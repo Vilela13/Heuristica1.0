@@ -44,7 +44,7 @@ all: Heuristica1.0
 Heuristica1.0: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: Cross G++ Linker'
-	g++  -o "Heuristica1.0" $(OBJS) $(USER_OBJS) $(LIBS)
+	g++ -L/home/lapo/cplex/cplex126/concert/lib/x86-64_linux/static_pic -L/home/lapo/cplex/cplex126/cplex/lib/x86-64_linux/static_pic -o "Heuristica1.0" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 

@@ -4,5 +4,5 @@
 
 USER_OBJS :=
 
-LIBS :=
+LIBS := -lconcert -lilocplex -lcplex -lpthread -lm
 

@@ -1,0 +1,4 @@
+# Todo arquivo terminado com ~ que marca arquivoi temporario
+*~
+# ignora arquivos terminados com .o (arquivo objeto) ou .a (compactado) 
+*.[oa]

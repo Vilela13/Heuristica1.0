@@ -39,6 +39,10 @@
 using namespace std;
 
 #include "DadosSolomon.hpp"
+#include "Plantas.hpp"
+#include "Carretas.hpp"
+#include "Construcoes.hpp"
+#include "Heuristica.hpp"
 
 
 

@@ -7,6 +7,7 @@
 //============================================================================
 
 #include "Bibliotecas.hpp"
+#include "Plantas.hpp"
 
 using namespace std;
 
@@ -19,6 +20,8 @@ int main(int argc, char **argv) {
 		list<char*> ListaInstancias;
 		string Nome;
 
+		char Saida[200];
+
 		int EscreveDadosLidosNaTela;
 
 		list<char*>::iterator it;
@@ -27,7 +30,7 @@ int main(int argc, char **argv) {
 
 
 
-		EscreveDadosLidosNaTela = 0;
+		EscreveDadosLidosNaTela = 1;
 
 	// -------------------------- Le arquivo com as instancias de Solomon e as guarda em uma lista ----------------------- //
 
@@ -122,56 +125,32 @@ int main(int argc, char **argv) {
 			cout << "\n \n Arquivo inexistente! \n \n";
 			return 0;
 		}
-			/*
-			//cout << " Saida = > "<< Saida << "   Tamanho entrada = " << TamanhoEntrda << endl;
 
-			ArquivoExcelResposta.open(Saida);
 
-			ArquivoExcelResposta << " Instância" << '\t';
-			ArquivoExcelResposta << " Status" << '\t';
-			ArquivoExcelResposta << " Solução Primal" << '\t';
-			ArquivoExcelResposta << " Solução Dual" << '\t';
-			ArquivoExcelResposta << " Gap" << '\t';
-			ArquivoExcelResposta << " Tempo" << '\n';
+		ArquivoExcelResposta.open(Saida);
 
-			No *Instancia;
 
-			while( !ListaInstancias.empty()){
-				Instancia = new No;
-				it = ListaInstancias.begin();
-				a = *it;
-				ListaInstancias.pop_front();
-				cout << " Modelo <= " << a << endl << endl;
+		Heuristica *Instancia;
 
-				if( Instancia->LeDados(a, EscreveDadosLidosNaTela) == 1){
+		while( !ListaInstancias.empty()){
+			it = ListaInstancias.begin();
+			a = *it;
+			ListaInstancias.pop_front();
+			cout << " Modelo <= " << a << endl << endl;
+			Instancia = new Heuristica;
 
-					resolveu = Instancia->Cplex(a, Status, SolucaoPrimal, SolucaoDual, Gap, Tempo);
-					cout << endl << endl << " Resolveu = " << resolveu << endl ;
-					ArquivoExcelResposta << a  << '\t' ;
-					switch (Status){
-						case 0:	ArquivoExcelResposta <<  "Unknow" << '\t';						break;
-						case 1:	ArquivoExcelResposta <<  "Feasible" << '\t';					break;
-						case 2:	ArquivoExcelResposta <<  "Optimal" << '\t';						break;
-						case 3:	ArquivoExcelResposta <<  "Infeasible" << '\t';					break;
-						case 4:	ArquivoExcelResposta <<  "Unbounded" << '\t';					break;
-						case 5: ArquivoExcelResposta <<  "Infeasible Or Unbounded" << '\t';		break;
-						default:ArquivoExcelResposta <<  "Erro" << '\t';
-					}
-					ArquivoExcelResposta << " " <<   SolucaoPrimal << '\t' <<  " " << SolucaoDual << '\t' << " " <<   Gap << '\t' <<  " " << Tempo << '\n';
+			if( Instancia->LeDados(a, EscreveDadosLidosNaTela) == 1){
+				cout << " Leu Dados" << endl;
 
-				}
-				free(Instancia);
 			}
-
-			ArquivoExcelResposta.close();
-
-			cout << "\n \n Galo Doido! \n \n";
-			return 1;
-		}else{
-			cout << "\n \n Arquivo inexistente! \n \n";
-			return 0;
+			free(Instancia);
 		}
-		*/
+
+		ArquivoExcelResposta.close();
+
+		cout << "\n \n Galo Doido! \n \n";
+		return 1;
+
 
 /*
 	}else{

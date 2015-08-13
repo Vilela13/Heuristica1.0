@@ -8,7 +8,7 @@
 #ifndef CONSTRUCOES_HPP_
 #define CONSTRUCOES_HPP_
 
-
+#include "Bibliotecas.hpp"
 
 
 

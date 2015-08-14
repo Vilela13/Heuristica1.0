@@ -19,7 +19,9 @@ public:
 	int NP;
 	ConjuntoPlantas PlantasInstancia;
 	int NE;
+	ConjuntoConstrucoes ConstrucoesInstancia;
 	int NV;
+	ConjuntoCarretas CarretasInstancia;
 
 	int  LeDados(char*, int );
 	void LeNomeInstancia(int comentarios, string* Instancia);
@@ -76,8 +78,10 @@ void Heuristica::LeNumeroPlantasEntregasVeiculos(int comentarios){
 	arq >> NP;
 	PlantasInstancia.IniciaConjuntoPlantas(NP);
 	arq >> NE;
-
+	ConstrucoesInstancia.IniciaConjuntoConstrucoes(NE);
 	arq >> NV;
+	CarretasInstancia.IniciaConjuntoCarretas(NV);
+
 	if( comentarios == 1){
 		cout << " Numero de plantas "<<  NP << endl;
 		cout << " Numero de Entregas "<< NE << endl;

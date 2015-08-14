@@ -3,3 +3,4 @@
 # ignora arquivos terminados com .o (arquivo objeto) ou .a (compactado) 
 *.[oa]
 /Debug/
+/Release/

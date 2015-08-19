@@ -33,6 +33,10 @@ public:
 	void LeNumeroDemandas(int);
 	void LeDistancias(int);
 	void LeTempoConstrucao(int);
+	void LeTempoPlanta(int);
+	void LeTempoMaximoEntreDescargas(int);
+	void LeTempoMaximoMinimoConstrucoes(int);
+	void LeTempoMaximoMinimoPlantas(int);
 
 
     ~Heuristica();
@@ -73,6 +77,10 @@ int Heuristica::LeDados(string Nome, int comentarios){
 		LeNumeroDemandas(comentarios);
 		LeDistancias(comentarios);
 		LeTempoConstrucao(comentarios);
+		LeTempoPlanta(comentarios);
+		LeTempoMaximoEntreDescargas(comentarios);
+		LeTempoMaximoMinimoConstrucoes(comentarios);
+		LeTempoMaximoMinimoPlantas(comentarios);
 
 		arq.close();
 		return 1;
@@ -225,6 +233,57 @@ void Heuristica::LeTempoConstrucao(int comentarios){
 			}
 		}
 
+	}
+}
+
+void Heuristica::LeTempoPlanta(int comentarios){
+	for (int p = 0; p < NP ; p++){
+		arq >> PlantasInstancia.Plantas[p].TempoPlanta;
+		if( comentarios == 1){
+			cout << " Tempo na Planta " << p +1 << " = " <<  PlantasInstancia.Plantas[p].TempoPlanta << endl;
+		}
+	}
+}
+
+void Heuristica::LeTempoMaximoEntreDescargas(int comentarios){
+	if( comentarios == 1){
+		cout << "     Tempo maximo entre descargas " << endl;
+	}
+	for ( int c = 0; c < NE; c++){
+		arq >> ConstrucoesInstancia.Construcoes[c].TempoMaximoEntreDescargas;
+		if( comentarios == 1){
+			cout << " Construcao " << c + 1 << " = " <<  ConstrucoesInstancia.Construcoes[c].TempoMaximoEntreDescargas << endl;
+		}
+	}
+}
+
+void Heuristica::LeTempoMaximoMinimoConstrucoes(int comentarios){
+	for ( int c = 0; c < NE; c++){
+		arq >> ConstrucoesInstancia.Construcoes[c].TempoMinimoDeFuncionamento;
+	}
+	for ( int c = 0; c < NE; c++){
+		arq >> ConstrucoesInstancia.Construcoes[c].TempoMaximoDeFuncionamento;
+	}
+	if( comentarios == 1){
+		cout << "     Intervalo de Funcionamento Construcoes " << endl;
+		for ( int c = 0; c < NE; c++){
+			cout << c + 1 << " ( " << ConstrucoesInstancia.Construcoes[c].TempoMinimoDeFuncionamento << " - " << ConstrucoesInstancia.Construcoes[c].TempoMaximoDeFuncionamento << " ) " << endl;
+		}
+	}
+}
+
+void Heuristica::LeTempoMaximoMinimoPlantas(int comentarios){
+	for ( int p = 0; p < NP; p++){
+		arq >> PlantasInstancia.Plantas[p].TempoMinimoDeFuncionamento;
+	}
+	for ( int p = 0; p < NP; p++){
+		arq >> PlantasInstancia.Plantas[p].TempoMaximoDeFuncionamento;
+	}
+	if( comentarios == 1){
+		cout << "     Intervalo de Funcionamento Plantas " << endl;
+		for ( int p = 0; p < NP; p++){
+			cout << p + 1 << " ( " << PlantasInstancia.Plantas[p].TempoMinimoDeFuncionamento << " - " << PlantasInstancia.Plantas[p].TempoMaximoDeFuncionamento << " ) " << endl;
+		}
 	}
 }
 

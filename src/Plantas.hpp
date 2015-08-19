@@ -18,6 +18,10 @@ public:
 	int NumeroVeiculos;
 	ConjuntoCarretas VeiculosDaPlanta;
 	vector < double > DistanciaConstrucoes;
+	double TempoPlanta;
+	double TempoMinimoDeFuncionamento;
+	double TempoMaximoDeFuncionamento;
+
 
 	~Planta();
 

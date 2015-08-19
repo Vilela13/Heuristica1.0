@@ -18,6 +18,9 @@ public:
 	Construcao();
 	int NumeroDemandas;
 	vector < double > DistanciaPlantas;
+	double TempoMaximoEntreDescargas;
+	double TempoMinimoDeFuncionamento;
+	double TempoMaximoDeFuncionamento;
 
 	~Construcao();
 

@@ -16,6 +16,8 @@ class Construcao{
 
 public:
 	Construcao();
+	int NumeroDemandas;
+	vector < double > DistanciaPlantas;
 
 	~Construcao();
 
@@ -34,7 +36,7 @@ class ConjuntoConstrucoes{
 
 public:
 	ConjuntoConstrucoes();
-	vector< Construcao > ConstrucoesInstancia;
+	vector< Construcao > Construcoes;
 
 	void IniciaConjuntoConstrucoes(int);
 
@@ -46,7 +48,7 @@ ConjuntoConstrucoes::ConjuntoConstrucoes(){
 }
 
 void ConjuntoConstrucoes::IniciaConjuntoConstrucoes(int Numero){
-	ConstrucoesInstancia.resize(Numero);
+	Construcoes.resize(Numero);
 
 }
 

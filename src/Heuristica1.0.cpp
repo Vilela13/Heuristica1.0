@@ -16,17 +16,19 @@ int main(int argc, char **argv) {
 
 	//if( argc == 2){
 
-		char *a;
-		list<char*> ListaInstancias;
+		list<string> ListaInstancias;
 		string Nome;
 
-		char Saida[200];
+		string Saida;
+		char *cstr;
 
 		int EscreveDadosLidosNaTela;
 
-		list<char*>::iterator it;
+		list<string>::iterator it;
 
 		ofstream ArquivoExcelResposta;
+
+		string Instancias;
 
 
 
@@ -40,13 +42,9 @@ int main(int argc, char **argv) {
 		}else{
 
 			ArquivoInstanciaSolomon >> Nome;
-			cout << " \n   Arqmazena nome de instancias \n " << endl;
+			cout << " \n   Armazena nome de instancias Solomon\n " << endl;
 			while( Nome != "EOF"){
-				a = new char[Nome.size()+1];
-				a[Nome.size()]=0;
-				memcpy(a,Nome.c_str(),Nome.size());
-				cout << "  " << a  << endl ;
-				ListaInstancias.push_back(a);
+				ListaInstancias.push_back(Nome);
 				ArquivoInstanciaSolomon >> Nome;
 			}
 
@@ -61,85 +59,74 @@ int main(int argc, char **argv) {
 
 		while( ListaInstancias.size() > 0){
 			it = ListaInstancias.begin();
-			a = *it;
+			Nome = *it;
 			ListaInstancias.pop_front();
 			//cout <<  " ai 1" << endl;
 
-			cout << a << endl;
+			cout << Nome << endl;
 			//cout <<  " ai 2" << endl;
 
-			InstanciaSolomon->CarregarNumeroNosCoordenadas(a);
-			//InstanciaSolomon->EscreverDadosLidosInstanciaSolomon();
 			cout << " entrei 0 - carrega dados" << endl;
+			InstanciaSolomon->CarregarNumeroNosCoordenadas( Nome );
+			//InstanciaSolomon->EscreverDadosLidosInstanciaSolomon();
+			cout << " sai 0 - carrega dados" << endl;
 
-			InstanciaSolomon->CriarInstanciaSolomon(a);
 			cout << " entrei 1 - escreve Instancia Salomon" << endl;
+			InstanciaSolomon->CriarInstanciaSolomon( Nome );
+			cout << " sai 1 - escreve Instancia Salomon" << endl;
 
-			InstanciaSolomon->EscreverComandosR(a,'4');
-			// 1 => .ps	  2 =>.png   3 =>.jpeg    4 =>.pdf
 			cout << " entrei 2 - escreve comandos R" << endl;
+			InstanciaSolomon->EscreverComandosR( Nome ,'4');
+			// 1 => .ps	  2 =>.png   3 =>.jpeg    4 =>.pdf
+			cout << " sai 2 - escreve comandos R" << endl;
 
-			InstanciaSolomon->EscreverComandosExcel(a);					// Não implementado ainda
 			cout << " entrei 3 - escreve comandos excel" << endl;
+			InstanciaSolomon->EscreverComandosExcel( Nome );					// Não implementado ainda
+			cout << " sai 3 - escreve comandos excel" << endl;
 		}
 		free(InstanciaSolomon);
 
 
-
-
 	// Resolve o problema
 
-		char* Instancias;
-		Instancias = argv[1];
+		//Instancias = argv[1];
 		Instancias = "Instancias.txt";
 
+
 		ifstream ArquivoInstancia;
-		ArquivoInstancia.open(Instancias);
+
+		cstr = new char[Instancias.length() + 1];
+		strcpy(cstr, Instancias.c_str());
+
+		ArquivoInstancia.open(cstr);
+
+		delete [] cstr;
+
 		if ( ArquivoInstancia.is_open() ){
 			ArquivoInstancia >> Nome;
+			cout << " instancia lida = " << Nome << endl;
 			while( Nome != "EOF"){
-				a = new char[Nome.size()+1];
-				a[Nome.size()]=0;
-				memcpy(a,Nome.c_str(),Nome.size());
-				cout << a  << endl ;
-				ListaInstancias.push_back(a);
+				ListaInstancias.push_back(Nome);
 				ArquivoInstancia >> Nome;
 			}
 			ArquivoInstancia.close();
 
 
-		// ----------- Le um arquivo com as instancias a serem resolvidas pelo modelo, abre o arquivo com a instancia e o resolve -------------------------- //
-
-			//cout << endl << endl << " Lendo arquivo " << endl << endl << endl;
-
-			char Saida[200];
-			int TamanhoEntrda;
-			strcpy (Saida,"Res-");				// coloca Res- no char*
-			TamanhoEntrda = strcspn (Instancias,".");	// Ve o tamanho do char* passado na entrada
-			if(TamanhoEntrda > 12){				// Fixa o tamanho minimo da string
-				TamanhoEntrda = 12;
-			}
-			strncat (Saida, Instancias, TamanhoEntrda);	// Cria o nome do arquivo de saida
-			strcat (Saida,".txt");
 		}else{
 			cout << "\n \n Arquivo inexistente! \n \n";
 			return 0;
 		}
 
-
-		ArquivoExcelResposta.open(Saida);
-
-
 		Heuristica *Instancia;
 
 		while( !ListaInstancias.empty()){
 			it = ListaInstancias.begin();
-			a = *it;
+			Nome = *it;
 			ListaInstancias.pop_front();
-			cout << " Modelo <= " << a << endl << endl;
+			cout << " Modelo => " << Nome << endl << endl;
 			Instancia = new Heuristica;
 
-			if( Instancia->LeDados(a, EscreveDadosLidosNaTela) == 1){
+			if( Instancia->LeDados(Nome, EscreveDadosLidosNaTela) == 1){
 				cout << " Leu Dados" << endl;
 
 			}

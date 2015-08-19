@@ -18,8 +18,6 @@ public:
     DadosSolomon();
 
 // Variaveis de leitura do arquivo
-
-    //int X;					// Não sei para que serve mais
 	string NomeInstancia;
 	string Auxiliar;
 	int NumeroVeiculos;
@@ -49,14 +47,8 @@ public:
 
 	char *b;
 	char *aux1;
-	string CaminhoArquivo1;
-	string CaminhoArquivo2;
-	string Nome;
-	string NomeAux;
-	string Versao;
-	string Dados;
-	string TXT;
-	int NumeroVERSAO;
+
+
 
 	int CaminhaoAux;
 
@@ -78,24 +70,24 @@ public:
 
 // Funções
 
-	void CarregarNumeroNosCoordenadas( char*);
+	void CarregarNumeroNosCoordenadas( string);
 
 	void EscreverDadosLidosInstanciaSolomon();
 
 	ifstream Instancia;
 
-	void EscreverComandosR(char*,char );
+	void EscreverComandosR(string,char );
 
 	ofstream ComandosR;
 
-	void EscreverComandosExcel(char*);
+	void EscreverComandosExcel(string);
 
 	ofstream ComandosExcel;
 
 	void CriaPastaInstS();
 	void CriaPastaDat();
 
-	void CriarInstanciaSolomon(char*);
+	void CriarInstanciaSolomon(string);
 
 	ofstream InstanciaSolomon;
 	ofstream DadosInstanciaSalomonCriada;
@@ -114,11 +106,17 @@ DadosSolomon::DadosSolomon(){
 
 }
 
-void DadosSolomon::CarregarNumeroNosCoordenadas( char* a){
+void DadosSolomon::CarregarNumeroNosCoordenadas( string Nome){
 
 	int EscreveDadosLidos = 0;
 
-	Instancia.open(a);
+	char *cstr;
+	cstr = new char[Nome.length() + 1];
+	strcpy(cstr, Nome.c_str());
+
+	Instancia.open(cstr);
+
+	delete [] cstr;
 
 	Instancia >> NomeInstancia;
 
@@ -232,7 +230,7 @@ void DadosSolomon::EscreverDadosLidosInstanciaSolomon(){
 
 }
 
-void DadosSolomon::EscreverComandosR(char* a, char TipoArquivoSaida){
+void DadosSolomon::EscreverComandosR(string Nome, char TipoArquivoSaida){
 
 	//int LimiteplotarX;
 	//int LimiteplotarY;
@@ -248,10 +246,10 @@ void DadosSolomon::EscreverComandosR(char* a, char TipoArquivoSaida){
 	PosicaoTextoY = 2;
 	TamanhoLetraLegenda = 2;
 
-	char *b;
 	string TipoComando;
 	string NomeArquivoComandoR;
 	TipoComando = "./ComR/CmdR-";
+	TipoComando += Nome;
 
 
 	if(!opendir ("ComR")){
@@ -277,15 +275,17 @@ void DadosSolomon::EscreverComandosR(char* a, char TipoArquivoSaida){
 		cout << " Tem diretorio \"ComR\" !!  " << endl;
 	}
 
+	char *cstr;
+	cstr = new char[TipoComando.length() + 1];
+	strcpy(cstr, TipoComando.c_str());
 
-		b = new char[TipoComando.size()+1];
-		b[TipoComando.size()]=0;
-		memcpy(b,TipoComando.c_str(),TipoComando.size());
-		strcat(b,a);
 
-		cout << endl <<  " Arquivo do comando R = " <<   b << endl << endl;
 
-		ComandosR.open(b);
+		cout << endl <<  " Arquivo do comando R = " <<   TipoComando << endl << endl;
+
+		ComandosR.open(cstr);
+
+		delete [] cstr;
 
 		ComandosR << "require(ggplot2) "<< endl;
 
@@ -354,7 +354,7 @@ void DadosSolomon::EscreverComandosR(char* a, char TipoArquivoSaida){
 		}
 
 		//NomeArquivoComandoR = "./Imagens/";
-		NomeArquivoComandoR += a;
+		NomeArquivoComandoR += Nome;
 
 		NomeArquivoComandoR.resize( NomeArquivoComandoR.size() - 4 );
 
@@ -401,7 +401,7 @@ void DadosSolomon::EscreverComandosR(char* a, char TipoArquivoSaida){
 
 }
 
-void DadosSolomon::EscreverComandosExcel(char* a){
+void DadosSolomon::EscreverComandosExcel(string Nome){
 
 	/*
 	char *b;
@@ -426,9 +426,9 @@ void DadosSolomon::EscreverComandosExcel(char* a){
 
 	*/
 
-	char *b;
 	string TipoComando;
 	TipoComando = "./ComE/CmdE-";
+	TipoComando += Nome;
 
 
 
@@ -456,14 +456,17 @@ void DadosSolomon::EscreverComandosExcel(char* a){
 		cout << " Tem diretorio \"ComE\" !!  " << endl;
 	}
 
-	b = new char[TipoComando.size()+1];
-	b[TipoComando.size()]=0;
-	memcpy(b,TipoComando.c_str(),TipoComando.size());
-	strcat(b,a);
+
 
 	//cout << " galo => " << b << endl << endl;
 
-	ComandosExcel.open(b);
+	char *cstr;
+		cstr = new char[TipoComando.length() + 1];
+		strcpy(cstr, TipoComando.c_str());
+
+	ComandosExcel.open(cstr);
+
+	delete [] cstr;
 
 	//cout << " Doido " << endl << endl;
 
@@ -528,8 +531,18 @@ void DadosSolomon::CriaPastaDat(){
 	}
 }
 
-void DadosSolomon::CriarInstanciaSolomon(char* a){
+void DadosSolomon::CriarInstanciaSolomon(string Nome){
 
+
+	string CaminhoArquivo1;
+	string CaminhoArquivo2;
+	string NomeAux;
+	string Versao;
+	string Dados;
+	string TXT;
+	int NumeroVERSAO;
+
+	char *cstr;
 
 	NumeroVERSAO = 49;
 	//NumeroVERSAO = 50;
@@ -547,9 +560,7 @@ void DadosSolomon::CriarInstanciaSolomon(char* a){
 
 // Cria o nome da instancia para o modelo
 
-	Nome.assign(a);
 	if( Nome.size() > 3){
-		Nome.resize(Nome.size()-4);
 		if( NomeInstancia[0] == 'R' || NomeInstancia[0] == 'C'){
 			if(NomeInstancia[1] != 'C'){
 				if(NomeInstancia[1] == '1'){
@@ -586,16 +597,15 @@ void DadosSolomon::CriarInstanciaSolomon(char* a){
             }
         }
 		Versao += NumeroVERSAO;
-		Nome.insert(Nome.size(),Versao);
 		NomeAux = Nome;
+
+		NomeAux.resize(NomeAux.size()-4);
+		NomeAux += Versao;
 		TXT = ".txt";
-		Nome.insert(Nome.size(),TXT);
+		NomeAux += TXT;
 
-		cout << "      Nome da Instancia Solomon = " << Nome << endl << endl;
+		cout << "      Nome da Instancia Solomon = " << NomeAux << endl << endl;
 
-		a = new char[Nome.size()+1];
-		a[Nome.size()]=0;
-		memcpy(a,Nome.c_str(),Nome.size());
 
 	}else{
 		cout << "Arquivo passado com tamanho invaldo " <<  Nome << endl ;
@@ -605,33 +615,41 @@ void DadosSolomon::CriarInstanciaSolomon(char* a){
 
 	//CaminhoArquivo1 = "./";
 	CaminhoArquivo1 = "./InstS/";
+	CaminhoArquivo1 += NomeAux;
 
-	b = new char[CaminhoArquivo1.size()+1];
-	b[CaminhoArquivo1.size()]=0;
-	memcpy(b,CaminhoArquivo1.c_str(),CaminhoArquivo1.size());
-	strcat(b,a);
 
-	cout << endl << "  Arquivo = " << a << "  Caminho = " << b << endl;
+
+	cout << endl << "  Arquivo = " << NomeAux << "  Caminho = " << CaminhoArquivo1 << endl;
 
 // Cria arquivo para guardar os dados da instancia criada
 
 	if( NomeInstancia[0] == 'R' || NomeInstancia[0] == 'C' || NomeInstancia[0] == 'r'){
-        InstanciaSolomon.open(b);
+
+
+		cstr = new char[CaminhoArquivo1.length() + 1];
+		strcpy(cstr, CaminhoArquivo1.c_str());
+
+        InstanciaSolomon.open(cstr);
+
+        delete [] cstr;
 
         CriaPastaDat();
 
         CaminhoArquivo2 = "./Dat/";
+        CaminhoArquivo2 += NomeAux;
 
-        aux1 = new char[CaminhoArquivo2.size()+1];
-        aux1[CaminhoArquivo2.size()]=0;
-        memcpy(aux1,CaminhoArquivo2.c_str(),CaminhoArquivo2.size());
-        strcat(aux1,a);
-        DadosInstanciaSalomonCriada.open(aux1);
+        cstr = new char[CaminhoArquivo2.length() + 1];
+        strcpy(cstr, CaminhoArquivo2.c_str());
 
-        cout << endl << "  Caminho salvar em pasta Dat = " << aux1 << endl;
 
-        DadosInstanciaSalomonCriada << b << endl;
-        InstanciaSolomon << NomeInstancia << endl;
+        DadosInstanciaSalomonCriada.open(cstr);
+
+        cout << endl << "  Caminho salvar em pasta Dat = " << cstr << endl;
+
+        DadosInstanciaSalomonCriada << cstr << endl;
+        InstanciaSolomon << NomeAux << endl;
+
+        delete [] cstr;
 
         if(NomeInstancia[0] == 'R' && NomeInstancia[1] == 'C'){
 

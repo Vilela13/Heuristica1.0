@@ -16,6 +16,7 @@ class Carreta{
 
 public:
 	Carreta();
+	vector < vector < double > > TempoConstrucao;
 
 	~Carreta();
 
@@ -34,7 +35,7 @@ class ConjuntoCarretas{
 
 public:
 	ConjuntoCarretas();
-	vector< Carreta > CarretasInstancia;
+	vector< Carreta > Carretas;
 
 	void IniciaConjuntoCarretas(int);
 
@@ -46,7 +47,7 @@ ConjuntoCarretas::ConjuntoCarretas(){
 }
 
 void ConjuntoCarretas::IniciaConjuntoCarretas(int Numero){
-	CarretasInstancia.resize(Numero);
+	Carretas.resize(Numero);
 
 }
 

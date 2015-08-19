@@ -1,4 +1,4 @@
-./InstS/p-Cxxxx-V1.txt
+./Dat/p-Cxxxx-V1.txt
  Gerador dos numeros aleatorios das demandas ( 49 ) 
 Dados das plantas 
    NoPlanta = 4 Horario [ 7 - 18 ]

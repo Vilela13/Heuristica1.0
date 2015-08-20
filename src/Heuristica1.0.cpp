@@ -127,7 +127,7 @@ int main(int argc, char **argv) {
 			Instancia = new Heuristica;
 
 			if( Instancia->LeDados(Nome, EscreveDadosLidosNaTela) == 1){
-				cout << " Leu Dados" << endl;
+				//cout << " Leu Dados" << endl;
 
 			}
 			free(Instancia);

@@ -22,6 +22,7 @@ public:
 	double TempoMinimoDeFuncionamento;
 	double TempoMaximoDeFuncionamento;
 	double RankTempoDemandas;
+	int StatusAtendimento;
 
 	void CalculaRankTempoDemandas(int);
 
@@ -30,7 +31,7 @@ public:
 };
 
 Construcao::Construcao(){
-
+	StatusAtendimento = 0;
 }
 
 void Construcao::CalculaRankTempoDemandas(int comentarios){

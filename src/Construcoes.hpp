@@ -21,6 +21,9 @@ public:
 	double TempoMaximoEntreDescargas;
 	double TempoMinimoDeFuncionamento;
 	double TempoMaximoDeFuncionamento;
+	double RankTempoDemandas;
+
+	void CalculaRankTempoDemandas(int);
 
 	~Construcao();
 
@@ -28,6 +31,13 @@ public:
 
 Construcao::Construcao(){
 
+}
+
+void Construcao::CalculaRankTempoDemandas(int comentarios){
+	RankTempoDemandas = ( TempoMaximoDeFuncionamento - TempoMinimoDeFuncionamento) / NumeroDemandas ;
+	if( comentarios == 1){
+		cout << " Rank ( Tempo /Demandas ) = " << RankTempoDemandas << endl;
+	}
 }
 
 Construcao::~Construcao(){

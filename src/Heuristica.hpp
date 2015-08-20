@@ -37,6 +37,7 @@ public:
 	void LeTempoMaximoEntreDescargas(int);
 	void LeTempoMaximoMinimoConstrucoes(int);
 	void LeTempoMaximoMinimoPlantas(int);
+	void CalculoRankTempoDemanda(int);
 
 
     ~Heuristica();
@@ -52,7 +53,7 @@ int Heuristica::LeDados(string Nome, int comentarios){
 	string Instancia;
 	string CaminhoArquivo1;
 
-	char *cstr;
+	Procedimento1 Prod1;
 
 
 // Abre arquivo das instâncias
@@ -60,14 +61,9 @@ int Heuristica::LeDados(string Nome, int comentarios){
 	CaminhoArquivo1 = "./InstS/";
 	CaminhoArquivo1 += Nome;
 
-	cstr = new char[CaminhoArquivo1.length() + 1];
-	strcpy(cstr, CaminhoArquivo1.c_str());
+	cout << " Arquivo a abrir : " << CaminhoArquivo1.c_str() << endl;
 
-
-	cout << " Arquivo a abrir : " << cstr << endl;
-
-	arq.open(cstr);
-	delete [] cstr;
+	arq.open(CaminhoArquivo1.c_str());
 	if (arq.is_open()){
 		LeNomeInstancia(comentarios, Instancia);
 		LeNumeroPlantasEntregasVeiculos(comentarios);
@@ -81,8 +77,12 @@ int Heuristica::LeDados(string Nome, int comentarios){
 		LeTempoMaximoEntreDescargas(comentarios);
 		LeTempoMaximoMinimoConstrucoes(comentarios);
 		LeTempoMaximoMinimoPlantas(comentarios);
+		CalculoRankTempoDemanda(comentarios);
 
 		arq.close();
+
+		Prod1.CarregaDados(NP, PlantasInstancia, NE, ConstrucoesInstancia, NV, Velocidade, TempoDeVidaConcreto);
+
 		return 1;
 	}else{
 		cout << "         Fudeu Muito! Não abriu o arquivo " << CaminhoArquivo1 << endl << endl;
@@ -284,6 +284,15 @@ void Heuristica::LeTempoMaximoMinimoPlantas(int comentarios){
 		for ( int p = 0; p < NP; p++){
 			cout << p + 1 << " ( " << PlantasInstancia.Plantas[p].TempoMinimoDeFuncionamento << " - " << PlantasInstancia.Plantas[p].TempoMaximoDeFuncionamento << " ) " << endl;
 		}
+	}
+}
+
+void Heuristica::CalculoRankTempoDemanda(int comentarios){
+	for ( int c = 0; c < NE; c++){
+		if( comentarios == 1){
+			cout << " Construcao " << c + 1 << " com";
+		}
+		ConstrucoesInstancia.Construcoes[c].CalculaRankTempoDemandas( comentarios );
 	}
 }
 

@@ -97,12 +97,28 @@ public:
 };
 
 DadosSolomon::DadosSolomon(){
-	AuxiliarInt = 13131313;
-	Capacidade  = 13131313;
-	NumeroNosDadosSolomon = 13131313;
-	NumeroVeiculos = 13131313;
-	x = 13131313;
-	y = 13131313;
+	AuxiliarInt = -13;
+	Capacidade = -13;
+	NumeroNosDadosSolomon = -13;
+	NumeroVeiculos = -13;
+	x = -13;
+	y = -13;
+	AuxiliarInt = -13;
+	CaminhaoAux = -13;
+
+	b = NULL;
+	aux1  = NULL;
+
+	NumeroPlantas = -13;
+	NumeroClientes = -13;
+	NumeroCaminhoes = -13;
+	Velocidade = -13;
+
+	TempoDeDescarga = -13;
+	TemproEntreEntregas = -13;
+	TempoPlanta = -13;
+	TempoDeVidaConcreto = -13;
+	TempoEntreEntregas = -13;
 
 }
 

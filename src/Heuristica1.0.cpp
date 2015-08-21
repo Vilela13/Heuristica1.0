@@ -129,6 +129,8 @@ int main(int argc, char **argv) {
 			if( Instancia->LeDados(Nome, EscreveDadosLidosNaTela) == 1){
 				//cout << " Leu Dados" << endl;
 
+				Instancia->ExecutaProcedimentoHeuristico1();
+
 			}
 			free(Instancia);
 		}

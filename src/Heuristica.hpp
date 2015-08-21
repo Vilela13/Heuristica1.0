@@ -25,6 +25,9 @@ public:
 	double TempoDeVidaConcreto;
 
 	int  LeDados(string, int );
+
+	void ExecutaProcedimentoHeuristico1();
+
 	void LeNomeInstancia(int , string& );
 	void LeNumeroPlantasEntregasVeiculos(int);
 	void LeVelocidade(int);
@@ -45,6 +48,11 @@ public:
 };
 
 Heuristica::Heuristica(){
+	NP = -13;
+	NE = -13;
+	NV = -13;
+	Velocidade = -13;
+	TempoDeVidaConcreto = -13;
 
 }
 
@@ -52,8 +60,6 @@ int Heuristica::LeDados(string Nome, int comentarios){
 
 	string Instancia;
 	string CaminhoArquivo1;
-
-	Procedimento1 Prod1;
 
 
 // Abre arquivo das instâncias
@@ -81,14 +87,35 @@ int Heuristica::LeDados(string Nome, int comentarios){
 
 		arq.close();
 
-		Prod1.CarregaDados(NP, PlantasInstancia, NE, ConstrucoesInstancia, NV, Velocidade, TempoDeVidaConcreto);
-
 		return 1;
 	}else{
 		cout << "         Fudeu Muito! Não abriu o arquivo " << CaminhoArquivo1 << endl << endl;
 		return 0;
 	}
 }
+
+void Heuristica::ExecutaProcedimentoHeuristico1(){
+	Procedimento1 Prod1;
+	int Solucao;
+	Solucao = 0;
+
+
+	Prod1.CarregaDados(NP, PlantasInstancia, NE, ConstrucoesInstancia, NV, Velocidade, TempoDeVidaConcreto);
+
+	//Prod1.ConstrucoesInstancia.ImprimeContrucoes();
+
+	sort ( Prod1.ConstrucoesInstancia.Construcoes.begin(), Prod1.ConstrucoesInstancia.Construcoes.end(), DecideQualContrucaoTemMaiorRank );
+
+	//Prod1.ConstrucoesInstancia.ImprimeContrucoes();
+
+	Solucao = Prod1.Executa();
+
+	if( Solucao == 1 ){
+		cout << endl << endl << "  Solucao viavel!    " << endl << endl;
+	}
+
+}
+
 
 void Heuristica::LeNomeInstancia(int comentarios, string& Instancia){
 	arq >> Instancia;
@@ -100,8 +127,16 @@ void Heuristica::LeNomeInstancia(int comentarios, string& Instancia){
 void Heuristica::LeNumeroPlantasEntregasVeiculos(int comentarios){
 	arq >> NP;
 	PlantasInstancia.IniciaConjuntoPlantas(NP);
+	for( int p = 0; p < NP; p++){
+		PlantasInstancia.Plantas[p].NumeroDaPlanta = p + 1;
+		//cout << "    Imputa numero planta = " << p+1 << endl;
+	}
 	arq >> NE;
 	ConstrucoesInstancia.IniciaConjuntoConstrucoes(NE);
+	for( int c = 0; c < NE; c++){
+		ConstrucoesInstancia.Construcoes[c].NumeroDaConstrucao = c + 1;
+		//cout << "    Imputa numero construcao = " << c+1 << endl;
+	}
 	arq >> NV;
 
 	if( comentarios == 1){
@@ -171,12 +206,12 @@ void Heuristica::LeDistancias(int comentarios){
 	if( comentarios == 1){
 		cout << "     Distancia Planta para Construcoes"<< endl;
 	}
-	for (int i = 0; i < NP ; i++){
-		PlantasInstancia.Plantas[i].DistanciaConstrucoes.resize(NE);
-		for ( int j = 0; j < NE; j++){
-			arq >> PlantasInstancia.Plantas[i].DistanciaConstrucoes[j];
+	for (int p = 0; p < NP ; p++){
+		PlantasInstancia.Plantas[p].DistanciaConstrucoes.resize(NE);
+		for ( int c = 0; c < NE; c++){
+			arq >> PlantasInstancia.Plantas[p].DistanciaConstrucoes[c];
 			if( comentarios == 1){
-				cout << PlantasInstancia.Plantas[i].DistanciaConstrucoes[j] << " ";
+				cout << PlantasInstancia.Plantas[p].DistanciaConstrucoes[c] << " ";
 			}
 		}
 		if( comentarios == 1){
@@ -187,12 +222,13 @@ void Heuristica::LeDistancias(int comentarios){
 	if( comentarios == 1){
 		cout << "     Distancia Construcoes para Plantas"<< endl;
 	}
-	for (int i = 0; i < NE ; i++){
-		ConstrucoesInstancia.Construcoes[i].DistanciaPlantas.resize(NP);
-		for ( int j = 0; j < NP; j++){
-			arq >> ConstrucoesInstancia.Construcoes[i].DistanciaPlantas[j];
+	for (int c = 0; c < NE ; c++){
+		ConstrucoesInstancia.Construcoes[c].DistanciaPlantas.resize(NP);
+		for ( int p = 0; p < NP; p++){
+			arq >> ConstrucoesInstancia.Construcoes[c].DistanciaPlantas[p].Distancia;
+			ConstrucoesInstancia.Construcoes[c].DistanciaPlantas[p].PlantaComparada = &PlantasInstancia.Plantas[p];
 			if( comentarios == 1){
-				cout <<  ConstrucoesInstancia.Construcoes[i].DistanciaPlantas[j] << " ";
+				cout <<  ConstrucoesInstancia.Construcoes[c].DistanciaPlantas[p].Distancia << " ";
 			}
 		}
 		if( comentarios == 1){
@@ -214,17 +250,17 @@ void Heuristica::LeTempoConstrucao(int comentarios){
 			if( comentarios == 1){
 				cout << " Veiculo  " << aux << endl;
 			}
-			PlantasInstancia.Plantas[p].VeiculosDaPlanta.Carretas[v].TempoConstrucao.resize( NE);
+			PlantasInstancia.Plantas[p].VeiculosDaPlanta.Carretas[v].TempoParaDescarregarNaConstrucao.resize( NE);
 			for ( int c = 0; c < NE; c++){
 				arq >> aux;
 				if ( aux != ConstrucoesInstancia.Construcoes[c].NumeroDemandas){
 					cout << "        ############## Dados Incosistentes ############## " << endl << endl;
 				}
-				PlantasInstancia.Plantas[p].VeiculosDaPlanta.Carretas[v].TempoConstrucao[c].resize( ConstrucoesInstancia.Construcoes[c].NumeroDemandas );
+				PlantasInstancia.Plantas[p].VeiculosDaPlanta.Carretas[v].TempoParaDescarregarNaConstrucao[c].resize( ConstrucoesInstancia.Construcoes[c].NumeroDemandas );
 				for ( int d = 0; d < ConstrucoesInstancia.Construcoes[c].NumeroDemandas; d++){
-					arq >> PlantasInstancia.Plantas[p].VeiculosDaPlanta.Carretas[v].TempoConstrucao[c][d];
+					arq >> PlantasInstancia.Plantas[p].VeiculosDaPlanta.Carretas[v].TempoParaDescarregarNaConstrucao[c][d];
 					if( comentarios == 1){
-						cout << PlantasInstancia.Plantas[p].VeiculosDaPlanta.Carretas[v].TempoConstrucao[c][d] << "  ";
+						cout << PlantasInstancia.Plantas[p].VeiculosDaPlanta.Carretas[v].TempoParaDescarregarNaConstrucao[c][d] << "  ";
 					}
 				}
 				if( comentarios == 1){
@@ -290,7 +326,7 @@ void Heuristica::LeTempoMaximoMinimoPlantas(int comentarios){
 void Heuristica::CalculoRankTempoDemanda(int comentarios){
 	for ( int c = 0; c < NE; c++){
 		if( comentarios == 1){
-			cout << " Construcao " << c + 1 << " com";
+			cout << " Construcao " << ConstrucoesInstancia.Construcoes[c].NumeroDaConstrucao << " com";
 		}
 		ConstrucoesInstancia.Construcoes[c].CalculaRankTempoDemandas( comentarios );
 	}

@@ -10,13 +10,23 @@
 
 #include "Bibliotecas.hpp"
 
+class Deslocamento{
+public:
+	double HorarioInicioDeslocamento;
+	double HorarioFinalDeslocamento;
 
+};
 
 class Carreta{
 
 public:
 	Carreta();
-	vector < vector < double > > TempoConstrucao;
+	int NumerosDaCarreta;
+	vector < vector < double > > TempoParaDescarregarNaConstrucao;
+
+	vector < Deslocamento > Deslocamentos;
+
+
 
 	~Carreta();
 
@@ -48,6 +58,9 @@ ConjuntoCarretas::ConjuntoCarretas(){
 
 void ConjuntoCarretas::IniciaConjuntoCarretas(int Numero){
 	Carretas.resize(Numero);
+	for(int v = 0; v < Numero; v++){
+		Carretas[v].NumerosDaCarreta = v + 1;
+	}
 
 }
 
@@ -55,6 +68,10 @@ ConjuntoCarretas::~ConjuntoCarretas(){
 
 }
 
+
+bool DecideQualMenorInicioTempoDeslocamento ( Deslocamento c1, Deslocamento c2 ){
+	return ( c1.HorarioInicioDeslocamento < c2.HorarioInicioDeslocamento );
+}
 
 
 #endif /* CARRETAS_HPP_ */

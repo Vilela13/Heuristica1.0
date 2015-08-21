@@ -63,8 +63,11 @@ int Procedimento1::Executa(){
 			}
 		}
 	}
+
+	cout << endl << "Construcao e planta selecionadas " << endl << endl;
 	ConstrucaoVaiSerSuprida->ImprimeContrucao();
 	PlantaMaisPerto->Imprime();
+
 	for( int d = 0; d < ConstrucaoVaiSerSuprida->NumeroDemandas; d++){
 	}
 	return 1;

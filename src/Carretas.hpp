@@ -31,7 +31,7 @@ public:
 	int VerificaDisponibilidade( double, double);
 	void AlocaAtividade(double, double, int, int);
 
-
+	void Imprime();
 
 
 	~Carreta();
@@ -46,7 +46,7 @@ Carreta::Carreta(){
 
 int Carreta::VerificaDisponibilidade(double InicioPossivelAlocacao, double FinalPossivelAlocacao){
 
-	for( int d = 0; d < Deslocamentos.size(); d ++){
+	for( unsigned int d = 0; d < Deslocamentos.size(); d ++){
 		if( InicioPossivelAlocacao < Deslocamentos[d].HorarioInicioDeslocamento){
 			if( FinalPossivelAlocacao > Deslocamentos[d].HorarioInicioDeslocamento){
 				return 0;
@@ -74,6 +74,9 @@ int Carreta::VerificaDisponibilidade(double InicioPossivelAlocacao, double Final
 }
 
 void Carreta::AlocaAtividade(double HoraInicio, double HoraFinal, int NumContrucao, int NumDemanda){
+
+	NumeroDeDemandasAntendidas = NumeroDeDemandasAntendidas + 1;
+
 	Deslocamento DeslocamentoAux;
 
 	DeslocamentoAux.HorarioInicioDeslocamento = HoraInicio;
@@ -82,6 +85,16 @@ void Carreta::AlocaAtividade(double HoraInicio, double HoraFinal, int NumContruc
 	DeslocamentoAux.NumeroDemandaSuprida = NumDemanda;
 
 	Deslocamentos.push_back( DeslocamentoAux );
+}
+
+void Carreta::Imprime(){
+	cout << endl;
+	cout << "# Carreta " << NumeroDaCarreta << " que atendeu " << NumeroDeDemandasAntendidas << endl;
+	for( int d = 0; d < NumeroDeDemandasAntendidas; d++){
+		cout << "    * Atendeu a construção " << Deslocamentos[d].NumeroConstrucao << " na demanda " << Deslocamentos[d].NumeroDemandaSuprida;
+		cout << " no horario ( " << Deslocamentos[d].HorarioInicioDeslocamento << " - " << Deslocamentos[d].HorarioFinalDeslocamento << " ) " << endl;
+	}
+
 }
 
 Carreta::~Carreta(){

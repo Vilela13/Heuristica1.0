@@ -94,11 +94,9 @@ int Procedimento1::SelecionaCarreta(Planta& PlantaMaisPerto, Construcao& Constru
 				PlantaMaisPerto.AlocaAtividade(HorarioInicioPlanta, HorarioSaiDaPlanta, ConstrucaoVaiSerSuprida.NumeroDaConstrucao, NumeroDemanda, &( PlantaMaisPerto.VeiculosDaPlanta.Carretas[c] ) );
 				PlantaMaisPerto.Imprime();
 				ConstrucaoVaiSerSuprida.AlocaAtividade(HorarioChegaContrucao, HorarioSaiConstrucao, NumeroDemanda,  &( PlantaMaisPerto.VeiculosDaPlanta.Carretas[c] ) );
-				cout << " ei 1" << endl;
 				ConstrucaoVaiSerSuprida.ImprimeContrucao();
-				cout << " ei 2" << endl;
 				PlantaMaisPerto.VeiculosDaPlanta.Carretas[c].AlocaAtividade(HorarioInicioPlanta, HorarioRetornaPlanta, ConstrucaoVaiSerSuprida.NumeroDaConstrucao, NumeroDemanda);
-				cout << " ei 3" << endl ;
+				PlantaMaisPerto.VeiculosDaPlanta.Carretas[c].Imprime();
 			}
 		}
 	}
@@ -153,11 +151,9 @@ int Procedimento1::Executa(){
 
 	PermiteAtendimentoDemanda = SelecionaCarreta(*PlantaMaisPerto , *ConstrucaoVaiSerSuprida,  Demanda);
 
-	cout << "  PermiteAtendimentoDemanda = " << PermiteAtendimentoDemanda << endl;
 
 	Demanda = 1;
 
-	cout << "     ConstrucaoVaiSerSuprida->NumeroDemandas " << ConstrucaoVaiSerSuprida->NumeroDemandas << endl << endl;
 
 	for( int d = Demanda; d < ConstrucaoVaiSerSuprida->NumeroDemandas; d++){
 		cout << " Demanda a ser atendida ainda = " << d << endl;

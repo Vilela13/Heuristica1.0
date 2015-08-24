@@ -77,7 +77,7 @@ int Construcao::VerificaDisponibilidade( double InicioPossivelAlocacao, double F
 		return 0;
 	}
 
-	for( int d = 0; d < Descarregamentos.size(); d ++){
+	for( unsigned int d = 0; d < Descarregamentos.size(); d ++){
 		if( InicioPossivelAlocacao < Descarregamentos[d].HorarioInicioDescarregamento){
 			if( FinalPossivelAlocacao > Descarregamentos[d].HorarioInicioDescarregamento){
 				return 0;
@@ -103,7 +103,7 @@ int Construcao::VerificaDisponibilidade( double InicioPossivelAlocacao, double F
 	if( StatusAtendimento == 0) {
 		return 1;
 	}else{
-		for( int d = 0; d < Descarregamentos.size(); d ++){
+		for( unsigned int d = 0; d < Descarregamentos.size(); d ++){
 			if( InicioPossivelAlocacao > Descarregamentos[d].HorarioFinalDescarregamento){
 				if( InicioPossivelAlocacao < Descarregamentos[d].HorarioFinalDescarregamento + TempoMaximoEntreDescargas){
 					return 1;
@@ -126,19 +126,17 @@ void Construcao::AlocaAtividade(double HoraInicio, double HoraFinal, int NumDema
 }
 
 void Construcao::ImprimeContrucao(){
+	cout << endl;
 	cout << "# Contrucao " << NumeroDaConstrucao << " com " << NumeroDemandas << " demandas, janela de tempo (" <<  TempoMinimoDeFuncionamento;
 	cout << "," << TempoMaximoDeFuncionamento << "), com rank = " << RankTempoDemandas << endl;
 	if( StatusAtendimento != 0){
-		for( int d = 0; d < Descarregamentos.size(); d++){
-			cout << " *  Carreta " << Descarregamentos[d].CarretaUtilizada->NumeroDaCarreta;
+		for( unsigned int d = 0; d < Descarregamentos.size(); d++){
+			cout << "     * Carreta " << Descarregamentos[d].CarretaUtilizada->NumeroDaCarreta;
 			cout << " atende demanda " << Descarregamentos[d].NumeroDemandaSuprida;
-			cout << " de " << Descarregamentos[d].HorarioInicioDescarregamento;
-			cout << " ate as " << Descarregamentos[d].HorarioFinalDescarregamento  << " ui "<< endl;
-			cout << " Ou! " << endl;
+			cout << " de ( " << Descarregamentos[d].HorarioInicioDescarregamento;
+			cout << " as " << Descarregamentos[d].HorarioFinalDescarregamento  << " ) " << endl;
 		}
-		cout << " Galo 1" << endl;
 	}
-	cout << " Galo 2" << endl;
 }
 
 

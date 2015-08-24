@@ -51,7 +51,7 @@ Planta::Planta(){
 }
 
 int Planta::VerificaDisponibilidade( double InicioPossivelAlocacao, double FinalPossivelAlocacao){
-	for( int c = 0; c < Carregamentos.size(); c++){
+	for( unsigned int c = 0; c < Carregamentos.size(); c++){
 		if( InicioPossivelAlocacao < Carregamentos[c].HorarioInicioCarregamento){
 			if( FinalPossivelAlocacao > Carregamentos[c].HorarioInicioCarregamento){
 				return 0;
@@ -89,15 +89,16 @@ void Planta::AlocaAtividade(double HoraInicio, double HoraFinal, int NumConstruc
 }
 
 void Planta::Imprime(){
+	cout << endl;
 	cout << "# Planta " << NumeroDaPlanta << " com " << NumeroVeiculos << " veiculos, funciona de (";
 	cout << TempoMinimoDeFuncionamento << ", "<< TempoMaximoDeFuncionamento << ")" << endl;
 
 	if ( Carregamentos.size() != 0 ){
 		cout << "   Carregamentos " << endl;
-		for( int c = 0; c < Carregamentos.size(); c++){
-			cout << " Caminhao " << Carregamentos[c].CarretaUtilizada->NumeroDaCarreta << " para suprir construcao ";
+		for( unsigned int c = 0; c < Carregamentos.size(); c++){
+			cout << "    * Caminhao " << Carregamentos[c].CarretaUtilizada->NumeroDaCarreta << " para suprir construcao ";
 			cout << Carregamentos[c].NumeroConstrucao << " demanda " << Carregamentos[c].NumeroDemandaSuprida;
-			cout << " das "<< Carregamentos[c].HorarioInicioCarregamento << " ate as " << Carregamentos[c].HorarioFinalCarregamento << " . " << endl;
+			cout << " das ( "<< Carregamentos[c].HorarioInicioCarregamento << " as " << Carregamentos[c].HorarioFinalCarregamento << " ) " << endl;
 		}
 	}
 

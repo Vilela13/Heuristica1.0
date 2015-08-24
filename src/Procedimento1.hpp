@@ -23,6 +23,8 @@ public:
 
 	void CarregaDados(int , ConjuntoPlantas, int, ConjuntoConstrucoes, int, double, double );
 
+	int SelecionaCarreta(Planta& , Construcao& , int);
+
 	int Executa();
 
     ~Procedimento1();
@@ -47,20 +49,97 @@ void Procedimento1::CarregaDados(int InstNP, ConjuntoPlantas InstPlantasInstanci
 	TempoDeVidaConcreto = InstTempoDeVidaConcreto;
 }
 
+int Procedimento1::SelecionaCarreta(Planta& PlantaMaisPerto, Construcao& ConstrucaoVaiSerSuprida, int  NumeroDemanda ){
+
+	double HorarioInicioPlanta;
+	double HorarioSaiDaPlanta;
+	double HorarioRetornaPlanta;
+	double HorarioChegaContrucao;
+	double HorarioSaiConstrucao;
+
+	int DisponibilidadePlanta;
+	int DisponibilidadeConstrucao;
+	int DisponibilidadeCarreta;
+
+	PlantaMaisPerto.VeiculosDaPlanta.OrdenaCarretasPorNUmeroDeTarefasRealizadas();
+
+
+	int c = 0;
+	HorarioInicioPlanta = PlantaMaisPerto.TempoMinimoDeFuncionamento;
+	HorarioSaiDaPlanta = HorarioInicioPlanta + PlantaMaisPerto.TempoPlanta;
+	HorarioChegaContrucao = HorarioSaiDaPlanta + PlantaMaisPerto.DistanciaConstrucoes[ConstrucaoVaiSerSuprida.NumeroDaConstrucao];
+	HorarioSaiConstrucao = HorarioChegaContrucao +  PlantaMaisPerto.VeiculosDaPlanta.Carretas[c].TempoParaDescarregarNaConstrucao[c][0];
+	HorarioRetornaPlanta = HorarioSaiConstrucao + PlantaMaisPerto.DistanciaConstrucoes[ConstrucaoVaiSerSuprida.NumeroDaConstrucao];
+
+	cout << endl << endl;
+	cout << " Horario inicio planta = " << HorarioInicioPlanta << endl;
+	cout << " Horario que sai da planta = " << HorarioSaiDaPlanta << endl;
+	cout << " Horario que chega na construcao = " << HorarioChegaContrucao << endl;
+	cout << " Horario que sai da construcao = " << HorarioSaiConstrucao << endl;
+	cout << " Horario que retorna a planta = " << HorarioRetornaPlanta << endl << endl;
+
+	DisponibilidadePlanta = PlantaMaisPerto.VerificaDisponibilidade(HorarioInicioPlanta, HorarioSaiDaPlanta );
+	cout << " Disponibilidade Planta = " << DisponibilidadePlanta << endl ;
+
+	DisponibilidadeConstrucao = ConstrucaoVaiSerSuprida.VerificaDisponibilidade( HorarioChegaContrucao, HorarioSaiConstrucao);
+	cout << " Disponibilidade Construcao = " << DisponibilidadeConstrucao << endl ;
+
+	DisponibilidadeCarreta = PlantaMaisPerto.VeiculosDaPlanta.Carretas[c].VerificaDisponibilidade(HorarioInicioPlanta, HorarioRetornaPlanta);
+	cout << " Disponibilidade Caminhao = " << DisponibilidadeCarreta << endl ;
+
+	if( DisponibilidadePlanta == 1){
+		if( DisponibilidadeConstrucao == 1){
+			if( DisponibilidadeCarreta == 1){
+				ConstrucaoVaiSerSuprida.StatusAtendimento = ConstrucaoVaiSerSuprida.StatusAtendimento + 1;
+				PlantaMaisPerto.AlocaAtividade(HorarioInicioPlanta, HorarioSaiDaPlanta, ConstrucaoVaiSerSuprida.NumeroDaConstrucao, NumeroDemanda, &( PlantaMaisPerto.VeiculosDaPlanta.Carretas[c] ) );
+				PlantaMaisPerto.Imprime();
+				ConstrucaoVaiSerSuprida.AlocaAtividade(HorarioChegaContrucao, HorarioSaiConstrucao, NumeroDemanda,  &( PlantaMaisPerto.VeiculosDaPlanta.Carretas[c] ) );
+				cout << " ei 1" << endl;
+				ConstrucaoVaiSerSuprida.ImprimeContrucao();
+				cout << " ei 2" << endl;
+				PlantaMaisPerto.VeiculosDaPlanta.Carretas[c].AlocaAtividade(HorarioInicioPlanta, HorarioRetornaPlanta, ConstrucaoVaiSerSuprida.NumeroDaConstrucao, NumeroDemanda);
+				cout << " ei 3" << endl ;
+			}
+		}
+	}
+
+	return 1;
+
+
+}
+
 int Procedimento1::Executa(){
 	Planta* PlantaMaisPerto;
 	Construcao* ConstrucaoVaiSerSuprida;
-	double DistanciaPLanta;
+	double RankInicial;
+	double DistanciaConstrucaoPlanta;
+	int PermiteAtendimentoDemanda;
 
-	DistanciaPLanta= DBL_MAX;
+	int Demanda;
+
+	vector < int > PLantasAnalizadas;
+	PLantasAnalizadas.resize(NP);
+
+	for( int p = 0; p < NP; p++){
+		PLantasAnalizadas[p] = 0;
+	}
+
+
+	RankInicial = DBL_MAX;
 
 	for( int c = 0; c < NE; c++){
-		for( int p = 0; p < NP; p++){
-			if ( DistanciaPLanta > ConstrucoesInstancia.Construcoes[c].DistanciaPlantas[p].Distancia && ConstrucoesInstancia.Construcoes[c].StatusAtendimento == 0){
-				PlantaMaisPerto = &PlantasInstancia.Plantas[p];
-				ConstrucaoVaiSerSuprida = &ConstrucoesInstancia.Construcoes[c];
-				DistanciaPLanta = ConstrucoesInstancia.Construcoes[c].DistanciaPlantas[p].Distancia;
-			}
+		if ( RankInicial > ConstrucoesInstancia.Construcoes[c].RankTempoDemandas && ConstrucoesInstancia.Construcoes[c].StatusAtendimento == 0){
+			ConstrucaoVaiSerSuprida = &ConstrucoesInstancia.Construcoes[c];
+			RankInicial = ConstrucoesInstancia.Construcoes[c].RankTempoDemandas;
+		}
+	}
+
+	DistanciaConstrucaoPlanta = DBL_MAX;
+
+	for( int p = 0; p < NP; p++){
+		if( DistanciaConstrucaoPlanta > ConstrucaoVaiSerSuprida->DistanciaPlantas[p].Distancia ){
+			PlantaMaisPerto = &PlantasInstancia.Plantas[p];
+			DistanciaConstrucaoPlanta = ConstrucaoVaiSerSuprida->DistanciaPlantas[p].Distancia;
 		}
 	}
 
@@ -68,7 +147,20 @@ int Procedimento1::Executa(){
 	ConstrucaoVaiSerSuprida->ImprimeContrucao();
 	PlantaMaisPerto->Imprime();
 
-	for( int d = 0; d < ConstrucaoVaiSerSuprida->NumeroDemandas; d++){
+	PLantasAnalizadas[ PlantaMaisPerto->NumeroDaPlanta ] = 1;
+
+	Demanda = 0;
+
+	PermiteAtendimentoDemanda = SelecionaCarreta(*PlantaMaisPerto , *ConstrucaoVaiSerSuprida,  Demanda);
+
+	cout << "  PermiteAtendimentoDemanda = " << PermiteAtendimentoDemanda << endl;
+
+	Demanda = 1;
+
+	cout << "     ConstrucaoVaiSerSuprida->NumeroDemandas " << ConstrucaoVaiSerSuprida->NumeroDemandas << endl << endl;
+
+	for( int d = Demanda; d < ConstrucaoVaiSerSuprida->NumeroDemandas; d++){
+		cout << " Demanda a ser atendida ainda = " << d << endl;
 	}
 	return 1;
 }

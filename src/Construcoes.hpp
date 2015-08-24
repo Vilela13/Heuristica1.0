@@ -14,6 +14,7 @@ class Descarregamento{
 public:
 	double HorarioInicioDescarregamento;
 	double HorarioFinalDescarregamento;
+	int NumeroDemandaSuprida;
 	Carreta* CarretaUtilizada;
 };
 
@@ -41,6 +42,9 @@ public:
 
 	vector < Descarregamento > Descarregamentos;
 
+	int VerificaDisponibilidade( double, double);
+	void AlocaAtividade(double, double, int, Carreta*);
+
 	void ImprimeContrucao();
 
 	~Construcao();
@@ -64,9 +68,77 @@ void Construcao::CalculaRankTempoDemandas(int comentarios){
 	}
 }
 
+int Construcao::VerificaDisponibilidade( double InicioPossivelAlocacao, double FinalPossivelAlocacao){
+
+	if( InicioPossivelAlocacao < TempoMinimoDeFuncionamento){
+		return 0;
+	}
+	if( FinalPossivelAlocacao > TempoMaximoDeFuncionamento){
+		return 0;
+	}
+
+	for( int d = 0; d < Descarregamentos.size(); d ++){
+		if( InicioPossivelAlocacao < Descarregamentos[d].HorarioInicioDescarregamento){
+			if( FinalPossivelAlocacao > Descarregamentos[d].HorarioInicioDescarregamento){
+				return 0;
+			}
+		}
+		if( InicioPossivelAlocacao < Descarregamentos[d].HorarioFinalDescarregamento){
+			if ( FinalPossivelAlocacao > Descarregamentos[d].HorarioFinalDescarregamento){
+				return 0;
+			}
+		}
+		if( InicioPossivelAlocacao < Descarregamentos[d].HorarioInicioDescarregamento){
+			if ( FinalPossivelAlocacao > Descarregamentos[d].HorarioFinalDescarregamento){
+				return 0;
+			}
+		}
+		if( InicioPossivelAlocacao > Descarregamentos[d].HorarioInicioDescarregamento){
+			if ( FinalPossivelAlocacao < Descarregamentos[d].HorarioFinalDescarregamento){
+				return 0;
+			}
+		}
+	}
+
+	if( StatusAtendimento == 0) {
+		return 1;
+	}else{
+		for( int d = 0; d < Descarregamentos.size(); d ++){
+			if( InicioPossivelAlocacao > Descarregamentos[d].HorarioFinalDescarregamento){
+				if( InicioPossivelAlocacao < Descarregamentos[d].HorarioFinalDescarregamento + TempoMaximoEntreDescargas){
+					return 1;
+				}
+			}
+		}
+		return 0;
+	}
+}
+
+void Construcao::AlocaAtividade(double HoraInicio, double HoraFinal, int NumDemanda, Carreta* Carreta){
+	Descarregamento DescarregamentoAux;
+
+	DescarregamentoAux.HorarioInicioDescarregamento = HoraInicio;
+	DescarregamentoAux.HorarioFinalDescarregamento = HoraFinal;
+	DescarregamentoAux.NumeroDemandaSuprida = NumDemanda;
+	DescarregamentoAux.CarretaUtilizada = Carreta;
+
+	Descarregamentos.push_back( DescarregamentoAux );
+}
+
 void Construcao::ImprimeContrucao(){
 	cout << "# Contrucao " << NumeroDaConstrucao << " com " << NumeroDemandas << " demandas, janela de tempo (" <<  TempoMinimoDeFuncionamento;
 	cout << "," << TempoMaximoDeFuncionamento << "), com rank = " << RankTempoDemandas << endl;
+	if( StatusAtendimento != 0){
+		for( int d = 0; d < Descarregamentos.size(); d++){
+			cout << " *  Carreta " << Descarregamentos[d].CarretaUtilizada->NumeroDaCarreta;
+			cout << " atende demanda " << Descarregamentos[d].NumeroDemandaSuprida;
+			cout << " de " << Descarregamentos[d].HorarioInicioDescarregamento;
+			cout << " ate as " << Descarregamentos[d].HorarioFinalDescarregamento  << " ui "<< endl;
+			cout << " Ou! " << endl;
+		}
+		cout << " Galo 1" << endl;
+	}
+	cout << " Galo 2" << endl;
 }
 
 

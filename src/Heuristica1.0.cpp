@@ -32,7 +32,7 @@ int main(int argc, char **argv) {
 
 
 
-		EscreveDadosLidosNaTela = 1;
+		EscreveDadosLidosNaTela = 0;
 
 	// -------------------------- Le arquivo com as instancias de Solomon e as guarda em uma lista ----------------------- //
 

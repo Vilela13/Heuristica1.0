@@ -14,6 +14,8 @@ class Carregamento{
 public:
 	double HorarioInicioCarregamento;
 	double HorarioFinalCarregamento;
+	int NumeroConstrucao;
+	int NumeroDemandaSuprida;
 	Carreta* CarretaUtilizada;
 };
 
@@ -31,6 +33,9 @@ public:
 
 	vector < Carregamento > Carregamentos;
 
+	int VerificaDisponibilidade( double InicioPossivelAlocacao, double FinalPossivelAlocacao);
+	void AlocaAtividade(double , double, int , int , Carreta*);
+
 	void Imprime();
 
 	~Planta();
@@ -38,10 +43,49 @@ public:
 };
 
 Planta::Planta(){
+	NumeroDaPlanta = -13;
 	NumeroVeiculos = -13;
 	TempoPlanta = -13;
 	TempoMinimoDeFuncionamento = -13;
 	TempoMaximoDeFuncionamento = -13;
+}
+
+int Planta::VerificaDisponibilidade( double InicioPossivelAlocacao, double FinalPossivelAlocacao){
+	for( int c = 0; c < Carregamentos.size(); c++){
+		if( InicioPossivelAlocacao < Carregamentos[c].HorarioInicioCarregamento){
+			if( FinalPossivelAlocacao > Carregamentos[c].HorarioInicioCarregamento){
+				return 0;
+			}
+		}
+		if( InicioPossivelAlocacao < Carregamentos[c].HorarioFinalCarregamento){
+			if ( FinalPossivelAlocacao > Carregamentos[c].HorarioFinalCarregamento){
+				return 0;
+			}
+		}
+		if( InicioPossivelAlocacao < Carregamentos[c].HorarioInicioCarregamento){
+			if ( FinalPossivelAlocacao > Carregamentos[c].HorarioFinalCarregamento){
+				return 0;
+			}
+		}
+		if( InicioPossivelAlocacao > Carregamentos[c].HorarioInicioCarregamento){
+			if ( FinalPossivelAlocacao < Carregamentos[c].HorarioFinalCarregamento){
+				return 0;
+			}
+		}
+	}
+	return 1;
+}
+
+void Planta::AlocaAtividade(double HoraInicio, double HoraFinal, int NumConstrucao, int NumDemanda, Carreta* Carreta){
+	Carregamento CarregamentoAux;
+
+	CarregamentoAux.HorarioInicioCarregamento = HoraInicio;
+	CarregamentoAux.HorarioFinalCarregamento = HoraFinal;
+	CarregamentoAux.NumeroConstrucao = NumConstrucao;
+	CarregamentoAux.NumeroDemandaSuprida = NumDemanda;
+	CarregamentoAux.CarretaUtilizada = Carreta;
+
+	Carregamentos.push_back(CarregamentoAux);
 }
 
 void Planta::Imprime(){
@@ -51,12 +95,15 @@ void Planta::Imprime(){
 	if ( Carregamentos.size() != 0 ){
 		cout << "   Carregamentos " << endl;
 		for( int c = 0; c < Carregamentos.size(); c++){
-			cout << "   ( "<< Carregamentos[c].HorarioInicioCarregamento << " , " << Carregamentos[c].HorarioFinalCarregamento << " ) " << endl;
+			cout << " Caminhao " << Carregamentos[c].CarretaUtilizada->NumeroDaCarreta << " para suprir construcao ";
+			cout << Carregamentos[c].NumeroConstrucao << " demanda " << Carregamentos[c].NumeroDemandaSuprida;
+			cout << " das "<< Carregamentos[c].HorarioInicioCarregamento << " ate as " << Carregamentos[c].HorarioFinalCarregamento << " . " << endl;
 		}
 	}
 
 
 }
+
 
 Planta::~Planta(){
 

@@ -51,6 +51,13 @@ Planta::Planta(){
 }
 
 int Planta::VerificaDisponibilidade( double InicioPossivelAlocacao, double FinalPossivelAlocacao){
+	if( InicioPossivelAlocacao < TempoMinimoDeFuncionamento){
+		return 0;
+	}
+	if( FinalPossivelAlocacao > TempoMaximoDeFuncionamento){
+		return 0;
+	}
+
 	for( unsigned int c = 0; c < Carregamentos.size(); c++){
 		if( InicioPossivelAlocacao < Carregamentos[c].HorarioInicioCarregamento){
 			if( FinalPossivelAlocacao > Carregamentos[c].HorarioInicioCarregamento){

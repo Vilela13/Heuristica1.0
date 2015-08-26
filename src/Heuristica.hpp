@@ -128,13 +128,13 @@ void Heuristica::LeNumeroPlantasEntregasVeiculos(int comentarios){
 	arq >> NP;
 	PlantasInstancia.IniciaConjuntoPlantas(NP);
 	for( int p = 0; p < NP; p++){
-		PlantasInstancia.Plantas[p].NumeroDaPlanta = p + 1;
+		PlantasInstancia.Plantas[p].NumeroDaPlanta = p;
 		//cout << "    Imputa numero planta = " << p+1 << endl;
 	}
 	arq >> NE;
 	ConstrucoesInstancia.IniciaConjuntoConstrucoes(NE);
 	for( int c = 0; c < NE; c++){
-		ConstrucoesInstancia.Construcoes[c].NumeroDaConstrucao = c + 1;
+		ConstrucoesInstancia.Construcoes[c].NumeroDaConstrucao = c;
 		//cout << "    Imputa numero construcao = " << c+1 << endl;
 	}
 	arq >> NV;

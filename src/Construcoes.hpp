@@ -104,7 +104,7 @@ int Construcao::VerificaDisponibilidade( double InicioPossivelAlocacao, double F
 		return 1;
 	}else{
 		for( unsigned int d = 0; d < Descarregamentos.size(); d ++){
-			if( InicioPossivelAlocacao > Descarregamentos[d].HorarioFinalDescarregamento){
+			if( InicioPossivelAlocacao >= Descarregamentos[d].HorarioFinalDescarregamento){
 				if( InicioPossivelAlocacao < Descarregamentos[d].HorarioFinalDescarregamento + TempoMaximoEntreDescargas){
 					return 1;
 				}

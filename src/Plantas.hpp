@@ -38,6 +38,8 @@ public:
 
 	void Imprime();
 
+	void ImprimeDistancias();
+
 	~Planta();
 
 };
@@ -114,6 +116,13 @@ void Planta::Imprime(){
 
 }
 
+void Planta::ImprimeDistancias(){
+	cout << " +++ Distancias ++++ " << endl;
+	cout << "Numero de conatricoes " << DistanciaConstrucoes.size() << endl;
+	for (int c = 0; c < DistanciaConstrucoes.size(); c++){
+		cout << "   Contrucao" << c << " = "<< DistanciaConstrucoes[c] << endl;
+	}
+}
 
 Planta::~Planta(){
 

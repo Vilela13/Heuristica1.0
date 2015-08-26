@@ -84,6 +84,9 @@ void Carreta::AlocaAtividade(double HoraInicio, double HoraFinal, int NumContruc
 	DeslocamentoAux.NumeroConstrucao = NumContrucao;
 	DeslocamentoAux.NumeroDemandaSuprida = NumDemanda;
 
+	cout << endl << endl << "     ******** aloca  caminhao ********* " << endl;
+	cout << " inicio " << HoraInicio << " final " << HoraFinal <<endl;
+
 	Deslocamentos.push_back( DeslocamentoAux );
 }
 
@@ -91,8 +94,8 @@ void Carreta::Imprime(){
 	cout << endl;
 	cout << "# Carreta " << NumeroDaCarreta << " que atendeu " << NumeroDeDemandasAntendidas << endl;
 	for( int d = 0; d < NumeroDeDemandasAntendidas; d++){
-		cout << "    * Atendeu a construção " << Deslocamentos[d].NumeroConstrucao << " na demanda " << Deslocamentos[d].NumeroDemandaSuprida;
-		cout << " no horario ( " << Deslocamentos[d].HorarioInicioDeslocamento << " - " << Deslocamentos[d].HorarioFinalDeslocamento << " ) " << endl;
+		cout << "    *  funciona de ( " << Deslocamentos[d].HorarioInicioDeslocamento << " - " << Deslocamentos[d].HorarioFinalDeslocamento << " ) " ;
+		cout << " para atender a [" << Deslocamentos[d].NumeroConstrucao << "-"<< Deslocamentos[d].NumeroDemandaSuprida << "]" << endl;
 	}
 
 }
@@ -128,7 +131,7 @@ ConjuntoCarretas::ConjuntoCarretas(){
 void ConjuntoCarretas::IniciaConjuntoCarretas(int Numero){
 	Carretas.resize(Numero);
 	for(int v = 0; v < Numero; v++){
-		Carretas[v].NumeroDaCarreta = v + 1;
+		Carretas[v].NumeroDaCarreta = v;
 		Carretas[v].NumeroDeDemandasAntendidas = 0;
 	}
 

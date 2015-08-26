@@ -25,6 +25,11 @@ public:
 
 	int SelecionaCarreta(Planta& , Construcao& , int);
 
+	void InicializaPlantasAnalizadas(vector < int >&);
+
+	int SelecionaConstrucao( Construcao**);
+	int SelecionaPlanta( Planta** , Construcao*, vector < int > );
+
 	int Executa();
 
     ~Procedimento1();
@@ -111,50 +116,92 @@ int Procedimento1::SelecionaCarreta(Planta& PlantaMaisPerto, Construcao& Constru
 
 }
 
-int Procedimento1::Executa(){
-	Planta* PlantaMaisPerto;
-	Construcao* ConstrucaoVaiSerSuprida;
-	double RankInicial;
-	double DistanciaConstrucaoPlanta;
-	int PermiteAtendimentoDemanda;
-
-	int Demanda;
-
-	vector < int > PLantasAnalizadas;
-	PLantasAnalizadas.resize(NP);
+void Procedimento1::InicializaPlantasAnalizadas(vector < int >& PlantasAnalizadas){
+	PlantasAnalizadas.resize(NP);
 
 	for( int p = 0; p < NP; p++){
-		PLantasAnalizadas[p] = 0;
+		PlantasAnalizadas[p] = 0;
 	}
+}
 
+int Procedimento1::SelecionaConstrucao( Construcao** ConstrucaoVaiSerSuprida ){
+	double RankInicial;
+	int Ativo;
 
+	Ativo = 0;
 	RankInicial = DBL_MAX;
 
 	for( int c = 0; c < NE; c++){
 		if ( RankInicial > ConstrucoesInstancia.Construcoes[c].RankTempoDemandas){
 			if(ConstrucoesInstancia.Construcoes[c].StatusAtendimento < ConstrucoesInstancia.Construcoes[c].NumeroDemandas){
-				ConstrucaoVaiSerSuprida = &ConstrucoesInstancia.Construcoes[c];
+				*ConstrucaoVaiSerSuprida = &ConstrucoesInstancia.Construcoes[c];
 				RankInicial = ConstrucoesInstancia.Construcoes[c].RankTempoDemandas;
+				Ativo = 1;
 			}
 		}
 	}
+	if( Ativo == 1){
+		return 1;
+	}else{
+		return 0;
+	}
+}
 
+int Procedimento1::SelecionaPlanta( Planta** PlantaMaisPerto,Construcao* ConstrucaoVaiSerSuprida, vector < int > PlantasAnalizadas ){
+	double DistanciaConstrucaoPlanta;
+	int Ativo;
+
+	Ativo = 0;
 	DistanciaConstrucaoPlanta = DBL_MAX;
 
 	for( int p = 0; p < NP; p++){
 		if( DistanciaConstrucaoPlanta > ConstrucaoVaiSerSuprida->DistanciaPlantas[p].Distancia){
-			if( PLantasAnalizadas[p] == 0){
-				PlantaMaisPerto = &PlantasInstancia.Plantas[p];
+			if( PlantasAnalizadas[p] == 0){
+				*PlantaMaisPerto = &PlantasInstancia.Plantas[p];
 				DistanciaConstrucaoPlanta = ConstrucaoVaiSerSuprida->DistanciaPlantas[p].Distancia;
 			}
 		}
 	}
+	if( Ativo == 1){
+		return 1;
+	}else{
+		return 0;
+	}
+}
+
+int Procedimento1::Executa(){
+	Planta* PlantaMaisPerto;
+	Construcao* ConstrucaoVaiSerSuprida;
+
+	int ConstrucaoSelecionada;
+	int PlantaSelecionada;
+
+
+	int PermiteAtendimentoDemanda;
+
+	int Demanda;
+
+	vector < int > PlantasAnalizadas;
+
+	InicializaPlantasAnalizadas(PlantasAnalizadas);
+
+	for ( int p = 0; p < NP; p++){
+		cout << endl << " PlantasAnalizadas[" << p << "] = " << PlantasAnalizadas[p] << endl;
+	}
+
+
+
+	ConstrucaoSelecionada = SelecionaConstrucao( &ConstrucaoVaiSerSuprida);
+
+	PlantaSelecionada = SelecionaPlanta( &PlantaMaisPerto , ConstrucaoVaiSerSuprida, PlantasAnalizadas );
+
+
 
 	cout << endl << "Construcao e planta selecionadas " << endl << endl;
 	ConstrucaoVaiSerSuprida->ImprimeContrucao();
 	PlantaMaisPerto->Imprime();
 
-	PLantasAnalizadas[ PlantaMaisPerto->NumeroDaPlanta ] = 1;
+	PlantasAnalizadas[ PlantaMaisPerto->NumeroDaPlanta ] = 1;
 
 	Demanda = 0;
 
@@ -167,6 +214,7 @@ int Procedimento1::Executa(){
 	for( int d = Demanda; d < ConstrucaoVaiSerSuprida->NumeroDemandas; d++){
 		cout << " Demanda a ser atendida ainda = " << d << endl;
 	}
+
 	return 1;
 }
 

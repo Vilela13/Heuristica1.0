@@ -109,6 +109,8 @@ void Planta::Imprime(){
 		}
 	}
 
+	cout << endl << "    =>  Veiculos da Planta " << endl;
+	VeiculosDaPlanta.Imprime();
 
 }
 
@@ -126,6 +128,8 @@ public:
 
 	void IniciaConjuntoPlantas(int);
 
+	void Imprime();
+
 
 	~ConjuntoPlantas();
 };
@@ -137,6 +141,13 @@ ConjuntoPlantas::ConjuntoPlantas(){
 void ConjuntoPlantas::IniciaConjuntoPlantas(int Numero){
 	Plantas.resize(Numero);
 
+}
+
+void ConjuntoPlantas::Imprime(){
+	cout << endl << endl << " [[[[[[  Imprime plantas  ]]]]]]" << endl;
+	for( int p = 0; p < Plantas.size(); p++){
+		Plantas[p].Imprime();
+	}
 }
 
 ConjuntoPlantas::~ConjuntoPlantas(){

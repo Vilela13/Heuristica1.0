@@ -116,6 +116,8 @@ public:
 
 	void OrdenaCarretasPorNUmeroDeTarefasRealizadas();
 
+	void Imprime();
+
 	~ConjuntoCarretas();
 };
 
@@ -134,6 +136,13 @@ void ConjuntoCarretas::IniciaConjuntoCarretas(int Numero){
 
 void ConjuntoCarretas::OrdenaCarretasPorNUmeroDeTarefasRealizadas(){
 	sort (Carretas.begin(), Carretas.end(), DecideQualCarretaTemMenosTarefasRealizadas);
+}
+
+void ConjuntoCarretas::Imprime(){
+	cout << endl << endl << " [[[[[[  Imprime carretas  ]]]]]]" << endl;
+	for( int c = 0; c < Carretas.size(); c++){
+		Carretas[c].Imprime();
+	}
 }
 
 ConjuntoCarretas::~ConjuntoCarretas(){

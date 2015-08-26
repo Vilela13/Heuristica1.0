@@ -171,6 +171,7 @@ void ConjuntoConstrucoes::IniciaConjuntoConstrucoes(int Numero){
 }
 
 void ConjuntoConstrucoes::ImprimeContrucoes(){
+	cout << endl << endl << " [[[[[[  Imprime construcoes  ]]]]]]" << endl;
 	for(int c = 0; c < NumeroConstrucoes; c++){
 		Construcoes[c].ImprimeContrucao();
 	}

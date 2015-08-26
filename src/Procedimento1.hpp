@@ -23,14 +23,16 @@ public:
 
 	void CarregaDados(int , ConjuntoPlantas, int, ConjuntoConstrucoes, int, double, double );
 
-	int SelecionaCarreta(Planta& , Construcao& , int);
-
 	void InicializaPlantasAnalizadas(vector < int >&);
 
 	int SelecionaConstrucao( Construcao**);
 	int SelecionaPlanta( Planta** , Construcao*, vector < int > );
+	int SelecionaCarreta(Planta& , Construcao& , int);
+
+	int AnalizouTodasPLanats(vector < int > );
 
 	int Executa();
+
 
     ~Procedimento1();
 
@@ -54,67 +56,6 @@ void Procedimento1::CarregaDados(int InstNP, ConjuntoPlantas InstPlantasInstanci
 	TempoDeVidaConcreto = InstTempoDeVidaConcreto;
 }
 
-int Procedimento1::SelecionaCarreta(Planta& PlantaMaisPerto, Construcao& ConstrucaoVaiSerSuprida, int  NumeroDemanda ){
-
-	double HorarioInicioPlanta;
-	double HorarioSaiDaPlanta;
-	double HorarioRetornaPlanta;
-	double HorarioChegaContrucao;
-	double HorarioSaiConstrucao;
-
-	int DisponibilidadePlanta;
-	int DisponibilidadeConstrucao;
-	int DisponibilidadeCarreta;
-
-	PlantaMaisPerto.VeiculosDaPlanta.OrdenaCarretasPorNUmeroDeTarefasRealizadas();
-
-
-	for( int c = 0; c < PlantaMaisPerto.NumeroVeiculos; c++){
-		HorarioInicioPlanta = PlantaMaisPerto.TempoMinimoDeFuncionamento;
-		do{
-			HorarioSaiDaPlanta = HorarioInicioPlanta + PlantaMaisPerto.TempoPlanta;
-			HorarioChegaContrucao = HorarioSaiDaPlanta + PlantaMaisPerto.DistanciaConstrucoes[ConstrucaoVaiSerSuprida.NumeroDaConstrucao];
-			HorarioSaiConstrucao = HorarioChegaContrucao +  PlantaMaisPerto.VeiculosDaPlanta.Carretas[c].TempoParaDescarregarNaConstrucao[c][0];
-			HorarioRetornaPlanta = HorarioSaiConstrucao + PlantaMaisPerto.DistanciaConstrucoes[ConstrucaoVaiSerSuprida.NumeroDaConstrucao];
-
-			cout << endl << endl;
-			cout << " Horario inicio planta = " << HorarioInicioPlanta << endl;
-			cout << " Horario que sai da planta = " << HorarioSaiDaPlanta << endl;
-			cout << " Horario que chega na construcao = " << HorarioChegaContrucao << endl;
-			cout << " Horario que sai da construcao = " << HorarioSaiConstrucao << endl;
-			cout << " Horario que retorna a planta = " << HorarioRetornaPlanta << endl << endl;
-
-			DisponibilidadePlanta = PlantaMaisPerto.VerificaDisponibilidade(HorarioInicioPlanta, HorarioSaiDaPlanta );
-			cout << " Disponibilidade Planta = " << DisponibilidadePlanta << endl ;
-
-			DisponibilidadeConstrucao = ConstrucaoVaiSerSuprida.VerificaDisponibilidade( HorarioChegaContrucao, HorarioSaiConstrucao);
-			cout << " Disponibilidade Construcao = " << DisponibilidadeConstrucao << endl ;
-
-			DisponibilidadeCarreta = PlantaMaisPerto.VeiculosDaPlanta.Carretas[c].VerificaDisponibilidade(HorarioInicioPlanta, HorarioRetornaPlanta);
-			cout << " Disponibilidade Caminhao = " << DisponibilidadeCarreta << endl ;
-
-			if( DisponibilidadePlanta == 1){
-				if( DisponibilidadeConstrucao == 1){
-					if( DisponibilidadeCarreta == 1){
-						ConstrucaoVaiSerSuprida.StatusAtendimento = ConstrucaoVaiSerSuprida.StatusAtendimento + 1;
-						PlantaMaisPerto.AlocaAtividade(HorarioInicioPlanta, HorarioSaiDaPlanta, ConstrucaoVaiSerSuprida.NumeroDaConstrucao, NumeroDemanda, &( PlantaMaisPerto.VeiculosDaPlanta.Carretas[c] ) );
-						PlantaMaisPerto.Imprime();
-						ConstrucaoVaiSerSuprida.AlocaAtividade(HorarioChegaContrucao, HorarioSaiConstrucao, NumeroDemanda,  &( PlantaMaisPerto.VeiculosDaPlanta.Carretas[c] ) );
-						ConstrucaoVaiSerSuprida.ImprimeContrucao();
-						PlantaMaisPerto.VeiculosDaPlanta.Carretas[c].AlocaAtividade(HorarioInicioPlanta, HorarioRetornaPlanta, ConstrucaoVaiSerSuprida.NumeroDaConstrucao, NumeroDemanda);
-						PlantaMaisPerto.VeiculosDaPlanta.Carretas[c].Imprime();
-						return 1;
-					}
-				}
-			}
-			HorarioInicioPlanta = HorarioInicioPlanta + 0.016666;
-		}while( HorarioSaiDaPlanta <= PlantaMaisPerto.TempoMaximoDeFuncionamento ||  HorarioSaiConstrucao <= ConstrucaoVaiSerSuprida.TempoMaximoDeFuncionamento);
-	}
-
-	return 0;
-
-
-}
 
 void Procedimento1::InicializaPlantasAnalizadas(vector < int >& PlantasAnalizadas){
 	PlantasAnalizadas.resize(NP);
@@ -159,6 +100,7 @@ int Procedimento1::SelecionaPlanta( Planta** PlantaMaisPerto,Construcao* Constru
 			if( PlantasAnalizadas[p] == 0){
 				*PlantaMaisPerto = &PlantasInstancia.Plantas[p];
 				DistanciaConstrucaoPlanta = ConstrucaoVaiSerSuprida->DistanciaPlantas[p].Distancia;
+				Ativo = 1;
 			}
 		}
 	}
@@ -167,6 +109,78 @@ int Procedimento1::SelecionaPlanta( Planta** PlantaMaisPerto,Construcao* Constru
 	}else{
 		return 0;
 	}
+}
+
+
+int Procedimento1::SelecionaCarreta(Planta& PlantaMaisPerto, Construcao& ConstrucaoVaiSerSuprida, int  NumeroDemanda ){
+
+	double HorarioInicioPlanta;
+	double HorarioSaiDaPlanta;
+	double HorarioRetornaPlanta;
+	double HorarioChegaContrucao;
+	double HorarioSaiConstrucao;
+
+	int DisponibilidadePlanta;
+	int DisponibilidadeConstrucao;
+	int DisponibilidadeCarreta;
+
+	PlantaMaisPerto.VeiculosDaPlanta.OrdenaCarretasPorNUmeroDeTarefasRealizadas();
+
+
+	for( int c = 0; c < PlantaMaisPerto.NumeroVeiculos; c++){
+		HorarioInicioPlanta = PlantaMaisPerto.TempoMinimoDeFuncionamento;
+		do{
+			HorarioSaiDaPlanta = HorarioInicioPlanta + PlantaMaisPerto.TempoPlanta;
+			HorarioChegaContrucao = HorarioSaiDaPlanta + PlantaMaisPerto.DistanciaConstrucoes[ConstrucaoVaiSerSuprida.NumeroDaConstrucao];
+			HorarioSaiConstrucao = HorarioChegaContrucao +  PlantaMaisPerto.VeiculosDaPlanta.Carretas[c].TempoParaDescarregarNaConstrucao[c][0];
+			HorarioRetornaPlanta = HorarioSaiConstrucao + PlantaMaisPerto.DistanciaConstrucoes[ConstrucaoVaiSerSuprida.NumeroDaConstrucao];
+
+			//cout << endl << endl;
+			//cout << " 		Horario inicio planta = " << HorarioInicioPlanta << endl;
+			//cout << " 		Horario que sai da planta = " << HorarioSaiDaPlanta << endl;
+			//cout << " 		Horario que chega na construcao = " << HorarioChegaContrucao << endl;
+			//cout << " 		Horario que sai da construcao = " << HorarioSaiConstrucao << endl;
+			//cout << " 		Horario que retorna a planta = " << HorarioRetornaPlanta << endl << endl;
+
+			DisponibilidadePlanta = PlantaMaisPerto.VerificaDisponibilidade(HorarioInicioPlanta, HorarioSaiDaPlanta );
+			//cout << " 		Disponibilidade Planta = " << DisponibilidadePlanta << endl ;
+
+			DisponibilidadeConstrucao = ConstrucaoVaiSerSuprida.VerificaDisponibilidade( HorarioChegaContrucao, HorarioSaiConstrucao);
+			//cout << " 		Disponibilidade Construcao = " << DisponibilidadeConstrucao << endl ;
+
+			DisponibilidadeCarreta = PlantaMaisPerto.VeiculosDaPlanta.Carretas[c].VerificaDisponibilidade(HorarioInicioPlanta, HorarioRetornaPlanta);
+			//cout << " 		Disponibilidade Caminhao = " << DisponibilidadeCarreta << endl ;
+
+			if( DisponibilidadePlanta == 1){
+				if( DisponibilidadeConstrucao == 1){
+					if( DisponibilidadeCarreta == 1){
+						ConstrucaoVaiSerSuprida.StatusAtendimento = ConstrucaoVaiSerSuprida.StatusAtendimento + 1;
+						PlantaMaisPerto.AlocaAtividade(HorarioInicioPlanta, HorarioSaiDaPlanta, ConstrucaoVaiSerSuprida.NumeroDaConstrucao, NumeroDemanda, &( PlantaMaisPerto.VeiculosDaPlanta.Carretas[c] ) );
+						//PlantaMaisPerto.Imprime();
+						ConstrucaoVaiSerSuprida.AlocaAtividade(HorarioChegaContrucao, HorarioSaiConstrucao, NumeroDemanda,  &( PlantaMaisPerto.VeiculosDaPlanta.Carretas[c] ) );
+						//ConstrucaoVaiSerSuprida.ImprimeContrucao();
+						PlantaMaisPerto.VeiculosDaPlanta.Carretas[c].AlocaAtividade(HorarioInicioPlanta, HorarioRetornaPlanta, ConstrucaoVaiSerSuprida.NumeroDaConstrucao, NumeroDemanda);
+						//PlantaMaisPerto.VeiculosDaPlanta.Carretas[c].Imprime();
+						return 1;
+					}
+				}
+			}
+			HorarioInicioPlanta = HorarioInicioPlanta + 0.016666;
+		}while( HorarioSaiDaPlanta <= PlantaMaisPerto.TempoMaximoDeFuncionamento ||  HorarioSaiConstrucao <= ConstrucaoVaiSerSuprida.TempoMaximoDeFuncionamento);
+	}
+
+	return 0;
+
+
+}
+
+int Procedimento1::AnalizouTodasPLanats(vector < int > PlantasAnalizadas){
+	for ( int p = 0; p < NP; p++){
+		if( PlantasAnalizadas[p] == 0){
+			return 0;
+		}
+	}
+	return 1;
 }
 
 int Procedimento1::Executa(){
@@ -179,41 +193,36 @@ int Procedimento1::Executa(){
 
 	int PermiteAtendimentoDemanda;
 
-	int Demanda;
-
 	vector < int > PlantasAnalizadas;
 
 	InicializaPlantasAnalizadas(PlantasAnalizadas);
 
-	for ( int p = 0; p < NP; p++){
-		cout << endl << " PlantasAnalizadas[" << p << "] = " << PlantasAnalizadas[p] << endl;
-	}
-
-
-
 	ConstrucaoSelecionada = SelecionaConstrucao( &ConstrucaoVaiSerSuprida);
 
-	PlantaSelecionada = SelecionaPlanta( &PlantaMaisPerto , ConstrucaoVaiSerSuprida, PlantasAnalizadas );
+	for( int Demanda = 0; Demanda < ConstrucaoVaiSerSuprida->NumeroDemandas; Demanda++  ){
+
+		PermiteAtendimentoDemanda = 0;
+
+		do{
+			PlantaSelecionada = SelecionaPlanta( &PlantaMaisPerto , ConstrucaoVaiSerSuprida, PlantasAnalizadas );
+
+			if( PlantaSelecionada == 1){
+				//cout << endl << "Construcao e planta selecionadas " << endl << endl;
+				//ConstrucaoVaiSerSuprida->ImprimeContrucao();
+				//PlantaMaisPerto->Imprime();
+
+				PlantasAnalizadas[ PlantaMaisPerto->NumeroDaPlanta ] = 1;
+
+				PermiteAtendimentoDemanda = SelecionaCarreta(*PlantaMaisPerto , *ConstrucaoVaiSerSuprida,  Demanda);
+			}
+		}while( PermiteAtendimentoDemanda == 0 && AnalizouTodasPLanats(PlantasAnalizadas) == 0);
 
 
-
-	cout << endl << "Construcao e planta selecionadas " << endl << endl;
-	ConstrucaoVaiSerSuprida->ImprimeContrucao();
-	PlantaMaisPerto->Imprime();
-
-	PlantasAnalizadas[ PlantaMaisPerto->NumeroDaPlanta ] = 1;
-
-	Demanda = 0;
-
-	PermiteAtendimentoDemanda = SelecionaCarreta(*PlantaMaisPerto , *ConstrucaoVaiSerSuprida,  Demanda);
-
-
-	Demanda = 1;
-
-
-	for( int d = Demanda; d < ConstrucaoVaiSerSuprida->NumeroDemandas; d++){
-		cout << " Demanda a ser atendida ainda = " << d << endl;
 	}
+
+	PlantasInstancia.Imprime();
+	ConstrucoesInstancia.ImprimeContrucoes();
+
 
 	return 1;
 }

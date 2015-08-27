@@ -126,7 +126,6 @@ void Construcao::AlocaAtividade(double HoraInicio, double HoraFinal, int NumDema
 }
 
 void Construcao::ImprimeContrucao(){
-	cout << endl;
 	cout << "# Contrucao " << NumeroDaConstrucao << " com " << NumeroDemandas << " demandas, janela de tempo (" <<  TempoMinimoDeFuncionamento;
 	cout << "," << TempoMaximoDeFuncionamento << "), com rank = " << RankTempoDemandas << endl;
 	if( StatusAtendimento != 0){

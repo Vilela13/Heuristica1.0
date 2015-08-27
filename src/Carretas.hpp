@@ -25,6 +25,7 @@ public:
 	Carreta();
 	int NumeroDaCarreta;
 	int NumeroDeDemandasAntendidas;
+	int NumeroPlanta;
 	vector < vector < double > > TempoParaDescarregarNaConstrucao;
 	vector < Deslocamento > Deslocamentos;
 
@@ -41,6 +42,7 @@ public:
 Carreta::Carreta(){
 	NumeroDaCarreta = -13;
 	NumeroDeDemandasAntendidas = -13;
+	NumeroPlanta = -13;
 
 }
 
@@ -91,8 +93,7 @@ void Carreta::AlocaAtividade(double HoraInicio, double HoraFinal, int NumContruc
 }
 
 void Carreta::Imprime(){
-	cout << endl;
-	cout << "# Carreta " << NumeroDaCarreta << " que atendeu " << NumeroDeDemandasAntendidas << endl;
+	cout << "# Carreta [" << NumeroPlanta << "-" << NumeroDaCarreta << "] que atendeu " << NumeroDeDemandasAntendidas << endl;
 	for( int d = 0; d < NumeroDeDemandasAntendidas; d++){
 		cout << "    *  funciona de ( " << Deslocamentos[d].HorarioInicioDeslocamento << " - " << Deslocamentos[d].HorarioFinalDeslocamento << " ) " ;
 		cout << " para atender a [" << Deslocamentos[d].NumeroConstrucao << "-"<< Deslocamentos[d].NumeroDemandaSuprida << "]" << endl;
@@ -115,7 +116,7 @@ public:
 	ConjuntoCarretas();
 	vector< Carreta > Carretas;
 
-	void IniciaConjuntoCarretas(int);
+	void IniciaConjuntoCarretas(int, int);
 
 	void OrdenaCarretasPorNUmeroDeTarefasRealizadas();
 
@@ -128,11 +129,12 @@ ConjuntoCarretas::ConjuntoCarretas(){
 
 }
 
-void ConjuntoCarretas::IniciaConjuntoCarretas(int Numero){
-	Carretas.resize(Numero);
-	for(int v = 0; v < Numero; v++){
+void ConjuntoCarretas::IniciaConjuntoCarretas(int NumeroCaminhoes, int NumeroDaPlanta){
+	Carretas.resize(NumeroCaminhoes);
+	for(int v = 0; v < NumeroCaminhoes; v++){
 		Carretas[v].NumeroDaCarreta = v;
 		Carretas[v].NumeroDeDemandasAntendidas = 0;
+		Carretas[v].NumeroPlanta = NumeroDaPlanta;
 	}
 
 }
@@ -142,7 +144,7 @@ void ConjuntoCarretas::OrdenaCarretasPorNUmeroDeTarefasRealizadas(){
 }
 
 void ConjuntoCarretas::Imprime(){
-	cout << endl << endl << " [[[[[[  Imprime carretas  ]]]]]]" << endl;
+	cout  << " [[[[[[  Imprime carretas  ]]]]]]" << endl;
 	for( int c = 0; c < Carretas.size(); c++){
 		Carretas[c].Imprime();
 	}

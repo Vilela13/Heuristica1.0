@@ -164,7 +164,7 @@ void Heuristica::LeVeiculosPorPlanta(int comentarios){
 	int aux;
 	for (int i = 0; i < NP ; i++){
 		arq >> PlantasInstancia.Plantas[i].NumeroVeiculos;
-		PlantasInstancia.Plantas[i].VeiculosDaPlanta.IniciaConjuntoCarretas( PlantasInstancia.Plantas[i].NumeroVeiculos );
+		PlantasInstancia.Plantas[i].VeiculosDaPlanta.IniciaConjuntoCarretas( PlantasInstancia.Plantas[i].NumeroVeiculos, PlantasInstancia.Plantas[i].NumeroDaPlanta );
 		if( comentarios == 1){
 			cout << " Numero de veiculo na planta  " << i + 1 << " = " << PlantasInstancia.Plantas[i].NumeroVeiculos << "  ( ";
 		}

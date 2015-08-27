@@ -126,7 +126,7 @@ int Procedimento1::SelecionaCarreta(Planta& PlantaMaisPerto, Construcao& Constru
 
 	PlantaMaisPerto.VeiculosDaPlanta.OrdenaCarretasPorNUmeroDeTarefasRealizadas();
 
-	PlantaMaisPerto.ImprimeDistancias();
+	//PlantaMaisPerto.ImprimeDistancias();
 
 
 	for( int c = 0; c < PlantaMaisPerto.NumeroVeiculos; c++){
@@ -211,7 +211,7 @@ int Procedimento1::Executa(){
 		do{
 			PlantaSelecionada = SelecionaPlanta( &PlantaMaisPerto , ConstrucaoVaiSerSuprida, PlantasAnalizadas );
 
-			PlantaMaisPerto->ImprimeDistancias();
+			//PlantaMaisPerto->ImprimeDistancias();
 
 			if( PlantaSelecionada == 1){
 				//cout << endl << "Construcao e planta selecionadas " << endl << endl;

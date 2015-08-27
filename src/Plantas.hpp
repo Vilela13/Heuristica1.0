@@ -111,7 +111,7 @@ void Planta::Imprime(){
 		}
 	}
 
-	cout << endl << "    =>  Veiculos da Planta " << endl;
+	cout <<  "    =>  Veiculos da Planta " << NumeroDaPlanta << " <= " << endl;
 	VeiculosDaPlanta.Imprime();
 
 }

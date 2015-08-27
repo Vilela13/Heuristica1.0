@@ -31,6 +31,8 @@ public:
 
 	int AnalizouTodasPLanats(vector < int > );
 
+	void ConfereSeNaoEncontrouUmaPlanta( int);
+
 	int Executa();
 
 
@@ -59,7 +61,6 @@ void Procedimento1::CarregaDados(int InstNP, ConjuntoPlantas InstPlantasInstanci
 
 void Procedimento1::InicializaPlantasAnalizadas(vector < int >& PlantasAnalizadas){
 	PlantasAnalizadas.resize(NP);
-
 	for( int p = 0; p < NP; p++){
 		PlantasAnalizadas[p] = 0;
 	}
@@ -134,8 +135,8 @@ int Procedimento1::SelecionaCarreta(Planta& PlantaMaisPerto, Construcao& Constru
 		do{
 			HorarioSaiDaPlanta = HorarioInicioPlanta + PlantaMaisPerto.TempoPlanta;
 			HorarioChegaContrucao = HorarioSaiDaPlanta + PlantaMaisPerto.DistanciaConstrucoes[ConstrucaoVaiSerSuprida.NumeroDaConstrucao];
-			cout << endl << endl << " ConstrucaoVaiSerSuprida.NumeroDaConstrucao " << ConstrucaoVaiSerSuprida.NumeroDaConstrucao << endl;
-			cout << endl << endl << " PlantaMaisPerto.DistanciaConstrucoes[ConstrucaoVaiSerSuprida.NumeroDaConstrucao] " << PlantaMaisPerto.DistanciaConstrucoes[ConstrucaoVaiSerSuprida.NumeroDaConstrucao] << endl << endl;
+			//cout << endl << endl << " ConstrucaoVaiSerSuprida.NumeroDaConstrucao " << ConstrucaoVaiSerSuprida.NumeroDaConstrucao << endl;
+			//cout << endl << endl << " PlantaMaisPerto.DistanciaConstrucoes[ConstrucaoVaiSerSuprida.NumeroDaConstrucao] " << PlantaMaisPerto.DistanciaConstrucoes[ConstrucaoVaiSerSuprida.NumeroDaConstrucao] << endl << endl;
 			HorarioSaiConstrucao = HorarioChegaContrucao +  PlantaMaisPerto.VeiculosDaPlanta.Carretas[c].TempoParaDescarregarNaConstrucao[c][0];
 			HorarioRetornaPlanta = HorarioSaiConstrucao + PlantaMaisPerto.DistanciaConstrucoes[ConstrucaoVaiSerSuprida.NumeroDaConstrucao];
 
@@ -188,28 +189,42 @@ int Procedimento1::AnalizouTodasPLanats(vector < int > PlantasAnalizadas){
 	return 1;
 }
 
+void Procedimento1::ConfereSeNaoEncontrouUmaPlanta( int  PlantaSelecionada){
+	if( PlantaSelecionada == 0){
+		cout  << endl << endl << endl;
+		cout << " ##############################################################" << endl;
+		cout << "           Não encontrou Planta para se alocar " << endl;
+		cout << " ##############################################################" << endl;
+		cout << endl << endl;
+	}
+}
+
 int Procedimento1::Executa(){
 	Planta* PlantaMaisPerto;
 	Construcao* ConstrucaoVaiSerSuprida;
 
 	int ConstrucaoSelecionada;
 	int PlantaSelecionada;
+	int Demanda;
 
 
 	int PermiteAtendimentoDemanda;
 
 	vector < int > PlantasAnalizadas;
 
-	InicializaPlantasAnalizadas(PlantasAnalizadas);
 
 	ConstrucaoSelecionada = SelecionaConstrucao( &ConstrucaoVaiSerSuprida);
 
-	for( int Demanda = 0; Demanda < ConstrucaoVaiSerSuprida->NumeroDemandas; Demanda++  ){
+	InicializaPlantasAnalizadas(PlantasAnalizadas);
+
+		Demanda = ConstrucaoVaiSerSuprida->StatusAtendimento;
 
 		PermiteAtendimentoDemanda = 0;
 
 		do{
 			PlantaSelecionada = SelecionaPlanta( &PlantaMaisPerto , ConstrucaoVaiSerSuprida, PlantasAnalizadas );
+
+			ConfereSeNaoEncontrouUmaPlanta( PlantaSelecionada);
 
 			//PlantaMaisPerto->ImprimeDistancias();
 
@@ -225,7 +240,7 @@ int Procedimento1::Executa(){
 		}while( PermiteAtendimentoDemanda == 0 && AnalizouTodasPLanats(PlantasAnalizadas) == 0);
 
 
-	}
+
 
 	PlantasInstancia.Imprime();
 	ConstrucoesInstancia.ImprimeContrucoes();

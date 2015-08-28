@@ -49,23 +49,23 @@ Carreta::Carreta(){
 int Carreta::VerificaDisponibilidade(double InicioPossivelAlocacao, double FinalPossivelAlocacao){
 
 	for( unsigned int d = 0; d < Deslocamentos.size(); d ++){
-		if( InicioPossivelAlocacao < Deslocamentos[d].HorarioInicioDeslocamento){
+		if( InicioPossivelAlocacao <= Deslocamentos[d].HorarioInicioDeslocamento){
+			if ( FinalPossivelAlocacao >= Deslocamentos[d].HorarioFinalDeslocamento){
+				return 0;
+			}
+		}
+		if( InicioPossivelAlocacao >= Deslocamentos[d].HorarioInicioDeslocamento){
+			if ( FinalPossivelAlocacao <= Deslocamentos[d].HorarioFinalDeslocamento){
+				return 0;
+			}
+		}
+		if( InicioPossivelAlocacao <= Deslocamentos[d].HorarioInicioDeslocamento){
 			if( FinalPossivelAlocacao > Deslocamentos[d].HorarioInicioDeslocamento){
 				return 0;
 			}
 		}
 		if( InicioPossivelAlocacao < Deslocamentos[d].HorarioFinalDeslocamento){
-			if ( FinalPossivelAlocacao > Deslocamentos[d].HorarioFinalDeslocamento){
-				return 0;
-			}
-		}
-		if( InicioPossivelAlocacao < Deslocamentos[d].HorarioInicioDeslocamento){
-			if ( FinalPossivelAlocacao > Deslocamentos[d].HorarioFinalDeslocamento){
-				return 0;
-			}
-		}
-		if( InicioPossivelAlocacao > Deslocamentos[d].HorarioInicioDeslocamento){
-			if ( FinalPossivelAlocacao < Deslocamentos[d].HorarioFinalDeslocamento){
+			if ( FinalPossivelAlocacao >= Deslocamentos[d].HorarioFinalDeslocamento){
 				return 0;
 			}
 		}
@@ -93,10 +93,10 @@ void Carreta::AlocaAtividade(double HoraInicio, double HoraFinal, int NumContruc
 }
 
 void Carreta::Imprime(){
-	cout << "# Carreta [" << NumeroPlanta << "-" << NumeroDaCarreta << "] que atendeu " << NumeroDeDemandasAntendidas << " das demandas" << endl;
+	cout << "# Carreta [" << NumeroPlanta << "-" << NumeroDaCarreta << "] que atendeu " << NumeroDeDemandasAntendidas << " demandas" << endl;
 	for( int d = 0; d < NumeroDeDemandasAntendidas; d++){
-		cout << "    *  funciona de ( " << Deslocamentos[d].HorarioInicioDeslocamento << " - " << Deslocamentos[d].HorarioFinalDeslocamento << " ) " ;
-		cout << " para atender a [" << Deslocamentos[d].NumeroConstrucao << "-"<< Deslocamentos[d].NumeroDemandaSuprida << "]" << endl;
+		cout << "    *  Atender a [" << Deslocamentos[d].NumeroConstrucao << "-"<< Deslocamentos[d].NumeroDemandaSuprida << "]" ;
+		cout << " de ( " << Deslocamentos[d].HorarioInicioDeslocamento << " - " << Deslocamentos[d].HorarioFinalDeslocamento << " ) "<< endl;
 	}
 
 }
@@ -118,7 +118,7 @@ public:
 
 	void IniciaConjuntoCarretas(int, int);
 
-	void OrdenaCarretasPorNUmeroDeTarefasRealizadas();
+	void OrdenaCarretasPorNumeroDeTarefasRealizadas();
 
 	void Imprime();
 
@@ -139,13 +139,13 @@ void ConjuntoCarretas::IniciaConjuntoCarretas(int NumeroCaminhoes, int NumeroDaP
 
 }
 
-void ConjuntoCarretas::OrdenaCarretasPorNUmeroDeTarefasRealizadas(){
+void ConjuntoCarretas::OrdenaCarretasPorNumeroDeTarefasRealizadas(){
 	sort (Carretas.begin(), Carretas.end(), DecideQualCarretaTemMenosTarefasRealizadas);
 }
 
 void ConjuntoCarretas::Imprime(){
 	cout  << " [[[[[[  Imprime carretas  ]]]]]]" << endl;
-	for( int c = 0; c < Carretas.size(); c++){
+	for( unsigned int c = 0; c < Carretas.size(); c++){
 		Carretas[c].Imprime();
 	}
 }

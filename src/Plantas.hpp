@@ -16,7 +16,7 @@ public:
 	double HorarioFinalCarregamento;
 	int NumeroConstrucao;
 	int NumeroDemandaSuprida;
-	Carreta* CarretaUtilizada;
+	int NumCarretaUtilizada;
 };
 
 class Planta{
@@ -34,7 +34,7 @@ public:
 	vector < Carregamento > Carregamentos;
 
 	int VerificaDisponibilidade( double InicioPossivelAlocacao, double FinalPossivelAlocacao);
-	void AlocaAtividade(double , double, int , int , Carreta*);
+	void AlocaAtividade(double , double, int , int , int);
 
 	void Imprime();
 
@@ -61,23 +61,23 @@ int Planta::VerificaDisponibilidade( double InicioPossivelAlocacao, double Final
 	}
 
 	for( unsigned int c = 0; c < Carregamentos.size(); c++){
-		if( InicioPossivelAlocacao < Carregamentos[c].HorarioInicioCarregamento){
+		if( InicioPossivelAlocacao <= Carregamentos[c].HorarioInicioCarregamento){
+			if ( FinalPossivelAlocacao >= Carregamentos[c].HorarioFinalCarregamento){
+				return 0;
+			}
+		}
+		if( InicioPossivelAlocacao >= Carregamentos[c].HorarioInicioCarregamento){
+			if ( FinalPossivelAlocacao <= Carregamentos[c].HorarioFinalCarregamento){
+				return 0;
+			}
+		}
+		if( InicioPossivelAlocacao <= Carregamentos[c].HorarioInicioCarregamento){
 			if( FinalPossivelAlocacao > Carregamentos[c].HorarioInicioCarregamento){
 				return 0;
 			}
 		}
 		if( InicioPossivelAlocacao < Carregamentos[c].HorarioFinalCarregamento){
-			if ( FinalPossivelAlocacao > Carregamentos[c].HorarioFinalCarregamento){
-				return 0;
-			}
-		}
-		if( InicioPossivelAlocacao < Carregamentos[c].HorarioInicioCarregamento){
-			if ( FinalPossivelAlocacao > Carregamentos[c].HorarioFinalCarregamento){
-				return 0;
-			}
-		}
-		if( InicioPossivelAlocacao > Carregamentos[c].HorarioInicioCarregamento){
-			if ( FinalPossivelAlocacao < Carregamentos[c].HorarioFinalCarregamento){
+			if ( FinalPossivelAlocacao >= Carregamentos[c].HorarioFinalCarregamento){
 				return 0;
 			}
 		}
@@ -85,14 +85,14 @@ int Planta::VerificaDisponibilidade( double InicioPossivelAlocacao, double Final
 	return 1;
 }
 
-void Planta::AlocaAtividade(double HoraInicio, double HoraFinal, int NumConstrucao, int NumDemanda, Carreta* Carreta){
+void Planta::AlocaAtividade(double HoraInicio, double HoraFinal, int NumConstrucao, int NumDemanda, int Carreta){
 	Carregamento CarregamentoAux;
 
 	CarregamentoAux.HorarioInicioCarregamento = HoraInicio;
 	CarregamentoAux.HorarioFinalCarregamento = HoraFinal;
 	CarregamentoAux.NumeroConstrucao = NumConstrucao;
 	CarregamentoAux.NumeroDemandaSuprida = NumDemanda;
-	CarregamentoAux.CarretaUtilizada = Carreta;
+	CarregamentoAux.NumCarretaUtilizada = Carreta;
 
 	Carregamentos.push_back(CarregamentoAux);
 }
@@ -105,9 +105,9 @@ void Planta::Imprime(){
 	if ( Carregamentos.size() != 0 ){
 		cout << "   Carregamentos " << endl;
 		for( unsigned int c = 0; c < Carregamentos.size(); c++){
-			cout << "    * Caminhao " << Carregamentos[c].CarretaUtilizada->NumeroDaCarreta << " para suprir construcao ";
-			cout << Carregamentos[c].NumeroConstrucao << " demanda " << Carregamentos[c].NumeroDemandaSuprida;
-			cout << " das ( "<< Carregamentos[c].HorarioInicioCarregamento << " as " << Carregamentos[c].HorarioFinalCarregamento << " ) " << endl;
+			cout << "    * Caminhao [" << NumeroDaPlanta << "-" << Carregamentos[c].NumCarretaUtilizada;
+			cout << "] para suprir construcao [" << Carregamentos[c].NumeroConstrucao << "-" << Carregamentos[c].NumeroDemandaSuprida;
+			cout << "] das ( "<< Carregamentos[c].HorarioInicioCarregamento << " as " << Carregamentos[c].HorarioFinalCarregamento << " ) " << endl;
 		}
 	}
 
@@ -119,7 +119,7 @@ void Planta::Imprime(){
 void Planta::ImprimeDistancias(){
 	cout << " +++ Distancias ++++ " << endl;
 	cout << "Numero de conatricoes " << DistanciaConstrucoes.size() << endl;
-	for (int c = 0; c < DistanciaConstrucoes.size(); c++){
+	for ( unsigned int c = 0; c < DistanciaConstrucoes.size(); c++){
 		cout << "   Contrucao" << c << " = "<< DistanciaConstrucoes[c] << endl;
 	}
 }
@@ -154,7 +154,7 @@ void ConjuntoPlantas::IniciaConjuntoPlantas(int Numero){
 
 void ConjuntoPlantas::Imprime(){
 	cout << endl << endl << " [[[[[[  Imprime plantas  ]]]]]]" << endl;
-	for( int p = 0; p < Plantas.size(); p++){
+	for( unsigned int p = 0; p < Plantas.size(); p++){
 		Plantas[p].Imprime();
 	}
 }

@@ -106,12 +106,14 @@ void Heuristica::ExecutaProcedimentoHeuristico1(){
 
 	sort ( Prod1.ConstrucoesInstancia.Construcoes.begin(), Prod1.ConstrucoesInstancia.Construcoes.end(), DecideQualContrucaoTemMaiorRank );
 
-	//Prod1.ConstrucoesInstancia.ImprimeContrucoes();
+	Prod1.ConstrucoesInstancia.ImprimeContrucoes();
 
 	Solucao = Prod1.Executa();
 
 	if( Solucao == 1 ){
 		cout << endl << endl << "  Solucao viavel!    " << endl << endl;
+	}else{
+		cout << endl << endl << "  Solucao inviavel!    " << endl << endl;
 	}
 
 }

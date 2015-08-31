@@ -104,7 +104,8 @@ void Heuristica::ExecutaProcedimentoHeuristico1(){
 
 	//Prod1.ConstrucoesInstancia.ImprimeContrucoes();
 
-	sort ( Prod1.ConstrucoesInstancia.Construcoes.begin(), Prod1.ConstrucoesInstancia.Construcoes.end(), DecideQualContrucaoTemMaiorRank );
+	//sort ( Prod1.ConstrucoesInstancia.Construcoes.begin(), Prod1.ConstrucoesInstancia.Construcoes.end(), DecideQualContrucaoTemMaiorRank );
+	sort ( Prod1.ConstrucoesInstancia.Construcoes.begin(), Prod1.ConstrucoesInstancia.Construcoes.end(), DecideQualContrucaoTemMenorInicioDepoisMaiorRank );
 
 	Prod1.ConstrucoesInstancia.ImprimeContrucoes();
 

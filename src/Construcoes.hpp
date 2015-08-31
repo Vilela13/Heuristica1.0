@@ -79,23 +79,26 @@ int Construcao::VerificaDisponibilidade( double InicioPossivelAlocacao, double F
 	}
 
 	for( unsigned int d = 0; d < Descarregamentos.size(); d ++){
+		// Verifica se possivel alocação possui um descarregamento alocado dentro dela
 		if( InicioPossivelAlocacao <= Descarregamentos[d].HorarioInicioDescarregamento){
-			if ( FinalPossivelAlocacao >= Descarregamentos[d].HorarioFinalDescarregamento){
+			if ( Descarregamentos[d].HorarioFinalDescarregamento <= FinalPossivelAlocacao){
 				return 0;
 			}
 		}
-		if( InicioPossivelAlocacao >= Descarregamentos[d].HorarioInicioDescarregamento){
+		// Verifica se possivel alocação está dentro de um descarregamento alocado
+		if( Descarregamentos[d].HorarioInicioDescarregamento <= InicioPossivelAlocacao){
 			if ( FinalPossivelAlocacao <= Descarregamentos[d].HorarioFinalDescarregamento){
 				return 0;
 			}
 		}
+		// Verifica se possivel alocação está parcialmente dentro de um descarregamento alocado, no seu final
 		if( InicioPossivelAlocacao <= Descarregamentos[d].HorarioInicioDescarregamento){
-			if( FinalPossivelAlocacao > Descarregamentos[d].HorarioInicioDescarregamento){
+			if( Descarregamentos[d].HorarioInicioDescarregamento < FinalPossivelAlocacao ){
 				return 0;
 			}
 		}
 		if( InicioPossivelAlocacao < Descarregamentos[d].HorarioFinalDescarregamento){
-			if ( FinalPossivelAlocacao >= Descarregamentos[d].HorarioFinalDescarregamento){
+			if (  Descarregamentos[d].HorarioFinalDescarregamento <= FinalPossivelAlocacao ){
 				return 0;
 			}
 		}
@@ -105,10 +108,8 @@ int Construcao::VerificaDisponibilidade( double InicioPossivelAlocacao, double F
 		return 1;
 	}else{
 		for( unsigned int d = 0; d < Descarregamentos.size(); d ++){
-			if( InicioPossivelAlocacao >= Descarregamentos[d].HorarioFinalDescarregamento){
-				if( InicioPossivelAlocacao <= Descarregamentos[d].HorarioFinalDescarregamento + TempoMaximoEntreDescargas){
-					return 1;
-				}
+			if( Descarregamentos[d].HorarioFinalDescarregamento <= InicioPossivelAlocacao && InicioPossivelAlocacao <= Descarregamentos[d].HorarioFinalDescarregamento + TempoMaximoEntreDescargas){
+				return 1;
 			}
 		}
 		return 0;
@@ -186,6 +187,13 @@ ConjuntoConstrucoes::~ConjuntoConstrucoes(){
 
 bool DecideQualContrucaoTemMaiorRank (Construcao c1,Construcao c2) {
 	return ( c1.RankTempoDemandas < c2.RankTempoDemandas );
+}
+
+bool DecideQualContrucaoTemMenorInicioDepoisMaiorRank (Construcao c1,Construcao c2) {
+	if( c1.TempoMinimoDeFuncionamento == c2.TempoMinimoDeFuncionamento ){
+			return ( c1.RankTempoDemandas < c2.RankTempoDemandas );
+	}
+	return ( c1.TempoMinimoDeFuncionamento < c2.TempoMinimoDeFuncionamento );
 }
 
 bool DecideQualMenorInicioTempoDescarregamento ( Descarregamento d1, Descarregamento d2){

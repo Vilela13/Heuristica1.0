@@ -19,6 +19,10 @@ public:
 
 };
 
+bool DecideQualMenorInicioTempoDeslocamento ( Deslocamento c1, Deslocamento c2 ){
+	return ( c1.HorarioInicioDeslocamento < c2.HorarioInicioDeslocamento );
+}
+
 class Carreta{
 
 public:
@@ -93,6 +97,8 @@ void Carreta::AlocaAtividade(double HoraInicio, double HoraFinal, int NumContruc
 }
 
 void Carreta::Imprime(){
+
+	sort (Deslocamentos.begin(), Deslocamentos.end(), DecideQualMenorInicioTempoDeslocamento);
 	cout << "# Carreta [" << NumeroPlanta << "-" << NumeroDaCarreta << "] que atendeu " << NumeroDeDemandasAntendidas << " demandas" << endl;
 	for( int d = 0; d < NumeroDeDemandasAntendidas; d++){
 		cout << "    *  Atender a [" << Deslocamentos[d].NumeroConstrucao << "-"<< Deslocamentos[d].NumeroDemandaSuprida << "]" ;
@@ -125,6 +131,12 @@ public:
 	~ConjuntoCarretas();
 };
 
+bool DecideCarretaAnterior ( Carreta c1, Carreta c2 ){
+	return ( c1.NumeroDaCarreta < c2.NumeroDaCarreta );
+}
+
+
+
 ConjuntoCarretas::ConjuntoCarretas(){
 
 }
@@ -144,6 +156,7 @@ void ConjuntoCarretas::OrdenaCarretasPorNumeroDeTarefasRealizadas(){
 }
 
 void ConjuntoCarretas::Imprime(){
+	sort (Carretas.begin(), Carretas.end(), DecideCarretaAnterior);
 	cout  << " [[[[[[  Imprime carretas  ]]]]]]" << endl;
 	for( unsigned int c = 0; c < Carretas.size(); c++){
 		Carretas[c].Imprime();
@@ -154,10 +167,6 @@ ConjuntoCarretas::~ConjuntoCarretas(){
 
 }
 
-
-bool DecideQualMenorInicioTempoDeslocamento ( Deslocamento c1, Deslocamento c2 ){
-	return ( c1.HorarioInicioDeslocamento < c2.HorarioInicioDeslocamento );
-}
 
 
 

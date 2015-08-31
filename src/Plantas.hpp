@@ -19,6 +19,10 @@ public:
 	int NumCarretaUtilizada;
 };
 
+bool DecideQualMenorInicioTempoCarregamento ( Carregamento c1, Carregamento c2 ){
+	return ( c1.HorarioInicioCarregamento < c2.HorarioInicioCarregamento );
+}
+
 class Planta{
 
 public:
@@ -102,6 +106,7 @@ void Planta::Imprime(){
 	cout << "# Planta " << NumeroDaPlanta << " com " << NumeroVeiculos << " veiculos, funciona de (";
 	cout << TempoMinimoDeFuncionamento << ", "<< TempoMaximoDeFuncionamento << ")" << endl;
 
+	sort (Carregamentos.begin(), Carregamentos.end(), DecideQualMenorInicioTempoCarregamento);
 	if ( Carregamentos.size() != 0 ){
 		cout << "   Carregamentos " << endl;
 		for( unsigned int c = 0; c < Carregamentos.size(); c++){
@@ -161,10 +166,6 @@ void ConjuntoPlantas::Imprime(){
 
 ConjuntoPlantas::~ConjuntoPlantas(){
 
-}
-
-bool DecideQualMenorInicioTempoCarregamento ( Carregamento c1, Carregamento c2 ){
-	return ( c1.HorarioInicioCarregamento < c2.HorarioInicioCarregamento );
 }
 
 #endif /* PLANTAS_HPP_ */

@@ -168,7 +168,7 @@ int Procedimento1::SelecionaCarreta(Planta& PlantaMaisPerto, Construcao& Constru
 				}
 			}
 			HorarioInicioPlanta = HorarioInicioPlanta + 0.0000001; //0.016666; // um minuto
-		}while( HorarioSaiDaPlanta <= PlantaMaisPerto.TempoMaximoDeFuncionamento ||  HorarioSaiConstrucao <= ConstrucaoVaiSerSuprida.TempoMaximoDeFuncionamento);
+		}while( HorarioInicioPlanta <= PlantaMaisPerto.TempoMaximoDeFuncionamento ||  HorarioChegaContrucao <= ConstrucaoVaiSerSuprida.TempoMaximoDeFuncionamento);
 	}
 
 	return 0;

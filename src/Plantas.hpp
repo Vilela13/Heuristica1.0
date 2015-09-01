@@ -60,7 +60,7 @@ int Planta::VerificaDisponibilidade( double InicioPossivelAlocacao, double Final
 	if( InicioPossivelAlocacao < TempoMinimoDeFuncionamento){
 		return 0;
 	}
-	if( FinalPossivelAlocacao > TempoMaximoDeFuncionamento){
+	if( InicioPossivelAlocacao > TempoMaximoDeFuncionamento){
 		return 0;
 	}
 

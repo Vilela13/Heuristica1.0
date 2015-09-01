@@ -74,7 +74,7 @@ int Construcao::VerificaDisponibilidade( double InicioPossivelAlocacao, double F
 	if( InicioPossivelAlocacao < TempoMinimoDeFuncionamento){
 		return 0;
 	}
-	if( FinalPossivelAlocacao > TempoMaximoDeFuncionamento){
+	if( InicioPossivelAlocacao > TempoMaximoDeFuncionamento){
 		return 0;
 	}
 

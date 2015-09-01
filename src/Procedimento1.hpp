@@ -23,8 +23,6 @@ public:
 
 	void CarregaDados(int , ConjuntoPlantas, int, ConjuntoConstrucoes, int, double, double );
 
-	void InicializaConstrucaosAnalizadas(vector < int >&);
-	void InicializaPlantasAnalizadas(vector < int >&);
 
 	int SelecionaConstrucao( Construcao**, vector < int >);
 	int SelecionaPlanta( Planta** , Construcao*, vector < int > );
@@ -59,19 +57,9 @@ void Procedimento1::CarregaDados(int InstNP, ConjuntoPlantas InstPlantasInstanci
 	TempoDeVidaConcreto = InstTempoDeVidaConcreto;
 }
 
-void Procedimento1::InicializaConstrucaosAnalizadas(vector < int >& ConstrucaosAnalizadas){
-	ConstrucaosAnalizadas.resize(NE);
-	for( int c = 0; c < NE; c++){
-		ConstrucaosAnalizadas[c] = 0;
-	}
-}
 
-void Procedimento1::InicializaPlantasAnalizadas(vector < int >& PlantasAnalizadas){
-	PlantasAnalizadas.resize(NP);
-	for( int p = 0; p < NP; p++){
-		PlantasAnalizadas[p] = 0;
-	}
-}
+
+
 
 int Procedimento1::SelecionaConstrucao( Construcao** ConstrucaoVaiSerSuprida , vector < int > ConstrucaosAnalizadas){
 	double RankInicial;
@@ -157,9 +145,11 @@ int Procedimento1::SelecionaCarreta(Planta& PlantaMaisPerto, Construcao& Constru
 				if( DisponibilidadeConstrucao == 1){
 					if( DisponibilidadeCarreta == 1){
 						ConstrucaoVaiSerSuprida.StatusAtendimento = ConstrucaoVaiSerSuprida.StatusAtendimento + 1;
+
+						PlantaMaisPerto.VeiculosDaPlanta.Carretas[v].AlocaAtividade(HorarioInicioPlanta, HorarioRetornaPlanta, ConstrucaoVaiSerSuprida.NumeroDaConstrucao , NumeroDemanda);
 						PlantaMaisPerto.AlocaAtividade(HorarioInicioPlanta, HorarioSaiDaPlanta, ConstrucaoVaiSerSuprida.NumeroDaConstrucao , NumeroDemanda,  PlantaMaisPerto.VeiculosDaPlanta.Carretas[v].NumeroDaCarreta  );
 						ConstrucaoVaiSerSuprida.AlocaAtividade(HorarioChegaContrucao, HorarioSaiConstrucao, NumeroDemanda,  PlantaMaisPerto.VeiculosDaPlanta.Carretas[v].NumeroDaCarreta, PlantaMaisPerto.NumeroDaPlanta );
-						PlantaMaisPerto.VeiculosDaPlanta.Carretas[v].AlocaAtividade(HorarioInicioPlanta, HorarioRetornaPlanta, ConstrucaoVaiSerSuprida.NumeroDaConstrucao , NumeroDemanda);
+
 
 						cout << "		PLanta (" <<  HorarioInicioPlanta << "-" << HorarioSaiDaPlanta << " trajeto " << HorarioChegaContrucao << " - " << HorarioSaiConstrucao << " trajeto " << HorarioRetornaPlanta << ") " << endl;
 
@@ -167,7 +157,7 @@ int Procedimento1::SelecionaCarreta(Planta& PlantaMaisPerto, Construcao& Constru
 					}
 				}
 			}
-			HorarioInicioPlanta = HorarioInicioPlanta + 0.0000001; //0.016666; // um minuto
+			HorarioInicioPlanta = HorarioInicioPlanta + 0.0001; //0.0000001; //0.016666; // um minuto
 		}while( HorarioInicioPlanta <= PlantaMaisPerto.TempoMaximoDeFuncionamento ||  HorarioChegaContrucao <= ConstrucaoVaiSerSuprida.TempoMaximoDeFuncionamento);
 	}
 
@@ -176,14 +166,7 @@ int Procedimento1::SelecionaCarreta(Planta& PlantaMaisPerto, Construcao& Constru
 
 }
 
-int Procedimento1::AnalizouTodasPLanats(vector < int > PlantasAnalizadas){
-	for ( int p = 0; p < NP; p++){
-		if( PlantasAnalizadas[p] == 0){
-			return 0;
-		}
-	}
-	return 1;
-}
+
 
 void Procedimento1::ConfereSeNaoEncontrouUmaPlanta( int  PlantaSelecionada){
 	if( PlantaSelecionada == 0){
@@ -208,31 +191,31 @@ int Procedimento1::Executa(){
 
 	int PermiteAtendimentoDemanda;
 
-	vector < int > PlantasAnalizadas;
-	vector < int > ConstrucaosAnalizadas;
+
+
 
 	Viabilidade = 1;
 
-	InicializaConstrucaosAnalizadas(ConstrucaosAnalizadas);
+	ConstrucoesInstancia.InicializaConstrucaosAnalizadas();
 
 	for( int c = 0; c < ConstrucoesInstancia.NumeroConstrucoes; c++ ){
 		cout << "Construcao " << c << endl;
 
-		ConstrucaoSelecionada = SelecionaConstrucao( &ConstrucaoVaiSerSuprida, ConstrucaosAnalizadas);
+		ConstrucaoSelecionada = SelecionaConstrucao( &ConstrucaoVaiSerSuprida, ConstrucoesInstancia.ConstrucaosAnalizadas);
 
 		if( ConstrucaoSelecionada == 1){
 
-			ConstrucaosAnalizadas[ConstrucaoVaiSerSuprida->NumeroDaConstrucao] =  1;
+			ConstrucoesInstancia.ConstrucaosAnalizadas[ConstrucaoVaiSerSuprida->NumeroDaConstrucao] =  1;
 			do{
 
-				InicializaPlantasAnalizadas(PlantasAnalizadas);
+				 PlantasInstancia.InicializaPlantasAnalizadas();
 
 				Demanda = ConstrucaoVaiSerSuprida->StatusAtendimento;
 
 				PermiteAtendimentoDemanda = 0;
 
 				do{
-					PlantaSelecionada = SelecionaPlanta( &PlantaMaisPerto , ConstrucaoVaiSerSuprida, PlantasAnalizadas );
+					PlantaSelecionada = SelecionaPlanta( &PlantaMaisPerto , ConstrucaoVaiSerSuprida, PlantasInstancia.PlantasAnalizadas );
 
 					ConfereSeNaoEncontrouUmaPlanta( PlantaSelecionada);
 
@@ -243,7 +226,7 @@ int Procedimento1::Executa(){
 						//ConstrucaoVaiSerSuprida->ImprimeContrucao();
 						//PlantaMaisPerto->Imprime();
 
-						PlantasAnalizadas[ PlantaMaisPerto->NumeroDaPlanta ] = 1;
+						PlantasInstancia.PlantasAnalizadas[ PlantaMaisPerto->NumeroDaPlanta ] = 1;
 
 						PermiteAtendimentoDemanda = SelecionaCarreta(*PlantaMaisPerto , *ConstrucaoVaiSerSuprida,  Demanda);
 						cout << " 			Atendeu " << PermiteAtendimentoDemanda << endl;
@@ -251,13 +234,13 @@ int Procedimento1::Executa(){
 
 					}
 
-				}while( PermiteAtendimentoDemanda == 0 && AnalizouTodasPLanats(PlantasAnalizadas) == 0);
+				}while( PermiteAtendimentoDemanda == 0 && PlantasInstancia.AnalizouTodasPLanats() == 0);
 
 				if( PermiteAtendimentoDemanda == 1){
-					PlantasAnalizadas[ PlantaMaisPerto->NumeroDaPlanta ] = 0;
+					PlantasInstancia.PlantasAnalizadas[ PlantaMaisPerto->NumeroDaPlanta ] = 0;
 				}
 
-			}while( ConstrucaoVaiSerSuprida->StatusAtendimento < ConstrucaoVaiSerSuprida->NumeroDemandas && AnalizouTodasPLanats(PlantasAnalizadas) == 0);
+			}while( ConstrucaoVaiSerSuprida->StatusAtendimento < ConstrucaoVaiSerSuprida->NumeroDemandas && PlantasInstancia.AnalizouTodasPLanats() == 0);
 
 			if( ConstrucaoVaiSerSuprida->StatusAtendimento < ConstrucaoVaiSerSuprida->NumeroDemandas ){
 				cout  << endl << endl << endl;
@@ -272,8 +255,12 @@ int Procedimento1::Executa(){
 		}
 	}
 
-	PlantasInstancia.Imprime();
+
+	ConstrucoesInstancia.CalcularNivelDeInviabilidade();
+
+	ConstrucoesInstancia.CalcularNivelDeInviabilidade();
 	ConstrucoesInstancia.ImprimeContrucoes();
+
 
 	if( Viabilidade == 1){
 		return 1;

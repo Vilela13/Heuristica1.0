@@ -154,6 +154,12 @@ public:
 	vector< Construcao > Construcoes;
 	int NumeroConstrucoes;
 
+	vector < int > ConstrucaosAnalizadas;
+	void InicializaConstrucaosAnalizadas();
+
+	int NivelDeInviabilidade;
+	void CalcularNivelDeInviabilidade();
+
 	void IniciaConjuntoConstrucoes(int);
 	void ImprimeContrucoes();
 
@@ -164,6 +170,21 @@ public:
 
 ConjuntoConstrucoes::ConjuntoConstrucoes(){
 	NumeroConstrucoes = -13;
+	NivelDeInviabilidade = -13;
+}
+
+void ConjuntoConstrucoes::InicializaConstrucaosAnalizadas(){
+	ConstrucaosAnalizadas.resize(Construcoes.size());
+	for( int c = 0; c < Construcoes.size(); c++){
+		ConstrucaosAnalizadas[c] = 0;
+	}
+}
+
+void ConjuntoConstrucoes::CalcularNivelDeInviabilidade(){
+	NivelDeInviabilidade = 0;
+	for( int c = 0; c < Construcoes.size(); c++){
+		NivelDeInviabilidade = NivelDeInviabilidade + Construcoes[c].NumeroDemandas - Construcoes[c].StatusAtendimento;
+	}
 }
 
 void ConjuntoConstrucoes::IniciaConjuntoConstrucoes(int Numero){
@@ -177,6 +198,8 @@ void ConjuntoConstrucoes::ImprimeContrucoes(){
 	for(int c = 0; c < NumeroConstrucoes; c++){
 		Construcoes[c].ImprimeContrucao();
 	}
+
+	cout << endl << " Nivel de Inviabilidade = " << NivelDeInviabilidade << endl;
 
 }
 

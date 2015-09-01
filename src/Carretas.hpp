@@ -84,6 +84,7 @@ void Carreta::AlocaAtividade(double HoraInicio, double HoraFinal, int NumContruc
 	NumeroDeDemandasAntendidas = NumeroDeDemandasAntendidas + 1;
 
 	Deslocamento DeslocamentoAux;
+	vector<Deslocamento>::iterator Auxiliar;
 
 	DeslocamentoAux.HorarioInicioDeslocamento = HoraInicio;
 	DeslocamentoAux.HorarioFinalDeslocamento = HoraFinal;
@@ -93,7 +94,10 @@ void Carreta::AlocaAtividade(double HoraInicio, double HoraFinal, int NumContruc
 	//cout << endl << endl << "     ******** aloca  caminhao ********* " << endl;
 	//cout << " inicio " << HoraInicio << " final " << HoraFinal <<endl;
 
-	Deslocamentos.push_back( DeslocamentoAux );
+	Deslocamentos.insert(Deslocamentos.begin(), DeslocamentoAux );
+	Auxiliar = Deslocamentos.begin();
+	cout << endl << endl << "      Ponteiro  " << Auxiliar->HorarioInicioDeslocamento << " - " << Auxiliar->HorarioFinalDeslocamento << endl;
+
 }
 
 void Carreta::Imprime(){

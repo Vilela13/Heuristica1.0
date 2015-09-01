@@ -10,6 +10,120 @@
 
 #include "Bibliotecas.hpp"
 
+class Solucao{
+public:
+	Solucao();
+
+	int NP;
+	ConjuntoPlantas PlantasInstancia;
+	int NE;
+	ConjuntoConstrucoes ConstrucoesInstancia;
+	int NV;
+	double Velocidade;
+	double TempoDeVidaConcreto;
+	int StatusSolucao;
+
+	void CarregaSolucao(int, ConjuntoPlantas, int, ConjuntoConstrucoes,	int, double, double, int);
+	void Imprime();
+
+	int Viabilidade1();
+
+	~Solucao();
+};
+
+Solucao::Solucao(){
+	NP = -13;
+	NE = -13;
+	NV = -13;
+	Velocidade = -13;
+	TempoDeVidaConcreto = -13;
+	StatusSolucao = -13;
+
+}
+
+void Solucao::CarregaSolucao(int np, ConjuntoPlantas Plantas, int ne, ConjuntoConstrucoes Construcoes, int nv, double v,double TDVC, int status){
+	NP = np;
+	PlantasInstancia = Plantas;
+	NE = ne;
+	ConstrucoesInstancia = Construcoes;
+	NV = nv;
+	Velocidade = v;
+	TempoDeVidaConcreto = TDVC;
+	StatusSolucao = status;
+}
+
+void Solucao::Imprime(){
+	PlantasInstancia.Imprime();
+	ConstrucoesInstancia.ImprimeContrucoes();
+
+}
+
+int Solucao::Viabilidade1(){
+	cout << " 		Planta carregamento " << endl;
+	cout << PlantasInstancia.Plantas[0].Carregamentos[0].HorarioInicioCarregamento << endl;
+	cout << PlantasInstancia.Plantas[0].Carregamentos[0].HorarioFinalCarregamento << endl;
+	cout << PlantasInstancia.Plantas[0].Carregamentos[0].NumCarretaUtilizada << endl;
+	cout << PlantasInstancia.Plantas[0].Carregamentos[0].NumeroConstrucao << endl;
+	cout << PlantasInstancia.Plantas[0].Carregamentos[0].NumeroDemandaSuprida << endl;
+
+	cout << endl << endl;
+	for ( int v = 0; v < PlantasInstancia.Plantas[0].NumeroVeiculos; v++){
+		cout << v << endl;
+		if( PlantasInstancia.Plantas[0].VeiculosDaPlanta.Carretas[v].NumeroDaCarreta == PlantasInstancia.Plantas[0].Carregamentos[0].NumCarretaUtilizada){
+			cout << endl << endl << " achou " << endl << endl;
+			for ( int d = 0; d < PlantasInstancia.Plantas[0].VeiculosDaPlanta.Carretas[v].Deslocamentos.size(); d++){
+				cout << " deslocamento " << d << endl;
+				if( PlantasInstancia.Plantas[0].VeiculosDaPlanta.Carretas[v].Deslocamentos[d].NumeroConstrucao == PlantasInstancia.Plantas[0].Carregamentos[0].NumeroConstrucao){
+					if( PlantasInstancia.Plantas[0].VeiculosDaPlanta.Carretas[v].Deslocamentos[d].NumeroDemandaSuprida == PlantasInstancia.Plantas[0].Carregamentos[0].NumeroDemandaSuprida){
+						cout << "    Descarregamento " << endl;
+						cout << "    " << PlantasInstancia.Plantas[0].VeiculosDaPlanta.Carretas[v].Deslocamentos[d].HorarioInicioDeslocamento << endl;
+						cout << "    " << PlantasInstancia.Plantas[0].VeiculosDaPlanta.Carretas[v].Deslocamentos[d].HorarioFinalDeslocamento << endl;
+						cout << "    " << PlantasInstancia.Plantas[0].VeiculosDaPlanta.Carretas[v].Deslocamentos[d].NumeroConstrucao << endl;
+						cout << "    " << PlantasInstancia.Plantas[0].VeiculosDaPlanta.Carretas[v].Deslocamentos[d].NumeroDemandaSuprida << endl;
+					}
+				}
+			}
+		}
+	}
+
+}
+
+Solucao::~Solucao(){
+
+}
+
+class ConjuntoSolucoes{
+public:
+	ConjuntoSolucoes();
+	vector < Solucao > Solucoes;
+	void InsereSolucao(int, ConjuntoPlantas, int, ConjuntoConstrucoes,	int, double, double, int);
+	void Imprime();
+	~ConjuntoSolucoes();
+
+};
+
+ConjuntoSolucoes::ConjuntoSolucoes(){
+}
+
+void ConjuntoSolucoes::InsereSolucao(int np, ConjuntoPlantas Plantas, int ne, ConjuntoConstrucoes Construcoes, int nv, double v,double TDVC, int status){
+	Solucao S1;
+	S1.CarregaSolucao( np, Plantas, ne, Construcoes, nv, v, TDVC, status);
+	Solucoes.push_back(S1);
+}
+
+void ConjuntoSolucoes::Imprime(){
+	for( int s = 0; s <  Solucoes.size(); s++){
+		cout << endl << endl << "   Solucao " << s << endl << endl;
+		 Solucoes[s].Imprime();
+	}
+}
+
+ConjuntoSolucoes::~ConjuntoSolucoes(){
+
+}
+void InsereSolucao(int, ConjuntoPlantas, int, ConjuntoConstrucoes,	int, double, double, int);
+
+
 class Heuristica{
 
 public:
@@ -99,6 +213,8 @@ void Heuristica::ExecutaProcedimentoHeuristico1(){
 	int Solucao;
 	Solucao = 0;
 
+	ConjuntoSolucoes Solucoes;
+
 
 	Prod1.CarregaDados(NP, PlantasInstancia, NE, ConstrucoesInstancia, NV, Velocidade, TempoDeVidaConcreto);
 
@@ -116,6 +232,11 @@ void Heuristica::ExecutaProcedimentoHeuristico1(){
 	}else{
 		cout << endl << endl << "  Solucao inviavel!    " << endl << endl;
 	}
+
+	Solucoes.InsereSolucao(Prod1.NP, Prod1.PlantasInstancia, Prod1.NE, Prod1.ConstrucoesInstancia, Prod1.NV, Prod1.Velocidade, Prod1.TempoDeVidaConcreto, Solucao);
+	Solucoes.Imprime();
+
+	Solucoes.Solucoes[0].Viabilidade1();
 
 }
 

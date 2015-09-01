@@ -140,6 +140,10 @@ public:
 	ConjuntoPlantas();
 	vector< Planta > Plantas;
 
+	vector < int > PlantasAnalizadas;
+	void InicializaPlantasAnalizadas();
+	int AnalizouTodasPLanats();
+
 	void IniciaConjuntoPlantas(int);
 
 	void Imprime();
@@ -150,6 +154,22 @@ public:
 
 ConjuntoPlantas::ConjuntoPlantas(){
 
+}
+
+void ConjuntoPlantas::InicializaPlantasAnalizadas(){
+	PlantasAnalizadas.resize(Plantas.size());
+	for( int p = 0; p < Plantas.size(); p++){
+		PlantasAnalizadas[p] = 0;
+	}
+}
+
+int ConjuntoPlantas::AnalizouTodasPLanats(){
+	for ( int p = 0; p < Plantas.size(); p++){
+		if( PlantasAnalizadas[p] == 0){
+			return 0;
+		}
+	}
+	return 1;
 }
 
 void ConjuntoPlantas::IniciaConjuntoPlantas(int Numero){

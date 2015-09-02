@@ -10,6 +10,9 @@
 
 #include "Bibliotecas.hpp"
 
+#define ItCarregamento vector< Carregamento >::iterator
+#define ItDeslocamento vector< Deslocamento >::iterator
+
 class Solucao{
 public:
 	Solucao();
@@ -59,33 +62,77 @@ void Solucao::Imprime(){
 }
 
 int Solucao::Viabilidade1(){
-	cout << " 		Planta carregamento " << endl;
-	cout << PlantasInstancia.Plantas[0].Carregamentos[0].HorarioInicioCarregamento << endl;
-	cout << PlantasInstancia.Plantas[0].Carregamentos[0].HorarioFinalCarregamento << endl;
-	cout << PlantasInstancia.Plantas[0].Carregamentos[0].NumCarretaUtilizada << endl;
-	cout << PlantasInstancia.Plantas[0].Carregamentos[0].NumeroConstrucao << endl;
-	cout << PlantasInstancia.Plantas[0].Carregamentos[0].NumeroDemandaSuprida << endl;
+/*	cout << " 		Entregas  " << endl;
+	for(  int c = 0; c < NE; c++ ){
+		cout << " Contrucao " << ConstrucoesInstancia.Construcoes[c].NumeroDaConstrucao << endl;
+		for ( int w = 0; w < ConstrucoesInstancia.Construcoes[c].StatusAtendimento; w++){
+			cout << endl << " W = " << w << endl;
 
-	cout << endl << endl;
-	for ( int v = 0; v < PlantasInstancia.Plantas[0].NumeroVeiculos; v++){
-		cout << v << endl;
-		if( PlantasInstancia.Plantas[0].VeiculosDaPlanta.Carretas[v].NumeroDaCarreta == PlantasInstancia.Plantas[0].Carregamentos[0].NumCarretaUtilizada){
-			cout << endl << endl << " achou " << endl << endl;
-			for ( int d = 0; d < PlantasInstancia.Plantas[0].VeiculosDaPlanta.Carretas[v].Deslocamentos.size(); d++){
-				cout << " deslocamento " << d << endl;
-				if( PlantasInstancia.Plantas[0].VeiculosDaPlanta.Carretas[v].Deslocamentos[d].NumeroConstrucao == PlantasInstancia.Plantas[0].Carregamentos[0].NumeroConstrucao){
-					if( PlantasInstancia.Plantas[0].VeiculosDaPlanta.Carretas[v].Deslocamentos[d].NumeroDemandaSuprida == PlantasInstancia.Plantas[0].Carregamentos[0].NumeroDemandaSuprida){
-						cout << "    Descarregamento " << endl;
-						cout << "    " << PlantasInstancia.Plantas[0].VeiculosDaPlanta.Carretas[v].Deslocamentos[d].HorarioInicioDeslocamento << endl;
-						cout << "    " << PlantasInstancia.Plantas[0].VeiculosDaPlanta.Carretas[v].Deslocamentos[d].HorarioFinalDeslocamento << endl;
-						cout << "    " << PlantasInstancia.Plantas[0].VeiculosDaPlanta.Carretas[v].Deslocamentos[d].NumeroConstrucao << endl;
-						cout << "    " << PlantasInstancia.Plantas[0].VeiculosDaPlanta.Carretas[v].Deslocamentos[d].NumeroDemandaSuprida << endl;
+		}
+	}
+*/
+
+	int PlantaEmAnalise;
+	int CaminhaoEmAnalise;
+	int ConstrucaoEmAnalise;
+	int DemandaDesalocada;
+	double HorarioInicioAuxiliar;
+	double HorarioFinalAuxiliar;
+
+	int c;
+	c = 0;
+	int d;
+	d = 0;
+
+	ItCarregamento it1Aux;
+	ItDeslocamento it2Aux;
+
+	if( 0 < ConstrucoesInstancia.Construcoes[c].StatusAtendimento ){
+		cout << endl << endl;
+		cout << " contrucao " << ConstrucoesInstancia.Construcoes[c].NumeroDaConstrucao;
+		PlantaEmAnalise =  ConstrucoesInstancia.Construcoes[c].Descarregamentos[d].NumPlantaFornecedor;
+		ConstrucaoEmAnalise = ConstrucoesInstancia.Construcoes[c].NumeroDaConstrucao;
+		DemandaDesalocada = ConstrucoesInstancia.Construcoes[c].Descarregamentos[d].NumeroDemandaSuprida;
+		CaminhaoEmAnalise = ConstrucoesInstancia.Construcoes[c].Descarregamentos[d].NumCarretaUtilizada;
+		HorarioInicioAuxiliar = ConstrucoesInstancia.Construcoes[c].Descarregamentos[d].HorarioInicioDescarregamento;
+		HorarioFinalAuxiliar = ConstrucoesInstancia.Construcoes[c].Descarregamentos[d].HorarioFinalDescarregamento;
+		cout << " planta " << PlantaEmAnalise << " construcao " << ConstrucaoEmAnalise << " demanda " << DemandaDesalocada << " caminhao " << CaminhaoEmAnalise << endl;
+
+		if ( ConstrucoesInstancia.Construcoes[c].Descarregamentos.begin()->HorarioInicioDescarregamento == HorarioInicioAuxiliar && ConstrucoesInstancia.Construcoes[c].Descarregamentos.begin()->HorarioFinalDescarregamento == HorarioFinalAuxiliar && ConstrucoesInstancia.Construcoes[c].Descarregamentos.begin()->NumCarretaUtilizada == CaminhaoEmAnalise && ConstrucoesInstancia.Construcoes[c].Descarregamentos.begin()->NumPlantaFornecedor == PlantaEmAnalise && ConstrucoesInstancia.Construcoes[c].Descarregamentos.begin()->NumCarretaUtilizada ==  CaminhaoEmAnalise ){
+			cout << endl << "  Deleta construcao" << endl;
+			ConstrucoesInstancia.Construcoes[c].Descarregamentos.erase( ConstrucoesInstancia.Construcoes[c].Descarregamentos.begin() );
+			ConstrucoesInstancia.Construcoes[c].StatusAtendimento = ConstrucoesInstancia.Construcoes[c].StatusAtendimento - 1;
+			ConstrucoesInstancia.NivelDeInviabilidade = ConstrucoesInstancia.NivelDeInviabilidade + 1;
+		}else{
+			cout << endl << endl << endl << "   FUDEU " << endl << endl << endl;
+		}
+
+		for( int p = 0; p < NP; p++){
+			if( PlantasInstancia.Plantas[p].NumeroDaPlanta == PlantaEmAnalise ){
+				for (ItCarregamento it1 = PlantasInstancia.Plantas[p].Carregamentos.begin() ; it1 != PlantasInstancia.Plantas[p].Carregamentos.end(); it1++){
+					if( it1->NumCarretaUtilizada == CaminhaoEmAnalise && it1->NumeroConstrucao ==  ConstrucaoEmAnalise && it1->NumeroDemandaSuprida == DemandaDesalocada){
+						cout <<  "        Deletou na planta " << endl;
+						it1Aux = it1;
+					}
+				}
+				PlantasInstancia.Plantas[p].Carregamentos.erase(it1Aux);
+				for( int v = 0; v < PlantasInstancia.Plantas[p].NumeroVeiculos; v++){
+					if( v == CaminhaoEmAnalise ){
+						for (ItDeslocamento it2 = PlantasInstancia.Plantas[p].VeiculosDaPlanta.Carretas[v].Deslocamentos.begin(); it2 != PlantasInstancia.Plantas[p].VeiculosDaPlanta.Carretas[v].Deslocamentos.end(); it2++){
+							if( it2->NumeroConstrucao == ConstrucaoEmAnalise && it2->NumeroDemandaSuprida == DemandaDesalocada){
+								cout << "        Deletou na carreta " << endl;
+								it2Aux = it2;
+							}
+						}
+						PlantasInstancia.Plantas[p].VeiculosDaPlanta.Carretas[v].Deslocamentos.erase(it2Aux);
+						PlantasInstancia.Plantas[p].VeiculosDaPlanta.Carretas[v].NumeroDeDemandasAntendidas = PlantasInstancia.Plantas[p].VeiculosDaPlanta.Carretas[v].NumeroDeDemandasAntendidas - 1;
 					}
 				}
 			}
 		}
 	}
 
+	return 1;
 }
 
 Solucao::~Solucao(){
@@ -112,7 +159,7 @@ void ConjuntoSolucoes::InsereSolucao(int np, ConjuntoPlantas Plantas, int ne, Co
 }
 
 void ConjuntoSolucoes::Imprime(){
-	for( int s = 0; s <  Solucoes.size(); s++){
+	for( unsigned  int s = 0; s <  Solucoes.size(); s++){
 		cout << endl << endl << "   Solucao " << s << endl << endl;
 		 Solucoes[s].Imprime();
 	}
@@ -237,6 +284,8 @@ void Heuristica::ExecutaProcedimentoHeuristico1(){
 	Solucoes.Imprime();
 
 	Solucoes.Solucoes[0].Viabilidade1();
+
+	Solucoes.Imprime();
 
 }
 

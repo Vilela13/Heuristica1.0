@@ -17,8 +17,7 @@ public:
 	int NumeroDemandaSuprida;
 	int NumCarretaUtilizada;
 	int NumPlantaFornecedor;
-	vector<Deslocamento>::iterator DeslocamentoCarreta;
-	vector<Carregamento>::iterator CarregamentoPlanta;
+
 };
 
 class DistanciaPlanta{
@@ -46,7 +45,7 @@ public:
 	vector < Descarregamento > Descarregamentos;
 
 	int VerificaDisponibilidade( double, double);
-	void AlocaAtividade(double, double, int, int, int, vector<Deslocamento>::iterator, vector<Carregamento>::iterator);
+	void AlocaAtividade(double, double, int, int, int);
 
 	void ImprimeContrucao();
 
@@ -118,7 +117,7 @@ int Construcao::VerificaDisponibilidade( double InicioPossivelAlocacao, double F
 	}
 }
 
-void Construcao::AlocaAtividade(double HoraInicio, double HoraFinal, int NumDemanda, int Carreta, int Planta, vector<Deslocamento>::iterator Deslocamento, vector<Carregamento>::iterator Carregamento){
+void Construcao::AlocaAtividade(double HoraInicio, double HoraFinal, int NumDemanda, int Carreta, int Planta){
 	Descarregamento DescarregamentoAux;
 
 	DescarregamentoAux.HorarioInicioDescarregamento = HoraInicio;
@@ -126,10 +125,8 @@ void Construcao::AlocaAtividade(double HoraInicio, double HoraFinal, int NumDema
 	DescarregamentoAux.NumeroDemandaSuprida = NumDemanda;
 	DescarregamentoAux.NumCarretaUtilizada = Carreta;
 	DescarregamentoAux.NumPlantaFornecedor = Planta;
-	DescarregamentoAux.DeslocamentoCarreta = Deslocamento;
-	DescarregamentoAux.CarregamentoPlanta = Carregamento;
 
-	Descarregamentos.push_back( DescarregamentoAux );
+	Descarregamentos.insert(Descarregamentos.begin(), DescarregamentoAux );
 }
 
 void Construcao::ImprimeContrucao(){
@@ -179,14 +176,14 @@ ConjuntoConstrucoes::ConjuntoConstrucoes(){
 
 void ConjuntoConstrucoes::InicializaConstrucaosAnalizadas(){
 	ConstrucaosAnalizadas.resize(Construcoes.size());
-	for( int c = 0; c < Construcoes.size(); c++){
+	for( unsigned int c = 0; c < Construcoes.size(); c++){
 		ConstrucaosAnalizadas[c] = 0;
 	}
 }
 
 void ConjuntoConstrucoes::CalcularNivelDeInviabilidade(){
 	NivelDeInviabilidade = 0;
-	for( int c = 0; c < Construcoes.size(); c++){
+	for( unsigned int c = 0; c < Construcoes.size(); c++){
 		NivelDeInviabilidade = NivelDeInviabilidade + Construcoes[c].NumeroDemandas - Construcoes[c].StatusAtendimento;
 	}
 }

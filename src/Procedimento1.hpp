@@ -120,8 +120,7 @@ int Procedimento1::SelecionaCarreta(Planta& PlantaMaisPerto, Construcao& Constru
 	int DisponibilidadeConstrucao;
 	int DisponibilidadeCarreta;
 
-	vector<Deslocamento>::iterator AuxDeslocamento;
-	vector<Carregamento>::iterator AuxCarregamento;
+
 
 	PlantaMaisPerto.VeiculosDaPlanta.OrdenaCarretasPorNumeroDeTarefasRealizadas();
 
@@ -149,22 +148,19 @@ int Procedimento1::SelecionaCarreta(Planta& PlantaMaisPerto, Construcao& Constru
 					if( DisponibilidadeCarreta == 1){
 						ConstrucaoVaiSerSuprida.StatusAtendimento = ConstrucaoVaiSerSuprida.StatusAtendimento + 1;
 
-						PlantaMaisPerto.VeiculosDaPlanta.Carretas[v].AlocaAtividade(HorarioInicioPlanta, HorarioRetornaPlanta, ConstrucaoVaiSerSuprida.NumeroDaConstrucao , NumeroDemanda, AuxDeslocamento);
-						cout <<  endl << "      Ponteiro 2  " << AuxDeslocamento->HorarioInicioDeslocamento << " - " << AuxDeslocamento->HorarioFinalDeslocamento << endl;
-
-						PlantaMaisPerto.AlocaAtividade(HorarioInicioPlanta, HorarioSaiDaPlanta, ConstrucaoVaiSerSuprida.NumeroDaConstrucao , NumeroDemanda,  PlantaMaisPerto.VeiculosDaPlanta.Carretas[v].NumeroDaCarreta, AuxDeslocamento, AuxCarregamento);
-						cout <<  endl << "      Ponteiro planta 2 " << AuxCarregamento->HorarioInicioCarregamento << " - " << AuxCarregamento->HorarioFinalCarregamento << endl;
-
-						ConstrucaoVaiSerSuprida.AlocaAtividade(HorarioChegaContrucao, HorarioSaiConstrucao, NumeroDemanda,  PlantaMaisPerto.VeiculosDaPlanta.Carretas[v].NumeroDaCarreta, PlantaMaisPerto.NumeroDaPlanta, AuxDeslocamento, AuxCarregamento);
+						PlantaMaisPerto.VeiculosDaPlanta.Carretas[v].AlocaAtividade(HorarioInicioPlanta, HorarioRetornaPlanta, ConstrucaoVaiSerSuprida.NumeroDaConstrucao , NumeroDemanda);
+						PlantaMaisPerto.AlocaAtividade(HorarioInicioPlanta, HorarioSaiDaPlanta, ConstrucaoVaiSerSuprida.NumeroDaConstrucao , NumeroDemanda,  PlantaMaisPerto.VeiculosDaPlanta.Carretas[v].NumeroDaCarreta);
+						ConstrucaoVaiSerSuprida.AlocaAtividade(HorarioChegaContrucao, HorarioSaiConstrucao, NumeroDemanda,  PlantaMaisPerto.VeiculosDaPlanta.Carretas[v].NumeroDaCarreta, PlantaMaisPerto.NumeroDaPlanta);
 
 
 						cout << "		PLanta (" <<  HorarioInicioPlanta << "-" << HorarioSaiDaPlanta << " trajeto " << HorarioChegaContrucao << " - " << HorarioSaiConstrucao << " trajeto " << HorarioRetornaPlanta << ") " << endl;
+
 
 						return 1;
 					}
 				}
 			}
-			HorarioInicioPlanta = HorarioInicioPlanta + 0.0001; //0.0000001; //0.016666; // um minuto
+			HorarioInicioPlanta = HorarioInicioPlanta + IntervaloDeTempo;
 		}while( HorarioInicioPlanta <= PlantaMaisPerto.TempoMaximoDeFuncionamento ||  HorarioChegaContrucao <= ConstrucaoVaiSerSuprida.TempoMaximoDeFuncionamento);
 	}
 

@@ -17,7 +17,6 @@ public:
 	int NumeroConstrucao;
 	int NumeroDemandaSuprida;
 	int NumCarretaUtilizada;
-	vector<Deslocamento>::iterator CarretaRespectiva;
 };
 
 bool DecideQualMenorInicioTempoCarregamento ( Carregamento c1, Carregamento c2 ){
@@ -39,7 +38,7 @@ public:
 	vector < Carregamento > Carregamentos;
 
 	int VerificaDisponibilidade( double, double);
-	void AlocaAtividade(double , double, int , int , int, vector<Deslocamento>::iterator, vector<Carregamento>::iterator&);
+	void AlocaAtividade(double , double, int , int , int);
 
 	void Imprime();
 
@@ -90,7 +89,7 @@ int Planta::VerificaDisponibilidade( double InicioPossivelAlocacao, double Final
 	return 1;
 }
 
-void Planta::AlocaAtividade(double HoraInicio, double HoraFinal, int NumConstrucao, int NumDemanda, int Carreta, vector<Deslocamento>::iterator IteradorCarreta, vector<Carregamento>::iterator &CarregamentoPlanta){
+void Planta::AlocaAtividade(double HoraInicio, double HoraFinal, int NumConstrucao, int NumDemanda, int Carreta){
 	Carregamento CarregamentoAux;
 
 	CarregamentoAux.HorarioInicioCarregamento = HoraInicio;
@@ -98,11 +97,9 @@ void Planta::AlocaAtividade(double HoraInicio, double HoraFinal, int NumConstruc
 	CarregamentoAux.NumeroConstrucao = NumConstrucao;
 	CarregamentoAux.NumeroDemandaSuprida = NumDemanda;
 	CarregamentoAux.NumCarretaUtilizada = Carreta;
-	CarregamentoAux.CarretaRespectiva = IteradorCarreta;
 
 	Carregamentos.insert(Carregamentos.begin(), CarregamentoAux );
-	CarregamentoPlanta = Carregamentos.begin();
-		cout << endl << endl << "      Ponteiro planta 1 " << CarregamentoPlanta->HorarioInicioCarregamento << " - " << CarregamentoPlanta->HorarioFinalCarregamento << endl;
+
 }
 
 void Planta::Imprime(){
@@ -162,13 +159,13 @@ ConjuntoPlantas::ConjuntoPlantas(){
 
 void ConjuntoPlantas::InicializaPlantasAnalizadas(){
 	PlantasAnalizadas.resize(Plantas.size());
-	for( int p = 0; p < Plantas.size(); p++){
+	for( unsigned  int p = 0; p < Plantas.size(); p++){
 		PlantasAnalizadas[p] = 0;
 	}
 }
 
 int ConjuntoPlantas::AnalizouTodasPLanats(){
-	for ( int p = 0; p < Plantas.size(); p++){
+	for ( unsigned  int p = 0; p < Plantas.size(); p++){
 		if( PlantasAnalizadas[p] == 0){
 			return 0;
 		}

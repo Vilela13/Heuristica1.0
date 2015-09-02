@@ -41,6 +41,9 @@
 
 using namespace std;
 
+#define IntervaloDeTempo 0.0083333 // meio minuto
+//0.016666; // um minuto
+
 #include "DadosSolomon.hpp"
 #include "Carretas.hpp"
 #include "Plantas.hpp"

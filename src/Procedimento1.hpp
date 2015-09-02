@@ -120,6 +120,9 @@ int Procedimento1::SelecionaCarreta(Planta& PlantaMaisPerto, Construcao& Constru
 	int DisponibilidadeConstrucao;
 	int DisponibilidadeCarreta;
 
+	vector<Deslocamento>::iterator AuxDeslocamento;
+	vector<Carregamento>::iterator AuxCarregamento;
+
 	PlantaMaisPerto.VeiculosDaPlanta.OrdenaCarretasPorNumeroDeTarefasRealizadas();
 
 	for( int v = 0; v < PlantaMaisPerto.NumeroVeiculos; v++){
@@ -146,9 +149,13 @@ int Procedimento1::SelecionaCarreta(Planta& PlantaMaisPerto, Construcao& Constru
 					if( DisponibilidadeCarreta == 1){
 						ConstrucaoVaiSerSuprida.StatusAtendimento = ConstrucaoVaiSerSuprida.StatusAtendimento + 1;
 
-						PlantaMaisPerto.VeiculosDaPlanta.Carretas[v].AlocaAtividade(HorarioInicioPlanta, HorarioRetornaPlanta, ConstrucaoVaiSerSuprida.NumeroDaConstrucao , NumeroDemanda);
-						PlantaMaisPerto.AlocaAtividade(HorarioInicioPlanta, HorarioSaiDaPlanta, ConstrucaoVaiSerSuprida.NumeroDaConstrucao , NumeroDemanda,  PlantaMaisPerto.VeiculosDaPlanta.Carretas[v].NumeroDaCarreta  );
-						ConstrucaoVaiSerSuprida.AlocaAtividade(HorarioChegaContrucao, HorarioSaiConstrucao, NumeroDemanda,  PlantaMaisPerto.VeiculosDaPlanta.Carretas[v].NumeroDaCarreta, PlantaMaisPerto.NumeroDaPlanta );
+						PlantaMaisPerto.VeiculosDaPlanta.Carretas[v].AlocaAtividade(HorarioInicioPlanta, HorarioRetornaPlanta, ConstrucaoVaiSerSuprida.NumeroDaConstrucao , NumeroDemanda, AuxDeslocamento);
+						cout <<  endl << "      Ponteiro 2  " << AuxDeslocamento->HorarioInicioDeslocamento << " - " << AuxDeslocamento->HorarioFinalDeslocamento << endl;
+
+						PlantaMaisPerto.AlocaAtividade(HorarioInicioPlanta, HorarioSaiDaPlanta, ConstrucaoVaiSerSuprida.NumeroDaConstrucao , NumeroDemanda,  PlantaMaisPerto.VeiculosDaPlanta.Carretas[v].NumeroDaCarreta, AuxDeslocamento, AuxCarregamento);
+						cout <<  endl << "      Ponteiro planta 2 " << AuxCarregamento->HorarioInicioCarregamento << " - " << AuxCarregamento->HorarioFinalCarregamento << endl;
+
+						ConstrucaoVaiSerSuprida.AlocaAtividade(HorarioChegaContrucao, HorarioSaiConstrucao, NumeroDemanda,  PlantaMaisPerto.VeiculosDaPlanta.Carretas[v].NumeroDaCarreta, PlantaMaisPerto.NumeroDaPlanta, AuxDeslocamento, AuxCarregamento);
 
 
 						cout << "		PLanta (" <<  HorarioInicioPlanta << "-" << HorarioSaiDaPlanta << " trajeto " << HorarioChegaContrucao << " - " << HorarioSaiConstrucao << " trajeto " << HorarioRetornaPlanta << ") " << endl;

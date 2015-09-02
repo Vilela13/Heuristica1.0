@@ -34,7 +34,7 @@ public:
 	vector < Deslocamento > Deslocamentos;
 
 	int VerificaDisponibilidade( double, double);
-	void AlocaAtividade(double, double, int, int);
+	void AlocaAtividade(double, double, int, int, vector<Deslocamento>::iterator&);
 
 	void Imprime();
 
@@ -79,12 +79,11 @@ int Carreta::VerificaDisponibilidade(double InicioPossivelAlocacao, double Final
 
 }
 
-void Carreta::AlocaAtividade(double HoraInicio, double HoraFinal, int NumContrucao, int NumDemanda){
+void Carreta::AlocaAtividade(double HoraInicio, double HoraFinal, int NumContrucao, int NumDemanda, vector<Deslocamento>::iterator &Auxiliar){
 
 	NumeroDeDemandasAntendidas = NumeroDeDemandasAntendidas + 1;
 
 	Deslocamento DeslocamentoAux;
-	vector<Deslocamento>::iterator Auxiliar;
 
 	DeslocamentoAux.HorarioInicioDeslocamento = HoraInicio;
 	DeslocamentoAux.HorarioFinalDeslocamento = HoraFinal;

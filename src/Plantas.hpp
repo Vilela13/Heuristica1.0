@@ -17,6 +17,7 @@ public:
 	int NumeroConstrucao;
 	int NumeroDemandaSuprida;
 	int NumCarretaUtilizada;
+	vector<Deslocamento>::iterator CarretaRespectiva;
 };
 
 bool DecideQualMenorInicioTempoCarregamento ( Carregamento c1, Carregamento c2 ){
@@ -37,8 +38,8 @@ public:
 
 	vector < Carregamento > Carregamentos;
 
-	int VerificaDisponibilidade( double InicioPossivelAlocacao, double FinalPossivelAlocacao);
-	void AlocaAtividade(double , double, int , int , int);
+	int VerificaDisponibilidade( double, double);
+	void AlocaAtividade(double , double, int , int , int, vector<Deslocamento>::iterator, vector<Carregamento>::iterator&);
 
 	void Imprime();
 
@@ -89,7 +90,7 @@ int Planta::VerificaDisponibilidade( double InicioPossivelAlocacao, double Final
 	return 1;
 }
 
-void Planta::AlocaAtividade(double HoraInicio, double HoraFinal, int NumConstrucao, int NumDemanda, int Carreta){
+void Planta::AlocaAtividade(double HoraInicio, double HoraFinal, int NumConstrucao, int NumDemanda, int Carreta, vector<Deslocamento>::iterator IteradorCarreta, vector<Carregamento>::iterator &CarregamentoPlanta){
 	Carregamento CarregamentoAux;
 
 	CarregamentoAux.HorarioInicioCarregamento = HoraInicio;
@@ -97,8 +98,11 @@ void Planta::AlocaAtividade(double HoraInicio, double HoraFinal, int NumConstruc
 	CarregamentoAux.NumeroConstrucao = NumConstrucao;
 	CarregamentoAux.NumeroDemandaSuprida = NumDemanda;
 	CarregamentoAux.NumCarretaUtilizada = Carreta;
+	CarregamentoAux.CarretaRespectiva = IteradorCarreta;
 
-	Carregamentos.push_back(CarregamentoAux);
+	Carregamentos.insert(Carregamentos.begin(), CarregamentoAux );
+	CarregamentoPlanta = Carregamentos.begin();
+		cout << endl << endl << "      Ponteiro planta 1 " << CarregamentoPlanta->HorarioInicioCarregamento << " - " << CarregamentoPlanta->HorarioFinalCarregamento << endl;
 }
 
 void Planta::Imprime(){

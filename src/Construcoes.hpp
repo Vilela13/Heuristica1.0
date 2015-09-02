@@ -17,6 +17,8 @@ public:
 	int NumeroDemandaSuprida;
 	int NumCarretaUtilizada;
 	int NumPlantaFornecedor;
+	vector<Deslocamento>::iterator DeslocamentoCarreta;
+	vector<Carregamento>::iterator CarregamentoPlanta;
 };
 
 class DistanciaPlanta{
@@ -44,7 +46,7 @@ public:
 	vector < Descarregamento > Descarregamentos;
 
 	int VerificaDisponibilidade( double, double);
-	void AlocaAtividade(double, double, int, int, int);
+	void AlocaAtividade(double, double, int, int, int, vector<Deslocamento>::iterator, vector<Carregamento>::iterator);
 
 	void ImprimeContrucao();
 
@@ -116,7 +118,7 @@ int Construcao::VerificaDisponibilidade( double InicioPossivelAlocacao, double F
 	}
 }
 
-void Construcao::AlocaAtividade(double HoraInicio, double HoraFinal, int NumDemanda, int Carreta, int Planta){
+void Construcao::AlocaAtividade(double HoraInicio, double HoraFinal, int NumDemanda, int Carreta, int Planta, vector<Deslocamento>::iterator Deslocamento, vector<Carregamento>::iterator Carregamento){
 	Descarregamento DescarregamentoAux;
 
 	DescarregamentoAux.HorarioInicioDescarregamento = HoraInicio;
@@ -124,6 +126,8 @@ void Construcao::AlocaAtividade(double HoraInicio, double HoraFinal, int NumDema
 	DescarregamentoAux.NumeroDemandaSuprida = NumDemanda;
 	DescarregamentoAux.NumCarretaUtilizada = Carreta;
 	DescarregamentoAux.NumPlantaFornecedor = Planta;
+	DescarregamentoAux.DeslocamentoCarreta = Deslocamento;
+	DescarregamentoAux.CarregamentoPlanta = Carregamento;
 
 	Descarregamentos.push_back( DescarregamentoAux );
 }

@@ -33,6 +33,7 @@ public:
 	Construcao();
 	int NumeroDaConstrucao;
 	int NumeroDemandas;
+	vector < int > SituacaoDemanda;
 	vector < DistanciaPlanta > DistanciaPlantas;
 	double TempoMaximoEntreDescargas;
 	double TempoMinimoDeFuncionamento;
@@ -125,6 +126,7 @@ void Construcao::AlocaAtividade(double HoraInicio, double HoraFinal, int NumDema
 	DescarregamentoAux.NumeroDemandaSuprida = NumDemanda;
 	DescarregamentoAux.NumCarretaUtilizada = Carreta;
 	DescarregamentoAux.NumPlantaFornecedor = Planta;
+	SituacaoDemanda[NumDemanda] = 1;
 
 	Descarregamentos.insert(Descarregamentos.begin(), DescarregamentoAux );
 }
@@ -140,6 +142,11 @@ void Construcao::ImprimeContrucao(){
 			cout << " as " << Descarregamentos[d].HorarioFinalDescarregamento  << " ) " << endl;
 		}
 	}
+	cout << "   Vetor de atendimento demandas [ ";
+	for ( int i = 0; i < NumeroDemandas; i++){
+		cout << SituacaoDemanda[ i ] << " ";
+	}
+	cout << "]" << endl;
 }
 
 

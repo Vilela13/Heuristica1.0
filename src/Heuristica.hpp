@@ -26,6 +26,13 @@ public:
 	double TempoDeVidaConcreto;
 	int StatusSolucao;
 
+	int PlantaEmAnalise;
+	int CaminhaoEmAnalise;
+	int ConstrucaoEmAnalise;
+	int DemandaDesalocada;
+	double HorarioInicioAuxiliar;
+	double HorarioFinalAuxiliar;
+
 	void CarregaSolucao(int, ConjuntoPlantas, int, ConjuntoConstrucoes,	int, double, double, int);
 	void Imprime();
 
@@ -61,6 +68,7 @@ void Solucao::Imprime(){
 
 }
 
+
 int Solucao::Viabilidade1(){
 /*	cout << " 		Entregas  " << endl;
 	for(  int c = 0; c < NE; c++ ){
@@ -72,12 +80,6 @@ int Solucao::Viabilidade1(){
 	}
 */
 
-	int PlantaEmAnalise;
-	int CaminhaoEmAnalise;
-	int ConstrucaoEmAnalise;
-	int DemandaDesalocada;
-	double HorarioInicioAuxiliar;
-	double HorarioFinalAuxiliar;
 
 	int c;
 	c = 0;
@@ -102,6 +104,7 @@ int Solucao::Viabilidade1(){
 			cout << endl << "  Deleta construcao" << endl;
 			ConstrucoesInstancia.Construcoes[c].Descarregamentos.erase( ConstrucoesInstancia.Construcoes[c].Descarregamentos.begin() );
 			ConstrucoesInstancia.Construcoes[c].StatusAtendimento = ConstrucoesInstancia.Construcoes[c].StatusAtendimento - 1;
+			ConstrucoesInstancia.Construcoes[c].SituacaoDemanda[DemandaDesalocada] = 0;
 			ConstrucoesInstancia.NivelDeInviabilidade = ConstrucoesInstancia.NivelDeInviabilidade + 1;
 		}else{
 			cout << endl << endl << endl << "   FUDEU " << endl << endl << endl;
@@ -131,6 +134,14 @@ int Solucao::Viabilidade1(){
 			}
 		}
 	}
+
+	for(int constAux = 0; constAux < NE; constAux++){
+		if( ConstrucoesInstancia.Construcoes[constAux].StatusAtendimento < ConstrucoesInstancia.Construcoes[constAux].NumeroDemandas ){
+
+		}
+
+	}
+
 
 	return 1;
 }
@@ -359,6 +370,10 @@ void Heuristica::LeNumeroDemandas(int comentarios){
 	int aux;
 	for (int i = 0; i < NE ; i++){
 		arq >> ConstrucoesInstancia.Construcoes[i].NumeroDemandas;
+		ConstrucoesInstancia.Construcoes[i].SituacaoDemanda.resize(ConstrucoesInstancia.Construcoes[i].NumeroDemandas);
+		for( int d = 0; d < ConstrucoesInstancia.Construcoes[i].NumeroDemandas; d++){
+			ConstrucoesInstancia.Construcoes[i].SituacaoDemanda[d] = 0;
+		}
 		if( comentarios == 1){
 			cout << " Numero de demandas na construção " << i + 1 << " = " << ConstrucoesInstancia.Construcoes[i].NumeroDemandas << "  ( ";
 		}

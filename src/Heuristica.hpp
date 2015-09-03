@@ -36,6 +36,7 @@ public:
 	void CarregaSolucao(int, ConjuntoPlantas, int, ConjuntoConstrucoes,	int, double, double, int);
 	void Imprime();
 
+	int VerificaRespeitoIntervalos();
 	int Viabilidade1();
 
 	~Solucao();
@@ -48,6 +49,13 @@ Solucao::Solucao(){
 	Velocidade = -13;
 	TempoDeVidaConcreto = -13;
 	StatusSolucao = -13;
+	PlantaEmAnalise = -13;
+	CaminhaoEmAnalise = -13;
+	ConstrucaoEmAnalise = -13;
+	DemandaDesalocada = -13;
+	HorarioInicioAuxiliar = -13;
+	HorarioFinalAuxiliar = -13;
+
 
 }
 
@@ -68,6 +76,11 @@ void Solucao::Imprime(){
 
 }
 
+int Solucao::VerificaRespeitoIntervalos(){
+	for( int c = 0; c < NE; c++){
+
+	}
+}
 
 int Solucao::Viabilidade1(){
 /*	cout << " 		Entregas  " << endl;
@@ -134,6 +147,8 @@ int Solucao::Viabilidade1(){
 			}
 		}
 	}
+
+
 
 	for(int constAux = 0; constAux < NE; constAux++){
 		if( ConstrucoesInstancia.Construcoes[constAux].StatusAtendimento < ConstrucoesInstancia.Construcoes[constAux].NumeroDemandas ){

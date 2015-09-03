@@ -17,8 +17,14 @@ public:
 	int NumeroDemandaSuprida;
 	int NumCarretaUtilizada;
 	int NumPlantaFornecedor;
+	int InicioDescarregamentos;
+	int FinalDescarregamentos;
 
 };
+
+bool DecideQualDescarregamentoVemprimeiro ( Descarregamento d1, Descarregamento d2 ){
+	return ( d1.HorarioInicioDescarregamento < d2.HorarioInicioDescarregamento );
+}
 
 class DistanciaPlanta{
 public:
@@ -46,7 +52,10 @@ public:
 	vector < Descarregamento > Descarregamentos;
 
 	int VerificaDisponibilidade( double, double);
-	void AlocaAtividade(double, double, int, int, int);
+	void AlocaAtividade(double, double, int, int, int, int, int);
+
+	void OrdenaDescarregamentosEmOrdemCrescente();
+	void MarcaInicioFimDescarregamentos();
 
 	void ImprimeContrucao();
 
@@ -118,7 +127,7 @@ int Construcao::VerificaDisponibilidade( double InicioPossivelAlocacao, double F
 	}
 }
 
-void Construcao::AlocaAtividade(double HoraInicio, double HoraFinal, int NumDemanda, int Carreta, int Planta){
+void Construcao::AlocaAtividade(double HoraInicio, double HoraFinal, int NumDemanda, int Carreta, int Planta, int inicio, int fim){
 	Descarregamento DescarregamentoAux;
 
 	DescarregamentoAux.HorarioInicioDescarregamento = HoraInicio;
@@ -126,9 +135,40 @@ void Construcao::AlocaAtividade(double HoraInicio, double HoraFinal, int NumDema
 	DescarregamentoAux.NumeroDemandaSuprida = NumDemanda;
 	DescarregamentoAux.NumCarretaUtilizada = Carreta;
 	DescarregamentoAux.NumPlantaFornecedor = Planta;
+	DescarregamentoAux.InicioDescarregamentos = inicio;
+	DescarregamentoAux.FinalDescarregamentos = fim;
 	SituacaoDemanda[NumDemanda] = 1;
 
 	Descarregamentos.insert(Descarregamentos.begin(), DescarregamentoAux );
+}
+
+void Construcao::OrdenaDescarregamentosEmOrdemCrescente(){
+	sort (Descarregamentos.begin(), Descarregamentos.end(), DecideQualDescarregamentoVemprimeiro);
+}
+
+void Construcao::MarcaInicioFimDescarregamentos(){
+	int menor;
+	int maior;
+	double ValorMenor;
+	double ValorMaior;
+	ValorMenor = TempoMaximoDeFuncionamento + 1;
+	ValorMaior =  0;
+
+	if( StatusAtendimento > 0){
+
+		for( int d = 0; d < Descarregamentos.size(); d++){
+			if( Descarregamentos[d].HorarioInicioDescarregamento < ValorMenor){
+				ValorMenor = Descarregamentos[d].HorarioInicioDescarregamento;
+				menor = d;
+			}
+			if( Descarregamentos[d].HorarioInicioDescarregamento > ValorMaior){
+				ValorMaior = Descarregamentos[d].HorarioInicioDescarregamento;
+				maior = d;
+			}
+		}
+		Descarregamentos[menor].InicioDescarregamentos = 1;
+		Descarregamentos[maior].FinalDescarregamentos = 1;
+	}
 }
 
 void Construcao::ImprimeContrucao(){
@@ -139,7 +179,8 @@ void Construcao::ImprimeContrucao(){
 			cout << "     * Carreta [" << Descarregamentos[d].NumPlantaFornecedor << "-" << Descarregamentos[d].NumCarretaUtilizada;
 			cout << "] atende demanda " << Descarregamentos[d].NumeroDemandaSuprida;
 			cout << " de ( " << Descarregamentos[d].HorarioInicioDescarregamento;
-			cout << " as " << Descarregamentos[d].HorarioFinalDescarregamento  << " ) " << endl;
+			cout << " as " << Descarregamentos[d].HorarioFinalDescarregamento  << " ) inicio = " << Descarregamentos[d].InicioDescarregamentos;
+			cout << " final = " << Descarregamentos[d].FinalDescarregamentos <<  endl;
 		}
 	}
 	cout << "   Vetor de atendimento demandas [ ";
@@ -168,6 +209,9 @@ public:
 	int NivelDeInviabilidade;
 	void CalcularNivelDeInviabilidade();
 
+	void OrdenaDescarregamentosConstrucoesOrdemCrescente();
+	void  MarcaInicioFimDescarregamentosConstrucoes();
+
 	void IniciaConjuntoConstrucoes(int);
 	void ImprimeContrucoes();
 
@@ -192,6 +236,18 @@ void ConjuntoConstrucoes::CalcularNivelDeInviabilidade(){
 	NivelDeInviabilidade = 0;
 	for( unsigned int c = 0; c < Construcoes.size(); c++){
 		NivelDeInviabilidade = NivelDeInviabilidade + Construcoes[c].NumeroDemandas - Construcoes[c].StatusAtendimento;
+	}
+}
+
+void  ConjuntoConstrucoes::OrdenaDescarregamentosConstrucoesOrdemCrescente(){
+	for( unsigned int c = 0; c < Construcoes.size(); c++){
+			Construcoes[c].OrdenaDescarregamentosEmOrdemCrescente();
+	}
+}
+
+void  ConjuntoConstrucoes::MarcaInicioFimDescarregamentosConstrucoes(){
+	for( unsigned int c = 0; c < Construcoes.size(); c++){
+			Construcoes[c].MarcaInicioFimDescarregamentos();
 	}
 }
 

@@ -73,14 +73,11 @@ void Solucao::CarregaSolucao(int np, ConjuntoPlantas Plantas, int ne, ConjuntoCo
 void Solucao::Imprime(){
 	PlantasInstancia.Imprime();
 	ConstrucoesInstancia.ImprimeContrucoes();
+	ConstrucoesInstancia.VerificaIntervaloContrucoes();
 
 }
 
-int Solucao::VerificaRespeitoIntervalos(){
-	for( int c = 0; c < NE; c++){
 
-	}
-}
 
 int Solucao::Viabilidade1(){
 /*	cout << " 		Entregas  " << endl;
@@ -101,6 +98,9 @@ int Solucao::Viabilidade1(){
 
 	ItCarregamento it1Aux;
 	ItDeslocamento it2Aux;
+
+
+
 
 	if( 0 < ConstrucoesInstancia.Construcoes[c].StatusAtendimento ){
 		cout << endl << endl;
@@ -127,23 +127,30 @@ int Solucao::Viabilidade1(){
 			if( PlantasInstancia.Plantas[p].NumeroDaPlanta == PlantaEmAnalise ){
 				for (ItCarregamento it1 = PlantasInstancia.Plantas[p].Carregamentos.begin() ; it1 != PlantasInstancia.Plantas[p].Carregamentos.end(); it1++){
 					if( it1->NumCarretaUtilizada == CaminhaoEmAnalise && it1->NumeroConstrucao ==  ConstrucaoEmAnalise && it1->NumeroDemandaSuprida == DemandaDesalocada){
-						cout <<  "        Deletou na planta " << endl;
+						cout <<  "        Deleta planta " << endl;
 						it1Aux = it1;
 					}
 				}
-				PlantasInstancia.Plantas[p].Carregamentos.erase(it1Aux);
-				for( int v = 0; v < PlantasInstancia.Plantas[p].NumeroVeiculos; v++){
-					if( v == CaminhaoEmAnalise ){
-						for (ItDeslocamento it2 = PlantasInstancia.Plantas[p].VeiculosDaPlanta.Carretas[v].Deslocamentos.begin(); it2 != PlantasInstancia.Plantas[p].VeiculosDaPlanta.Carretas[v].Deslocamentos.end(); it2++){
-							if( it2->NumeroConstrucao == ConstrucaoEmAnalise && it2->NumeroDemandaSuprida == DemandaDesalocada){
-								cout << "        Deletou na carreta " << endl;
-								it2Aux = it2;
+
+					PlantasInstancia.Plantas[p].Carregamentos.erase(it1Aux);
+					cout <<  "        Deletou na planta " << endl;
+					for( int v = 0; v < PlantasInstancia.Plantas[p].NumeroVeiculos; v++){
+						if( v == CaminhaoEmAnalise ){
+							cout << "        Deletou  carreta " << endl;
+							for (vector< Deslocamento >::iterator it2 = PlantasInstancia.Plantas[p].VeiculosDaPlanta.Carretas[v].Deslocamentos.begin(); it2 != PlantasInstancia.Plantas[p].VeiculosDaPlanta.Carretas[v].Deslocamentos.end(); it2++){
+								cout << "          " << it2->NumeroConstrucao << " (" << ConstrucaoEmAnalise << ") e " << it2->NumeroDemandaSuprida << " (" << DemandaDesalocada << ") "  << endl;
+								if( it2->NumeroConstrucao == ConstrucaoEmAnalise && it2->NumeroDemandaSuprida == DemandaDesalocada){
+									cout << "        Deleta carreta " << endl;
+									it2Aux = it2;
+								}
 							}
+
+								PlantasInstancia.Plantas[p].VeiculosDaPlanta.Carretas[v].Deslocamentos.erase(it2Aux);
+								PlantasInstancia.Plantas[p].VeiculosDaPlanta.Carretas[v].NumeroDeDemandasAntendidas = PlantasInstancia.Plantas[p].VeiculosDaPlanta.Carretas[v].NumeroDeDemandasAntendidas - 1;
+
 						}
-						PlantasInstancia.Plantas[p].VeiculosDaPlanta.Carretas[v].Deslocamentos.erase(it2Aux);
-						PlantasInstancia.Plantas[p].VeiculosDaPlanta.Carretas[v].NumeroDeDemandasAntendidas = PlantasInstancia.Plantas[p].VeiculosDaPlanta.Carretas[v].NumeroDeDemandasAntendidas - 1;
 					}
-				}
+
 			}
 		}
 	}

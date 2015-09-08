@@ -56,6 +56,7 @@ public:
 
 	void OrdenaDescarregamentosEmOrdemCrescente();
 	void MarcaInicioFimDescarregamentos();
+	int VerificaDescarregamentosRespeitaIntervalo();
 
 	void ImprimeContrucao();
 
@@ -156,7 +157,9 @@ void Construcao::MarcaInicioFimDescarregamentos(){
 
 	if( StatusAtendimento > 0){
 
-		for( int d = 0; d < Descarregamentos.size(); d++){
+		for( unsigned int d = 0; d < Descarregamentos.size(); d++){
+			Descarregamentos[d].InicioDescarregamentos = 0;
+			Descarregamentos[d].FinalDescarregamentos = 0;
 			if( Descarregamentos[d].HorarioInicioDescarregamento < ValorMenor){
 				ValorMenor = Descarregamentos[d].HorarioInicioDescarregamento;
 				menor = d;
@@ -169,6 +172,50 @@ void Construcao::MarcaInicioFimDescarregamentos(){
 		Descarregamentos[menor].InicioDescarregamentos = 1;
 		Descarregamentos[maior].FinalDescarregamentos = 1;
 	}
+}
+
+int Construcao::VerificaDescarregamentosRespeitaIntervalo(){
+	bool DescarregamentoEsquerda;
+	bool DescarregamentoDireita;
+	for( unsigned int d1 = 0; d1 < Descarregamentos.size(); d1++){
+		DescarregamentoEsquerda = 0;
+		DescarregamentoDireita = 0;
+		if( Descarregamentos[d1].InicioDescarregamentos == 1 ){
+			DescarregamentoEsquerda = 1;
+			for( unsigned int d2 = 0; d2 < Descarregamentos.size(); d2++){
+				if( Descarregamentos[d1].HorarioFinalDescarregamento < Descarregamentos[d2].HorarioInicioDescarregamento &&  Descarregamentos[d1].HorarioFinalDescarregamento + TempoMaximoEntreDescargas > Descarregamentos[d2].HorarioInicioDescarregamento ){
+					DescarregamentoDireita = 1;
+				}
+			}
+		}
+
+		if( Descarregamentos[d1].FinalDescarregamentos == 1 ){
+			DescarregamentoDireita = 1;
+			for( unsigned int d2 = 0; d2 < Descarregamentos.size(); d2++){
+				if( Descarregamentos[d1].HorarioInicioDescarregamento > Descarregamentos[d2].HorarioFinalDescarregamento && Descarregamentos[d1].HorarioInicioDescarregamento < Descarregamentos[d2].HorarioFinalDescarregamento + TempoMaximoEntreDescargas){
+					DescarregamentoEsquerda = 1;
+				}
+			}
+		}
+		if( Descarregamentos[d1].InicioDescarregamentos == 0 && Descarregamentos[d1].FinalDescarregamentos == 0 ){
+			for( unsigned int d2 = 0; d2 < Descarregamentos.size(); d2++){
+				if( Descarregamentos[d1].HorarioFinalDescarregamento < Descarregamentos[d2].HorarioInicioDescarregamento &&  Descarregamentos[d1].HorarioFinalDescarregamento + TempoMaximoEntreDescargas > Descarregamentos[d2].HorarioInicioDescarregamento ){
+					DescarregamentoDireita = 1;
+				}
+				if( Descarregamentos[d1].HorarioInicioDescarregamento > Descarregamentos[d2].HorarioFinalDescarregamento && Descarregamentos[d1].HorarioInicioDescarregamento < Descarregamentos[d2].HorarioFinalDescarregamento + TempoMaximoEntreDescargas){
+					DescarregamentoEsquerda = 1;
+				}
+			}
+		}
+		if( Descarregamentos[d1].InicioDescarregamentos == 1 && Descarregamentos[d1].FinalDescarregamentos == 1 ){
+			DescarregamentoEsquerda = 1;
+			DescarregamentoDireita = 1;
+		}
+		if ( DescarregamentoDireita == 0 || DescarregamentoEsquerda == 0){
+			return 0;
+		}
+	}
+	return 1;
 }
 
 void Construcao::ImprimeContrucao(){
@@ -214,6 +261,8 @@ public:
 
 	void IniciaConjuntoConstrucoes(int);
 	void ImprimeContrucoes();
+
+	void VerificaIntervaloContrucoes();
 
 
 
@@ -267,6 +316,17 @@ void ConjuntoConstrucoes::ImprimeContrucoes(){
 
 }
 
+void ConjuntoConstrucoes::VerificaIntervaloContrucoes(){
+
+	cout << endl << " Status de respeito aintervelos de construção" << endl;
+	for(int c = 0; c < NumeroConstrucoes; c++){
+		if( Construcoes[c].VerificaDescarregamentosRespeitaIntervalo() == 1){
+			cout << endl << Construcoes[c].NumeroDaConstrucao << " OK!";
+		}else{
+			cout << endl << Construcoes[c].NumeroDaConstrucao << " inviavel!";
+		}
+	}
+}
 ConjuntoConstrucoes::~ConjuntoConstrucoes(){
 
 }

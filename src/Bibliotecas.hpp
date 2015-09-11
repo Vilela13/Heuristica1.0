@@ -49,6 +49,7 @@ using namespace std;
 #include "Plantas.hpp"
 #include "Construcoes.hpp"
 #include "Procedimento1.hpp"
+#include "Solucoes.hpp"
 #include "Heuristica.hpp"
 
 

@@ -20,6 +20,8 @@ public:
 	int InicioDescarregamentos;
 	int FinalDescarregamentos;
 
+	bool FoiDeslocado;
+
 };
 
 bool DecideQualDescarregamentoVemprimeiro ( Descarregamento d1, Descarregamento d2 ){
@@ -52,7 +54,7 @@ public:
 	vector < Descarregamento > Descarregamentos;
 
 	int VerificaDisponibilidade( double, double);
-	void AlocaAtividade(double, double, int, int, int, int, int);
+	void AlocaAtividade(double, double, int, int, int, int, int, bool);
 
 	void OrdenaDescarregamentosEmOrdemCrescente();
 	void MarcaInicioFimDescarregamentos();
@@ -128,7 +130,7 @@ int Construcao::VerificaDisponibilidade( double InicioPossivelAlocacao, double F
 	}
 }
 
-void Construcao::AlocaAtividade(double HoraInicio, double HoraFinal, int NumDemanda, int Carreta, int Planta, int inicio, int fim){
+void Construcao::AlocaAtividade(double HoraInicio, double HoraFinal, int NumDemanda, int Carreta, int Planta, int inicio, int fim, bool StatusDesalocamento){
 	Descarregamento DescarregamentoAux;
 
 	DescarregamentoAux.HorarioInicioDescarregamento = HoraInicio;
@@ -138,6 +140,7 @@ void Construcao::AlocaAtividade(double HoraInicio, double HoraFinal, int NumDema
 	DescarregamentoAux.NumPlantaFornecedor = Planta;
 	DescarregamentoAux.InicioDescarregamentos = inicio;
 	DescarregamentoAux.FinalDescarregamentos = fim;
+	DescarregamentoAux.FoiDeslocado = StatusDesalocamento;
 	SituacaoDemanda[NumDemanda] = 1;
 
 	Descarregamentos.insert(Descarregamentos.begin(), DescarregamentoAux );
@@ -154,6 +157,8 @@ void Construcao::MarcaInicioFimDescarregamentos(){
 	double ValorMaior;
 	ValorMenor = TempoMaximoDeFuncionamento + 1;
 	ValorMaior =  0;
+	menor = -13;
+	maior = -13;
 
 	if( StatusAtendimento > 0){
 
@@ -171,6 +176,11 @@ void Construcao::MarcaInicioFimDescarregamentos(){
 		}
 		Descarregamentos[menor].InicioDescarregamentos = 1;
 		Descarregamentos[maior].FinalDescarregamentos = 1;
+	}
+	if( menor == -13 || maior == -13 ){
+		if( Descarregamentos.size() > 1){
+			cout << endl << endl << endl << "   &&&&&&&&&&&&& Problema na ordenacao &&&&&&&&&&&&& " << endl << endl << endl;
+		}
 	}
 }
 
@@ -224,7 +234,7 @@ void Construcao::ImprimeContrucao(){
 	if( StatusAtendimento != 0){
 		for( unsigned int d = 0; d < Descarregamentos.size(); d++){
 			cout << "     * Carreta [" << Descarregamentos[d].NumPlantaFornecedor << "-" << Descarregamentos[d].NumCarretaUtilizada;
-			cout << "] atende demanda " << Descarregamentos[d].NumeroDemandaSuprida;
+			cout << "] atende demanda " << NumeroDaConstrucao << "-" << Descarregamentos[d].NumeroDemandaSuprida;
 			cout << " de ( " << Descarregamentos[d].HorarioInicioDescarregamento;
 			cout << " as " << Descarregamentos[d].HorarioFinalDescarregamento  << " ) inicio = " << Descarregamentos[d].InicioDescarregamentos;
 			cout << " final = " << Descarregamentos[d].FinalDescarregamentos <<  endl;
@@ -326,6 +336,7 @@ void ConjuntoConstrucoes::VerificaIntervaloContrucoes(){
 			cout << endl << Construcoes[c].NumeroDaConstrucao << " inviavel!";
 		}
 	}
+	cout << endl ;
 }
 ConjuntoConstrucoes::~ConjuntoConstrucoes(){
 

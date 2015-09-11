@@ -10,195 +10,6 @@
 
 #include "Bibliotecas.hpp"
 
-#define ItCarregamento vector< Carregamento >::iterator
-#define ItDeslocamento vector< Deslocamento >::iterator
-
-class Solucao{
-public:
-	Solucao();
-
-	int NP;
-	ConjuntoPlantas PlantasInstancia;
-	int NE;
-	ConjuntoConstrucoes ConstrucoesInstancia;
-	int NV;
-	double Velocidade;
-	double TempoDeVidaConcreto;
-	int StatusSolucao;
-
-	int PlantaEmAnalise;
-	int CaminhaoEmAnalise;
-	int ConstrucaoEmAnalise;
-	int DemandaDesalocada;
-	double HorarioInicioAuxiliar;
-	double HorarioFinalAuxiliar;
-
-	void CarregaSolucao(int, ConjuntoPlantas, int, ConjuntoConstrucoes,	int, double, double, int);
-	void Imprime();
-
-	int VerificaRespeitoIntervalos();
-	int DetetaAlocacaoTarefa(int,int);
-
-	~Solucao();
-};
-
-Solucao::Solucao(){
-	NP = -13;
-	NE = -13;
-	NV = -13;
-	Velocidade = -13;
-	TempoDeVidaConcreto = -13;
-	StatusSolucao = -13;
-	PlantaEmAnalise = -13;
-	CaminhaoEmAnalise = -13;
-	ConstrucaoEmAnalise = -13;
-	DemandaDesalocada = -13;
-	HorarioInicioAuxiliar = -13;
-	HorarioFinalAuxiliar = -13;
-
-
-}
-
-void Solucao::CarregaSolucao(int np, ConjuntoPlantas Plantas, int ne, ConjuntoConstrucoes Construcoes, int nv, double v,double TDVC, int status){
-	NP = np;
-	PlantasInstancia = Plantas;
-	NE = ne;
-	ConstrucoesInstancia = Construcoes;
-	NV = nv;
-	Velocidade = v;
-	TempoDeVidaConcreto = TDVC;
-	StatusSolucao = status;
-}
-
-void Solucao::Imprime(){
-	PlantasInstancia.Imprime();
-	ConstrucoesInstancia.ImprimeContrucoes();
-	ConstrucoesInstancia.VerificaIntervaloContrucoes();
-
-}
-
-
-
-int Solucao::DetetaAlocacaoTarefa(int c, int d){
-/*	cout << " 		Entregas  " << endl;
-	for(  int c = 0; c < NE; c++ ){
-		cout << " Contrucao " << ConstrucoesInstancia.Construcoes[c].NumeroDaConstrucao << endl;
-		for ( int w = 0; w < ConstrucoesInstancia.Construcoes[c].StatusAtendimento; w++){
-			cout << endl << " W = " << w << endl;
-
-		}
-	}
-*/
-
-	ItCarregamento it1Aux;
-	ItDeslocamento it2Aux;
-
-	bool AlocouPonteiroCarregamento;
-	bool AlocouPonteiroDeslocamento;
-
-	cout << " contrucao " << ConstrucoesInstancia.Construcoes[c].NumeroDaConstrucao;
-	PlantaEmAnalise =  ConstrucoesInstancia.Construcoes[c].Descarregamentos[d].NumPlantaFornecedor;
-	ConstrucaoEmAnalise = ConstrucoesInstancia.Construcoes[c].NumeroDaConstrucao;
-	DemandaDesalocada = ConstrucoesInstancia.Construcoes[c].Descarregamentos[d].NumeroDemandaSuprida;
-	CaminhaoEmAnalise = ConstrucoesInstancia.Construcoes[c].Descarregamentos[d].NumCarretaUtilizada;
-	HorarioInicioAuxiliar = ConstrucoesInstancia.Construcoes[c].Descarregamentos[d].HorarioInicioDescarregamento;
-	HorarioFinalAuxiliar = ConstrucoesInstancia.Construcoes[c].Descarregamentos[d].HorarioFinalDescarregamento;
-	cout << " planta " << PlantaEmAnalise << " construcao " << ConstrucaoEmAnalise << " demanda " << DemandaDesalocada << " caminhao " << CaminhaoEmAnalise << endl;
-
-	if ( ConstrucoesInstancia.Construcoes[c].Descarregamentos.begin()->HorarioInicioDescarregamento == HorarioInicioAuxiliar && ConstrucoesInstancia.Construcoes[c].Descarregamentos.begin()->HorarioFinalDescarregamento == HorarioFinalAuxiliar && ConstrucoesInstancia.Construcoes[c].Descarregamentos.begin()->NumCarretaUtilizada == CaminhaoEmAnalise && ConstrucoesInstancia.Construcoes[c].Descarregamentos.begin()->NumPlantaFornecedor == PlantaEmAnalise && ConstrucoesInstancia.Construcoes[c].Descarregamentos.begin()->NumCarretaUtilizada ==  CaminhaoEmAnalise ){
-		cout << endl << "  Deleta construcao" << endl;
-		ConstrucoesInstancia.Construcoes[c].Descarregamentos.erase( ConstrucoesInstancia.Construcoes[c].Descarregamentos.begin() );
-		ConstrucoesInstancia.Construcoes[c].StatusAtendimento = ConstrucoesInstancia.Construcoes[c].StatusAtendimento - 1;
-		ConstrucoesInstancia.Construcoes[c].SituacaoDemanda[DemandaDesalocada] = 0;
-		ConstrucoesInstancia.NivelDeInviabilidade = ConstrucoesInstancia.NivelDeInviabilidade + 1;
-	}else{
-		cout << endl << endl << endl << "   Nao conseguiu descarregar  " << endl << endl << endl;
-		return 0;
-	}
-
-	AlocouPonteiroCarregamento = 0;
-	for( int p = 0; p < NP; p++){
-		if( PlantasInstancia.Plantas[p].NumeroDaPlanta == PlantaEmAnalise ){
-			for (ItCarregamento it1 = PlantasInstancia.Plantas[p].Carregamentos.begin() ; it1 != PlantasInstancia.Plantas[p].Carregamentos.end(); it1++){
-				if( it1->NumCarretaUtilizada == CaminhaoEmAnalise && it1->NumeroConstrucao ==  ConstrucaoEmAnalise && it1->NumeroDemandaSuprida == DemandaDesalocada){
-					cout <<  "        Deleta planta " << endl;
-					it1Aux = it1;
-					AlocouPonteiroCarregamento = 1;
-				}
-			}
-
-			if( AlocouPonteiroCarregamento == 1){
-				PlantasInstancia.Plantas[p].Carregamentos.erase(it1Aux);
-				cout <<  "        Deletou na planta " << endl;
-			}else{
-				cout << endl << endl << endl << "    Carregamento nao desalocado " << endl << endl << endl;
-				return 0;
-			}
-
-			AlocouPonteiroDeslocamento = 0;
-			for( int v = 0; v < PlantasInstancia.Plantas[p].NumeroVeiculos; v++){
-				if( v == CaminhaoEmAnalise ){
-					cout << "        Deletou  carreta " << endl;
-					for (ItDeslocamento it2 = PlantasInstancia.Plantas[p].VeiculosDaPlanta.Carretas[v].Deslocamentos.begin(); it2 != PlantasInstancia.Plantas[p].VeiculosDaPlanta.Carretas[v].Deslocamentos.end(); it2++){
-						cout << "          " << it2->NumeroConstrucao << " (" << ConstrucaoEmAnalise << ") e " << it2->NumeroDemandaSuprida << " (" << DemandaDesalocada << ") "  << endl;
-						if( it2->NumeroConstrucao == ConstrucaoEmAnalise && it2->NumeroDemandaSuprida == DemandaDesalocada){
-							it2Aux = it2;
-							AlocouPonteiroDeslocamento = 1;
-						}
-					}
-					if( AlocouPonteiroDeslocamento == 1){
-						PlantasInstancia.Plantas[p].VeiculosDaPlanta.Carretas[CaminhaoEmAnalise].Deslocamentos.erase(it2Aux);
-						PlantasInstancia.Plantas[p].VeiculosDaPlanta.Carretas[CaminhaoEmAnalise].NumeroDeDemandasAntendidas = PlantasInstancia.Plantas[p].VeiculosDaPlanta.Carretas[CaminhaoEmAnalise].NumeroDeDemandasAntendidas - 1;
-					}else{
-						cout << endl << endl << endl << "    Deslocamento nao desalocado " << endl << endl << endl;
-						return 0;
-					}
-
-				}
-			}
-
-		}
-	}
-
-	return 1;
-}
-
-Solucao::~Solucao(){
-
-}
-
-class ConjuntoSolucoes{
-public:
-	ConjuntoSolucoes();
-	vector < Solucao > Solucoes;
-	void InsereSolucao(int, ConjuntoPlantas, int, ConjuntoConstrucoes,	int, double, double, int);
-	void Imprime();
-	~ConjuntoSolucoes();
-
-};
-
-ConjuntoSolucoes::ConjuntoSolucoes(){
-}
-
-void ConjuntoSolucoes::InsereSolucao(int np, ConjuntoPlantas Plantas, int ne, ConjuntoConstrucoes Construcoes, int nv, double v,double TDVC, int status){
-	Solucao S1;
-	S1.CarregaSolucao( np, Plantas, ne, Construcoes, nv, v, TDVC, status);
-	Solucoes.push_back(S1);
-}
-
-void ConjuntoSolucoes::Imprime(){
-	for( unsigned  int s = 0; s <  Solucoes.size(); s++){
-		cout << endl << endl << "   Solucao " << s << endl << endl;
-		 Solucoes[s].Imprime();
-	}
-}
-
-ConjuntoSolucoes::~ConjuntoSolucoes(){
-
-}
-void InsereSolucao(int, ConjuntoPlantas, int, ConjuntoConstrucoes,	int, double, double, int);
-
-
 class Heuristica{
 
 public:
@@ -295,10 +106,12 @@ void Heuristica::ExecutaProcedimentoHeuristico1(){
 
 	//Prod1.ConstrucoesInstancia.ImprimeContrucoes();
 
+// Define a ordem de seleção da alocação inicial das atividades
+
 	//sort ( Prod1.ConstrucoesInstancia.Construcoes.begin(), Prod1.ConstrucoesInstancia.Construcoes.end(), DecideQualContrucaoTemMaiorRank );
 	sort ( Prod1.ConstrucoesInstancia.Construcoes.begin(), Prod1.ConstrucoesInstancia.Construcoes.end(), DecideQualContrucaoTemMenorInicioDepoisMaiorRank );
 
-	Prod1.ConstrucoesInstancia.ImprimeContrucoes();
+	//Prod1.ConstrucoesInstancia.ImprimeContrucoes();
 
 	Solucao = Prod1.Executa();
 
@@ -309,13 +122,15 @@ void Heuristica::ExecutaProcedimentoHeuristico1(){
 	}
 
 	Solucoes.InsereSolucao(Prod1.NP, Prod1.PlantasInstancia, Prod1.NE, Prod1.ConstrucoesInstancia, Prod1.NV, Prod1.Velocidade, Prod1.TempoDeVidaConcreto, Solucao);
-	Solucoes.Imprime();
+	Solucoes.Imprime(1,0,0);
 
+	//Solucoes.Solucoes[0].DeletaAlocacaoTarefasPosteriores(0,0);
 	Solucoes.Solucoes[0].DetetaAlocacaoTarefa(0,0);
 
 	Solucoes.Solucoes[0].ConstrucoesInstancia.MarcaInicioFimDescarregamentosConstrucoes();
 
-	Solucoes.Imprime();
+	Solucoes.Imprime(1,0,0);
+
 
 }
 

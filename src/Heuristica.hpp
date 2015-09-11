@@ -122,14 +122,14 @@ void Heuristica::ExecutaProcedimentoHeuristico1(){
 	}
 
 	Solucoes.InsereSolucao(Prod1.NP, Prod1.PlantasInstancia, Prod1.NE, Prod1.ConstrucoesInstancia, Prod1.NV, Prod1.Velocidade, Prod1.TempoDeVidaConcreto, Solucao);
-	Solucoes.Imprime(1,0,0);
+	Solucoes.Imprime(0,1,0);
 
-	//Solucoes.Solucoes[0].DeletaAlocacaoTarefasPosteriores(0,0);
-	Solucoes.Solucoes[0].DetetaAlocacaoTarefa(0,0);
+	Solucoes.Solucoes[0].DeletaAlocacaoTarefasPosteriores(0,0);
+	//Solucoes.Solucoes[0].DetetaAlocacaoTarefa(0,0);
 
 	Solucoes.Solucoes[0].ConstrucoesInstancia.MarcaInicioFimDescarregamentosConstrucoes();
 
-	Solucoes.Imprime(1,0,0);
+	Solucoes.Imprime(0,1,0);
 
 
 }

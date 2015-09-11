@@ -224,6 +224,7 @@ int Solucao::DeletaAlocacaoTarefasPosteriores(int Construcao, int Demanda ){
 
 	int c;
 	int d;
+	vector < int > DemandaDesalocar;
 
 	c = -13;
 	d = -13;
@@ -233,33 +234,36 @@ int Solucao::DeletaAlocacaoTarefasPosteriores(int Construcao, int Demanda ){
 			c = i;
 		}
 	}
-
 	for( unsigned int j = 0; j < ConstrucoesInstancia.Construcoes[c].Descarregamentos.size(); j++){
 		if( Demanda == ConstrucoesInstancia.Construcoes[c].Descarregamentos[j].NumeroDemandaSuprida){
 			d = j;
 		}
 	}
-
 	if( c == -13 || d == -13 ){
 		cout << cout << endl << endl << endl << "   &&&&&&&&&&&&& Nao encontrei a demanda ou construcao &&&&&&&&&&&&& " << endl << endl << endl;
 	}
 
 
 	ConstrucoesInstancia.OrdenaDescarregamentosConstrucoesOrdemCrescente();
-	ConstrucoesInstancia.Construcoes[c].ImprimeContrucao();
+	//ConstrucoesInstancia.Construcoes[c].ImprimeContrucao();
 	bool EncontrouDeslocamento;
 	EncontrouDeslocamento = 0;
 	for( ItDescarregamento it1 = ConstrucoesInstancia.Construcoes[c].Descarregamentos.begin(); it1 != ConstrucoesInstancia.Construcoes[c].Descarregamentos.end(); it1++ ){
-		cout << endl << " ## Passou por Construcao = " << Construcao << " e Demanda = " << Demanda << endl;
+		//cout << endl << " ## Passou por Construcao = " << Construcao << " e Demanda = " << it1->NumeroDemandaSuprida << endl;
 		if( it1->NumeroDemandaSuprida == Demanda){
 			EncontrouDeslocamento = 1;
 		}
 		if( EncontrouDeslocamento == 1){
-			DetetaAlocacaoTarefa(Construcao, it1->NumeroDemandaSuprida);
-			cout << " %%%%%%%%%%%%%%%%% Entrou e deletou ConstrucaoEmAnalise = " << Construcao << " e Demanda = " << Demanda << endl;
+			DemandaDesalocar.push_back (it1->NumeroDemandaSuprida);
+			//cout << " %%%%%%%%%%%%%%%%% Entrou e deletou ConstrucaoEmAnalise = " << Construcao << " e Demanda = " << it1->NumeroDemandaSuprida << endl;
 		}
 	}
 	if( EncontrouDeslocamento == 1){
+		for( unsigned int i = 0; i < DemandaDesalocar.size(); i++){
+			//cout << "   i = " << DemandaDesalocar[i] << endl;
+			DetetaAlocacaoTarefa(Construcao, DemandaDesalocar[i]);
+		}
+		DemandaDesalocar.erase (DemandaDesalocar.begin(),DemandaDesalocar.end());
 		return 1;
 	}else{
 		return 0;

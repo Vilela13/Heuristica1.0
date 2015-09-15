@@ -62,6 +62,8 @@ public:
 
 	void ImprimeContrucao();
 
+	vector < bool > SituacaoRemocao;			// SE o valor for 1 ela ja foi removida, se é 0 ela ainda não foi
+
 	~Construcao();
 
 };
@@ -243,6 +245,11 @@ void Construcao::ImprimeContrucao(){
 	cout << "   Vetor de atendimento demandas [ ";
 	for ( int i = 0; i < NumeroDemandas; i++){
 		cout << SituacaoDemanda[ i ] << " ";
+	}
+	cout << "]" << endl;
+	cout << "   Vetor de Situacao Remocao das demandas [ ";
+	for ( int i = 0; i < NumeroDemandas; i++){
+		cout << SituacaoRemocao[ i ] << " ";
 	}
 	cout << "]" << endl;
 }

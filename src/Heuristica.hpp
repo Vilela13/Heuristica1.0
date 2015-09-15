@@ -99,6 +99,9 @@ void Heuristica::ExecutaProcedimentoHeuristico1(){
 	int Solucao;
 	Solucao = 0;
 
+	bool TarefaDeletada;
+	bool TarefaAlocada;
+
 	ConjuntoSolucoes Solucoes;
 
 
@@ -124,20 +127,33 @@ void Heuristica::ExecutaProcedimentoHeuristico1(){
 	Solucoes.InsereSolucao(Prod1.NP, Prod1.PlantasInstancia, Prod1.NE, Prod1.ConstrucoesInstancia, Prod1.NV, Prod1.Velocidade, Prod1.TempoDeVidaConcreto, Solucao);
 	Solucoes.Imprime(0,1,0);
 
-	Solucoes.Solucoes[0].DeletaAlocacaoTarefasPosteriores(0,0);
-	//Solucoes.Solucoes[0].DetetaAlocacaoTarefa(0,0);
+
+	TarefaDeletada = Solucoes.Solucoes[0].DeletaAlocacaoTarefasPosteriores(0,0);
+	//TarefaDeletada = Solucoes.Solucoes[0].DetetaAlocacaoTarefa(0,0);
+	Solucoes.Solucoes[0].MarcaTarefaDeletadaNoVetor(0,0);
 
 	Solucoes.Solucoes[0].ConstrucoesInstancia.MarcaInicioFimDescarregamentosConstrucoes();
 	Solucoes.Imprime(0,1,0);
 
-	cout << endl << endl << "   Tenta adicionar " << endl << endl;
 
-	Solucoes.Solucoes[0].AdicionaTarefa(0,0);
+	if ( TarefaDeletada == 1){
 
-	Solucoes.Solucoes[0].ConstrucoesInstancia.MarcaInicioFimDescarregamentosConstrucoes();
+		cout << endl << endl << "   Tenta adicionar " << endl << endl;
+
+		TarefaAlocada = Solucoes.Solucoes[0].ProcessoParaAlocarTarefa( 0, 0 );
+		if( TarefaAlocada == 1){
+			Solucoes.Solucoes[0].MarcaTarefaNaoDeletadaNoVetor(0,0);
+		}
+
+		Solucoes.Solucoes[0].ConstrucoesInstancia.MarcaInicioFimDescarregamentosConstrucoes();
+		Solucoes.Imprime(0,1,0);
+		Solucoes.Solucoes[0].ReadicionaTarefas(0,0);
 
 
-	Solucoes.Imprime(0,1,0);
+		Solucoes.Imprime(0,1,0);
+	}else{
+		 cout << endl << endl << endl << "   #######################  Tarefa nao deletada ######################## " << endl << endl << endl;
+	}
 
 
 }
@@ -213,8 +229,10 @@ void Heuristica::LeNumeroDemandas(int comentarios){
 	for (int i = 0; i < NE ; i++){
 		arq >> ConstrucoesInstancia.Construcoes[i].NumeroDemandas;
 		ConstrucoesInstancia.Construcoes[i].SituacaoDemanda.resize(ConstrucoesInstancia.Construcoes[i].NumeroDemandas);
+		ConstrucoesInstancia.Construcoes[i].SituacaoRemocao.resize(ConstrucoesInstancia.Construcoes[i].NumeroDemandas);
 		for( int d = 0; d < ConstrucoesInstancia.Construcoes[i].NumeroDemandas; d++){
 			ConstrucoesInstancia.Construcoes[i].SituacaoDemanda[d] = 0;
+			ConstrucoesInstancia.Construcoes[i].SituacaoRemocao[d] = 0;
 		}
 		if( comentarios == 1){
 			cout << " Numero de demandas na construção " << i + 1 << " = " << ConstrucoesInstancia.Construcoes[i].NumeroDemandas << "  ( ";

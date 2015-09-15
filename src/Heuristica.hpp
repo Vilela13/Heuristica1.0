@@ -128,6 +128,14 @@ void Heuristica::ExecutaProcedimentoHeuristico1(){
 	//Solucoes.Solucoes[0].DetetaAlocacaoTarefa(0,0);
 
 	Solucoes.Solucoes[0].ConstrucoesInstancia.MarcaInicioFimDescarregamentosConstrucoes();
+	Solucoes.Imprime(0,1,0);
+
+	cout << endl << endl << "   Tenta adicionar " << endl << endl;
+
+	Solucoes.Solucoes[0].AdicionaTarefa(0,0);
+
+	Solucoes.Solucoes[0].ConstrucoesInstancia.MarcaInicioFimDescarregamentosConstrucoes();
+
 
 	Solucoes.Imprime(0,1,0);
 

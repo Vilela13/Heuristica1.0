@@ -386,7 +386,12 @@ int Solucao::AdicionaTarefa( int Construcao, int Demanda ){
 								ConstrucoesInstancia.NivelDeInviabilidade = ConstrucoesInstancia.NivelDeInviabilidade - 1;
 								//cout << "		PLanta (" <<  HorarioInicioPlanta << "-" << HorarioSaiDaPlanta << " trajeto " << HorarioChegaContrucao << " - " << HorarioSaiConstrucao << " trajeto " << HorarioRetornaPlanta << ") " << endl;
 
+								ConstrucoesInstancia.OrdenaDescarregamentosConstrucoesOrdemCrescente();
 								ConstrucoesInstancia.MarcaInicioFimDescarregamentosConstrucoes();
+								cout << "      -> Adicionou construcao [" << ConstrucoesInstancia.Construcoes[c].NumeroDaConstrucao << "-" << d << "]";
+								cout << " construcao ("<< HorarioChegaContrucao <<"-" << HorarioSaiConstrucao << ")";
+								cout << " planta " << PlantasInstancia.Plantas[NumPlantaAnalisando].NumeroDaPlanta << " (" << HorarioInicioPlanta << "-" << HorarioSaiDaPlanta <<")";
+								cout << " caminhao  " << PlantasInstancia.Plantas[NumPlantaAnalisando].VeiculosDaPlanta.Carretas[v].NumeroDaCarreta << " (" << HorarioInicioPlanta << "-" << HorarioRetornaPlanta << ")" << endl;
 								return 1;
 							}
 						}
@@ -397,7 +402,8 @@ int Solucao::AdicionaTarefa( int Construcao, int Demanda ){
 			PlantasInstancia.PlantasAnalizadas[NumPlantaAnalisando] = 1;
 		}while( PlantasInstancia.AnalizouTodasPLanats() == 0);
 
-		cout << endl << endl << endl << "   &&&&&&&&&&&&& Nao consigo atender contrucao [" << c << "-" << d << "]   -> AdicionaTarefa &&&&&&&&&&&&& " << endl << endl << endl;
+		//cout << "   &&&&&&&&&&&&& Nao consigo atender contrucao [" << ConstrucoesInstancia.Construcoes[c].NumeroDaConstrucao << "-" << d << "]   -> AdicionaTarefa &&&&&&&&&&&&& " << endl;
+
 		return 0;
 
 	}else{
@@ -432,14 +438,16 @@ int Solucao::ProcessoParaAlocarTarefa( int Construcao, int Demanda, int& Novatar
 	for( unsigned int contrucoes = 0; contrucoes < ConstrucoesInstancia.Construcoes.size(); contrucoes++){
 		for ( int demandas = 0; demandas < ConstrucoesInstancia.Construcoes[contrucoes].NumeroDemandas; demandas++){
 			if( contrucoes != c){
-				if( ConstrucoesInstancia.Construcoes[contrucoes].SituacaoDemanda[demandas] == 1){
-					Alocou = AdicionaTarefa(contrucoes,demandas);
-					cout << "   tenta alocar [" << contrucoes << "-" << demandas << "] -> ProcessoParaAlocarTarefa" << endl;
+				if( ConstrucoesInstancia.Construcoes[contrucoes].SituacaoDemanda[demandas] == 0){
+					cout << "   tenta alocar [" << ConstrucoesInstancia.Construcoes[contrucoes].NumeroDaConstrucao << "-" << demandas << "] ";
+					Alocou = AdicionaTarefa(ConstrucoesInstancia.Construcoes[contrucoes].NumeroDaConstrucao,demandas);
 					if( Alocou == 1){
-						cout << "        => Alocou [" << contrucoes << "-" << demandas << "] -> ProcessoParaAlocarTarefa" << endl;
-						NovatarefaAlocadaConstrucao = contrucoes;
+						cout << " => Alocou [" << ConstrucoesInstancia.Construcoes[contrucoes].NumeroDaConstrucao << "-" << demandas << "] -> ProcessoParaAlocarTarefa" << endl;
+						NovatarefaAlocadaConstrucao = ConstrucoesInstancia.Construcoes[contrucoes].NumeroDaConstrucao;
 						NovatarefaAlocadaDemanda = demandas;
 						return 1;
+					}else{
+						cout << " => Falhou! " << endl;
 					}
 				}
 			}
@@ -469,17 +477,19 @@ int Solucao::ReadicionaTarefas(int Construcao, int Demanda){
 		d = Demanda;
 	}
 	if( c == -13 || d == -13 ){
-		 cout << endl << endl << endl << "   &&&&&&&&&&&&& Nao encontrei a demanda ou construcao -> ReadicionaTarefas &&&&&&&&&&&&& " << endl << endl << endl;
+		 cout  << endl << "   &&&&&&&&&&&&& Nao encontrei a demanda ou construcao -> ReadicionaTarefas &&&&&&&&&&&&& " << endl;
 		 return 0;
 	}
 	for ( int demandas = 0; demandas < ConstrucoesInstancia.Construcoes[c].NumeroDemandas; demandas++){
-		cout << " ->[" << c << "-" << demandas << "] -> ReadicionaTarefas" << endl;
+		cout << " ->[" << ConstrucoesInstancia.Construcoes[c].NumeroDaConstrucao << "-" << demandas << "] -> ReadicionaTarefas" << endl;
 		if( ConstrucoesInstancia.Construcoes[c].SituacaoDemanda[demandas] == 0){
-			Alocou = AdicionaTarefa(c,demandas);
+			Alocou = AdicionaTarefa(ConstrucoesInstancia.Construcoes[c].NumeroDaConstrucao,demandas);
 			//Alocou = 1;
 			if( Alocou == 1){
-				cout << "   +++ Realocou [" << c << "-" << demandas << "] -> ReadicionaTarefas" << endl;
+				cout << "   +++ Realocou [" << ConstrucoesInstancia.Construcoes[c].NumeroDaConstrucao << "-" << demandas << "] -> ReadicionaTarefas" << endl;
 				Ativa = 1;
+			}else{
+				cout << "   *** Nao Realocou [" << ConstrucoesInstancia.Construcoes[c].NumeroDaConstrucao << "-" << demandas << "] -> ReadicionaTarefas" << endl;
 			}
 		}
 	}
@@ -512,6 +522,9 @@ void Solucao::MarcaTarefaNaoDeletadaNoVetor(int Construcao, int Demanda){
 }
 
 int Solucao::ConstrucaoTarefaRemover(int& Construcao, int& Demanda){
+
+	//ConstrucoesInstancia.ImprimeContrucoes();
+
 	double RankInicial;
 	int Ativo;
 
@@ -524,16 +537,21 @@ int Solucao::ConstrucaoTarefaRemover(int& Construcao, int& Demanda){
 	for( int c = 0; c < NE; c++){
 		if ( RankInicial > ConstrucoesInstancia.Construcoes[c].RankTempoDemandas){
 			for( int d = (ConstrucoesInstancia.Construcoes[c].NumeroDemandas - 1); d >= 0 ; d--){
-				if(ConstrucoesInstancia.Construcoes[c].SituacaoDemanda[d] == 1 && ConstrucoesInstancia.Construcoes[c].SituacaoRemocao[d] == 0){
-					Construcao = c;
-					Demanda = d;
-					RankInicial = ConstrucoesInstancia.Construcoes[c].RankTempoDemandas;
-					Ativo = 1;
+				if(ConstrucoesInstancia.Construcoes[c].SituacaoDemanda[d] == 1){
+					if( ConstrucoesInstancia.Construcoes[c].SituacaoRemocao[d] == 0){
+						Construcao = ConstrucoesInstancia.Construcoes[c].NumeroDaConstrucao;
+						Demanda = d;
+						RankInicial = ConstrucoesInstancia.Construcoes[c].RankTempoDemandas;
+						Ativo = 1;
+					}
 				}
 			}
 		}
 	}
 	if( Ativo == 1){
+		cout << " Selecionou construcao " << Construcao << "-" << Demanda << " com janela de tempo ";
+		cout <<  ConstrucoesInstancia.Construcoes[Construcao].TempoMinimoDeFuncionamento << "-" << ConstrucoesInstancia.Construcoes[Construcao].TempoMaximoDeFuncionamento;
+		cout << " -> ConstrucaoTarefaRemover" << endl ;
 		return 1;
 	}else{
 		return 0;

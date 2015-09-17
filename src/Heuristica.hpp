@@ -104,6 +104,18 @@ void Heuristica::ExecutaProcedimentoHeuristico1(){
 
 	ConjuntoSolucoes Solucoes;
 
+	int NovatarefaAlocadaConstrucao;
+	int NovatarefaAlocadaDemanda;
+
+	int InviabilidadeSolucaoAnterior;
+
+	int Readicionou;
+
+	int ConstrucaoAnalisandoRetirada;
+	int DemandaAnalisandoRetirada;
+
+	bool ExisteTarefa;
+
 
 	Prod1.CarregaDados(NP, PlantasInstancia, NE, ConstrucoesInstancia, NV, Velocidade, TempoDeVidaConcreto);
 
@@ -124,33 +136,65 @@ void Heuristica::ExecutaProcedimentoHeuristico1(){
 		cout << endl << endl << "  Solucao inviavel!    " << endl << endl;
 	}
 
-	Solucoes.InsereSolucao(Prod1.NP, Prod1.PlantasInstancia, Prod1.NE, Prod1.ConstrucoesInstancia, Prod1.NV, Prod1.Velocidade, Prod1.TempoDeVidaConcreto, Solucao);
+
+	Solucoes.InsereSolucao(Prod1.NP, Prod1.PlantasInstancia, Prod1.NE, Prod1.ConstrucoesInstancia, Prod1.NV, Prod1.Velocidade, Prod1.TempoDeVidaConcreto);
 	Solucoes.Imprime(0,1,0);
 
 
-	TarefaDeletada = Solucoes.Solucoes[0].DeletaAlocacaoTarefasPosteriores(0,0);
-	//TarefaDeletada = Solucoes.Solucoes[0].DetetaAlocacaoTarefa(0,0);
-	Solucoes.Solucoes[0].MarcaTarefaDeletadaNoVetor(0,0);
+	InviabilidadeSolucaoAnterior = Solucoes.Solucoes[0].ConstrucoesInstancia.NivelDeInviabilidade;
 
-	Solucoes.Solucoes[0].ConstrucoesInstancia.MarcaInicioFimDescarregamentosConstrucoes();
+	ExisteTarefa = Solucoes.Solucoes[0].ConstrucaoTarefaRemover(ConstrucaoAnalisandoRetirada, DemandaAnalisandoRetirada);
+
+	cout << "       *+*+*+*+*+*+*    Tarefa a retirar [" << ConstrucaoAnalisandoRetirada << "-" << DemandaAnalisandoRetirada << "]" << endl;
+
+	cout << endl << endl << "   Deleta tarefas " << endl << endl;
+
+	TarefaDeletada = Solucoes.Solucoes[0].DeletaAlocacaoTarefasPosteriores(ConstrucaoAnalisandoRetirada, DemandaAnalisandoRetirada);
+	//TarefaDeletada = Solucoes.Solucoes[0].DetetaAlocacaoTarefa(0,0);
+	Solucoes.Solucoes[0].MarcaTarefaDeletadaNoVetor(ConstrucaoAnalisandoRetirada, DemandaAnalisandoRetirada);
+
 	Solucoes.Imprime(0,1,0);
 
 
 	if ( TarefaDeletada == 1){
 
+		NovatarefaAlocadaConstrucao = -13;
+		NovatarefaAlocadaDemanda = -13;
+
 		cout << endl << endl << "   Tenta adicionar " << endl << endl;
 
-		TarefaAlocada = Solucoes.Solucoes[0].ProcessoParaAlocarTarefa( 0, 0 );
+		TarefaAlocada = Solucoes.Solucoes[0].ProcessoParaAlocarTarefa( ConstrucaoAnalisandoRetirada, DemandaAnalisandoRetirada , NovatarefaAlocadaConstrucao , NovatarefaAlocadaDemanda);
+		Solucoes.Imprime(0,1,0);
+
 		if( TarefaAlocada == 1){
-			Solucoes.Solucoes[0].MarcaTarefaNaoDeletadaNoVetor(0,0);
+			cout << "       -----> Tarefa alocada no novo espaço [" << NovatarefaAlocadaConstrucao << "-" << NovatarefaAlocadaDemanda << "]" << endl;
+			Readicionou = Solucoes.Solucoes[0].ReadicionaTarefas(ConstrucaoAnalisandoRetirada, DemandaAnalisandoRetirada);
+			Solucoes.Imprime(0,1,0);
+
+			if( InviabilidadeSolucaoAnterior > Solucoes.Solucoes[0].ConstrucoesInstancia.NivelDeInviabilidade){
+				cout << endl << endl << "  !!!!!!!!! Melhorou !!!!!!!!!!! " << endl << endl;
+				Solucoes.Solucoes[0].MarcaTarefaNaoDeletadaNoVetor(ConstrucaoAnalisandoRetirada, DemandaAnalisandoRetirada);
+				Solucoes.Imprime(0,1,0);
+			}else{
+				cout << endl << endl << "  !!!!!!!!! Nao melhorou !!!!!!!!!!! " << endl << endl;
+				if( Readicionou == 1) {
+					cout <<  endl << "  Deleta tarefas antigas recolocadas " <<  endl;
+					TarefaDeletada = Solucoes.Solucoes[0].DeletaAlocacaoTarefasPosteriores(ConstrucaoAnalisandoRetirada, DemandaAnalisandoRetirada);
+					Solucoes.Imprime(0,1,0);
+				}
+				cout <<  endl << "  Deleta tarefa adicionada " <<  endl;
+				TarefaDeletada = Solucoes.Solucoes[0].DetetaAlocacaoTarefa(NovatarefaAlocadaConstrucao , NovatarefaAlocadaDemanda);
+				Solucoes.Imprime(0,1,0);
+				cout <<  endl << "  Recoloca tarefas antigas para refazer solucao inicial " <<  endl;
+				Solucoes.Solucoes[0].ReadicionaTarefas(ConstrucaoAnalisandoRetirada, DemandaAnalisandoRetirada);
+				Solucoes.Imprime(0,1,0);
+			}
+		}else{
+			cout << endl << endl << "   Nao consegui adicionar nova tarefa" << endl << endl;
+			Solucoes.Imprime(0,1,0);
+			Solucoes.Solucoes[0].ReadicionaTarefas(ConstrucaoAnalisandoRetirada, DemandaAnalisandoRetirada);
+			Solucoes.Imprime(0,1,0);
 		}
-
-		Solucoes.Solucoes[0].ConstrucoesInstancia.MarcaInicioFimDescarregamentosConstrucoes();
-		Solucoes.Imprime(0,1,0);
-		Solucoes.Solucoes[0].ReadicionaTarefas(0,0);
-
-
-		Solucoes.Imprime(0,1,0);
 	}else{
 		 cout << endl << endl << endl << "   #######################  Tarefa nao deletada ######################## " << endl << endl << endl;
 	}

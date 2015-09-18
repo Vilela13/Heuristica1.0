@@ -36,6 +36,8 @@ public:
 	int VerificaDisponibilidade( double, double);
 	void AlocaAtividade(double, double, int, int);
 
+	int DeletaAtividade(double, double, int, int);
+
 	void Imprime();
 
 
@@ -97,6 +99,25 @@ void Carreta::AlocaAtividade(double HoraInicio, double HoraFinal, int NumContruc
 
 }
 
+int Carreta::DeletaAtividade(double HoraInicio, double HoraFinal, int NumContrucao, int NumDemanda){
+	for( vector < Deslocamento >::iterator it = Deslocamentos.begin(); it != Deslocamentos.end(); it++){
+		if( it->HorarioInicioDeslocamento == HoraInicio){
+			if( it->HorarioFinalDeslocamento == HoraFinal){
+				if( it->NumeroConstrucao == NumContrucao){
+					if( it->NumeroDemandaSuprida == NumDemanda){
+						NumeroDeDemandasAntendidas = NumeroDeDemandasAntendidas - 1;
+						Deslocamentos.erase(it);
+						//cout << endl << endl << " ************* deletou " << Deslocamentos.size() << endl << endl ;
+						return 1;
+					}
+				}
+			}
+		}
+	}
+	cout << endl << endl << " ###########################   Problema! Não encontrou elemento deslocamento [" << NumContrucao << "-" << NumDemanda << "] a deletar !  -> Carreta::DeletaAtividade ################## " << endl << endl;
+	return 0;
+}
+
 void Carreta::Imprime(){
 
 	sort (Deslocamentos.begin(), Deslocamentos.end(), DecideQualMenorInicioTempoDeslocamento);
@@ -127,6 +148,8 @@ public:
 
 	void OrdenaCarretasPorNumeroDeTarefasRealizadas();
 
+	int DeletaTarefa( int, double, double, int, int);
+
 	void Imprime();
 
 	~ConjuntoCarretas();
@@ -154,6 +177,24 @@ void ConjuntoCarretas::IniciaConjuntoCarretas(int NumeroCaminhoes, int NumeroDaP
 
 void ConjuntoCarretas::OrdenaCarretasPorNumeroDeTarefasRealizadas(){
 	sort (Carretas.begin(), Carretas.end(), DecideQualCarretaTemMenosTarefasRealizadas);
+}
+
+int ConjuntoCarretas::DeletaTarefa( int NumeroCaminhao, double HoraInicio, double HoraFinal, int NumContrucao, int NumDemanda){
+	int Retirou;
+	Retirou = 0;
+	for( int c = 0; c < Carretas.size(); c++){
+		if( Carretas[c].NumeroDaCarreta == NumeroCaminhao){
+			Retirou = Carretas[c].DeletaAtividade(HoraInicio, HoraFinal, NumContrucao, NumDemanda);
+			if( Retirou == 1){
+				return 1;
+			}else{
+				cout << endl << endl << " ###########################   Problema! Não encontrou elemento deslocamento [" << NumContrucao << "-" << NumDemanda << "] a deletar !  -> ConjuntoCarretas::DeletaTarefa ################## " << endl << endl;
+				return 0;
+			}
+		}
+	}
+	cout << endl << endl << " ###########################   Problema! Não encontrou caminhao [" << NumeroCaminhao << "] a deletar !  -> ConjuntoCarretas::DeletaTarefa ################## " << endl << endl;
+	return 0;
 }
 
 void ConjuntoCarretas::Imprime(){

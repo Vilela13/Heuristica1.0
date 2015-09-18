@@ -55,6 +55,7 @@ public:
 
 	int VerificaDisponibilidade( double, double);
 	void AlocaAtividade(double, double, int, int, int, int, int, bool);
+	int DeletaAtividade(double, double, int, int, int);
 
 	void OrdenaDescarregamentosEmOrdemCrescente();
 	void MarcaInicioFimDescarregamentos();
@@ -149,6 +150,30 @@ void Construcao::AlocaAtividade(double HoraInicio, double HoraFinal, int NumDema
 	SituacaoDemanda[NumDemanda] = 1;
 
 	Descarregamentos.insert(Descarregamentos.begin(), DescarregamentoAux );
+}
+
+int Construcao::DeletaAtividade(double HoraInicio, double HoraFinal, int NumDemanda,  int Planta, int Carreta){
+
+	for( vector < Descarregamento >::iterator it = Descarregamentos.begin(); it != Descarregamentos.end(); it++){
+			if( it->HorarioInicioDescarregamento == HoraInicio){
+				if( it->HorarioFinalDescarregamento == HoraFinal){
+					if( it->NumeroDemandaSuprida == NumDemanda){
+						if( it->NumPlantaFornecedor == Planta){
+							if( it->NumCarretaUtilizada == Carreta){
+								SituacaoDemanda[NumDemanda] = 0;
+								StatusAtendimento = StatusAtendimento - 1;
+								SituacaoRemocao[NumDemanda] = 0;
+								Descarregamentos.erase(it);
+								//cout << endl << endl << " ************* deletou " << Deslocamentos.size() << endl << endl ;
+								return 1;
+							}
+						}
+					}
+				}
+			}
+		}
+		cout << endl << endl << " ###########################   Problema! Não encontrou elemento Descarregamento [" << NumeroDaConstrucao << "-" << NumDemanda << "] a deletar !  -> Construcao::DeletaAtividade ################## " << endl << endl;
+		return 0;
 }
 
 void Construcao::OrdenaDescarregamentosEmOrdemCrescente(){
@@ -280,6 +305,9 @@ public:
 	void  MarcaInicioFimDescarregamentosConstrucoes();
 
 	void IniciaConjuntoConstrucoes(int);
+
+	int DeletaTarefa(int, double, double, int, int, int);
+
 	void ImprimeContrucoes();
 
 	void VerificaIntervaloContrucoes();
@@ -324,6 +352,26 @@ void ConjuntoConstrucoes::IniciaConjuntoConstrucoes(int Numero){
 	Construcoes.resize(Numero);
 	NumeroConstrucoes = Numero;
 
+}
+
+int ConjuntoConstrucoes::DeletaTarefa(int NumConstrucao, double HoraInicio, double HoraFinal, int NumDemanda,  int Planta, int Carreta){
+	int Retirou;
+	Retirou = 0;
+
+	for( int c = 0; c < Construcoes.size(); c++){
+		if( Construcoes[c].NumeroDaConstrucao == NumConstrucao){
+			Retirou = Construcoes[c].DeletaAtividade( HoraInicio, HoraFinal, NumDemanda, Planta, Carreta);
+			if( Retirou == 1){
+				NivelDeInviabilidade = NivelDeInviabilidade + 1;
+				return 1;
+			}else{
+				cout << endl << endl << " ###########################   Problema! Não encontrou elemento descarregamento [" << NumConstrucao << "-" << NumDemanda << "] a deletar !  -> ConjuntoConstrucoes::DeletaTarefa ################## " << endl << endl;
+				return 0;
+			}
+		}
+	}
+	cout << endl << endl << " ###########################   Problema! Não encontrou construcao [" << NumConstrucao << "] a deletar !  -> ConjuntoConstrucoes::DeletaTarefa ################## " << endl << endl;
+	return 0;
 }
 
 void ConjuntoConstrucoes::ImprimeContrucoes(){

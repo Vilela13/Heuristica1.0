@@ -39,6 +39,7 @@ public:
 
 	int VerificaDisponibilidade( double, double);
 	void AlocaAtividade(double , double, int , int , int);
+	int DeletaAtividade(double , double, int , int , int);
 
 	void Imprime();
 
@@ -102,6 +103,25 @@ void Planta::AlocaAtividade(double HoraInicio, double HoraFinal, int NumConstruc
 
 }
 
+int Planta::DeletaAtividade(double HoraInicio, double HoraFinal, int NumConstrucao, int NumDemanda, int Carreta){
+	for( vector < Carregamento >::iterator it = Carregamentos.begin(); it != Carregamentos.end(); it++){
+		if( it->HorarioInicioCarregamento == HoraInicio){
+			if( it->HorarioFinalCarregamento == HoraFinal){
+				if( it->NumeroConstrucao == NumConstrucao){
+					if( it->NumeroDemandaSuprida == NumDemanda){
+						if( it->NumCarretaUtilizada == Carreta){
+							Carregamentos.erase(it);
+							return 1;
+						}
+					}
+				}
+			}
+		}
+	}
+	cout << endl << endl << " ###########################   Problema! Não encontrou elemento carregamento [" << NumConstrucao << "-" << NumDemanda << "] a deletar !  -> Planta::DeletaAtividade ################## " << endl << endl;
+	return 0;
+}
+
 void Planta::Imprime(){
 	cout << endl;
 	cout << "# Planta " << NumeroDaPlanta << " com " << NumeroVeiculos << " veiculos, funciona de (";
@@ -147,6 +167,8 @@ public:
 
 	void IniciaConjuntoPlantas(int);
 
+	int DeletaTarefa( int, double , double, int , int , int, double, double);
+
 	void Imprime();
 
 
@@ -175,6 +197,35 @@ int ConjuntoPlantas::AnalizouTodasPLanats(){
 
 void ConjuntoPlantas::IniciaConjuntoPlantas(int Numero){
 	Plantas.resize(Numero);
+
+}
+
+int ConjuntoPlantas::DeletaTarefa( int NumPlanta, double HoraInicio, double HoraFinal, int NumConstrucao, int NumDemanda, int Carreta, double HoraInicioCarreta, double HoraFinalCarreta){
+	int RetirouCarregamento;
+	RetirouCarregamento = 0;
+
+	int RetirouDeslocamento;
+	RetirouDeslocamento = 0;
+
+	for( int p = 0; p < Plantas.size(); p++){
+		if( Plantas[p].NumeroDaPlanta == NumPlanta){
+			RetirouCarregamento = Plantas[p].DeletaAtividade( HoraInicio, HoraFinal, NumConstrucao, NumDemanda, Carreta);
+			RetirouDeslocamento = Plantas[p].VeiculosDaPlanta.DeletaTarefa(Carreta, HoraInicioCarreta, HoraFinalCarreta, NumConstrucao, NumDemanda);
+			if( RetirouCarregamento == 1 && RetirouDeslocamento == 1){
+				return 1;
+			}else{
+				if( RetirouCarregamento != 1){
+					cout << endl << endl << " ###########################   Problema! Não encontrou elemento carregamento [" << NumConstrucao << "-" << NumDemanda << "] a deletar !  -> ConjuntoPlantas::DeletaTarefa ################## " << endl << endl;
+				}
+				if( RetirouDeslocamento != 1){
+					cout << endl << endl << " ###########################   Problema! Não encontrou elemento delocamento [" << NumConstrucao << "-" << NumDemanda << "] da carreta [" << Carreta << "] a deletar !  -> ConjuntoPlantas::DeletaTarefa ################## " << endl << endl;
+				}
+				return 0;
+			}
+		}
+	}
+	cout << endl << endl << " ###########################   Problema! Não encontrou planta [" << NumPlanta << "] a deletar !  -> ConjuntoPlantas::DeletaTarefa ################## " << endl << endl;
+	return 0;
 
 }
 

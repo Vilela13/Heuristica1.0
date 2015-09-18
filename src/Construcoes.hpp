@@ -127,8 +127,11 @@ int Construcao::VerificaDisponibilidade( double InicioPossivelAlocacao, double F
 			if( Descarregamentos[d].HorarioFinalDescarregamento <= InicioPossivelAlocacao && InicioPossivelAlocacao <= Descarregamentos[d].HorarioFinalDescarregamento + TempoMaximoEntreDescargas){
 				return 1;
 			}
+			if( FinalPossivelAlocacao <=  Descarregamentos[d].HorarioInicioDescarregamento &&  Descarregamentos[d].HorarioInicioDescarregamento   <= FinalPossivelAlocacao + TempoMaximoEntreDescargas ){
+				return 2;
+			}
 		}
-		return 0;
+		return -1;
 	}
 }
 

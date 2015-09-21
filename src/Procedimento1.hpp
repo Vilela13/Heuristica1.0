@@ -8,6 +8,57 @@
 #ifndef PROCEDIMENTO1_HPP_
 #define PROCEDIMENTO1_HPP_
 
+class DadosParaReordenar{
+public:
+	DadosParaReordenar();
+	 vector < int >  DadosDasTarefasRetiradas; 		// 0 -> NumConstrução , 1 -> NumDemanda , 2 -> NumPlanta , 3 -> NumCarreta
+	 vector < double > HorariosDasTarefasRetiradas;		// 0 -> HoraChegaPlanta , 1 -> HoraSaiPlanta , 2 -> HoraChegaConstrução , 3 -> HoraSaiConstrução , 4 -> HoraRetornaPlanta
+	void IniciaConteudo();
+	void InserirConteudo(int, int, int, int, double, double, double, double, double);
+	void Imprimir();
+	~DadosParaReordenar();
+};
+
+DadosParaReordenar::DadosParaReordenar(){
+
+}
+
+void DadosParaReordenar::IniciaConteudo(){
+	DadosDasTarefasRetiradas.resize(4);
+	HorariosDasTarefasRetiradas.resize(5);
+}
+
+void DadosParaReordenar::InserirConteudo(int NumConstucao, int NumDemanda, int NumPlanta, int NumCarreta, double HoraInicioPlanta, double HoraSaiPlanta, double HoraInicioConstrucao, double HoraSaiConstrucao, double HoraRetornaPlanta ){
+	DadosDasTarefasRetiradas[0] = NumConstucao;
+	DadosDasTarefasRetiradas[1] = NumDemanda;
+	DadosDasTarefasRetiradas[2] = NumPlanta;
+	DadosDasTarefasRetiradas[3] = NumCarreta;
+
+	HorariosDasTarefasRetiradas[0] = HoraInicioPlanta;
+	HorariosDasTarefasRetiradas[1] = HoraSaiPlanta;
+	HorariosDasTarefasRetiradas[2] = HoraInicioConstrucao;
+	HorariosDasTarefasRetiradas[3] = HoraSaiConstrucao;
+	HorariosDasTarefasRetiradas[4] = HoraRetornaPlanta;
+}
+
+void DadosParaReordenar::Imprimir(){
+	cout << " Construcao [" << DadosDasTarefasRetiradas[0] << "-" << DadosDasTarefasRetiradas[1] << "]";
+	cout << "tempo (" << HorariosDasTarefasRetiradas[2] << "-" << HorariosDasTarefasRetiradas[3] << ") ";
+	cout << " Planta [" << DadosDasTarefasRetiradas[2] << "]";
+	cout << " tempo (" << HorariosDasTarefasRetiradas[0] << "-" << HorariosDasTarefasRetiradas[1] << ") ";
+	cout << " Caminhao [" << DadosDasTarefasRetiradas[2] << "-" << DadosDasTarefasRetiradas[3] << "]";
+	cout << " tempo (" << HorariosDasTarefasRetiradas[0] << "-" << HorariosDasTarefasRetiradas[4] << ") " << endl;
+}
+
+DadosParaReordenar::~DadosParaReordenar(){
+
+}
+
+bool DecideQualTarefaVemAntes ( DadosParaReordenar d1, DadosParaReordenar d2 ){
+	return ( d1.HorariosDasTarefasRetiradas[2] < d2.HorariosDasTarefasRetiradas[2] );
+}
+
+
 class Procedimento1{
 
 public:
@@ -60,10 +111,6 @@ void Procedimento1::CarregaDados(int InstNP, ConjuntoPlantas InstPlantasInstanci
 	TempoDeVidaConcreto = InstTempoDeVidaConcreto;
 }
 
-
-
-
-
 int Procedimento1::SelecionaConstrucao( Construcao** ConstrucaoVaiSerSuprida , vector < int > ConstrucaosAnalizadas){
 	double RankInicial;
 	int Ativo;
@@ -112,8 +159,6 @@ int Procedimento1::SelecionaPlanta( Planta** PlantaMaisPerto,Construcao* Constru
 
 void Procedimento1::RearrumaTarefasParaAdicionalas(Construcao ConstrucaoVaiSerSuprida, int NumDemanda, int NumPlanta, int NumCarreta, double HorarioInicioPlanta, double HorarioSaiDaPlanta, double HorarioChegaContrucao, double HorarioSaiConstrucao, double HorarioRetornaPlanta){
 
-	vector < vector < int > > DadosDasTarefasRetiradas; 		// 0 -> NumConstrução , 1 -> NumDemanda , 2 -> NumPlanta , 3 -> NumCarreta
-	vector < vector < double > > HorariosDasTarefasRetiradas;		// 0 -> HoraChegaPlanta , 1 -> HoraSaiPlanta , 2 -> HoraChegaConstrução , 3 -> HoraSaiConstrução , 4 -> HoraRetornaPlanta
 
 	int  ParaPrograma;
 
@@ -122,68 +167,97 @@ void Procedimento1::RearrumaTarefasParaAdicionalas(Construcao ConstrucaoVaiSerSu
 	//ConstrucoesInstancia.ImprimeContrucoes();
 	PlantasInstancia.Imprime();
 
-	DadosDasTarefasRetiradas.resize(ConstrucaoVaiSerSuprida.StatusAtendimento+1);
-	HorariosDasTarefasRetiradas.resize(ConstrucaoVaiSerSuprida.StatusAtendimento+1);
+	vector < DadosParaReordenar > Instancia;
 
-	for( int t = 0; t < DadosDasTarefasRetiradas.size(); t++){
-		DadosDasTarefasRetiradas[t].resize(4);
-		HorariosDasTarefasRetiradas[t].resize(5);
+	Instancia.resize(ConstrucaoVaiSerSuprida.StatusAtendimento+1);
+
+	for( unsigned int t = 0; t < Instancia.size(); t++){
+		Instancia[t].IniciaConteudo();
 	}
 
 	for( unsigned int d = 0; d < ConstrucaoVaiSerSuprida.Descarregamentos.size(); d++){
-		DadosDasTarefasRetiradas[d][0] = ConstrucaoVaiSerSuprida.NumeroDaConstrucao;
-		DadosDasTarefasRetiradas[d][1] = ConstrucaoVaiSerSuprida.Descarregamentos[d].NumeroDemandaSuprida;
-		DadosDasTarefasRetiradas[d][2] = ConstrucaoVaiSerSuprida.Descarregamentos[d].NumPlantaFornecedor;
-		DadosDasTarefasRetiradas[d][3] = ConstrucaoVaiSerSuprida.Descarregamentos[d].NumCarretaUtilizada;
+		Instancia[d].DadosDasTarefasRetiradas[0] = ConstrucaoVaiSerSuprida.NumeroDaConstrucao;
+		Instancia[d].DadosDasTarefasRetiradas[1] = ConstrucaoVaiSerSuprida.Descarregamentos[d].NumeroDemandaSuprida;
+		Instancia[d].DadosDasTarefasRetiradas[2] = ConstrucaoVaiSerSuprida.Descarregamentos[d].NumPlantaFornecedor;
+		Instancia[d].DadosDasTarefasRetiradas[3] = ConstrucaoVaiSerSuprida.Descarregamentos[d].NumCarretaUtilizada;
 
-		HorariosDasTarefasRetiradas[d][2] = ConstrucaoVaiSerSuprida.Descarregamentos[d].HorarioInicioDescarregamento;
-		HorariosDasTarefasRetiradas[d][3] = ConstrucaoVaiSerSuprida.Descarregamentos[d].HorarioFinalDescarregamento;
+		Instancia[d].HorariosDasTarefasRetiradas[2] = ConstrucaoVaiSerSuprida.Descarregamentos[d].HorarioInicioDescarregamento;
+		Instancia[d].HorariosDasTarefasRetiradas[3] = ConstrucaoVaiSerSuprida.Descarregamentos[d].HorarioFinalDescarregamento;
 
 		for( unsigned int p = 0; p < PlantasInstancia.Plantas.size(); p++){
-			if( PlantasInstancia.Plantas[p].NumeroDaPlanta == DadosDasTarefasRetiradas[d][2] ){
+			if( PlantasInstancia.Plantas[p].NumeroDaPlanta == Instancia[d].DadosDasTarefasRetiradas[2] ){
 				PlantaAuxiliarRemocao = PlantasInstancia.Plantas[p];
 			}
 		}
 
-		HorariosDasTarefasRetiradas[d][0] = ConstrucaoVaiSerSuprida.Descarregamentos[d].HorarioInicioDescarregamento - PlantaAuxiliarRemocao.DistanciaConstrucoes[DadosDasTarefasRetiradas[d][0]] - PlantaAuxiliarRemocao.TempoPlanta;
-		HorariosDasTarefasRetiradas[d][1] = ConstrucaoVaiSerSuprida.Descarregamentos[d].HorarioInicioDescarregamento - PlantaAuxiliarRemocao.DistanciaConstrucoes[DadosDasTarefasRetiradas[d][0]];
-		HorariosDasTarefasRetiradas[d][4] = ConstrucaoVaiSerSuprida.Descarregamentos[d].HorarioFinalDescarregamento + PlantaAuxiliarRemocao.DistanciaConstrucoes[DadosDasTarefasRetiradas[d][0]];
+		Instancia[d].HorariosDasTarefasRetiradas[0] = ConstrucaoVaiSerSuprida.Descarregamentos[d].HorarioInicioDescarregamento - PlantaAuxiliarRemocao.DistanciaConstrucoes[ Instancia[d].DadosDasTarefasRetiradas[0] ] - PlantaAuxiliarRemocao.TempoPlanta;
+		Instancia[d].HorariosDasTarefasRetiradas[1] = ConstrucaoVaiSerSuprida.Descarregamentos[d].HorarioInicioDescarregamento - PlantaAuxiliarRemocao.DistanciaConstrucoes[ Instancia[d].DadosDasTarefasRetiradas[0] ];
+		Instancia[d].HorariosDasTarefasRetiradas[4] = ConstrucaoVaiSerSuprida.Descarregamentos[d].HorarioFinalDescarregamento + PlantaAuxiliarRemocao.DistanciaConstrucoes[ Instancia[d].DadosDasTarefasRetiradas[0] ];
 
 	}
 
 	cout << endl << endl << "  Dados Gravados " << endl << endl;
 
 	for( unsigned int d = 0; d < ConstrucaoVaiSerSuprida.Descarregamentos.size(); d++){
-		cout << " Construcao [" << DadosDasTarefasRetiradas[d][0] << "-" << DadosDasTarefasRetiradas[d][1] << "] tempo (" << HorariosDasTarefasRetiradas[d][2] << "-" << HorariosDasTarefasRetiradas[d][3] << ") ";
-		cout << " Planta [" << DadosDasTarefasRetiradas[d][2] << "] tempo (" << HorariosDasTarefasRetiradas[d][0] << "-" << HorariosDasTarefasRetiradas[d][1] << ") ";
-		cout << " Caminhao [" << DadosDasTarefasRetiradas[d][2] << "-" << DadosDasTarefasRetiradas[d][3] << "] tempo (" << HorariosDasTarefasRetiradas[d][0] << "-" << HorariosDasTarefasRetiradas[d][4] << ") " << endl;
+		Instancia[d].Imprimir();
 	}
 	int d;
 	d = 0;
 
-	PlantasInstancia.DeletaTarefa( DadosDasTarefasRetiradas[d][2], HorariosDasTarefasRetiradas[d][0], HorariosDasTarefasRetiradas[d][1], DadosDasTarefasRetiradas[d][0], DadosDasTarefasRetiradas[d][1], DadosDasTarefasRetiradas[d][3],HorariosDasTarefasRetiradas[d][0],  HorariosDasTarefasRetiradas[d][4]);
-	ConstrucoesInstancia.DeletaTarefa(DadosDasTarefasRetiradas[d][0], HorariosDasTarefasRetiradas[d][2], HorariosDasTarefasRetiradas[d][3], DadosDasTarefasRetiradas[d][1],  DadosDasTarefasRetiradas[d][2], DadosDasTarefasRetiradas[d][3]);
+	PlantasInstancia.DeletaTarefa( Instancia[d].DadosDasTarefasRetiradas[2], Instancia[d].HorariosDasTarefasRetiradas[0], Instancia[d].HorariosDasTarefasRetiradas[1], Instancia[d].DadosDasTarefasRetiradas[0], Instancia[d].DadosDasTarefasRetiradas[1], Instancia[d].DadosDasTarefasRetiradas[3],Instancia[d].HorariosDasTarefasRetiradas[0],  Instancia[d].HorariosDasTarefasRetiradas[4]);
+	ConstrucoesInstancia.DeletaTarefa(Instancia[d].DadosDasTarefasRetiradas[0], Instancia[d].HorariosDasTarefasRetiradas[2], Instancia[d].HorariosDasTarefasRetiradas[3], Instancia[d].DadosDasTarefasRetiradas[1],  Instancia[d].DadosDasTarefasRetiradas[2], Instancia[d].DadosDasTarefasRetiradas[3]);
 
 	//ConstrucoesInstancia.ImprimeContrucoes();
 	PlantasInstancia.Imprime();
 
+	Instancia[ (Instancia.size()-1) ].InserirConteudo( ConstrucaoVaiSerSuprida.NumeroDaConstrucao, NumDemanda, NumPlanta, NumCarreta, HorarioInicioPlanta, HorarioSaiDaPlanta, HorarioChegaContrucao, HorarioSaiConstrucao, HorarioRetornaPlanta);
 
-	DadosDasTarefasRetiradas[DadosDasTarefasRetiradas.size()-1][0] = ConstrucaoVaiSerSuprida.NumeroDaConstrucao;
-	DadosDasTarefasRetiradas[DadosDasTarefasRetiradas.size()-1][1] = NumDemanda;
-	DadosDasTarefasRetiradas[DadosDasTarefasRetiradas.size()-1][2] = NumPlanta;
-	DadosDasTarefasRetiradas[DadosDasTarefasRetiradas.size()-1][3] = NumCarreta;
-
-	HorariosDasTarefasRetiradas[HorariosDasTarefasRetiradas.size()-1][0] = HorarioInicioPlanta;
-	HorariosDasTarefasRetiradas[HorariosDasTarefasRetiradas.size()-1][1] = HorarioSaiDaPlanta;
-	HorariosDasTarefasRetiradas[HorariosDasTarefasRetiradas.size()-1][2] = HorarioChegaContrucao;
-	HorariosDasTarefasRetiradas[HorariosDasTarefasRetiradas.size()-1][3] = HorarioSaiConstrucao;
-	HorariosDasTarefasRetiradas[HorariosDasTarefasRetiradas.size()-1][4] = HorarioRetornaPlanta;
-
-	for( unsigned int d = 0; d < HorariosDasTarefasRetiradas.size(); d++){
-		cout << " Construcao [" << DadosDasTarefasRetiradas[d][0] << "-" << DadosDasTarefasRetiradas[d][1] << "] tempo (" << HorariosDasTarefasRetiradas[d][2] << "-" << HorariosDasTarefasRetiradas[d][3] << ") ";
-		cout << " Planta [" << DadosDasTarefasRetiradas[d][2] << "] tempo (" << HorariosDasTarefasRetiradas[d][0] << "-" << HorariosDasTarefasRetiradas[d][1] << ") ";
-		cout << " Caminhao [" << DadosDasTarefasRetiradas[d][2] << "-" << DadosDasTarefasRetiradas[d][3] << "] tempo (" << HorariosDasTarefasRetiradas[d][0] << "-" << HorariosDasTarefasRetiradas[d][4] << ") " << endl;
+	for( unsigned int d = 0; d < Instancia.size(); d++){
+		Instancia[d].Imprimir();
 	}
+
+	sort( Instancia.begin(), Instancia.end(), DecideQualTarefaVemAntes );
+
+	cout << endl << endl << "      Ordenou " << endl << endl;
+
+	for( unsigned int d = 0; d < Instancia.size(); d++){
+		Instancia[d].Imprimir();
+	}
+
+	int ConstrucaoIndice;
+	int PlantaIndice;
+	int CaminhaoIndice;
+
+	for( int t = 0; t < Instancia.size(); t++){
+
+		for( unsigned int c = 0; c < ConstrucoesInstancia.Construcoes.size(); c++){
+			if( ConstrucoesInstancia.Construcoes[c].NumeroDaConstrucao == Instancia[t].DadosDasTarefasRetiradas[0] ){
+				ConstrucaoIndice = c;
+			}
+		}
+
+		for( unsigned int p = 0; p < PlantasInstancia.Plantas.size(); p++){
+			if( PlantasInstancia.Plantas[p].NumeroDaPlanta ==  Instancia[t].DadosDasTarefasRetiradas[2] ){
+				PlantaIndice = p;
+			}
+		}
+
+		for( unsigned int v = 0; v < PlantasInstancia.Plantas[PlantaIndice].VeiculosDaPlanta.Carretas.size(); v++){
+			if(  PlantasInstancia.Plantas[PlantaIndice].VeiculosDaPlanta.Carretas[v].NumeroDaCarreta ==  Instancia[t].DadosDasTarefasRetiradas[3] ){
+				CaminhaoIndice = v;
+			}
+		}
+
+
+
+		ConstrucoesInstancia.Construcoes[ConstrucaoIndice].StatusAtendimento = ConstrucoesInstancia.Construcoes[ConstrucaoIndice].StatusAtendimento + 1;
+		PlantasInstancia.Plantas[PlantaIndice].VeiculosDaPlanta.Carretas[CaminhaoIndice].AlocaAtividade(Instancia[t].HorariosDasTarefasRetiradas[0], Instancia[t].HorariosDasTarefasRetiradas[4],Instancia[t].DadosDasTarefasRetiradas[0], Instancia[t].DadosDasTarefasRetiradas[1]);
+		PlantasInstancia.Plantas[PlantaIndice].AlocaAtividade( Instancia[t].HorariosDasTarefasRetiradas[0], Instancia[t].HorariosDasTarefasRetiradas[1], Instancia[t].DadosDasTarefasRetiradas[0], Instancia[t].DadosDasTarefasRetiradas[1], Instancia[t].DadosDasTarefasRetiradas[3]);
+		ConstrucoesInstancia.Construcoes[ConstrucaoIndice].AlocaAtividade( Instancia[t].HorariosDasTarefasRetiradas[2], Instancia[t].HorariosDasTarefasRetiradas[3] , Instancia[t].DadosDasTarefasRetiradas[1], Instancia[t].DadosDasTarefasRetiradas[3], Instancia[t].DadosDasTarefasRetiradas[2],0,0,0);
+	}
+
+	ConstrucoesInstancia.ImprimeContrucoes();
+	PlantasInstancia.Imprime();
 
 	cin >> ParaPrograma;
 

@@ -142,7 +142,7 @@ void Heuristica::ExecutaProcedimentoHeuristico1(){
 	Solucoes.InsereSolucao(Prod1.NP, Prod1.PlantasInstancia, Prod1.NE, Prod1.ConstrucoesInstancia, Prod1.NV, Prod1.Velocidade, Prod1.TempoDeVidaConcreto);
 	Solucoes.Imprime(0,1,0);
 
-/*
+
 	InviabilidadeSolucaoAnterior = Solucoes.Solucoes[0].ConstrucoesInstancia.NivelDeInviabilidade;
 	ExisteTarefa = Solucoes.Solucoes[0].ConstrucaoTarefaRemover(ConstrucaoAnalisandoRetirada, DemandaAnalisandoRetirada);
 
@@ -213,12 +213,12 @@ void Heuristica::ExecutaProcedimentoHeuristico1(){
 		}
 		Solucoes.Imprime(1,1,0);
 
-		//cin >> PararPrograma;
+		cin >> PararPrograma;
 
 	}while( ExisteTarefa == 1);
 
 	Solucoes.Imprime(1,1,0);
-*/
+
 }
 
 

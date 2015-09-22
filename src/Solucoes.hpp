@@ -591,10 +591,6 @@ void ConjuntoSolucoes::Imprime(bool ImprimePlanta, bool ImprimeConstrucao, bool 
 ConjuntoSolucoes::~ConjuntoSolucoes(){
 
 }
-void InsereSolucao(int, ConjuntoPlantas, int, ConjuntoConstrucoes,	int, double, double, int);
-
-
-
 
 
 #endif /* SOLUCOES_HPP_ */

@@ -8,6 +8,8 @@
 #ifndef PROCEDIMENTO1_HPP_
 #define PROCEDIMENTO1_HPP_
 
+
+
 class DadosParaReordenar{
 public:
 	DadosParaReordenar();
@@ -160,16 +162,16 @@ int Procedimento1::SelecionaPlanta( Planta** PlantaMaisPerto,Construcao* Constru
 void Procedimento1::RearrumaTarefasParaAdicionalas(Construcao ConstrucaoVaiSerSuprida, int NumDemanda, int NumPlanta, int NumCarreta, double HorarioInicioPlanta, double HorarioSaiDaPlanta, double HorarioChegaContrucao, double HorarioSaiConstrucao, double HorarioRetornaPlanta){
 
 
-	int  ParaPrograma;
+	//int  ParaPrograma;
 
 	Planta PlantaAuxiliarRemocao;
 
 	//ConstrucoesInstancia.ImprimeContrucoes();
-	PlantasInstancia.Imprime();
+	//PlantasInstancia.Imprime();
 
 	vector < DadosParaReordenar > Instancia;
 
-	Instancia.resize(ConstrucaoVaiSerSuprida.StatusAtendimento+1);
+	Instancia.resize( ConstrucaoVaiSerSuprida.StatusAtendimento + 1 );
 
 	for( unsigned int t = 0; t < Instancia.size(); t++){
 		Instancia[t].IniciaConteudo();
@@ -196,39 +198,48 @@ void Procedimento1::RearrumaTarefasParaAdicionalas(Construcao ConstrucaoVaiSerSu
 
 	}
 
-	cout << endl << endl << "  Dados Gravados " << endl << endl;
+	//cout << endl << endl << "  Dados Gravados " << endl << endl;
 
-	for( unsigned int d = 0; d < ConstrucaoVaiSerSuprida.Descarregamentos.size(); d++){
-		Instancia[d].Imprimir();
+	//for( unsigned int d = 0; d < ConstrucaoVaiSerSuprida.Descarregamentos.size(); d++){
+		//Instancia[d].Imprimir();
+	//}
+
+	//cout << endl << endl << "       Deleta" << endl << endl;
+	for( int d = 0; d < ( Instancia.size() - 1 ); d++){
+		//cout << " deleta[" << d << "]=> " ;
+		//Instancia[d].Imprimir();
+		PlantasInstancia.DeletaTarefa( Instancia[d].DadosDasTarefasRetiradas[2], Instancia[d].HorariosDasTarefasRetiradas[0], Instancia[d].HorariosDasTarefasRetiradas[1], Instancia[d].DadosDasTarefasRetiradas[0], Instancia[d].DadosDasTarefasRetiradas[1], Instancia[d].DadosDasTarefasRetiradas[3],Instancia[d].HorariosDasTarefasRetiradas[0],  Instancia[d].HorariosDasTarefasRetiradas[4]);
+		ConstrucoesInstancia.DeletaTarefa(Instancia[d].DadosDasTarefasRetiradas[0], Instancia[d].HorariosDasTarefasRetiradas[2], Instancia[d].HorariosDasTarefasRetiradas[3], Instancia[d].DadosDasTarefasRetiradas[1],  Instancia[d].DadosDasTarefasRetiradas[2], Instancia[d].DadosDasTarefasRetiradas[3]);
 	}
-	int d;
-	d = 0;
-
-	PlantasInstancia.DeletaTarefa( Instancia[d].DadosDasTarefasRetiradas[2], Instancia[d].HorariosDasTarefasRetiradas[0], Instancia[d].HorariosDasTarefasRetiradas[1], Instancia[d].DadosDasTarefasRetiradas[0], Instancia[d].DadosDasTarefasRetiradas[1], Instancia[d].DadosDasTarefasRetiradas[3],Instancia[d].HorariosDasTarefasRetiradas[0],  Instancia[d].HorariosDasTarefasRetiradas[4]);
-	ConstrucoesInstancia.DeletaTarefa(Instancia[d].DadosDasTarefasRetiradas[0], Instancia[d].HorariosDasTarefasRetiradas[2], Instancia[d].HorariosDasTarefasRetiradas[3], Instancia[d].DadosDasTarefasRetiradas[1],  Instancia[d].DadosDasTarefasRetiradas[2], Instancia[d].DadosDasTarefasRetiradas[3]);
 
 	//ConstrucoesInstancia.ImprimeContrucoes();
-	PlantasInstancia.Imprime();
+	//PlantasInstancia.Imprime();
+
+	//cout << endl << endl << "     Adiciona na lista tarefa " << endl;
 
 	Instancia[ (Instancia.size()-1) ].InserirConteudo( ConstrucaoVaiSerSuprida.NumeroDaConstrucao, NumDemanda, NumPlanta, NumCarreta, HorarioInicioPlanta, HorarioSaiDaPlanta, HorarioChegaContrucao, HorarioSaiConstrucao, HorarioRetornaPlanta);
 
-	for( unsigned int d = 0; d < Instancia.size(); d++){
-		Instancia[d].Imprimir();
-	}
+	//for( unsigned int d = 0; d < Instancia.size(); d++){
+		//Instancia[d].Imprimir();
+	//}
 
 	sort( Instancia.begin(), Instancia.end(), DecideQualTarefaVemAntes );
 
-	cout << endl << endl << "      Ordenou " << endl << endl;
+//	cout << endl << endl << "      Ordenou " << endl << endl;
 
-	for( unsigned int d = 0; d < Instancia.size(); d++){
-		Instancia[d].Imprimir();
-	}
+	//for( unsigned int d = 0; d < Instancia.size(); d++){
+		//Instancia[d].Imprimir();
+	//}
 
 	int ConstrucaoIndice;
 	int PlantaIndice;
 	int CaminhaoIndice;
 
-	for( int t = 0; t < Instancia.size(); t++){
+	ConstrucaoIndice = -13;
+	PlantaIndice = -13;
+	CaminhaoIndice = -13;
+
+	for( unsigned int t = 0; t < Instancia.size(); t++){
 
 		for( unsigned int c = 0; c < ConstrucoesInstancia.Construcoes.size(); c++){
 			if( ConstrucoesInstancia.Construcoes[c].NumeroDaConstrucao == Instancia[t].DadosDasTarefasRetiradas[0] ){
@@ -248,18 +259,24 @@ void Procedimento1::RearrumaTarefasParaAdicionalas(Construcao ConstrucaoVaiSerSu
 			}
 		}
 
+		if( ConstrucaoIndice == -13 || PlantaIndice == -13 || CaminhaoIndice == -13){
+			cout << endl << endl << "  ########################## Problema em alocar os valores de ConstrucaoIndice, PlantaIndice e CaminhaoIndice  -> Procedimento1::RearrumaTarefasParaAdicionalas ########################## " << endl << endl ;
+		}
 
+		//cout << endl << endl << "          Adiciona na construção e planta" << endl;
+
+		//Instancia[t].Imprimir();
 
 		ConstrucoesInstancia.Construcoes[ConstrucaoIndice].StatusAtendimento = ConstrucoesInstancia.Construcoes[ConstrucaoIndice].StatusAtendimento + 1;
-		PlantasInstancia.Plantas[PlantaIndice].VeiculosDaPlanta.Carretas[CaminhaoIndice].AlocaAtividade(Instancia[t].HorariosDasTarefasRetiradas[0], Instancia[t].HorariosDasTarefasRetiradas[4],Instancia[t].DadosDasTarefasRetiradas[0], Instancia[t].DadosDasTarefasRetiradas[1]);
-		PlantasInstancia.Plantas[PlantaIndice].AlocaAtividade( Instancia[t].HorariosDasTarefasRetiradas[0], Instancia[t].HorariosDasTarefasRetiradas[1], Instancia[t].DadosDasTarefasRetiradas[0], Instancia[t].DadosDasTarefasRetiradas[1], Instancia[t].DadosDasTarefasRetiradas[3]);
-		ConstrucoesInstancia.Construcoes[ConstrucaoIndice].AlocaAtividade( Instancia[t].HorariosDasTarefasRetiradas[2], Instancia[t].HorariosDasTarefasRetiradas[3] , Instancia[t].DadosDasTarefasRetiradas[1], Instancia[t].DadosDasTarefasRetiradas[3], Instancia[t].DadosDasTarefasRetiradas[2],0,0,0);
+		PlantasInstancia.Plantas[PlantaIndice].VeiculosDaPlanta.Carretas[CaminhaoIndice].AlocaAtividade(Instancia[t].HorariosDasTarefasRetiradas[0], Instancia[t].HorariosDasTarefasRetiradas[4],Instancia[t].DadosDasTarefasRetiradas[0], t);
+		PlantasInstancia.Plantas[PlantaIndice].AlocaAtividade( Instancia[t].HorariosDasTarefasRetiradas[0], Instancia[t].HorariosDasTarefasRetiradas[1], Instancia[t].DadosDasTarefasRetiradas[0], t, Instancia[t].DadosDasTarefasRetiradas[3]);
+		ConstrucoesInstancia.Construcoes[ConstrucaoIndice].AlocaAtividade( Instancia[t].HorariosDasTarefasRetiradas[2], Instancia[t].HorariosDasTarefasRetiradas[3] , t, Instancia[t].DadosDasTarefasRetiradas[3], Instancia[t].DadosDasTarefasRetiradas[2],0,0,0);
 	}
 
-	ConstrucoesInstancia.ImprimeContrucoes();
-	PlantasInstancia.Imprime();
+	//ConstrucoesInstancia.ImprimeContrucoes();
+	//PlantasInstancia.Imprime();
 
-	cin >> ParaPrograma;
+	//cin >> ParaPrograma;
 
 }
 

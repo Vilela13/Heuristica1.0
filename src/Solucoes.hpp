@@ -67,7 +67,7 @@ void Solucao::CarregaSolucao(int np, ConjuntoPlantas Plantas, int ne, ConjuntoCo
 void Solucao::Imprime(bool ImprimePlanta, bool ImprimeConstrucao, bool IntervalosRespeitadosConstrucaoes ){
 	ConstrucoesInstancia.MarcaInicioFimDescarregamentosConstrucoes();
 	if( ImprimePlanta == 1 ){
-		PlantasInstancia.Imprime();
+		PlantasInstancia.Imprime(1,1);
 	}
 	if( ImprimeConstrucao == 1){
 		ConstrucoesInstancia.ImprimeContrucoes();
@@ -361,13 +361,19 @@ int Solucao::AdicionaTarefa( int Construcao, int Demanda ){
 
 
 			PlantasInstancia.Plantas[NumPlantaAnalisando].VeiculosDaPlanta.OrdenaCarretasPorNumeroDeTarefasRealizadas();
+
+			cout << endl << endl << "    (((((+++ Situação carragamentos " << endl ;
+			PlantasInstancia.Plantas[NumPlantaAnalisando].VeiculosDaPlanta.Imprime(0);
+			cout << endl << endl;
+
 			for( int v = 0; v < PlantasInstancia.Plantas[NumPlantaAnalisando].NumeroVeiculos; v++){
 				if( (ConstrucoesInstancia.Construcoes[c].TempoMinimoDeFuncionamento - PlantasInstancia.Plantas[NumPlantaAnalisando].DistanciaConstrucoes[ConstrucoesInstancia.Construcoes[c].NumeroDaConstrucao] - PlantasInstancia.Plantas[NumPlantaAnalisando].TempoPlanta) > PlantasInstancia.Plantas[NumPlantaAnalisando].TempoMinimoDeFuncionamento){
 					HorarioInicioPlanta = ConstrucoesInstancia.Construcoes[c].TempoMinimoDeFuncionamento - PlantasInstancia.Plantas[NumPlantaAnalisando].DistanciaConstrucoes[ConstrucoesInstancia.Construcoes[c].NumeroDaConstrucao] - PlantasInstancia.Plantas[NumPlantaAnalisando].TempoPlanta;
 				}else{
 					HorarioInicioPlanta = PlantasInstancia.Plantas[NumPlantaAnalisando].TempoMinimoDeFuncionamento;
 				}
-				//cout << "    Carreta usada [" << PlantaMaisPerto.NumeroDaPlanta << "-" << PlantaMaisPerto.VeiculosDaPlanta.Carretas[v].NumeroDaCarreta << "] Construcao e Demanda [" << ConstrucaoVaiSerSuprida.NumeroDaConstrucao << "-" <<  NumeroDemanda << "]" << endl;
+				cout << "    Carreta usada [" << PlantasInstancia.Plantas[NumPlantaAnalisando].NumeroDaPlanta << "-" << PlantasInstancia.Plantas[NumPlantaAnalisando].VeiculosDaPlanta.Carretas[v].NumeroDaCarreta << "]";
+				cout << " Construcao e Demanda [" << ConstrucoesInstancia.Construcoes[c].NumeroDaConstrucao << "-" <<  Demanda << "]" << endl;
 				do{
 					HorarioSaiDaPlanta = HorarioInicioPlanta + PlantasInstancia.Plantas[NumPlantaAnalisando].TempoPlanta;
 					HorarioChegaContrucao = HorarioSaiDaPlanta + PlantasInstancia.Plantas[NumPlantaAnalisando].DistanciaConstrucoes[ConstrucoesInstancia.Construcoes[c].NumeroDaConstrucao];
@@ -390,8 +396,9 @@ int Solucao::AdicionaTarefa( int Construcao, int Demanda ){
 								ConstrucoesInstancia.MarcaInicioFimDescarregamentosConstrucoes();
 								cout << "      -> Adicionou construcao [" << ConstrucoesInstancia.Construcoes[c].NumeroDaConstrucao << "-" << d << "]";
 								cout << " construcao ("<< HorarioChegaContrucao <<"-" << HorarioSaiConstrucao << ")";
-								cout << " planta " << PlantasInstancia.Plantas[NumPlantaAnalisando].NumeroDaPlanta << " (" << HorarioInicioPlanta << "-" << HorarioSaiDaPlanta <<")";
-								cout << " caminhao  " << PlantasInstancia.Plantas[NumPlantaAnalisando].VeiculosDaPlanta.Carretas[v].NumeroDaCarreta << " (" << HorarioInicioPlanta << "-" << HorarioRetornaPlanta << ")" << endl;
+								cout << " planta [" << PlantasInstancia.Plantas[NumPlantaAnalisando].NumeroDaPlanta << "] (" << HorarioInicioPlanta << "-" << HorarioSaiDaPlanta <<")";
+								cout << " caminhao  [" << PlantasInstancia.Plantas[NumPlantaAnalisando].NumeroDaPlanta << "-"<< PlantasInstancia.Plantas[NumPlantaAnalisando].VeiculosDaPlanta.Carretas[v].NumeroDaCarreta << "]";
+								cout << " (" << HorarioInicioPlanta << "-" << HorarioRetornaPlanta << ")" << endl;
 								return 1;
 							}
 						}

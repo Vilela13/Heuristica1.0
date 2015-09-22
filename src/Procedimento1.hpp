@@ -167,7 +167,7 @@ void Procedimento1::RearrumaTarefasParaAdicionalas(Construcao ConstrucaoVaiSerSu
 	Planta PlantaAuxiliarRemocao;
 
 	//ConstrucoesInstancia.ImprimeContrucoes();
-	//PlantasInstancia.Imprime();
+	//PlantasInstancia.Imprime(1,1);
 
 	vector < DadosParaReordenar > Instancia;
 
@@ -213,7 +213,7 @@ void Procedimento1::RearrumaTarefasParaAdicionalas(Construcao ConstrucaoVaiSerSu
 	}
 
 	//ConstrucoesInstancia.ImprimeContrucoes();
-	//PlantasInstancia.Imprime();
+	//PlantasInstancia.Imprime(1,1);
 
 	//cout << endl << endl << "     Adiciona na lista tarefa " << endl;
 
@@ -274,7 +274,7 @@ void Procedimento1::RearrumaTarefasParaAdicionalas(Construcao ConstrucaoVaiSerSu
 	}
 
 	//ConstrucoesInstancia.ImprimeContrucoes();
-	//PlantasInstancia.Imprime();
+	//PlantasInstancia.Imprime(1,1);
 
 	//cin >> ParaPrograma;
 

@@ -38,7 +38,7 @@ public:
 
 	int DeletaAtividade(double, double, int, int);
 
-	void Imprime();
+	void Imprime(int);
 
 
 	~Carreta();
@@ -118,9 +118,11 @@ int Carreta::DeletaAtividade(double HoraInicio, double HoraFinal, int NumContruc
 	return 0;
 }
 
-void Carreta::Imprime(){
+void Carreta::Imprime(int Ordena){
 
-	sort (Deslocamentos.begin(), Deslocamentos.end(), DecideQualMenorInicioTempoDeslocamento);
+	if( Ordena == 1){
+		sort (Deslocamentos.begin(), Deslocamentos.end(), DecideQualMenorInicioTempoDeslocamento);
+	}
 	cout << "# Carreta [" << NumeroPlanta << "-" << NumeroDaCarreta << "] que atendeu " << NumeroDeDemandasAntendidas << " demandas" << endl;
 	for( int d = 0; d < NumeroDeDemandasAntendidas; d++){
 		cout << "    *  Atender a [" << Deslocamentos[d].NumeroConstrucao << "-"<< Deslocamentos[d].NumeroDemandaSuprida << "]" ;
@@ -150,7 +152,7 @@ public:
 
 	int DeletaTarefa( int, double, double, int, int);
 
-	void Imprime();
+	void Imprime(int);
 
 	~ConjuntoCarretas();
 };
@@ -182,7 +184,7 @@ void ConjuntoCarretas::OrdenaCarretasPorNumeroDeTarefasRealizadas(){
 int ConjuntoCarretas::DeletaTarefa( int NumeroCaminhao, double HoraInicio, double HoraFinal, int NumContrucao, int NumDemanda){
 	int Retirou;
 	Retirou = 0;
-	for( int c = 0; c < Carretas.size(); c++){
+	for( unsigned int c = 0; c < Carretas.size(); c++){
 		if( Carretas[c].NumeroDaCarreta == NumeroCaminhao){
 			Retirou = Carretas[c].DeletaAtividade(HoraInicio, HoraFinal, NumContrucao, NumDemanda);
 			if( Retirou == 1){
@@ -197,20 +199,19 @@ int ConjuntoCarretas::DeletaTarefa( int NumeroCaminhao, double HoraInicio, doubl
 	return 0;
 }
 
-void ConjuntoCarretas::Imprime(){
-	sort (Carretas.begin(), Carretas.end(), DecideCarretaAnterior);
+void ConjuntoCarretas::Imprime(int Ordena){
+	if(Ordena == 1){
+		sort (Carretas.begin(), Carretas.end(), DecideCarretaAnterior);
+	}
 	cout  << " [[[[[[  Imprime carretas  ]]]]]]" << endl;
 	for( unsigned int c = 0; c < Carretas.size(); c++){
-		Carretas[c].Imprime();
+		Carretas[c].Imprime(Ordena);
 	}
 }
 
 ConjuntoCarretas::~ConjuntoCarretas(){
 
 }
-
-
-
 
 
 #endif /* CARRETAS_HPP_ */

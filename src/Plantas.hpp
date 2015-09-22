@@ -41,7 +41,7 @@ public:
 	void AlocaAtividade(double , double, int , int , int);
 	int DeletaAtividade(double , double, int , int , int);
 
-	void Imprime();
+	void Imprime(int,int);
 
 	void ImprimeDistancias();
 
@@ -122,12 +122,14 @@ int Planta::DeletaAtividade(double HoraInicio, double HoraFinal, int NumConstruc
 	return 0;
 }
 
-void Planta::Imprime(){
+void Planta::Imprime(int OrdenaPlantas, int OrdenaCarretas){
 	cout << endl;
 	cout << "# Planta " << NumeroDaPlanta << " com " << NumeroVeiculos << " veiculos, funciona de (";
 	cout << TempoMinimoDeFuncionamento << ", "<< TempoMaximoDeFuncionamento << ")" << endl;
 
-	sort (Carregamentos.begin(), Carregamentos.end(), DecideQualMenorInicioTempoCarregamento);
+	if(OrdenaPlantas == 1){
+		sort (Carregamentos.begin(), Carregamentos.end(), DecideQualMenorInicioTempoCarregamento);
+	}
 	if ( Carregamentos.size() != 0 ){
 		cout << "   Carregamentos " << endl;
 		for( unsigned int c = 0; c < Carregamentos.size(); c++){
@@ -138,7 +140,7 @@ void Planta::Imprime(){
 	}
 
 	cout <<  "    =>  Veiculos da Planta " << NumeroDaPlanta << " <= " << endl;
-	VeiculosDaPlanta.Imprime();
+	VeiculosDaPlanta.Imprime(OrdenaCarretas);
 
 }
 
@@ -169,7 +171,7 @@ public:
 
 	int DeletaTarefa( int, double , double, int , int , int, double, double);
 
-	void Imprime();
+	void Imprime(int, int);
 
 
 	~ConjuntoPlantas();
@@ -229,10 +231,10 @@ int ConjuntoPlantas::DeletaTarefa( int NumPlanta, double HoraInicio, double Hora
 
 }
 
-void ConjuntoPlantas::Imprime(){
+void ConjuntoPlantas::Imprime(int OrdenaPlantas,int OrdenaCarrtas){
 	cout << endl << endl << " [[[[[[  Imprime plantas  ]]]]]]" << endl;
 	for( unsigned int p = 0; p < Plantas.size(); p++){
-		Plantas[p].Imprime();
+		Plantas[p].Imprime(OrdenaPlantas, OrdenaCarrtas);
 	}
 }
 

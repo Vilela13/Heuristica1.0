@@ -209,7 +209,7 @@ void Construcao::MarcaInicioFimDescarregamentos(){
 	}
 	if( menor == -13 || maior == -13 ){
 		if( Descarregamentos.size() > 1){
-			cout << endl << endl << endl << "   &&&&&&&&&&&&& Problema na ordenacao &&&&&&&&&&&&& " << endl << endl << endl;
+			cout << endl << endl << endl << "   &&&&&&&&&&&&& Problema na ordenacao -> Construcao::MarcaInicioFimDescarregamentos &&&&&&&&&&&&& " << endl << endl << endl;
 		}
 	}
 }
@@ -386,7 +386,7 @@ void ConjuntoConstrucoes::ImprimeContrucoes(){
 
 void ConjuntoConstrucoes::VerificaIntervaloContrucoes(){
 
-	cout << endl << " Status de respeito aintervelos de construção" << endl;
+	cout << endl << " Status de respeito a intervelos de construção" << endl;
 	for(int c = 0; c < NumeroConstrucoes; c++){
 		if( Construcoes[c].VerificaDescarregamentosRespeitaIntervalo() == 1){
 			cout << endl << Construcoes[c].NumeroDaConstrucao << " OK!";

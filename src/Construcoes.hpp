@@ -63,6 +63,8 @@ public:
 
 	void RetornaHorarioInicioCarregamento(  int, double&);
 
+	void RetornaDadosDescarregamento( int, int&, int&, int&, int&, double&, double&);
+
 	void ImprimeContrucao();
 
 	vector < bool > SituacaoRemocao;			// SE o valor for 1 ela ja foi removida, se é 0 ela ainda não foi
@@ -268,6 +270,14 @@ void Construcao::RetornaHorarioInicioCarregamento( int NumDemanda, double& HoraI
 	}
 }
 
+void Construcao::RetornaDadosDescarregamento( int d, int& PlantaEmAnalise, int& 	CaminhaoEmAnalise, int& ConstrucaoEmAnalise, int& DemandaDesalocada, double& HorarioInicioAuxiliar,double& HorarioFinalAuxiliar){
+	PlantaEmAnalise 		=	Descarregamentos[d].NumPlantaFornecedor;
+	CaminhaoEmAnalise 		=	Descarregamentos[d].NumCarretaUtilizada;
+	ConstrucaoEmAnalise 	= 	NumeroDaConstrucao;
+	DemandaDesalocada 		= 	Descarregamentos[d].NumeroDemandaSuprida;
+	HorarioInicioAuxiliar 	= 	Descarregamentos[d].HorarioInicioDescarregamento;
+	HorarioFinalAuxiliar 	= 	Descarregamentos[d].HorarioFinalDescarregamento;
+}
 void Construcao::ImprimeContrucao(){
 	cout << "# Contrucao " << NumeroDaConstrucao << " com " << NumeroDemandas << " demandas, janela de tempo (" <<  TempoMinimoDeFuncionamento;
 	cout << "," << TempoMaximoDeFuncionamento << "), com rank = " << RankTempoDemandas << endl;

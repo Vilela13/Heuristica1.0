@@ -61,6 +61,8 @@ public:
 	void MarcaInicioFimDescarregamentos();
 	int VerificaDescarregamentosRespeitaIntervalo();
 
+	void RetornaHorarioInicioCarregamento(  int, double&);
+
 	void ImprimeContrucao();
 
 	vector < bool > SituacaoRemocao;			// SE o valor for 1 ela ja foi removida, se é 0 ela ainda não foi
@@ -256,6 +258,14 @@ int Construcao::VerificaDescarregamentosRespeitaIntervalo(){
 		}
 	}
 	return 1;
+}
+
+void Construcao::RetornaHorarioInicioCarregamento( int NumDemanda, double& HoraInicio){
+	for( unsigned int d = 0; d < Descarregamentos.size(); d ++){
+		if( NumDemanda == Descarregamentos[d].NumeroDemandaSuprida){
+			HoraInicio = Descarregamentos[d].HorarioInicioDescarregamento;
+		}
+	}
 }
 
 void Construcao::ImprimeContrucao(){

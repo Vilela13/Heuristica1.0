@@ -209,7 +209,7 @@ int ConjuntoPlantas::DeletaTarefa( int NumPlanta, double HoraInicio, double Hora
 	int RetirouDeslocamento;
 	RetirouDeslocamento = 0;
 
-	for( int p = 0; p < Plantas.size(); p++){
+	for( unsigned int p = 0; p < Plantas.size(); p++){
 		if( Plantas[p].NumeroDaPlanta == NumPlanta){
 			RetirouCarregamento = Plantas[p].DeletaAtividade( HoraInicio, HoraFinal, NumConstrucao, NumDemanda, Carreta);
 			RetirouDeslocamento = Plantas[p].VeiculosDaPlanta.DeletaTarefa(Carreta, HoraInicioCarreta, HoraFinalCarreta, NumConstrucao, NumDemanda);

@@ -378,7 +378,7 @@ int ConjuntoConstrucoes::DeletaTarefa(int NumConstrucao, double HoraInicio, doub
 	int Retirou;
 	Retirou = 0;
 
-	for( int c = 0; c < Construcoes.size(); c++){
+	for( unsigned int c = 0; c < Construcoes.size(); c++){
 		if( Construcoes[c].NumeroDaConstrucao == NumConstrucao){
 			Retirou = Construcoes[c].DeletaAtividade( HoraInicio, HoraFinal, NumDemanda, Planta, Carreta);
 			if( Retirou == 1){

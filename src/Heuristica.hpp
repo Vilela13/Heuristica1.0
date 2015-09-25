@@ -125,6 +125,8 @@ void Heuristica::ExecutaProcedimentoHeuristico1(){
 
 
 	Solucoes.InsereSolucao(Prod1.NP, Prod1.PlantasInstancia, Prod1.NE, Prod1.ConstrucoesInstancia, Prod1.NV, Prod1.Velocidade, Prod1.TempoDeVidaConcreto);
+
+	Solucoes.CalculaMakespanSolucoes();
 	Solucoes.Imprime(1,1,0);
 
 	cout << endl << endl << "############################### Procedimento Viabilidade #####################################" << endl << endl;
@@ -133,7 +135,7 @@ void Heuristica::ExecutaProcedimentoHeuristico1(){
 
 	cout << endl << endl << "##############################################################################################" << endl << endl;
 
-
+	Solucoes.CalculaMakespanSolucoes();
 	Solucoes.Imprime(1,1,0);
 
 }

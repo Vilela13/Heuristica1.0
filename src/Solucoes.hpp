@@ -74,6 +74,8 @@ public:
 	double Velocidade;
 	double TempoDeVidaConcreto;
 
+	double Makespan;
+
 // Funções interanas
 	void AlocaValoresIniciaisIndices(int&, int&);
 	void RetornaIndiceConstrucao(int, int&);
@@ -1008,6 +1010,7 @@ public:
 	ConjuntoSolucoes();
 	vector < Solucao > Solucoes;
 	void InsereSolucao(int, ConjuntoPlantas, int, ConjuntoConstrucoes,	int, double, double);
+	void CalculaMakespanSolucoes();
 	void Imprime(bool, bool, bool);
 	~ConjuntoSolucoes();
 
@@ -1022,10 +1025,19 @@ void ConjuntoSolucoes::InsereSolucao(int np, ConjuntoPlantas Plantas, int ne, Co
 	Solucoes.push_back(S1);
 }
 
+void ConjuntoSolucoes::CalculaMakespanSolucoes(){
+	for( unsigned  int s = 0; s <  Solucoes.size(); s++){
+		Solucoes[s].ConstrucoesInstancia.CalculaMakespansConstrucoes();
+		Solucoes[s].PlantasInstancia.CalculaMakespanPlantas();
+		Solucoes[s].Makespan = Solucoes[s].ConstrucoesInstancia.MakespanConstrucoes + Solucoes[s].PlantasInstancia.MakespanPLantas;
+	}
+}
+
 void ConjuntoSolucoes::Imprime(bool ImprimePlanta, bool ImprimeConstrucao, bool IntervalosRespeitadosConstrucaoes){
 	for( unsigned  int s = 0; s <  Solucoes.size(); s++){
 		cout << endl << endl << "   Solucao " << s << endl << endl;
 		 Solucoes[s].Imprime(ImprimePlanta,ImprimeConstrucao, IntervalosRespeitadosConstrucaoes);
+		 cout << "         Makespan total = " << Solucoes[s].Makespan << endl ;
 	}
 }
 

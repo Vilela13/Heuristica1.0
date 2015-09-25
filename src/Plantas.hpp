@@ -37,9 +37,13 @@ public:
 
 	vector < Carregamento > Carregamentos;
 
+	double Makespan;
+
 	int VerificaDisponibilidade( double, double);
 	void AlocaAtividade(double , double, int , int , int);
 	int DeletaAtividade(double , double, int , int , int);
+
+	void CalculaMakespan();
 
 	void Imprime(int,int);
 
@@ -55,6 +59,7 @@ Planta::Planta(){
 	TempoPlanta = -13;
 	TempoMinimoDeFuncionamento = -13;
 	TempoMaximoDeFuncionamento = -13;
+	Makespan = -13;
 }
 
 int Planta::VerificaDisponibilidade( double InicioPossivelAlocacao, double FinalPossivelAlocacao){
@@ -122,6 +127,23 @@ int Planta::DeletaAtividade(double HoraInicio, double HoraFinal, int NumConstruc
 	return 0;
 }
 
+void Planta::CalculaMakespan(){
+	Makespan = 0;
+
+	if( Makespan > TempoMinimoDeFuncionamento){
+		Makespan = TempoMinimoDeFuncionamento;
+	}
+	for( int v = 0; v < VeiculosDaPlanta.Carretas.size(); v++){
+		for( int d = 0; d < VeiculosDaPlanta.Carretas[v].Deslocamentos.size(); d++){
+			if( Makespan < VeiculosDaPlanta.Carretas[v].Deslocamentos[d].HorarioFinalDeslocamento){
+				Makespan = VeiculosDaPlanta.Carretas[v].Deslocamentos[d].HorarioFinalDeslocamento;
+			}
+		}
+	}
+
+
+}
+
 void Planta::Imprime(int OrdenaPlantas, int OrdenaCarretas){
 	cout << endl;
 	cout << "# Planta " << NumeroDaPlanta << " com " << NumeroVeiculos << " veiculos, funciona de (";
@@ -141,6 +163,8 @@ void Planta::Imprime(int OrdenaPlantas, int OrdenaCarretas){
 
 	cout <<  "    =>  Veiculos da Planta " << NumeroDaPlanta << " <= " << endl;
 	VeiculosDaPlanta.Imprime(OrdenaCarretas);
+
+	cout << "   Makespan = " << Makespan << endl;
 
 }
 
@@ -164,12 +188,17 @@ public:
 	vector< Planta > Plantas;
 
 	vector < int > PlantasAnalizadas;
+
+	double MakespanPLantas;
+
 	void InicializaPlantasAnalizadas();
 	int AnalizouTodasPLanats();
 
 	void IniciaConjuntoPlantas(int);
 
 	int DeletaTarefa( int, double , double, int , int , int, double, double);
+
+	void CalculaMakespanPlantas();
 
 	void Imprime(int, int);
 
@@ -231,11 +260,22 @@ int ConjuntoPlantas::DeletaTarefa( int NumPlanta, double HoraInicio, double Hora
 
 }
 
+void ConjuntoPlantas::CalculaMakespanPlantas(){
+	MakespanPLantas = 0;
+
+	for( unsigned int p = 0; p < Plantas.size(); p++){
+		Plantas[p].CalculaMakespan();
+		MakespanPLantas = MakespanPLantas + Plantas[p].Makespan;
+	}
+}
+
 void ConjuntoPlantas::Imprime(int OrdenaPlantas,int OrdenaCarrtas){
 	cout << endl << endl << " [[[[[[  Imprime plantas  ]]]]]]" << endl;
 	for( unsigned int p = 0; p < Plantas.size(); p++){
 		Plantas[p].Imprime(OrdenaPlantas, OrdenaCarrtas);
 	}
+
+	cout << endl << "  Makespan Geral das Plantas = "<< MakespanPLantas << endl;
 }
 
 ConjuntoPlantas::~ConjuntoPlantas(){

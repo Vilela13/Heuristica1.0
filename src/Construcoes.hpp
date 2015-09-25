@@ -20,6 +20,7 @@ public:
 	int InicioDescarregamentos;
 	int FinalDescarregamentos;
 
+
 	bool FoiDeslocado;
 
 };
@@ -49,6 +50,8 @@ public:
 	double RankTempoDemandas;
 	int StatusAtendimento;
 
+	double Makespan;
+
 	void CalculaRankTempoDemandas(int);
 
 	vector < Descarregamento > Descarregamentos;
@@ -64,6 +67,8 @@ public:
 	void RetornaHorarioInicioCarregamento(  int, double&);
 
 	void RetornaDadosDescarregamento( int, int&, int&, int&, int&, double&, double&);
+
+	void CalculaMakespan();
 
 	void ImprimeContrucao();
 
@@ -81,6 +86,7 @@ Construcao::Construcao(){
 	TempoMaximoDeFuncionamento = -13;
 	RankTempoDemandas = -13;
 	StatusAtendimento = 0;
+	Makespan = -13;
 }
 
 void Construcao::CalculaRankTempoDemandas(int comentarios){
@@ -278,6 +284,26 @@ void Construcao::RetornaDadosDescarregamento( int d, int& PlantaEmAnalise, int& 
 	HorarioInicioAuxiliar 	= 	Descarregamentos[d].HorarioInicioDescarregamento;
 	HorarioFinalAuxiliar 	= 	Descarregamentos[d].HorarioFinalDescarregamento;
 }
+
+void Construcao::CalculaMakespan(){
+	Makespan = 0 ;
+
+	cout << endl << endl << "  Contrucao " << NumeroDaConstrucao << endl;
+
+	for( unsigned int d = 0; d < Descarregamentos.size(); d++){
+		if( Descarregamentos[d].HorarioFinalDescarregamento  > Makespan){
+			Makespan = Descarregamentos[d].HorarioFinalDescarregamento;
+			cout << " =-=-=-=-=-";
+		}
+	}
+	cout << "  " << Makespan ;
+	for ( int i = 0; i < NumeroDemandas; i++){
+		if( SituacaoDemanda[ i ] == 0){
+			Makespan = Makespan + 5 * TempoMaximoDeFuncionamento;
+		}
+	}
+}
+
 void Construcao::ImprimeContrucao(){
 	cout << "# Contrucao " << NumeroDaConstrucao << " com " << NumeroDemandas << " demandas, janela de tempo (" <<  TempoMinimoDeFuncionamento;
 	cout << "," << TempoMaximoDeFuncionamento << "), com rank = " << RankTempoDemandas << endl;
@@ -300,6 +326,7 @@ void Construcao::ImprimeContrucao(){
 		cout << SituacaoRemocao[ i ] << " ";
 	}
 	cout << "]" << endl;
+	cout << "   MAKESPAN = " << Makespan << endl;
 }
 
 
@@ -316,6 +343,9 @@ public:
 	int NumeroConstrucoes;
 
 	vector < int > ConstrucaosAnalizadas;
+
+	double MakespanConstrucoes;
+
 	void InicializaConstrucaosAnalizadas();
 
 	int NivelDeInviabilidade;
@@ -331,6 +361,8 @@ public:
 	void ImprimeContrucoes();
 
 	void VerificaIntervaloContrucoes();
+
+	void CalculaMakespansConstrucoes();
 
 
 
@@ -400,7 +432,7 @@ void ConjuntoConstrucoes::ImprimeContrucoes(){
 		Construcoes[c].ImprimeContrucao();
 	}
 
-	cout << endl << " Nivel de Inviabilidade = " << NivelDeInviabilidade << endl;
+	cout << endl << " Nivel de Inviabilidade = " << NivelDeInviabilidade << "  Makespan Geral das Construcoes = "<< MakespanConstrucoes << endl;
 
 }
 
@@ -416,6 +448,15 @@ void ConjuntoConstrucoes::VerificaIntervaloContrucoes(){
 	}
 	cout << endl ;
 }
+
+void ConjuntoConstrucoes::CalculaMakespansConstrucoes(){
+	MakespanConstrucoes = 0;
+	for( unsigned int c = 0; c < Construcoes.size(); c++){
+		Construcoes[c].CalculaMakespan();
+		MakespanConstrucoes = MakespanConstrucoes + Construcoes[c].Makespan;
+	}
+}
+
 ConjuntoConstrucoes::~ConjuntoConstrucoes(){
 
 }

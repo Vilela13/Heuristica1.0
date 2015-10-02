@@ -173,7 +173,7 @@ void Solucao::VerificaIndiceDemandaAlemSituacaoAtendimentoDemanda(int c, int Dem
 
 int Solucao::VerificaInidices( int c, int d){
 	if( c == -13 || d == -13 ){
-			cout << cout << endl << endl << endl << "   &&&&&&&&&&&&& Nao encontrei a demanda ou construcao &&&&&&&&&&&&& " << endl << endl << endl;
+			cout  << endl << endl << endl << "   &&&&&&&&&&&&& Nao encontrei a demanda ou construcao &&&&&&&&&&&&& " << endl << endl << endl;
 			return -1;
 		}
 	return 1;
@@ -181,7 +181,7 @@ int Solucao::VerificaInidices( int c, int d){
 
 int Solucao::VerificaInidices2( int p, int v){
 	if( p == -13 || v == -13 ){
-			cout << cout << endl << endl << endl << "   &&&&&&&&&&&&& Nao encontrei a planta ou caminhao &&&&&&&&&&&&& " << endl << endl << endl;
+			cout  << endl << endl << endl << "   &&&&&&&&&&&&& Nao encontrei a planta ou caminhao &&&&&&&&&&&&& " << endl << endl << endl;
 			return -1;
 		}
 	return 1;
@@ -279,7 +279,7 @@ int Solucao::DetetaAlocacaoTarefa(int Construcao, int Demanda, int& NumeroCarret
 	RetornaIndiceConstrucao(Construcao, c );
 	RetornaIndiceDemanda(c, Demanda,d);
 	if( VerificaInidices(c,d) == -1){
-		cout << "  <<<<    Solucao::DetetaAlocacaoTarefa  >>>>>>>>>> " << endl;
+		cout << "  <<<<    Solucao::DetetaAlocacaoTarefa  [" << Construcao << "-" << Demanda << "] >>>>>>>>>>> " << endl;
 		return -1;
 	}
 
@@ -428,6 +428,9 @@ int Solucao::DeletaAlocacaoTarefasPosteriores(int Construcao, int Demanda, vecto
 	}
 	if( EncontrouDeslocamento == 1){
 		for( unsigned int i = 0; i < DemandaDesalocar.size(); i++){
+			if( Construcao == 2 && DemandaDesalocar[i] == 2){
+				cout << " ixi  demanda [" << Construcao << "-" << DemandaDesalocar[i] << "]" << endl;
+			}
 			//cout << "   i = " << DemandaDesalocar[i] << endl;
 			ConseguiDesalocar = DetetaAlocacaoTarefa(Construcao, DemandaDesalocar[i], NumeroCarreta, NumeroPlanta, HorarioInicioFabrica, HorarioSaiFabrica, HorarioInicioDescarregamento, HorarioFinalDescarregamento, HorarioRetornaFabrica);
 
@@ -496,7 +499,7 @@ int Solucao::AdicionaTarefaHorarioInicioDescarregamento( int Construcao, int Dem
 		do{
 			EncontraPlantaMenorDistanciaConstrucao(c, NumPlantaAnalisando);
 			if(NumPlantaAnalisando == -13){
-				cout << cout << endl << endl << endl << "   &&&&&&&&&&&&& Problema em fornecer valor de  NumPlantaAnalisando em adiciona tarefa  -> AdicionaTarefa &&&&&&&&&&&&& " << endl << endl << endl;
+				cout << endl << endl << endl << "   &&&&&&&&&&&&& Problema em fornecer valor de  NumPlantaAnalisando em adiciona tarefa  -> AdicionaTarefa &&&&&&&&&&&&& " << endl << endl << endl;
 			}
 
 
@@ -565,7 +568,7 @@ int Solucao::AdicionaTarefaHorarioInicioDescarregamento( int Construcao, int Dem
 		return 0;
 
 	}else{
-		cout << cout << endl << endl << endl << "   &&&&&&&&&&&&& Construcao [" << c << "-" << d << "] com demanda ja atendida -> Solucao::AdicionaTarefa&&&&&&&&&&&&& " << endl << endl << endl;
+		cout << endl << endl << endl << "   &&&&&&&&&&&&& Construcao [" << c << "-" << d << "] com demanda ja atendida -> Solucao::AdicionaTarefa&&&&&&&&&&&&& " << endl << endl << endl;
 		return 0;
 	}
 
@@ -597,10 +600,11 @@ int Solucao::AdicionaTarefa( int Construcao, int Demanda ){
 	if ( ConstrucoesInstancia.Construcoes[c].NumeroDemandas > ConstrucoesInstancia.Construcoes[c].StatusAtendimento){
 		PlantasInstancia.InicializaPlantasAnalizadas();
 
+
 		do{
 			EncontraPlantaMenorDistanciaConstrucao(c, NumPlantaAnalisando);
 			if(NumPlantaAnalisando == -13){
-				cout << cout << endl << endl << endl << "   &&&&&&&&&&&&& Problema em fornecer valor de  NumPlantaAnalisando em adiciona tarefa  -> AdicionaTarefa &&&&&&&&&&&&& " << endl << endl << endl;
+				cout << endl << endl << endl << "   &&&&&&&&&&&&& Problema em fornecer valor de  NumPlantaAnalisando em adiciona tarefa  -> AdicionaTarefa &&&&&&&&&&&&& " << endl << endl << endl;
 			}
 
 
@@ -669,7 +673,7 @@ int Solucao::AdicionaTarefa( int Construcao, int Demanda ){
 		return 0;
 
 	}else{
-		cout << cout << endl << endl << endl << "   &&&&&&&&&&&&& Construcao [" << c << "-" << d << "] com demanda ja atendida -> Solucao::AdicionaTarefa&&&&&&&&&&&&& " << endl << endl << endl;
+		cout << endl << endl << endl << "   &&&&&&&&&&&&& Construcao [" << c << "-" << d << "] com demanda ja atendida -> Solucao::AdicionaTarefa&&&&&&&&&&&&& " << endl << endl << endl;
 		return 0;
 	}
 
@@ -693,11 +697,14 @@ int Solucao::ProcessoParaAlocarTarefa( int Construcao, int Demanda, int& Novatar
 			if( contrucoes != c){
 				if( ConstrucoesInstancia.Construcoes[contrucoes].SituacaoDemanda[demandas] == 0){
 					//cout << "   tenta alocar [" << ConstrucoesInstancia.Construcoes[contrucoes].NumeroDaConstrucao << "-" << demandas << "]  -> Solucao::ProcessoParaAlocarTarefa";
+
 					Alocou = AdicionaTarefa(ConstrucoesInstancia.Construcoes[contrucoes].NumeroDaConstrucao,demandas);
+
 					if( Alocou == 1){
 						//cout << " => Alocou [" << ConstrucoesInstancia.Construcoes[contrucoes].NumeroDaConstrucao << "-" << demandas << "] -> Solucao::ProcessoParaAlocarTarefa" << endl;
 						NovatarefaAlocadaConstrucao = ConstrucoesInstancia.Construcoes[contrucoes].NumeroDaConstrucao;
 						NovatarefaAlocadaDemanda = demandas;
+
 						return 1;
 					}else{
 						//cout << " => Falhou! " << endl;
@@ -933,11 +940,13 @@ void Solucao::ProcessoViabilizacao1(){
 	InviabilidadeSolucaoAnterior = ConstrucoesInstancia.NivelDeInviabilidade;
 	ExisteTarefa = ConstrucaoTarefaRemover(ConstrucaoAnalisandoRetirada, DemandaAnalisandoRetirada);
 
+
 	do{
 
 		//cout << endl << "   Deleta tarefas [" << ConstrucaoAnalisandoRetirada << "-" << DemandaAnalisandoRetirada << "]" << endl ;
 
 		DadosTarefasDesalocadas.clear();
+
 
 		TarefaDeletada = DeletaAlocacaoTarefasPosteriores(ConstrucaoAnalisandoRetirada, DemandaAnalisandoRetirada, DadosTarefasDesalocadas);
 		MarcaTarefaDeletadaNoVetor(ConstrucaoAnalisandoRetirada, DemandaAnalisandoRetirada);
@@ -954,7 +963,6 @@ void Solucao::ProcessoViabilizacao1(){
 
 			NovatarefaAlocadaConstrucao = -13;
 			NovatarefaAlocadaDemanda = -13;
-
 			//cout << endl << "   Tenta adicionar " << endl ;
 			TarefaAlocada = ProcessoParaAlocarTarefa( ConstrucaoAnalisandoRetirada, DemandaAnalisandoRetirada , NovatarefaAlocadaConstrucao , NovatarefaAlocadaDemanda);
 
@@ -973,6 +981,11 @@ void Solucao::ProcessoViabilizacao1(){
 						TarefaDeletada = DeletaAlocacaoTarefasPosteriores(ConstrucaoAnalisandoRetirada, DemandaAnalisandoRetirada, AuxiliarLixo);
 					}
 					//cout <<  endl << "  Deleta tarefa adicionada [" << NovatarefaAlocadaConstrucao << "-" << NovatarefaAlocadaDemanda << "]" <<  endl;
+
+					if( NovatarefaAlocadaConstrucao == 2 && NovatarefaAlocadaDemanda == 2){
+						cout << " ixi[2]  demanda [" << NovatarefaAlocadaConstrucao << "-" << NovatarefaAlocadaDemanda << "]" << endl;
+					}
+
 					TarefaDeletada = DetetaAlocacaoTarefa(NovatarefaAlocadaConstrucao , NovatarefaAlocadaDemanda, NumeroCarreta, NumeroPlanta, HorarioInicioFabrica, HorarioSaiFabrica, HorarioInicioDescarregamento, HorarioFinalDescarregamento, HorarioRetornaFabrica);
 					//cout <<  endl << "  Recoloca tarefas antigas para refazer solucao inicial [" << ConstrucaoAnalisandoRetirada << "-" << DemandaAnalisandoRetirada << "]" <<  endl;
 					ReadicionaTarefasApartirDeDados( DadosTarefasDesalocadas );

@@ -288,18 +288,19 @@ void Construcao::RetornaDadosDescarregamento( int d, int& PlantaEmAnalise, int& 
 void Construcao::CalculaMakespan(){
 	Makespan = 0 ;
 
-	cout << endl << endl << "  Contrucao " << NumeroDaConstrucao << endl;
+	//cout << endl << endl << "  Contrucao " << NumeroDaConstrucao << endl;
 
 	for( unsigned int d = 0; d < Descarregamentos.size(); d++){
 		if( Descarregamentos[d].HorarioFinalDescarregamento  > Makespan){
 			Makespan = Descarregamentos[d].HorarioFinalDescarregamento;
-			cout << " =-=-=-=-=-";
+			//cout << " =-=-=-=-=-";
 		}
 	}
-	cout << "  " << Makespan ;
+	//cout << "  " << Makespan ;
 	for ( int i = 0; i < NumeroDemandas; i++){
 		if( SituacaoDemanda[ i ] == 0){
 			Makespan = Makespan + 5 * TempoMaximoDeFuncionamento;
+			cout << endl << endl << "  " << Makespan << " -> Inviolado construcao " << NumeroDaConstrucao << endl << endl;
 		}
 	}
 }

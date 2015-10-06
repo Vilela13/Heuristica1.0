@@ -72,7 +72,7 @@ public:
 
 	void ImprimeContrucao();
 
-	vector < bool > SituacaoRemocao;			// SE o valor for 1 ela ja foi removida, se é 0 ela ainda não foi
+	vector < int > SituacaoRemocao;			// SE o valor for 1 ela ja foi removida, se é 0 ela ainda não foi
 
 	~Construcao();
 
@@ -373,6 +373,7 @@ public:
 ConjuntoConstrucoes::ConjuntoConstrucoes(){
 	NumeroConstrucoes = -13;
 	NivelDeInviabilidade = -13;
+	MakespanConstrucoes = -13;
 }
 
 void ConjuntoConstrucoes::InicializaConstrucaosAnalizadas(){

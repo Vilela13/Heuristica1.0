@@ -355,7 +355,7 @@ int Procedimento1::Executa(){
 	int Viabilidade;
 	int PermiteAtendimentoDemanda;
 
-	int ParaPrograma;
+	//int ParaPrograma;
 
 	Viabilidade = 1;
 

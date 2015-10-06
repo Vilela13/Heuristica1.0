@@ -133,8 +133,8 @@ void Planta::CalculaMakespan(){
 	if( Makespan > TempoMinimoDeFuncionamento){
 		Makespan = TempoMinimoDeFuncionamento;
 	}
-	for( int v = 0; v < VeiculosDaPlanta.Carretas.size(); v++){
-		for( int d = 0; d < VeiculosDaPlanta.Carretas[v].Deslocamentos.size(); d++){
+	for( unsigned int v = 0; v < VeiculosDaPlanta.Carretas.size(); v++){
+		for( unsigned int d = 0; d < VeiculosDaPlanta.Carretas[v].Deslocamentos.size(); d++){
 			if( Makespan < VeiculosDaPlanta.Carretas[v].Deslocamentos[d].HorarioFinalDeslocamento){
 				Makespan = VeiculosDaPlanta.Carretas[v].Deslocamentos[d].HorarioFinalDeslocamento;
 			}
@@ -207,7 +207,7 @@ public:
 };
 
 ConjuntoPlantas::ConjuntoPlantas(){
-
+	MakespanPLantas = -13;
 }
 
 void ConjuntoPlantas::InicializaPlantasAnalizadas(){

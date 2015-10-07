@@ -596,7 +596,8 @@ int Solucao::AdicionaTarefa( int Construcao, int Demanda ){
 	RetornaIndiceConstrucao(Construcao, c );
 	VerificaIndiceDemandaAlemSituacaoAtendimentoDemanda(c, Demanda, d);
 	if( VerificaInidices(c,d) == -1){
-		cout << "  <<<<    Solucao::AdicionaTarefa  >>>>>>>>>> " << endl;
+		cout << "  <<<<    Solucao::AdicionaTarefa  c[" <<  Construcao << "-" << c ;
+		cout << "]   d[" << Demanda << "-" << d << "]    >>>>>>>>>>>> " << endl;
 	}
 
 	if ( ConstrucoesInstancia.Construcoes[c].NumeroDemandas > ConstrucoesInstancia.Construcoes[c].StatusAtendimento){
@@ -1051,7 +1052,7 @@ int  Solucao::ProcuraConstrucaoNaoAtendida(int &ConstrucaoNaoAtendida, int &Dema
 	}
 	ConstrucaoNaoAtendida = ConstrucaoTemporario;
 	DemandaNaoAtendida = DemandaTemporaria;
-	ConstrucoesInstancia.Construcoes[ IndiceConstrucaoTemporario ].SituacaoDemanda[ DemandaTemporaria ] = -1;
+
 	return 1;
 }
 
@@ -1072,6 +1073,7 @@ void Solucao::ProcessoViabilizacao2(){
 
 	vector < DadosTarefa > DadosTarefasDesalocadas;
 	int TarefaDeletada;
+	int TarefaAdicionada;
 
 	int PararPrograma;
 
@@ -1111,16 +1113,23 @@ void Solucao::ProcessoViabilizacao2(){
 					if( TarefaDeletada == 1){
 						cout << "                  Tarefa deletada " << endl << endl;
 					}
-					ConstrucoesInstancia.ImprimeContrucoes();
-					PlantasInstancia.Imprime(1,1);
-
-
-
-					cin >> PararPrograma;
 
 				}
 			}
 		}
+		TarefaAdicionada = AdicionaTarefa( ConstrucaoNaoAtendida, DemandaNaoAtendida );
+		if( TarefaAdicionada == 1){
+			cout << "                  Tarefa adicionada " << endl << endl;
+		}else{
+			cout << "                  Tarefa NAO adicionada " << endl << endl;
+			ConstrucoesInstancia.Construcoes[ IndiceConstrucaoNaoAtendida ].SituacaoDemanda[ DemandaNaoAtendida ] = -1;
+		}
+		ConstrucoesInstancia.ImprimeContrucoes();
+		PlantasInstancia.Imprime(1,1);
+		cin >> PararPrograma;
+
+
+
 		ExisteTarefa = ProcuraConstrucaoNaoAtendida( ConstrucaoNaoAtendida, DemandaNaoAtendida);
 		cout << endl;
 	}while( ExisteTarefa == 1);

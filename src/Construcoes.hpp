@@ -23,10 +23,20 @@ public:
 
 	bool FoiDeslocado;
 
+	void Imprime();
+
 };
 
 bool DecideQualDescarregamentoVemprimeiro ( Descarregamento d1, Descarregamento d2 ){
 	return ( d1.HorarioInicioDescarregamento < d2.HorarioInicioDescarregamento );
+}
+
+void Descarregamento::Imprime(){
+	cout << " Deamnda = " << NumeroDemandaSuprida;
+	cout << " Planta = " << NumPlantaFornecedor;
+	cout << " Carreta = " << NumCarretaUtilizada ;
+	cout << " Inicio = " << InicioDescarregamentos << " Final = " << FinalDescarregamentos << endl;
+	cout << " Tempo [" << HorarioInicioDescarregamento << " - " << HorarioFinalDescarregamento << "]" << endl;
 }
 
 class DistanciaPlanta{

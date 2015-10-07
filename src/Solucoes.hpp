@@ -1024,6 +1024,7 @@ void Solucao::ProcessoViabilizacao1(){
 
 int  Solucao::ProcuraConstrucaoNaoAtendida(int &ConstrucaoNaoAtendida, int &DemandaNaoAtendida){
 	int ConstrucaoTemporario;
+	int IndiceConstrucaoTemporario;
 	int DemandaTemporaria;
 	ConstrucaoTemporario = -13;
 	DemandaTemporaria = -13;
@@ -1037,6 +1038,7 @@ int  Solucao::ProcuraConstrucaoNaoAtendida(int &ConstrucaoNaoAtendida, int &Dema
 					if( DistanciaPlantaTemporaria > ConstrucoesInstancia.Construcoes[i].DistanciaPlantas[p].Distancia){
 						DistanciaPlantaTemporaria = ConstrucoesInstancia.Construcoes[i].DistanciaPlantas[p].Distancia;
 						ConstrucaoTemporario = ConstrucoesInstancia.Construcoes[i].NumeroDaConstrucao;
+						IndiceConstrucaoTemporario = i;
 						DemandaTemporaria = d;
 					}
 				}
@@ -1049,6 +1051,7 @@ int  Solucao::ProcuraConstrucaoNaoAtendida(int &ConstrucaoNaoAtendida, int &Dema
 	}
 	ConstrucaoNaoAtendida = ConstrucaoTemporario;
 	DemandaNaoAtendida = DemandaTemporaria;
+	ConstrucoesInstancia.Construcoes[ IndiceConstrucaoTemporario ].SituacaoDemanda[ DemandaTemporaria ] = -1;
 	return 1;
 }
 
@@ -1065,34 +1068,62 @@ void Solucao::ProcessoViabilizacao2(){
 
 	int PlantaAux;
 
+	double DistanciaAux;
+
+	vector < DadosTarefa > DadosTarefasDesalocadas;
+	int TarefaDeletada;
+
+	int PararPrograma;
+
 	InviabilidadeSolucaoAnterior = ConstrucoesInstancia.NivelDeInviabilidade;
 	ExisteTarefa = ProcuraConstrucaoNaoAtendida( ConstrucaoNaoAtendida, DemandaNaoAtendida);
-	TempoSaiPlanta.resize(NP);
-	cout << " ConstrucaoNaoAtendida = " << ConstrucaoNaoAtendida <<" DemandaNaoAtendida = " << DemandaNaoAtendida << endl;
-	RetornaIndiceConstrucao(ConstrucaoNaoAtendida, IndiceConstrucaoNaoAtendida);
 
-	for( int p = 0; p < NP; p++){
-		TempoSaiPlanta[p] = ConstrucoesInstancia.Construcoes[IndiceConstrucaoNaoAtendida].TempoMinimoDeFuncionamento - ConstrucoesInstancia.Construcoes[ IndiceConstrucaoNaoAtendida ].DistanciaPlantas[ p ].Distancia;
-	}
-	if( ConstrucoesInstancia.Construcoes[IndiceConstrucaoNaoAtendida].StatusAtendimento > 0){
-		for( unsigned int d = 0; d < ConstrucoesInstancia.Construcoes[IndiceConstrucaoNaoAtendida].Descarregamentos.size(); d++ ){
-			for( int p = 0; p < NP; p++){
-				if( TempoSaiPlanta[p] < ConstrucoesInstancia.Construcoes[IndiceConstrucaoNaoAtendida].Descarregamentos[d].HorarioInicioDescarregamento - ConstrucoesInstancia.Construcoes[IndiceConstrucaoNaoAtendida].DistanciaPlantas[p].Distancia){
-					TempoSaiPlanta[p] = ConstrucoesInstancia.Construcoes[IndiceConstrucaoNaoAtendida].Descarregamentos[d].HorarioInicioDescarregamento - ConstrucoesInstancia.Construcoes[IndiceConstrucaoNaoAtendida].DistanciaPlantas[p].Distancia;
+	do{
+		TempoSaiPlanta.resize(NP);
+		cout << " ConstrucaoNaoAtendida = " << ConstrucaoNaoAtendida <<" DemandaNaoAtendida = " << DemandaNaoAtendida << endl;
+		RetornaIndiceConstrucao(ConstrucaoNaoAtendida, IndiceConstrucaoNaoAtendida);
+
+		for( int p = 0; p < NP; p++){
+			TempoSaiPlanta[p] = ConstrucoesInstancia.Construcoes[IndiceConstrucaoNaoAtendida].TempoMinimoDeFuncionamento - ConstrucoesInstancia.Construcoes[ IndiceConstrucaoNaoAtendida ].DistanciaPlantas[ p ].Distancia;
+		}
+		if( ConstrucoesInstancia.Construcoes[IndiceConstrucaoNaoAtendida].StatusAtendimento > 0){
+			for( unsigned int d = 0; d < ConstrucoesInstancia.Construcoes[IndiceConstrucaoNaoAtendida].Descarregamentos.size(); d++ ){
+				for( int p = 0; p < NP; p++){
+					if( TempoSaiPlanta[p] < ConstrucoesInstancia.Construcoes[IndiceConstrucaoNaoAtendida].Descarregamentos[d].HorarioInicioDescarregamento - ConstrucoesInstancia.Construcoes[IndiceConstrucaoNaoAtendida].DistanciaPlantas[p].Distancia){
+						TempoSaiPlanta[p] = ConstrucoesInstancia.Construcoes[IndiceConstrucaoNaoAtendida].Descarregamentos[d].HorarioInicioDescarregamento - ConstrucoesInstancia.Construcoes[IndiceConstrucaoNaoAtendida].DistanciaPlantas[p].Distancia;
+					}
 				}
 			}
 		}
-	}
 
-	for( int p = 0; p < NP; p++){
-		cout << " TempoSaiPlanta[" << p << "] = " << TempoSaiPlanta[p] << endl;
-	}
+		for( int p = 0; p < NP; p++){
+			cout << " TempoSaiPlanta[" << p << "] = " << TempoSaiPlanta[p] << endl;
+		}
+
+		for( int c = 0; c < NE; c++){
+			for(unsigned int d = 0; d < ConstrucoesInstancia.Construcoes[c].Descarregamentos.size() ; d++){
+				PlantaAux = ConstrucoesInstancia.Construcoes[c].Descarregamentos[d].NumPlantaFornecedor;
+				DistanciaAux = ConstrucoesInstancia.Construcoes[c].DistanciaPlantas[ PlantaAux ].Distancia;
+				if( ConstrucoesInstancia.Construcoes[c].Descarregamentos[d].HorarioInicioDescarregamento - DistanciaAux > TempoSaiPlanta[PlantaAux]){
+					cout << "	-> Planta = " << PlantaAux << "   Construcao = " << ConstrucoesInstancia.Construcoes[c].NumeroDaConstrucao << " (" << c << ")" << endl;
+					ConstrucoesInstancia.Construcoes[c].Descarregamentos[d].Imprime();
+					TarefaDeletada = DeletaAlocacaoTarefasPosteriores( ConstrucoesInstancia.Construcoes[c].NumeroDaConstrucao, ConstrucoesInstancia.Construcoes[c].Descarregamentos[d].NumeroDemandaSuprida, DadosTarefasDesalocadas);
+					if( TarefaDeletada == 1){
+						cout << "                  Tarefa deletada " << endl << endl;
+					}
+					ConstrucoesInstancia.ImprimeContrucoes();
+					PlantasInstancia.Imprime(1,1);
 
 
 
+					cin >> PararPrograma;
 
-
-
+				}
+			}
+		}
+		ExisteTarefa = ProcuraConstrucaoNaoAtendida( ConstrucaoNaoAtendida, DemandaNaoAtendida);
+		cout << endl;
+	}while( ExisteTarefa == 1);
 }
 
 Solucao::~Solucao(){

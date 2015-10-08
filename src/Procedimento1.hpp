@@ -162,12 +162,16 @@ int Procedimento1::SelecionaPlanta( Planta** PlantaMaisPerto,Construcao* Constru
 void Procedimento1::RearrumaTarefasParaAdicionalas(Construcao ConstrucaoVaiSerSuprida, int NumDemanda, int NumPlanta, int NumCarreta, double HorarioInicioPlanta, double HorarioSaiDaPlanta, double HorarioChegaContrucao, double HorarioSaiConstrucao, double HorarioRetornaPlanta){
 
 
-	//int  ParaPrograma;
+	int  ParaPrograma;
+	int	Imprime;
+	Imprime = 0;
 
 	Planta PlantaAuxiliarRemocao;
 
-	//ConstrucoesInstancia.ImprimeContrucoes();
-	//PlantasInstancia.Imprime(1,1);
+	if( Imprime == 1){
+		ConstrucoesInstancia.ImprimeContrucoes();
+		PlantasInstancia.Imprime(1,1);
+	}
 
 	vector < DadosParaReordenar > Instancia;
 
@@ -198,38 +202,41 @@ void Procedimento1::RearrumaTarefasParaAdicionalas(Construcao ConstrucaoVaiSerSu
 
 	}
 
-	//cout << endl << endl << "  Dados Gravados " << endl << endl;
+	if( Imprime == 2){
+		cout << endl << endl << "  Dados Gravados " << endl << endl;
+		for( unsigned int d = 0; d < ConstrucaoVaiSerSuprida.Descarregamentos.size(); d++){
+			Instancia[d].Imprimir();
+		}
+	}
 
-	//for( unsigned int d = 0; d < ConstrucaoVaiSerSuprida.Descarregamentos.size(); d++){
-		//Instancia[d].Imprimir();
-	//}
 
-	//cout << endl << endl << "       Deleta" << endl << endl;
 	for( int d = 0; d < ( Instancia.size() - 1 ); d++){
-		//cout << " deleta[" << d << "]=> " ;
-		//Instancia[d].Imprimir();
 		PlantasInstancia.DeletaTarefa( Instancia[d].DadosDasTarefasRetiradas[2], Instancia[d].HorariosDasTarefasRetiradas[0], Instancia[d].HorariosDasTarefasRetiradas[1], Instancia[d].DadosDasTarefasRetiradas[0], Instancia[d].DadosDasTarefasRetiradas[1], Instancia[d].DadosDasTarefasRetiradas[3],Instancia[d].HorariosDasTarefasRetiradas[0],  Instancia[d].HorariosDasTarefasRetiradas[4]);
 		ConstrucoesInstancia.DeletaTarefa(Instancia[d].DadosDasTarefasRetiradas[0], Instancia[d].HorariosDasTarefasRetiradas[2], Instancia[d].HorariosDasTarefasRetiradas[3], Instancia[d].DadosDasTarefasRetiradas[1],  Instancia[d].DadosDasTarefasRetiradas[2], Instancia[d].DadosDasTarefasRetiradas[3]);
 	}
 
-	//ConstrucoesInstancia.ImprimeContrucoes();
-	//PlantasInstancia.Imprime(1,1);
+	if( Imprime == 1){
+		ConstrucoesInstancia.ImprimeContrucoes();
+		PlantasInstancia.Imprime(1,1);
+	}
 
-	//cout << endl << endl << "     Adiciona na lista tarefa " << endl;
 
 	Instancia[ (Instancia.size()-1) ].InserirConteudo( ConstrucaoVaiSerSuprida.NumeroDaConstrucao, NumDemanda, NumPlanta, NumCarreta, HorarioInicioPlanta, HorarioSaiDaPlanta, HorarioChegaContrucao, HorarioSaiConstrucao, HorarioRetornaPlanta);
 
-	//for( unsigned int d = 0; d < Instancia.size(); d++){
-		//Instancia[d].Imprimir();
-	//}
+	if( Imprime == 2){
+		for( unsigned int d = 0; d < Instancia.size(); d++){
+			Instancia[d].Imprimir();
+		}
+	}
 
 	sort( Instancia.begin(), Instancia.end(), DecideQualTarefaVemAntes );
 
-//	cout << endl << endl << "      Ordenou " << endl << endl;
-
-	//for( unsigned int d = 0; d < Instancia.size(); d++){
-		//Instancia[d].Imprimir();
-	//}
+	if( Imprime == 2){
+		cout << endl << endl << "      Ordenou " << endl << endl;
+		for( unsigned int d = 0; d < Instancia.size(); d++){
+			Instancia[d].Imprimir();
+		}
+	}
 
 	int ConstrucaoIndice;
 	int PlantaIndice;
@@ -263,20 +270,18 @@ void Procedimento1::RearrumaTarefasParaAdicionalas(Construcao ConstrucaoVaiSerSu
 			cout << endl << endl << "  ########################## Problema em alocar os valores de ConstrucaoIndice, PlantaIndice e CaminhaoIndice  -> Procedimento1::RearrumaTarefasParaAdicionalas ########################## " << endl << endl ;
 		}
 
-		//cout << endl << endl << "          Adiciona na construção e planta" << endl;
-
-		//Instancia[t].Imprimir();
-
 		ConstrucoesInstancia.Construcoes[ConstrucaoIndice].StatusAtendimento = ConstrucoesInstancia.Construcoes[ConstrucaoIndice].StatusAtendimento + 1;
 		PlantasInstancia.Plantas[PlantaIndice].VeiculosDaPlanta.Carretas[CaminhaoIndice].AlocaAtividade(Instancia[t].HorariosDasTarefasRetiradas[0], Instancia[t].HorariosDasTarefasRetiradas[4],Instancia[t].DadosDasTarefasRetiradas[0], t);
 		PlantasInstancia.Plantas[PlantaIndice].AlocaAtividade( Instancia[t].HorariosDasTarefasRetiradas[0], Instancia[t].HorariosDasTarefasRetiradas[1], Instancia[t].DadosDasTarefasRetiradas[0], t, Instancia[t].DadosDasTarefasRetiradas[3]);
 		ConstrucoesInstancia.Construcoes[ConstrucaoIndice].AlocaAtividade( Instancia[t].HorariosDasTarefasRetiradas[2], Instancia[t].HorariosDasTarefasRetiradas[3] , t, Instancia[t].DadosDasTarefasRetiradas[3], Instancia[t].DadosDasTarefasRetiradas[2],0,0,0);
 	}
 
-	//ConstrucoesInstancia.ImprimeContrucoes();
-	//PlantasInstancia.Imprime(1,1);
-
-	//cin >> ParaPrograma;
+	if( Imprime == 1){
+		ConstrucoesInstancia.ImprimeContrucoes();
+		PlantasInstancia.Imprime(1,1);
+		cout << "                 Ta indo " << endl;
+		cin >> ParaPrograma;
+	}
 
 }
 
@@ -321,7 +326,7 @@ int Procedimento1::SelecionaCarreta(Planta& PlantaMaisPerto, Construcao& Constru
 						}else{
 							if( DisponibilidadeConstrucao == 2){
 								RearrumaTarefasParaAdicionalas(ConstrucaoVaiSerSuprida, NumeroDemanda, PlantaMaisPerto.NumeroDaPlanta, PlantaMaisPerto.VeiculosDaPlanta.Carretas[v].NumeroDaCarreta , HorarioInicioPlanta, HorarioSaiDaPlanta, HorarioChegaContrucao, HorarioSaiConstrucao, HorarioRetornaPlanta);
-
+								return 1;
 							}
 						}
 					}
@@ -355,7 +360,7 @@ int Procedimento1::Executa(){
 	int Viabilidade;
 	int PermiteAtendimentoDemanda;
 
-	//int ParaPrograma;
+	int ParaPrograma;
 
 	Viabilidade = 1;
 
@@ -363,33 +368,22 @@ int Procedimento1::Executa(){
 	for( int c = 0; c < ConstrucoesInstancia.NumeroConstrucoes; c++ ){
 		//cout << "Construcao " << c << endl;
 		ConstrucaoSelecionada = SelecionaConstrucao( &ConstrucaoVaiSerSuprida, ConstrucoesInstancia.ConstrucaosAnalizadas);
-
 		/*
 		if( ConstrucaoVaiSerSuprida->NumeroDaConstrucao == 2 ){
 			cin >> ParaPrograma;
 		}
 		*/
-
 		if( ConstrucaoSelecionada == 1){
 			ConstrucoesInstancia.ConstrucaosAnalizadas[ConstrucaoVaiSerSuprida->NumeroDaConstrucao] =  1;
 			do{
 				PlantasInstancia.InicializaPlantasAnalizadas();
 				Demanda = ConstrucaoVaiSerSuprida->StatusAtendimento;
-				/*
-				if( ConstrucaoVaiSerSuprida->NumeroDaConstrucao == 2 ){
-					cout << " Demanda  = " << Demanda << "(" << ConstrucaoVaiSerSuprida->StatusAtendimento << ") / " << ConstrucaoVaiSerSuprida->NumeroDemandas << endl;
-					cin >> ParaPrograma;
-				}
-				*/
 				PermiteAtendimentoDemanda = 0;
 				do{
 					PlantaSelecionada = SelecionaPlanta( &PlantaMaisPerto , ConstrucaoVaiSerSuprida, PlantasInstancia.PlantasAnalizadas );
 					ConfereSeNaoEncontrouUmaPlanta( PlantaSelecionada);
 					//PlantaMaisPerto->ImprimeDistancias();
 					if( PlantaSelecionada == 1){
-						//cout << endl << "Construcao e planta selecionadas " << endl << endl;
-						//ConstrucaoVaiSerSuprida->ImprimeContrucao();
-						//PlantaMaisPerto->Imprime();
 						PlantasInstancia.PlantasAnalizadas[ PlantaMaisPerto->NumeroDaPlanta ] = 1;
 						PermiteAtendimentoDemanda = SelecionaCarreta(*PlantaMaisPerto , *ConstrucaoVaiSerSuprida,  Demanda);
 						//cout << " 			Atendeu " << PermiteAtendimentoDemanda << endl;
@@ -399,14 +393,12 @@ int Procedimento1::Executa(){
 					PlantasInstancia.PlantasAnalizadas[ PlantaMaisPerto->NumeroDaPlanta ] = 0;
 				}
 			}while( ConstrucaoVaiSerSuprida->StatusAtendimento < ConstrucaoVaiSerSuprida->NumeroDemandas && PlantasInstancia.AnalizouTodasPLanats() == 0);
-
 			/*
 			if( ConstrucaoVaiSerSuprida->NumeroDaConstrucao == 2 ){
 				cout << "fora  Demanda  = " << Demanda << "(" << ConstrucaoVaiSerSuprida->StatusAtendimento << ") / " << ConstrucaoVaiSerSuprida->NumeroDemandas << endl;
 				cin >> ParaPrograma;
 			}
 			*/
-
 			if( ConstrucaoVaiSerSuprida->StatusAtendimento < ConstrucaoVaiSerSuprida->NumeroDemandas ){
 				cout << endl;
 				cout << " ##############################################################" << endl;

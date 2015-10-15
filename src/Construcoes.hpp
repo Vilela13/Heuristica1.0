@@ -32,7 +32,7 @@ bool DecideQualDescarregamentoVemprimeiro ( Descarregamento d1, Descarregamento 
 }
 
 void Descarregamento::Imprime(){
-	cout << " Deamnda = " << NumeroDemandaSuprida;
+	cout << " Demanda = " << NumeroDemandaSuprida;
 	cout << " Planta = " << NumPlantaFornecedor;
 	cout << " Carreta = " << NumCarretaUtilizada ;
 	cout << " Inicio = " << InicioDescarregamentos << " Final = " << FinalDescarregamentos << endl;
@@ -67,7 +67,7 @@ public:
 	vector < Descarregamento > Descarregamentos;
 
 	int VerificaDisponibilidade( double, double);
-	void AlocaAtividade(double, double, int, int, int, int, int, bool);
+	void AlocaAtividade(double, double, int, int, int, int, int, bool, int);
 	int DeletaAtividade(double, double, int, int, int);
 
 	void OrdenaDescarregamentosEmOrdemCrescente();
@@ -156,7 +156,7 @@ int Construcao::VerificaDisponibilidade( double InicioPossivelAlocacao, double F
 	}
 }
 
-void Construcao::AlocaAtividade(double HoraInicio, double HoraFinal, int NumDemanda, int Carreta, int Planta, int inicio, int fim, bool StatusDesalocamento){
+void Construcao::AlocaAtividade(double HoraInicio, double HoraFinal, int NumDemanda, int Carreta, int Planta, int inicio, int fim, bool StatusDesalocamento, int Situacao){
 	Descarregamento DescarregamentoAux;
 
 	DescarregamentoAux.HorarioInicioDescarregamento = HoraInicio;
@@ -167,7 +167,7 @@ void Construcao::AlocaAtividade(double HoraInicio, double HoraFinal, int NumDema
 	DescarregamentoAux.InicioDescarregamentos = inicio;
 	DescarregamentoAux.FinalDescarregamentos = fim;
 	DescarregamentoAux.FoiDeslocado = StatusDesalocamento;
-	SituacaoDemanda[NumDemanda] = 1;
+	SituacaoDemanda[NumDemanda] = Situacao;
 
 	Descarregamentos.insert(Descarregamentos.begin(), DescarregamentoAux );
 }

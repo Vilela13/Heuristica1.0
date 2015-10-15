@@ -80,9 +80,9 @@ public:
 	int SelecionaConstrucao( Construcao**, vector < int >);
 	int SelecionaPlanta( Planta** , Construcao*, vector < int > );
 
-	void RearrumaTarefasParaAdicionalas(Construcao, int, int, int, double, double, double, double, double );
+	void RearrumaTarefasParaAdicionalas(Construcao, int, int, int, double, double, double, double, double , int);
 
-	int SelecionaCarreta(Planta& , Construcao& , int);
+	int SelecionaCarreta(Planta& , Construcao& , int, int);
 
 	int AnalizouTodasPLanats(vector < int > );
 
@@ -159,7 +159,7 @@ int Procedimento1::SelecionaPlanta( Planta** PlantaMaisPerto,Construcao* Constru
 	}
 }
 
-void Procedimento1::RearrumaTarefasParaAdicionalas(Construcao ConstrucaoVaiSerSuprida, int NumDemanda, int NumPlanta, int NumCarreta, double HorarioInicioPlanta, double HorarioSaiDaPlanta, double HorarioChegaContrucao, double HorarioSaiConstrucao, double HorarioRetornaPlanta){
+void Procedimento1::RearrumaTarefasParaAdicionalas(Construcao ConstrucaoVaiSerSuprida, int NumDemanda, int NumPlanta, int NumCarreta, double HorarioInicioPlanta, double HorarioSaiDaPlanta, double HorarioChegaContrucao, double HorarioSaiConstrucao, double HorarioRetornaPlanta, int SituacaoDemanda){
 
 
 	int  ParaPrograma;
@@ -174,6 +174,8 @@ void Procedimento1::RearrumaTarefasParaAdicionalas(Construcao ConstrucaoVaiSerSu
 	}
 
 	vector < DadosParaReordenar > Instancia;
+
+// Armazena Tarefas em estrutura
 
 	Instancia.resize( ConstrucaoVaiSerSuprida.StatusAtendimento + 1 );
 
@@ -209,6 +211,7 @@ void Procedimento1::RearrumaTarefasParaAdicionalas(Construcao ConstrucaoVaiSerSu
 		}
 	}
 
+// Deleta tarefas
 
 	for( int d = 0; d < ( Instancia.size() - 1 ); d++){
 		PlantasInstancia.DeletaTarefa( Instancia[d].DadosDasTarefasRetiradas[2], Instancia[d].HorariosDasTarefasRetiradas[0], Instancia[d].HorariosDasTarefasRetiradas[1], Instancia[d].DadosDasTarefasRetiradas[0], Instancia[d].DadosDasTarefasRetiradas[1], Instancia[d].DadosDasTarefasRetiradas[3],Instancia[d].HorariosDasTarefasRetiradas[0],  Instancia[d].HorariosDasTarefasRetiradas[4]);
@@ -220,7 +223,7 @@ void Procedimento1::RearrumaTarefasParaAdicionalas(Construcao ConstrucaoVaiSerSu
 		PlantasInstancia.Imprime(1,1);
 	}
 
-
+// Insere Tarfea que está fora da ordem em estrutura
 	Instancia[ (Instancia.size()-1) ].InserirConteudo( ConstrucaoVaiSerSuprida.NumeroDaConstrucao, NumDemanda, NumPlanta, NumCarreta, HorarioInicioPlanta, HorarioSaiDaPlanta, HorarioChegaContrucao, HorarioSaiConstrucao, HorarioRetornaPlanta);
 
 	if( Imprime == 2){
@@ -229,6 +232,7 @@ void Procedimento1::RearrumaTarefasParaAdicionalas(Construcao ConstrucaoVaiSerSu
 		}
 	}
 
+// Ordena Tarfeas
 	sort( Instancia.begin(), Instancia.end(), DecideQualTarefaVemAntes );
 
 	if( Imprime == 2){
@@ -246,6 +250,7 @@ void Procedimento1::RearrumaTarefasParaAdicionalas(Construcao ConstrucaoVaiSerSu
 	PlantaIndice = -13;
 	CaminhaoIndice = -13;
 
+// Reinsere Tarefas que foram retiradas, só que agora em ordem
 	for( unsigned int t = 0; t < Instancia.size(); t++){
 
 		for( unsigned int c = 0; c < ConstrucoesInstancia.Construcoes.size(); c++){
@@ -273,7 +278,7 @@ void Procedimento1::RearrumaTarefasParaAdicionalas(Construcao ConstrucaoVaiSerSu
 		ConstrucoesInstancia.Construcoes[ConstrucaoIndice].StatusAtendimento = ConstrucoesInstancia.Construcoes[ConstrucaoIndice].StatusAtendimento + 1;
 		PlantasInstancia.Plantas[PlantaIndice].VeiculosDaPlanta.Carretas[CaminhaoIndice].AlocaAtividade(Instancia[t].HorariosDasTarefasRetiradas[0], Instancia[t].HorariosDasTarefasRetiradas[4],Instancia[t].DadosDasTarefasRetiradas[0], t);
 		PlantasInstancia.Plantas[PlantaIndice].AlocaAtividade( Instancia[t].HorariosDasTarefasRetiradas[0], Instancia[t].HorariosDasTarefasRetiradas[1], Instancia[t].DadosDasTarefasRetiradas[0], t, Instancia[t].DadosDasTarefasRetiradas[3]);
-		ConstrucoesInstancia.Construcoes[ConstrucaoIndice].AlocaAtividade( Instancia[t].HorariosDasTarefasRetiradas[2], Instancia[t].HorariosDasTarefasRetiradas[3] , t, Instancia[t].DadosDasTarefasRetiradas[3], Instancia[t].DadosDasTarefasRetiradas[2],0,0,0);
+		ConstrucoesInstancia.Construcoes[ConstrucaoIndice].AlocaAtividade( Instancia[t].HorariosDasTarefasRetiradas[2], Instancia[t].HorariosDasTarefasRetiradas[3] , t, Instancia[t].DadosDasTarefasRetiradas[3], Instancia[t].DadosDasTarefasRetiradas[2],0,0,0, SituacaoDemanda);
 	}
 
 	if( Imprime == 1){
@@ -285,7 +290,7 @@ void Procedimento1::RearrumaTarefasParaAdicionalas(Construcao ConstrucaoVaiSerSu
 
 }
 
-int Procedimento1::SelecionaCarreta(Planta& PlantaMaisPerto, Construcao& ConstrucaoVaiSerSuprida, int  NumeroDemanda ){
+int Procedimento1::SelecionaCarreta(Planta& PlantaMaisPerto, Construcao& ConstrucaoVaiSerSuprida, int  NumeroDemanda, int SituacaoDemanda ){
 
 	double HorarioInicioPlanta;
 	double HorarioSaiDaPlanta;
@@ -320,12 +325,12 @@ int Procedimento1::SelecionaCarreta(Planta& PlantaMaisPerto, Construcao& Constru
 							ConstrucaoVaiSerSuprida.StatusAtendimento = ConstrucaoVaiSerSuprida.StatusAtendimento + 1;
 							PlantaMaisPerto.VeiculosDaPlanta.Carretas[v].AlocaAtividade(HorarioInicioPlanta, HorarioRetornaPlanta, ConstrucaoVaiSerSuprida.NumeroDaConstrucao , NumeroDemanda);
 							PlantaMaisPerto.AlocaAtividade(HorarioInicioPlanta, HorarioSaiDaPlanta, ConstrucaoVaiSerSuprida.NumeroDaConstrucao , NumeroDemanda,  PlantaMaisPerto.VeiculosDaPlanta.Carretas[v].NumeroDaCarreta);
-							ConstrucaoVaiSerSuprida.AlocaAtividade(HorarioChegaContrucao, HorarioSaiConstrucao, NumeroDemanda,  PlantaMaisPerto.VeiculosDaPlanta.Carretas[v].NumeroDaCarreta, PlantaMaisPerto.NumeroDaPlanta,0,0,0);
+							ConstrucaoVaiSerSuprida.AlocaAtividade(HorarioChegaContrucao, HorarioSaiConstrucao, NumeroDemanda,  PlantaMaisPerto.VeiculosDaPlanta.Carretas[v].NumeroDaCarreta, PlantaMaisPerto.NumeroDaPlanta,0,0,0,SituacaoDemanda);
 							//cout << "		PLanta (" <<  HorarioInicioPlanta << "-" << HorarioSaiDaPlanta << " trajeto " << HorarioChegaContrucao << " - " << HorarioSaiConstrucao << " trajeto " << HorarioRetornaPlanta << ") " << endl;
 							return 1;
 						}else{
 							if( DisponibilidadeConstrucao == 2){
-								RearrumaTarefasParaAdicionalas(ConstrucaoVaiSerSuprida, NumeroDemanda, PlantaMaisPerto.NumeroDaPlanta, PlantaMaisPerto.VeiculosDaPlanta.Carretas[v].NumeroDaCarreta , HorarioInicioPlanta, HorarioSaiDaPlanta, HorarioChegaContrucao, HorarioSaiConstrucao, HorarioRetornaPlanta);
+								RearrumaTarefasParaAdicionalas(ConstrucaoVaiSerSuprida, NumeroDemanda, PlantaMaisPerto.NumeroDaPlanta, PlantaMaisPerto.VeiculosDaPlanta.Carretas[v].NumeroDaCarreta , HorarioInicioPlanta, HorarioSaiDaPlanta, HorarioChegaContrucao, HorarioSaiConstrucao, HorarioRetornaPlanta, SituacaoDemanda);
 								return 1;
 							}
 						}
@@ -385,7 +390,7 @@ int Procedimento1::Executa(){
 					//PlantaMaisPerto->ImprimeDistancias();
 					if( PlantaSelecionada == 1){
 						PlantasInstancia.PlantasAnalizadas[ PlantaMaisPerto->NumeroDaPlanta ] = 1;
-						PermiteAtendimentoDemanda = SelecionaCarreta(*PlantaMaisPerto , *ConstrucaoVaiSerSuprida,  Demanda);
+						PermiteAtendimentoDemanda = SelecionaCarreta(*PlantaMaisPerto , *ConstrucaoVaiSerSuprida,  Demanda, 1);
 						//cout << " 			Atendeu " << PermiteAtendimentoDemanda << endl;
 					}
 				}while( PermiteAtendimentoDemanda == 0 && PlantasInstancia.AnalizouTodasPLanats() == 0);

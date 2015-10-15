@@ -134,7 +134,7 @@ void Heuristica::ExecutaProcedimentoHeuristico1(){
 
 	Solucoes.Imprime(1,1,0);
 
-
+/*
 	cout << endl << endl << "############################### Procedimento Viabilidade 1 #####################################" << endl << endl;
 
 	Solucoes.Solucoes[0].ProcessoViabilizacao1();
@@ -143,7 +143,7 @@ void Heuristica::ExecutaProcedimentoHeuristico1(){
 
 	Solucoes.CalculaMakespanSolucoes();
 	Solucoes.Imprime(1,1,0);
-
+*/
 	cout << endl << endl << "############################### Procedimento Viabilidade 2 #####################################" << endl << endl;
 
 	Solucoes.Solucoes[0].ProcessoViabilizacao2();

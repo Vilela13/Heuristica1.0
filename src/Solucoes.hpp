@@ -111,6 +111,7 @@ public:
 	void ProcessoViabilizacao1();
 
 	int  ProcuraConstrucaoNaoAtendida(int&, int&);
+	int SelecionaConstrucao(int, int, vector < int >);
 	void ProcessoViabilizacao2();
 
 
@@ -1053,6 +1054,33 @@ int  Solucao::ProcuraConstrucaoNaoAtendida(int &ConstrucaoNaoAtendida, int &Dema
 	return 1;
 }
 
+
+
+
+int Solucao::SelecionaConstrucao( int ConstrucaoParaAtender, int ConstrucaoParaAtenderIndice, vector < int > ConstrucaosAnalizadas){
+	double RankInicial;
+	int Ativo;
+
+	Ativo = 0;
+	RankInicial = DBL_MAX;
+
+	for( int c = 0; c < NE; c++){
+		if ( RankInicial > ConstrucoesInstancia.Construcoes[c].RankTempoDemandas){
+			if(ConstrucoesInstancia.Construcoes[c].StatusAtendimento < ConstrucoesInstancia.Construcoes[c].NumeroDemandas && ConstrucaosAnalizadas[c] == 0){
+				ConstrucaoParaAtender = ConstrucoesInstancia.Construcoes[c].NumeroDaConstrucao;
+				ConstrucaoParaAtenderIndice = c;
+				RankInicial = ConstrucoesInstancia.Construcoes[c].RankTempoDemandas;
+				Ativo = 1;
+			}
+		}
+	}
+	if( Ativo == 1){
+		return 1;
+	}else{
+		return 0;
+	}
+}
+
 void Solucao::ProcessoViabilizacao2(){
 
 	int InviabilidadeSolucaoAnterior;
@@ -1071,6 +1099,11 @@ void Solucao::ProcessoViabilizacao2(){
 	vector < DadosTarefa > DadosTarefasDesalocadas;
 	int TarefaDeletada;
 	int TarefaAdicionada;
+
+	int ConstrucaoParaAtender;
+	int ConstrucaoParaAtenderIndice;
+	vector < int > ConstrucaosAnalizadas;
+	int PossuiConstrucaoParaAnalisar;
 
 	int PararPrograma;
 
@@ -1128,6 +1161,32 @@ void Solucao::ProcessoViabilizacao2(){
 
 		ConstrucoesInstancia.ImprimeContrucoes();
 		PlantasInstancia.Imprime(1,1);
+
+		cout << endl << endl << endl;
+
+
+		ConstrucaosAnalizadas.resize(NE);
+		for( int c = 0; c < NE; c++){
+			if(ConstrucoesInstancia.Construcoes[c].StatusAtendimento == ConstrucoesInstancia.Construcoes[c].NumeroDemandas){
+				ConstrucaosAnalizadas[c] = 1;
+			}else{
+				ConstrucaosAnalizadas[c] = 0;
+			}
+		}
+
+		cout << " vetor de analise " << endl;
+		for ( int c = 0; c < NE; c++){
+			cout << " [" << c << "] " << ConstrucaosAnalizadas[c];
+		}
+		cout << endl;
+
+		PossuiConstrucaoParaAnalisar = SelecionaConstrucao( ConstrucaoParaAtender, ConstrucaoParaAtenderIndice, ConstrucaosAnalizadas);
+		if( PossuiConstrucaoParaAnalisar == 1){
+			cout << " construcao a se recolocar tarefas => " << ConstrucaoParaAtender << "(" << ConstrucaoParaAtenderIndice << ")" << endl;
+		}else{
+			cout << "  Sem construcoa " << endl;
+		}
+
 		cin >> PararPrograma;
 
 

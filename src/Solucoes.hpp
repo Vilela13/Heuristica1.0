@@ -112,6 +112,8 @@ public:
 
 	int  ProcuraConstrucaoNaoAtendida(int&, int&);
 	int SelecionaConstrucao(int, int, vector < int >);
+	int SelecionaPlanta(int, int, int, vector < int >);
+	int SelecionaCarreta(int, int, int, int, vector < DadosTarefa >&);
 	void ProcessoViabilizacao2();
 
 
@@ -1081,6 +1083,98 @@ int Solucao::SelecionaConstrucao( int ConstrucaoParaAtender, int ConstrucaoParaA
 	}
 }
 
+int Solucao::SelecionaPlanta( int PlantaAtender, int PlantaAtenderIndice, int c, vector < int > PlantasAnalizadas ){
+	double DistanciaConstrucaoPlanta;
+	int Ativo;
+
+	Ativo = 0;
+	DistanciaConstrucaoPlanta = DBL_MAX;
+
+	for( int p = 0; p < NP; p++){
+		if( DistanciaConstrucaoPlanta > ConstrucoesInstancia.Construcoes[c].DistanciaPlantas[p].Distancia){
+			if( PlantasAnalizadas[p] == 0){
+				PlantaAtenderIndice = p;
+				PlantaAtender = PlantasInstancia.Plantas[p].NumeroDaPlanta;
+				DistanciaConstrucaoPlanta = ConstrucoesInstancia.Construcoes[c].DistanciaPlantas[p].Distancia;
+				Ativo = 1;
+			}
+		}
+	}
+	if( Ativo == 1){
+		return 1;
+	}else{
+		return 0;
+	}
+}
+
+int Solucao::SelecionaCarreta(int c, int p, int  NumeroDemanda, int SituacaoDemanda, vector < DadosTarefa > &DadosTarefasAdicionadas ){
+
+	double HorarioInicioPlanta;
+	double HorarioSaiDaPlanta;
+	double HorarioRetornaPlanta;
+	double HorarioChegaContrucao;
+	double HorarioSaiConstrucao;
+
+	int DisponibilidadePlanta;
+	int DisponibilidadeConstrucao;
+	int DisponibilidadeCarreta;
+
+	int posicao;
+
+
+	if( ConstrucoesInstancia.Construcoes[c].SituacaoDemanda[NumeroDemanda] == 0){
+		PlantasInstancia.Plantas[p].VeiculosDaPlanta.OrdenaCarretasPorNumeroDeTarefasRealizadas();
+		for( int v = 0; v < PlantasInstancia.Plantas[p].NumeroVeiculos; v++){
+			cout << " oi  " << endl;
+			if( (ConstrucoesInstancia.Construcoes[c].TempoMinimoDeFuncionamento - PlantasInstancia.Plantas[p].DistanciaConstrucoes[ConstrucoesInstancia.Construcoes[c].NumeroDaConstrucao] - PlantasInstancia.Plantas[p].TempoPlanta) > PlantasInstancia.Plantas[p].TempoMinimoDeFuncionamento){
+				HorarioInicioPlanta = ConstrucoesInstancia.Construcoes[c].TempoMinimoDeFuncionamento - PlantasInstancia.Plantas[p].DistanciaConstrucoes[ConstrucoesInstancia.Construcoes[c].NumeroDaConstrucao] - PlantasInstancia.Plantas[p].TempoPlanta;
+			}else{
+				HorarioInicioPlanta = PlantasInstancia.Plantas[p].TempoMinimoDeFuncionamento;
+			}
+			//cout << "    Carreta usada [" << PlantaMaisPerto.NumeroDaPlanta << "-" << PlantaMaisPerto.VeiculosDaPlanta.Carretas[v].NumeroDaCarreta << "] Construcao e Demanda [" << ConstrucaoVaiSerSuprida.NumeroDaConstrucao << "-" <<  NumeroDemanda << "]" << endl;
+			do{
+				cout << "   LOOP " << endl;
+				HorarioSaiDaPlanta = HorarioInicioPlanta + PlantasInstancia.Plantas[p].TempoPlanta;
+				HorarioChegaContrucao = HorarioSaiDaPlanta + PlantasInstancia.Plantas[p].DistanciaConstrucoes[ConstrucoesInstancia.Construcoes[c].NumeroDaConstrucao];
+				HorarioSaiConstrucao = HorarioChegaContrucao +  PlantasInstancia.Plantas[p].VeiculosDaPlanta.Carretas[v].TempoParaDescarregarNaConstrucao[ConstrucoesInstancia.Construcoes[c].NumeroDaConstrucao][NumeroDemanda];
+				HorarioRetornaPlanta = HorarioSaiConstrucao + PlantasInstancia.Plantas[p].DistanciaConstrucoes[ConstrucoesInstancia.Construcoes[c].NumeroDaConstrucao];
+				DisponibilidadePlanta = PlantasInstancia.Plantas[p].VerificaDisponibilidade(HorarioInicioPlanta, HorarioSaiDaPlanta );
+				DisponibilidadeCarreta = PlantasInstancia.Plantas[p].VeiculosDaPlanta.Carretas[v].VerificaDisponibilidade(HorarioInicioPlanta, HorarioRetornaPlanta);
+				DisponibilidadeConstrucao = ConstrucoesInstancia.Construcoes[c].VerificaDisponibilidade( HorarioChegaContrucao, HorarioSaiConstrucao);
+				if( DisponibilidadePlanta == 1){
+					if( DisponibilidadeCarreta == 1){
+						if( DisponibilidadeConstrucao == 1){
+
+							cout << "   LOOP entrei" << endl;
+							DadosTarefasAdicionadas.resize( DadosTarefasAdicionadas.size() + 1 );
+							cout << "   LOOP parte 1 - tamanho [" << DadosTarefasAdicionadas.size() << "]" << endl;
+							posicao = DadosTarefasAdicionadas.size() - 1;
+							cout << DadosTarefasAdicionadas.size() - 1 << endl;
+							DadosTarefasAdicionadas[ posicao ].IniciaConteudo();
+							DadosTarefasAdicionadas[ posicao ].InserirConteudo(ConstrucoesInstancia.Construcoes[c].NumeroDaConstrucao , NumeroDemanda, PlantasInstancia.Plantas[p].NumeroDaPlanta, PlantasInstancia.Plantas[p].VeiculosDaPlanta.Carretas[v].NumeroDaCarreta, HorarioInicioPlanta, HorarioSaiDaPlanta, HorarioChegaContrucao, HorarioSaiConstrucao, HorarioRetornaPlanta );
+							cout << "   LOOP parte 2" << endl;
+
+							ConstrucoesInstancia.Construcoes[c].StatusAtendimento = ConstrucoesInstancia.Construcoes[c].StatusAtendimento + 1;
+							PlantasInstancia.Plantas[p].VeiculosDaPlanta.Carretas[v].AlocaAtividade(HorarioInicioPlanta, HorarioRetornaPlanta, ConstrucoesInstancia.Construcoes[c].NumeroDaConstrucao , NumeroDemanda);
+							PlantasInstancia.Plantas[p].AlocaAtividade(HorarioInicioPlanta, HorarioSaiDaPlanta, ConstrucoesInstancia.Construcoes[c].NumeroDaConstrucao , NumeroDemanda,  PlantasInstancia.Plantas[p].VeiculosDaPlanta.Carretas[v].NumeroDaCarreta);
+							ConstrucoesInstancia.Construcoes[c].AlocaAtividade(HorarioChegaContrucao, HorarioSaiConstrucao, NumeroDemanda,  PlantasInstancia.Plantas[p].VeiculosDaPlanta.Carretas[v].NumeroDaCarreta, PlantasInstancia.Plantas[p].NumeroDaPlanta,0,0,0,SituacaoDemanda);
+							//cout << "		PLanta (" <<  HorarioInicioPlanta << "-" << HorarioSaiDaPlanta << " trajeto " << HorarioChegaContrucao << " - " << HorarioSaiConstrucao << " trajeto " << HorarioRetornaPlanta << ") " << endl;
+							return 1;
+						}else{
+							if( DisponibilidadeConstrucao == 2){
+								//RearrumaTarefasParaAdicionalas(ConstrucaoVaiSerSuprida, NumeroDemanda, PlantasInstancia.Plantas[p].NumeroDaPlanta, PlantasInstancia.Plantas[p].VeiculosDaPlanta.Carretas[v].NumeroDaCarreta , HorarioInicioPlanta, HorarioSaiDaPlanta, HorarioChegaContrucao, HorarioSaiConstrucao, HorarioRetornaPlanta, SituacaoDemanda);
+								return 1;
+							}
+						}
+					}
+				}
+				HorarioInicioPlanta = HorarioInicioPlanta + IntervaloDeTempo;
+			}while( HorarioInicioPlanta <= PlantasInstancia.Plantas[p].TempoMaximoDeFuncionamento ||  HorarioChegaContrucao <= ConstrucoesInstancia.Construcoes[c].TempoMaximoDeFuncionamento);
+		}
+	}
+	return 0;
+}
+
 void Solucao::ProcessoViabilizacao2(){
 
 	int InviabilidadeSolucaoAnterior;
@@ -1104,6 +1198,16 @@ void Solucao::ProcessoViabilizacao2(){
 	int ConstrucaoParaAtenderIndice;
 	vector < int > ConstrucaosAnalizadas;
 	int PossuiConstrucaoParaAnalisar;
+
+	int d;
+
+	int PlantaAtender;
+	int PlantaAtenderIndice;
+	int ExistePlanta;
+
+	int PermiteAtendimentoDemanda;
+	vector < DadosTarefa > DadosTarefasAdicionadas;
+
 
 	int PararPrograma;
 
@@ -1183,9 +1287,28 @@ void Solucao::ProcessoViabilizacao2(){
 		PossuiConstrucaoParaAnalisar = SelecionaConstrucao( ConstrucaoParaAtender, ConstrucaoParaAtenderIndice, ConstrucaosAnalizadas);
 		if( PossuiConstrucaoParaAnalisar == 1){
 			cout << " construcao a se recolocar tarefas => " << ConstrucaoParaAtender << "(" << ConstrucaoParaAtenderIndice << ")" << endl;
+			ConstrucaosAnalizadas[ConstrucaoParaAtenderIndice] = 1;
 		}else{
 			cout << "  Sem construcoa " << endl;
 		}
+
+		ConstrucoesInstancia.Construcoes[ConstrucaoParaAtenderIndice].StatusAtendimento + 1 ;
+		cout << " Demanda [" << d << "]" << endl;
+		PlantasInstancia.InicializaPlantasAnalizadas();
+		ExistePlanta = SelecionaPlanta( PlantaAtender,PlantaAtenderIndice, ConstrucaoParaAtenderIndice, PlantasInstancia.PlantasAnalizadas );
+		if( ExistePlanta == 1){
+			cout << "     Planta " << PlantaAtender << " [" << PlantaAtenderIndice << "]" << endl;
+			PlantasInstancia.PlantasAnalizadas[PlantaAtenderIndice] = 1;
+			cout << " ixi 1" << endl;
+			PermiteAtendimentoDemanda = SelecionaCarreta(ConstrucaoParaAtenderIndice, PlantaAtenderIndice, d, 3, DadosTarefasAdicionadas );
+			cout << " ixi 2" << endl;
+			ConstrucoesInstancia.ImprimeContrucoes();
+		}else{
+			cout << "     Nao tem planta para se analisar" << endl;
+		}
+
+
+
 
 		cin >> PararPrograma;
 

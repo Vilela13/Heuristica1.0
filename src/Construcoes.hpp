@@ -107,6 +107,11 @@ void Construcao::CalculaRankTempoDemandas(int comentarios){
 }
 
 int Construcao::VerificaDisponibilidade( double InicioPossivelAlocacao, double FinalPossivelAlocacao){
+	int PossuiTarefaAnterior;
+	int PossuiTarefaPosterior;
+
+	PossuiTarefaAnterior = 0;
+	PossuiTarefaPosterior = 0;
 
 	if( InicioPossivelAlocacao < TempoMinimoDeFuncionamento){
 		return 0;
@@ -128,12 +133,13 @@ int Construcao::VerificaDisponibilidade( double InicioPossivelAlocacao, double F
 				return 0;
 			}
 		}
-		// Verifica se possivel alocação está parcialmente dentro de um descarregamento alocado, no seu final
+		// Verifica se possivel alocação está parcialmente dentro de um descarregamento alocado, no inicio do deslocamento já alocado
 		if( InicioPossivelAlocacao <= Descarregamentos[d].HorarioInicioDescarregamento){
 			if( Descarregamentos[d].HorarioInicioDescarregamento < FinalPossivelAlocacao ){
 				return 0;
 			}
 		}
+		// Verifica se possivel alocação está parcialmente detro de um descarregamento, no fim do deslocamento já alocado
 		if( InicioPossivelAlocacao < Descarregamentos[d].HorarioFinalDescarregamento){
 			if (  Descarregamentos[d].HorarioFinalDescarregamento <= FinalPossivelAlocacao ){
 				return 0;
@@ -146,13 +152,28 @@ int Construcao::VerificaDisponibilidade( double InicioPossivelAlocacao, double F
 	}else{
 		for( unsigned int d = 0; d < Descarregamentos.size(); d ++){
 			if( Descarregamentos[d].HorarioFinalDescarregamento <= InicioPossivelAlocacao && InicioPossivelAlocacao <= Descarregamentos[d].HorarioFinalDescarregamento + TempoMaximoEntreDescargas){
-				return 1;
+				PossuiTarefaAnterior = 1;
 			}
 			if( FinalPossivelAlocacao <=  Descarregamentos[d].HorarioInicioDescarregamento &&  Descarregamentos[d].HorarioInicioDescarregamento   <= FinalPossivelAlocacao + TempoMaximoEntreDescargas ){
-				return 2;
+				PossuiTarefaPosterior = 1;
 			}
 		}
+
+		if ( PossuiTarefaAnterior == 1 && PossuiTarefaPosterior == 0){
+			return 1;
+		}
+		if ( PossuiTarefaAnterior == 0 && PossuiTarefaPosterior == 1){
+			return 2;
+		}
+		if ( PossuiTarefaAnterior == 1 && PossuiTarefaPosterior == 1){
+			cout << endl << endl << " No meio das tarefas ->Construcao::VerificaDisponibilidade  " << endl << endl << endl;
+			return 3;
+
+		}
+
+		// Não respeita o intervalo de tempo necessario entre um descarregamento e outro
 		return -1;
+
 	}
 }
 

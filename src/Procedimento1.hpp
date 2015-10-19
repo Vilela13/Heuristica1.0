@@ -80,6 +80,8 @@ public:
 	int SelecionaConstrucao( Construcao**, vector < int >);
 	int SelecionaPlanta( Planta** , Construcao*, vector < int > );
 
+	void AlocaIndicesDadosParaReorganizar(int, int&, int&,  int&, vector < DadosParaReordenar >);
+	void InserirDadosEmEstruturaInstanciasDadosTarefasRetirar( vector < DadosParaReordenar > &, Construcao, int);
 	void RearrumaTarefasParaAdicionalas(Construcao, int, int, int, double, double, double, double, double , int);
 
 	int SelecionaCarreta(Planta& , Construcao& , int, int);
@@ -159,29 +161,33 @@ int Procedimento1::SelecionaPlanta( Planta** PlantaMaisPerto,Construcao* Constru
 	}
 }
 
-void Procedimento1::RearrumaTarefasParaAdicionalas(Construcao ConstrucaoVaiSerSuprida, int NumDemanda, int NumPlanta, int NumCarreta, double HorarioInicioPlanta, double HorarioSaiDaPlanta, double HorarioChegaContrucao, double HorarioSaiConstrucao, double HorarioRetornaPlanta, int SituacaoDemanda){
+void Procedimento1::AlocaIndicesDadosParaReorganizar(int t, int &ConstrucaoIndice, int &PlantaIndice,  int &CaminhaoIndice, vector < DadosParaReordenar > Instancia){
+	for( unsigned int c = 0; c < ConstrucoesInstancia.Construcoes.size(); c++){
+		if( ConstrucoesInstancia.Construcoes[c].NumeroDaConstrucao == Instancia[t].DadosDasTarefasRetiradas[0] ){
+			ConstrucaoIndice = c;
+		}
+	}
 
+	for( unsigned int p = 0; p < PlantasInstancia.Plantas.size(); p++){
+		if( PlantasInstancia.Plantas[p].NumeroDaPlanta ==  Instancia[t].DadosDasTarefasRetiradas[2] ){
+			PlantaIndice = p;
+		}
+	}
 
-	int  ParaPrograma;
-	int	Imprime;
-	Imprime = 0;
+	for( unsigned int v = 0; v < PlantasInstancia.Plantas[PlantaIndice].VeiculosDaPlanta.Carretas.size(); v++){
+		if(  PlantasInstancia.Plantas[PlantaIndice].VeiculosDaPlanta.Carretas[v].NumeroDaCarreta ==  Instancia[t].DadosDasTarefasRetiradas[3] ){
+			CaminhaoIndice = v;
+		}
+	}
+
+	if( ConstrucaoIndice == -13 || PlantaIndice == -13 || CaminhaoIndice == -13){
+		cout << endl << endl << "  ########################## Problema em alocar os valores de ConstrucaoIndice, PlantaIndice e CaminhaoIndice  -> Procedimento1::RearrumaTarefasParaAdicionalas:: AlocaIndicesDadosParaReorganizar ########################## " << endl << endl ;
+	}
+}
+
+void Procedimento1::InserirDadosEmEstruturaInstanciasDadosTarefasRetirar( vector < DadosParaReordenar > &Instancia, Construcao ConstrucaoVaiSerSuprida, int Imprime){
 
 	Planta PlantaAuxiliarRemocao;
-
-	if( Imprime == 1){
-		ConstrucoesInstancia.ImprimeContrucoes();
-		PlantasInstancia.Imprime(1,1);
-	}
-
-	vector < DadosParaReordenar > Instancia;
-
-// Armazena Tarefas em estrutura
-
-	Instancia.resize( ConstrucaoVaiSerSuprida.StatusAtendimento + 1 );
-
-	for( unsigned int t = 0; t < Instancia.size(); t++){
-		Instancia[t].IniciaConteudo();
-	}
 
 	for( unsigned int d = 0; d < ConstrucaoVaiSerSuprida.Descarregamentos.size(); d++){
 		Instancia[d].DadosDasTarefasRetiradas[0] = ConstrucaoVaiSerSuprida.NumeroDaConstrucao;
@@ -204,12 +210,37 @@ void Procedimento1::RearrumaTarefasParaAdicionalas(Construcao ConstrucaoVaiSerSu
 
 	}
 
-	if( Imprime == 2){
+	if( Imprime == 1){
 		cout << endl << endl << "  Dados Gravados " << endl << endl;
 		for( unsigned int d = 0; d < ConstrucaoVaiSerSuprida.Descarregamentos.size(); d++){
 			Instancia[d].Imprimir();
 		}
 	}
+}
+
+void Procedimento1::RearrumaTarefasParaAdicionalas(Construcao ConstrucaoVaiSerSuprida, int NumDemanda, int NumPlanta, int NumCarreta, double HorarioInicioPlanta, double HorarioSaiDaPlanta, double HorarioChegaContrucao, double HorarioSaiConstrucao, double HorarioRetornaPlanta, int SituacaoDemanda){
+
+
+	int  ParaPrograma;
+	int	Imprime;
+	Imprime = 0;
+
+	if( Imprime == 1){
+		ConstrucoesInstancia.ImprimeContrucoes();
+		PlantasInstancia.Imprime(1,1);
+	}
+
+	vector < DadosParaReordenar > Instancia;
+
+// Armazena Tarefas em estrutura
+
+	Instancia.resize( ConstrucaoVaiSerSuprida.StatusAtendimento + 1 );
+
+	for( unsigned int t = 0; t < Instancia.size(); t++){
+		Instancia[t].IniciaConteudo();
+	}
+
+	InserirDadosEmEstruturaInstanciasDadosTarefasRetirar( Instancia, ConstrucaoVaiSerSuprida, Imprime);
 
 // Deleta tarefas
 
@@ -253,27 +284,7 @@ void Procedimento1::RearrumaTarefasParaAdicionalas(Construcao ConstrucaoVaiSerSu
 // Reinsere Tarefas que foram retiradas, só que agora em ordem
 	for( unsigned int t = 0; t < Instancia.size(); t++){
 
-		for( unsigned int c = 0; c < ConstrucoesInstancia.Construcoes.size(); c++){
-			if( ConstrucoesInstancia.Construcoes[c].NumeroDaConstrucao == Instancia[t].DadosDasTarefasRetiradas[0] ){
-				ConstrucaoIndice = c;
-			}
-		}
-
-		for( unsigned int p = 0; p < PlantasInstancia.Plantas.size(); p++){
-			if( PlantasInstancia.Plantas[p].NumeroDaPlanta ==  Instancia[t].DadosDasTarefasRetiradas[2] ){
-				PlantaIndice = p;
-			}
-		}
-
-		for( unsigned int v = 0; v < PlantasInstancia.Plantas[PlantaIndice].VeiculosDaPlanta.Carretas.size(); v++){
-			if(  PlantasInstancia.Plantas[PlantaIndice].VeiculosDaPlanta.Carretas[v].NumeroDaCarreta ==  Instancia[t].DadosDasTarefasRetiradas[3] ){
-				CaminhaoIndice = v;
-			}
-		}
-
-		if( ConstrucaoIndice == -13 || PlantaIndice == -13 || CaminhaoIndice == -13){
-			cout << endl << endl << "  ########################## Problema em alocar os valores de ConstrucaoIndice, PlantaIndice e CaminhaoIndice  -> Procedimento1::RearrumaTarefasParaAdicionalas ########################## " << endl << endl ;
-		}
+		AlocaIndicesDadosParaReorganizar(t, ConstrucaoIndice, PlantaIndice, CaminhaoIndice, Instancia);
 
 		ConstrucoesInstancia.Construcoes[ConstrucaoIndice].StatusAtendimento = ConstrucoesInstancia.Construcoes[ConstrucaoIndice].StatusAtendimento + 1;
 		PlantasInstancia.Plantas[PlantaIndice].VeiculosDaPlanta.Carretas[CaminhaoIndice].AlocaAtividade(Instancia[t].HorariosDasTarefasRetiradas[0], Instancia[t].HorariosDasTarefasRetiradas[4],Instancia[t].DadosDasTarefasRetiradas[0], t);
@@ -332,6 +343,11 @@ int Procedimento1::SelecionaCarreta(Planta& PlantaMaisPerto, Construcao& Constru
 							if( DisponibilidadeConstrucao == 2){
 								RearrumaTarefasParaAdicionalas(ConstrucaoVaiSerSuprida, NumeroDemanda, PlantaMaisPerto.NumeroDaPlanta, PlantaMaisPerto.VeiculosDaPlanta.Carretas[v].NumeroDaCarreta , HorarioInicioPlanta, HorarioSaiDaPlanta, HorarioChegaContrucao, HorarioSaiConstrucao, HorarioRetornaPlanta, SituacaoDemanda);
 								return 1;
+							}else{
+								if( DisponibilidadeConstrucao == 3){
+									RearrumaTarefasParaAdicionalas(ConstrucaoVaiSerSuprida, NumeroDemanda, PlantaMaisPerto.NumeroDaPlanta, PlantaMaisPerto.VeiculosDaPlanta.Carretas[v].NumeroDaCarreta , HorarioInicioPlanta, HorarioSaiDaPlanta, HorarioChegaContrucao, HorarioSaiConstrucao, HorarioRetornaPlanta, SituacaoDemanda);
+									cout << endl << endl << endl << "            Verificar corretude do procedimento -> Procedimento1::SelecionaCarreta " << endl << endl << endl;
+								}
 							}
 						}
 					}

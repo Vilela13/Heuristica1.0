@@ -56,7 +56,7 @@ DadosParaReordenar::~DadosParaReordenar(){
 
 }
 
-bool DecideQualTarefaVemAntes ( DadosParaReordenar d1, DadosParaReordenar d2 ){
+bool DecideQualTarefaVemAntesReordenar ( DadosParaReordenar d1, DadosParaReordenar d2 ){
 	return ( d1.HorariosDasTarefasRetiradas[2] < d2.HorariosDasTarefasRetiradas[2] );
 }
 
@@ -244,7 +244,7 @@ void Procedimento1::RearrumaTarefasParaAdicionalas(Construcao ConstrucaoVaiSerSu
 
 // Deleta tarefas
 
-	for( int d = 0; d < ( Instancia.size() - 1 ); d++){
+	for( unsigned int d = 0; d < ( Instancia.size() - 1 ); d++){
 		PlantasInstancia.DeletaTarefa( Instancia[d].DadosDasTarefasRetiradas[2], Instancia[d].HorariosDasTarefasRetiradas[0], Instancia[d].HorariosDasTarefasRetiradas[1], Instancia[d].DadosDasTarefasRetiradas[0], Instancia[d].DadosDasTarefasRetiradas[1], Instancia[d].DadosDasTarefasRetiradas[3],Instancia[d].HorariosDasTarefasRetiradas[0],  Instancia[d].HorariosDasTarefasRetiradas[4]);
 		ConstrucoesInstancia.DeletaTarefa(Instancia[d].DadosDasTarefasRetiradas[0], Instancia[d].HorariosDasTarefasRetiradas[2], Instancia[d].HorariosDasTarefasRetiradas[3], Instancia[d].DadosDasTarefasRetiradas[1],  Instancia[d].DadosDasTarefasRetiradas[2], Instancia[d].DadosDasTarefasRetiradas[3]);
 	}
@@ -264,7 +264,7 @@ void Procedimento1::RearrumaTarefasParaAdicionalas(Construcao ConstrucaoVaiSerSu
 	}
 
 // Ordena Tarfeas
-	sort( Instancia.begin(), Instancia.end(), DecideQualTarefaVemAntes );
+	sort( Instancia.begin(), Instancia.end(),  DecideQualTarefaVemAntesReordenar );
 
 	if( Imprime == 2){
 		cout << endl << endl << "      Ordenou " << endl << endl;

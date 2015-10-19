@@ -160,12 +160,15 @@ int Construcao::VerificaDisponibilidade( double InicioPossivelAlocacao, double F
 		}
 
 		if ( PossuiTarefaAnterior == 1 && PossuiTarefaPosterior == 0){
+			// Entra no depois de todas as tarefas alocadas
 			return 1;
 		}
 		if ( PossuiTarefaAnterior == 0 && PossuiTarefaPosterior == 1){
+			// Entra antes de todas as tarefas alocadas
 			return 2;
 		}
 		if ( PossuiTarefaAnterior == 1 && PossuiTarefaPosterior == 1){
+			// Entra no meio de duas tarefas alocadas
 			cout << endl << endl << " No meio das tarefas ->Construcao::VerificaDisponibilidade  " << endl << endl << endl;
 			return 3;
 

@@ -99,7 +99,7 @@ public:
 	int VerificaRespeitoIntervalos();
 	int DetetaAlocacaoTarefa(int,int,int&, int&, double&, double&, double&, double&, double&);
 	int DeletaAlocacaoTarefasPosteriores(int, int, vector < DadosTarefa >& );
-	void MarcaTarefaDeletadaNoVetor(int, int);
+	void MarcaTarefaDeletadaNoVetor(int, int, int);
 
 	int AdicionaTarefaHorarioInicioDescarregamento( int, int, double, int) ;
 
@@ -467,7 +467,7 @@ int Solucao::DeletaAlocacaoTarefasPosteriores(int Construcao, int Demanda, vecto
 	}
 }
 
-void Solucao::MarcaTarefaDeletadaNoVetor(int Construcao, int Demanda){
+void Solucao::MarcaTarefaDeletadaNoVetor(int Construcao, int Demanda, int Situacao){
 	int c;
 	int d;
 
@@ -478,7 +478,7 @@ void Solucao::MarcaTarefaDeletadaNoVetor(int Construcao, int Demanda){
 		cout << "  <<<<    Solucao::MarcaTarefaDeletadaNoVetor  >>>>>>>>>> " << endl;
 	}
 
-	ConstrucoesInstancia.Construcoes[c].SituacaoRemocao[d] = 1;
+	ConstrucoesInstancia.Construcoes[c].SituacaoRemocao[d] = Situacao;
 }
 
 int Solucao::AdicionaTarefaHorarioInicioDescarregamento( int Construcao, int Demanda , double HorarioInicioDescarregamento, int SituacaoDemanda){
@@ -1093,7 +1093,7 @@ void Solucao::ProcessoViabilizacao1(){
 			//cout << endl << "   Deleta tarefas [" << ConstrucaoAnalisandoRetirada << "-" << DemandaAnalisandoRetirada << "]" << endl ;
 			DadosTarefasDesalocadas.clear();
 			TarefaDeletada = DeletaAlocacaoTarefasPosteriores(ConstrucaoAnalisandoRetirada, DemandaAnalisandoRetirada, DadosTarefasDesalocadas);
-			MarcaTarefaDeletadaNoVetor(ConstrucaoAnalisandoRetirada, DemandaAnalisandoRetirada);
+			MarcaTarefaDeletadaNoVetor(ConstrucaoAnalisandoRetirada, DemandaAnalisandoRetirada,1);
 			if ( TarefaDeletada == 1){
 				AlocaValoresIniciaisIndices( NovatarefaAlocadaConstrucao, NovatarefaAlocadaDemanda);
 				TarefaAlocada = ProcessoParaAlocarTarefa( ConstrucaoAnalisandoRetirada, DemandaAnalisandoRetirada , NovatarefaAlocadaConstrucao , NovatarefaAlocadaDemanda, 1);
@@ -1406,12 +1406,14 @@ void Solucao::ProcessoViabilizacao2(){
 		if( TarefaAdicionada == 1){
 			cout << "                  Tarefa adicionada " << endl << endl;
 			ConstrucoesInstancia.Construcoes[ IndiceConstrucaoNaoAtendida ].SituacaoDemanda[ DemandaNaoAtendida ] = 2;
+			MarcaTarefaDeletadaNoVetor(ConstrucoesInstancia.Construcoes[ IndiceConstrucaoNaoAtendida ].NumeroDaConstrucao, DemandaNaoAtendida, 2);
 		}else{
 			cout << "                  Tarefa NAO adicionada " << endl << endl;
 			ConstrucoesInstancia.Construcoes[ IndiceConstrucaoNaoAtendida ].SituacaoDemanda[ DemandaNaoAtendida ] = -1;
+			MarcaTarefaDeletadaNoVetor(ConstrucoesInstancia.Construcoes[ IndiceConstrucaoNaoAtendida ].NumeroDaConstrucao, DemandaNaoAtendida, 3);
 		}
 
-		/*
+
 
 
 		ConstrucoesInstancia.ImprimeContrucoes();
@@ -1434,7 +1436,7 @@ void Solucao::ProcessoViabilizacao2(){
 			cout << " [" << c << "] " << ConstrucaosAnalizadas[c];
 		}
 		cout << endl;
-
+/*
 		PossuiConstrucaoParaAnalisar = SelecionaConstrucao( ConstrucaoParaAtender, ConstrucaoParaAtenderIndice, ConstrucaosAnalizadas);
 		if( PossuiConstrucaoParaAnalisar == 1){
 			cout << " construcao a se recolocar tarefas => " << ConstrucaoParaAtender << "(" << ConstrucaoParaAtenderIndice << ")" << endl;

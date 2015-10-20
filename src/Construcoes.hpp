@@ -361,7 +361,7 @@ void Construcao::ImprimeContrucao(){
 		cout << SituacaoRemocao[ i ] << " ";
 	}
 	cout << "]" << endl;
-	cout << "   MAKESPAN = " << Makespan << endl;
+	cout << "   MAKESPAN = " << Makespan << "   Status = " <<  StatusAtendimento << endl;
 }
 
 

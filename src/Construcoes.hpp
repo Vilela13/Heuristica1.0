@@ -332,7 +332,7 @@ void Construcao::CalculaMakespan(){
 	}
 	//cout << "  " << Makespan ;
 	for ( int i = 0; i < NumeroDemandas; i++){
-		if( SituacaoDemanda[ i ] == 0){
+		if( SituacaoDemanda[ i ] == 0 || SituacaoDemanda[ i ] == -1){
 			Makespan = Makespan + 5 * TempoMaximoDeFuncionamento;
 			cout << endl << endl << "  " << Makespan << " -> Inviolado construcao " << NumeroDaConstrucao << endl << endl;
 		}

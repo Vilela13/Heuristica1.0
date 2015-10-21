@@ -153,8 +153,8 @@ void Heuristica::ExecutaProcedimentoHeuristico1(){
 
 	cout << endl << endl << "##############################################################################################" << endl << endl;
 
-	Solucoes.CalculaMakespanSolucoes();
-	Solucoes.Imprime(1,1,0);
+	//Solucoes.CalculaMakespanSolucoes();
+	//Solucoes.Solucoes[1].Imprime(1,1,1);
 
 
 }

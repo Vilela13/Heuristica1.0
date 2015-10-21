@@ -569,7 +569,8 @@ int Solucao::AdicionaTarefaHorarioInicioDescarregamento( int Construcao, int Dem
 								return 1;
 							}else{
 								if( DisponibilidadeConstrucao == 2){
-									cout << endl << endl << "  <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<      Possivel Alocação anterior    >>>>>>>>>>>>> " << endl << endl;
+									cout << endl << endl << "  <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<      Possivel Alocação anterior    -> Solucao::AdicionaTarefaHorarioInicioDescarregamento >>>>>>>>>>>>> " << endl << endl;
+									RearrumaTarefasParaAdicionalas(c, d, PlantasInstancia.Plantas[NumPlantaAnalisando].NumeroDaPlanta, PlantasInstancia.Plantas[NumPlantaAnalisando].VeiculosDaPlanta.Carretas[v].NumeroDaCarreta , HorarioInicioPlanta, HorarioSaiDaPlanta, HorarioChegaContrucao, HorarioSaiConstrucao, HorarioRetornaPlanta, SituacaoDemanda);
 								}else{
 									if( DisponibilidadeConstrucao == -1){
 
@@ -1457,26 +1458,36 @@ int Solucao::MoveTarefasParaTentarAlocarTarfea(int IndiceConstrucaoNaoAtendida, 
 	double HorarioFinalDescarregamento;
 	double HorarioRetornaFabrica;
 
+	int DemandaPosterior;
+
+	double Horario;
+	int Adicionou;
+
 	int ParaPrograma;
 
 	ConstrucoesInstancia.ImprimeContrucoes();
 	PlantasInstancia.Imprime(1,1);
 
-	for( int d = 0; d < Demanda; d++){
+	DemandaPosterior = Demanda - 1;
+
+	Horario = DBL_MAX;
+
+	for( int d = DemandaPosterior; d < Demanda; d++){
 		DetetaAlocacaoTarefa( ConstrucoesInstancia.Construcoes[IndiceConstrucaoNaoAtendida].NumeroDaConstrucao, d, NumeroCarreta, NumeroPlanta,HorarioInicioFabrica, HorarioSaiFabrica, HorarioInicioDescarregamento, HorarioFinalDescarregamento,HorarioRetornaFabrica);
+		if( Horario > HorarioInicioDescarregamento ){
+			Horario = HorarioInicioDescarregamento;
+		}
 	}
 
 	cout << " ----------------------------------------------------------------------------------------------" << endl << endl;
+
+	Horario = Horario + IntervaloDeTempo;
+	Adicionou = AdicionaTarefaHorarioInicioDescarregamento( ConstrucoesInstancia.Construcoes[IndiceConstrucaoNaoAtendida].NumeroDaConstrucao, DemandaPosterior , Horario, 3);
 
 	ConstrucoesInstancia.ImprimeContrucoes();
 	PlantasInstancia.Imprime(1,1);
 
 	cin >> ParaPrograma;
-
-
-
-
-
 
 
 	return 0;

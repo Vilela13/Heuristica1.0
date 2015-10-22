@@ -23,7 +23,7 @@ public:
 };
 
 int RetiraElementoVetorDadosTarefa(vector < DadosTarefa >, int, int );
-
+void ImprimeVetorDadosTarefa( vector < DadosTarefa >);
 bool DecideQualTarefaVemAntes ( DadosTarefa, DadosTarefa );
 
 
@@ -62,7 +62,6 @@ DadosTarefa::~DadosTarefa(){
 
 }
 
-
 int RetiraElementoVetorDadosTarefa(vector < DadosTarefa > Vetor, int Construcao, int Demanda){
 	for( int i = 0; i < Vetor.size(); i++){
 		if( Vetor[i].DadosDasTarefasRetiradas[0] == Construcao && Vetor[i].DadosDasTarefasRetiradas[0] == Demanda){
@@ -73,7 +72,12 @@ int RetiraElementoVetorDadosTarefa(vector < DadosTarefa > Vetor, int Construcao,
 	return 0;
 }
 
-
+void ImprimeVetorDadosTarefa( vector < DadosTarefa > Vetor){
+	for( int i = 0; i < Vetor.size(); i++){
+		cout << "[" << i << "] ";
+		Vetor[i].Imprimir();
+	}
+}
 
 bool DecideQualTarefaVemAntes ( DadosTarefa d1, DadosTarefa d2 ){
 	return ( d1.HorariosDasTarefasRetiradas[2] < d2.HorariosDasTarefasRetiradas[2] );

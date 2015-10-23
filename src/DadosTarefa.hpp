@@ -37,6 +37,8 @@ void DadosTarefa::IniciaConteudo(){
 }
 
 void DadosTarefa::InserirConteudo(int NumConstucao, int NumDemanda, int NumPlanta, int NumCarreta, double HoraInicioPlanta, double HoraSaiPlanta, double HoraInicioConstrucao, double HoraSaiConstrucao, double HoraRetornaPlanta ){
+	IniciaConteudo();
+
 	DadosDasTarefasRetiradas[0] = NumConstucao;
 	DadosDasTarefasRetiradas[1] = NumDemanda;
 	DadosDasTarefasRetiradas[2] = NumPlanta;

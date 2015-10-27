@@ -193,6 +193,10 @@ void Construcao::AlocaAtividade(double HoraInicio, double HoraFinal, int NumDema
 	DescarregamentoAux.FoiDeslocado = StatusDesalocamento;
 	SituacaoDemanda[NumDemanda] = Situacao;
 
+	StatusAtendimento = StatusAtendimento + 1;
+	OrdenaDescarregamentosEmOrdemCrescente();
+	MarcaInicioFimDescarregamentos();
+
 	Descarregamentos.insert(Descarregamentos.begin(), DescarregamentoAux );
 }
 

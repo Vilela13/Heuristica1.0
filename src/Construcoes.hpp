@@ -193,11 +193,11 @@ void Construcao::AlocaAtividade(double HoraInicio, double HoraFinal, int NumDema
 	DescarregamentoAux.FoiDeslocado = StatusDesalocamento;
 	SituacaoDemanda[NumDemanda] = Situacao;
 
+	Descarregamentos.insert(Descarregamentos.begin(), DescarregamentoAux );
 	StatusAtendimento = StatusAtendimento + 1;
+
 	OrdenaDescarregamentosEmOrdemCrescente();
 	MarcaInicioFimDescarregamentos();
-
-	Descarregamentos.insert(Descarregamentos.begin(), DescarregamentoAux );
 }
 
 int Construcao::DeletaAtividade(double HoraInicio, double HoraFinal, int NumDemanda,  int Planta, int Carreta){
@@ -254,10 +254,11 @@ void Construcao::MarcaInicioFimDescarregamentos(){
 		}
 		Descarregamentos[menor].InicioDescarregamentos = 1;
 		Descarregamentos[maior].FinalDescarregamentos = 1;
-	}
-	if( menor == -13 || maior == -13 ){
-		if( Descarregamentos.size() > 1){
-			cout << endl << endl << endl << "   &&&&&&&&&&&&& Problema na ordenacao -> Construcao::MarcaInicioFimDescarregamentos &&&&&&&&&&&&& " << endl << endl << endl;
+
+		if( menor == -13 || maior == -13 ){
+			if( Descarregamentos.size() > 1){
+				cout << endl << endl << endl << "   &&&&&&&&&&&&& Problema na ordenacao -> Construcao::MarcaInicioFimDescarregamentos &&&&&&&&&&&&& " << endl << endl << endl;
+			}
 		}
 	}
 }

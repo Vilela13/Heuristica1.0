@@ -354,7 +354,7 @@ int Procedimento1::Executa(){
 			cout << endl << endl << " &&&&&&&&&&&&&& Nao conseguiu selecionar uma construcao &&&&&&&&&&&&&& " << endl << endl;
 		}
 	}
-	ConstrucoesInstancia.OrdenaDescarregamentosConstrucoesOrdemCrescente();
+	//ConstrucoesInstancia.OrdenaDescarregamentosConstrucoesOrdemCrescente();
 	ConstrucoesInstancia.MarcaInicioFimDescarregamentosConstrucoes();
 	ConstrucoesInstancia.CalcularNivelDeInviabilidade();
 	//ConstrucoesInstancia.ImprimeContrucoes();

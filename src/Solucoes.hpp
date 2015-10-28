@@ -34,12 +34,12 @@ public:
 
 	void RetornaIndiceConstrucao(int, int&);
 	void RetornaIndiceDemanda(int, int, int&);
+	void RetornaIndiceDemandaNaoAtendida( int, int, int&);
 	void RetornaIndicePlanta(int, int&);
 	void RetornaIndiceVeiculo(int, int, int&);
 
 
-	void VerificaIndiceDemanda(int, int, int&);
-	void VerificaIndiceDemandaNaoAtendida(int, int, int&);
+
 	int VerificaIteradorDescarregamento( ItDescarregamento, double, double, int, int, int);
 	int VerificaIteradorCarregamento( ItCarregamento, int, int, int);
 	int VerificaIteradorDeslocamento( ItDeslocamento, int, int);
@@ -117,8 +117,17 @@ void Solucao::RetornaIndiceConstrucao(int Construcao, int& Indice){
 }
 void Solucao::RetornaIndiceDemanda(int c, int Demanda, int& Indice){
 	for( unsigned int j = 0; j < ConstrucoesInstancia.Construcoes[c].Descarregamentos.size(); j++){
-		if( Demanda == ConstrucoesInstancia.Construcoes[c].Descarregamentos[j].NumeroDemandaSuprida){
+		if( ConstrucoesInstancia.Construcoes[c].Descarregamentos[j].NumeroDemandaSuprida == Demanda){
 			Indice = j;
+		}
+	}
+}
+void Solucao::RetornaIndiceDemandaNaoAtendida(int c, int Demanda, int& Indice){
+	for( unsigned int j = 0; j < ConstrucoesInstancia.Construcoes[c].Descarregamentos.size(); j++){
+		if( ConstrucoesInstancia.Construcoes[c].Descarregamentos[j].NumeroDemandaSuprida == Demanda){
+			if( ConstrucoesInstancia.Construcoes[c].SituacaoDemanda[j] == 0){
+				Indice = j;
+			}
 		}
 	}
 }
@@ -137,18 +146,7 @@ void Solucao::RetornaIndiceVeiculo(int p, int Veiculo, int& v){
 	}
 }
 
-void Solucao::VerificaIndiceDemanda(int c, int Demanda, int& Indice){
-	if( Demanda < ConstrucoesInstancia.Construcoes[c].NumeroDemandas){
-		Indice = Demanda;
-	}
-}
-void Solucao::VerificaIndiceDemandaNaoAtendida(int c, int Demanda, int& Indice){
-	if( Demanda < ConstrucoesInstancia.Construcoes[c].NumeroDemandas){
-		if( ConstrucoesInstancia.Construcoes[c].SituacaoDemanda[Demanda] == 0){
-			Indice = Demanda;
-		}
-	}
-}
+
 int Solucao::VerificaIteradorDescarregamento( ItDescarregamento it1, double HorarioInicioAuxiliar, double HorarioFinalAuxiliar, int CaminhaoEmAnalise, int PlantaEmAnalise, int DemandaDesalocada ){
 	if( it1->HorarioInicioDescarregamento == HorarioInicioAuxiliar){
 		if( it1->HorarioFinalDescarregamento == HorarioFinalAuxiliar){
@@ -185,9 +183,9 @@ int Solucao::AlocaIndicesCeD( int &c, int &d, int Construcao, int Demanda,int Ve
 	RetornaIndiceConstrucao(Construcao, c );
 
 	if( VerificaAlocacao == 1){
-		VerificaIndiceDemandaNaoAtendida(c, Demanda, d);
+		RetornaIndiceDemandaNaoAtendida(c, Demanda, d);
 	}else{
-		VerificaIndiceDemanda(c, Demanda, d);
+		RetornaIndiceDemanda(c, Demanda, d);
 	}
 	if( VerificaInidices(c,d) == -1){
 		cout << frase << endl;
@@ -275,9 +273,11 @@ void Solucao::DeletaTarefaConstrucao(ItDescarregamento 	It1Aux, int c, int d ) {
 	ConstrucoesInstancia.Construcoes[c].Descarregamentos.erase( It1Aux );
 	ConstrucoesInstancia.Construcoes[c].StatusAtendimento = ConstrucoesInstancia.Construcoes[c].StatusAtendimento - 1;
 	ConstrucoesInstancia.Construcoes[c].SituacaoDemanda[d] = 0;
-	ConstrucoesInstancia.Construcoes[c].OrdenaDescarregamentosEmOrdemCrescente();
+	//ConstrucoesInstancia.Construcoes[c].OrdenaDescarregamentosEmOrdemCrescente();
 	ConstrucoesInstancia.Construcoes[c].MarcaInicioFimDescarregamentos();
 	ConstrucoesInstancia.NivelDeInviabilidade = ConstrucoesInstancia.NivelDeInviabilidade + 1;
+
+	cout << endl << endl << " Colocar uma função que reorganiza tarefas alocadas " << endl << endl;
 
 	ConstrucoesInstancia.CalculaMakespansConstrucoes();
 	ConstrucoesInstancia.CalcularNivelDeInviabilidade();
@@ -429,10 +429,7 @@ int Solucao::DeletaAlocacaoTarefasPosteriores(int Construcao, int Demanda, vecto
 	bool ConseguiDesalocar;
 	bool EncontrouDeslocamento;
 
-
 	AlocaIndicesCeD( c,d,Construcao, Demanda, 0, "  <<<<    Solucao::DeletaAlocacaoTarefasPosteriores  >>>>>>>>>> " );
-
-	ConstrucoesInstancia.OrdenaDescarregamentosConstrucoesOrdemCrescente();
 
 	EncontrouDeslocamento = 0;
 	for( ItDescarregamento it1 = ConstrucoesInstancia.Construcoes[c].Descarregamentos.begin(); it1 != ConstrucoesInstancia.Construcoes[c].Descarregamentos.end(); it1++ ){
@@ -795,12 +792,8 @@ int Solucao::AdicionaTarefa( int Construcao, int Demanda ,  vector < DadosTarefa
 	int DisponibilidadeConstrucao;
 	int DisponibilidadeCarreta;
 
-	AlocaValoresIniciaisIndices(c,d);
-	RetornaIndiceConstrucao(Construcao, c );
-	VerificaIndiceDemandaNaoAtendida(c, Demanda, d);
-	if( VerificaInidices(c,d) == -1){
-		cout << "  <<<<    Solucao::AdicionaTarefa  c[" <<  Construcao << "-" << c ;
-		cout << "]   d[" << Demanda << "-" << d << "]    >>>>>>>>>>>> " << endl;
+	if(AlocaIndicesCeD( c,d,Construcao, Demanda,1, "  <<<<    Solucao::AdicionaTarefa  >>>>>") == -13){
+		cout << "  <<<<<<< [" << Construcao << "-" << c << "]   d[" << Demanda << "-" << d << "]    >>>>>>>>>>>> " << endl << endl;
 	}
 
 	if ( ConstrucoesInstancia.Construcoes[c].NumeroDemandas > ConstrucoesInstancia.Construcoes[c].StatusAtendimento){
@@ -837,7 +830,7 @@ int Solucao::AdicionaTarefa( int Construcao, int Demanda ,  vector < DadosTarefa
 								DadosTarefasAdicionadas.resize( DadosTarefasAdicionadas.size() + 1);
 								DadosTarefasAdicionadas[DadosTarefasAdicionadas.size() - 1].InserirConteudo(ConstrucoesInstancia.Construcoes[c].NumeroDaConstrucao , d, PlantasInstancia.Plantas[NumPlantaAnalisando].NumeroDaPlanta, PlantasInstancia.Plantas[NumPlantaAnalisando].VeiculosDaPlanta.Carretas[v].NumeroDaCarreta, HorarioInicioPlanta, HorarioSaiDaPlanta, HorarioChegaContrucao, HorarioSaiConstrucao,HorarioRetornaPlanta);
 
-								ConstrucoesInstancia.OrdenaDescarregamentosConstrucoesOrdemCrescente();
+								//ConstrucoesInstancia.OrdenaDescarregamentosConstrucoesOrdemCrescente();
 								ConstrucoesInstancia.MarcaInicioFimDescarregamentosConstrucoes();
 								return 1;
 							}else{
@@ -884,12 +877,10 @@ int Solucao::ProcessoParaAlocarTarefa( int Construcao, int Demanda, int& NovaTar
 	int Alocou;
 	Alocou = 0;
 
-	AlocaValoresIniciaisIndices(c,d);
-	RetornaIndiceConstrucao(Construcao, c );
-	VerificaIndiceDemandaNaoAtendida(c, Demanda, d);
-	if( VerificaInidices(c,d) == -1){
-		cout << "  <<<<    Solucao::ProcessoParaAlocarTarefa >>>>>>>>>> " << endl;
+	if(AlocaIndicesCeD( c,d,Construcao, Demanda,1, "  <<<<    Solucao::ProcessoParaAlocarTarefa  >>>>>") == -13){
+		cout << "  <<<<<<< [" << Construcao << "-" << c << "]   d[" << Demanda << "-" << d << "]    >>>>>>>>>>>> " << endl << endl;
 	}
+
 
 	for( unsigned int contrucoes = 0; contrucoes < ConstrucoesInstancia.Construcoes.size(); contrucoes++){
 		for ( int demandas = 0; demandas < ConstrucoesInstancia.Construcoes[contrucoes].NumeroDemandas; demandas++){

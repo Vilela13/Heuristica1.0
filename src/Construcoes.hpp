@@ -70,7 +70,7 @@ public:
 	int VerificaIterador( vector < Descarregamento >::iterator, double, double, int,  int, int);
 	int DeletaAtividade(double, double, int, int, int);
 
-	void OrdenaDescarregamentosEmOrdemCrescente();
+	//void OrdenaDescarregamentosEmOrdemCrescente();
 	void MarcaInicioFimDescarregamentos();
 	int VerificaDescarregamentosRespeitaIntervalo();
 
@@ -196,7 +196,7 @@ void Construcao::AlocaAtividade(double HoraInicio, double HoraFinal, int NumDema
 	Descarregamentos.insert(Descarregamentos.begin(), DescarregamentoAux );
 	StatusAtendimento = StatusAtendimento + 1;
 
-	OrdenaDescarregamentosEmOrdemCrescente();
+	//OrdenaDescarregamentosEmOrdemCrescente();
 	MarcaInicioFimDescarregamentos();
 }
 
@@ -216,7 +216,10 @@ int Construcao::DeletaAtividade(double HoraInicio, double HoraFinal, int NumDema
 				StatusAtendimento = StatusAtendimento - 1;
 				SituacaoRemocao[NumDemanda] = 0;
 				Descarregamentos.erase(it);
-				OrdenaDescarregamentosEmOrdemCrescente();
+				//OrdenaDescarregamentosEmOrdemCrescente();
+
+				cout << endl << endl << "  implementar função que reoorganiza tarfeas" << endl << endl;
+
 				MarcaInicioFimDescarregamentos();
 				//cout << endl << endl << " ************* deletou " << Deslocamentos.size() << endl << endl ;
 				return 1;
@@ -225,10 +228,11 @@ int Construcao::DeletaAtividade(double HoraInicio, double HoraFinal, int NumDema
 		cout << endl << endl << " ###########################   Problema! Não encontrou elemento Descarregamento [" << NumeroDaConstrucao << "-" << NumDemanda << "] a deletar !  -> Construcao::DeletaAtividade ################## " << endl << endl;
 		return 0;
 }
-
+/*
 void Construcao::OrdenaDescarregamentosEmOrdemCrescente(){
 	sort (Descarregamentos.begin(), Descarregamentos.end(), DecideQualDescarregamentoVemprimeiro);
 }
+*/
 
 void Construcao::MarcaInicioFimDescarregamentos(){
 	int menor;
@@ -392,8 +396,9 @@ public:
 
 	int NivelDeInviabilidade;
 	void CalcularNivelDeInviabilidade();
-
+/*
 	void OrdenaDescarregamentosConstrucoesOrdemCrescente();
+*/
 	void  MarcaInicioFimDescarregamentosConstrucoes();
 
 	void IniciaConjuntoConstrucoes(int);
@@ -431,11 +436,13 @@ void ConjuntoConstrucoes::CalcularNivelDeInviabilidade(){
 	}
 }
 
+/*
 void  ConjuntoConstrucoes::OrdenaDescarregamentosConstrucoesOrdemCrescente(){
 	for( unsigned int c = 0; c < Construcoes.size(); c++){
 			Construcoes[c].OrdenaDescarregamentosEmOrdemCrescente();
 	}
 }
+*/
 
 void  ConjuntoConstrucoes::MarcaInicioFimDescarregamentosConstrucoes(){
 	for( unsigned int c = 0; c < Construcoes.size(); c++){

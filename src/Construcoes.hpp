@@ -20,11 +20,9 @@ public:
 	int InicioDescarregamentos;
 	int FinalDescarregamentos;
 
-
 	bool FoiDeslocado;
 
 	void Imprime();
-
 };
 
 bool DecideQualDescarregamentoVemprimeiro ( Descarregamento d1, Descarregamento d2 ){
@@ -68,6 +66,8 @@ public:
 
 	int VerificaDisponibilidade( double, double);
 	void AlocaAtividade(double, double, int, int, int, int, int, bool, int);
+
+	int VerificaIterador( vector < Descarregamento >::iterator, double, double, int,  int, int);
 	int DeletaAtividade(double, double, int, int, int);
 
 	void OrdenaDescarregamentosEmOrdemCrescente();
@@ -200,24 +200,26 @@ void Construcao::AlocaAtividade(double HoraInicio, double HoraFinal, int NumDema
 	MarcaInicioFimDescarregamentos();
 }
 
+int Construcao::VerificaIterador( vector < Descarregamento >::iterator it, double HoraInicio, double HoraFinal, int NumDemanda,  int Planta, int Carreta){
+	if( it->HorarioInicioDescarregamento == HoraInicio &&  it->HorarioFinalDescarregamento == HoraFinal && it->NumeroDemandaSuprida == NumDemanda && it->NumPlantaFornecedor == Planta && it->NumCarretaUtilizada == Carreta){
+		return 1;
+	}else{
+		return 0;
+	}
+}
+
 int Construcao::DeletaAtividade(double HoraInicio, double HoraFinal, int NumDemanda,  int Planta, int Carreta){
 
 	for( vector < Descarregamento >::iterator it = Descarregamentos.begin(); it != Descarregamentos.end(); it++){
-			if( it->HorarioInicioDescarregamento == HoraInicio){
-				if( it->HorarioFinalDescarregamento == HoraFinal){
-					if( it->NumeroDemandaSuprida == NumDemanda){
-						if( it->NumPlantaFornecedor == Planta){
-							if( it->NumCarretaUtilizada == Carreta){
-								SituacaoDemanda[NumDemanda] = 0;
-								StatusAtendimento = StatusAtendimento - 1;
-								SituacaoRemocao[NumDemanda] = 0;
-								Descarregamentos.erase(it);
-								//cout << endl << endl << " ************* deletou " << Deslocamentos.size() << endl << endl ;
-								return 1;
-							}
-						}
-					}
-				}
+			if( VerificaIterador( it, HoraInicio, HoraFinal, NumDemanda, Planta, Carreta) == 1){
+				SituacaoDemanda[NumDemanda] = 0;
+				StatusAtendimento = StatusAtendimento - 1;
+				SituacaoRemocao[NumDemanda] = 0;
+				Descarregamentos.erase(it);
+				OrdenaDescarregamentosEmOrdemCrescente();
+				MarcaInicioFimDescarregamentos();
+				//cout << endl << endl << " ************* deletou " << Deslocamentos.size() << endl << endl ;
+				return 1;
 			}
 		}
 		cout << endl << endl << " ###########################   Problema! Não encontrou elemento Descarregamento [" << NumeroDaConstrucao << "-" << NumDemanda << "] a deletar !  -> Construcao::DeletaAtividade ################## " << endl << endl;

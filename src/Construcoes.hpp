@@ -8,22 +8,35 @@
 #ifndef CONSTRUCOES_HPP_
 #define CONSTRUCOES_HPP_
 
+
+
 #include "Bibliotecas.hpp"
+
+
 
 class Descarregamento{
 public:
+	Descarregamento();
 	double HorarioInicioDescarregamento;
 	double HorarioFinalDescarregamento;
 	int NumeroDemandaSuprida;
 	int NumCarretaUtilizada;
 	int NumPlantaFornecedor;
-	int InicioDescarregamentos;
-	int FinalDescarregamentos;
 
 	bool FoiDeslocado;
 
 	void Imprime();
 };
+
+Descarregamento::Descarregamento(){
+	HorarioInicioDescarregamento = -13;
+	HorarioFinalDescarregamento = -13;
+	NumeroDemandaSuprida = -13;
+	NumCarretaUtilizada = -13;
+	NumPlantaFornecedor = -13;
+
+	FoiDeslocado = 0;
+}
 
 bool DecideQualDescarregamentoVemprimeiro ( Descarregamento d1, Descarregamento d2 ){
 	return ( d1.HorarioInicioDescarregamento < d2.HorarioInicioDescarregamento );
@@ -33,7 +46,6 @@ void Descarregamento::Imprime(){
 	cout << " Demanda = " << NumeroDemandaSuprida;
 	cout << " Planta = " << NumPlantaFornecedor;
 	cout << " Carreta = " << NumCarretaUtilizada ;
-	cout << " Inicio = " << InicioDescarregamentos << " Final = " << FinalDescarregamentos << endl;
 	cout << " Tempo [" << HorarioInicioDescarregamento << " - " << HorarioFinalDescarregamento << "]" << endl;
 }
 
@@ -59,19 +71,17 @@ public:
 	int StatusAtendimento;
 
 	double Makespan;
+	vector < Descarregamento > Descarregamentos;
+	vector < int > SituacaoRemocao;			// SE o valor for 1 ela ja foi removida, se é 0 ela ainda não foi
 
 	void CalculaRankTempoDemandas(int);
 
-	vector < Descarregamento > Descarregamentos;
-
 	int VerificaDisponibilidade( double, double);
-	void AlocaAtividade(double, double, int, int, int, int, int, bool, int);
+	void AlocaAtividade(double, double, int, int, Planta&,  bool, int);
 
 	int VerificaIterador( vector < Descarregamento >::iterator, double, double, int,  int, int);
 	int DeletaAtividade(double, double, int, int, int);
 
-	//void OrdenaDescarregamentosEmOrdemCrescente();
-	void MarcaInicioFimDescarregamentos();
 	int VerificaDescarregamentosRespeitaIntervalo();
 
 	void RetornaHorarioInicioCarregamento(  int, double&);
@@ -81,8 +91,6 @@ public:
 	void CalculaMakespan();
 
 	void ImprimeContrucao();
-
-	vector < int > SituacaoRemocao;			// SE o valor for 1 ela ja foi removida, se é 0 ela ainda não foi
 
 	~Construcao();
 
@@ -120,7 +128,7 @@ int Construcao::VerificaDisponibilidade( double InicioPossivelAlocacao, double F
 		return 0;
 	}
 
-	for( unsigned int d = 0; d < Descarregamentos.size(); d ++){
+	for( unsigned int d = 0; d < StatusAtendimento; d ++){
 		// Verifica se possivel alocação possui um descarregamento alocado dentro dela
 		if( InicioPossivelAlocacao <= Descarregamentos[d].HorarioInicioDescarregamento){
 			if ( Descarregamentos[d].HorarioFinalDescarregamento <= FinalPossivelAlocacao){
@@ -150,7 +158,7 @@ int Construcao::VerificaDisponibilidade( double InicioPossivelAlocacao, double F
 	if( StatusAtendimento == 0) {
 		return 1;
 	}else{
-		for( unsigned int d = 0; d < Descarregamentos.size(); d ++){
+		for( unsigned int d = 0; d < StatusAtendimento; d ++){
 			if( Descarregamentos[d].HorarioFinalDescarregamento <= InicioPossivelAlocacao && InicioPossivelAlocacao <= Descarregamentos[d].HorarioFinalDescarregamento + TempoMaximoEntreDescargas){
 				PossuiTarefaAnterior = 1;
 			}
@@ -180,53 +188,81 @@ int Construcao::VerificaDisponibilidade( double InicioPossivelAlocacao, double F
 	}
 }
 
-void Construcao::AlocaAtividade(double HoraInicio, double HoraFinal, int NumDemanda, int Carreta, int Planta, int inicio, int fim, bool StatusDesalocamento, int Situacao){
-	Descarregamento DescarregamentoAux;
+void Construcao::AlocaAtividade(double HoraInicio, double HoraFinal, int Carreta, int NumPlanta, Planta& PlantaMaisPerto,  bool StatusDesalocamento, int Situacao){
 
-	DescarregamentoAux.HorarioInicioDescarregamento = HoraInicio;
-	DescarregamentoAux.HorarioFinalDescarregamento = HoraFinal;
-	DescarregamentoAux.NumeroDemandaSuprida = NumDemanda;
-	DescarregamentoAux.NumCarretaUtilizada = Carreta;
-	DescarregamentoAux.NumPlantaFornecedor = Planta;
-	DescarregamentoAux.InicioDescarregamentos = inicio;
-	DescarregamentoAux.FinalDescarregamentos = fim;
-	DescarregamentoAux.FoiDeslocado = StatusDesalocamento;
+	// Verifica se é possivel colocar uma tarefa nesta construção
+	if( StatusAtendimento == NumeroDemandas){
+		cout << endl << endl << "  <<<<<<<<<<<<<  Erro! construcao [" << NumeroDaConstrucao << "] ->Construcao::AlocaAtividade >>>>>>>>>> " << endl << endl;
+	}
+
+
+	int Encontrou;
+	int NumDemanda;
+
+	Encontrou = 0;
+
+	for( int d = 0; d < StatusAtendimento; d++){
+		if( Descarregamentos[d].HorarioInicioDescarregamento > HoraInicio && Encontrou == 0){
+			NumDemanda = d;
+			Encontrou = 1;
+		}
+	}
+
+	for( int d = NumDemanda; d < StatusAtendimento + 1; d++){
+		Descarregamentos[ d + 1 ].HorarioInicioDescarregamento = Descarregamentos[ d ].HorarioInicioDescarregamento;
+		Descarregamentos[ d + 1 ].HorarioFinalDescarregamento = Descarregamentos[ d ].HorarioFinalDescarregamento;
+		Descarregamentos[ d + 1 ].NumeroDemandaSuprida = Descarregamentos[ d ].NumeroDemandaSuprida;
+		Descarregamentos[ d + 1 ].NumCarretaUtilizada = Descarregamentos[ d ].NumCarretaUtilizada;
+		Descarregamentos[ d + 1 ].NumPlantaFornecedor = Descarregamentos[ d ].NumPlantaFornecedor;
+
+		Descarregamentos[ d + 1 ].FoiDeslocado = Descarregamentos[ d ].FoiDeslocado;
+		SituacaoDemanda[ d + 1 ] = 1;
+	}
+
+
+
+	Descarregamentos[NumDemanda].HorarioInicioDescarregamento = HoraInicio;
+	Descarregamentos[NumDemanda].HorarioFinalDescarregamento = HoraFinal;
+	Descarregamentos[NumDemanda].NumeroDemandaSuprida = NumDemanda;
+	Descarregamentos[NumDemanda].NumCarretaUtilizada = Carreta;
+	Descarregamentos[NumDemanda].NumPlantaFornecedor = NumPlanta;
+	Descarregamentos[NumDemanda].FoiDeslocado = StatusDesalocamento;
 	SituacaoDemanda[NumDemanda] = Situacao;
 
-	Descarregamentos.insert(Descarregamentos.begin(), DescarregamentoAux );
 	StatusAtendimento = StatusAtendimento + 1;
 
-	//OrdenaDescarregamentosEmOrdemCrescente();
-	MarcaInicioFimDescarregamentos();
+
 }
 
-int Construcao::VerificaIterador( vector < Descarregamento >::iterator it, double HoraInicio, double HoraFinal, int NumDemanda,  int Planta, int Carreta){
-	if( it->HorarioInicioDescarregamento == HoraInicio &&  it->HorarioFinalDescarregamento == HoraFinal && it->NumeroDemandaSuprida == NumDemanda && it->NumPlantaFornecedor == Planta && it->NumCarretaUtilizada == Carreta){
+int Construcao::VerificaIterador( vector < Descarregamento >::iterator it, double HoraInicio, double HoraFinal, int NumDemanda,  int NumPlanta, int Carreta){
+	if( it->HorarioInicioDescarregamento == HoraInicio &&  it->HorarioFinalDescarregamento == HoraFinal && it->NumeroDemandaSuprida == NumDemanda && it->NumPlantaFornecedor == NumPlanta && it->NumCarretaUtilizada == Carreta){
 		return 1;
 	}else{
 		return 0;
 	}
 }
 
-int Construcao::DeletaAtividade(double HoraInicio, double HoraFinal, int NumDemanda,  int Planta, int Carreta){
-
+int Construcao::DeletaAtividade(double HoraInicio, double HoraFinal, int NumDemanda,  int NumPlanta, int Carreta){
+		cout << endl << endl << " Reimplementar ->Construcao::DeletaAtividade" << endl << endl;
+/*
 	for( vector < Descarregamento >::iterator it = Descarregamentos.begin(); it != Descarregamentos.end(); it++){
-			if( VerificaIterador( it, HoraInicio, HoraFinal, NumDemanda, Planta, Carreta) == 1){
+			if( VerificaIterador( it, HoraInicio, HoraFinal, NumDemanda, NumPlanta, Carreta) == 1){
 				SituacaoDemanda[NumDemanda] = 0;
-				StatusAtendimento = StatusAtendimento - 1;
 				SituacaoRemocao[NumDemanda] = 0;
-				Descarregamentos.erase(it);
+				//Descarregamentos[NumDemanda].Descarregamento();
 				//OrdenaDescarregamentosEmOrdemCrescente();
 
 				cout << endl << endl << "  implementar função que reoorganiza tarfeas" << endl << endl;
 
-				MarcaInicioFimDescarregamentos();
+
+				StatusAtendimento = StatusAtendimento - 1;
 				//cout << endl << endl << " ************* deletou " << Deslocamentos.size() << endl << endl ;
 				return 1;
 			}
 		}
 		cout << endl << endl << " ###########################   Problema! Não encontrou elemento Descarregamento [" << NumeroDaConstrucao << "-" << NumDemanda << "] a deletar !  -> Construcao::DeletaAtividade ################## " << endl << endl;
 		return 0;
+*/
 }
 /*
 void Construcao::OrdenaDescarregamentosEmOrdemCrescente(){
@@ -234,83 +270,9 @@ void Construcao::OrdenaDescarregamentosEmOrdemCrescente(){
 }
 */
 
-void Construcao::MarcaInicioFimDescarregamentos(){
-	int menor;
-	int maior;
-	double ValorMenor;
-	double ValorMaior;
-	ValorMenor = TempoMaximoDeFuncionamento + 1;
-	ValorMaior =  0;
-	menor = -13;
-	maior = -13;
-
-	if( StatusAtendimento > 0){
-
-		for( unsigned int d = 0; d < Descarregamentos.size(); d++){
-			Descarregamentos[d].InicioDescarregamentos = 0;
-			Descarregamentos[d].FinalDescarregamentos = 0;
-			if( Descarregamentos[d].HorarioInicioDescarregamento < ValorMenor){
-				ValorMenor = Descarregamentos[d].HorarioInicioDescarregamento;
-				menor = d;
-			}
-			if( Descarregamentos[d].HorarioInicioDescarregamento > ValorMaior){
-				ValorMaior = Descarregamentos[d].HorarioInicioDescarregamento;
-				maior = d;
-			}
-		}
-		Descarregamentos[menor].InicioDescarregamentos = 1;
-		Descarregamentos[maior].FinalDescarregamentos = 1;
-
-		if( menor == -13 || maior == -13 ){
-			if( Descarregamentos.size() > 1){
-				cout << endl << endl << endl << "   &&&&&&&&&&&&& Problema na ordenacao -> Construcao::MarcaInicioFimDescarregamentos &&&&&&&&&&&&& " << endl << endl << endl;
-			}
-		}
-	}
-}
 
 int Construcao::VerificaDescarregamentosRespeitaIntervalo(){
-	bool DescarregamentoEsquerda;
-	bool DescarregamentoDireita;
-	for( unsigned int d1 = 0; d1 < Descarregamentos.size(); d1++){
-		DescarregamentoEsquerda = 0;
-		DescarregamentoDireita = 0;
-		if( Descarregamentos[d1].InicioDescarregamentos == 1 ){
-			DescarregamentoEsquerda = 1;
-			for( unsigned int d2 = 0; d2 < Descarregamentos.size(); d2++){
-				if( Descarregamentos[d1].HorarioFinalDescarregamento < Descarregamentos[d2].HorarioInicioDescarregamento &&  Descarregamentos[d1].HorarioFinalDescarregamento + TempoMaximoEntreDescargas > Descarregamentos[d2].HorarioInicioDescarregamento ){
-					DescarregamentoDireita = 1;
-				}
-			}
-		}
-
-		if( Descarregamentos[d1].FinalDescarregamentos == 1 ){
-			DescarregamentoDireita = 1;
-			for( unsigned int d2 = 0; d2 < Descarregamentos.size(); d2++){
-				if( Descarregamentos[d1].HorarioInicioDescarregamento > Descarregamentos[d2].HorarioFinalDescarregamento && Descarregamentos[d1].HorarioInicioDescarregamento < Descarregamentos[d2].HorarioFinalDescarregamento + TempoMaximoEntreDescargas){
-					DescarregamentoEsquerda = 1;
-				}
-			}
-		}
-		if( Descarregamentos[d1].InicioDescarregamentos == 0 && Descarregamentos[d1].FinalDescarregamentos == 0 ){
-			for( unsigned int d2 = 0; d2 < Descarregamentos.size(); d2++){
-				if( Descarregamentos[d1].HorarioFinalDescarregamento < Descarregamentos[d2].HorarioInicioDescarregamento &&  Descarregamentos[d1].HorarioFinalDescarregamento + TempoMaximoEntreDescargas > Descarregamentos[d2].HorarioInicioDescarregamento ){
-					DescarregamentoDireita = 1;
-				}
-				if( Descarregamentos[d1].HorarioInicioDescarregamento > Descarregamentos[d2].HorarioFinalDescarregamento && Descarregamentos[d1].HorarioInicioDescarregamento < Descarregamentos[d2].HorarioFinalDescarregamento + TempoMaximoEntreDescargas){
-					DescarregamentoEsquerda = 1;
-				}
-			}
-		}
-		if( Descarregamentos[d1].InicioDescarregamentos == 1 && Descarregamentos[d1].FinalDescarregamentos == 1 ){
-			DescarregamentoEsquerda = 1;
-			DescarregamentoDireita = 1;
-		}
-		if ( DescarregamentoDireita == 0 || DescarregamentoEsquerda == 0){
-			return 0;
-		}
-	}
-	return 1;
+	cout << endl << endl << "  Reimplementar -> Construcao::VerificaDescarregamentosRespeitaIntervalo()" << endl << endl;
 }
 
 void Construcao::RetornaHorarioInicioCarregamento( int NumDemanda, double& HoraInicio){
@@ -358,8 +320,7 @@ void Construcao::ImprimeContrucao(){
 			cout << "     * Carreta [" << Descarregamentos[d].NumPlantaFornecedor << "-" << Descarregamentos[d].NumCarretaUtilizada;
 			cout << "] atende demanda " << NumeroDaConstrucao << "-" << Descarregamentos[d].NumeroDemandaSuprida;
 			cout << " de ( " << Descarregamentos[d].HorarioInicioDescarregamento;
-			cout << " as " << Descarregamentos[d].HorarioFinalDescarregamento  << " ) inicio = " << Descarregamentos[d].InicioDescarregamentos;
-			cout << " final = " << Descarregamentos[d].FinalDescarregamentos <<  endl;
+			cout << " as " << Descarregamentos[d].HorarioFinalDescarregamento  << " ) " << endl;
 		}
 	}
 	cout << "   Vetor de atendimento demandas [ ";
@@ -396,10 +357,7 @@ public:
 
 	int NivelDeInviabilidade;
 	void CalcularNivelDeInviabilidade();
-/*
-	void OrdenaDescarregamentosConstrucoesOrdemCrescente();
-*/
-	void  MarcaInicioFimDescarregamentosConstrucoes();
+
 
 	void IniciaConjuntoConstrucoes(int);
 
@@ -436,19 +394,7 @@ void ConjuntoConstrucoes::CalcularNivelDeInviabilidade(){
 	}
 }
 
-/*
-void  ConjuntoConstrucoes::OrdenaDescarregamentosConstrucoesOrdemCrescente(){
-	for( unsigned int c = 0; c < Construcoes.size(); c++){
-			Construcoes[c].OrdenaDescarregamentosEmOrdemCrescente();
-	}
-}
-*/
 
-void  ConjuntoConstrucoes::MarcaInicioFimDescarregamentosConstrucoes(){
-	for( unsigned int c = 0; c < Construcoes.size(); c++){
-			Construcoes[c].MarcaInicioFimDescarregamentos();
-	}
-}
 
 void ConjuntoConstrucoes::IniciaConjuntoConstrucoes(int Numero){
 	Construcoes.resize(Numero);
@@ -456,13 +402,13 @@ void ConjuntoConstrucoes::IniciaConjuntoConstrucoes(int Numero){
 
 }
 
-int ConjuntoConstrucoes::DeletaTarefa(int NumConstrucao, double HoraInicio, double HoraFinal, int NumDemanda,  int Planta, int Carreta){
+int ConjuntoConstrucoes::DeletaTarefa(int NumConstrucao, double HoraInicio, double HoraFinal, int NumDemanda,  int NumPlanta, int Carreta){
 	int Retirou;
 	Retirou = 0;
 
 	for( unsigned int c = 0; c < Construcoes.size(); c++){
 		if( Construcoes[c].NumeroDaConstrucao == NumConstrucao){
-			Retirou = Construcoes[c].DeletaAtividade( HoraInicio, HoraFinal, NumDemanda, Planta, Carreta);
+			Retirou = Construcoes[c].DeletaAtividade( HoraInicio, HoraFinal, NumDemanda, NumPlanta, Carreta);
 			if( Retirou == 1){
 				NivelDeInviabilidade = NivelDeInviabilidade + 1;
 				return 1;

@@ -99,7 +99,7 @@ void Heuristica::ExecutaProcedimentoHeuristico1(){
 	int Solucao;
 	Solucao = 0;
 
-	ConjuntoSolucoes Solucoes;
+	//ConjuntoSolucoes Solucoes;
 
 
 
@@ -113,8 +113,8 @@ void Heuristica::ExecutaProcedimentoHeuristico1(){
 	//sort ( Prod1.ConstrucoesInstancia.Construcoes.begin(), Prod1.ConstrucoesInstancia.Construcoes.end(), DecideQualContrucaoTemMaiorRank );
 	sort ( Prod1.ConstrucoesInstancia.Construcoes.begin(), Prod1.ConstrucoesInstancia.Construcoes.end(), DecideQualContrucaoTemMenorInicioDepoisMaiorRank );
 
-	//Prod1.ConstrucoesInstancia.ImprimeContrucoes();
-
+	Prod1.ConstrucoesInstancia.ImprimeContrucoes();
+	/*
 	cout << endl << endl << "############################### Procedimento ConstrucaoSolucao #####################################" << endl << endl;
 
 	Solucao = Prod1.Executa();
@@ -143,7 +143,7 @@ void Heuristica::ExecutaProcedimentoHeuristico1(){
 
 	Solucoes.CalculaMakespanSolucoes();
 	Solucoes.Imprime(1,1,0);
-/*
+
 	Solucoes.Solucoes.resize(Solucoes.Solucoes.size()+1);
 	Solucoes.Solucoes[1] = Solucoes.Solucoes[0];
 
@@ -229,6 +229,11 @@ void Heuristica::LeNumeroDemandas(int comentarios){
 	int aux;
 	for (int i = 0; i < NE ; i++){
 		arq >> ConstrucoesInstancia.Construcoes[i].NumeroDemandas;
+		ConstrucoesInstancia.Construcoes[i].Descarregamentos.resize(ConstrucoesInstancia.Construcoes[i].NumeroDemandas);
+		ConstrucoesInstancia.Construcoes[i].StatusAtendimento = 0;
+		for( int d = 0; d < ConstrucoesInstancia.Construcoes[i].NumeroDemandas; d++){
+			ConstrucoesInstancia.Construcoes[i].Descarregamentos[d].NumeroDemandaSuprida = d;
+		}
 		ConstrucoesInstancia.Construcoes[i].SituacaoDemanda.resize(ConstrucoesInstancia.Construcoes[i].NumeroDemandas);
 		ConstrucoesInstancia.Construcoes[i].SituacaoRemocao.resize(ConstrucoesInstancia.Construcoes[i].NumeroDemandas);
 		for( int d = 0; d < ConstrucoesInstancia.Construcoes[i].NumeroDemandas; d++){

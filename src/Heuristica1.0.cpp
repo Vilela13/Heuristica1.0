@@ -92,7 +92,6 @@ int main(int argc, char **argv) {
 		//Instancias = argv[1];
 		Instancias = "Instancias.txt";
 
-
 		ifstream ArquivoInstancia;
 
 		cstr = new char[Instancias.length() + 1];

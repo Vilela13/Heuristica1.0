@@ -169,6 +169,9 @@ void Procedimento1::InserirDadosEmEstruturaInstanciasDadosTarefasRetirar( vector
 
 void Procedimento1::RearrumaTarefasParaAdicionalas(Construcao ConstrucaoVaiSerSuprida, int NumDemanda, int NumPlanta, int NumCarreta, double HorarioInicioPlanta, double HorarioSaiDaPlanta, double HorarioChegaContrucao, double HorarioSaiConstrucao, double HorarioRetornaPlanta, int SituacaoDemanda){
 
+	cout << endl << endl << "     <<<<< Reimplementar -> Procedimento1::RearrumaTarefasParaAdicionalas" << endl << endl;
+
+	/*
 	vector < DadosParaReordenar > Instancia;
 
 	int	Imprime;
@@ -244,6 +247,7 @@ void Procedimento1::RearrumaTarefasParaAdicionalas(Construcao ConstrucaoVaiSerSu
 	}
 
 	Instancia.clear();
+	*/
 }
 
 int Procedimento1::SelecionaCarreta(Planta& PlantaMaisPerto, Construcao& ConstrucaoVaiSerSuprida, int  NumeroDemanda, int SituacaoDemanda ){
@@ -279,9 +283,11 @@ int Procedimento1::SelecionaCarreta(Planta& PlantaMaisPerto, Construcao& Constru
 
 				if( DisponibilidadePlanta == 1 && DisponibilidadeCarreta == 1){
 					if( DisponibilidadeConstrucao == 1){
+						//ConstrucaoVaiSerSuprida.AlocaAtividade(HorarioChegaContrucao, HorarioSaiConstrucao, NumeroDemanda,  PlantaMaisPerto.VeiculosDaPlanta.Carretas[v].NumeroDaCarreta, PlantaMaisPerto.NumeroDaPlanta,0,0,0,SituacaoDemanda);
+						cout << endl << endl << "   mudar aqui -> Procedimento1::SelecionaCarreta " << endl << endl;
 						PlantaMaisPerto.VeiculosDaPlanta.Carretas[v].AlocaAtividade(HorarioInicioPlanta, HorarioRetornaPlanta, ConstrucaoVaiSerSuprida.NumeroDaConstrucao , NumeroDemanda);
 						PlantaMaisPerto.AlocaAtividade(HorarioInicioPlanta, HorarioSaiDaPlanta, ConstrucaoVaiSerSuprida.NumeroDaConstrucao , NumeroDemanda,  PlantaMaisPerto.VeiculosDaPlanta.Carretas[v].NumeroDaCarreta);
-						ConstrucaoVaiSerSuprida.AlocaAtividade(HorarioChegaContrucao, HorarioSaiConstrucao, NumeroDemanda,  PlantaMaisPerto.VeiculosDaPlanta.Carretas[v].NumeroDaCarreta, PlantaMaisPerto.NumeroDaPlanta,0,0,0,SituacaoDemanda);
+
 						return 1;
 					}else{
 						if( DisponibilidadeConstrucao == 2 || DisponibilidadeConstrucao == 3){
@@ -354,8 +360,7 @@ int Procedimento1::Executa(){
 			cout << endl << endl << " &&&&&&&&&&&&&& Nao conseguiu selecionar uma construcao &&&&&&&&&&&&&& " << endl << endl;
 		}
 	}
-	//ConstrucoesInstancia.OrdenaDescarregamentosConstrucoesOrdemCrescente();
-	ConstrucoesInstancia.MarcaInicioFimDescarregamentosConstrucoes();
+
 	ConstrucoesInstancia.CalcularNivelDeInviabilidade();
 	//ConstrucoesInstancia.ImprimeContrucoes();
 	if( Viabilidade == 1){

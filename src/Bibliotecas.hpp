@@ -47,6 +47,7 @@ using namespace std;
 #include "DadosSolomon.hpp"
 #include "Carretas.hpp"
 #include "Plantas.hpp"
+
 #include "Construcoes.hpp"
 #include "Procedimento1.hpp"
 #include "Solucoes.hpp"

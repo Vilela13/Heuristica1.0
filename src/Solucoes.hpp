@@ -12,6 +12,8 @@
 #include "DadosTarefa.hpp"
 #include "FuncoesSolucoes.hpp"
 
+/*
+
 #define ItCarregamento 		vector< Carregamento 	>::iterator
 #define ItDescarregamento 	vector< Descarregamento >::iterator
 #define ItDeslocamento 		vector< Deslocamento 	>::iterator
@@ -77,7 +79,7 @@ public:
 	int ConstrucaoTarefaRemover(int&, int&);
 
 	void ProcessoViabilizacao1();
-/*
+
 	int  ProcuraConstrucaoNaoAtendida(int&, int&);
 	int SelecionaConstrucao(int&, int&, vector < int >);
 	int SelecionaPlanta(int&, int&, int, vector < int >);
@@ -94,7 +96,7 @@ public:
 	int MoveTarefasParaTentarAlocarTarefa(int, int, vector < DadosTarefa >&, vector < DadosTarefa > &);
 	void OrganizaSolucao( int);
 	void ProcessoViabilizacao2();
-*/
+
 
 	~Solucao();
 };
@@ -231,7 +233,6 @@ void Solucao::CarregaSolucao(int np, ConjuntoPlantas Plantas, int ne, ConjuntoCo
 	TempoDeVidaConcreto = TDVC;
 }
 void Solucao::Imprime(bool ImprimePlanta, bool ImprimeConstrucao, bool IntervalosRespeitadosConstrucaoes ){
-	ConstrucoesInstancia.MarcaInicioFimDescarregamentosConstrucoes();
 	if( ImprimePlanta == 1 ){
 		PlantasInstancia.Imprime(1,1);
 	}
@@ -273,8 +274,6 @@ void Solucao::DeletaTarefaConstrucao(ItDescarregamento 	It1Aux, int c, int d ) {
 	ConstrucoesInstancia.Construcoes[c].Descarregamentos.erase( It1Aux );
 	ConstrucoesInstancia.Construcoes[c].StatusAtendimento = ConstrucoesInstancia.Construcoes[c].StatusAtendimento - 1;
 	ConstrucoesInstancia.Construcoes[c].SituacaoDemanda[d] = 0;
-	//ConstrucoesInstancia.Construcoes[c].OrdenaDescarregamentosEmOrdemCrescente();
-	ConstrucoesInstancia.Construcoes[c].MarcaInicioFimDescarregamentos();
 	ConstrucoesInstancia.NivelDeInviabilidade = ConstrucoesInstancia.NivelDeInviabilidade + 1;
 
 	cout << endl << endl << " Colocar uma função que reorganiza tarefas alocadas " << endl << endl;
@@ -830,8 +829,7 @@ int Solucao::AdicionaTarefa( int Construcao, int Demanda ,  vector < DadosTarefa
 								DadosTarefasAdicionadas.resize( DadosTarefasAdicionadas.size() + 1);
 								DadosTarefasAdicionadas[DadosTarefasAdicionadas.size() - 1].InserirConteudo(ConstrucoesInstancia.Construcoes[c].NumeroDaConstrucao , d, PlantasInstancia.Plantas[NumPlantaAnalisando].NumeroDaPlanta, PlantasInstancia.Plantas[NumPlantaAnalisando].VeiculosDaPlanta.Carretas[v].NumeroDaCarreta, HorarioInicioPlanta, HorarioSaiDaPlanta, HorarioChegaContrucao, HorarioSaiConstrucao,HorarioRetornaPlanta);
 
-								//ConstrucoesInstancia.OrdenaDescarregamentosConstrucoesOrdemCrescente();
-								ConstrucoesInstancia.MarcaInicioFimDescarregamentosConstrucoes();
+
 								return 1;
 							}else{
 								if( DisponibilidadeConstrucao == 2 || DisponibilidadeConstrucao == 3){
@@ -1139,7 +1137,7 @@ void Solucao::ProcessoViabilizacao1(){
 }
 
 
-/*
+
 int  Solucao::ProcuraConstrucaoNaoAtendida(int &ConstrucaoNaoAtendida, int &DemandaNaoAtendida){
 	int ConstrucaoTemporario;
 	int IndiceConstrucaoTemporario;
@@ -1667,7 +1665,7 @@ void Solucao::ProcessoViabilizacao2(){
 
 
 }
-*/
+
 Solucao::~Solucao(){
 
 }
@@ -1712,5 +1710,6 @@ ConjuntoSolucoes::~ConjuntoSolucoes(){
 
 }
 
+*/
 
 #endif /* SOLUCOES_HPP_ */

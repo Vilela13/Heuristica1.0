@@ -141,7 +141,7 @@ void Procedimento1::InserirDadosEmEstruturaInstanciasDadosTarefasRetirar( vector
 
 	for( unsigned int d = 0; d < ConstrucaoVaiSerSuprida.Descarregamentos.size(); d++){
 		Instancia[d].DadosDasTarefasRetiradas[0] = ConstrucaoVaiSerSuprida.NumeroDaConstrucao;
-		Instancia[d].DadosDasTarefasRetiradas[1] = ConstrucaoVaiSerSuprida.Descarregamentos[d].NumeroDemandaSuprida;
+		Instancia[d].DadosDasTarefasRetiradas[1] = d;
 		Instancia[d].DadosDasTarefasRetiradas[2] = ConstrucaoVaiSerSuprida.Descarregamentos[d].NumPlantaFornecedor;
 		Instancia[d].DadosDasTarefasRetiradas[3] = ConstrucaoVaiSerSuprida.Descarregamentos[d].NumCarretaUtilizada;
 

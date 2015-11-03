@@ -17,7 +17,16 @@ public:
 	int NumeroConstrucao;
 	int NumeroDemandaSuprida;
 
+	int verifica(int construcao,int NumeroDemandaSuprida, double HorarioInicioVeiculo,double HorarioFimVeiculo);
+
 };
+
+int Deslocamento::verifica(int construcao,int Demanda, double HorarioInicioVeiculo,double HorarioFimVeiculo){
+	if( construcao == NumeroConstrucao && Demanda == NumeroDemandaSuprida && HorarioInicioVeiculo == HorarioInicioDeslocamento && HorarioFimVeiculo == HorarioFinalDeslocamento){
+		return 1;
+	}
+	return 0;
+}
 
 bool DecideQualMenorInicioTempoDeslocamento ( Deslocamento c1, Deslocamento c2 ){
 	return ( c1.HorarioInicioDeslocamento < c2.HorarioInicioDeslocamento );
@@ -152,6 +161,8 @@ public:
 
 	int DeletaTarefa( int, double, double, int, int);
 
+	int AlocaInidiceVeiculo( int, int&);
+
 	void Imprime(int);
 
 	~ConjuntoCarretas();
@@ -160,8 +171,6 @@ public:
 bool DecideCarretaAnterior ( Carreta c1, Carreta c2 ){
 	return ( c1.NumeroDaCarreta < c2.NumeroDaCarreta );
 }
-
-
 
 ConjuntoCarretas::ConjuntoCarretas(){
 
@@ -196,6 +205,16 @@ int ConjuntoCarretas::DeletaTarefa( int NumeroCaminhao, double HoraInicio, doubl
 		}
 	}
 	cout << endl << endl << " ###########################   Problema! Não encontrou caminhao [" << NumeroCaminhao << "] a deletar !  -> ConjuntoCarretas::DeletaTarefa ################## " << endl << endl;
+	return 0;
+}
+
+int ConjuntoCarretas::AlocaInidiceVeiculo( int NumCarretaUtilizada, int &v){
+	for( int i = 0; i < Carretas.size(); i++){
+		if ( Carretas[i].NumeroDaCarreta == NumCarretaUtilizada ){
+			v = i;
+			return 1;
+		}
+	}
 	return 0;
 }
 

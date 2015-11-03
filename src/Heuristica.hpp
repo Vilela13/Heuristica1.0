@@ -231,9 +231,6 @@ void Heuristica::LeNumeroDemandas(int comentarios){
 		arq >> ConstrucoesInstancia.Construcoes[i].NumeroDemandas;
 		ConstrucoesInstancia.Construcoes[i].Descarregamentos.resize(ConstrucoesInstancia.Construcoes[i].NumeroDemandas);
 		ConstrucoesInstancia.Construcoes[i].StatusAtendimento = 0;
-		for( int d = 0; d < ConstrucoesInstancia.Construcoes[i].NumeroDemandas; d++){
-			ConstrucoesInstancia.Construcoes[i].Descarregamentos[d].NumeroDemandaSuprida = d;
-		}
 		ConstrucoesInstancia.Construcoes[i].SituacaoDemanda.resize(ConstrucoesInstancia.Construcoes[i].NumeroDemandas);
 		ConstrucoesInstancia.Construcoes[i].SituacaoRemocao.resize(ConstrucoesInstancia.Construcoes[i].NumeroDemandas);
 		for( int d = 0; d < ConstrucoesInstancia.Construcoes[i].NumeroDemandas; d++){

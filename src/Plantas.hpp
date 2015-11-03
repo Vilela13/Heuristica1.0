@@ -17,7 +17,16 @@ public:
 	int NumeroConstrucao;
 	int NumeroDemandaSuprida;
 	int NumCarretaUtilizada;
+
+	int verifica( int , int , int , double , double );
 };
+
+int Carregamento::verifica( int NumCarreta, int construcao, int Demanda, double HorarioInicioPlanta, double HorarioFimPlanta){
+	if( NumCarreta == NumCarretaUtilizada &&  construcao == NumeroConstrucao && Demanda == NumeroDemandaSuprida && HorarioInicioPlanta == HorarioInicioCarregamento && HorarioFimPlanta == HorarioFinalCarregamento){
+		return 1;
+	}
+	return 0;
+}
 
 bool DecideQualMenorInicioTempoCarregamento ( Carregamento c1, Carregamento c2 ){
 	return ( c1.HorarioInicioCarregamento < c2.HorarioInicioCarregamento );
@@ -186,7 +195,6 @@ class ConjuntoPlantas{
 public:
 	ConjuntoPlantas();
 	vector< Planta > Plantas;
-
 	vector < int > PlantasAnalizadas;
 
 	double MakespanPLantas;
@@ -200,8 +208,10 @@ public:
 
 	void CalculaMakespanPlantas();
 
-	void Imprime(int, int);
+	int AlocaInidiceFabrica( int, int&);
+	int CorrigeReferenciaCarregamentoDeslocamentoMaisUm( int, int, int, int, double, double);
 
+	void Imprime(int, int);
 
 	~ConjuntoPlantas();
 };
@@ -267,6 +277,74 @@ void ConjuntoPlantas::CalculaMakespanPlantas(){
 		Plantas[p].CalculaMakespan();
 		MakespanPLantas = MakespanPLantas + Plantas[p].Makespan;
 	}
+}
+
+int ConjuntoPlantas::AlocaInidiceFabrica(int Planta, int &IndicePlanta){
+	for ( unsigned int i  = 0; i < Plantas.size(); i ++){
+		if( Plantas[i].NumeroDaPlanta == Planta){
+			IndicePlanta = i;
+			return 1;
+		}
+	}
+	return 0;
+}
+
+int ConjuntoPlantas::CorrigeReferenciaCarregamentoDeslocamentoMaisUm( int NumPlantaFornecedor,int NumCarretaUtilizada,int construcao, int NumeroDemandaSuprida, double HorarioInicioDescarregamento,  double HorarioFinalDescarregamento ){
+	// Emcontra o indice da planta
+	int p;
+	if( AlocaInidiceFabrica(NumPlantaFornecedor,p) == 0){
+		cout << endl << endl << " <<<<<<<< probelam com indice planta [" << NumPlantaFornecedor << " ->ConjuntoPlantas::CorrigeReferenciaCarregamentoDeslocamento  >>>>>>>>>>>>> " << endl << endl ;
+	}
+
+	// Encontra os tempos relativos da tarefa na planta
+	double HorarioInicioPlanta;
+	double HorarioFimPlanta;
+
+	HorarioInicioPlanta = HorarioInicioDescarregamento - Plantas[p].DistanciaConstrucoes[construcao];
+	HorarioFimPlanta = HorarioInicioPlanta -  Plantas[p].TempoPlanta;
+
+	// Modifica o número da demanda suprida pela planta em questão em mais um
+	int ModificouCarregamento;
+	ModificouCarregamento = 0;
+
+	for( unsigned int c = 0; c < Plantas[p].Carregamentos.size() ; c++){
+		if( Plantas[p].Carregamentos[c].verifica( NumCarretaUtilizada, construcao, NumeroDemandaSuprida, HorarioInicioPlanta, HorarioFimPlanta) == 1 && ModificouCarregamento == 0){
+			Plantas[p].Carregamentos[c].NumeroDemandaSuprida = Plantas[p].Carregamentos[c].NumeroDemandaSuprida + 1;
+			ModificouCarregamento = 1;
+		}
+	}
+
+	// Emcontra o indice do veículo
+	int v;
+	if( Plantas[p].VeiculosDaPlanta.AlocaInidiceVeiculo( NumCarretaUtilizada, v) == 1 ){
+		cout << endl << endl << " <<<<<<<< probelam com indice veiculo [" << NumCarretaUtilizada << " ->ConjuntoPlantas::CorrigeReferenciaCarregamentoDeslocamento  >>>>>>>>>>>>> " << endl << endl ;
+	}
+
+	// Encontra os tempos relativos da tarefa no caminhão (veículo)
+	double HorarioInicioVeiculo;
+	double HorarioFimVeiculo;
+
+	HorarioInicioVeiculo = HorarioInicioPlanta;
+	HorarioFimVeiculo = HorarioFinalDescarregamento + Plantas[p].DistanciaConstrucoes[construcao];
+
+	// Modifica o número da demanda suprida pelo caminhão (veículo) em questão em mais um
+	int ModificouDeslocamento;
+	ModificouDeslocamento = 0;
+
+	for( unsigned int d = 0; d < Plantas[p].VeiculosDaPlanta.Carretas[v].Deslocamentos.size() ; d++){
+		if( Plantas[p].VeiculosDaPlanta.Carretas[v].Deslocamentos[d].verifica( construcao, NumeroDemandaSuprida, HorarioInicioVeiculo, HorarioFimVeiculo) == 1 && ModificouDeslocamento == 0){
+			Plantas[p].VeiculosDaPlanta.Carretas[v].Deslocamentos[d].NumeroDemandaSuprida = Plantas[p].VeiculosDaPlanta.Carretas[v].Deslocamentos[d].NumeroDemandaSuprida + 1;
+			ModificouDeslocamento = 1;
+		}
+	}
+
+	// verifica se realizou as mudanças desejadas
+	if( ModificouCarregamento == 1 && ModificouDeslocamento == 1){
+		return 1;
+	}else{
+		return 0;
+	}
+
 }
 
 void ConjuntoPlantas::Imprime(int OrdenaPlantas,int OrdenaCarrtas){

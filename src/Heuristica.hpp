@@ -99,7 +99,7 @@ void Heuristica::ExecutaProcedimentoHeuristico1(){
 	int Solucao;
 	Solucao = 0;
 
-	//ConjuntoSolucoes Solucoes;
+	ConjuntoSolucoes Solucoes;
 
 
 
@@ -114,7 +114,7 @@ void Heuristica::ExecutaProcedimentoHeuristico1(){
 	sort ( Prod1.ConstrucoesInstancia.Construcoes.begin(), Prod1.ConstrucoesInstancia.Construcoes.end(), DecideQualContrucaoTemMenorInicioDepoisMaiorRank );
 
 	Prod1.ConstrucoesInstancia.ImprimeContrucoes();
-	/*
+
 	cout << endl << endl << "############################### Procedimento ConstrucaoSolucao #####################################" << endl << endl;
 
 	Solucao = Prod1.Executa();
@@ -134,6 +134,43 @@ void Heuristica::ExecutaProcedimentoHeuristico1(){
 
 	Solucoes.Imprime(1,1,0);
 
+
+
+	cout << endl << endl << "  coletando dados " << endl << endl;
+
+	Solucoes.Solucoes[0].ConstrucoesInstancia.Construcoes[1].ImprimeContrucao();
+
+	cout << endl << endl << "  coletando tarefa " << endl << endl;
+
+	Solucoes.Solucoes[0].ConstrucoesInstancia.Construcoes[1].Descarregamentos[1].Imprime();
+
+	double HoraInicio;
+	double HoraFinal;
+	int NumDemanda;
+	int NumPlanta;
+	int Carreta;
+
+	HoraInicio = Solucoes.Solucoes[0].ConstrucoesInstancia.Construcoes[1].Descarregamentos[1].HorarioInicioDescarregamento;
+	HoraFinal = Solucoes.Solucoes[0].ConstrucoesInstancia.Construcoes[1].Descarregamentos[1].HorarioFinalDescarregamento;
+	NumDemanda = 1;
+	NumPlanta = Solucoes.Solucoes[0].ConstrucoesInstancia.Construcoes[1].Descarregamentos[1].NumPlantaFornecedor;
+	Carreta = Solucoes.Solucoes[0].ConstrucoesInstancia.Construcoes[1].Descarregamentos[1].NumCarretaUtilizada;
+
+
+
+	Solucoes.Solucoes[0].ConstrucoesInstancia.Construcoes[1].DeletaAtividadeLocomovendoAsOutrasTarefas(HoraInicio, HoraFinal, NumDemanda, NumPlanta, Carreta, Solucoes.Solucoes[0].PlantasInstancia);
+
+	cout << endl << endl << "  Retira tarefa " << endl << endl;
+
+	Solucoes.Imprime(1,1,0);
+
+	cout << endl << endl << "  Readiciona tarefa " << endl << endl;
+
+	Solucoes.Solucoes[0].ConstrucoesInstancia.Construcoes[1].AlocaAtividade(HoraInicio, HoraFinal, Carreta, NumPlanta,  0, 1, Solucoes.Solucoes[0].PlantasInstancia);
+
+	Solucoes.Imprime(1,1,0);
+
+	/*
 
 	cout << endl << endl << "############################### Procedimento Viabilidade 1 #####################################" << endl << endl;
 
@@ -172,13 +209,11 @@ void Heuristica::LeNumeroPlantasEntregasVeiculos(int comentarios){
 	PlantasInstancia.IniciaConjuntoPlantas(NP);
 	for( int p = 0; p < NP; p++){
 		PlantasInstancia.Plantas[p].NumeroDaPlanta = p;
-		//cout << "    Imputa numero planta = " << p+1 << endl;
 	}
 	arq >> NE;
 	ConstrucoesInstancia.IniciaConjuntoConstrucoes(NE);
 	for( int c = 0; c < NE; c++){
 		ConstrucoesInstancia.Construcoes[c].NumeroDaConstrucao = c;
-		//cout << "    Imputa numero construcao = " << c+1 << endl;
 	}
 	arq >> NV;
 

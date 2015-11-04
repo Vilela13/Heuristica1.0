@@ -235,15 +235,19 @@ void ConjuntoPlantas::IniciaConjuntoPlantas(int Numero){
 }
 
 int ConjuntoPlantas::DeletaTarefa( int NumPlanta, double HoraInicio, double HoraFinal, int NumConstrucao, int NumDemanda, int Carreta, double HoraInicioCarreta, double HoraFinalCarreta){
+	// variaveis de controle
 	int RetirouCarregamento;
 	RetirouCarregamento = 0;
 
 	int RetirouDeslocamento;
 	RetirouDeslocamento = 0;
 
+
 	for( unsigned int p = 0; p < Plantas.size(); p++){
 		if( Plantas[p].NumeroDaPlanta == NumPlanta){
+			// retira tarefa da planta
 			RetirouCarregamento = Plantas[p].DeletaAtividade( HoraInicio, HoraFinal, NumConstrucao, NumDemanda, Carreta);
+			// retira tarefa do caminhão
 			RetirouDeslocamento = Plantas[p].VeiculosDaPlanta.DeletaTarefa(Carreta, HoraInicioCarreta, HoraFinalCarreta, NumConstrucao, NumDemanda);
 			if( RetirouCarregamento == 1 && RetirouDeslocamento == 1){
 				return 1;
@@ -286,15 +290,15 @@ int ConjuntoPlantas::CorrigeReferenciaCarregamentoDeslocamentoMaisUm( int NumPla
 	// Emcontra o indice da planta
 	int p;
 	if( AlocaInidiceFabrica(NumPlantaFornecedor,p) == 0){
-		cout << endl << endl << " <<<<<<<< probelam com indice planta [" << NumPlantaFornecedor << " ->ConjuntoPlantas::CorrigeReferenciaCarregamentoDeslocamento  >>>>>>>>>>>>> " << endl << endl ;
+		cout << endl << endl << " <<<<<<<< probelam com indice planta [" << NumPlantaFornecedor << "] => " << p << " -> ConjuntoPlantas::CorrigeReferenciaCarregamentoDeslocamentoMaisUm  >>>>>>>>>>>>> " << endl << endl ;
 	}
 
 	// Encontra os tempos relativos da tarefa na planta
 	double HorarioInicioPlanta;
 	double HorarioFimPlanta;
 
-	HorarioInicioPlanta = HorarioInicioDescarregamento - Plantas[p].DistanciaConstrucoes[construcao];
-	HorarioFimPlanta = HorarioInicioPlanta -  Plantas[p].TempoPlanta;
+	HorarioInicioPlanta = HorarioInicioDescarregamento - Plantas[p].DistanciaConstrucoes[construcao] -  Plantas[p].TempoPlanta;
+	HorarioFimPlanta = HorarioInicioPlanta + Plantas[p].TempoPlanta;
 
 	// Modifica o número da demanda suprida pela planta em questão em mais um
 	int ModificouCarregamento;
@@ -309,8 +313,8 @@ int ConjuntoPlantas::CorrigeReferenciaCarregamentoDeslocamentoMaisUm( int NumPla
 
 	// Emcontra o indice do veículo
 	int v;
-	if( Plantas[p].VeiculosDaPlanta.AlocaInidiceVeiculo( NumCarretaUtilizada, v) == 1 ){
-		cout << endl << endl << " <<<<<<<< probelam com indice veiculo [" << NumCarretaUtilizada << " ->ConjuntoPlantas::CorrigeReferenciaCarregamentoDeslocamento  >>>>>>>>>>>>> " << endl << endl ;
+	if( Plantas[p].VeiculosDaPlanta.AlocaInidiceVeiculo( NumCarretaUtilizada, v) == 0 ){
+		cout << endl << endl << " <<<<<<<< probelam com indice veiculo [" << NumCarretaUtilizada << "] => " << v << " ->CorrigeReferenciaCarregamentoDeslocamentoMaisUm  >>>>>>>>>>>>> " << endl << endl ;
 	}
 
 	// Encontra os tempos relativos da tarefa no caminhão (veículo)
@@ -335,6 +339,12 @@ int ConjuntoPlantas::CorrigeReferenciaCarregamentoDeslocamentoMaisUm( int NumPla
 	if( ModificouCarregamento == 1 && ModificouDeslocamento == 1){
 		return 1;
 	}else{
+		if( ModificouCarregamento == 0 ){
+			cout << endl << endl << " <<<<<<<< probelam em corrigir carregamento [" << construcao << "-" << NumeroDemandaSuprida << "] ->ConjuntoPlantas::CorrigeReferenciaCarregamentoDeslocamentoMenosUm  >>>>>>>>>>>>> " << endl << endl ;
+		}
+		if( ModificouDeslocamento == 0){
+			cout << endl << endl << " <<<<<<<< probelam em corrigir deslocamento [" << construcao << "-" << NumeroDemandaSuprida << "]  ->ConjuntoPlantas::CorrigeReferenciaCarregamentoDeslocamentoMenosUm  >>>>>>>>>>>>> " << endl << endl ;
+		}
 		return 0;
 	}
 
@@ -345,15 +355,15 @@ int ConjuntoPlantas::CorrigeReferenciaCarregamentoDeslocamentoMenosUm(int NumPla
 	// Emcontra o indice da planta
 	int p;
 	if( AlocaInidiceFabrica(NumPlanta,p) == 0){
-		cout << endl << endl << " <<<<<<<< probelam com indice planta [" << NumPlanta << " ->ConjuntoPlantas::CorrigeReferenciaCarregamentoDeslocamento  >>>>>>>>>>>>> " << endl << endl ;
+		cout << endl << endl << " <<<<<<<< problema com indice planta [" << NumPlanta << "] => " << p << " ->ConjuntoPlantas::CorrigeReferenciaCarregamentoDeslocamentoMenosUm  >>>>>>>>>>>>> " << endl << endl ;
 	}
 
 	// Encontra os tempos relativos da tarefa na planta
 	double HorarioInicioPlanta;
 	double HorarioFimPlanta;
 
-	HorarioInicioPlanta = HorarioInicioDescarregamento - Plantas[p].DistanciaConstrucoes[Construcao];
-	HorarioFimPlanta = HorarioInicioPlanta -  Plantas[p].TempoPlanta;
+	HorarioInicioPlanta = HorarioInicioDescarregamento - Plantas[p].DistanciaConstrucoes[Construcao] -  Plantas[p].TempoPlanta;
+	HorarioFimPlanta = HorarioInicioPlanta +  Plantas[p].TempoPlanta;
 
 	// Modifica o número da demanda suprida pela planta em questão em mais um
 	int ModificouCarregamento;
@@ -368,8 +378,8 @@ int ConjuntoPlantas::CorrigeReferenciaCarregamentoDeslocamentoMenosUm(int NumPla
 
 	// Emcontra o indice do veículo
 	int v;
-	if( Plantas[p].VeiculosDaPlanta.AlocaInidiceVeiculo( NumCarreta, v) == 1 ){
-		cout << endl << endl << " <<<<<<<< probelam com indice veiculo [" << NumCarreta << " ->ConjuntoPlantas::CorrigeReferenciaCarregamentoDeslocamento  >>>>>>>>>>>>> " << endl << endl ;
+	if( Plantas[p].VeiculosDaPlanta.AlocaInidiceVeiculo( NumCarreta, v) == 0 ){
+		cout << endl << endl << " <<<<<<<< probelam com indice veiculo [" << NumCarreta << "] => " << v << " ->ConjuntoPlantas::CorrigeReferenciaCarregamentoDeslocamentoMenosUm  >>>>>>>>>>>>> " << endl << endl ;
 	}
 
 	// Encontra os tempos relativos da tarefa no caminhão (veículo)
@@ -394,6 +404,12 @@ int ConjuntoPlantas::CorrigeReferenciaCarregamentoDeslocamentoMenosUm(int NumPla
 	if( ModificouCarregamento == 1 && ModificouDeslocamento == 1){
 		return 1;
 	}else{
+		if( ModificouCarregamento == 0 ){
+			cout << endl << endl << " <<<<<<<< probelam em corrigir carregamento [" << Construcao << "-" << Demanda << "] ->ConjuntoPlantas::CorrigeReferenciaCarregamentoDeslocamentoMenosUm  >>>>>>>>>>>>> " << endl << endl ;
+		}
+		if( ModificouDeslocamento == 0){
+			cout << endl << endl << " <<<<<<<< probelam em corrigir deslocamento [" << Construcao << "-" << Demanda << "]  ->ConjuntoPlantas::CorrigeReferenciaCarregamentoDeslocamentoMenosUm  >>>>>>>>>>>>> " << endl << endl ;
+		}
 		return 0;
 	}
 }

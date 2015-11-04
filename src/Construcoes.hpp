@@ -196,6 +196,7 @@ int Construcao::VerificaDisponibilidade( double InicioPossivelAlocacao, double F
 
 void Construcao::AlocaAtividade(double HoraInicio, double HoraFinal, int Carreta, int NumPlanta,  bool StatusDesalocamento, int Situacao, ConjuntoPlantas& Plantas){
 
+
 	// Verifica se é possivel colocar uma tarefa nesta construção
 	if( StatusAtendimento == NumeroDemandas){
 		cout << endl << endl << "  <<<<<<<<<<<<<  Erro! construcao [" << NumeroDaConstrucao << "] ->Construcao::AlocaAtividade >>>>>>>>>> " << endl << endl;
@@ -215,8 +216,10 @@ void Construcao::AlocaAtividade(double HoraInicio, double HoraFinal, int Carreta
 		}
 	}
 
+
 	// Caso tenha uma tarefa que atenda a construção depois dessa, ele faz a atualização das tarefas que atendem a construção após ela
 	if( Encontrou == 1){
+
 		for( int d = StatusAtendimento - 1; d >= NumDemanda ; d--){
 			Plantas.CorrigeReferenciaCarregamentoDeslocamentoMaisUm( Descarregamentos[d].NumPlantaFornecedor, Descarregamentos[d].NumCarretaUtilizada, NumeroDaConstrucao, d, Descarregamentos[d].HorarioInicioDescarregamento, Descarregamentos[d].HorarioFinalDescarregamento);
 
@@ -243,6 +246,34 @@ void Construcao::AlocaAtividade(double HoraInicio, double HoraFinal, int Carreta
 
 	// atualiza o status de atendimento
 	StatusAtendimento = StatusAtendimento + 1;
+
+// Adiciona a tarefa na Planta e no Caminhão
+	int p;
+	int v;
+
+	// aloca indices para planta e veiculo
+	if( Plantas.AlocaInidiceFabrica( NumPlanta, p) == 0 || 	Plantas.Plantas[p].VeiculosDaPlanta.AlocaInidiceVeiculo(Carreta,v) == 0){
+		cout << endl << endl << "  <<<<<<<<<<<<<  Erro! Alocar indice planta [" << NumPlanta << "] => " << p << " ou veiculo [" << Carreta << "] => " << v << " ->Construcao::AlocaAtividade >>>>>>>>>> " << endl << endl;
+	}
+
+	// aloca horarios
+	double HorarioInicioPlanta;
+	double HorarioFimPlanta;
+
+	HorarioInicioPlanta = HoraInicio - Plantas.Plantas[p].DistanciaConstrucoes[NumeroDaConstrucao] -  Plantas.Plantas[p].TempoPlanta;
+	HorarioFimPlanta = HorarioInicioPlanta +  Plantas.Plantas[p].TempoPlanta;
+
+	double HorarioInicioCarreta;
+	double HorarioFimCarreta;
+
+	HorarioInicioCarreta = HorarioInicioPlanta;
+	HorarioFimCarreta = HoraFinal + Plantas.Plantas[p].DistanciaConstrucoes[NumeroDaConstrucao];
+
+	// Aloca atividades no veiculo e depois na planta
+	Plantas.Plantas[p].VeiculosDaPlanta.Carretas[v].AlocaAtividade( HorarioInicioCarreta, HorarioFimCarreta, NumeroDaConstrucao , NumDemanda);
+	Plantas.Plantas[p].AlocaAtividade(HorarioInicioPlanta, HorarioFimPlanta, NumeroDaConstrucao , NumDemanda,  Carreta);
+
+
 }
 
 int Construcao::VerificaIterador( vector < Descarregamento >::iterator it, double HoraInicio, double HoraFinal,   int NumPlanta, int Carreta){
@@ -269,11 +300,12 @@ int Construcao::DeletaAtividadeLocomovendoAsOutrasTarefas(double HoraInicio, dou
 			cout << endl << endl << "  <<<<<<<<<<<<<  Erro! planta [" << NumPlanta << "] ->Construcao::DeletaAtividade>>>>>>>>>> " << endl << endl;
 		}
 
+		// aloca horarios
 		double HorarioInicioPlanta;
 		double HorarioFimPlanta;
 
-		HorarioInicioPlanta = HoraInicio - Plantas.Plantas[p].DistanciaConstrucoes[NumeroDaConstrucao];
-		HorarioFimPlanta = HorarioInicioPlanta -  Plantas.Plantas[p].TempoPlanta;
+		HorarioInicioPlanta = HoraInicio - Plantas.Plantas[p].DistanciaConstrucoes[NumeroDaConstrucao] -  Plantas.Plantas[p].TempoPlanta;
+		HorarioFimPlanta = HorarioInicioPlanta +  Plantas.Plantas[p].TempoPlanta;
 
 		double HorarioInicioCarreta;
 		double HorarioFimCarreta;
@@ -281,10 +313,21 @@ int Construcao::DeletaAtividadeLocomovendoAsOutrasTarefas(double HoraInicio, dou
 		HorarioInicioCarreta = HorarioInicioPlanta;
 		HorarioFimCarreta = HoraFinal + Plantas.Plantas[p].DistanciaConstrucoes[NumeroDaConstrucao];
 
+		/*
+		cout << endl << endl << "  Dados tarefa " << endl << endl;
+
+		cout << "  contrucao [" << NumeroDaConstrucao << "-" << NumDemanda << "] as " <<  HoraInicio << " até " << HoraFinal << endl;
+		cout << "  planta [" << NumPlanta << "] as " << HorarioInicioPlanta << " até " << HorarioFimPlanta << endl;
+		cout << "  carreta [" << Carreta << "] as " << HorarioInicioCarreta  << " até " << HorarioFimCarreta << endl << endl;
+		 */
+
+
+// Deleta tarefa na planta e no caminhão
 		Plantas.DeletaTarefa( NumPlanta, HorarioInicioPlanta, HorarioFimPlanta, NumeroDaConstrucao, NumDemanda, Carreta, HorarioInicioCarreta, HorarioFimCarreta);
 
+
 		// Reorganiza Tarefas
-		for( int d = NumDemanda + 1; d < StatusAtendimento; d--){
+		for( int d = NumDemanda + 1; d < StatusAtendimento; d++){
 			Plantas.CorrigeReferenciaCarregamentoDeslocamentoMenosUm(Descarregamentos[d].NumPlantaFornecedor, Descarregamentos[d].NumCarretaUtilizada, NumeroDaConstrucao, d, Descarregamentos[d].HorarioInicioDescarregamento, Descarregamentos[d].HorarioFinalDescarregamento);
 			Descarregamentos[ d - 1 ].HorarioInicioDescarregamento = Descarregamentos[ d ].HorarioInicioDescarregamento;
 			Descarregamentos[ d - 1 ].HorarioFinalDescarregamento = Descarregamentos[ d ].HorarioFinalDescarregamento;
@@ -295,10 +338,10 @@ int Construcao::DeletaAtividadeLocomovendoAsOutrasTarefas(double HoraInicio, dou
 			SituacaoRemocao[ d - 1 ] = SituacaoRemocao[ d ];
 		}
 
+		// atualiza dados da tarefa deletada
 		Descarregamentos[ StatusAtendimento - 1].AnulaConteudo();
 		SituacaoDemanda[StatusAtendimento - 1] = 0;
 		SituacaoRemocao[StatusAtendimento - 1] = 0;
-
 
 		StatusAtendimento = StatusAtendimento - 1;
 

@@ -12,7 +12,7 @@
 #include "DadosTarefa.hpp"
 #include "FuncoesSolucoes.hpp"
 
-/*
+
 
 #define ItCarregamento 		vector< Carregamento 	>::iterator
 #define ItDescarregamento 	vector< Descarregamento >::iterator
@@ -33,7 +33,7 @@ public:
 	double Makespan;
 
 // Funções interanas
-
+/*
 	void RetornaIndiceConstrucao(int, int&);
 	void RetornaIndiceDemanda(int, int, int&);
 	void RetornaIndiceDemandaNaoAtendida( int, int, int&);
@@ -50,10 +50,14 @@ public:
 	int AlocaIndicesPeV( int&, int&, int, int, string);
 
 	void EncontraPlantaMenorDistanciaConstrucao(int, int&, string);
+
+	*/
 	void CarregaSolucao(int, ConjuntoPlantas, int, ConjuntoConstrucoes,	int, double, double);
+
+
 	void Imprime(bool, bool, bool);
 
-
+/*
 	int RetornaDadosTarefa(int,int,int&, int&, double&, double&, double&, double&, double&);
 
 	void DeletaTarefaConstrucao(ItDescarregamento,int, int);
@@ -94,9 +98,8 @@ public:
 	void AlocaNovaDemandaParaAtender( int&, int, int&, int&,vector< int >&, int&, int);
 
 	int MoveTarefasParaTentarAlocarTarefa(int, int, vector < DadosTarefa >&, vector < DadosTarefa > &);
-	void OrganizaSolucao( int);
 	void ProcessoViabilizacao2();
-
+*/
 
 	~Solucao();
 };
@@ -110,6 +113,7 @@ Solucao::Solucao(){
 	Makespan = -13;
 }
 
+/*
 void Solucao::RetornaIndiceConstrucao(int Construcao, int& Indice){
 	for ( int i = 0; i < NE; i++){
 		if( Construcao == ConstrucoesInstancia.Construcoes[i].NumeroDaConstrucao){
@@ -223,6 +227,9 @@ void Solucao::EncontraPlantaMenorDistanciaConstrucao( int c, int& NumPlantaAnali
 		cout << endl << endl << endl << frase << endl << endl << endl;
 	}
 }
+
+*/
+
 void Solucao::CarregaSolucao(int np, ConjuntoPlantas Plantas, int ne, ConjuntoConstrucoes Construcoes, int nv, double v,double TDVC){
 	NP = np;
 	PlantasInstancia = Plantas;
@@ -232,6 +239,8 @@ void Solucao::CarregaSolucao(int np, ConjuntoPlantas Plantas, int ne, ConjuntoCo
 	Velocidade = v;
 	TempoDeVidaConcreto = TDVC;
 }
+
+
 void Solucao::Imprime(bool ImprimePlanta, bool ImprimeConstrucao, bool IntervalosRespeitadosConstrucaoes ){
 	if( ImprimePlanta == 1 ){
 		PlantasInstancia.Imprime(1,1);
@@ -244,6 +253,7 @@ void Solucao::Imprime(bool ImprimePlanta, bool ImprimeConstrucao, bool Intervalo
 	}
 
 }
+/*
 
 int Solucao::RetornaDadosTarefa(int Construcao, int Demanda, int& NumeroCarreta, int& NumeroPlanta,double& HorarioInicioFabrica, double& HorarioSaiFabrica, double& HorarioInicioDescarregamento, double& HorarioFinalDescarregamento,double& HorarioRetornaFabrica){
 	int ConstrucaoIndice;
@@ -1429,10 +1439,7 @@ void Solucao::AlocaNovaDemandaParaAtender( int &d, int ConstrucaoParaAtenderIndi
 	ExistePlanta = SelecionaPlanta( PlantaAtender,PlantaAtenderIndice, ConstrucaoParaAtenderIndice, PlantasInstancia.PlantasAnalizadas );
 }
 
-void Solucao::OrganizaSolucao( int ConstrucaoParaAtenderIndice){
-	ConstrucoesInstancia.Construcoes[ConstrucaoParaAtenderIndice].OrdenaDescarregamentosEmOrdemCrescente();
-	ConstrucoesInstancia.Construcoes[ConstrucaoParaAtenderIndice].MarcaInicioFimDescarregamentos();
-}
+
 
 int Solucao::MoveTarefasParaTentarAlocarTarefa(int IndiceConstrucaoNaoAtendida, int Demanda, vector < DadosTarefa > &DadosTarefasAdicionadas, vector < DadosTarefa > &DadosTarefasDesalocadas){
 
@@ -1463,8 +1470,7 @@ int Solucao::MoveTarefasParaTentarAlocarTarefa(int IndiceConstrucaoNaoAtendida, 
 	DemandaAnterior = Demanda;
 
 
-	ConstrucoesInstancia.Construcoes[IndiceConstrucaoNaoAtendida].OrdenaDescarregamentosEmOrdemCrescente();
-	ConstrucoesInstancia.Construcoes[IndiceConstrucaoNaoAtendida].MarcaInicioFimDescarregamentos();
+
 
 
 
@@ -1665,7 +1671,7 @@ void Solucao::ProcessoViabilizacao2(){
 
 
 }
-
+*/
 Solucao::~Solucao(){
 
 }
@@ -1710,6 +1716,6 @@ ConjuntoSolucoes::~ConjuntoSolucoes(){
 
 }
 
-*/
+
 
 #endif /* SOLUCOES_HPP_ */

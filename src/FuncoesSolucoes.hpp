@@ -39,7 +39,7 @@ int VerificaInidices2( int p, int v){
 }
 
 int VerificaValorUmVetorInt( vector< int > VetorInt){
-	for(int i = 0; i < VetorInt.size(); i++){
+	for(unsigned int i = 0; i < VetorInt.size(); i++){
 		if( VetorInt[i] != 1){
 			return 0;
 		}
@@ -49,7 +49,7 @@ int VerificaValorUmVetorInt( vector< int > VetorInt){
 
 void ImprimeVetorInt( vector< int > VetorInt){
 	cout << " Conteudo Vetor "<< endl;
-	for(int i = 0; i < VetorInt.size(); i++){
+	for(unsigned int i = 0; i < VetorInt.size(); i++){
 		cout << " [" << i << "] " << VetorInt[i] << " ";
 	}
 	cout << endl;

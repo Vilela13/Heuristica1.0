@@ -373,6 +373,7 @@ void Construcao::RetornaHorarioInicioCarregamento( int NumDemanda, double& HoraI
 }
 
 void Construcao::RetornaDadosDescarregamento( int d, int& PlantaEmAnalise, int& 	CaminhaoEmAnalise, int& ConstrucaoEmAnalise, double& HorarioInicioAuxiliar,double& HorarioFinalAuxiliar){
+
 	PlantaEmAnalise 		=	Descarregamentos[d].NumPlantaFornecedor;
 	CaminhaoEmAnalise 		=	Descarregamentos[d].NumCarretaUtilizada;
 	ConstrucaoEmAnalise 	= 	NumeroDaConstrucao;

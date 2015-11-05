@@ -90,6 +90,7 @@ public:
 	void CalculaRankTempoDemandas(int);
 	int VerificaDisponibilidade( double, double);
 	void AlocaAtividade(double, double, int, int, bool, int, ConjuntoPlantas&);
+	void AlocaAtividadeSalvandoDados(double, double, int, int,  bool, int, ConjuntoPlantas&, vector < DadosTarefa >&);
 	int VerificaIterador( vector < Descarregamento >::iterator, double, double, int, int);
 	int DeletaAtividadeLocomovendoAsOutrasTarefas(double, double, int, int, int, ConjuntoPlantas&);
 	int DeletaTarefas(  int, vector < DadosTarefa >&, ConjuntoPlantas& Plantas);
@@ -277,6 +278,90 @@ void Construcao::AlocaAtividade(double HoraInicio, double HoraFinal, int Carreta
 
 }
 
+void Construcao::AlocaAtividadeSalvandoDados(double HoraInicio, double HoraFinal, int Carreta, int NumPlanta,  bool StatusDesalocamento, int Situacao, ConjuntoPlantas& Plantas, vector < DadosTarefa > &DadosAdicionado){
+
+
+	// Verifica se é possivel colocar uma tarefa nesta construção
+	if( StatusAtendimento == NumeroDemandas){
+		cout << endl << endl << "  <<<<<<<<<<<<<  Erro! construcao [" << NumeroDaConstrucao << "] ->Construcao::AlocaAtividade >>>>>>>>>> " << endl << endl;
+	}
+
+	// Verifica se tem uma tarefa já alocada atende a cosntrução depois desta
+	int Encontrou;
+	int NumDemanda;
+
+	Encontrou = 0;
+	NumDemanda = -13;
+
+	for( int d = 0; d < StatusAtendimento; d++){
+		if( Descarregamentos[d].HorarioInicioDescarregamento > HoraInicio && Encontrou == 0){
+			NumDemanda = d;
+			Encontrou = 1;
+		}
+	}
+
+
+	// Caso tenha uma tarefa que atenda a construção depois dessa, ele faz a atualização das tarefas que atendem a construção após ela
+	if( Encontrou == 1){
+
+		for( int d = StatusAtendimento - 1; d >= NumDemanda ; d--){
+			Plantas.CorrigeReferenciaCarregamentoDeslocamentoMaisUm( Descarregamentos[d].NumPlantaFornecedor, Descarregamentos[d].NumCarretaUtilizada, NumeroDaConstrucao, d, Descarregamentos[d].HorarioInicioDescarregamento, Descarregamentos[d].HorarioFinalDescarregamento);
+
+			Descarregamentos[ d + 1 ].HorarioInicioDescarregamento = Descarregamentos[ d ].HorarioInicioDescarregamento;
+			Descarregamentos[ d + 1 ].HorarioFinalDescarregamento = Descarregamentos[ d ].HorarioFinalDescarregamento;
+			Descarregamentos[ d + 1 ].NumCarretaUtilizada = Descarregamentos[ d ].NumCarretaUtilizada;
+			Descarregamentos[ d + 1 ].NumPlantaFornecedor = Descarregamentos[ d ].NumPlantaFornecedor;
+			Descarregamentos[ d + 1 ].FoiDeslocado = Descarregamentos[ d ].FoiDeslocado;
+			SituacaoDemanda[ d + 1 ] = SituacaoDemanda[ d ];
+			SituacaoRemocao[ d + 1 ] = SituacaoRemocao[ d ];
+		}
+	}else{
+		NumDemanda = StatusAtendimento;
+	}
+
+	// Adiciona a tarefa
+	Descarregamentos[NumDemanda].HorarioInicioDescarregamento = HoraInicio;
+	Descarregamentos[NumDemanda].HorarioFinalDescarregamento = HoraFinal;
+	Descarregamentos[NumDemanda].NumCarretaUtilizada = Carreta;
+	Descarregamentos[NumDemanda].NumPlantaFornecedor = NumPlanta;
+	Descarregamentos[NumDemanda].FoiDeslocado = StatusDesalocamento;
+	SituacaoDemanda[NumDemanda] = Situacao;
+	SituacaoRemocao[NumDemanda] = 0;
+
+	// atualiza o status de atendimento
+	StatusAtendimento = StatusAtendimento + 1;
+
+// Adiciona a tarefa na Planta e no Caminhão
+	int p;
+	int v;
+
+	// aloca indices para planta e veiculo
+	if( Plantas.AlocaInidiceFabrica( NumPlanta, p) == 0 || 	Plantas.Plantas[p].VeiculosDaPlanta.AlocaInidiceVeiculo(Carreta,v) == 0){
+		cout << endl << endl << "  <<<<<<<<<<<<<  Erro! Alocar indice planta [" << NumPlanta << "] => " << p << " ou veiculo [" << Carreta << "] => " << v << " ->Construcao::AlocaAtividade >>>>>>>>>> " << endl << endl;
+	}
+
+	// aloca horarios
+	double HorarioInicioPlanta;
+	double HorarioFimPlanta;
+
+	HorarioInicioPlanta = HoraInicio - Plantas.Plantas[p].DistanciaConstrucoes[NumeroDaConstrucao] -  Plantas.Plantas[p].TempoPlanta;
+	HorarioFimPlanta = HorarioInicioPlanta +  Plantas.Plantas[p].TempoPlanta;
+
+	double HorarioInicioCarreta;
+	double HorarioFimCarreta;
+
+	HorarioInicioCarreta = HorarioInicioPlanta;
+	HorarioFimCarreta = HoraFinal + Plantas.Plantas[p].DistanciaConstrucoes[NumeroDaConstrucao];
+
+	// Aloca atividades no veiculo e depois na planta
+	Plantas.Plantas[p].VeiculosDaPlanta.Carretas[v].AlocaAtividade( HorarioInicioCarreta, HorarioFimCarreta, NumeroDaConstrucao , NumDemanda);
+	Plantas.Plantas[p].AlocaAtividade(HorarioInicioPlanta, HorarioFimPlanta, NumeroDaConstrucao , NumDemanda,  Carreta);
+
+	AdicionaElementoVetorDadosTarefa(DadosAdicionado,NumeroDaConstrucao, NumPlanta, Carreta,  Situacao, HorarioInicioPlanta, HorarioFimPlanta, HoraInicio, HoraFinal, HorarioFimCarreta);
+
+
+}
+
 int Construcao::VerificaIterador( vector < Descarregamento >::iterator it, double HoraInicio, double HoraFinal,   int NumPlanta, int Carreta){
 	if( it->HorarioInicioDescarregamento == HoraInicio &&  it->HorarioFinalDescarregamento == HoraFinal && it->NumPlantaFornecedor == NumPlanta && it->NumCarretaUtilizada == Carreta){
 		return 1;
@@ -371,6 +456,8 @@ int Construcao::DeletaTarefas(  int demanda, vector < DadosTarefa > &DadosRetira
 	int p;
 	int DemandasRetiradas;
 
+	int situacao;
+
 	DemandasRetiradas = 0;
 
 	if( StatusAtendimento - 1 < demanda){
@@ -406,17 +493,24 @@ int Construcao::DeletaTarefas(  int demanda, vector < DadosTarefa > &DadosRetira
 
 
 // Deleta tarefa na planta e no caminhão
-
-		if( AdicionaElementoVetorDadosTarefa(DadosRetirando,NumeroDaConstrucao, Planta, Carreta, HorarioInicioPlanta, HorarioFimPlanta,HorarioInicioConstrucao, HorarioFinalConstrucao, HorarioFimCarreta) == 0 ){
-			cout << endl << endl << " Problema em adicionar tarefa a vetor de tarefas desalocadas " << endl << endl;
-			return 0;
-		}
-
 		Plantas.DeletaTarefa( Planta, HorarioInicioPlanta, HorarioFimPlanta, NumeroDaConstrucao, d, Carreta, HorarioInicioCarreta, HorarioFimCarreta);
+
 
 		Descarregamentos[d].AnulaConteudo();
 		SituacaoDemanda[d] = 0;
 		SituacaoRemocao[d] = 0;
+
+		if( d == demanda){
+			situacao = 1;
+			SituacaoRemocao[d] = 1;
+		}else{
+			situacao = 0;
+		}
+
+		if( AdicionaElementoVetorDadosTarefa(DadosRetirando,NumeroDaConstrucao, Planta, Carreta, situacao, HorarioInicioPlanta, HorarioFimPlanta,HorarioInicioConstrucao, HorarioFinalConstrucao, HorarioFimCarreta) == 0 ){
+			cout << endl << endl << " Problema em adicionar tarefa a vetor de tarefas desalocadas " << endl << endl;
+			return 0;
+		}
 
 		DemandasRetiradas++;
 	}

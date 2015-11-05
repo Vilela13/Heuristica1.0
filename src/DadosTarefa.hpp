@@ -15,17 +15,17 @@
 class DadosTarefa{
 public:
 	DadosTarefa();
-	 vector < int >  DadosDasTarefasRetiradas; 		// 0 -> NumConstrução , 1 -> NumPlanta , 2 -> NumCarreta
+	 vector < int >  DadosDasTarefasRetiradas; 		// 0 -> NumConstrução , 1 -> NumPlanta , 2 -> NumCarreta, 3 -> situação retirada
 	 vector < double > HorariosDasTarefasRetiradas;		// 0 -> HoraChegaPlanta , 1 -> HoraSaiPlanta , 2 -> HoraChegaConstrução , 3 -> HoraSaiConstrução , 4 -> HoraRetornaPlanta
 	void IniciaConteudo();
-	void InserirConteudo(int, int, int, double, double, double, double, double);
+	void InserirConteudo(int, int, int, int, double, double, double, double, double);
 	void Imprimir();
 	~DadosTarefa();
 };
 
 
 int RetiraElementoVetorDadosTarefa(vector < DadosTarefa >&,int, int, int, double, double, double, double, double);
-int AdicionaElementoVetorDadosTarefa(vector < DadosTarefa >&, int, int, int, double, double, double, double, double);
+int AdicionaElementoVetorDadosTarefa(vector < DadosTarefa >&, int, int, int, int, double, double, double, double, double);
 
 int VerificaElementoVetorDadosTarefa(vector < DadosTarefa >,int, int, int, double, double, double, double, double);
 
@@ -38,16 +38,17 @@ DadosTarefa::DadosTarefa(){
 }
 
 void DadosTarefa::IniciaConteudo(){
-	DadosDasTarefasRetiradas.resize(3);
+	DadosDasTarefasRetiradas.resize(4);
 	HorariosDasTarefasRetiradas.resize(5);
 }
 
-void DadosTarefa::InserirConteudo(int NumConstucao, int NumPlanta, int NumCarreta, double HoraInicioPlanta, double HoraSaiPlanta, double HoraInicioConstrucao, double HoraSaiConstrucao, double HoraRetornaPlanta ){
+void DadosTarefa::InserirConteudo(int NumConstucao, int NumPlanta, int NumCarreta, int SituacaoRetirada, double HoraInicioPlanta, double HoraSaiPlanta, double HoraInicioConstrucao, double HoraSaiConstrucao, double HoraRetornaPlanta ){
 	IniciaConteudo();
 
 	DadosDasTarefasRetiradas[0] = NumConstucao;
 	DadosDasTarefasRetiradas[1] = NumPlanta;
 	DadosDasTarefasRetiradas[2] = NumCarreta;
+	DadosDasTarefasRetiradas[3] = SituacaoRetirada;
 
 	HorariosDasTarefasRetiradas[0] = HoraInicioPlanta;
 	HorariosDasTarefasRetiradas[1] = HoraSaiPlanta;
@@ -62,7 +63,8 @@ void DadosTarefa::Imprimir(){
 	cout << " Planta [" << DadosDasTarefasRetiradas[1] << "]";
 	cout << " tempo (" << HorariosDasTarefasRetiradas[0] << "-" << HorariosDasTarefasRetiradas[1] << ") ";
 	cout << " Caminhao [" << DadosDasTarefasRetiradas[1] << "-" << DadosDasTarefasRetiradas[2] << "]";
-	cout << " tempo (" << HorariosDasTarefasRetiradas[0] << "-" << HorariosDasTarefasRetiradas[4] << ") " << endl;
+	cout << " tempo (" << HorariosDasTarefasRetiradas[0] << "-" << HorariosDasTarefasRetiradas[4] << ") ";
+	cout << " Situação [" << DadosDasTarefasRetiradas[3] << "]" << endl;
 }
 
 DadosTarefa::~DadosTarefa(){
@@ -83,13 +85,13 @@ int RetiraElementoVetorDadosTarefa(vector < DadosTarefa > &Vetor,int NumConstuca
 }
 
 
-int AdicionaElementoVetorDadosTarefa(vector < DadosTarefa > &Vetor,int NumConstucao, int NumPlanta, int NumCarreta, double HoraInicioPlanta, double HoraSaiPlanta, double HoraInicioConstrucao, double HoraSaiConstrucao, double HoraRetornaPlanta){
-	if( RetiraElementoVetorDadosTarefa(Vetor,NumConstucao, NumPlanta,NumCarreta,HoraInicioPlanta, HoraSaiPlanta, HoraInicioConstrucao, HoraSaiConstrucao, HoraRetornaPlanta) == 1){
+int AdicionaElementoVetorDadosTarefa(vector < DadosTarefa > &Vetor,int NumConstucao, int NumPlanta, int NumCarreta,  int SituacaoRetirada, double HoraInicioPlanta, double HoraSaiPlanta, double HoraInicioConstrucao, double HoraSaiConstrucao, double HoraRetornaPlanta){
+	if( RetiraElementoVetorDadosTarefa(Vetor,NumConstucao, NumPlanta,NumCarreta,  HoraInicioPlanta, HoraSaiPlanta, HoraInicioConstrucao, HoraSaiConstrucao, HoraRetornaPlanta) == 1){
 		cout << endl << endl << "    <<<<<<<<<<<<<<<   ERRO! -> AdicionaElementoVetorDadosTarefa >>>>>>>>>>>>>>>>>>>>>" << endl << endl;
 		return 0;
 	}else{
 		Vetor.resize(Vetor.size()+1);
-		Vetor[Vetor.size()-1].InserirConteudo(NumConstucao, NumPlanta,NumCarreta,HoraInicioPlanta, HoraSaiPlanta, HoraInicioConstrucao, HoraSaiConstrucao, HoraRetornaPlanta);
+		Vetor[Vetor.size()-1].InserirConteudo(NumConstucao, NumPlanta,NumCarreta, SituacaoRetirada, HoraInicioPlanta, HoraSaiPlanta, HoraInicioConstrucao, HoraSaiConstrucao, HoraRetornaPlanta);
 		return 1;
 	}
 }

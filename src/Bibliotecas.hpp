@@ -48,6 +48,8 @@ using namespace std;
 #include "Carretas.hpp"
 #include "Plantas.hpp"
 
+#include "DadosTarefa.hpp"
+
 #include "Construcoes.hpp"
 #include "Procedimento1.hpp"
 #include "Solucoes.hpp"

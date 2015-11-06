@@ -95,6 +95,8 @@ public:
 	int VerificaIterador( vector < Descarregamento >::iterator, double, double, int, int);
 	int DeletaAtividadeLocomovendoAsOutrasTarefas(double, double, int, int, int, ConjuntoPlantas&);
 
+	int DeletaAtividadeLocomovendoAsOutrasTarefasSalvandoDados(double, double, int, int, int, ConjuntoPlantas&, vector < DadosTarefa >&);
+
 	int DeletaTarefas(  int, vector < DadosTarefa >&, ConjuntoPlantas& Plantas);
 	int DeletaTarefasAnteriormenteAdicionadasDados(   DadosTarefa, ConjuntoPlantas&);
 	int VerificaDescarregamentosRespeitaIntervalo();
@@ -102,6 +104,8 @@ public:
 	void RetornaHorarioInicioCarregamento(  int, double&);
 	void RetornaDadosDescarregamento( int, int&, int&, int&, double&, double&);
 	void CalculaMakespan();
+
+	void ReiniciaTarefasRetiradas();
 
 	void ImprimeContrucao();
 
@@ -447,6 +451,84 @@ int Construcao::DeletaAtividadeLocomovendoAsOutrasTarefas(double HoraInicio, dou
 
 }
 
+
+int Construcao::DeletaAtividadeLocomovendoAsOutrasTarefasSalvandoDados(double HoraInicio, double HoraFinal, int NumDemanda,  int NumPlanta, int Carreta, ConjuntoPlantas& Plantas, vector < DadosTarefa > &DadosRetirando){
+
+	// Verifica se é possivel colocar uma tarefa nesta construção
+	if( StatusAtendimento - 1 < NumDemanda){
+		cout << endl << endl << "  <<<<<<<<<<<<<  Erro! Demanda [" << NumDemanda << "] ->Construcao::DeletaAtividade>>>>>>>>>> " << endl << endl;
+		return 0;
+	}
+
+	// Verifica se tem uma tarefa já alocada atende a cosntrução depois desta
+	if( Descarregamentos[NumDemanda].verifica( Carreta, NumPlanta, HoraInicio,HoraFinal) == 1){
+
+		// Deleta tarefa
+		int p;
+		if( Plantas.AlocaInidiceFabrica( NumPlanta, p) == 0) {
+			cout << endl << endl << "  <<<<<<<<<<<<<  Erro! planta [" << NumPlanta << "] ->Construcao::DeletaAtividade>>>>>>>>>> " << endl << endl;
+			return 0;
+		}
+
+		// aloca horarios
+		double HorarioInicioPlanta;
+		double HorarioFimPlanta;
+
+		HorarioInicioPlanta = HoraInicio - Plantas.Plantas[p].DistanciaConstrucoes[NumeroDaConstrucao] -  Plantas.Plantas[p].TempoPlanta;
+		HorarioFimPlanta = HorarioInicioPlanta +  Plantas.Plantas[p].TempoPlanta;
+
+		double HorarioInicioCarreta;
+		double HorarioFimCarreta;
+
+		HorarioInicioCarreta = HorarioInicioPlanta;
+		HorarioFimCarreta = HoraFinal + Plantas.Plantas[p].DistanciaConstrucoes[NumeroDaConstrucao];
+
+		/*
+		cout << endl << endl << "  Dados tarefa " << endl << endl;
+
+		cout << "  contrucao [" << NumeroDaConstrucao << "-" << NumDemanda << "] as " <<  HoraInicio << " até " << HoraFinal << endl;
+		cout << "  planta [" << NumPlanta << "] as " << HorarioInicioPlanta << " até " << HorarioFimPlanta << endl;
+		cout << "  carreta [" << Carreta << "] as " << HorarioInicioCarreta  << " até " << HorarioFimCarreta << endl << endl;
+		 */
+
+
+// Deleta tarefa na planta e no caminhão
+		Plantas.DeletaTarefa( NumPlanta, HorarioInicioPlanta, HorarioFimPlanta, NumeroDaConstrucao, NumDemanda, Carreta, HorarioInicioCarreta, HorarioFimCarreta);
+
+		AdicionaElementoVetorDadosTarefa(DadosRetirando, NumeroDaConstrucao, NumPlanta, Carreta, 0, HorarioInicioPlanta, HorarioFimPlanta, HoraInicio, HoraFinal, HorarioFimCarreta);
+
+
+		// Reorganiza Tarefas
+		for( int d = NumDemanda + 1; d < StatusAtendimento; d++){
+			Plantas.CorrigeReferenciaCarregamentoDeslocamentoMenosUm(Descarregamentos[d].NumPlantaFornecedor, Descarregamentos[d].NumCarretaUtilizada, NumeroDaConstrucao, d, Descarregamentos[d].HorarioInicioDescarregamento, Descarregamentos[d].HorarioFinalDescarregamento);
+			Descarregamentos[ d - 1 ].HorarioInicioDescarregamento = Descarregamentos[ d ].HorarioInicioDescarregamento;
+			Descarregamentos[ d - 1 ].HorarioFinalDescarregamento = Descarregamentos[ d ].HorarioFinalDescarregamento;
+			Descarregamentos[ d - 1 ].NumCarretaUtilizada = Descarregamentos[ d ].NumCarretaUtilizada;
+			Descarregamentos[ d - 1 ].NumPlantaFornecedor = Descarregamentos[ d ].NumPlantaFornecedor;
+			Descarregamentos[ d - 1 ].FoiDeslocado = Descarregamentos[ d ].FoiDeslocado;
+			SituacaoDemanda[ d - 1 ] = SituacaoDemanda[ d ];
+			SituacaoRemocao[ d - 1 ] = SituacaoRemocao[ d ];
+		}
+
+		// atualiza dados da tarefa deletada
+		Descarregamentos[ StatusAtendimento - 1].AnulaConteudo();
+		SituacaoDemanda[StatusAtendimento - 1] = 0;
+		SituacaoRemocao[StatusAtendimento - 1] = 0;
+
+		StatusAtendimento = StatusAtendimento - 1;
+
+	}else{
+		cout << endl << endl << "  <<<<<<<<<<<<<  Erro! Planta [" << NumPlanta << "], Carreta [" << Carreta << "]";
+		cout << ", HoraInicio [" << HoraInicio << "],HoraFinal [" << HoraFinal << "] ->Construcao::DeletaAtividade>>>>>>>>>> " << endl << endl;
+		return 0;
+	}
+	return 1;
+
+}
+
+
+
+
 int Construcao::DeletaTarefas(  int demanda, vector < DadosTarefa > &DadosRetirando, ConjuntoPlantas& Plantas){
 	double HorarioInicioConstrucao;
 	double HorarioFinalConstrucao;
@@ -647,6 +729,14 @@ void Construcao::CalculaMakespan(){
 	}
 }
 
+void Construcao::ReiniciaTarefasRetiradas(){
+	for( unsigned int d = 0; d < Descarregamentos.size(); d++){
+		Descarregamentos[d].FoiDeslocado = 0;
+	}
+}
+
+
+
 void Construcao::ImprimeContrucao(){
 	cout << "# Contrucao " << NumeroDaConstrucao << " com " << NumeroDemandas << " demandas, janela de tempo (" <<  TempoMinimoDeFuncionamento;
 	cout << "," << TempoMaximoDeFuncionamento << "), com rank = " << RankTempoDemandas << endl;
@@ -690,10 +780,13 @@ public:
 	void InicializaConstrucaosAnalizadas();
 	void CalcularNivelDeInviabilidade();
 	void IniciaConjuntoConstrucoes(int);
+
 	int DeletaTarefa(int, double, double, int, int, int, ConjuntoPlantas&);
 	void ImprimeContrucoes();
 	void VerificaIntervaloContrucoes();
+
 	void CalculaMakespansConstrucoes();
+	void ReiniciaTarefasRetiradas();
 
 	~ConjuntoConstrucoes();
 };
@@ -777,6 +870,15 @@ void ConjuntoConstrucoes::CalculaMakespansConstrucoes(){
 	for( unsigned int c = 0; c < Construcoes.size(); c++){
 		Construcoes[c].CalculaMakespan();
 		MakespanConstrucoes = MakespanConstrucoes + Construcoes[c].Makespan;
+	}
+}
+
+void ConjuntoConstrucoes::ReiniciaTarefasRetiradas(){
+	for( unsigned int c = 0; c < Construcoes.size(); c++){
+		Construcoes[c].ReiniciaTarefasRetiradas();
+		for( int d = 0; d < Construcoes[c].NumeroDemandas; d++){
+			Construcoes[c].SituacaoRemocao[d] = 0;
+		}
 	}
 }
 

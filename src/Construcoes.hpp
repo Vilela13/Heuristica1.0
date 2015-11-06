@@ -544,15 +544,65 @@ int Construcao::DeletaTarefasAnteriormenteAdicionadasDados(   DadosTarefa DadoRe
 		return 0;
 	}
 
-	if( DeletaAtividadeLocomovendoAsOutrasTarefas(DadoRetirando.HorariosDasTarefas[2], DadoRetirando.HorariosDasTarefas[3], demanda,  DadoRetirando.DadosDasTarefas[1], DadoRetirando.DadosDasTarefas[2], Plantas) == 1){
-		return 1;
+	int NumPlanta;
+	int Carreta;
+
+	NumPlanta = DadoRetirando.DadosDasTarefas[1];
+	Carreta = DadoRetirando.DadosDasTarefas[2];
+
+	// Deleta tarefa
+	int p;
+	if( Plantas.AlocaInidiceFabrica( NumPlanta, p) == 0) {
+		cout << endl << endl << "  <<<<<<<<<<<<<  Erro! planta [" << NumPlanta << "] ->Construcao::DeletaAtividade>>>>>>>>>> " << endl << endl;
+		return 0;
 	}
 
-	return 0;
+	// aloca horarios
+	double HorarioInicioPlanta;
+	double HorarioFimPlanta;
+	double HorarioInicioCarreta;
+	double HorarioFimCarreta;
+
+	HorarioInicioPlanta = DadoRetirando.HorariosDasTarefas[0];
+	HorarioFimPlanta = DadoRetirando.HorariosDasTarefas[1];
+	HorarioInicioCarreta = DadoRetirando.HorariosDasTarefas[0];
+	HorarioFimCarreta = DadoRetirando.HorariosDasTarefas[4];
 
 
+		/*
+		cout << endl << endl << "  Dados tarefa " << endl << endl;
+
+		cout << "  contrucao [" << NumeroDaConstrucao << "-" << NumDemanda << "] as " <<  HoraInicio << " até " << HoraFinal << endl;
+		cout << "  planta [" << NumPlanta << "] as " << HorarioInicioPlanta << " até " << HorarioFimPlanta << endl;
+		cout << "  carreta [" << Carreta << "] as " << HorarioInicioCarreta  << " até " << HorarioFimCarreta << endl << endl;
+		 */
 
 
+// Deleta tarefa na planta e no caminhão
+	Plantas.DeletaTarefa( NumPlanta, HorarioInicioPlanta, HorarioFimPlanta, NumeroDaConstrucao, demanda, Carreta, HorarioInicioCarreta, HorarioFimCarreta);
+
+
+	// Reorganiza Tarefas
+	for( int d = demanda + 1; d < StatusAtendimento; d++){
+		Plantas.CorrigeReferenciaCarregamentoDeslocamentoMenosUm(Descarregamentos[d].NumPlantaFornecedor, Descarregamentos[d].NumCarretaUtilizada, NumeroDaConstrucao, d, Descarregamentos[d].HorarioInicioDescarregamento, Descarregamentos[d].HorarioFinalDescarregamento);
+		Descarregamentos[ d - 1 ].HorarioInicioDescarregamento = Descarregamentos[ d ].HorarioInicioDescarregamento;
+		Descarregamentos[ d - 1 ].HorarioFinalDescarregamento = Descarregamentos[ d ].HorarioFinalDescarregamento;
+		Descarregamentos[ d - 1 ].NumCarretaUtilizada = Descarregamentos[ d ].NumCarretaUtilizada;
+		Descarregamentos[ d - 1 ].NumPlantaFornecedor = Descarregamentos[ d ].NumPlantaFornecedor;
+		Descarregamentos[ d - 1 ].FoiDeslocado = Descarregamentos[ d ].FoiDeslocado;
+		SituacaoDemanda[ d - 1 ] = SituacaoDemanda[ d ];
+		SituacaoRemocao[ d - 1 ] = SituacaoRemocao[ d ];
+	}
+
+	// atualiza dados da tarefa deletada
+	Descarregamentos[ StatusAtendimento - 1].AnulaConteudo();
+	SituacaoDemanda[StatusAtendimento - 1] = 0;
+	SituacaoRemocao[StatusAtendimento - 1] = 0;
+
+	StatusAtendimento = StatusAtendimento - 1;
+
+
+	return 1;
 
 }
 

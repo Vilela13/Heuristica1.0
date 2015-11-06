@@ -209,7 +209,7 @@ int ConjuntoCarretas::DeletaTarefa( int NumeroCaminhao, double HoraInicio, doubl
 }
 
 int ConjuntoCarretas::AlocaInidiceVeiculo( int NumCarretaUtilizada, int &v){
-	for( int i = 0; i < Carretas.size(); i++){
+	for( unsigned int i = 0; i < Carretas.size(); i++){
 		if ( Carretas[i].NumeroDaCarreta == NumCarretaUtilizada ){
 			v = i;
 			return 1;

@@ -689,7 +689,14 @@ int Construcao::DeletaTarefasAnteriormenteAdicionadasDados(   DadosTarefa DadoRe
 }
 
 int Construcao::VerificaDescarregamentosRespeitaIntervalo(){
-	cout << endl << endl << "  Reimplementar -> Construcao::VerificaDescarregamentosRespeitaIntervalo()" << endl << endl;
+	if( StatusAtendimento > 1){
+		for( int d = 2; d < StatusAtendimento; d++){
+			if( Descarregamentos[d].HorarioInicioDescarregamento - Descarregamentos[d -1].HorarioFinalDescarregamento > TempoMaximoEntreDescargas){
+				return 0;
+			}
+		}
+	}
+	return 1;
 }
 
 void Construcao::RetornaHorarioInicioCarregamento( int NumDemanda, double& HoraInicio){

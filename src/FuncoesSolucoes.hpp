@@ -16,6 +16,7 @@ int VerificaInidices( int, int);
 int VerificaInidices2( int, int);
 int VerificaValorUmVetorInt( vector< int > );
 void ImprimeVetorInt( vector< int > );
+void ImprimeDadosRetiradoAdicionadoVetorConstrucaoAnalisada( int, vector < DadosTarefa >, int, vector < DadosTarefa >, int, vector < int >, int);
 
 void AlocaValoresIniciaisIndices( int& c, int& d){
 	c = -13;
@@ -55,4 +56,26 @@ void ImprimeVetorInt( vector< int > VetorInt){
 	cout << endl;
 }
 
+void ImprimeDadosRetiradoAdicionadoVetorConstrucaoAnalisada( int ImprimeDesalocados, vector < DadosTarefa > DadosTarefasDesalocadas, int ImprimeAlocados, vector < DadosTarefa > DadosTarefasAdicionadas, int ImprimeVetorCosntrucoes, vector < int > ConstrucaosAnalizadas, int ParaPrograma){
+	int numero;
+
+	if ( ImprimeDesalocados == 1){
+		cout << "DadosTarefasDesalocadas" << endl;
+		ImprimeVetorDadosTarefa( DadosTarefasDesalocadas);
+	}
+
+	if ( ImprimeAlocados == 1){
+		cout << "DadosTarefasAdicionadas" << endl;
+		ImprimeVetorDadosTarefa( DadosTarefasAdicionadas);
+	}
+
+	if( ImprimeVetorCosntrucoes == 1){
+		cout << "  ConstrucaosAnalizadas " << endl;
+		ImprimeVetorInt(ConstrucaosAnalizadas);
+	}
+
+	if( ParaPrograma == 1){
+		cin >> numero;
+	}
+}
 #endif /* FUNCOESSOLUCOES_HPP_ */

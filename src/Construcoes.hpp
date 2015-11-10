@@ -781,10 +781,14 @@ public:
 	vector< Construcao > Construcoes;
 	int NumeroConstrucoes;
 	vector < int > ConstrucaosAnalizadas;
+
+	vector < int > ConstrucaoPodeAvaliar;
+
 	double MakespanConstrucoes;
 	int NivelDeInviabilidade;
 
 	void InicializaConstrucaosAnalizadas();
+	void AlocaValoresConstrucaosAnalizadas( int );
 	void CalcularNivelDeInviabilidade();
 	void IniciaConjuntoConstrucoes(int);
 
@@ -794,6 +798,9 @@ public:
 
 	void CalculaMakespansConstrucoes();
 	void ReiniciaTarefasRetiradas();
+
+	void AlocaValoresConstrucaoPodeAtender();
+	int VerificaConstrucaoPodeAtender();
 
 	~ConjuntoConstrucoes();
 };
@@ -809,6 +816,16 @@ void ConjuntoConstrucoes::InicializaConstrucaosAnalizadas(){
 	for( unsigned int c = 0; c < Construcoes.size(); c++){
 		ConstrucaosAnalizadas[c] = 0;
 	}
+}
+
+void ConjuntoConstrucoes::AlocaValoresConstrucaosAnalizadas( int IndiceConstrucaoNaoAtendida){
+	for ( int c = 0; c < NumeroConstrucoes; c++){
+		if( Construcoes[c].StatusAtendimento == Construcoes[c].NumeroDemandas ){
+			ConstrucaosAnalizadas[c] = 2;
+		}
+	}
+	ConstrucaosAnalizadas[IndiceConstrucaoNaoAtendida] = 3;
+
 }
 
 void ConjuntoConstrucoes::CalcularNivelDeInviabilidade(){
@@ -887,6 +904,28 @@ void ConjuntoConstrucoes::ReiniciaTarefasRetiradas(){
 			Construcoes[c].SituacaoRemocao[d] = 0;
 		}
 	}
+}
+
+void ConjuntoConstrucoes::AlocaValoresConstrucaoPodeAtender(){
+	ConstrucaoPodeAvaliar.resize(NumeroConstrucoes);
+	for( int c = 0; c < NumeroConstrucoes; c++){
+		if ( Construcoes[c].NumeroDemandas == Construcoes[c].StatusAtendimento){
+			ConstrucaoPodeAvaliar[c] = 1;
+		}else{
+			ConstrucaoPodeAvaliar[c] = 0;
+		}
+	}
+
+}
+
+int ConjuntoConstrucoes::VerificaConstrucaoPodeAtender(){
+	for( int c = 0; c < NumeroConstrucoes; c++){
+		if( ConstrucaoPodeAvaliar[c] == 0){
+			return 1;
+		}
+	}
+	return 0;
+
 }
 
 ConjuntoConstrucoes::~ConjuntoConstrucoes(){

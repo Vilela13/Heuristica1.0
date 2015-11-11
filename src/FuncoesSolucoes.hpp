@@ -17,6 +17,9 @@ int VerificaInidices2( int, int);
 int VerificaValorUmVetorInt( vector< int > );
 void ImprimeVetorInt( vector< int > );
 void ImprimeDadosRetiradoAdicionadoVetorConstrucaoAnalisada( int, vector < DadosTarefa >, int, vector < DadosTarefa >, int, vector < int >, int);
+void IniciaVetorIntComZero(vector< int >&);
+int VerificaSeTemUmValorVetorInt( int, vector< int >);
+int VerificaTodosValoresVetorInt( int, vector< int >);
 
 void AlocaValoresIniciaisIndices( int& c, int& d){
 	c = -13;
@@ -78,4 +81,29 @@ void ImprimeDadosRetiradoAdicionadoVetorConstrucaoAnalisada( int ImprimeDesaloca
 		cin >> numero;
 	}
 }
+
+void IniciaVetorIntComZero(vector< int > &VetorInt){
+	for(unsigned int i = 0; i < VetorInt.size(); i++){
+		 VetorInt[i] = 0;
+	}
+}
+
+int VerificaSeTemUmValorVetorInt( int Valor, vector< int > VetorInt){
+	for(unsigned int i = 0; i < VetorInt.size(); i++){
+		 if( VetorInt[i] == Valor){
+			 return 1;
+		 }
+	}
+	return 0;
+}
+
+int VerificaTodosValoresVetorInt( int Valor, vector< int > VetorInt){
+	for(unsigned int i = 0; i < VetorInt.size(); i++){
+		 if( VetorInt[i] != Valor){
+			 return 0;
+		 }
+	}
+	return 1;
+}
+
 #endif /* FUNCOESSOLUCOES_HPP_ */

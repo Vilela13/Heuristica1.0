@@ -97,6 +97,8 @@ public:
 
 	int DeletaAtividadeLocomovendoAsOutrasTarefasSalvandoDados(double, double, int, int, int, ConjuntoPlantas&, vector < DadosTarefa >&);
 
+	int DeletaTodasAtividadesDaContrucaoSalvandoDados(double&, ConjuntoPlantas&, vector < DadosTarefa >&);
+
 	int DeletaTarefas(  int, vector < DadosTarefa >&, ConjuntoPlantas& Plantas);
 	int DeletaTarefasAnteriormenteAdicionadasDados(   DadosTarefa, ConjuntoPlantas&);
 	int VerificaDescarregamentosRespeitaIntervalo();
@@ -540,7 +542,50 @@ int Construcao::DeletaAtividadeLocomovendoAsOutrasTarefasSalvandoDados(double Ho
 }
 
 
+int Construcao::DeletaTodasAtividadesDaContrucaoSalvandoDados(double &HoraInicio, ConjuntoPlantas& Plantas, vector < DadosTarefa > &DadosRetirandoAux){
 
+	// Verifica se tem uma tarefa já alocada atende a cosntrução depois desta
+	int p;
+	int Carreta;
+
+	double HorarioInicioPlanta;
+	double HorarioFimPlanta;
+
+	double HorarioInicioCarreta;
+	double HorarioFimCarreta;
+
+	if( StatusAtendimento > 0){
+
+		HoraInicio = Descarregamentos[0].HorarioInicioDescarregamento;
+
+		for( int d = 0; d < StatusAtendimento; d++){
+			if( Plantas.AlocaInidiceFabrica( Descarregamentos[d].NumPlantaFornecedor, p) == 0) {
+				cout << endl << endl << "  <<<<<<<<<<<<<  Erro! planta [" << Descarregamentos[d].NumPlantaFornecedor << "] ->Construcao::DeletaAtividade>>>>>>>>>> " << endl << endl;
+				return 0;
+			}
+
+			HorarioInicioPlanta = Descarregamentos[d].HorarioInicioDescarregamento - Plantas.Plantas[p].DistanciaConstrucoes[NumeroDaConstrucao] -  Plantas.Plantas[p].TempoPlanta;
+			HorarioFimPlanta = HorarioInicioPlanta +  Plantas.Plantas[p].TempoPlanta;
+
+			HorarioInicioCarreta = HorarioInicioPlanta;
+			HorarioFimCarreta = Descarregamentos[d].HorarioFinalDescarregamento + Plantas.Plantas[p].DistanciaConstrucoes[NumeroDaConstrucao];
+
+			Carreta = Descarregamentos[d].NumCarretaUtilizada;
+
+			AdicionaElementoVetorDadosTarefa(DadosRetirandoAux, NumeroDaConstrucao, Descarregamentos[d].NumPlantaFornecedor, Carreta, 0, HorarioInicioPlanta, HorarioFimPlanta, Descarregamentos[d].HorarioInicioDescarregamento, Descarregamentos[d].HorarioFinalDescarregamento, HorarioFimCarreta);
+
+			Plantas.DeletaTarefa( Descarregamentos[d].NumPlantaFornecedor, HorarioInicioPlanta, HorarioFimPlanta, NumeroDaConstrucao, d, Carreta, HorarioInicioCarreta, HorarioFimCarreta);
+
+			Descarregamentos[ d ].AnulaConteudo();
+			SituacaoDemanda[d ] = 0;
+			SituacaoRemocao[ d ] = 0;
+
+		}
+		StatusAtendimento = 0;
+		return 1;
+	}
+	return 0;
+}
 
 int Construcao::DeletaTarefas(  int demanda, vector < DadosTarefa > &DadosRetirando, ConjuntoPlantas& Plantas){
 	double HorarioInicioConstrucao;

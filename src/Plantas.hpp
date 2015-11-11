@@ -199,12 +199,16 @@ public:
 	void InicializaPlantasAnalizadas();
 	int AnalizouTodasPLanats();
 	void IniciaConjuntoPlantas(int);
+
 	int DeletaTarefa( int, double , double, int , int , int, double, double);
 	void CalculaMakespanPlantas();
 	int AlocaInidiceFabrica( int, int&);
+
 	int CorrigeReferenciaCarregamentoDeslocamentoMaisUm(int, int, int, int, double, double);
 	int CorrigeReferenciaCarregamentoDeslocamentoMenosUm(int, int, int, int, double, double);
 	void Imprime(int, int);
+
+	int VerificaPlantasAnalizadasPodemAtenderSeatrazar();
 
 	~ConjuntoPlantas();
 };
@@ -421,6 +425,16 @@ void ConjuntoPlantas::Imprime(int OrdenaPlantas,int OrdenaCarrtas){
 	}
 
 	cout << endl << "  Makespan Geral das Plantas = "<< MakespanPLantas << endl;
+}
+
+int ConjuntoPlantas::VerificaPlantasAnalizadasPodemAtenderSeatrazar(){
+	for ( unsigned  int p = 0; p < Plantas.size(); p++){
+		if( PlantasAnalizadas[p] == -2){
+			return 1;
+		}
+	}
+	return 0;
+
 }
 
 ConjuntoPlantas::~ConjuntoPlantas(){

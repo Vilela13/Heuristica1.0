@@ -200,6 +200,19 @@ int Construcao::VerificaDisponibilidade( double InicioPossivelAlocacao, double F
 		}
 
 		// Não respeita o intervalo de tempo necessario entre um descarregamento e outro
+		int TemTarefaAntes;
+		TemTarefaAntes = 0;
+
+		for( int d = 0; d < StatusAtendimento; d ++){
+			if( Descarregamentos[d].HorarioFinalDescarregamento > InicioPossivelAlocacao ){
+				TemTarefaAntes = 1;
+			}
+		}
+
+		if( TemTarefaAntes == 0){
+			return -2;
+		}
+
 		return -1;
 
 	}

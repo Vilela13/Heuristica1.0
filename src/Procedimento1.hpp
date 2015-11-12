@@ -30,13 +30,13 @@ public:
 // Seleciona a planta mais perto
 	int SelecionaPlanta( Planta** , Construcao*, vector < int > );
 // Seleciona carreta menos utilizada
-	int SelecionaCarreta(Planta& , Construcao& , int, int);
+	int SelecionaCarreta(Planta& , Construcao& , int, int, int);
 
 	int AnalizouTodasPLanats(vector < int > );
 	void ConfereSeNaoEncontrouUmaPlanta( int);
 	void VerificaAlocacaoDemandaConstrucao(Construcao*, int&);
 
-	int Executa();
+	int Executa(int);
 
 
     ~Procedimento1();
@@ -109,7 +109,7 @@ int Procedimento1::SelecionaPlanta( Planta** PlantaMaisPerto,Construcao* Constru
 	}
 }
 
-int Procedimento1::SelecionaCarreta(Planta& PlantaMaisPerto, Construcao& ConstrucaoVaiSerSuprida, int  NumeroDemanda, int SituacaoDemanda ){
+int Procedimento1::SelecionaCarreta(Planta& PlantaMaisPerto, Construcao& ConstrucaoVaiSerSuprida, int  NumeroDemanda, int SituacaoDemanda, int TipoOrdenacao ){
 
 	double HorarioInicioPlanta;
 	double HorarioSaiDaPlanta;
@@ -121,8 +121,13 @@ int Procedimento1::SelecionaCarreta(Planta& PlantaMaisPerto, Construcao& Constru
 	int DisponibilidadeConstrucao;
 	int DisponibilidadeCarreta;
 
+	int Para;
+
 	if( ConstrucaoVaiSerSuprida.SituacaoDemanda[NumeroDemanda] == 0){
-		PlantaMaisPerto.VeiculosDaPlanta.OrdenaCarretasPorNumeroDeTarefasRealizadas();
+		PlantaMaisPerto.VeiculosDaPlanta.OrdenaCarretasPorNumeroDeTarefasRealizadas(TipoOrdenacao);
+		//PlantaMaisPerto.VeiculosDaPlanta.Imprime(0);
+		//cin >> Para;
+
 		for( int v = 0; v < PlantaMaisPerto.NumeroVeiculos; v++){
 			if( (ConstrucaoVaiSerSuprida.TempoMinimoDeFuncionamento - PlantaMaisPerto.DistanciaConstrucoes[ConstrucaoVaiSerSuprida.NumeroDaConstrucao] - PlantaMaisPerto.TempoPlanta) > PlantaMaisPerto.TempoMinimoDeFuncionamento){
 				HorarioInicioPlanta = ConstrucaoVaiSerSuprida.TempoMinimoDeFuncionamento - PlantaMaisPerto.DistanciaConstrucoes[ConstrucaoVaiSerSuprida.NumeroDaConstrucao] - PlantaMaisPerto.TempoPlanta;
@@ -172,7 +177,7 @@ void Procedimento1::VerificaAlocacaoDemandaConstrucao(Construcao *ConstrucaoVaiS
 	}
 }
 
-int Procedimento1::Executa(){
+int Procedimento1::Executa( int TipoOrdenacao){
 	Planta* PlantaMaisPerto;
 	Construcao* ConstrucaoVaiSerSuprida;
 
@@ -201,7 +206,7 @@ int Procedimento1::Executa(){
 					ConfereSeNaoEncontrouUmaPlanta( PlantaSelecionada);
 					if( PlantaSelecionada == 1){
 						PlantasInstancia.PlantasAnalizadas[ PlantaMaisPerto->NumeroDaPlanta ] = 1;
-						PermiteAtendimentoDemanda = SelecionaCarreta(*PlantaMaisPerto , *ConstrucaoVaiSerSuprida,  Demanda, 1);
+						PermiteAtendimentoDemanda = SelecionaCarreta(*PlantaMaisPerto , *ConstrucaoVaiSerSuprida,  Demanda, 1, TipoOrdenacao);
 					}
 				}while( PermiteAtendimentoDemanda == 0 && PlantasInstancia.AnalizouTodasPLanats() == 0);
 				if( PermiteAtendimentoDemanda == 1){

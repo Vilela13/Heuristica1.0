@@ -99,6 +99,10 @@ void Heuristica::ExecutaProcedimentoHeuristico1(){
 	int Solucao;
 	Solucao = 0;
 
+	int TipoOrdenacaoVeiculos;
+// ordena na ordem do menor número de tarefas para o maior se colocar o valor 1, ordena na ordem do maior número de tarefas para o menor se colocar o valor 2
+	TipoOrdenacaoVeiculos = 1;
+
 	ConjuntoSolucoes Solucoes;
 
 
@@ -117,7 +121,7 @@ void Heuristica::ExecutaProcedimentoHeuristico1(){
 
 	cout << endl << endl << "############################### Procedimento ConstrucaoSolucao #####################################" << endl << endl;
 
-	Solucao = Prod1.Executa();
+	Solucao = Prod1.Executa( TipoOrdenacaoVeiculos );
 
 	cout << endl << endl << "##############################################################################################" << endl << endl;
 
@@ -176,7 +180,7 @@ void Heuristica::ExecutaProcedimentoHeuristico1(){
 */
 	cout << endl << endl << "############################### Procedimento Viabilidade 1 #####################################" << endl << endl;
 
-	Solucoes.Solucoes[0].ProcessoViabilizacao1();
+	Solucoes.Solucoes[0].ProcessoViabilizacao1( TipoOrdenacaoVeiculos );
 
 	cout << endl << endl << "##############################################################################################" << endl << endl;
 
@@ -189,7 +193,7 @@ void Heuristica::ExecutaProcedimentoHeuristico1(){
 
 	cout << endl << endl << "############################### Procedimento Viabilidade 2 #####################################" << endl << endl;
 
-	Solucoes.Solucoes[1].ProcessoViabilizacao2();
+	Solucoes.Solucoes[1].ProcessoViabilizacao2( TipoOrdenacaoVeiculos );
 
 	cout << endl << endl << "##############################################################################################" << endl << endl;
 

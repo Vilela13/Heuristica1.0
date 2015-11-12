@@ -147,6 +147,9 @@ Carreta::~Carreta(){
 bool DecideQualCarretaTemMenosTarefasRealizadas ( Carreta c1, Carreta c2 ){
 	return ( c1.NumeroDeDemandasAntendidas < c2.NumeroDeDemandasAntendidas );
 }
+bool DecideQualCarretaTemMaisTarefasRealizadas ( Carreta c1, Carreta c2 ){
+	return ( c1.NumeroDeDemandasAntendidas > c2.NumeroDeDemandasAntendidas );
+}
 
 
 class ConjuntoCarretas{
@@ -157,7 +160,7 @@ public:
 
 	void IniciaConjuntoCarretas(int, int);
 
-	void OrdenaCarretasPorNumeroDeTarefasRealizadas();
+	void OrdenaCarretasPorNumeroDeTarefasRealizadas(int);
 
 	int DeletaTarefa( int, double, double, int, int);
 
@@ -186,8 +189,14 @@ void ConjuntoCarretas::IniciaConjuntoCarretas(int NumeroCaminhoes, int NumeroDaP
 
 }
 
-void ConjuntoCarretas::OrdenaCarretasPorNumeroDeTarefasRealizadas(){
-	sort (Carretas.begin(), Carretas.end(), DecideQualCarretaTemMenosTarefasRealizadas);
+// ordena na ordem do menor número de tarefas para o maior se colocar o valor 1, ordena na ordem do maior número de tarefas para o menor se colocar o valor 2
+void ConjuntoCarretas::OrdenaCarretasPorNumeroDeTarefasRealizadas(int TipoOrdenacao){
+	if( TipoOrdenacao == 1){
+		sort (Carretas.begin(), Carretas.end(), DecideQualCarretaTemMenosTarefasRealizadas);
+	}
+	if( TipoOrdenacao == 2){
+			sort (Carretas.begin(), Carretas.end(),DecideQualCarretaTemMaisTarefasRealizadas);
+	}
 }
 
 int ConjuntoCarretas::DeletaTarefa( int NumeroCaminhao, double HoraInicio, double HoraFinal, int NumContrucao, int NumDemanda){

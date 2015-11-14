@@ -1588,6 +1588,44 @@ void Solucao::ProcessoViabilizacao2(int TipoOrdenacao){
 
 							cin >> PararPrograma;
 
+							cout << endl << endl << "    Atualizar vetores " << endl << endl;
+							cout << endl << endl << "    antes de atualizar vetores " << endl << endl;
+							ImprimeDadosRetiradoAdicionadoVetorConstrucaoAnalisada( 1,  DadosTarefasDesalocadas, 1,  DadosTarefasAdicionadas, 0,  ConstrucoesInstancia.ConstrucaosAnalizadas, 0);
+
+							cout << endl << endl << "    dados internos " << endl << endl;
+							ImprimeDadosRetiradoAdicionadoVetorConstrucaoAnalisada( 1,  DadosRetirandoAux, 1, DadosAdicionaAux, 0,  ConstrucoesInstancia.ConstrucaosAnalizadas, 0);
+
+							if( ConseguiAlocarTarefa == 1){
+								for( int i = 0; i < DadosRetirandoAux.size();i++){
+									if( VerificaElementoVetorDadosTarefaApartirestrutura(DadosTarefasAdicionadas ,DadosRetirandoAux[i] ) == 1){
+										if( RetiraElementoVetorDadosTarefaApartirestrutura(DadosTarefasAdicionadas, DadosRetirandoAux[i]) == 0){
+											cout << "    Não retirou " << endl;
+											DadosRetirandoAux[i].Imprimir();
+											cout << "             DadosRetirandoAux" << endl ;
+										}
+									}else{
+										if( AdicionaElementoVetorDadosTarefaApartirestrutura(DadosTarefasAdicionadas, DadosRetirandoAux[i]) == 0){
+											cout << "    Naõ adicionou " << endl;
+											DadosRetirandoAux[i].Imprimir();
+											cout << "             DadosRetirandoAux" << endl ;
+										}
+									}
+								}
+								for( int i = 0; i < DadosAdicionaAux.size();i++){
+									if( AdicionaElementoVetorDadosTarefaApartirestrutura(DadosTarefasAdicionadas, DadosAdicionaAux[i] ) == 0){
+										cout << "    Naõ adicionou " << endl;
+										DadosRetirandoAux[i].Imprimir();
+										cout << "             DadosAdicionaAux" << endl ;
+									}
+								}
+							}else{
+								ReadicionaTarefasApartirDeDados( DadosRetirandoAux, 1);
+							}
+
+							cout << endl << endl << "    depois de atualizar vetores " << endl << endl;
+							ImprimeDadosRetiradoAdicionadoVetorConstrucaoAnalisada( 1,  DadosTarefasDesalocadas, 1,  DadosTarefasAdicionadas, 0,  ConstrucoesInstancia.ConstrucaosAnalizadas, 0);
+
+							cin >> PararPrograma;
 
 
 						}

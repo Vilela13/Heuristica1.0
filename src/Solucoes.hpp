@@ -77,7 +77,7 @@ int SelecionaPlanta(int&, int&, int, vector < int >);
 	int SelecionaCarreta(int, int, int, int, vector < DadosTarefa >&, int);
 	int SelecionaCarretaComHoraInicio(double, int, int, int, int, vector < DadosTarefa > &, int);
 
-	int ColocarTarefaAtrazandoAsOutras(int , int , double, vector < DadosTarefa > &, int);
+	int ColocarTarefaAtrazandoAsOutras(int , int , double, vector < DadosTarefa > &, int, int);
 
 	void ProcessoViabilizacao2(int);
 
@@ -160,6 +160,7 @@ int Solucao::RetornaIndiceConstrucao(int Construcao, int& Indice, string frase){
 }
 
 int Solucao::ConstrucaoTarefaRemover(int& Construcao, int& Demanda, int Imprimir){
+	// Verifica se possui uma construção que possui demandas que ainda não foram retiradas para se tentar a viabilização da solução. Caso possuir, retorna 1 a função e é retornado os dados da construção e da demanda por parametro.
 
 	//ConstrucoesInstancia.ImprimeContrucoes();
 	int Ativo;
@@ -821,7 +822,7 @@ int Solucao::SelecionaCarretaComHoraInicio( double HoraInicio, int c, int p, int
 	return 0;
 }
 
-int Solucao::ColocarTarefaAtrazandoAsOutras(int ConstrucaoParaAtenderIndice, int demanda , double HoraInicio, vector < DadosTarefa > & DadosAdicionaAux, int TipoOrdenacao){
+int Solucao::ColocarTarefaAtrazandoAsOutras(int ConstrucaoParaAtenderIndice, int demanda , double HoraInicio, vector < DadosTarefa > & DadosAdicionaAux, int TipoOrdenacao, int Imprime){
 	vector < int > SituacaoPlantas;
 	vector < int > SituacaoDemandas;
 	double HorarioInicioConstrucao;
@@ -832,57 +833,61 @@ int Solucao::ColocarTarefaAtrazandoAsOutras(int ConstrucaoParaAtenderIndice, int
 
 	int PermiteAtendimentoDemanda;
 
-	vector < DadosTarefa > Auxiliar;
+	vector < DadosTarefa > TemporarioAdiciona;
 	vector < DadosTarefa > AuxiliarRetira;
 
 	HorarioInicioConstrucao = HoraInicio + IntervaloDeTempo;
 
-	SituacaoPlantas.resize(NP);
-	SituacaoDemandas.resize(demanda + 1);
+	SituacaoPlantas.resize(NP);					// Vetor que armazena se a planta foi analisada ou não para atender certa demanda
+	SituacaoDemandas.resize(demanda + 1); 		// Tem que somar mais um pelo fato de se contar o 0 como um elemento
 
 	while(HorarioInicioConstrucao <  ConstrucoesInstancia.Construcoes[ConstrucaoParaAtenderIndice].TempoMaximoDeFuncionamento ){
 
-		//cout << "  HorarioInicioConstrucao " << HorarioInicioConstrucao << endl;
+		if ( Imprime == 1){
+			cout << "  HorarioInicioConstrucao " << HorarioInicioConstrucao << " / " << ConstrucoesInstancia.Construcoes[ConstrucaoParaAtenderIndice].TempoMaximoDeFuncionamento << endl;
+		}
 		IniciaVetorIntComZero(SituacaoDemandas);
 		for( int d = 0; d <= demanda; d++){
 			IniciaVetorIntComZero(SituacaoPlantas);
-			ExistePlanta = SelecionaPlanta( PlantaAtender,PlantaAtenderIndice, ConstrucaoParaAtenderIndice, SituacaoPlantas );
+			ExistePlanta = SelecionaPlanta( PlantaAtender,PlantaAtenderIndice, ConstrucaoParaAtenderIndice, SituacaoPlantas );		// seleciona planta a atender
 			PermiteAtendimentoDemanda = 0;
 			while( ExistePlanta == 1 && ConstrucoesInstancia.Construcoes[ConstrucaoParaAtenderIndice].StatusAtendimento < demanda + 1 && PermiteAtendimentoDemanda == 0){
-				SituacaoPlantas[PlantaAtenderIndice] = 1;
-				PermiteAtendimentoDemanda = SelecionaCarretaComHoraInicio( HorarioInicioConstrucao, ConstrucaoParaAtenderIndice, PlantaAtenderIndice, d, 3, Auxiliar, TipoOrdenacao);
-				if( PermiteAtendimentoDemanda == 1){
-					IniciaVetorIntComZero(SituacaoPlantas);
-					SituacaoDemandas[d] = 1;
-					ExistePlanta = SelecionaPlanta( PlantaAtender,PlantaAtenderIndice, ConstrucaoParaAtenderIndice, SituacaoPlantas );
+				SituacaoPlantas[PlantaAtenderIndice] = 1;							// Marca planta atendida
+				PermiteAtendimentoDemanda = SelecionaCarretaComHoraInicio( HorarioInicioConstrucao, ConstrucaoParaAtenderIndice, PlantaAtenderIndice, d, 3, TemporarioAdiciona, TipoOrdenacao); 		// aloca atendimento da demanda se 1, 0 se não
+				if( PermiteAtendimentoDemanda == 1){		// se alocou a demanda
+					IniciaVetorIntComZero(SituacaoPlantas);		// zera o vetor do status das plantas
+					SituacaoDemandas[d] = 1;					// coloca a demanda como atendida
 				}else{
 					if( PermiteAtendimentoDemanda == 0){
-						SituacaoPlantas[PlantaAtender] = 1;
-						ExistePlanta = SelecionaPlanta( PlantaAtender,PlantaAtenderIndice, ConstrucaoParaAtenderIndice, SituacaoPlantas );
+						SituacaoPlantas[PlantaAtender] = 1;			// marca planta já analisada
 					}
 					if ( PermiteAtendimentoDemanda == -2){
-						SituacaoPlantas[PlantaAtender] = -2;
-						ExistePlanta = SelecionaPlanta( PlantaAtender,PlantaAtenderIndice, ConstrucaoParaAtenderIndice, SituacaoPlantas );
+						SituacaoPlantas[PlantaAtender] = -2;		// marca planata já analisada, mas que poderia atender a demnada caso a demanda anterior fosse mais tarde
 					}
 				}
+				ExistePlanta = SelecionaPlanta( PlantaAtender,PlantaAtenderIndice, ConstrucaoParaAtenderIndice, SituacaoPlantas );	// retorna a planta que ira atender a proxima demanda
 			}
 			if ( VerificaTodosValoresVetorInt( 1, SituacaoDemandas) == 1){
-				DadosAdicionaAux = Auxiliar;
+				DadosAdicionaAux = TemporarioAdiciona;		// retorna as tarefas adicionadas no procediemnto
 				return 1;
 			}
 		}
 		if ( VerificaSeTemUmValorVetorInt( -2, SituacaoPlantas) == 1){
 			ConstrucoesInstancia.Construcoes[ConstrucaoParaAtenderIndice].DeletaTodasAtividadesDaContrucaoSalvandoDados(HoraInicio, PlantasInstancia, AuxiliarRetira);
-			Auxiliar.clear();
+			TemporarioAdiciona.clear();
 			HorarioInicioConstrucao = HorarioInicioConstrucao + IntervaloDeTempo;
 		}else{
 			ImprimeVetorInt( SituacaoPlantas);
 			ConstrucoesInstancia.Construcoes[ConstrucaoParaAtenderIndice].DeletaTodasAtividadesDaContrucaoSalvandoDados(HoraInicio, PlantasInstancia, AuxiliarRetira);
-			Auxiliar.clear();
+			TemporarioAdiciona.clear();
 			return 0;
 		}
 	}
-	Auxiliar.clear();
+
+	if ( Imprime == 1){
+		cout << endl << endl << "  Não da para atrazar " << endl << endl;
+	}
+	TemporarioAdiciona.clear();
 	return 0;
 
 }
@@ -931,37 +936,55 @@ void Solucao::ProcessoViabilizacao2(int TipoOrdenacao){
 	int TarefaAdicionadaAposDeslocamentoTarefas;
 
 	int Imprime;
-	Imprime = 0;
 	int PararPrograma;
+
+	Imprime = 1;
 
 // Encontra demanda ainda não atendida
 
 	ConstrucoesInstancia.AlocaValoresConstrucaoPodeAtender();
 
 	while( ConstrucoesInstancia.VerificaConstrucaoPodeAtender() == 1){
+
+
 		InviabilidadeSolucaoAnterior = ConstrucoesInstancia.NivelDeInviabilidade;
 		ConstrucoesInstancia.ReiniciaTarefasRetiradas();
 		ProcuraConstrucaoNaoAtendida( ConstrucaoNaoAtendida, DemandaNaoAtendida);
 		TempoSaiPlanta.resize(NP);
-		//cout << " ConstrucaoNaoAtendida = " << ConstrucaoNaoAtendida <<" DemandaNaoAtendida = " << DemandaNaoAtendida << endl << endl;
+		if( Imprime == 1){
+			cout << " ConstrucaoNaoAtendida = " << ConstrucaoNaoAtendida <<" DemandaNaoAtendida = " << DemandaNaoAtendida << endl << endl;
+		}
 		RetornaIndiceConstrucao(ConstrucaoNaoAtendida, IndiceConstrucaoNaoAtendida, " inicio -> Solucao::ProcessoViabilizacao2" );
+
 	// deleta tarefas que são atendidas antes desta tarefa não alocada
 		AlocaTempoSaiDaPlanta(IndiceConstrucaoNaoAtendida,TempoSaiPlanta, 0);
 		DeletouAlgumaTarefa = DeletaTarefasAposTempoSaiPlanta(TempoSaiPlanta, DadosTarefasDesalocadas,  0);
+		if( Imprime == 1){
+			cout << "   <<<<<<<<<<< Deteta tarefas >>>>>>>>>>>>>> ";
+			ConstrucoesInstancia.ImprimeContrucoes();
+			cin >> PararPrograma;
+		}
+
+
 	// Adiciona a tarefa que não era alocada antes
 		TarefaAdicionada = AdicionaTarefa( ConstrucaoNaoAtendida, DemandaNaoAtendida, DadosTarefasAdicionadas, 2, TipoOrdenacao);
 		SinalizaTarefaAdicionadaInicialmente( TarefaAdicionada, IndiceConstrucaoNaoAtendida, DemandaNaoAtendida);
 		if( ConstrucoesInstancia.Construcoes[ IndiceConstrucaoNaoAtendida ].SituacaoDemanda[ DemandaNaoAtendida ] == -1){
-			cout << endl << endl << "   Não consigo alocar tarefa [" << ConstrucaoNaoAtendida << "-" << DemandaNaoAtendida << "] que não foi alocada antes -> Solucao::ProcessoViabilizacao2 " << endl << endl;
+			if( Imprime == 1){
+				cout << endl << endl << "   Não consigo alocar tarefa [" << ConstrucaoNaoAtendida << "-" << DemandaNaoAtendida << "] que não foi alocada antes -> Solucao::ProcessoViabilizacao2 " << endl << endl;
+			}
 			ReadicionaTarefasApartirDeDados( DadosTarefasDesalocadas, 1);
 			DadosTarefasDesalocadas.clear();
 			ConstrucoesInstancia.AlocaValoresConstrucaoPodeAtender();
 			ConstrucoesInstancia.ConstrucaoPodeAvaliar[IndiceConstrucaoNaoAtendida] = 4;
 		}else{
 
-			//ConstrucoesInstancia.ImprimeContrucoes();
-			//ImprimeDadosRetiradoAdicionadoVetorConstrucaoAnalisada( 1,  DadosTarefasDesalocadas, 1,  DadosTarefasAdicionadas, 0,  ConstrucoesInstancia.ConstrucaosAnalizadas, 0);
-			//cin >> PararPrograma;
+			if( Imprime == 1){
+				cout << "   <<<<<<<<<<< Coloca tarfea não alocada anterioremnte [" <<  ConstrucaoNaoAtendida << "-" << DemandaNaoAtendida << "]  >>>>>>>>>>>>>>> ";
+				ConstrucoesInstancia.ImprimeContrucoes();
+				ImprimeDadosRetiradoAdicionadoVetorConstrucaoAnalisada( 1,  DadosTarefasDesalocadas, 1,  DadosTarefasAdicionadas, 0,  ConstrucoesInstancia.ConstrucaosAnalizadas, 0);
+				cin >> PararPrograma;
+			}
 
 	// marca construções com tarefas a alocar
 			ConstrucoesInstancia.InicializaConstrucaosAnalizadas();
@@ -969,15 +992,16 @@ void Solucao::ProcessoViabilizacao2(int TipoOrdenacao){
 	// Verifica se tem tarefa a se colocar
 			PossuiConstrucaoParaAnalisar = SelecionaConstrucao( ConstrucaoParaAtender, ConstrucaoParaAtenderIndice, ConstrucoesInstancia.ConstrucaosAnalizadas);
 			//ImprimeDadosRetiradoAdicionadoVetorConstrucaoAnalisada( 0,  DadosTarefasDesalocadas, 0,  DadosTarefasAdicionadas, 1, ConstrucoesInstancia.ConstrucaosAnalizadas, 0);
-			//cout << " ConstrucaoParaAtender " << ConstrucaoParaAtender << " [" << ConstrucaoParaAtenderIndice << "]     << Inico >> " << endl << endl;
+			if( Imprime == 1){
+				cout << "   <<<<<<<<<<< Readiciona demandas   >>>>>>>>>>>>>>> " << endl;
+			}
 			//cin >> PararPrograma;
 
 			while( PossuiConstrucaoParaAnalisar == 1){
-				//cout << endl << "   >>>>>>>>>>>>  construcao a se recolocar tarefas => " << ConstrucaoParaAtender << "(" << ConstrucaoParaAtenderIndice << ")" << endl;
 				ConstrucoesInstancia.ConstrucaosAnalizadas[ConstrucaoParaAtenderIndice] = 1;
 				d = ConstrucoesInstancia.Construcoes[ConstrucaoParaAtenderIndice].StatusAtendimento;
 				if( Imprime == 1){
-					cout << " Demanda [" << d << "]" << endl;
+					cout << " Demanda [" << ConstrucaoParaAtender << "-" << d << "]";
 				}
 				PlantasInstancia.InicializaPlantasAnalizadas();
 				ExistePlanta = SelecionaPlanta( PlantaAtender,PlantaAtenderIndice, ConstrucaoParaAtenderIndice, PlantasInstancia.PlantasAnalizadas );
@@ -991,11 +1015,14 @@ void Solucao::ProcessoViabilizacao2(int TipoOrdenacao){
 					//ImprimeDadosRetiradoAdicionadoVetorConstrucaoAnalisada( 0,  DadosTarefasDesalocadas, 0,  DadosTarefasAdicionadas, 1,  ConstrucoesInstancia.ConstrucaosAnalizadas, 0);
 
 					if( PermiteAtendimentoDemanda == 1){
+						cout << "      Atendida " << endl;
 						//cout << "             +++++   Planta [" << PlantaAtenderIndice << "] " << PlantasInstancia.Plantas[PlantaAtenderIndice].NumeroDaPlanta << "  atende demanda " << ConstrucoesInstancia.Construcoes[ConstrucaoParaAtenderIndice].NumeroDaConstrucao << "-" << d << endl;
 						if(d < ConstrucoesInstancia.Construcoes[ConstrucaoParaAtenderIndice].NumeroDemandas){
 							d = ConstrucoesInstancia.Construcoes[ConstrucaoParaAtenderIndice].StatusAtendimento;
 								if( Imprime == 1){
-									cout << " Demanda [" << d << "]" << endl;
+									if( d != ConstrucoesInstancia.Construcoes[ConstrucaoParaAtenderIndice].NumeroDemandas){
+										cout << " Demanda [" << ConstrucaoParaAtender << "-" << d << "]" ;
+									}
 								}
 								PlantasInstancia.InicializaPlantasAnalizadas();
 								ExistePlanta = SelecionaPlanta( PlantaAtender,PlantaAtenderIndice, ConstrucaoParaAtenderIndice, PlantasInstancia.PlantasAnalizadas );
@@ -1014,57 +1041,60 @@ void Solucao::ProcessoViabilizacao2(int TipoOrdenacao){
 						}
 
 
+// Verifica se pode atrazar
 
-						if( ExistePlanta == 0 && PlantasInstancia.VerificaPlantasAnalizadasPodemAtenderSeatrazar() && ConstrucoesInstancia.Construcoes[ConstrucaoParaAtenderIndice].StatusAtendimento > 1){
-							//cout << endl << endl << "   	Pode atrazar tarefas da construção " << ConstrucaoParaAtender << " [" << ConstrucaoParaAtenderIndice << "] - d = " << d << " para alocar outra " << endl << endl;
+						if( ConstrucaoParaAtender == 0 && d == 1 ){
+							cout << endl << endl << "                Antes de entrar [" << ConstrucaoParaAtender << "-" << d << "]" << endl;
+							ImprimeVetorInt(PlantasInstancia.PlantasAnalizadas);
+						}
 
-							//ConstrucoesInstancia.ImprimeContrucoes();
-							//PlantasInstancia.Imprime(1,1);
 
-							//cin >> PararPrograma;
+
+						if( ExistePlanta == 0 && PlantasInstancia.VerificaPlantasAnalizadasPodemAtenderSeAtrazar() && ConstrucoesInstancia.Construcoes[ConstrucaoParaAtenderIndice].StatusAtendimento >= 1){
+							if( Imprime == 1){
+								cout << endl << endl << "   	Pode atrazar tarefas da construção " << ConstrucaoParaAtender << " [" << ConstrucaoParaAtenderIndice << "] - d = " << d << " para alocar outra " << endl << endl;
+							}
+
 							ConstrucoesInstancia.Construcoes[ConstrucaoParaAtenderIndice].DeletaTodasAtividadesDaContrucaoSalvandoDados(HoraInicio, PlantasInstancia, DadosRetirandoAux);
-
-							//ConstrucoesInstancia.ImprimeContrucoes();
-							//PlantasInstancia.Imprime(1,1);
-
-							//cout << endl << endl << "        Atraza e tenta alocar " << ConstrucaoParaAtender << " [" << ConstrucaoParaAtenderIndice << "]- d = " << d <<  endl << endl;
-
-							ConseguiAlocarTarefa = ColocarTarefaAtrazandoAsOutras( ConstrucaoParaAtenderIndice, d , HoraInicio, DadosAdicionaAux, TipoOrdenacao);
-
-							//cout << endl << endl << " ConseguiAlocarTarefa " << ConseguiAlocarTarefa << endl << endl;
-
-							//cin >> PararPrograma;
-
-							//ConstrucoesInstancia.ImprimeContrucoes();
-							//PlantasInstancia.Imprime(1,1);
-
-							//cin >> PararPrograma;
-
-							//cout << endl << endl << "    Atualizar vetores " << endl << endl;
-							//cout << endl << endl << "    antes de atualizar vetores " << endl << endl;
-							//ImprimeDadosRetiradoAdicionadoVetorConstrucaoAnalisada( 1,  DadosTarefasDesalocadas, 1,  DadosTarefasAdicionadas, 0,  ConstrucoesInstancia.ConstrucaosAnalizadas, 0);
-
-							//cout << endl << endl << "    dados internos " << endl << endl;
-							//ImprimeDadosRetiradoAdicionadoVetorConstrucaoAnalisada( 1,  DadosRetirandoAux, 1, DadosAdicionaAux, 0,  ConstrucoesInstancia.ConstrucaosAnalizadas, 0);
+							ConseguiAlocarTarefa = ColocarTarefaAtrazandoAsOutras( ConstrucaoParaAtenderIndice, d , HoraInicio, DadosAdicionaAux, TipoOrdenacao, Imprime);
 
 							if( ConseguiAlocarTarefa == 1){
+
+								PermiteAtendimentoDemanda = 1;
+								cout << endl << "      Atendida apos atrazar" << endl;
+								if(d < ConstrucoesInstancia.Construcoes[ConstrucaoParaAtenderIndice].NumeroDemandas){
+									d = ConstrucoesInstancia.Construcoes[ConstrucaoParaAtenderIndice].StatusAtendimento;
+									if( Imprime == 1){
+										if( d != ConstrucoesInstancia.Construcoes[ConstrucaoParaAtenderIndice].NumeroDemandas){
+											cout << " Demanda [" << ConstrucaoParaAtender << "-" << d << "]" ;
+										}
+									}
+									PlantasInstancia.InicializaPlantasAnalizadas();
+									ExistePlanta = SelecionaPlanta( PlantaAtender,PlantaAtenderIndice, ConstrucaoParaAtenderIndice, PlantasInstancia.PlantasAnalizadas );
+								}else{
+									PlantasInstancia.InicializaPlantasAnalizadas();
+									ExistePlanta = SelecionaPlanta( PlantaAtender,PlantaAtenderIndice, ConstrucaoParaAtenderIndice, PlantasInstancia.PlantasAnalizadas );
+								}
+
+
+
 								for( int i = 0; i < DadosRetirandoAux.size();i++){
-									if( VerificaElementoVetorDadosTarefaApartirestrutura(DadosTarefasAdicionadas ,DadosRetirandoAux[i] ) == 1){
-										if( RetiraElementoVetorDadosTarefaApartirestrutura(DadosTarefasAdicionadas, DadosRetirandoAux[i]) == 0){
-											//cout << "    Não retirou " << endl;
+									if( VerificaElementoVetorDadosTarefaApartirEstrutura(DadosTarefasAdicionadas ,DadosRetirandoAux[i] ) == 1){
+										if( RetiraElementoVetorDadosTarefaApartirEstrutura(DadosTarefasAdicionadas, DadosRetirandoAux[i]) == 0){
+											cout << "    Não retirou " << endl;
 											//DadosRetirandoAux[i].Imprimir();
 											//cout << "             DadosRetirandoAux" << endl ;
 										}
 									}else{
-										if( AdicionaElementoVetorDadosTarefaApartirestrutura(DadosTarefasAdicionadas, DadosRetirandoAux[i]) == 0){
-											//cout << "    Naõ adicionou " << endl;
+										if( AdicionaElementoVetorDadosTarefaApartirEstrutura(DadosTarefasAdicionadas, DadosRetirandoAux[i]) == 0){
+											cout << "    Naõ adicionou " << endl;
 											//DadosRetirandoAux[i].Imprimir();
 											//cout << "             DadosRetirandoAux" << endl ;
 										}
 									}
 								}
 								for( int i = 0; i < DadosAdicionaAux.size();i++){
-									if( AdicionaElementoVetorDadosTarefaApartirestrutura(DadosTarefasAdicionadas, DadosAdicionaAux[i] ) == 0){
+									if( AdicionaElementoVetorDadosTarefaApartirEstrutura(DadosTarefasAdicionadas, DadosAdicionaAux[i] ) == 0){
 										//cout << "    Naõ adicionou " << endl;
 										//DadosRetirandoAux[i].Imprimir();
 										//cout << "             DadosAdicionaAux" << endl ;
@@ -1082,16 +1112,11 @@ void Solucao::ProcessoViabilizacao2(int TipoOrdenacao){
 
 						}
 
-						/*
-						 *   A novo procedimento para atrazar as tarefas tem que entrar aqui!!!!!!!!!!!!!
-						 */
-
-
-
-
-
 					}
+
+
 					if( ExistePlanta == 0 ){
+						cout << "     -> Não atendida" << endl;
 						//cout << " Nao se pode colocar tarefa da construcao [" << ConstrucaoParaAtenderIndice << "] " << ConstrucoesInstancia.Construcoes[ConstrucaoParaAtenderIndice].NumeroDaConstrucao << "-" << d << endl;
 						ConstrucoesInstancia.ConstrucaosAnalizadas[ConstrucaoParaAtenderIndice] = 4;
 						//ImprimeVetorInt( PlantasInstancia.PlantasAnalizadas );
@@ -1108,7 +1133,9 @@ void Solucao::ProcessoViabilizacao2(int TipoOrdenacao){
 
 
 			}
-			//ConstrucoesInstancia.ImprimeContrucoes();
+
+			cin >> PararPrograma;
+			ConstrucoesInstancia.ImprimeContrucoes();
 			//PlantasInstancia.Imprime(1,1);
 
 			ConstrucoesInstancia.CalcularNivelDeInviabilidade();
@@ -1120,7 +1147,11 @@ void Solucao::ProcessoViabilizacao2(int TipoOrdenacao){
 				ConstrucoesInstancia.AlocaValoresConstrucaoPodeAtender();
 
 			}else{
-				cout << endl << endl << "    Não melhoru !!!!!!" << endl << endl;
+				if( Imprime == 1){
+					cout << endl << endl << "    Não melhoru !!!!!!" << endl << endl;
+					ConstrucoesInstancia.ImprimeContrucoes();
+					cin >> PararPrograma;
+				}
 				if( DeletaTarefasApartirDeDados(  DadosTarefasAdicionadas ) == 0){
 					cout << endl << endl << "   problema em deletar " << endl << endl;
 				}

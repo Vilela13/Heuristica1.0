@@ -208,7 +208,7 @@ public:
 	int CorrigeReferenciaCarregamentoDeslocamentoMenosUm(int, int, int, int, double, double);
 	void Imprime(int, int);
 
-	int VerificaPlantasAnalizadasPodemAtenderSeatrazar();
+	int VerificaPlantasAnalizadasPodemAtenderSeAtrazar();
 
 	~ConjuntoPlantas();
 };
@@ -427,7 +427,7 @@ void ConjuntoPlantas::Imprime(int OrdenaPlantas,int OrdenaCarrtas){
 	cout << endl << "  Makespan Geral das Plantas = "<< MakespanPLantas << endl;
 }
 
-int ConjuntoPlantas::VerificaPlantasAnalizadasPodemAtenderSeatrazar(){
+int ConjuntoPlantas::VerificaPlantasAnalizadasPodemAtenderSeAtrazar(){
 	for ( unsigned  int p = 0; p < Plantas.size(); p++){
 		if( PlantasAnalizadas[p] == -2){
 			return 1;

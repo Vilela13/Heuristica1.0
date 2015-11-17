@@ -25,12 +25,12 @@ public:
 
 
 int RetiraElementoVetorDadosTarefa(vector < DadosTarefa >&,int, int, int, double, double, double, double, double);
-int RetiraElementoVetorDadosTarefaApartirestrutura(vector < DadosTarefa >&, DadosTarefa );
+int RetiraElementoVetorDadosTarefaApartirEstrutura(vector < DadosTarefa >&, DadosTarefa );
 int AdicionaElementoVetorDadosTarefa(vector < DadosTarefa >&, int, int, int, int, double, double, double, double, double);
-int AdicionaElementoVetorDadosTarefaApartirestrutura(vector < DadosTarefa >&, DadosTarefa);
+int AdicionaElementoVetorDadosTarefaApartirEstrutura(vector < DadosTarefa >&, DadosTarefa);
 
 int VerificaElementoVetorDadosTarefa(vector < DadosTarefa >,int, int, int, double, double, double, double, double);
-int VerificaElementoVetorDadosTarefaApartirestrutura(vector < DadosTarefa >,DadosTarefa);
+int VerificaElementoVetorDadosTarefaApartirEstrutura(vector < DadosTarefa >,DadosTarefa);
 
 void ImprimeVetorDadosTarefa( vector < DadosTarefa >);
 bool DecideQualTarefaVemAntes ( DadosTarefa, DadosTarefa );
@@ -89,7 +89,7 @@ int RetiraElementoVetorDadosTarefa(vector < DadosTarefa > &Vetor,int NumConstuca
 	return 0;
 }
 
-int RetiraElementoVetorDadosTarefaApartirestrutura(vector < DadosTarefa > &Vetor, DadosTarefa Dado){
+int RetiraElementoVetorDadosTarefaApartirEstrutura(vector < DadosTarefa > &Vetor, DadosTarefa Dado){
 	for( unsigned int i = 0; i < Vetor.size(); i++){
 		if( Vetor[i].DadosDasTarefas[0] == Dado.DadosDasTarefas[0] && Vetor[i].DadosDasTarefas[1] == Dado.DadosDasTarefas[1] && Vetor[i].DadosDasTarefas[2] == Dado.DadosDasTarefas[2]){
 			if( Vetor[i].HorariosDasTarefas[0] == Dado.HorariosDasTarefas[0] && Vetor[i].HorariosDasTarefas[1] == Dado.HorariosDasTarefas[1] && Vetor[i].HorariosDasTarefas[2] == Dado.HorariosDasTarefas[2] && Vetor[i].HorariosDasTarefas[3] == Dado.HorariosDasTarefas[3] && Vetor[i].HorariosDasTarefas[4] == Dado.HorariosDasTarefas[4] ){
@@ -112,8 +112,8 @@ int AdicionaElementoVetorDadosTarefa(vector < DadosTarefa > &Vetor,int NumConstu
 	}
 }
 
-int AdicionaElementoVetorDadosTarefaApartirestrutura(vector < DadosTarefa > &Vetor, DadosTarefa Dado){
-	if( VerificaElementoVetorDadosTarefaApartirestrutura(Vetor,Dado) == 1){
+int AdicionaElementoVetorDadosTarefaApartirEstrutura(vector < DadosTarefa > &Vetor, DadosTarefa Dado){
+	if( VerificaElementoVetorDadosTarefaApartirEstrutura(Vetor,Dado) == 1){
 		cout << endl << endl << "    <<<<<<<<<<<<<<<   ERRO! -> AdicionaElementoVetorDadosTarefa >>>>>>>>>>>>>>>>>>>>>" << endl << endl;
 		return 0;
 	}else{
@@ -136,7 +136,7 @@ int VerificaElementoVetorDadosTarefa(vector < DadosTarefa > Vetor,int NumConstuc
 
 }
 
-int VerificaElementoVetorDadosTarefaApartirestrutura(vector < DadosTarefa >  Vetor,DadosTarefa Dado){
+int VerificaElementoVetorDadosTarefaApartirEstrutura(vector < DadosTarefa >  Vetor,DadosTarefa Dado){
 	for( unsigned int i = 0; i < Vetor.size(); i++){
 		if( Vetor[i].DadosDasTarefas[0] == Dado.DadosDasTarefas[0] && Vetor[i].DadosDasTarefas[1] == Dado.DadosDasTarefas[1] && Vetor[i].DadosDasTarefas[2] == Dado.DadosDasTarefas[2]){
 			if( Vetor[i].HorariosDasTarefas[0] == Dado.HorariosDasTarefas[0] && Vetor[i].HorariosDasTarefas[1] == Dado.HorariosDasTarefas[1] && Vetor[i].HorariosDasTarefas[2] == Dado.HorariosDasTarefas[2] && Vetor[i].HorariosDasTarefas[3] == Dado.HorariosDasTarefas[3] && Vetor[i].HorariosDasTarefas[4] == Dado.HorariosDasTarefas[4] ){

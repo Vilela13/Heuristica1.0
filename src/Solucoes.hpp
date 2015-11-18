@@ -636,7 +636,7 @@ void Solucao::AlocaTempoSaiDaPlanta(int IndiceConstrucaoNaoAtendida, vector < do
 		}
 	}
 
-// Aloca o tempo inicial que se pode sair da planta como sendo o tempo da ultima carreta que realizou o ultimo carregamento na quela planta para está construção
+// Aloca o tempo inicial que se pode sair da planta como sendo o tempo da ultima carreta que realizou o ultimo carregamento naquela planta para está construção
 	if( ConstrucoesInstancia.Construcoes[IndiceConstrucaoNaoAtendida].StatusAtendimento > 0){
 		for( int d = 0; d < ConstrucoesInstancia.Construcoes[IndiceConstrucaoNaoAtendida].StatusAtendimento; d++ ){
 			for( int p = 0; p < NP; p++){
@@ -700,16 +700,16 @@ int Solucao::DeletaTarefasAposTempoSaiPlanta(vector < double > &TempoSaiPlanta, 
 
 }
 
-void Solucao::SinalizaTarefaAdicionadaInicialmente( int TarefaAdicionada, int IndiceConstrucaoNaoAtendida, int DemandaNaoAtendida){
+void Solucao::SinalizaTarefaAdicionadaInicialmente( int TarefaAdicionada, int IndiceConstrucaoNaoAtendida, int DemandaNaoAtendida){		// Sinalisa se a tarefa foi antendida colocando os valores 2 em sua situação remoção. Caso não, a situação tem valor -1 e a remoção 3.
 		if( TarefaAdicionada == 1){
 			//cout << "                  Tarefa adicionada    -> Solucao::SinalizaTarefaAdicionadaInicialmente" << endl << endl;
 			ConstrucoesInstancia.Construcoes[ IndiceConstrucaoNaoAtendida ].SituacaoDemanda[ DemandaNaoAtendida ] = 2;
-			MarcaTarefaDeletadaNoVetor(ConstrucoesInstancia.Construcoes[ IndiceConstrucaoNaoAtendida ].NumeroDaConstrucao, DemandaNaoAtendida, 2);
+			MarcaTarefaDeletadaNoVetor(ConstrucoesInstancia.Construcoes[ IndiceConstrucaoNaoAtendida ].NumeroDaConstrucao, DemandaNaoAtendida, 2);		// coloca o valor 2 em sua situação remoção
 		}else{
-			cout << "                  Tarefa NAO adicionada " << endl << endl;
+			//cout << "                  Tarefa NAO adicionada " << endl << endl;
 			for( int d = DemandaNaoAtendida; d < ConstrucoesInstancia.Construcoes[ IndiceConstrucaoNaoAtendida ].NumeroDemandas; d++){
-				ConstrucoesInstancia.Construcoes[ IndiceConstrucaoNaoAtendida ].SituacaoDemanda[ d ] = -1;
-				MarcaTarefaDeletadaNoVetor(ConstrucoesInstancia.Construcoes[ IndiceConstrucaoNaoAtendida ].NumeroDaConstrucao, d, 3);
+				ConstrucoesInstancia.Construcoes[ IndiceConstrucaoNaoAtendida ].SituacaoDemanda[ d ] = -1;									// marca com -1, já tento alocar mas não conseguiu
+				MarcaTarefaDeletadaNoVetor(ConstrucoesInstancia.Construcoes[ IndiceConstrucaoNaoAtendida ].NumeroDaConstrucao, d, 3);		// marca com 3 a situação remoção
 			}
 		}
 }
@@ -948,35 +948,37 @@ void Solucao::ProcessoViabilizacao2(int TipoOrdenacao){
 	while( ConstrucoesInstancia.VerificaConstrucaoPodeAtender() == 1){			// Verifica se pode atender uma construção ainda, se tem uma com demanda não atendida
 
 		InviabilidadeSolucaoAnterior = ConstrucoesInstancia.NivelDeInviabilidade;		// guarda o nivel de inviabilidade
-		ConstrucoesInstancia.ReiniciaTarefasRetiradas();								//
-		ProcuraConstrucaoNaoAtendida( ConstrucaoNaoAtendida, DemandaNaoAtendida);
-		TempoSaiPlanta.resize(NP);
+		ConstrucoesInstancia.ReiniciaTarefasRetiradas();								// reinicia o estado de deslocamento e remoção de todas as demandas de todas as construções
+		ProcuraConstrucaoNaoAtendida( ConstrucaoNaoAtendida, DemandaNaoAtendida);		// retorna a demanda e a construção que serão analisados inicialmente
+		TempoSaiPlanta.resize(NP);														// inicia o tamanho do vetor de tempo do inicio das plantas com 0
 		if( Imprime == 1){
 			cout << " ConstrucaoNaoAtendida = " << ConstrucaoNaoAtendida <<" DemandaNaoAtendida = " << DemandaNaoAtendida << endl << endl;
 		}
-		RetornaIndiceConstrucao(ConstrucaoNaoAtendida, IndiceConstrucaoNaoAtendida, " inicio -> Solucao::ProcessoViabilizacao2" );
-
+		RetornaIndiceConstrucao(ConstrucaoNaoAtendida, IndiceConstrucaoNaoAtendida, " inicio -> Solucao::ProcessoViabilizacao2" );		// retorna o incide da cosntrução que tem qeu ser analisada no momento
 	// deleta tarefas que são atendidas antes desta tarefa não alocada
-		AlocaTempoSaiDaPlanta(IndiceConstrucaoNaoAtendida,TempoSaiPlanta, 0);
-		DeletouAlgumaTarefa = DeletaTarefasAposTempoSaiPlanta(TempoSaiPlanta, DadosTarefasDesalocadas,  0);
+		AlocaTempoSaiDaPlanta(IndiceConstrucaoNaoAtendida,TempoSaiPlanta, 0);		// aloca no vetor TempoSaiPlanta os tempos que as plantas podem atender
+		DeletouAlgumaTarefa = DeletaTarefasAposTempoSaiPlanta(TempoSaiPlanta, DadosTarefasDesalocadas,  0);		// deleta tarefas que são atendidas antes dos tempos armazenadaos no vetor TempoSaiPlanta
 		if( Imprime == 1){
 			cout << "   <<<<<<<<<<< Deteta tarefas >>>>>>>>>>>>>> ";
 			ConstrucoesInstancia.ImprimeContrucoes();
 			cin >> PararPrograma;
 		}
-
-
 	// Adiciona a tarefa que não era alocada antes
-		TarefaAdicionada = AdicionaTarefa( ConstrucaoNaoAtendida, DemandaNaoAtendida, DadosTarefasAdicionadas, 2, TipoOrdenacao);
-		SinalizaTarefaAdicionadaInicialmente( TarefaAdicionada, IndiceConstrucaoNaoAtendida, DemandaNaoAtendida);
-		if( ConstrucoesInstancia.Construcoes[ IndiceConstrucaoNaoAtendida ].SituacaoDemanda[ DemandaNaoAtendida ] == -1){
+		TarefaAdicionada = AdicionaTarefa( ConstrucaoNaoAtendida, DemandaNaoAtendida, DadosTarefasAdicionadas, 2, TipoOrdenacao);		// tenta adicionar a demanda não atendida anteriormente. Caso consegui retorna 1, caso contrario retorna 0.
+		SinalizaTarefaAdicionadaInicialmente( TarefaAdicionada, IndiceConstrucaoNaoAtendida, DemandaNaoAtendida);						// atualiza os valores de situação e remoção da demanda. caso for atendida coloca 2 em ambos, caso não, a situação tem valor -1 e a remoção 3
+		if( ConstrucoesInstancia.Construcoes[ IndiceConstrucaoNaoAtendida ].SituacaoDemanda[ DemandaNaoAtendida ] == -1){		// Verifa se conseguiu alocar a demnada não alocada antes
+			// Caos não aloque a demanda
 			if( Imprime == 1){
 				cout << endl << endl << "   Não consigo alocar tarefa [" << ConstrucaoNaoAtendida << "-" << DemandaNaoAtendida << "] que não foi alocada antes -> Solucao::ProcessoViabilizacao2 " << endl << endl;
 			}
-			ReadicionaTarefasApartirDeDados( DadosTarefasDesalocadas, 1);
-			DadosTarefasDesalocadas.clear();
-			ConstrucoesInstancia.AlocaValoresConstrucaoPodeAtender();
-			ConstrucoesInstancia.ConstrucaoPodeAvaliar[IndiceConstrucaoNaoAtendida] = 4;
+			ReadicionaTarefasApartirDeDados( DadosTarefasDesalocadas, 1);	// retorna a solução inicial
+			DadosTarefasDesalocadas.clear();								// deleta conteudo do vetor
+
+
+			//ConstrucoesInstancia.AlocaValoresConstrucaoPodeAtender();		// Marca as construções que já foram completamente atendidas com 1, as que não forma com 0
+
+
+			ConstrucoesInstancia.ConstrucaoPodeAvaliar[IndiceConstrucaoNaoAtendida] = 4;		// marca cosntrução como já analisada e que não se consegue alocar a demanda
 		}else{
 
 			if( Imprime == 1){
@@ -1129,8 +1131,6 @@ void Solucao::ProcessoViabilizacao2(int TipoOrdenacao){
 				//ConstrucoesInstancia.ImprimeContrucoes();
 				//PlantasInstancia.Imprime(1,1);
 				//cin >> PararPrograma;
-
-
 
 			}
 

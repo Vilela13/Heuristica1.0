@@ -836,7 +836,7 @@ int Solucao::ColocarTarefaAtrazandoAsOutras(int ConstrucaoParaAtenderIndice, int
 	vector < DadosTarefa > TemporarioAdiciona;
 	vector < DadosTarefa > AuxiliarRetira;
 
-	HorarioInicioConstrucao = HoraInicio + IntervaloDeTempo;
+	HorarioInicioConstrucao = HoraInicio + IntervaloDeTempo;	// aumenta o tempo que a primeira demanda pode ser atendida
 
 	SituacaoPlantas.resize(NP);					// Vetor que armazena se a planta foi analisada ou não para atender certa demanda
 	SituacaoDemandas.resize(demanda + 1); 		// Tem que somar mais um pelo fato de se contar o 0 como um elemento
@@ -873,21 +873,22 @@ int Solucao::ColocarTarefaAtrazandoAsOutras(int ConstrucaoParaAtenderIndice, int
 			}
 		}
 		if ( VerificaSeTemUmValorVetorInt( -2, SituacaoPlantas) == 1){
-			ConstrucoesInstancia.Construcoes[ConstrucaoParaAtenderIndice].DeletaTodasAtividadesDaContrucaoSalvandoDados(HoraInicio, PlantasInstancia, AuxiliarRetira);
-			TemporarioAdiciona.clear();
-			HorarioInicioConstrucao = HorarioInicioConstrucao + IntervaloDeTempo;
+			ConstrucoesInstancia.Construcoes[ConstrucaoParaAtenderIndice].DeletaTodasAtividadesDaContrucaoSalvandoDados(HoraInicio, PlantasInstancia, AuxiliarRetira);		//deleta tarefas anteriores ao horario inicio, pois ainda há possibilidade de atender a demanda que ainda não conseguimos atender
+			TemporarioAdiciona.clear();													// deleta conteudo do vetor de tarefas adicionadas, pois elas forma deletadas no procedimento acima
+			HorarioInicioConstrucao = HorarioInicioConstrucao + IntervaloDeTempo;		// aumenta o tempo que se começa a alocar as tarefas
 		}else{
-			ImprimeVetorInt( SituacaoPlantas);
-			ConstrucoesInstancia.Construcoes[ConstrucaoParaAtenderIndice].DeletaTodasAtividadesDaContrucaoSalvandoDados(HoraInicio, PlantasInstancia, AuxiliarRetira);
-			TemporarioAdiciona.clear();
+			// Não se consegue adicionar a demanda mesmo atrazando as atnteriores
+			//ImprimeVetorInt( SituacaoPlantas);
+			ConstrucoesInstancia.Construcoes[ConstrucaoParaAtenderIndice].DeletaTodasAtividadesDaContrucaoSalvandoDados(HoraInicio, PlantasInstancia, AuxiliarRetira);		// deleta todas as tarefas adicionadas
+			TemporarioAdiciona.clear();			// limpa vetor com as tarefas adicionadas durante o procedimento
 			return 0;
 		}
 	}
-
+	// ultrapassou o limite de tempo na construção
 	if ( Imprime == 1){
 		cout << endl << endl << "  Não da para atrazar " << endl << endl;
 	}
-	TemporarioAdiciona.clear();
+	TemporarioAdiciona.clear();				// limpa vetor com as tarefas adicionadas durante o procedimento
 	return 0;
 
 }
@@ -942,13 +943,12 @@ void Solucao::ProcessoViabilizacao2(int TipoOrdenacao){
 
 // Encontra demanda ainda não atendida
 
-	ConstrucoesInstancia.AlocaValoresConstrucaoPodeAtender();
+	ConstrucoesInstancia.AlocaValoresConstrucaoPodeAtender();		// Marca as construções que já foram completamente atenddidas com 1, as que não forma com 0
 
-	while( ConstrucoesInstancia.VerificaConstrucaoPodeAtender() == 1){
+	while( ConstrucoesInstancia.VerificaConstrucaoPodeAtender() == 1){			// Verifica se pode atender uma construção ainda, se tem uma com demanda não atendida
 
-
-		InviabilidadeSolucaoAnterior = ConstrucoesInstancia.NivelDeInviabilidade;
-		ConstrucoesInstancia.ReiniciaTarefasRetiradas();
+		InviabilidadeSolucaoAnterior = ConstrucoesInstancia.NivelDeInviabilidade;		// guarda o nivel de inviabilidade
+		ConstrucoesInstancia.ReiniciaTarefasRetiradas();								//
 		ProcuraConstrucaoNaoAtendida( ConstrucaoNaoAtendida, DemandaNaoAtendida);
 		TempoSaiPlanta.resize(NP);
 		if( Imprime == 1){

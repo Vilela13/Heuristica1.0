@@ -54,14 +54,14 @@ public:
 
 };
 
-Carreta::Carreta(){
+Carreta::Carreta(){						// Construtora
 	NumeroDaCarreta = -13;
 	NumeroDeDemandasAntendidas = -13;
 	NumeroPlanta = -13;
 
 }
 
-int Carreta::VerificaDisponibilidade(double InicioPossivelAlocacao, double FinalPossivelAlocacao){
+int Carreta::VerificaDisponibilidade(double InicioPossivelAlocacao, double FinalPossivelAlocacao){		// verifica a disponibilidade do veículo para atender a demanda
 
 	for( unsigned int d = 0; d < Deslocamentos.size(); d ++){
 		if( InicioPossivelAlocacao <= Deslocamentos[d].HorarioInicioDeslocamento){
@@ -90,7 +90,7 @@ int Carreta::VerificaDisponibilidade(double InicioPossivelAlocacao, double Final
 
 }
 
-void Carreta::AlocaAtividade(double HoraInicio, double HoraFinal, int NumContrucao, int NumDemanda){
+void Carreta::AlocaAtividade(double HoraInicio, double HoraFinal, int NumContrucao, int NumDemanda){	// Aloca veículo para atender a demanda
 
 	NumeroDeDemandasAntendidas = NumeroDeDemandasAntendidas + 1;
 
@@ -108,7 +108,7 @@ void Carreta::AlocaAtividade(double HoraInicio, double HoraFinal, int NumContruc
 
 }
 
-int Carreta::DeletaAtividade(double HoraInicio, double HoraFinal, int NumContrucao, int NumDemanda){
+int Carreta::DeletaAtividade(double HoraInicio, double HoraFinal, int NumContrucao, int NumDemanda){	// Deleta alocação de demanda alocada ao veículo
 	for( vector < Deslocamento >::iterator it = Deslocamentos.begin(); it != Deslocamentos.end(); it++){
 		if( it->HorarioInicioDeslocamento == HoraInicio){
 			if( it->HorarioFinalDeslocamento == HoraFinal){
@@ -127,7 +127,7 @@ int Carreta::DeletaAtividade(double HoraInicio, double HoraFinal, int NumContruc
 	return 0;
 }
 
-void Carreta::Imprime(int Ordena){
+void Carreta::Imprime(int Ordena){			// Imprime as atividades realizadas pelo veículo
 
 	if( Ordena == 1){
 		sort (Deslocamentos.begin(), Deslocamentos.end(), DecideQualMenorInicioTempoDeslocamento);
@@ -140,7 +140,7 @@ void Carreta::Imprime(int Ordena){
 
 }
 
-Carreta::~Carreta(){
+Carreta::~Carreta(){						// Destruidora
 
 }
 
@@ -179,7 +179,7 @@ ConjuntoCarretas::ConjuntoCarretas(){
 
 }
 
-void ConjuntoCarretas::IniciaConjuntoCarretas(int NumeroCaminhoes, int NumeroDaPlanta){
+void ConjuntoCarretas::IniciaConjuntoCarretas(int NumeroCaminhoes, int NumeroDaPlanta){		// inicia os dados e as estruturas dos veículos
 	Carretas.resize(NumeroCaminhoes);
 	for(int v = 0; v < NumeroCaminhoes; v++){
 		Carretas[v].NumeroDaCarreta = v;
@@ -199,7 +199,7 @@ void ConjuntoCarretas::OrdenaCarretasPorNumeroDeTarefasRealizadas(int TipoOrdena
 	}
 }
 
-int ConjuntoCarretas::DeletaTarefa( int NumeroCaminhao, double HoraInicio, double HoraFinal, int NumContrucao, int NumDemanda){
+int ConjuntoCarretas::DeletaTarefa( int NumeroCaminhao, double HoraInicio, double HoraFinal, int NumContrucao, int NumDemanda){		// deleta tarefa realizada por um veiculo
 	int Retirou;
 	Retirou = 0;
 	for( unsigned int c = 0; c < Carretas.size(); c++){
@@ -227,7 +227,7 @@ int ConjuntoCarretas::AlocaInidiceVeiculo( int NumCarretaUtilizada, int &v){
 	return 0;
 }
 
-void ConjuntoCarretas::Imprime(int Ordena){
+void ConjuntoCarretas::Imprime(int Ordena){		// Imprime os dados dos veiculos
 	if(Ordena == 1){
 		sort (Carretas.begin(), Carretas.end(), DecideCarretaAnterior);
 	}

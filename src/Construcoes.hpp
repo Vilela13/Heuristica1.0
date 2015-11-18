@@ -862,6 +862,7 @@ public:
 	void ReiniciaTarefasRetiradas();
 
 	void AlocaValoresConstrucaoPodeAtender();
+	void AtualizaValoresConstrucaoPodeAtender();
 	int VerificaConstrucaoPodeAtender();
 
 	~ConjuntoConstrucoes();
@@ -952,6 +953,15 @@ void ConjuntoConstrucoes::AlocaValoresConstrucaoPodeAtender(){		// aloca 1 se a 
 			ConstrucaoPodeAvaliar[c] = 1;
 		}else{
 			ConstrucaoPodeAvaliar[c] = 0;
+		}
+	}
+
+}
+
+void ConjuntoConstrucoes::AtualizaValoresConstrucaoPodeAtender(){		// atualiza com 1 se a construção já teve todas as demandas atendidas
+	for( int c = 0; c < NumeroConstrucoes; c++){
+		if ( Construcoes[c].NumeroDemandas == Construcoes[c].StatusAtendimento){
+			ConstrucaoPodeAvaliar[c] = 1;
 		}
 	}
 

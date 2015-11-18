@@ -1145,7 +1145,7 @@ void Solucao::ProcessoViabilizacao2(int TipoOrdenacao){
 				cout << endl << endl << "    Melhoru !!!!!!" << endl << endl;
 				DadosTarefasDesalocadas.clear();
 				DadosTarefasAdicionadas.clear();
-				ConstrucoesInstancia.AlocaValoresConstrucaoPodeAtender();
+				ConstrucoesInstancia.AtualizaValoresConstrucaoPodeAtender();
 
 			}else{
 				if( Imprime == 1){
@@ -1163,7 +1163,7 @@ void Solucao::ProcessoViabilizacao2(int TipoOrdenacao){
 				//cout << endl <<" aqui3" << endl ;
 				DadosTarefasDesalocadas.clear();
 				DadosTarefasAdicionadas.clear();
-				ConstrucoesInstancia.AlocaValoresConstrucaoPodeAtender();
+				ConstrucoesInstancia.AtualizaValoresConstrucaoPodeAtender();
 				ConstrucoesInstancia.ConstrucaoPodeAvaliar[IndiceConstrucaoNaoAtendida] = 3;
 			}
 

@@ -1135,12 +1135,13 @@ void Solucao::ProcessoViabilizacao2(int TipoOrdenacao){
 			}
 
 			cin >> PararPrograma;
+			ConstrucoesInstancia.CalcularNivelDeInviabilidade();
+
 			ConstrucoesInstancia.ImprimeContrucoes();
 			//PlantasInstancia.Imprime(1,1);
 
-			ConstrucoesInstancia.CalcularNivelDeInviabilidade();
 
-			if( InviabilidadeSolucaoAnterior < ConstrucoesInstancia.NivelDeInviabilidade){
+			if( InviabilidadeSolucaoAnterior > ConstrucoesInstancia.NivelDeInviabilidade){
 				cout << endl << endl << "    Melhoru !!!!!!" << endl << endl;
 				DadosTarefasDesalocadas.clear();
 				DadosTarefasAdicionadas.clear();

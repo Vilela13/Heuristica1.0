@@ -842,15 +842,15 @@ public:
 
 	vector< Construcao > Construcoes;
 	int NumeroConstrucoes;
-	vector < int > ConstrucaosAnalizadas;
+	vector < int > ConstrucoesAnalizadas;
 
 	vector < int > ConstrucaoPodeAvaliar;
 
 	double MakespanConstrucoes;
 	int NivelDeInviabilidade;
 
-	void InicializaConstrucaosAnalizadas();
-	void AlocaValoresConstrucaosAnalizadas( int );
+	void InicializaConstrucoesAnalizadas();
+	void AlocaValoresConstrucoesAnalizadas( int );
 	void CalcularNivelDeInviabilidade();
 
 	void IniciaConjuntoConstrucoes(int);
@@ -874,20 +874,20 @@ ConjuntoConstrucoes::ConjuntoConstrucoes(){
 	MakespanConstrucoes = -13;
 }
 
-void ConjuntoConstrucoes::InicializaConstrucaosAnalizadas(){			// Inicializa o status das cosntruções todos como 0
-	ConstrucaosAnalizadas.resize(Construcoes.size());
+void ConjuntoConstrucoes::InicializaConstrucoesAnalizadas(){			// Inicializa o status das cosntruções todos como 0
+	ConstrucoesAnalizadas.resize(Construcoes.size());
 	for( unsigned int c = 0; c < Construcoes.size(); c++){
-		ConstrucaosAnalizadas[c] = 0;
+		ConstrucoesAnalizadas[c] = 0;
 	}
 }
 
-void ConjuntoConstrucoes::AlocaValoresConstrucaosAnalizadas( int IndiceConstrucaoNaoAtendida){		// 		Coloca o status 2 para as construções que já foram atendidas, e coloca 3 no status da construção passada como parametro
+void ConjuntoConstrucoes::AlocaValoresConstrucoesAnalizadas( int IndiceConstrucaoNaoAtendida){		// 		Coloca o status 2 para as construções que já foram atendidas, e coloca 3 no status da construção passada como parametro
 	for ( int c = 0; c < NumeroConstrucoes; c++){
 		if( Construcoes[c].StatusAtendimento == Construcoes[c].NumeroDemandas ){
-			ConstrucaosAnalizadas[c] = 2;
+			ConstrucoesAnalizadas[c] = 2;
 		}
 	}
-	ConstrucaosAnalizadas[IndiceConstrucaoNaoAtendida] = 3;
+	ConstrucoesAnalizadas[IndiceConstrucaoNaoAtendida] = 3;
 
 }
 

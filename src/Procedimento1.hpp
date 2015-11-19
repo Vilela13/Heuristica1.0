@@ -61,7 +61,7 @@ void Procedimento1::CarregaDados(int InstNP, ConjuntoPlantas InstPlantasInstanci
 	TempoDeVidaConcreto = InstTempoDeVidaConcreto;
 }
 
-int Procedimento1::SelecionaConstrucao( Construcao** ConstrucaoVaiSerSuprida , vector < int > ConstrucaosAnalizadas){
+int Procedimento1::SelecionaConstrucao( Construcao** ConstrucaoVaiSerSuprida , vector < int > ConstrucoesAnalizadas){
 	int Ativo;
 	double RankInicial;
 
@@ -70,7 +70,7 @@ int Procedimento1::SelecionaConstrucao( Construcao** ConstrucaoVaiSerSuprida , v
 
 	for( int c = 0; c < NE; c++){
 		if ( RankInicial > ConstrucoesInstancia.Construcoes[c].RankTempoDemandas){
-			if(ConstrucoesInstancia.Construcoes[c].StatusAtendimento < ConstrucoesInstancia.Construcoes[c].NumeroDemandas &&  ConstrucaosAnalizadas[ConstrucoesInstancia.Construcoes[c].NumeroDaConstrucao] == 0){
+			if(ConstrucoesInstancia.Construcoes[c].StatusAtendimento < ConstrucoesInstancia.Construcoes[c].NumeroDemandas &&  ConstrucoesAnalizadas[ConstrucoesInstancia.Construcoes[c].NumeroDaConstrucao] == 0){
 				*ConstrucaoVaiSerSuprida = &ConstrucoesInstancia.Construcoes[c];
 				RankInicial = ConstrucoesInstancia.Construcoes[c].RankTempoDemandas;
 				Ativo = 1;
@@ -191,12 +191,12 @@ int Procedimento1::Executa( int TipoOrdenacao){
 
 	Viabilidade = 1;
 
-	ConstrucoesInstancia.InicializaConstrucaosAnalizadas();
+	ConstrucoesInstancia.InicializaConstrucoesAnalizadas();
 
 	for( int c = 0; c < ConstrucoesInstancia.NumeroConstrucoes; c++ ){
-		ConstrucaoSelecionada = SelecionaConstrucao( &ConstrucaoVaiSerSuprida, ConstrucoesInstancia.ConstrucaosAnalizadas);
+		ConstrucaoSelecionada = SelecionaConstrucao( &ConstrucaoVaiSerSuprida, ConstrucoesInstancia.ConstrucoesAnalizadas);
 		if( ConstrucaoSelecionada == 1){
-			ConstrucoesInstancia.ConstrucaosAnalizadas[ConstrucaoVaiSerSuprida->NumeroDaConstrucao] =  1;
+			ConstrucoesInstancia.ConstrucoesAnalizadas[ConstrucaoVaiSerSuprida->NumeroDaConstrucao] =  1;
 			do{
 				PlantasInstancia.InicializaPlantasAnalizadas();
 				Demanda = ConstrucaoVaiSerSuprida->StatusAtendimento;

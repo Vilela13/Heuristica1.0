@@ -148,7 +148,7 @@ int VerificaElementoVetorDadosTarefaApartirEstrutura(vector < DadosTarefa >  Vet
 }
 
 void ImprimeVetorDadosTarefa( vector < DadosTarefa > Vetor){
-	for( int i = 0; i < Vetor.size(); i++){
+	for( unsigned int i = 0; i < Vetor.size(); i++){
 		cout << "[" << i << "] ";
 		Vetor[i].Imprimir();
 	}

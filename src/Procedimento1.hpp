@@ -121,7 +121,7 @@ int Procedimento1::SelecionaCarreta(Planta& PlantaMaisPerto, Construcao& Constru
 	int DisponibilidadeConstrucao;
 	int DisponibilidadeCarreta;
 
-	int Para;
+	//int Para;
 
 	if( ConstrucaoVaiSerSuprida.SituacaoDemanda[NumeroDemanda] == 0){
 		PlantaMaisPerto.VeiculosDaPlanta.OrdenaCarretasPorNumeroDeTarefasRealizadas(TipoOrdenacao);

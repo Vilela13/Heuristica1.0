@@ -58,9 +58,7 @@ bool DecideQualDescarregamentoVemprimeiro ( Descarregamento d1, Descarregamento 
 }
 
 void Descarregamento::Imprime(){
-	cout << " Planta = " << NumPlantaFornecedor;
-	cout << " Carreta = " << NumCarretaUtilizada ;
-	cout << " Tempo [" << HorarioInicioDescarregamento << " - " << HorarioFinalDescarregamento << "]" << endl;
+	printf ("  Planta = %d Carreta = %d Tempo[%.4f - %.4f]\n", NumPlantaFornecedor, NumCarretaUtilizada, HorarioInicioDescarregamento, HorarioFinalDescarregamento);
 }
 
 class DistanciaPlanta{
@@ -806,14 +804,11 @@ void Construcao::ReiniciaTarefasRetiradas(){		// faz tarefas serem mascadas como
 
 
 void Construcao::ImprimeContrucao(){		// Imprime os dados da construções
-	cout << "# Contrucao " << NumeroDaConstrucao << " com " << NumeroDemandas << " demandas, janela de tempo (" <<  TempoMinimoDeFuncionamento;
-	cout << "," << TempoMaximoDeFuncionamento << "), com rank = " << RankTempoDemandas << endl;
+
+	printf( "# Contrucao %d com %d demandas, janela de tempo (%.4f - %.4f), com rank = %.4f \n",NumeroDaConstrucao, NumeroDemandas, TempoMinimoDeFuncionamento, TempoMaximoDeFuncionamento, RankTempoDemandas);
 	if( StatusAtendimento != 0){
 		for( unsigned int d = 0; d < Descarregamentos.size(); d++){
-			cout << "     * Carreta [" << Descarregamentos[d].NumPlantaFornecedor << "-" << Descarregamentos[d].NumCarretaUtilizada;
-			cout << "] atende demanda " << NumeroDaConstrucao << "-" << d;
-			cout << " de ( " << Descarregamentos[d].HorarioInicioDescarregamento;
-			cout << " as " << Descarregamentos[d].HorarioFinalDescarregamento  << " ) " << endl;
+			printf( "     * Carreta [%d-%d] atende demanda %d-%d de ( %.4f as %.4f )\n", Descarregamentos[d].NumPlantaFornecedor, Descarregamentos[d].NumCarretaUtilizada, NumeroDaConstrucao, d, Descarregamentos[d].HorarioInicioDescarregamento, Descarregamentos[d].HorarioFinalDescarregamento);
 		}
 	}
 	cout << "   Vetor de atendimento demandas [ ";
@@ -826,7 +821,7 @@ void Construcao::ImprimeContrucao(){		// Imprime os dados da construções
 		cout << SituacaoRemocao[ i ] << " ";
 	}
 	cout << "]" << endl;
-	cout << "   MAKESPAN = " << Makespan << "   Status = " <<  StatusAtendimento << endl;
+	printf ("   MAKESPAN = %.4f   Status = %d\n", Makespan, StatusAtendimento);
 }
 
 
@@ -912,7 +907,7 @@ void ConjuntoConstrucoes::ImprimeContrucoes(){							// Imprime as construções
 		Construcoes[c].ImprimeContrucao();
 	}
 
-	cout << endl << " Nivel de Inviabilidade = " << NivelDeInviabilidade << "  Makespan Geral das Construcoes = "<< MakespanConstrucoes << endl;
+	printf( " Nivel de Inviabilidade = %d  Makespan Geral das Construcoes = %.4f\n", NivelDeInviabilidade, MakespanConstrucoes);
 
 }
 

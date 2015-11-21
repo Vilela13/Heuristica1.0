@@ -64,21 +64,25 @@ Carreta::Carreta(){						// Construtora
 int Carreta::VerificaDisponibilidade(double InicioPossivelAlocacao, double FinalPossivelAlocacao){		// verifica a disponibilidade do veículo para atender a demanda
 
 	for( unsigned int d = 0; d < Deslocamentos.size(); d ++){
+		// verifica se o deslocamento que se quer colocar possui dentro de se um deslocamento já alocado
 		if( InicioPossivelAlocacao <= Deslocamentos[d].HorarioInicioDeslocamento){
 			if ( FinalPossivelAlocacao >= Deslocamentos[d].HorarioFinalDeslocamento){
 				return 0;
 			}
 		}
+		// verifica se o deslocamento que se quer colocar está dentro de se um deslocamento já alocado
 		if( InicioPossivelAlocacao >= Deslocamentos[d].HorarioInicioDeslocamento){
 			if ( FinalPossivelAlocacao <= Deslocamentos[d].HorarioFinalDeslocamento){
 				return 0;
 			}
 		}
+		// verifica se o deslocamento que se quer colocar possui a parte posterior dentro de um deslocamento alocado
 		if( InicioPossivelAlocacao <= Deslocamentos[d].HorarioInicioDeslocamento){
 			if( FinalPossivelAlocacao > Deslocamentos[d].HorarioInicioDeslocamento){
 				return 0;
 			}
 		}
+		// verifica se o deslocamento que se quer colocar possui a parte anterior dentro de um deslocamento alocado
 		if( InicioPossivelAlocacao < Deslocamentos[d].HorarioFinalDeslocamento){
 			if ( FinalPossivelAlocacao >= Deslocamentos[d].HorarioFinalDeslocamento){
 				return 0;
@@ -134,10 +138,8 @@ void Carreta::Imprime(int Ordena){			// Imprime as atividades realizadas pelo ve
 	}
 	cout << "# Carreta [" << NumeroPlanta << "-" << NumeroDaCarreta << "] que atendeu " << NumeroDeDemandasAntendidas << " demandas" << endl;
 	for( int d = 0; d < NumeroDeDemandasAntendidas; d++){
-		cout << "    *  Atender a [" << Deslocamentos[d].NumeroConstrucao << "-"<< Deslocamentos[d].NumeroDemandaSuprida << "]" ;
-		cout << " de ( " << Deslocamentos[d].HorarioInicioDeslocamento << " - " << Deslocamentos[d].HorarioFinalDeslocamento << " ) "<< endl;
+		printf( "    *  Atender a [%d-%d] de (%.4f - %.4f)\n", Deslocamentos[d].NumeroConstrucao, Deslocamentos[d].NumeroDemandaSuprida, Deslocamentos[d].HorarioInicioDeslocamento, Deslocamentos[d].HorarioFinalDeslocamento);
 	}
-
 }
 
 Carreta::~Carreta(){						// Destruidora

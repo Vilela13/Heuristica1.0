@@ -64,13 +64,13 @@ void DadosTarefa::InserirConteudo(int NumConstucao, int NumPlanta, int NumCarret
 }
 // Imprime dados da estrutura
 void DadosTarefa::Imprimir(){
-	cout << " Planta [" << DadosDasTarefas[1] << "]";
-	cout << " tempo (" << HorariosDasTarefas[0] << "-" << HorariosDasTarefas[1] << ") ";
-	cout << " Construcao [" << DadosDasTarefas[0]  << "]";
-	cout << "tempo (" << HorariosDasTarefas[2] << "-" << HorariosDasTarefas[3] << ") ";
-	cout << " Caminhao [" << DadosDasTarefas[1] << "-" << DadosDasTarefas[2] << "]";
-	cout << " tempo (" << HorariosDasTarefas[0] << "-" << HorariosDasTarefas[4] << ") ";
-	cout << " Situação [" << DadosDasTarefas[3] << "]" << endl;
+	printf (" Planta [%d]",DadosDasTarefas[1] );
+	printf (" tempo (%.4f-%.4f)", HorariosDasTarefas[0], HorariosDasTarefas[1]);
+	printf (" Construcao [%d]",DadosDasTarefas[0]);
+	printf (" tempo (%.4f-%.4f) ", HorariosDasTarefas[2], HorariosDasTarefas[3]);
+	printf (" Caminhao [%d-%d]",DadosDasTarefas[1], DadosDasTarefas[2]);
+	printf (" tempo (%.4f-%.4f)", HorariosDasTarefas[0], HorariosDasTarefas[4]);
+	printf (" Situação [%d]\n", DadosDasTarefas[3]);
 }
 // destruidora vazia da classe
 DadosTarefa::~DadosTarefa(){
@@ -128,12 +128,12 @@ int AdicionaElementoVetorDadosTarefa(vector < DadosTarefa > &Vetor, int NumConst
 	int ParaFuncao;
 	if( VerificaElementoVetorDadosTarefa(Vetor,NumConstucao, NumPlanta,NumCarreta,  HoraInicioPlanta, HoraSaiPlanta, HoraInicioConstrucao, HoraSaiConstrucao, HoraRetornaPlanta) == 1){
 		cout << endl << endl << "    <<<<<<<<<<<<<<<   ERRO! -> AdicionaElementoVetorDadosTarefa >>>>>>>>>>>>>>>>>>>>>" << endl << endl;
-		cout << " Planta [" << NumPlanta << "]";
-		cout << " tempo (" << HoraInicioPlanta << "-" << HoraSaiPlanta << ") ";
-		cout << " Construcao [" << NumConstucao  << "]";
-		cout << "tempo (" << HoraInicioConstrucao << "-" << HoraSaiConstrucao << ") ";
-		cout << " Caminhao [" << NumPlanta << "-" << NumCarreta << "]";
-		cout << " tempo (" << HoraInicioPlanta << "-" << HoraRetornaPlanta << ") " << endl;
+		printf (" Planta [%d]",NumPlanta );
+		printf (" tempo (%.4f-%.4f)", HoraInicioPlanta, HoraSaiPlanta);
+		printf (" Construcao [%d]",NumConstucao);
+		printf (" tempo (%.4f-%.4f)", HoraInicioConstrucao, HoraSaiConstrucao);
+		printf (" Caminhao [%d-%d]",NumPlanta, NumCarreta);
+		printf (" tempo (%.4f-%.4f)\n", HoraInicioPlanta, HoraRetornaPlanta);
 		cin >> ParaFuncao;
 		return 0;
 	}else{

@@ -153,9 +153,7 @@ void Planta::CalculaMakespan(){			// calcula o Makes pan da Planta
 }
 
 void Planta::Imprime(int OrdenaPlantas, int OrdenaCarretas){		// Imprime dados da planta
-	cout << endl;
-	cout << "# Planta " << NumeroDaPlanta << " com " << NumeroVeiculos << " veiculos, funciona de (";
-	cout << TempoMinimoDeFuncionamento << ", "<< TempoMaximoDeFuncionamento << ")" << endl;
+	printf ("\n# Planta %d com %d veiculos, funciona de (%.4f - %.4f)\n", NumeroDaPlanta,NumeroVeiculos,TempoMinimoDeFuncionamento, TempoMaximoDeFuncionamento);
 // Imprime os carregamentos das plantas
 	if(OrdenaPlantas == 1){
 		sort (Carregamentos.begin(), Carregamentos.end(), DecideQualMenorInicioTempoCarregamento);
@@ -163,9 +161,7 @@ void Planta::Imprime(int OrdenaPlantas, int OrdenaCarretas){		// Imprime dados d
 	if ( Carregamentos.size() != 0 ){
 		cout << "   Carregamentos " << endl;
 		for( unsigned int c = 0; c < Carregamentos.size(); c++){
-			cout << "    * Caminhao [" << NumeroDaPlanta << "-" << Carregamentos[c].NumCarretaUtilizada;
-			cout << "] para suprir construcao [" << Carregamentos[c].NumeroConstrucao << "-" << Carregamentos[c].NumeroDemandaSuprida;
-			cout << "] das ( "<< Carregamentos[c].HorarioInicioCarregamento << " as " << Carregamentos[c].HorarioFinalCarregamento << " ) " << endl;
+			printf ("    * Caminhao [%d - %d] para suprir construcao [%d - %d] das ( %.4f as %.4f)\n", NumeroDaPlanta, Carregamentos[c].NumCarretaUtilizada, Carregamentos[c].NumeroConstrucao, Carregamentos[c].NumeroDemandaSuprida, Carregamentos[c].HorarioInicioCarregamento, Carregamentos[c].HorarioFinalCarregamento);
 		}
 	}
 // Imprime os veículos da planta
@@ -180,7 +176,7 @@ void Planta::ImprimeDistancias(){		// Imprime as distancias da planta as constru
 	cout << " +++ Distancias ++++ " << endl;
 	cout << "Numero de conatricoes " << DistanciaConstrucoes.size() << endl;
 	for ( unsigned int c = 0; c < DistanciaConstrucoes.size(); c++){
-		cout << "   Contrucao" << c << " = "<< DistanciaConstrucoes[c] << endl;
+		printf("   Contrucao %d = %.4f", c, DistanciaConstrucoes[c]);
 	}
 }
 
@@ -426,7 +422,7 @@ void ConjuntoPlantas::Imprime(int OrdenaPlantas,int OrdenaCarrtas){		// Imprime 
 		Plantas[p].Imprime(OrdenaPlantas, OrdenaCarrtas);
 	}
 
-	cout << endl << "  Makespan Geral das Plantas = "<< MakespanPLantas << endl;
+	printf ("\n  Makespan Geral das Plantas = %.4f\n", MakespanPLantas);
 }
 
 int ConjuntoPlantas::VerificaPlantasAnalizadasPodemAtenderSeAtrazar(){		// verifica se uma das plantas em questão pode atender a demanda em questão caso de atrazar o atendimento das outras demandas da construção que se quer atender

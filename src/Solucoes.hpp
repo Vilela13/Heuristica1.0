@@ -953,7 +953,7 @@ void Solucao::ProcessoViabilizacao2(int TipoOrdenacao){
 		AlocaTempoSaiDaPlanta(IndiceConstrucaoNaoAtendida,TempoSaiPlanta, 0);		// aloca no vetor TempoSaiPlanta os tempos que as plantas podem atender
 		DeletouAlgumaTarefa = DeletaTarefasAposTempoSaiPlanta(TempoSaiPlanta, DadosTarefasDesalocadas,  0);		// deleta tarefas que são atendidas antes dos tempos armazenadaos no vetor TempoSaiPlanta
 		if( Imprime == 1){
-			cout << "   <<<<<<<<<<< Deteta tarefas >>>>>>>>>>>>>> ";
+			cout << "   							<<<<<<<<<<< Deteta tarefas >>>>>>>>>>>>>> ";
 			ConstrucoesInstancia.ImprimeContrucoes();
 			cin >> PararPrograma;
 		}
@@ -974,7 +974,7 @@ void Solucao::ProcessoViabilizacao2(int TipoOrdenacao){
 		}else{
 
 			if( Imprime == 1){
-				cout << "   <<<<<<<<<<< Coloca tarfea não alocada anterioremnte [" <<  ConstrucaoNaoAtendida << "-" << DemandaNaoAtendida << "]  >>>>>>>>>>>>>>> ";
+				cout << "   						<<<<<<<<<<< Coloca tarfea não alocada anterioremnte [" <<  ConstrucaoNaoAtendida << "-" << DemandaNaoAtendida << "]  >>>>>>>>>>>>>>> ";
 				ConstrucoesInstancia.ImprimeContrucoes();
 				ImprimeDadosRetiradoAdicionadoVetorConstrucaoAnalisada( 1,  DadosTarefasDesalocadas, 1,  DadosTarefasAdicionadas, 0,  ConstrucoesInstancia.ConstrucoesAnalizadas, 0);
 				cin >> PararPrograma;

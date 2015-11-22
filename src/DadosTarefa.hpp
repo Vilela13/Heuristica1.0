@@ -15,27 +15,27 @@
 class DadosTarefa{
 public:
 	DadosTarefa();
-	 vector < int >  DadosDasTarefas; 		// 0 -> NumConstrução , 1 -> NumPlanta , 2 -> NumCarreta, 3 -> situação retirada
+	 vector < int >  DadosDasTarefas; 		     // 0 -> NumConstrução ,  1 -> NumPlanta ,     2 -> NumCarreta,           3 -> situação alocação,  4 -> status retirada
 	 vector < double > HorariosDasTarefas;		// 0 -> HoraChegaPlanta , 1 -> HoraSaiPlanta , 2 -> HoraChegaConstrução , 3 -> HoraSaiConstrução , 4 -> HoraRetornaPlanta
 	void IniciaConteudo();
-	void InserirConteudo(int, int, int, int, double, double, double, double, double);
+	void InserirConteudo(int NumConstucao, int NumPlanta, int NumCarreta, int Situacao, int SituacaoRetirada, double HoraInicioPlanta, double HoraSaiPlanta, double HoraInicioConstrucao, double HoraSaiConstrucao, double HoraRetornaPlanta );
 	void Imprimir();
 	~DadosTarefa();
 };
 
 
-int RetiraElementoVetorDadosTarefa(vector < DadosTarefa >&,int, int, int, double, double, double, double, double);
-int RetiraElementoVetorDadosTarefaApartirEstrutura(vector < DadosTarefa >&, DadosTarefa );
+int RetiraElementoVetorDadosTarefa(vector < DadosTarefa > &Vetor,int NumConstucao, int NumPlanta, int NumCarreta, double HoraInicioPlanta, double HoraSaiPlanta, double HoraInicioConstrucao, double HoraSaiConstrucao, double HoraRetornaPlanta);
+int RetiraElementoVetorDadosTarefaApartirEstrutura(vector < DadosTarefa > &Vetor, DadosTarefa Dado );
 
-int VerificaElementoVetorDadosTarefa(vector < DadosTarefa >,int, int, int, double, double, double, double, double);
-int VerificaElementoVetorDadosTarefaApartirEstrutura(vector < DadosTarefa >,DadosTarefa);
+int VerificaElementoVetorDadosTarefa(vector < DadosTarefa > Vetor,int NumConstucao,  int NumPlanta, int NumCarreta, double HoraInicioPlanta, double HoraSaiPlanta, double HoraInicioConstrucao, double HoraSaiConstrucao, double HoraRetornaPlanta);
+int VerificaElementoVetorDadosTarefaApartirEstrutura(vector < DadosTarefa >  Vetor,DadosTarefa Dado);
 
-int AdicionaElementoVetorDadosTarefa(vector < DadosTarefa >&, int, int, int, int, double, double, double, double, double);
-int AdicionaElementoVetorDadosTarefaApartirEstrutura(vector < DadosTarefa >&, DadosTarefa);
+int AdicionaElementoVetorDadosTarefa(vector < DadosTarefa > &Vetor, int NumConstucao, int NumPlanta, int NumCarreta, int Situacao, int SituacaoRetirada, double HoraInicioPlanta, double HoraSaiPlanta, double HoraInicioConstrucao, double HoraSaiConstrucao, double HoraRetornaPlanta);
+int AdicionaElementoVetorDadosTarefaApartirEstrutura(vector < DadosTarefa > &Vetor, DadosTarefa Dado);
 
 
-void ImprimeVetorDadosTarefa( vector < DadosTarefa >);
-bool DecideQualTarefaVemAntes ( DadosTarefa, DadosTarefa );
+void ImprimeVetorDadosTarefa( vector < DadosTarefa > Vetor);
+bool DecideQualTarefaVemAntes ( DadosTarefa d1, DadosTarefa d2 );
 
 
 
@@ -44,17 +44,18 @@ DadosTarefa::DadosTarefa(){
 }
 // inicia o conteudo das esruturas
 void DadosTarefa::IniciaConteudo(){
-	DadosDasTarefas.resize(4);
+	DadosDasTarefas.resize(5);
 	HorariosDasTarefas.resize(5);
 }
 // Insere dados em estrutura
-void DadosTarefa::InserirConteudo(int NumConstucao, int NumPlanta, int NumCarreta, int SituacaoRetirada, double HoraInicioPlanta, double HoraSaiPlanta, double HoraInicioConstrucao, double HoraSaiConstrucao, double HoraRetornaPlanta ){
+void DadosTarefa::InserirConteudo(int NumConstucao, int NumPlanta, int NumCarreta, int Situacao, int SituacaoRetirada, double HoraInicioPlanta, double HoraSaiPlanta, double HoraInicioConstrucao, double HoraSaiConstrucao, double HoraRetornaPlanta ){
 	IniciaConteudo();
 
 	DadosDasTarefas[0] = NumConstucao;
 	DadosDasTarefas[1] = NumPlanta;
 	DadosDasTarefas[2] = NumCarreta;
-	DadosDasTarefas[3] = SituacaoRetirada;
+	DadosDasTarefas[3] = Situacao;
+	DadosDasTarefas[4] = SituacaoRetirada;
 
 	HorariosDasTarefas[0] = HoraInicioPlanta;
 	HorariosDasTarefas[1] = HoraSaiPlanta;
@@ -70,7 +71,7 @@ void DadosTarefa::Imprimir(){
 	printf (" tempo (%.4f-%.4f) ", HorariosDasTarefas[2], HorariosDasTarefas[3]);
 	printf (" Caminhao [%d-%d]",DadosDasTarefas[1], DadosDasTarefas[2]);
 	printf (" tempo (%.4f-%.4f)", HorariosDasTarefas[0], HorariosDasTarefas[4]);
-	printf (" Situação [%d]\n", DadosDasTarefas[3]);
+	printf (" Situação [%d], Status Remocao [%d]\n", DadosDasTarefas[3], DadosDasTarefas[4]);
 }
 // destruidora vazia da classe
 DadosTarefa::~DadosTarefa(){
@@ -124,7 +125,7 @@ int VerificaElementoVetorDadosTarefaApartirEstrutura(vector < DadosTarefa >  Vet
 	return 0;
 }
 
-int AdicionaElementoVetorDadosTarefa(vector < DadosTarefa > &Vetor, int NumConstucao, int NumPlanta, int NumCarreta,  int SituacaoRetirada, double HoraInicioPlanta, double HoraSaiPlanta, double HoraInicioConstrucao, double HoraSaiConstrucao, double HoraRetornaPlanta){
+int AdicionaElementoVetorDadosTarefa(vector < DadosTarefa > &Vetor, int NumConstucao, int NumPlanta, int NumCarreta, int Situacao, int SituacaoRetirada, double HoraInicioPlanta, double HoraSaiPlanta, double HoraInicioConstrucao, double HoraSaiConstrucao, double HoraRetornaPlanta){
 	int ParaFuncao;
 	if( VerificaElementoVetorDadosTarefa(Vetor,NumConstucao, NumPlanta,NumCarreta,  HoraInicioPlanta, HoraSaiPlanta, HoraInicioConstrucao, HoraSaiConstrucao, HoraRetornaPlanta) == 1){
 		cout << endl << endl << "    <<<<<<<<<<<<<<<   ERRO! -> AdicionaElementoVetorDadosTarefa >>>>>>>>>>>>>>>>>>>>>" << endl << endl;
@@ -138,7 +139,7 @@ int AdicionaElementoVetorDadosTarefa(vector < DadosTarefa > &Vetor, int NumConst
 		return 0;
 	}else{
 		Vetor.resize(Vetor.size() + 1);
-		Vetor[Vetor.size() - 1].InserirConteudo(NumConstucao, NumPlanta, NumCarreta, SituacaoRetirada, HoraInicioPlanta, HoraSaiPlanta, HoraInicioConstrucao, HoraSaiConstrucao, HoraRetornaPlanta);
+		Vetor[Vetor.size() - 1].InserirConteudo(NumConstucao, NumPlanta, NumCarreta, Situacao, SituacaoRetirada, HoraInicioPlanta, HoraSaiPlanta, HoraInicioConstrucao, HoraSaiConstrucao, HoraRetornaPlanta);
 		return 1;
 	}
 }
@@ -152,7 +153,7 @@ int AdicionaElementoVetorDadosTarefaApartirEstrutura(vector < DadosTarefa > &Vet
 		return 0;
 	}else{
 		Vetor.resize(Vetor.size() + 1);
-		Vetor[Vetor.size() - 1].InserirConteudo(Dado.DadosDasTarefas[0], Dado.DadosDasTarefas[1], Dado.DadosDasTarefas[2], Dado.DadosDasTarefas[3], Dado.HorariosDasTarefas[0] , Dado.HorariosDasTarefas[1], Dado.HorariosDasTarefas[2] , Dado.HorariosDasTarefas[3], Dado.HorariosDasTarefas[4]);
+		Vetor[Vetor.size() - 1].InserirConteudo(Dado.DadosDasTarefas[0], Dado.DadosDasTarefas[1], Dado.DadosDasTarefas[2], Dado.DadosDasTarefas[3], Dado.DadosDasTarefas[4], Dado.HorariosDasTarefas[0] , Dado.HorariosDasTarefas[1], Dado.HorariosDasTarefas[2] , Dado.HorariosDasTarefas[3], Dado.HorariosDasTarefas[4]);
 		return 1;
 	}
 }

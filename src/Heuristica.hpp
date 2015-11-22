@@ -136,7 +136,6 @@ void Heuristica::ExecutaProcedimentoHeuristico1(){
 
 	Solucoes.CalculaMakespanSolucoes();
 
-
 	/*
 	Solucoes.Imprime(1,1,0);
 

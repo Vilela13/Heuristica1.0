@@ -42,12 +42,12 @@ public:
 	vector < vector < double > > TempoParaDescarregarNaConstrucao;
 	vector < Deslocamento > Deslocamentos;
 
-	int VerificaDisponibilidade( double, double);
-	void AlocaAtividade(double, double, int, int);
+	int VerificaDisponibilidade(double InicioPossivelAlocacao, double FinalPossivelAlocacao);
+	void AlocaAtividade(double HoraInicio, double HoraFinal, int NumContrucao, int NumDemanda);
 
-	int DeletaAtividade(double, double, int, int);
+	int DeletaAtividade(double HoraInicio, double HoraFinal, int NumContrucao, int NumDemanda);
 
-	void Imprime(int);
+	void Imprime(int Ordena);
 
 
 	~Carreta();
@@ -152,6 +152,9 @@ bool DecideQualCarretaTemMenosTarefasRealizadas ( Carreta c1, Carreta c2 ){
 bool DecideQualCarretaTemMaisTarefasRealizadas ( Carreta c1, Carreta c2 ){
 	return ( c1.NumeroDeDemandasAntendidas > c2.NumeroDeDemandasAntendidas );
 }
+bool DecideCarretaAnterior ( Carreta c1, Carreta c2 ){
+	return ( c1.NumeroDaCarreta < c2.NumeroDaCarreta );
+}
 
 
 class ConjuntoCarretas{
@@ -160,22 +163,19 @@ public:
 	ConjuntoCarretas();
 	vector< Carreta > Carretas;
 
-	void IniciaConjuntoCarretas(int, int);
+	void IniciaConjuntoCarretas(int NumeroCaminhoes, int NumeroDaPlanta);
 
-	void OrdenaCarretasPorNumeroDeTarefasRealizadas(int);
+	void OrdenaCarretasPorNumeroDeTarefasRealizadas(int TipoOrdenacao);
 
-	int DeletaTarefa( int, double, double, int, int);
+	int DeletaTarefa(  int NumeroCaminhao, double HoraInicio, double HoraFinal, int NumContrucao, int NumDemanda);
 
-	int AlocaInidiceVeiculo( int, int&);
+	int AlocaInidiceVeiculo( int NumCarretaUtilizada, int &v);
 
-	void Imprime(int);
+	void Imprime(int Ordena);
 
 	~ConjuntoCarretas();
 };
 
-bool DecideCarretaAnterior ( Carreta c1, Carreta c2 ){
-	return ( c1.NumeroDaCarreta < c2.NumeroDaCarreta );
-}
 
 ConjuntoCarretas::ConjuntoCarretas(){
 

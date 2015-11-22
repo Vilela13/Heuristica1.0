@@ -18,7 +18,7 @@ public:
 	int NumeroDemandaSuprida;
 	int NumCarretaUtilizada;
 
-	int verifica( int , int , int , double , double );
+	int verifica(int NumCarreta, int construcao, int Demanda, double HorarioInicioPlanta, double HorarioFimPlanta);
 };
 
 int Carregamento::verifica( int NumCarreta, int construcao, int Demanda, double HorarioInicioPlanta, double HorarioFimPlanta){		// Verifica se estes dados representão o carregamento em questão
@@ -48,11 +48,11 @@ public:
 
 	double Makespan;
 
-	int VerificaDisponibilidade( double, double);
-	void AlocaAtividade(double , double, int , int , int);
-	int DeletaAtividade(double , double, int , int , int);
+	int VerificaDisponibilidade( double InicioPossivelAlocacao, double FinalPossivelAlocacao);
+	void AlocaAtividade(double HoraInicio, double HoraFinal, int NumConstrucao, int NumDemanda, int Carreta);
+	int DeletaAtividade(double HoraInicio, double HoraFinal, int NumConstrucao, int NumDemanda, int Carreta);
 	void CalculaMakespan();
-	void Imprime(int,int);
+	void Imprime(int OrdenaPlantas, int OrdenaCarretas);
 	void ImprimeDistancias();
 
 	~Planta();
@@ -65,6 +65,7 @@ Planta::Planta(){		// Construtora
 	TempoPlanta = -13;
 	TempoMinimoDeFuncionamento = -13;
 	TempoMaximoDeFuncionamento = -13;
+	Carregamentos.clear();
 	Makespan = -13;
 }
 
@@ -79,21 +80,25 @@ int Planta::VerificaDisponibilidade( double InicioPossivelAlocacao, double Final
 
 	// verifica se não viola outros acrregamentos que são realizados pela planta
 	for( unsigned int c = 0; c < Carregamentos.size(); c++){
+		// carregamento a alocar está dentro de outro carregamento
 		if( InicioPossivelAlocacao <= Carregamentos[c].HorarioInicioCarregamento){
 			if ( FinalPossivelAlocacao >= Carregamentos[c].HorarioFinalCarregamento){
 				return 0;
 			}
 		}
+		// carregamento a alocar contem outro carregamento
 		if( InicioPossivelAlocacao >= Carregamentos[c].HorarioInicioCarregamento){
 			if ( FinalPossivelAlocacao <= Carregamentos[c].HorarioFinalCarregamento){
 				return 0;
 			}
 		}
+		// Carregamento possui sua parte final conflitando com a parte fronteira de outro carregamento
 		if( InicioPossivelAlocacao <= Carregamentos[c].HorarioInicioCarregamento){
 			if( FinalPossivelAlocacao > Carregamentos[c].HorarioInicioCarregamento){
 				return 0;
 			}
 		}
+		// Carregamento possui sua parte inicial conflitando com a parte posterior de outro carregamento
 		if( InicioPossivelAlocacao < Carregamentos[c].HorarioFinalCarregamento){
 			if ( FinalPossivelAlocacao >= Carregamentos[c].HorarioFinalCarregamento){
 				return 0;
@@ -196,15 +201,15 @@ public:
 
 	void InicializaPlantasAnalizadas();
 	int AnalizouTodasPLanats();
-	void IniciaConjuntoPlantas(int);
+	void IniciaConjuntoPlantas(int Numero);
 
-	int DeletaTarefa( int, double , double, int , int , int, double, double);
+	int DeletaTarefa( int NumPlanta, double HoraInicio, double HoraFinal, int NumConstrucao, int NumDemanda, int Carreta, double HoraInicioCarreta, double HoraFinalCarreta);
 	void CalculaMakespanPlantas();
-	int AlocaInidiceFabrica( int, int&);
+	int AlocaInidiceFabrica( int Planta, int &IndicePlanta);
 
-	int CorrigeReferenciaCarregamentoDeslocamentoMaisUm(int, int, int, int, double, double);
-	int CorrigeReferenciaCarregamentoDeslocamentoMenosUm(int, int, int, int, double, double);
-	void Imprime(int, int);
+	int CorrigeReferenciaCarregamentoDeslocamentoMaisUm(int NumPlantaFornecedor,int NumCarretaUtilizada,int construcao, int NumeroDemandaSuprida, double HorarioInicioDescarregamento,  double HorarioFinalDescarregamento);
+	int CorrigeReferenciaCarregamentoDeslocamentoMenosUm(int NumPlanta, int NumCarreta,int Construcao, int Demanda, double HorarioInicioDescarregamento, double HorarioFinalDescarregamento);
+	void Imprime(int OrdenaPlantas,int OrdenaCarrtas);
 
 	int VerificaPlantasAnalizadasPodemAtenderSeAtrazar();
 
@@ -214,6 +219,7 @@ public:
 ConjuntoPlantas::ConjuntoPlantas(){			// Cosntrutora da classe
 	MakespanPLantas = -13;
 }
+
 
 void ConjuntoPlantas::InicializaPlantasAnalizadas(){ 			// Faz que nenhuma planta tenha sido analisada pelos algoritmos
 	PlantasAnalizadas.resize(Plantas.size());
@@ -235,6 +241,7 @@ void ConjuntoPlantas::IniciaConjuntoPlantas(int Numero){		// Inicia o vetor de p
 	Plantas.resize(Numero);
 
 }
+
 
 int ConjuntoPlantas::DeletaTarefa( int NumPlanta, double HoraInicio, double HoraFinal, int NumConstrucao, int NumDemanda, int Carreta, double HoraInicioCarreta, double HoraFinalCarreta){		// deleta tarefa tanto na planta e no veiculo que executa a tarefa
 	// variaveis de controle
@@ -288,21 +295,22 @@ int ConjuntoPlantas::AlocaInidiceFabrica(int Planta, int &IndicePlanta){		// Alo
 	return 0;
 }
 
+
 int ConjuntoPlantas::CorrigeReferenciaCarregamentoDeslocamentoMaisUm( int NumPlantaFornecedor,int NumCarretaUtilizada,int construcao, int NumeroDemandaSuprida, double HorarioInicioDescarregamento,  double HorarioFinalDescarregamento ){ // corrige as referencias da tarefa aumentando o numerod a demanda que é suprida em mais um
-	// Emcontra o indice da planta
+// Emcontra o indice da planta
 	int p;
 	if( AlocaInidiceFabrica(NumPlantaFornecedor,p) == 0){
 		cout << endl << endl << " <<<<<<<< probelam com indice planta [" << NumPlantaFornecedor << "] => " << p << " -> ConjuntoPlantas::CorrigeReferenciaCarregamentoDeslocamentoMaisUm  >>>>>>>>>>>>> " << endl << endl ;
 	}
 
-	// Encontra os tempos relativos da tarefa na planta
+// Encontra os tempos relativos da tarefa na planta
 	double HorarioInicioPlanta;
 	double HorarioFimPlanta;
 
 	HorarioInicioPlanta = HorarioInicioDescarregamento - Plantas[p].DistanciaConstrucoes[construcao] -  Plantas[p].TempoPlanta;
 	HorarioFimPlanta = HorarioInicioPlanta + Plantas[p].TempoPlanta;
 
-	// Modifica o número da demanda suprida pela planta em questão em mais um
+// Modifica o número da demanda suprida pela planta em questão em mais um
 	int ModificouCarregamento;
 	ModificouCarregamento = 0;
 
@@ -313,20 +321,20 @@ int ConjuntoPlantas::CorrigeReferenciaCarregamentoDeslocamentoMaisUm( int NumPla
 		}
 	}
 
-	// Emcontra o indice do veículo
+// Emcontra o indice do veículo
 	int v;
 	if( Plantas[p].VeiculosDaPlanta.AlocaInidiceVeiculo( NumCarretaUtilizada, v) == 0 ){
 		cout << endl << endl << " <<<<<<<< probelam com indice veiculo [" << NumCarretaUtilizada << "] => " << v << " ->CorrigeReferenciaCarregamentoDeslocamentoMaisUm  >>>>>>>>>>>>> " << endl << endl ;
 	}
 
-	// Encontra os tempos relativos da tarefa no caminhão (veículo)
+// Encontra os tempos relativos da tarefa no caminhão (veículo)
 	double HorarioInicioVeiculo;
 	double HorarioFimVeiculo;
 
 	HorarioInicioVeiculo = HorarioInicioPlanta;
 	HorarioFimVeiculo = HorarioFinalDescarregamento + Plantas[p].DistanciaConstrucoes[construcao];
 
-	// Modifica o número da demanda suprida pelo caminhão (veículo) em questão em mais um
+// Modifica o número da demanda suprida pelo caminhão (veículo) em questão em mais um
 	int ModificouDeslocamento;
 	ModificouDeslocamento = 0;
 
@@ -337,7 +345,7 @@ int ConjuntoPlantas::CorrigeReferenciaCarregamentoDeslocamentoMaisUm( int NumPla
 		}
 	}
 
-	// verifica se realizou as mudanças desejadas
+// verifica se realizou as mudanças desejadas
 	if( ModificouCarregamento == 1 && ModificouDeslocamento == 1){
 		return 1;
 	}else{
@@ -354,20 +362,20 @@ int ConjuntoPlantas::CorrigeReferenciaCarregamentoDeslocamentoMaisUm( int NumPla
 
 int ConjuntoPlantas::CorrigeReferenciaCarregamentoDeslocamentoMenosUm(int NumPlanta, int NumCarreta,int Construcao, int Demanda, double HorarioInicioDescarregamento, double HorarioFinalDescarregamento){		// corrige as referencias da tarefa aumentando o numerod a demanda que é suprida em menos um
 
-	// Emcontra o indice da planta
+// Emcontra o indice da planta
 	int p;
 	if( AlocaInidiceFabrica(NumPlanta,p) == 0){
 		cout << endl << endl << " <<<<<<<< problema com indice planta [" << NumPlanta << "] => " << p << " ->ConjuntoPlantas::CorrigeReferenciaCarregamentoDeslocamentoMenosUm  >>>>>>>>>>>>> " << endl << endl ;
 	}
 
-	// Encontra os tempos relativos da tarefa na planta
+// Encontra os tempos relativos da tarefa na planta
 	double HorarioInicioPlanta;
 	double HorarioFimPlanta;
 
 	HorarioInicioPlanta = HorarioInicioDescarregamento - Plantas[p].DistanciaConstrucoes[Construcao] -  Plantas[p].TempoPlanta;
 	HorarioFimPlanta = HorarioInicioPlanta +  Plantas[p].TempoPlanta;
 
-	// Modifica o número da demanda suprida pela planta em questão em mais um
+// Modifica o número da demanda suprida pela planta em questão em mais um
 	int ModificouCarregamento;
 	ModificouCarregamento = 0;
 
@@ -378,20 +386,20 @@ int ConjuntoPlantas::CorrigeReferenciaCarregamentoDeslocamentoMenosUm(int NumPla
 		}
 	}
 
-	// Emcontra o indice do veículo
+// Emcontra o indice do veículo
 	int v;
 	if( Plantas[p].VeiculosDaPlanta.AlocaInidiceVeiculo( NumCarreta, v) == 0 ){
 		cout << endl << endl << " <<<<<<<< probelam com indice veiculo [" << NumCarreta << "] => " << v << " ->ConjuntoPlantas::CorrigeReferenciaCarregamentoDeslocamentoMenosUm  >>>>>>>>>>>>> " << endl << endl ;
 	}
 
-	// Encontra os tempos relativos da tarefa no caminhão (veículo)
+// Encontra os tempos relativos da tarefa no caminhão (veículo)
 	double HorarioInicioVeiculo;
 	double HorarioFimVeiculo;
 
 	HorarioInicioVeiculo = HorarioInicioPlanta;
 	HorarioFimVeiculo = HorarioFinalDescarregamento + Plantas[p].DistanciaConstrucoes[Construcao];
 
-	// Modifica o número da demanda suprida pelo caminhão (veículo) em questão em mais um
+// Modifica o número da demanda suprida pelo caminhão (veículo) em questão em mais um
 	int ModificouDeslocamento;
 	ModificouDeslocamento = 0;
 
@@ -402,7 +410,7 @@ int ConjuntoPlantas::CorrigeReferenciaCarregamentoDeslocamentoMenosUm(int NumPla
 		}
 	}
 
-	// verifica se realizou as mudanças desejadas
+// verifica se realizou as mudanças desejadas
 	if( ModificouCarregamento == 1 && ModificouDeslocamento == 1){
 		return 1;
 	}else{

@@ -11,14 +11,16 @@
 #include "Bibliotecas.hpp"
 
 
-void AlocaValoresIniciaisIndices(int&, int&);
-int VerificaInidices( int, int);
-int VerificaInidices2( int, int);
-void ImprimeVetorInt( vector< int > );
-void ImprimeDadosRetiradoAdicionadoVetorConstrucaoAnalisada( int, vector < DadosTarefa >, int, vector < DadosTarefa >, int, vector < int >, int);
-void IniciaVetorIntComZero(vector< int >&);
-int VerificaSeTemUmValorVetorInt( int, vector< int >);
-int VerificaTodosValoresVetorInt( int, vector< int >);
+void AlocaValoresIniciaisIndices(int& c, int& d);
+int VerificaInidices( int c, int d);
+int VerificaInidices2( int p, int v);
+
+void ImprimeVetorInt( vector< int > VetorInt );
+void ImprimeDadosRetiradoAdicionadoVetorConstrucaoAnalisada( int ImprimeDesalocados, vector < DadosTarefa > DadosTarefasDesalocadas, int ImprimeAlocados, vector < DadosTarefa > DadosTarefasAdicionadas, int ImprimeVetorCosntrucoes, vector < int > ConstrucaosAnalizadas, int ParaPrograma);
+void IniciaVetorIntComZero(vector< int > &VetorInt);
+
+int VerificaSeTemUmValorVetorInt( int Valor, vector< int > VetorInt);
+int VerificaTodosValoresVetorInt( int Valor, vector< int > VetorInt);
 
 void AlocaValoresIniciaisIndices( int& c, int& d){
 	c = -13;
@@ -40,8 +42,6 @@ int VerificaInidices2( int p, int v){
 		}
 	return 1;
 }
-
-
 
 void ImprimeVetorInt( vector< int > VetorInt){
 	cout << " Conteudo Vetor "<< endl;

@@ -14,7 +14,6 @@
 void AlocaValoresIniciaisIndices(int&, int&);
 int VerificaInidices( int, int);
 int VerificaInidices2( int, int);
-int VerificaValorUmVetorInt( vector< int > );
 void ImprimeVetorInt( vector< int > );
 void ImprimeDadosRetiradoAdicionadoVetorConstrucaoAnalisada( int, vector < DadosTarefa >, int, vector < DadosTarefa >, int, vector < int >, int);
 void IniciaVetorIntComZero(vector< int >&);
@@ -42,14 +41,7 @@ int VerificaInidices2( int p, int v){
 	return 1;
 }
 
-int VerificaValorUmVetorInt( vector< int > VetorInt){
-	for(unsigned int i = 0; i < VetorInt.size(); i++){
-		if( VetorInt[i] != 1){
-			return 0;
-		}
-	}
-	return 1;
-}
+
 
 void ImprimeVetorInt( vector< int > VetorInt){
 	cout << " Conteudo Vetor "<< endl;

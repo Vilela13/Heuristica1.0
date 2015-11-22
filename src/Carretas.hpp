@@ -186,6 +186,7 @@ void ConjuntoCarretas::IniciaConjuntoCarretas(int NumeroCaminhoes, int NumeroDaP
 	for(int v = 0; v < NumeroCaminhoes; v++){
 		Carretas[v].NumeroDaCarreta = v;
 		Carretas[v].NumeroDeDemandasAntendidas = 0;
+		Carretas[v].Deslocamentos.clear();
 		Carretas[v].NumeroPlanta = NumeroDaPlanta;
 	}
 

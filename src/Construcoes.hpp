@@ -822,20 +822,28 @@ public:
 	int NivelDeInviabilidade;
 
 	void InicializaConstrucoesAnalizadas();
-	void AlocaValoresConstrucoesAnalizadas( int IndiceConstrucaoNaoAtendida );
 	void CalcularNivelDeInviabilidade();
-
 	void IniciaConjuntoConstrucoes(int Numero);
-
-	void ImprimeContrucoes();
 
 	void VerificaIntervaloContrucoes();
 	void CalculaMakespansConstrucoes();
-	void ReiniciaTarefasRetiradas();
+	int RetornaIndiceConstrucao(int Construcao, int& Indice, string frase);
 
+	void ImprimeContrucoes();
+
+// Funções com a SituaçãoRemover
+	void ReiniciaTarefasRetiradas();
+	void MarcaTarefaDeletadaNoVetor(int Construcao, int Demanda, int Situacao);
+	int ConstrucaoTemTarefaParaRemover(int& Construcao, int& Demanda, int Imprimir);
+	void MarcaTarefaNaoDeletadaNoVetor(int Construcao, int Demanda, string frase);
+
+
+// Funções com a PodeAtender
 	void AlocaValoresConstrucaoPodeAtender();
 	void AtualizaValoresConstrucaoPodeAtender();
 	int VerificaConstrucaoPodeAtender();
+
+	void AlocaValoresConstrucoesAnalizadas( int IndiceConstrucaoNaoAtendida );
 
 	~ConjuntoConstrucoes();
 };
@@ -846,21 +854,12 @@ ConjuntoConstrucoes::ConjuntoConstrucoes(){
 	MakespanConstrucoes = -13;
 }
 
+
 void ConjuntoConstrucoes::InicializaConstrucoesAnalizadas(){			// Inicializa o status das cosntruções todos como 0
 	ConstrucoesAnalizadas.resize(Construcoes.size());
 	for( unsigned int c = 0; c < Construcoes.size(); c++){
 		ConstrucoesAnalizadas[c] = 0;
 	}
-}
-
-void ConjuntoConstrucoes::AlocaValoresConstrucoesAnalizadas( int IndiceConstrucaoNaoAtendida){		// 		Coloca o status 2 para as construções que já foram atendidas, e coloca 3 no status da construção passada como parametro
-	for ( int c = 0; c < NumeroConstrucoes; c++){
-		if( Construcoes[c].StatusAtendimento == Construcoes[c].NumeroDemandas ){
-			ConstrucoesAnalizadas[c] = 2;
-		}
-	}
-	ConstrucoesAnalizadas[IndiceConstrucaoNaoAtendida] = 3;
-
 }
 
 void ConjuntoConstrucoes::CalcularNivelDeInviabilidade(){			// Calcula o Nivel de Inviabilidade
@@ -876,15 +875,6 @@ void ConjuntoConstrucoes::IniciaConjuntoConstrucoes(int Numero){		// Inicializa 
 
 }
 
-
-
-void ConjuntoConstrucoes::ImprimeContrucoes(){							// Imprime as construções e em seguida o nivel de inviabilidade
-	cout << endl << endl << " [[[[[[  Imprime construcoes  ]]]]]]" << endl;
-	for(int c = 0; c < NumeroConstrucoes; c++){
-		Construcoes[c].ImprimeContrucao();
-	}
-	printf( " Nivel de Inviabilidade = %d  Makespan Geral das Construcoes = %.4f\n", NivelDeInviabilidade, MakespanConstrucoes);
-}
 
 void ConjuntoConstrucoes::VerificaIntervaloContrucoes(){				// Verifica se as construções respeitão os intervalos de atendimento entre suas demandas
 
@@ -907,6 +897,29 @@ void ConjuntoConstrucoes::CalculaMakespansConstrucoes(){			// Calcula o Makespan
 	}
 }
 
+int ConjuntoConstrucoes::RetornaIndiceConstrucao(int Construcao, int& Indice, string frase){		// retorna o indice da construção passada
+	for ( int i = 0; i < NumeroConstrucoes; i++){
+		if( Construcao == Construcoes[i].NumeroDaConstrucao){
+			Indice = i;
+			return 1;
+		}
+	}
+	cout << endl << endl << "   Problema >> Não encontrou indice construção [" << Construcao << "]   -> ConjuntoConstrucoes::RetornaIndiceConstrucao" << endl << " ->";
+	cout << frase << endl << endl;
+	return 0;
+}
+
+
+
+void ConjuntoConstrucoes::ImprimeContrucoes(){							// Imprime as construções e em seguida o nivel de inviabilidade
+	cout << endl << endl << " [[[[[[  Imprime construcoes  ]]]]]]" << endl;
+	for(int c = 0; c < NumeroConstrucoes; c++){
+		Construcoes[c].ImprimeContrucao();
+	}
+	printf( " Nivel de Inviabilidade = %d  Makespan Geral das Construcoes = %.4f\n", NivelDeInviabilidade, MakespanConstrucoes);
+}
+
+// Funções com a SituaçãoRemover
 void ConjuntoConstrucoes::ReiniciaTarefasRetiradas(){				// Reinicia o status de remoção de todas as demandas de todas as construções
 	for( unsigned int c = 0; c < Construcoes.size(); c++){
 		for( int d = 0; d < Construcoes[c].NumeroDemandas; d++){
@@ -915,6 +928,64 @@ void ConjuntoConstrucoes::ReiniciaTarefasRetiradas(){				// Reinicia o status de
 	}
 }
 
+void ConjuntoConstrucoes::MarcaTarefaDeletadaNoVetor(int Construcao, int Demanda, int Situacao){		// maraca a situação remoção da demanda no vetor que sinaliza a situação da demanda
+	int c;
+
+	if( RetornaIndiceConstrucao(Construcao, c, "ConjuntoConstrucoes::MarcaTarefaDeletadaNoVetor")== 1 ){
+		Construcoes[c].SituacaoRemocao[Demanda] = Situacao;
+		//cout << endl << endl << "  marquei " << endl << endl;
+	}
+}
+
+int ConjuntoConstrucoes::ConstrucaoTemTarefaParaRemover(int& Construcao, int& Demanda, int Imprimir){		// Usado em ProcessoViabilizacao1. Verifica se possui uma construção que possui demandas que ainda não foram retiradas para se tentar a viabilização da solução. Caso possuir, retorna 1 a função e é retornado os dados da construção e da demanda por parametro.
+
+	//ConstrucoesInstancia.ImprimeContrucoes();
+	int Ativo;
+	double RankInicial;
+
+	Construcao = -13;
+	Demanda = -13;
+
+	Ativo = 0;
+	RankInicial = DBL_MAX;
+
+	for( int c = 0; c < NumeroConstrucoes; c++){
+		if ( RankInicial > Construcoes[c].RankTempoDemandas){
+			for( int d = (Construcoes[c].NumeroDemandas - 1); d >= 0 ; d--){
+				if(Construcoes[c].SituacaoDemanda[d] == 1){
+					if( Construcoes[c].SituacaoRemocao[d] == 0){
+						Construcao = Construcoes[c].NumeroDaConstrucao;
+						Demanda = d;
+						RankInicial = Construcoes[c].RankTempoDemandas;
+						Ativo = 1;
+					}
+				}
+			}
+		}
+	}
+	if( Ativo == 1){
+		if( Imprimir == 1){
+			cout << " Selecionou construcao " << Construcao << "-" << Demanda << " com janela de tempo ";
+			cout <<  Construcoes[Construcao].TempoMinimoDeFuncionamento << "-" << Construcoes[Construcao].TempoMaximoDeFuncionamento;
+			cout << " -> ConstrucaoTarefaRemover" << endl ;
+		}
+		return 1;
+	}else{
+		return 0;
+	}
+}
+
+void ConjuntoConstrucoes::MarcaTarefaNaoDeletadaNoVetor(int Construcao, int Demanda, string frase){
+	int c;
+
+	if( RetornaIndiceConstrucao( Construcao, c, " ConjuntoConstrucoes::MarcaTarefaNaoDeletadaNoVetor") == 1 ){
+		Construcoes[c].SituacaoRemocao[Demanda] = 0;
+	}else{
+		cout << "           -> " << frase << endl << endl;
+	}
+}
+
+// Funções com a PodeAtender
 void ConjuntoConstrucoes::AlocaValoresConstrucaoPodeAtender(){		// aloca 1 se a construção já teve todas as demandas atendidas, 0 as que não
 	ConstrucaoPodeAvaliar.resize(NumeroConstrucoes);
 	for( int c = 0; c < NumeroConstrucoes; c++){
@@ -943,6 +1014,16 @@ int ConjuntoConstrucoes::VerificaConstrucaoPodeAtender(){			// Verifica se exist
 		}
 	}
 	return 0;
+
+}
+
+void ConjuntoConstrucoes::AlocaValoresConstrucoesAnalizadas( int IndiceConstrucaoNaoAtendida){		// 		Coloca o status 2 para as construções que já foram atendidas, e coloca 3 no status da construção passada como parametro
+	for ( int c = 0; c < NumeroConstrucoes; c++){
+		if( Construcoes[c].StatusAtendimento == Construcoes[c].NumeroDemandas ){
+			ConstrucoesAnalizadas[c] = 2;
+		}
+	}
+	ConstrucoesAnalizadas[IndiceConstrucaoNaoAtendida] = 3;
 
 }
 

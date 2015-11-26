@@ -23,17 +23,16 @@ public:
 	double Velocidade;
 	double TempoDeVidaConcreto;
 
-	void CarregaDados(int , ConjuntoPlantas, int, ConjuntoConstrucoes, int, double, double );
+	void CarregaDados(int InstNP, ConjuntoPlantas InstPlantasInstancia, int InstNE, ConjuntoConstrucoes InstConstrucoesInstancia, int InstNV, double InstVelocidade, double InstTempoDeVidaConcreto);
 
 // Seleciona uma construção baseada em um rank que elas possuem
-	int SelecionaConstrucao( Construcao**, vector < int >);
+	int SelecionaConstrucao( Construcao** ConstrucaoVaiSerSuprida , vector < int > ConstrucoesAnalizadas);
 // Seleciona a planta mais perto
-	int SelecionaPlanta( Planta** , Construcao*, vector < int > );
+	int SelecionaPlanta( Planta** PlantaMaisPerto,Construcao* ConstrucaoVaiSerSuprida, vector < int > PlantasAnalizadas );
 // Seleciona carreta menos utilizada
-	int SelecionaCarreta(Planta& , Construcao& , int, int, int);
+	int SelecionaCarreta(Planta& PlantaMaisPerto, Construcao& ConstrucaoVaiSerSuprida, int  NumeroDemanda, int SituacaoDemandaAnalisada, int TipoOrdenacao);
 
 // funções de verificação
-	int AnalizouTodasPLanats(vector < int > );
 	void ConfereSeNaoEncontrouUmaPlanta( int);
 	void VerificaAlocacaoDemandaConstrucao(Construcao*, int&);
 
@@ -87,7 +86,7 @@ int Procedimento1::SelecionaConstrucao( Construcao** ConstrucaoVaiSerSuprida , v
 	}
 }
 
-// seleciona a planta mais perto
+// Seleciona a planta mais perto
 int Procedimento1::SelecionaPlanta( Planta** PlantaMaisPerto,Construcao* ConstrucaoVaiSerSuprida, vector < int > PlantasAnalizadas ){
 	int Ativo;
 	double DistanciaConstrucaoPlanta;
@@ -113,8 +112,8 @@ int Procedimento1::SelecionaPlanta( Planta** PlantaMaisPerto,Construcao* Constru
 	}
 }
 
-// seleciona a betoneira analisando primeiro a betoenira que tem mais tarefas alocadas ou a que tem emnos, depende da maneira como as betoneiras foram ordenadas antes de analisar elas para realizar o atendimento
-int Procedimento1::SelecionaCarreta(Planta& PlantaMaisPerto, Construcao& ConstrucaoVaiSerSuprida, int  NumeroDemanda, int SituacaoDemanda, int TipoOrdenacao ){
+// Seleciona a betoneira analisando primeiro a betoenira que tem mais tarefas alocadas ou a que tem emnos, depende da maneira como as betoneiras foram ordenadas antes de analisar elas para realizar o atendimento
+int Procedimento1::SelecionaCarreta(Planta& PlantaMaisPerto, Construcao& ConstrucaoVaiSerSuprida, int  NumeroDemanda, int SituacaoDemandaAnalisada, int TipoOrdenacao ){
 
 	double HorarioInicioPlanta;
 	double HorarioSaiDaPlanta;
@@ -159,7 +158,7 @@ int Procedimento1::SelecionaCarreta(Planta& PlantaMaisPerto, Construcao& Constru
 				// Caso for possivel atender a demanda se ira alocar essa tarefa na planta, na construção e na betoneira e a função retorna o valor 1.
 				if( DisponibilidadePlanta == 1 && DisponibilidadeCarreta == 1){
 					if( DisponibilidadeConstrucao == 1 || DisponibilidadeConstrucao == 2 || DisponibilidadeConstrucao == 3){
-						ConstrucaoVaiSerSuprida.AlocaAtividade(HorarioChegaContrucao, HorarioSaiConstrucao, PlantaMaisPerto.VeiculosDaPlanta.Carretas[v].NumeroDaCarreta, PlantaMaisPerto.NumeroDaPlanta,  0, 1, PlantasInstancia);
+						ConstrucaoVaiSerSuprida.AlocaAtividade(HorarioChegaContrucao, HorarioSaiConstrucao, PlantaMaisPerto.VeiculosDaPlanta.Carretas[v].NumeroDaCarreta, PlantaMaisPerto.NumeroDaPlanta,  SituacaoDemandaAnalisada , 0 , PlantasInstancia);
 						return 1;
 					}
 				}
@@ -173,6 +172,7 @@ int Procedimento1::SelecionaCarreta(Planta& PlantaMaisPerto, Construcao& Constru
 	return 0;
 }
 
+// Verifica se não encontrou uma planta
 void Procedimento1::ConfereSeNaoEncontrouUmaPlanta( int  PlantaSelecionada){
 	if( PlantaSelecionada == 0){
 		cout  << endl << endl << endl;
@@ -182,6 +182,8 @@ void Procedimento1::ConfereSeNaoEncontrouUmaPlanta( int  PlantaSelecionada){
 		cout << endl << endl;
 	}
 }
+
+// Verifica se consegue atender as demandas da construção
 void Procedimento1::VerificaAlocacaoDemandaConstrucao(Construcao *ConstrucaoVaiSerSuprida, int &Viabilidade){
 	if( ConstrucaoVaiSerSuprida->StatusAtendimento < ConstrucaoVaiSerSuprida->NumeroDemandas ){
 		cout << endl;
@@ -192,6 +194,7 @@ void Procedimento1::VerificaAlocacaoDemandaConstrucao(Construcao *ConstrucaoVaiS
 	}
 }
 
+// executa o procedimento de construção da solução
 int Procedimento1::Executa( int TipoOrdenacao){
 	Planta* PlantaMaisPerto;
 	Construcao* ConstrucaoVaiSerSuprida;

@@ -33,12 +33,12 @@ public:
 	void Imprime(bool, bool, bool);
 
 	int DeletaAlocacaoTarefasPosterioresMesmaConstrucao(int, int, vector < DadosTarefa >&);
-	int AdicionaTarefa( int, int, vector < DadosTarefa >&, int, int) ;
+	int AdicionaTarefa(int Construcao, int Demanda , vector < DadosTarefa > &DadosTarefasAdicionadas, int SituacaoDemanda, int SituacaoRemocao, int TipoOrdenacao) ;
 
-	int ProcessoParaAlocarTarefaNaoAtendida( int, int, int&, int&, vector < DadosTarefa >&, int, int);
+	int ProcessoParaAlocarTarefaNaoAtendida(  int Construcao, int Demanda, int& NovaTarefaAlocadaConstrucao , int& NovaTarefaAlocadaDemanda ,  vector < DadosTarefa > &DadosTarefasAdicionadas, int SituacaoDemanda, int SituacaoRetirada, int TipoOrdenacao);
 	void ReadicionaTarefas(int, vector < DadosTarefa >&, int, int);
 
-	int ReadicionaTarefasApartirDeDados( vector < DadosTarefa >, int);
+	int ReadicionaTarefasApartirDeDados( vector < DadosTarefa >);
 	int DeletaTarefasApartirDeDados( vector < DadosTarefa >);
 
 	void ProcessoViabilizacao1(int );
@@ -123,8 +123,6 @@ void Solucao::Imprime(bool ImprimePlanta, bool ImprimeConstrucao, bool Intervalo
 
 
 
-
-
 int Solucao::DeletaAlocacaoTarefasPosterioresMesmaConstrucao(int Construcao, int Demanda, vector < DadosTarefa >& DadosTarefasDesalocadas){
 		 int c;
 
@@ -144,7 +142,7 @@ int Solucao::DeletaAlocacaoTarefasPosterioresMesmaConstrucao(int Construcao, int
 }
 
 
-int Solucao::AdicionaTarefa( int Construcao, int Demanda , vector < DadosTarefa > &DadosTarefasAdicionadas, int SituacaoDemanda, int TipoOrdenacao){
+int Solucao::AdicionaTarefa( int Construcao, int Demanda , vector < DadosTarefa > &DadosTarefasAdicionadas, int SituacaoDemanda, int SituacaoRemocao, int TipoOrdenacao){
 
 	double HorarioInicioPlanta;
 	double HorarioSaiDaPlanta;
@@ -183,7 +181,7 @@ int Solucao::AdicionaTarefa( int Construcao, int Demanda , vector < DadosTarefa 
 						if( DisponibilidadePlanta == 1){
 							if( DisponibilidadeCarreta == 1){
 								if( DisponibilidadeConstrucao == 1 || DisponibilidadeConstrucao == 2 || DisponibilidadeConstrucao == 3){
-									ConstrucoesInstancia.Construcoes[c].AlocaAtividadeSalvandoDados(HorarioChegaContrucao, HorarioSaiConstrucao, PlantasInstancia.Plantas[NumPlantaAnalisando].VeiculosDaPlanta.Carretas[v].NumeroDaCarreta, PlantasInstancia.Plantas[NumPlantaAnalisando].NumeroDaPlanta, 0, SituacaoDemanda, PlantasInstancia, DadosTarefasAdicionadas);
+									ConstrucoesInstancia.Construcoes[c].AlocaAtividadeSalvandoDados(HorarioChegaContrucao, HorarioSaiConstrucao, PlantasInstancia.Plantas[NumPlantaAnalisando].VeiculosDaPlanta.Carretas[v].NumeroDaCarreta, PlantasInstancia.Plantas[NumPlantaAnalisando].NumeroDaPlanta, SituacaoDemanda, SituacaoRemocao, PlantasInstancia, DadosTarefasAdicionadas);
 									ConstrucoesInstancia.NivelDeInviabilidade = ConstrucoesInstancia.NivelDeInviabilidade - 1;
 									return 1;
 								}
@@ -209,7 +207,7 @@ int Solucao::AdicionaTarefa( int Construcao, int Demanda , vector < DadosTarefa 
 }
 
 
-int Solucao::ProcessoParaAlocarTarefaNaoAtendida( int Construcao, int Demanda, int& NovaTarefaAlocadaConstrucao , int& NovaTarefaAlocadaDemanda ,  vector < DadosTarefa > &DadosTarefasAdicionadas, int SituacaoDemanda, int TipoOrdenacao){
+int Solucao::ProcessoParaAlocarTarefaNaoAtendida( int Construcao, int Demanda, int& NovaTarefaAlocadaConstrucao , int& NovaTarefaAlocadaDemanda ,  vector < DadosTarefa > &DadosTarefasAdicionadas, int SituacaoDemanda, int SituacaoRetirada, int TipoOrdenacao){
 	int c;
 
 	int Alocou;
@@ -225,7 +223,7 @@ int Solucao::ProcessoParaAlocarTarefaNaoAtendida( int Construcao, int Demanda, i
 			if( contrucoes != c){
 				if( ConstrucoesInstancia.Construcoes[contrucoes].SituacaoDemanda[demandas] == 0){
 					//cout << "   tenta alocar [" << ConstrucoesInstancia.Construcoes[contrucoes].NumeroDaConstrucao << "-" << demandas << "]  -> Solucao::ProcessoParaAlocarTarefa";
-					Alocou = AdicionaTarefa(ConstrucoesInstancia.Construcoes[contrucoes].NumeroDaConstrucao,demandas, DadosTarefasAdicionadas, SituacaoDemanda, TipoOrdenacao);
+					Alocou = AdicionaTarefa(ConstrucoesInstancia.Construcoes[contrucoes].NumeroDaConstrucao,demandas, DadosTarefasAdicionadas, SituacaoDemanda, SituacaoRetirada, TipoOrdenacao);
 
 					if( Alocou == 1){
 
@@ -252,7 +250,7 @@ void Solucao::ReadicionaTarefas( int construcao, vector < DadosTarefa > &DadosTa
 		for ( int demandas = 0; demandas < ConstrucoesInstancia.Construcoes[c].NumeroDemandas; demandas++){
 			if( ConstrucoesInstancia.Construcoes[c].SituacaoDemanda[demandas] == 0){
 				//cout << " entrei " << endl;
-				if( AdicionaTarefa(ConstrucoesInstancia.Construcoes[c].NumeroDaConstrucao,demandas, DadosTarefasAdicionadas, SituacaoDemanda, TipoOrdenacao) == 1 ){
+				if( AdicionaTarefa(ConstrucoesInstancia.Construcoes[c].NumeroDaConstrucao,demandas, DadosTarefasAdicionadas, SituacaoDemanda, 0, TipoOrdenacao) == 1 ){
 					cout << " adicionou [" << ConstrucoesInstancia.Construcoes[c].NumeroDaConstrucao << "-" << demandas << "]" << endl;
 				}else{
 					cout << " Nao readicionou [" << ConstrucoesInstancia.Construcoes[c].NumeroDaConstrucao << "-" << demandas << "]" << endl;
@@ -266,7 +264,7 @@ void Solucao::ReadicionaTarefas( int construcao, vector < DadosTarefa > &DadosTa
 
 
 
-int Solucao::ReadicionaTarefasApartirDeDados( vector < DadosTarefa > DadosTarefasDesalocadas, int SituacaoDemanda){
+int Solucao::ReadicionaTarefasApartirDeDados( vector < DadosTarefa > DadosTarefasDesalocadas){
 
 	int c;
 
@@ -275,7 +273,8 @@ int Solucao::ReadicionaTarefasApartirDeDados( vector < DadosTarefa > DadosTarefa
 		if(ConstrucoesInstancia.RetornaIndiceConstrucao( DadosTarefasDesalocadas[i].DadosDasTarefas[0]  , c, " Solucao::DeletaTarefasApartirDeDados") == 0 ){
 			return 0;
 		}
-		ConstrucoesInstancia.Construcoes[c].AlocaAtividade( DadosTarefasDesalocadas[i].HorariosDasTarefas[2],DadosTarefasDesalocadas[i].HorariosDasTarefas[3], DadosTarefasDesalocadas[i].DadosDasTarefas[2], DadosTarefasDesalocadas[i].DadosDasTarefas[1], 0, SituacaoDemanda, PlantasInstancia);
+		// Dar uma olhada na situação demanda e situação remoção
+		ConstrucoesInstancia.Construcoes[c].AlocaAtividade( DadosTarefasDesalocadas[i].HorariosDasTarefas[2],DadosTarefasDesalocadas[i].HorariosDasTarefas[3], DadosTarefasDesalocadas[i].DadosDasTarefas[2], DadosTarefasDesalocadas[i].DadosDasTarefas[1], DadosTarefasDesalocadas[i].DadosDasTarefas[3], DadosTarefasDesalocadas[i].DadosDasTarefas[4], PlantasInstancia);
 		ConstrucoesInstancia.NivelDeInviabilidade = ConstrucoesInstancia.NivelDeInviabilidade - 1;
 
 	}
@@ -314,34 +313,48 @@ void Solucao::ProcessoViabilizacao1(int TipoOrdenacao){
 	int ConstrucaoAnalisandoRetirada;
 	int DemandaAnalisandoRetirada;
 
-	//int PararPrograma;
+	int PararPrograma;
 
 	vector < DadosTarefa > DadosTarefasDesalocadas;
 	vector < DadosTarefa > DadosTarefasAdicionadas;
 	vector < DadosTarefa > AuxiliarLixo;
+
+	int Imprime;
+
+	Imprime = 1;
 
 
 	//ConstrucoesInstancia.ImprimeContrucoes();
 	//PlantasInstancia.Imprime(1,1);
 
 	InviabilidadeSolucaoAnterior = ConstrucoesInstancia.NivelDeInviabilidade;
-	ExisteTarefa = ConstrucoesInstancia.ConstrucaoTemTarefaParaRemover(ConstrucaoAnalisandoRetirada, DemandaAnalisandoRetirada, 0);		// Encontra primeira tarefa que pode ser retirada
+	ExisteTarefa = ConstrucoesInstancia.ConstrucaoTemTarefaParaRemover(ConstrucaoAnalisandoRetirada, DemandaAnalisandoRetirada, Imprime);		// Encontra primeira tarefa que pode ser retirada
+	if( Imprime == 1){
+		cin >> PararPrograma;
+	}
 
 	if( ExisteTarefa == 1){
 		do{
+			if( Imprime == 1){
+				cout << endl << endl << "        Inicia procediemnto " << endl << endl;
+			}
 			DadosTarefasDesalocadas.clear();
 			TarefaDeletada = DeletaAlocacaoTarefasPosterioresMesmaConstrucao(ConstrucaoAnalisandoRetirada, DemandaAnalisandoRetirada, DadosTarefasDesalocadas);	// Deleta tarefa
 			ConstrucoesInstancia.CalcularNivelDeInviabilidade();
 
-			/*
-			cout << "DadosTarefasDesalocadas" << endl;
-			ImprimeVetorDadosTarefa( DadosTarefasDesalocadas);
-			cout << "DadosTarefasAdicionadas" << endl;
-			ImprimeVetorDadosTarefa( DadosTarefasAdicionadas);
+			if( Imprime == 1){
+				cout << endl << endl << "    deleta tarefas apos a demanda [" << ConstrucaoAnalisandoRetirada << "-" << DemandaAnalisandoRetirada << "]" << endl << endl;
+				cout << "DadosTarefasDesalocadas" << endl;
+				ImprimeVetorDadosTarefa( DadosTarefasDesalocadas);
+				cout << "DadosTarefasAdicionadas" << endl;
+				ImprimeVetorDadosTarefa( DadosTarefasAdicionadas);
 
-			ConstrucoesInstancia.ImprimeContrucoes();
-			PlantasInstancia.Imprime(1,1);
-			*/
+				ConstrucoesInstancia.ImprimeContrucoes();
+				//PlantasInstancia.Imprime(1,1);
+
+				cin >> PararPrograma;
+			}
+
 
 			if ( TarefaDeletada == 1){
 				// Aloca nova tarefa que não era alocada antes
@@ -349,68 +362,83 @@ void Solucao::ProcessoViabilizacao1(int TipoOrdenacao){
 
 				//ConstrucoesInstancia.ImprimeContrucoes();
 
-				//cout << endl << endl << "       Aloca tarefa " << endl << endl;
 
-				TarefaAlocada = ProcessoParaAlocarTarefaNaoAtendida( ConstrucaoAnalisandoRetirada, DemandaAnalisandoRetirada , NovaTarefaAlocadaConstrucao , NovaTarefaAlocadaDemanda,  DadosTarefasAdicionadas, 0, TipoOrdenacao);
+				TarefaAlocada = ProcessoParaAlocarTarefaNaoAtendida( ConstrucaoAnalisandoRetirada, DemandaAnalisandoRetirada , NovaTarefaAlocadaConstrucao , NovaTarefaAlocadaDemanda,  DadosTarefasAdicionadas, 1, 0, TipoOrdenacao);
 				ConstrucoesInstancia.CalcularNivelDeInviabilidade();
 
-				/*
-				 ConstrucoesInstancia.ImprimeContrucoes();
-
-				cout << endl << "  tenta alocar tarefa" << endl;
-				cout << "DadosTarefasDesalocadas" << endl;
-				ImprimeVetorDadosTarefa( DadosTarefasDesalocadas);
-				cout << "DadosTarefasAdicionadas" << endl;
-				ImprimeVetorDadosTarefa( DadosTarefasAdicionadas);
-
-				cin >> PararPrograma;
-				 */
 
 				if( TarefaAlocada == 1){
 
-					//cout << endl << endl << "         Readiciona " << endl << endl;
+					if( Imprime == 1){
+						cout << endl << endl << "         Aloca demanda não atendida anteriormente [ " << NovaTarefaAlocadaConstrucao << "-" << NovaTarefaAlocadaDemanda << "]" << endl << endl;
 
-					ReadicionaTarefas( ConstrucaoAnalisandoRetirada, DadosTarefasAdicionadas, 0, TipoOrdenacao);
-					ConstrucoesInstancia.CalcularNivelDeInviabilidade();
-
-					/*
-					cout << endl << "  Realocar tarefas" << endl;
-					cout << "DadosTarefasDesalocadas" << endl;
-					ImprimeVetorDadosTarefa( DadosTarefasDesalocadas);
-					cout << "DadosTarefasAdicionadas" << endl;
-					ImprimeVetorDadosTarefa( DadosTarefasAdicionadas);
-
-					ConstrucoesInstancia.ImprimeContrucoes();
-
-*/
-					//cin >> PararPrograma;
-
-
-					if( InviabilidadeSolucaoAnterior > ConstrucoesInstancia.NivelDeInviabilidade){
-						cout << endl << "  								!!!!!!!!! Melhorou !!!!!!!!!!! "  << endl;
+						cout << endl << "  tenta alocar tarefa" << endl;
+						cout << "DadosTarefasDesalocadas" << endl;
+						ImprimeVetorDadosTarefa( DadosTarefasDesalocadas);
+						cout << "DadosTarefasAdicionadas" << endl;
+						ImprimeVetorDadosTarefa( DadosTarefasAdicionadas);
 
 						ConstrucoesInstancia.ImprimeContrucoes();
-						PlantasInstancia.Imprime(1,1);
+						//PlantasInstancia.Imprime(1,1);
+
+						cin >> PararPrograma;
+					}
+
+					ReadicionaTarefas( ConstrucaoAnalisandoRetirada, DadosTarefasAdicionadas, 1, TipoOrdenacao);
+					ConstrucoesInstancia.CalcularNivelDeInviabilidade();
+
+					if( Imprime == 1){
+						cout << endl << endl << "         Readiciona tarefas deletadas " << endl << endl;
+
+						cout << "DadosTarefasDesalocadas" << endl;
+						ImprimeVetorDadosTarefa( DadosTarefasDesalocadas);
+						cout << "DadosTarefasAdicionadas" << endl;
+						ImprimeVetorDadosTarefa( DadosTarefasAdicionadas);
+
+						ConstrucoesInstancia.ImprimeContrucoes();
+						//PlantasInstancia.Imprime(1,1);
+
+						cin >> PararPrograma;
+					}
+
+					if( InviabilidadeSolucaoAnterior > ConstrucoesInstancia.NivelDeInviabilidade){
+						if( Imprime == 1){
+							cout << endl << "  								!!!!!!!!! Melhorou !!!!!!!!!!! "  << endl;
+
+							cout << "DadosTarefasDesalocadas" << endl;
+							ImprimeVetorDadosTarefa( DadosTarefasDesalocadas);
+							cout << "DadosTarefasAdicionadas" << endl;
+							ImprimeVetorDadosTarefa( DadosTarefasAdicionadas);
+
+							ConstrucoesInstancia.ImprimeContrucoes();
+							//PlantasInstancia.Imprime(1,1);
+
+							cin >> PararPrograma;
+						}
 
 						ConstrucoesInstancia.MarcaTarefaNaoDeletadaNoVetor(ConstrucaoAnalisandoRetirada, DemandaAnalisandoRetirada, "ProcessoViabilizacao1" );
 						DadosTarefasDesalocadas.clear();
 						DadosTarefasAdicionadas.clear();
 
 					}else{
-						cout << endl << "  								!!!!!!!!! Nao melhorou !!!!!!!!!!! " << endl;
+						if( Imprime == 1){
+							cout << endl << "  								!!!!!!!!! Nao melhorou !!!!!!!!!!! " << endl;
 
-/*
-						cout << "DadosTarefasDesalocadas" << endl;
-						ImprimeVetorDadosTarefa( DadosTarefasDesalocadas);
-						cout << "DadosTarefasAdicionadas" << endl;
-						ImprimeVetorDadosTarefa( DadosTarefasAdicionadas);
-*/
+							cout << "DadosTarefasDesalocadas" << endl;
+							ImprimeVetorDadosTarefa( DadosTarefasDesalocadas);
+							cout << "DadosTarefasAdicionadas" << endl;
+							ImprimeVetorDadosTarefa( DadosTarefasAdicionadas);
 
+							ConstrucoesInstancia.ImprimeContrucoes();
+							//PlantasInstancia.Imprime(1,1);
+
+							cin >> PararPrograma;
+						}
 
 						if( DeletaTarefasApartirDeDados(  DadosTarefasAdicionadas ) == 0){
 							cout << endl << endl << "   problema em deletar " << endl << endl;
 						}
-						if( ReadicionaTarefasApartirDeDados( DadosTarefasDesalocadas, 1) == 0){
+						if( ReadicionaTarefasApartirDeDados( DadosTarefasDesalocadas) == 0){
 							cout << endl << endl << "   problema em realocar " << endl << endl;
 						}
 						DadosTarefasDesalocadas.clear();
@@ -418,26 +446,43 @@ void Solucao::ProcessoViabilizacao1(int TipoOrdenacao){
 
 						ConstrucoesInstancia.MarcaTarefaDeletadaNoVetor(ConstrucaoAnalisandoRetirada, DemandaAnalisandoRetirada, 1);
 
-						//ConstrucoesInstancia.ImprimeContrucoes();
-						//PlantasInstancia.Imprime(1,1);
+						if( Imprime == 1){
+							cout << endl << endl << "          Deleta tarefas adicionadas, readiciona as deletadas e marca demanda [" << ConstrucaoAnalisandoRetirada << "-" << DemandaAnalisandoRetirada << "]" << endl << endl;
 
-						//cin >> PararPrograma;
+							cout << "DadosTarefasDesalocadas" << endl;
+							ImprimeVetorDadosTarefa( DadosTarefasDesalocadas);
+							cout << "DadosTarefasAdicionadas" << endl;
+							ImprimeVetorDadosTarefa( DadosTarefasAdicionadas);
 
+							ConstrucoesInstancia.ImprimeContrucoes();
+							//PlantasInstancia.Imprime(1,1);
+
+							cin >> PararPrograma;
+						}
 					}
 				}else{
-					//cout << endl << endl << "            Nao consegui adicionar nova tarefa" << endl << endl;
-					ReadicionaTarefasApartirDeDados( DadosTarefasDesalocadas, 1);
+
+					ReadicionaTarefasApartirDeDados( DadosTarefasDesalocadas);
 					DadosTarefasDesalocadas.clear();
 
 					ConstrucoesInstancia.MarcaTarefaDeletadaNoVetor(ConstrucaoAnalisandoRetirada, DemandaAnalisandoRetirada, 1);
 
-					//ConstrucoesInstancia.ImprimeContrucoes();
-					//PlantasInstancia.Imprime(1,1);
+					if( Imprime == 1){
+						cout << endl << endl << "            Nao consegui adicionar nova tarefa - readiciona tarefas e marca terafa como removida" << endl << endl;
 
-					//cin >> PararPrograma;
+						cout << "DadosTarefasDesalocadas" << endl;
+						ImprimeVetorDadosTarefa( DadosTarefasDesalocadas);
+						cout << "DadosTarefasAdicionadas" << endl;
+						ImprimeVetorDadosTarefa( DadosTarefasAdicionadas);
+
+						ConstrucoesInstancia.ImprimeContrucoes();
+						//PlantasInstancia.Imprime(1,1);
+
+						cin >> PararPrograma;
+					}
 				}
 			}else{
-				 cout << endl << endl << endl << "   #######################  Tarefa nao deletada ######################## " << endl << endl << endl;
+				 cout << endl << endl << endl << "   #######################  Tarefa não deletada ######################## " << endl << endl << endl;
 			}
 
 			InviabilidadeSolucaoAnterior = ConstrucoesInstancia.NivelDeInviabilidade;
@@ -671,7 +716,7 @@ int Solucao::SelecionaCarreta(int c, int p, int  NumeroDemanda, int SituacaoDema
 				if( DisponibilidadePlanta == 1){		// possivel o atendimento pela planta
 					if( DisponibilidadeCarreta == 1){		// possivel o atendimento pelo carregamento
 						if( DisponibilidadeConstrucao == 1 || DisponibilidadeConstrucao == 2 || DisponibilidadeConstrucao == 3){	// Possivel alocação pela construção, os números 1, 2 e 3 são referentes a posição onde a demanda será alocada em relação as outras demandas já alocadas na construção
-							ConstrucoesInstancia.Construcoes[c].AlocaAtividadeSalvandoDados(HorarioChegaContrucao, HorarioSaiConstrucao, PlantasInstancia.Plantas[p].VeiculosDaPlanta.Carretas[v].NumeroDaCarreta, PlantasInstancia.Plantas[p].NumeroDaPlanta,  0, 1, PlantasInstancia, DadosTarefasAdicionadas);	// aloca a demanda tanto no veículo, construção e planta
+							ConstrucoesInstancia.Construcoes[c].AlocaAtividadeSalvandoDados(HorarioChegaContrucao, HorarioSaiConstrucao, PlantasInstancia.Plantas[p].VeiculosDaPlanta.Carretas[v].NumeroDaCarreta, PlantasInstancia.Plantas[p].NumeroDaPlanta,  1,0, PlantasInstancia, DadosTarefasAdicionadas);	// aloca a demanda tanto no veículo, construção e planta
 							return 1;
 						}
 						if( DisponibilidadeConstrucao == -2){	// sinaliza que no momento não é possivel alocar a demanda, mas caso atrazar as outras demandas já atendidas talvéz seja possivel atender essa demanda
@@ -883,14 +928,14 @@ void Solucao::ProcessoViabilizacao2(int TipoOrdenacao){
 			cin >> PararPrograma;
 		}
 	// Adiciona a tarefa que não era alocada antes
-		TarefaAdicionada = AdicionaTarefa( ConstrucaoNaoAtendida, DemandaNaoAtendida, DadosTarefasAdicionadas, 2, TipoOrdenacao);		// tenta adicionar a demanda não atendida anteriormente. Caso consegui retorna 1, caso contrario retorna 0.
+		TarefaAdicionada = AdicionaTarefa( ConstrucaoNaoAtendida, DemandaNaoAtendida, DadosTarefasAdicionadas, 2, 0, TipoOrdenacao);		// tenta adicionar a demanda não atendida anteriormente. Caso consegui retorna 1, caso contrario retorna 0.
 		SinalizaTarefaAdicionadaInicialmente( TarefaAdicionada, IndiceConstrucaoNaoAtendida, DemandaNaoAtendida);						// atualiza os valores de situação e remoção da demanda. caso for atendida coloca 2 em ambos, caso não, a situação tem valor -1 e a remoção 3
 		if( ConstrucoesInstancia.Construcoes[ IndiceConstrucaoNaoAtendida ].SituacaoDemanda[ DemandaNaoAtendida ] == -1){		// Verifa se conseguiu alocar a demnada não alocada antes.
 			// Caos não aloque a demanda
 			if( Imprime == 1){
 				cout << endl << endl << "   Não consigo alocar tarefa [" << ConstrucaoNaoAtendida << "-" << DemandaNaoAtendida << "] que não foi alocada antes -> Solucao::ProcessoViabilizacao2 " << endl << endl;
 			}
-			ReadicionaTarefasApartirDeDados( DadosTarefasDesalocadas, 1);	// retorna a solução inicial
+			ReadicionaTarefasApartirDeDados( DadosTarefasDesalocadas);	// retorna a solução inicial
 			DadosTarefasDesalocadas.clear();								// deleta conteudo do vetor
 
 			//ConstrucoesInstancia.AlocaValoresConstrucaoPodeAtender();		// Marca as construções que já foram completamente atendidas com 1, as que não forma com 0
@@ -1132,7 +1177,7 @@ void Solucao::ProcessoViabilizacao2(int TipoOrdenacao){
 				//ImprimeDadosRetiradoAdicionadoVetorConstrucaoAnalisada( 1,  DadosTarefasDesalocadas, 1,  DadosTarefasAdicionadas, 0,  ConstrucoesInstancia.ConstrucoesAnalizadas, 0);
 				cout << endl << " aqui 2" << endl;
 
-				if( ReadicionaTarefasApartirDeDados( DadosTarefasDesalocadas, 1) == 0){		// readiciona as tarefas que foram deletadas anteriormente, visando a retornar ao sequenciamento que se tinha inicialmente
+				if( ReadicionaTarefasApartirDeDados( DadosTarefasDesalocadas) == 0){		// readiciona as tarefas que foram deletadas anteriormente, visando a retornar ao sequenciamento que se tinha inicialmente
 					if( Imprime == 1){
 						cout << endl << endl << "   problema em realocar " << endl << endl;
 					}

@@ -136,10 +136,10 @@ void Heuristica::ExecutaProcedimentoHeuristico1(){
 
 	Solucoes.CalculaMakespanSolucoes();
 
-	/*
+
 	Solucoes.Imprime(1,1,0);
 
-
+/*
 
 	cout << endl << endl << "  coletando dados " << endl << endl;
 
@@ -174,9 +174,9 @@ void Heuristica::ExecutaProcedimentoHeuristico1(){
 	Solucoes.Solucoes[0].ConstrucoesInstancia.Construcoes[1].AlocaAtividade(HoraInicio, HoraFinal, Carreta, NumPlanta,  0, 1, Solucoes.Solucoes[0].PlantasInstancia);
 
 	Solucoes.Imprime(1,1,0);
-
-
 */
+
+
 	cout << endl << endl << "############################### Procedimento Viabilidade 1 #####################################" << endl << endl;
 
 	Solucoes.Solucoes[0].ProcessoViabilizacao1( TipoOrdenacaoVeiculos );
@@ -185,7 +185,7 @@ void Heuristica::ExecutaProcedimentoHeuristico1(){
 
 	Solucoes.CalculaMakespanSolucoes();
 	Solucoes.Imprime(1,1,0);
-
+	/*
 
 	Solucoes.Solucoes.resize(Solucoes.Solucoes.size()+1);
 	Solucoes.Solucoes[1] = Solucoes.Solucoes[0];
@@ -198,7 +198,7 @@ void Heuristica::ExecutaProcedimentoHeuristico1(){
 
 	Solucoes.CalculaMakespanSolucoes();
 	Solucoes.Solucoes[1].Imprime(1,1,1);
-
+*/
 
 }
 

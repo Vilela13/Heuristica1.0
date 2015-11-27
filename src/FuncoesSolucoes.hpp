@@ -98,4 +98,11 @@ int VerificaTodosValoresVetorInt( int Valor, vector< int > VetorInt){
 	return 1;
 }
 
+void ImprimeVetorDouble( vector< double > VetorDouble){
+	cout << " Conteudo Vetor "<< endl;
+	for(unsigned int i = 0; i < VetorDouble.size(); i++){
+		cout << " [" << i << "] " << VetorDouble[i] << " ";
+	}
+	cout << endl;
+}
 #endif /* FUNCOESSOLUCOES_HPP_ */

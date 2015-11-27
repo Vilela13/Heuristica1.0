@@ -157,9 +157,12 @@ int Solucao::AdicionaTarefa( int Construcao, int Demanda , vector < DadosTarefa 
 	int c;
 	int NumPlantaAnalisando;
 
-
+	PlantasInstancia.InicializaVetorHorarioQuePlantaPodeAtender();
 
 	int ParaPrograma;
+
+	vector < DadosTarefa > DadosTarefasAdicionadasAuxiliar;
+	vector < DadosTarefa > DadosTarefasDesalocadasAuxiliar;
 
 
 
@@ -194,7 +197,12 @@ int Solucao::AdicionaTarefa( int Construcao, int Demanda , vector < DadosTarefa 
 								}else{
 									if( DisponibilidadeConstrucao == -2){
 										cout <<  "                     Caso atrazar da para alocar, demanda em analise [" << Construcao << "-" << Demanda<< "] no horario " << HorarioChegaContrucao << endl;
+										if( PlantasInstancia.PlantasAnalizadas[NumPlantaAnalisando] == 0){
+											PlantasInstancia.HorarioQuePlantaPodeAtender[NumPlantaAnalisando] = HorarioInicioPlanta;
+											PlantasInstancia.HorarioQueConstrucaoPodeAtenderDemanda[NumPlantaAnalisando] = HorarioChegaContrucao;
+										}
 										PlantasInstancia.PlantasAnalizadas[NumPlantaAnalisando] = -2;
+										HorarioInicioPlanta = PlantasInstancia.Plantas[NumPlantaAnalisando].TempoMaximoDeFuncionamento;
 									}
 								}
 
@@ -209,28 +217,27 @@ int Solucao::AdicionaTarefa( int Construcao, int Demanda , vector < DadosTarefa 
 			}while( PlantasInstancia.AnalizouTodasPLanats() == 0);
 			//cout << "   &&&&&&&&&&&&& Nao consigo atender contrucao [" << ConstrucoesInstancia.Construcoes[c].NumeroDaConstrucao << "-" << d << "]   -> AdicionaTarefa &&&&&&&&&&&&& " << endl;
 
-			cout << endl << endl <<  " Imprimir SituacaoPlantaAtenderCasoAtrazar I " << endl;
+			cout << endl << endl <<  " Imprimir SituacaoPlantaAtenderCasoAtrazar" << endl;
 			ImprimeVetorInt( PlantasInstancia.PlantasAnalizadas );
+			ImprimeVetorDouble( PlantasInstancia.HorarioQuePlantaPodeAtender);
+			ImprimeVetorDouble( PlantasInstancia.HorarioQueConstrucaoPodeAtenderDemanda);
 			cin >> ParaPrograma;
+
+			if( PlantasInstancia.VerificaPlantasAnalizadasPodemAtenderSeAtrazar() == 1){
+				DadosTarefasAdicionadasAuxiliar = DadosTarefasAdicionadas;
+				DadosTarefasDesalocadasAuxiliar = DadosTarefasDesalocadas;
+				cout << endl << endl << "      Função que atraza demandas - horario que pode atender construção = " << PlantasInstancia.RetornaMenorHorarioQueConstrucaoPode() << endl << endl;
+				ConstrucoesInstancia.Construcoes[c].AtrazaDemandasParaAtender( Demanda, PlantasInstancia.RetornaMenorHorarioQueConstrucaoPode() - ConstrucoesInstancia.Construcoes[c].TempoMaximoEntreDescargas + IntervaloDeTempo, DadosTarefasAdicionadasAuxiliar, DadosTarefasDesalocadasAuxiliar,PlantasInstancia);
+			}
 
 			return 0;
 
 		}else{
 			cout << endl << endl << endl << "   &&&&&&&&&&&&& Problema -> Construcao [" << c << "-" << Demanda << "] com demanda ja atendida -> Solucao::AdicionaTarefa&&&&&&&&&&&&& " << endl << endl << endl;
-
-			cout << endl << endl <<  " Imprimir SituacaoPlantaAtenderCasoAtrazar II" << endl;
-			ImprimeVetorInt( PlantasInstancia.PlantasAnalizadas );
-			cin >> ParaPrograma;
-
 			return 0;
 		}
 
 	}
-
-	cout << endl << endl <<  " Imprimir SituacaoPlantaAtenderCasoAtrazar III" << endl;
-	ImprimeVetorInt( PlantasInstancia.PlantasAnalizadas );
-	cin >> ParaPrograma;
-
 	return 0;
 
 }

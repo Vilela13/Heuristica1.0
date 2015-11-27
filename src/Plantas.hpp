@@ -197,6 +197,9 @@ public:
 	vector< Planta > Plantas;
 	vector < int > PlantasAnalizadas;
 
+	vector < double > HorarioQuePlantaPodeAtender; 		// Vetor que guarda o primeiro horario que a planta pode passar a atender essa demanda caso as demandas porteriores forem atrazadas
+	vector < double > HorarioQueConstrucaoPodeAtenderDemanda;
+
 	double MakespanPLantas;
 
 	void InicializaPlantasAnalizadas();
@@ -212,6 +215,8 @@ public:
 	void Imprime(int OrdenaPlantas,int OrdenaCarrtas);
 
 	int VerificaPlantasAnalizadasPodemAtenderSeAtrazar();
+	void InicializaVetorHorarioQuePlantaPodeAtender();		// Inicializa o vetor de horarios com -1;
+	double RetornaMenorHorarioQueConstrucaoPode();
 
 	~ConjuntoPlantas();
 };
@@ -442,6 +447,28 @@ int ConjuntoPlantas::VerificaPlantasAnalizadasPodemAtenderSeAtrazar(){		// verif
 	return 0;
 
 }
+
+void ConjuntoPlantas::InicializaVetorHorarioQuePlantaPodeAtender(){			// inicializa os horarios que as plantas podem atender certa demanda caso as outras forem atrazadas com o valor -1
+	HorarioQuePlantaPodeAtender.resize(Plantas.size());
+	HorarioQueConstrucaoPodeAtenderDemanda.resize(Plantas.size());
+	for( int p = 0; p < HorarioQuePlantaPodeAtender.size(); p++){
+		HorarioQuePlantaPodeAtender[p] = DBL_MAX;
+		HorarioQueConstrucaoPodeAtenderDemanda[p] = DBL_MAX;
+	}
+}
+
+double ConjuntoPlantas::RetornaMenorHorarioQueConstrucaoPode(){
+	double HoraAux;
+	HoraAux = DBL_MAX;
+
+	for( int p = 0; p < HorarioQuePlantaPodeAtender.size(); p++){
+		if( HorarioQueConstrucaoPodeAtenderDemanda[p] < HoraAux){
+			HoraAux = HorarioQueConstrucaoPodeAtenderDemanda[p];
+		}
+	}
+	return HoraAux;
+}
+
 
 ConjuntoPlantas::~ConjuntoPlantas(){
 

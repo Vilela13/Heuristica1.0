@@ -100,6 +100,8 @@ public:
 
 	void ImprimeContrucao();
 
+	int AtrazaDemandasParaAtender( int NumDemanda, double HoraInicioAtendiemnto, vector < DadosTarefa > &DadosTarefasAdicionadas, vector < DadosTarefa >& DadosTarefasDesalocadas,ConjuntoPlantas& Plantas);
+
 	~Construcao();
 
 };
@@ -803,6 +805,15 @@ void Construcao::ImprimeContrucao(){		// Imprime os dados da construções
 	printf ("   MAKESPAN = %.4f   Status = %d\n", Makespan, StatusAtendimento);
 }
 
+int Construcao::AtrazaDemandasParaAtender( int NumDemanda, double HoraInicioAtendiemnto, vector < DadosTarefa > &DadosTarefasAdicionadas, vector < DadosTarefa >& DadosTarefasDesalocadas,ConjuntoPlantas& Plantas){
+	int ParaPrograma;
+
+	cout << endl << endl << " Demanda " << NumDemanda << "  hora " << HoraInicioAtendiemnto << endl << endl;
+	DeletaAtividadeLocomovendoAsOutrasTarefasSalvandoDados( Descarregamentos[NumDemanda-1].HorarioInicioDescarregamento, Descarregamentos[NumDemanda-1].HorarioFinalDescarregamento, NumDemanda-1, Descarregamentos[NumDemanda-1].NumPlantaFornecedor  , Descarregamentos[NumDemanda-1].NumCarretaUtilizada , Plantas, DadosTarefasDesalocadas);
+	ImprimeContrucao();
+
+	cin >> ParaPrograma;
+}
 
 Construcao::~Construcao(){		// destruidora da classe
 

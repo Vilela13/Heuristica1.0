@@ -132,6 +132,8 @@ int Construcao::VerificaDisponibilidade( double InicioPossivelAlocacao, double F
 	PossuiTarefaAnterior = 0;
 	PossuiTarefaPosterior = 0;
 
+	int ParaPrograma;
+
 	// verifica se respeita os intervalos de funcionamento da construção
 	if( InicioPossivelAlocacao < TempoMinimoDeFuncionamento){
 		return 0;
@@ -198,15 +200,15 @@ int Construcao::VerificaDisponibilidade( double InicioPossivelAlocacao, double F
 
 		// Caso não respeita o intervalo de tempo necessario entre um descarregamento e outro semdo que ela seria colocada depois das outras demandas já alocadas.
 		int TemTarefaAntes;
-		TemTarefaAntes = 0;
+		TemTarefaAntes = 1;
 
 		for( int d = 0; d < StatusAtendimento; d ++){
 			if( Descarregamentos[d].HorarioFinalDescarregamento > InicioPossivelAlocacao ){
-				TemTarefaAntes = 1;
+				TemTarefaAntes = 0;
 			}
 		}
 
-		if( TemTarefaAntes == 0){		// Não se pode colocar a demanda pelo fato dela não respeitar o intervalo de atendimento, mas caso se atraze as demandas ela seria alocadac
+		if( TemTarefaAntes == 1){		// Não se pode colocar a demanda pelo fato dela não respeitar o intervalo de atendimento, mas caso se atraze as demandas ela seria alocadac
 			return -2;
 		}
 

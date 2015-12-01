@@ -86,7 +86,7 @@ public:
 
 	void AlocaAtividadeSalvandoDados(double HoraInicio, double HoraFinal, int Carreta, int NumPlanta, int Situacao, int StatusRemocao, ConjuntoPlantas& Plantas, vector < DadosTarefa > &DadosAdicionado);
 	int DeletaAtividadeLocomovendoAsOutrasTarefas(double HoraInicio, double HoraFinal, int NumDemanda,  int NumPlanta, int Carreta, ConjuntoPlantas& Plantas);
-	int DeletaAtividadeLocomovendoAsOutrasTarefasSalvandoDados(double HoraInicio, double HoraFinal, int NumDemanda,  int NumPlanta, int Carreta, ConjuntoPlantas& Plantas, vector < DadosTarefa > &DadosRetirando);
+	int DeletaAtividadeLocomovendoAsOutrasTarefasSalvandoDados(double HoraInicio, double HoraFinal, int NumDemanda,  int NumPlanta, int Carreta, ConjuntoPlantas& Plantas, vector < DadosTarefa > &DadosTarefasMovidasAuxiliar);
 
 	int DeletaTodasAtividadesDaContrucaoSalvandoDados(double &HoraInicio, ConjuntoPlantas& Plantas, vector < DadosTarefa > &DadosRetirandoAux);
 
@@ -100,7 +100,7 @@ public:
 
 	void ImprimeContrucao();
 
-	int AtrazaDemandasParaAtender( int NumDemanda, double HoraInicioAtendiemnto, vector < DadosTarefa > &DadosTarefasAdicionadas, vector < DadosTarefa >& DadosTarefasDesalocadas,ConjuntoPlantas& Plantas);
+	int AtrazaDemandasParaAtender( int NumDemanda, double HoraInicioAtendiemnto, vector < DadosTarefa > &DadosTarefasMovidasAuxiliar,ConjuntoPlantas& Plantas);
 
 	~Construcao();
 
@@ -454,7 +454,7 @@ int Construcao::DeletaAtividadeLocomovendoAsOutrasTarefas(double HoraInicio, dou
 
 }
 
-int Construcao::DeletaAtividadeLocomovendoAsOutrasTarefasSalvandoDados(double HoraInicio, double HoraFinal, int NumDemanda,  int NumPlanta, int Carreta, ConjuntoPlantas& Plantas, vector < DadosTarefa > &DadosRetirando){		// Deleta alocação de tarefa e reordenadno as alocações para que os dados se mantenham corretos, salvando os dados da tarefa removida em uma estrutura
+int Construcao::DeletaAtividadeLocomovendoAsOutrasTarefasSalvandoDados(double HoraInicio, double HoraFinal, int NumDemanda,  int NumPlanta, int Carreta, ConjuntoPlantas& Plantas, vector < DadosTarefa > &DadosTarefasMovidasAuxiliar){		// Deleta alocação de tarefa e reordenadno as alocações para que os dados se mantenham corretos, salvando os dados da tarefa removida em uma estrutura
 
 // Verifica se é possivel colocar uma tarefa nesta construção
 	if( StatusAtendimento - 1 < NumDemanda){
@@ -494,8 +494,9 @@ int Construcao::DeletaAtividadeLocomovendoAsOutrasTarefasSalvandoDados(double Ho
 		 */
 
 // Armazena tarefa deletada
-		if( AdicionaElementoVetorDadosTarefa(DadosRetirando, NumeroDaConstrucao, NumPlanta, Carreta, SituacaoDemanda[NumDemanda], SituacaoRemocao[NumDemanda],  HorarioInicioPlanta, HorarioFimPlanta, HoraInicio, HoraFinal, HorarioFimCarreta, 'r') == 0 ){
-			cout << endl << endl << " Problema em adicionar tarefa a vetor de tarefas desalocadas -> Construcao::DeletaAtividadeLocomovendoAsOutrasTarefasSalvandoDados" << endl << endl;
+		if( AdicionaElementoVetorDadosTarefa(DadosTarefasMovidasAuxiliar, NumeroDaConstrucao, NumPlanta, Carreta, SituacaoDemanda[NumDemanda], SituacaoRemocao[NumDemanda],  HorarioInicioPlanta, HorarioFimPlanta, HoraInicio, HoraFinal, HorarioFimCarreta, 'r') == 0 ){
+			cout << endl << endl << " Erro! - Problema em adicionar tarefa a vetor de tarefas desalocadas -> Construcao::DeletaAtividadeLocomovendoAsOutrasTarefasSalvandoDados" << endl << endl;
+			return 0;
 		}
 
 // Deleta tarefa na planta e no caminhão
@@ -808,18 +809,17 @@ void Construcao::ImprimeContrucao(){		// Imprime os dados da construções
 	printf ("   MAKESPAN = %.4f   Status = %d\n", Makespan, StatusAtendimento);
 }
 
-int Construcao::AtrazaDemandasParaAtender( int NumDemanda, double HoraInicioAtendiemnto, vector < DadosTarefa > &DadosTarefasAdicionadas, vector < DadosTarefa >& DadosTarefasDesalocadas,ConjuntoPlantas& Plantas){
+int Construcao::AtrazaDemandasParaAtender( int NumDemanda, double HoraInicioAtendiemnto, vector < DadosTarefa > &DadosTarefasMovidasAuxiliar,ConjuntoPlantas& Plantas){
 	int ParaPrograma;
 
 	ImprimeContrucao();
 
-	cout << "DadosTarefasDesalocadas" << endl;
-	ImprimeVetorDadosTarefa( DadosTarefasDesalocadas);
-	cout << "DadosTarefasAdicionadas" << endl;
-	ImprimeVetorDadosTarefa( DadosTarefasAdicionadas);
+	cout << "DadosTarefasMovidasAuxiliar" << endl;
+	ImprimeVetorDadosTarefa( DadosTarefasMovidasAuxiliar);
+
 
 	cout << endl << endl << "        AtrazaDemandasParaAtender" << endl << " Demanda " << NumDemanda << "  hora " << HoraInicioAtendiemnto << endl << endl;
-	DeletaAtividadeLocomovendoAsOutrasTarefasSalvandoDados( Descarregamentos[NumDemanda-1].HorarioInicioDescarregamento, Descarregamentos[NumDemanda-1].HorarioFinalDescarregamento, NumDemanda - 1, Descarregamentos[NumDemanda-1].NumPlantaFornecedor  , Descarregamentos[NumDemanda-1].NumCarretaUtilizada , Plantas, DadosTarefasDesalocadas);
+	DeletaAtividadeLocomovendoAsOutrasTarefasSalvandoDados( Descarregamentos[NumDemanda-1].HorarioInicioDescarregamento, Descarregamentos[NumDemanda-1].HorarioFinalDescarregamento, NumDemanda - 1, Descarregamentos[NumDemanda-1].NumPlantaFornecedor  , Descarregamentos[NumDemanda-1].NumCarretaUtilizada , Plantas, DadosTarefasMovidasAuxiliar);
 	ImprimeContrucao();
 
 	cin >> ParaPrograma;

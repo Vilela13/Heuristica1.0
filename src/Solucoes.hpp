@@ -160,8 +160,7 @@ int Solucao::AdicionaTarefa( int Construcao, int Demanda , vector < DadosTarefa 
 
 	int ParaPrograma;
 
-	vector < DadosTarefa > DadosTarefasAdicionadasAuxiliar;
-	vector < DadosTarefa > DadosTarefasDesalocadasAuxiliar;
+	vector < DadosTarefa > DadosTarefasMovidasAuxiliar;
 
 
 
@@ -215,7 +214,7 @@ int Solucao::AdicionaTarefa( int Construcao, int Demanda , vector < DadosTarefa 
 				}
 			}while( PlantasInstancia.AnalizouTodasPLanats() == 0);
 			//cout << "   &&&&&&&&&&&&& Nao consigo atender contrucao [" << ConstrucoesInstancia.Construcoes[c].NumeroDaConstrucao << "-" << d << "]   -> AdicionaTarefa &&&&&&&&&&&&& " << endl;
-			/*
+
 			cout << endl << endl <<  " Imprimir SituacaoPlantaAtenderCasoAtrazar" << endl;
 			ImprimeVetorInt( PlantasInstancia.PlantasAnalizadas );
 			ImprimeVetorDouble( PlantasInstancia.HorarioQuePlantaPodeAtender);
@@ -223,12 +222,12 @@ int Solucao::AdicionaTarefa( int Construcao, int Demanda , vector < DadosTarefa 
 			cin >> ParaPrograma;
 
 			if( PlantasInstancia.VerificaPlantasAnalizadasPodemAtenderSeAtrazar() == 1){
-				DadosTarefasAdicionadasAuxiliar = DadosTarefasAdicionadas;
-				DadosTarefasDesalocadasAuxiliar = DadosTarefasDesalocadas;
+				DadosTarefasMovidasAuxiliar = DadosTarefasMovidas;
+
 				cout << endl << endl << "      Função que atraza demandas - horario que pode atender construção = " << PlantasInstancia.RetornaMenorHorarioQueConstrucaoPode() << endl << endl;
-				ConstrucoesInstancia.Construcoes[c].AtrazaDemandasParaAtender( Demanda, PlantasInstancia.RetornaMenorHorarioQueConstrucaoPode() - ConstrucoesInstancia.Construcoes[c].TempoMaximoEntreDescargas + IntervaloDeTempo, DadosTarefasAdicionadasAuxiliar, DadosTarefasDesalocadasAuxiliar,PlantasInstancia);
+				ConstrucoesInstancia.Construcoes[c].AtrazaDemandasParaAtender( Demanda, PlantasInstancia.RetornaMenorHorarioQueConstrucaoPode() - ConstrucoesInstancia.Construcoes[c].TempoMaximoEntreDescargas + IntervaloDeTempo,DadosTarefasMovidasAuxiliar, PlantasInstancia);
 			}
-*/
+
 			return 0;
 
 		}else{

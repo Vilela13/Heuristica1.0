@@ -31,7 +31,7 @@ int RetiraElementoVetorDadosTarefaApartirEstrutura(vector < DadosTarefa > &Vetor
 int VerificaElementoVetorDadosTarefa(vector < DadosTarefa > Vetor,int NumConstucao,  int NumPlanta, int NumCarreta, double HoraInicioPlanta, double HoraSaiPlanta, double HoraInicioConstrucao, double HoraSaiConstrucao, double HoraRetornaPlanta);
 int VerificaElementoVetorDadosTarefaApartirEstrutura(vector < DadosTarefa >  Vetor,DadosTarefa Dado);
 
-int AdicionaElementoVetorDadosTarefa(vector < DadosTarefa > &Vetor, int NumConstucao, int NumPlanta, int NumCarreta, int Situacao, int SituacaoRetirada, double HoraInicioPlanta, double HoraSaiPlanta, double HoraInicioConstrucao, double HoraSaiConstrucao, double HoraRetornaPlanta, char status);
+int AdicionaElementoVetorDadosTarefa(int VerificaExistencia, vector < DadosTarefa > &Vetor, int NumConstucao, int NumPlanta, int NumCarreta, int Situacao, int SituacaoRetirada, double HoraInicioPlanta, double HoraSaiPlanta, double HoraInicioConstrucao, double HoraSaiConstrucao, double HoraRetornaPlanta, char status);
 int AdicionaElementoVetorDadosTarefaApartirEstrutura(vector < DadosTarefa > &Vetor, DadosTarefa Dado);
 
 
@@ -136,19 +136,26 @@ int VerificaElementoVetorDadosTarefaApartirEstrutura(vector < DadosTarefa >  Vet
 	return 0;
 }
 
-int AdicionaElementoVetorDadosTarefa(vector < DadosTarefa > &Vetor, int NumConstucao, int NumPlanta, int NumCarreta, int Situacao, int SituacaoRetirada, double HoraInicioPlanta, double HoraSaiPlanta, double HoraInicioConstrucao, double HoraSaiConstrucao, double HoraRetornaPlanta,char status){
+int AdicionaElementoVetorDadosTarefa(int VerificaExistencia, vector < DadosTarefa > &Vetor, int NumConstucao, int NumPlanta, int NumCarreta, int Situacao, int SituacaoRetirada, double HoraInicioPlanta, double HoraSaiPlanta, double HoraInicioConstrucao, double HoraSaiConstrucao, double HoraRetornaPlanta,char status){
 	int ParaFuncao;
-	if( VerificaElementoVetorDadosTarefa(Vetor,NumConstucao, NumPlanta,NumCarreta,  HoraInicioPlanta, HoraSaiPlanta, HoraInicioConstrucao, HoraSaiConstrucao, HoraRetornaPlanta, status) == 1){
-		cout << endl << endl << "    <<<<<<<<<<<<<<<   ERRO! -> AdicionaElementoVetorDadosTarefa >>>>>>>>>>>>>>>>>>>>>" << endl << endl;
-		printf (" Planta [%d]",NumPlanta );
-		printf (" tempo (%.4f-%.4f)", HoraInicioPlanta, HoraSaiPlanta);
-		printf (" Construcao [%d]",NumConstucao);
-		printf (" tempo (%.4f-%.4f)", HoraInicioConstrucao, HoraSaiConstrucao);
-		printf (" Caminhao [%d-%d]",NumPlanta, NumCarreta);
-		printf (" tempo (%.4f-%.4f)", HoraInicioPlanta, HoraRetornaPlanta);
-		printf (" status %c \n", status);
-		cin >> ParaFuncao;
-		return 0;
+
+	if( VerificaExistencia == 1){
+		if( VerificaElementoVetorDadosTarefa(Vetor,NumConstucao, NumPlanta,NumCarreta,  HoraInicioPlanta, HoraSaiPlanta, HoraInicioConstrucao, HoraSaiConstrucao, HoraRetornaPlanta, status) == 1){
+			cout << endl << endl << "    <<<<<<<<<<<<<<<   ERRO! -> AdicionaElementoVetorDadosTarefa >>>>>>>>>>>>>>>>>>>>>" << endl << endl;
+			printf (" Planta [%d]",NumPlanta );
+			printf (" tempo (%.4f-%.4f)", HoraInicioPlanta, HoraSaiPlanta);
+			printf (" Construcao [%d]",NumConstucao);
+			printf (" tempo (%.4f-%.4f)", HoraInicioConstrucao, HoraSaiConstrucao);
+			printf (" Caminhao [%d-%d]",NumPlanta, NumCarreta);
+			printf (" tempo (%.4f-%.4f)", HoraInicioPlanta, HoraRetornaPlanta);
+			printf (" status %c \n", status);
+			cin >> ParaFuncao;
+			return 0;
+		}else{
+			Vetor.resize(Vetor.size() + 1);
+			Vetor[Vetor.size() - 1].InserirConteudo(NumConstucao, NumPlanta, NumCarreta, Situacao, SituacaoRetirada, HoraInicioPlanta, HoraSaiPlanta, HoraInicioConstrucao, HoraSaiConstrucao, HoraRetornaPlanta, status);
+			return 1;
+		}
 	}else{
 		Vetor.resize(Vetor.size() + 1);
 		Vetor[Vetor.size() - 1].InserirConteudo(NumConstucao, NumPlanta, NumCarreta, Situacao, SituacaoRetirada, HoraInicioPlanta, HoraSaiPlanta, HoraInicioConstrucao, HoraSaiConstrucao, HoraRetornaPlanta, status);

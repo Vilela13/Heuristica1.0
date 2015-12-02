@@ -106,7 +106,7 @@ void Solucao::EncontraPlantaMenorDistanciaConstrucao( int c, int& NumPlantaAnali
 }
 
 
-
+//
 void Solucao::Imprime(bool ImprimePlanta, bool ImprimeConstrucao, bool IntervalosRespeitadosConstrucaoes ){
 	if( ImprimePlanta == 1 ){
 		PlantasInstancia.Imprime(1,1);
@@ -156,50 +156,75 @@ int Solucao::AdicionaTarefa( int VerificaExistencia, int Construcao, int Demanda
 	int c;
 	int NumPlantaAnalisando;
 
-	PlantasInstancia.InicializaVetorHorarioQuePlantaPodeAtender();
-
 	int ParaPrograma;
 
+	// Guarda as tarefas movidada no processo de mudar o horario d eatendimento de uma demanda anterior visando atender uma posterior
 	vector < DadosTarefa > DadosTarefasMovidasAuxiliar;
+
 	int SituacaoAlocacao;
 
+// inicializa os vetores que armazenam os horarios que as palnats podem atender a demanda da construção caso se caia no caso de -2 na Analise da planta. Se é inicializado com os valores maximos de Double
+	PlantasInstancia.InicializaVetorHorarioQuePlantaPodeAtender();
 
-
+// aloca o indice da planta
 	if( ConstrucoesInstancia.RetornaIndiceConstrucao(Construcao, c, " Solucao::AdicionaTarefa") == 1 ){
 
+		// verifica se a construção já foi atendida em sua totatlidade, cao não entra no if
 		if ( ConstrucoesInstancia.Construcoes[c].NumeroDemandas > ConstrucoesInstancia.Construcoes[c].StatusAtendimento){
+			// faz com que nenhuma planta tenha sido analisada até o momento
 			PlantasInstancia.InicializaPlantasAnalizadas();
-			do{
+
+			// só entra no loop enquanto se tem uma planta para analisar
+			while( PlantasInstancia.AnalizouTodasPLanats() == 0){
+				// encontra a planta mais perto d aconstrução
 				EncontraPlantaMenorDistanciaConstrucao(c, NumPlantaAnalisando, "   &&&&&&&&&&&&& Problema em fornecer valor de  NumPlantaAnalisando em adiciona tarefa  ->Solucao::AdicionaTarefa &&&&&&&&&&&&& ");
+				// ordena as britadeiras
 				PlantasInstancia.Plantas[NumPlantaAnalisando].VeiculosDaPlanta.OrdenaCarretasPorNumeroDeTarefasRealizadas(TipoOrdenacao);
+				// percorre todos os veículos da planta
 				for( int v = 0; v < PlantasInstancia.Plantas[NumPlantaAnalisando].NumeroVeiculos; v++){
+
+					// inicializa o tempo inicio que a planta corrente ira começar a analise se pode atender a demanda corrente, caso
 					if( ( ConstrucoesInstancia.Construcoes[c].TempoMinimoDeFuncionamento - PlantasInstancia.Plantas[NumPlantaAnalisando].DistanciaConstrucoes[ConstrucoesInstancia.Construcoes[c].NumeroDaConstrucao] - PlantasInstancia.Plantas[NumPlantaAnalisando].TempoPlanta ) > PlantasInstancia.Plantas[NumPlantaAnalisando].TempoMinimoDeFuncionamento ){
+						//caso o tempo de inicio do carregamento da britadeira na plantar for restrito pela construção.
 						HorarioInicioPlanta = ConstrucoesInstancia.Construcoes[c].TempoMinimoDeFuncionamento - PlantasInstancia.Plantas[NumPlantaAnalisando].DistanciaConstrucoes[ConstrucoesInstancia.Construcoes[c].NumeroDaConstrucao] - PlantasInstancia.Plantas[NumPlantaAnalisando].TempoPlanta;
 					}else{
+						//caso o tempo de inicio do carregamento da britadeira na plantar for restrito pela planta.
 						HorarioInicioPlanta = PlantasInstancia.Plantas[NumPlantaAnalisando].TempoMinimoDeFuncionamento;
 					}
+
+					// enquanto estiver na janela de tempo possivel para atendimeto se realiza o loop abaixo.
 					do{
+						// atualiza os horarios na construção e planta
 						HorarioSaiDaPlanta = HorarioInicioPlanta + PlantasInstancia.Plantas[NumPlantaAnalisando].TempoPlanta;
 						HorarioChegaContrucao = HorarioSaiDaPlanta + PlantasInstancia.Plantas[NumPlantaAnalisando].DistanciaConstrucoes[ConstrucoesInstancia.Construcoes[c].NumeroDaConstrucao];
 						HorarioSaiConstrucao = HorarioChegaContrucao +  PlantasInstancia.Plantas[NumPlantaAnalisando].VeiculosDaPlanta.Carretas[v].TempoParaDescarregarNaConstrucao[ConstrucoesInstancia.Construcoes[c].NumeroDaConstrucao][Demanda];
 						HorarioRetornaPlanta = HorarioSaiConstrucao + PlantasInstancia.Plantas[NumPlantaAnalisando].DistanciaConstrucoes[ConstrucoesInstancia.Construcoes[c].NumeroDaConstrucao];
 
+						// verifica se é possivel realizar o atendiemnto da demanda tanto na planta, construção e carreta
 						DisponibilidadePlanta = PlantasInstancia.Plantas[NumPlantaAnalisando].VerificaDisponibilidade(HorarioInicioPlanta, HorarioSaiDaPlanta );
 						DisponibilidadeConstrucao = ConstrucoesInstancia.Construcoes[c].VerificaDisponibilidade( HorarioChegaContrucao, HorarioSaiConstrucao);
 						DisponibilidadeCarreta = PlantasInstancia.Plantas[NumPlantaAnalisando].VeiculosDaPlanta.Carretas[v].VerificaDisponibilidade(HorarioInicioPlanta, HorarioRetornaPlanta);
+
+						// caso se puder realizar a terefa se entra nos If
 						if( DisponibilidadePlanta == 1){
 							if( DisponibilidadeCarreta == 1){
 								if( DisponibilidadeConstrucao == 1 || DisponibilidadeConstrucao == 2 || DisponibilidadeConstrucao == 3){
+									// se consegue atender a demanda com essa planta, carreta e nessa construção
 									ConstrucoesInstancia.Construcoes[c].AlocaAtividadeSalvandoDados(VerificaExistencia, HorarioChegaContrucao, HorarioSaiConstrucao, PlantasInstancia.Plantas[NumPlantaAnalisando].VeiculosDaPlanta.Carretas[v].NumeroDaCarreta, PlantasInstancia.Plantas[NumPlantaAnalisando].NumeroDaPlanta, SituacaoDemanda, SituacaoRemocao, PlantasInstancia, DadosTarefasMovidas);
+									// se dieminui o nível de iniviabilidade da solução
 									ConstrucoesInstancia.NivelDeInviabilidade = ConstrucoesInstancia.NivelDeInviabilidade - 1;
+									// retorna 1 indicando que se foi possivel alocar a demanda corrente
 									return 1;
 								}else{
+									// caso se poss a atender a demanda se atender a demanda anterior em um horario diferente
 									if( DisponibilidadeConstrucao == -2){
 										cout <<  "                     Caso atrazar da para alocar, demanda em analise [" << Construcao << "-" << Demanda<< "] no horario " << HorarioChegaContrucao << endl;
+										// caso for  aprimeira vez que se verifique a valor -2 para a DisponibilidadeConstrução, se atualiza os hoarios iniciais tanto na planta e na construção que a planta corrente pode vir a atender a construção
 										if( PlantasInstancia.PlantasAnalizadas[NumPlantaAnalisando] == 0){
 											PlantasInstancia.HorarioQuePlantaPodeAtender[NumPlantaAnalisando] = HorarioInicioPlanta;
 											PlantasInstancia.HorarioQueConstrucaoPodeAtenderDemanda[NumPlantaAnalisando] = HorarioChegaContrucao;
 										}
+										// se atualiza a situação da planta corrente com -2 e coloca o tempo de inicio da planta como o tempo maximo de funcionamento da planta para se forçar sair do loop do while
 										PlantasInstancia.PlantasAnalizadas[NumPlantaAnalisando] = -2;
 										HorarioInicioPlanta = PlantasInstancia.Plantas[NumPlantaAnalisando].TempoMaximoDeFuncionamento;
 									}
@@ -207,13 +232,19 @@ int Solucao::AdicionaTarefa( int VerificaExistencia, int Construcao, int Demanda
 
 							}
 						}
+						// acrescenta o horario do inicio da planta para se percorrer todos os possiveis horarios de alocação da demanda por essa planta corrente
 						HorarioInicioPlanta = HorarioInicioPlanta + IntervaloDeTempo;
+					// realiza o loop até que os intervalos de de funcionamento da planta e da construção ainda sejam respeitados
 					}while( HorarioInicioPlanta <= PlantasInstancia.Plantas[NumPlantaAnalisando].TempoMaximoDeFuncionamento ||  HorarioChegaContrucao <= ConstrucoesInstancia.Construcoes[c].TempoMaximoDeFuncionamento);
 				}
+
+				// caso a planta não tenha sido assinalada com -2, que ela pode atender a demanda caso atraze as outras demandas anteriores, se marca a planta com 1 para sinalizar que ela não consegue atender a está demanda.
 				if (PlantasInstancia.PlantasAnalizadas[NumPlantaAnalisando] != -2){
 					PlantasInstancia.PlantasAnalizadas[NumPlantaAnalisando] = 1;
 				}
-			}while( PlantasInstancia.AnalizouTodasPLanats() == 0);
+			}
+
+
 			cout << "   &&&&&&&&&&&&& Nao consigo atender contrucao [" << ConstrucoesInstancia.Construcoes[c].NumeroDaConstrucao << "-" << Demanda << "]   -> AdicionaTarefa &&&&&&&&&&&&& " << endl;
 
 			cout << endl << endl <<  " Imprimir SituacaoPlantaAtenderCasoAtrazar" << endl;
@@ -222,6 +253,7 @@ int Solucao::AdicionaTarefa( int VerificaExistencia, int Construcao, int Demanda
 			ImprimeVetorDouble( PlantasInstancia.HorarioQueConstrucaoPodeAtenderDemanda);
 			cin >> ParaPrograma;
 
+			// caso não se tenha conseguido atender a demanda corrente, se verifica se tem alguma planta que pode atender a demanda caso se mude o horario de atendiemnto das outras demandas posteriores a está. Caso se possa, se entra no if e tenta mudar o horario das demandas anteriores para se tentar atender a demanda corrente
 			if( PlantasInstancia.VerificaPlantasAnalizadasPodemAtenderSeAtrazar() == 1){
 				DadosTarefasMovidasAuxiliar.clear();
 

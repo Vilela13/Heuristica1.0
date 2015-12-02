@@ -817,42 +817,45 @@ int Construcao::AtrazaDemandasParaAtender( int NumDemanda, double HoraInicioAten
 	double NovaHoraInicioAtendiemnto;
 
 	ImprimeContrucao();
-
 	cout << "DadosTarefasMovidasAuxiliar" << endl;
 	ImprimeVetorDadosTarefa( DadosTarefasMovidasAuxiliar);
 
 
 	cout << endl << endl << "       +++++++++++++++++ Atraza Demandas Para Atender  Demanda " << NumDemanda << "- A demanda [" << NumDemanda -1 << "] tem que ser atendida as " << HoraInicioAtendiemnto << endl << endl;
+//Deleta a demanda anterior (NumDemanda-1) a demanda que não se consegue alocar
 	DeletaAtividadeLocomovendoAsOutrasTarefasSalvandoDados(0, Descarregamentos[NumDemanda-1].HorarioInicioDescarregamento, Descarregamentos[NumDemanda-1].HorarioFinalDescarregamento, NumDemanda - 1, Descarregamentos[NumDemanda-1].NumPlantaFornecedor  , Descarregamentos[NumDemanda-1].NumCarretaUtilizada , Plantas, DadosTarefasMovidasAuxiliar);
-	ImprimeContrucao();
 
+	ImprimeContrucao();
 	cout << "DadosTarefasMovidasAuxiliar" << endl;
 	ImprimeVetorDadosTarefa( DadosTarefasMovidasAuxiliar);
 
 	//cin >> ParaPrograma;
 
 	cout << endl << endl << "   Tenta adicionar demanda respeitando o intervalo" << endl << endl;
+// Tenta alocar a demanda que foi retirada ( NumDemanda-1) em um horario que permite o atendiemnto da demanda atual (NumDemanda)
 	SituacaoAlocacao = AlocaAtividadeComHorarioInicio( NumDemanda - 1, HoraInicioAtendiemnto, NovaHoraInicioAtendiemnto, DadosTarefasMovidasAuxiliar, Plantas, TipoOrdenacao);
 
 	cout << endl << endl << "Demanda [" << NumDemanda - 1 << "] SituacaoAlocacao [" << SituacaoAlocacao << "]"<< endl << endl;
-
 	ImprimeContrucao();
-
 	cout << "DadosTarefasMovidasAuxiliar" << endl;
 	ImprimeVetorDadosTarefa( DadosTarefasMovidasAuxiliar);
 
 	cin >> ParaPrograma;
 
+// Atualiza o horario de inicio que a nova demanda anterior temq eu ter
 	HoraInicioAtendiemnto = NovaHoraInicioAtendiemnto;
 
-	if( NumDemanda - 1> 0){
-		do{
+// só entra para ver se vai no loop caso a demanda corrente no novo loop ( NumDemanda-1) for maior que 0, pois só se for maior que zero ela tera uma tarefa anterior para ser deslocada no procedimento AlocaAtendimentoComHorarioInicio
+	if( NumDemanda - 1 > 0){
+		// só entra no loop caso se puder atender a tarefa ( NumDemanda-1) caso se atrazar o atendiment de demandas anteriores
+		while( SituacaoAlocacao == -2  ){
+
 			AtrazaDemandasParaAtender( NumDemanda - 1, HoraInicioAtendiemnto,  DadosTarefasMovidasAuxiliar,Plantas, SituacaoAlocacao, TipoOrdenacao);
 			if( SituacaoAlocacao == 1){
 				SituacaoAlocacao = AlocaAtividadeComHorarioInicio( NumDemanda, HoraInicioAtendiemnto, NovaHoraInicioAtendiemnto, DadosTarefasMovidasAuxiliar, Plantas, TipoOrdenacao);
 				HoraInicioAtendiemnto = NovaHoraInicioAtendiemnto;
 			}
-		}while( SituacaoAlocacao == -2  );
+		}
 	}
 
 	cout << endl << endl << "  Sai da recursão -> AtrazaDemandasParaAtender " << endl << endl;
@@ -863,11 +866,7 @@ int Construcao::AtrazaDemandasParaAtender( int NumDemanda, double HoraInicioAten
 
 	cin >> ParaPrograma;
 
-	if( SituacaoAlocacao == 1){
-		return 1;
-	}else{
-		return 0;
-	}
+
 
 }
 

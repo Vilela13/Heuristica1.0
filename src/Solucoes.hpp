@@ -272,9 +272,9 @@ int Solucao::AdicionaTarefa( int VerificaExistencia, int Construcao, int Demanda
 
 
 
-				cout << endl << endl << "      Função que atraza demandas - horario que pode atender construção = " << PlantasInstancia.RetornaMenorHorarioQueConstrucaoPode() << endl << endl;
+				cout << endl << endl << "      Função que atraza demandas - horario que pode atender construção = " << PlantasInstancia.RetornaMenorHorarioQueConstrucaoPodeAtenderDemanda() << endl << endl;
 	// função que realiza o atrazo das tarefas para atender uma demanda anterior
-				ConstrucoesInstancia.Construcoes[c].AtrazaDemandasParaAtender( Demanda, PlantasInstancia.RetornaMenorHorarioQueConstrucaoPode() - ConstrucoesInstancia.Construcoes[c].TempoMaximoEntreDescargas + IntervaloDeTempo,DadosTarefasMovidasAuxiliar, PlantasInstancia, SituacaoAlocacao, TipoOrdenacao);
+				ConstrucoesInstancia.Construcoes[c].AtrazaDemandasParaAtender( Demanda, PlantasInstancia.RetornaMenorHorarioQueConstrucaoPodeAtenderDemanda() - ConstrucoesInstancia.Construcoes[c].TempoMaximoEntreDescargas + IntervaloDeTempo,DadosTarefasMovidasAuxiliar, PlantasInstancia, SituacaoAlocacao, TipoOrdenacao);
 
 				cout << endl << endl <<  " Fim do atraza tarefas" << endl;
 				cout << "DadosTarefasMovidasAuxiliar" << endl;
@@ -1187,7 +1187,7 @@ void Solucao::ProcessoViabilizacao2(int TipoOrdenacao){
 										}
 									}else{
 										// caso eu retire uma tarefa no procedimento atraza, se está tarefa não já tiver sido colocada no vetor de tarefas adicionadas anteriormente, ela é originaria do sequencimanto original. Logo eu a coloco no vetor de tarefas retiradas
-										if( AdicionaElementoVetorDadosTarefaApartirEstrutura(DadosTarefasDesalocadas, DadosRetirandoAux[i]) == 0){
+										if( AdicionaElementoVetorDadosTarefaApartirEstrutura(1,DadosTarefasDesalocadas, DadosRetirandoAux[i]) == 0){
 											cout << "    Não adicionou " << endl;
 											if( Imprime == 1){
 												//DadosRetirandoAux[i].Imprimir();
@@ -1199,7 +1199,7 @@ void Solucao::ProcessoViabilizacao2(int TipoOrdenacao){
 
 								for( unsigned int i = 0; i < DadosAdicionaAux.size();i++){
 									// Todas as tarefas  adicionadas no procedimento no vetor de tarefas que foram adicionadas
-									if( AdicionaElementoVetorDadosTarefaApartirEstrutura(DadosTarefasAdicionadas, DadosAdicionaAux[i] ) == 0){
+									if( AdicionaElementoVetorDadosTarefaApartirEstrutura(1,DadosTarefasAdicionadas, DadosAdicionaAux[i] ) == 0){
 										cout << "    Naõ adicionou " << endl;
 										if( Imprime == 1){
 											//DadosRetirandoAux[i].Imprimir();

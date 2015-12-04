@@ -87,7 +87,7 @@ int main(int argc, char **argv) {
 		free(InstanciaSolomon);
 
 
-	// Resolve o problema
+		// -------------------------- Resolve as instancais atraevez dos procediemntos implementados ----------------------- //
 
 		//Instancias = argv[1];
 		Instancias = "Instancias.txt";

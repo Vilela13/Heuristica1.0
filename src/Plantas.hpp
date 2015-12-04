@@ -48,12 +48,12 @@ public:
 
 	double Makespan;
 
-	int VerificaDisponibilidade( double InicioPossivelAlocacao, double FinalPossivelAlocacao);
-	void AlocaAtividade(double HoraInicio, double HoraFinal, int NumConstrucao, int NumDemanda, int Carreta);
-	int DeletaAtividade(double HoraInicio, double HoraFinal, int NumConstrucao, int NumDemanda, int Carreta);
-	void CalculaMakespan();
-	void Imprime(int OrdenaPlantas, int OrdenaCarretas);
-	void ImprimeDistancias();
+	int VerificaDisponibilidade( double InicioPossivelAlocacao, double FinalPossivelAlocacao);					// Verifica a possibilidade de alocação da demanda
+	void AlocaAtividade(double HoraInicio, double HoraFinal, int NumConstrucao, int NumDemanda, int Carreta);	// Aloca tarefa na planta
+	int DeletaAtividade(double HoraInicio, double HoraFinal, int NumConstrucao, int NumDemanda, int Carreta);	// Deleta tarefa na planta
+	void CalculaMakespan();										// calcula o Makes pan da Planta
+	void Imprime(int OrdenaPlantas, int OrdenaCarretas);		// Imprime dados da planta
+	void ImprimeDistancias();									// Imprime as distancias da planta as construções
 
 	~Planta();
 
@@ -193,7 +193,7 @@ Planta::~Planta(){
 class ConjuntoPlantas{
 
 public:
-	ConjuntoPlantas();
+	ConjuntoPlantas();			// Cosntrutora da classe
 	vector< Planta > Plantas;
 	vector < int > PlantasAnalizadas;
 
@@ -202,9 +202,9 @@ public:
 
 	double MakespanPLantas;
 
-	void InicializaPlantasAnalizadas();
-	int AnalizouTodasPLanats();
-	void IniciaConjuntoPlantas(int Numero);
+	void InicializaPlantasAnalizadas();			// Faz que nenhuma planta tenha sido analisada pelos algoritmos
+	int AnalizouTodasPLanats();					// Verifica se já analisou todas as plantas
+	void IniciaConjuntoPlantas(int Numero);		// Inicia o vetor de plantas da classe com o número de palnats que se quer
 
 	int DeletaTarefa( int NumPlanta, double HoraInicio, double HoraFinal, int NumConstrucao, int NumDemanda, int Carreta, double HoraInicioCarreta, double HoraFinalCarreta);
 	void CalculaMakespanPlantas();
@@ -216,23 +216,25 @@ public:
 
 	int VerificaPlantasAnalizadasPodemAtenderSeAtrazar();
 	void InicializaVetorHorarioQuePlantaPodeAtender();		// Inicializa o vetor de horarios com -1;
-	double RetornaMenorHorarioQueConstrucaoPode();
+	double RetornaMenorHorarioQueConstrucaoPodeAtenderDemanda();
 
 	~ConjuntoPlantas();
 };
 
-ConjuntoPlantas::ConjuntoPlantas(){			// Cosntrutora da classe
+// Cosntrutora da classe
+ConjuntoPlantas::ConjuntoPlantas(){
 	MakespanPLantas = -13;
 }
 
-
-void ConjuntoPlantas::InicializaPlantasAnalizadas(){ 			// Faz que nenhuma planta tenha sido analisada pelos algoritmos
+// Faz que nenhuma planta tenha sido analisada pelos algoritmos
+void ConjuntoPlantas::InicializaPlantasAnalizadas(){
 	PlantasAnalizadas.resize(Plantas.size());
 	for( unsigned  int p = 0; p < Plantas.size(); p++){
 		PlantasAnalizadas[p] = 0;
 	}
 }
 
+// Verifica se já analisou todas as plantas
 int ConjuntoPlantas::AnalizouTodasPLanats(){					// Verifica se já analisou todas as plantas
 	for ( unsigned  int p = 0; p < Plantas.size(); p++){
 		if( PlantasAnalizadas[p] == 0){
@@ -242,13 +244,15 @@ int ConjuntoPlantas::AnalizouTodasPLanats(){					// Verifica se já analisou tod
 	return 1;
 }
 
-void ConjuntoPlantas::IniciaConjuntoPlantas(int Numero){		// Inicia o vetor de plantas da classe com o número de palnats que se quer
+// Inicia o vetor de plantas da classe com o número de palnats que se quer
+void ConjuntoPlantas::IniciaConjuntoPlantas(int Numero){
 	Plantas.resize(Numero);
 
 }
 
 
-int ConjuntoPlantas::DeletaTarefa( int NumPlanta, double HoraInicio, double HoraFinal, int NumConstrucao, int NumDemanda, int Carreta, double HoraInicioCarreta, double HoraFinalCarreta){		// deleta tarefa tanto na planta e no veiculo que executa a tarefa
+// deleta tarefa tanto na planta e no veiculo que executa a tarefa
+int ConjuntoPlantas::DeletaTarefa( int NumPlanta, double HoraInicio, double HoraFinal, int NumConstrucao, int NumDemanda, int Carreta, double HoraInicioCarreta, double HoraFinalCarreta){
 	// variaveis de controle
 	int RetirouCarregamento;
 	RetirouCarregamento = 0;
@@ -281,7 +285,8 @@ int ConjuntoPlantas::DeletaTarefa( int NumPlanta, double HoraInicio, double Hora
 
 }
 
-void ConjuntoPlantas::CalculaMakespanPlantas(){		// Calcula o Makespan de todas as Plantas
+// Calcula o Makespan de todas as Plantas
+void ConjuntoPlantas::CalculaMakespanPlantas(){
 	MakespanPLantas = 0;
 
 	for( unsigned int p = 0; p < Plantas.size(); p++){
@@ -290,7 +295,8 @@ void ConjuntoPlantas::CalculaMakespanPlantas(){		// Calcula o Makespan de todas 
 	}
 }
 
-int ConjuntoPlantas::AlocaInidiceFabrica(int Planta, int &IndicePlanta){		// Aloca o inice da planta que corresponde a planat que se passa como parametro
+// Aloca o inice da planta que corresponde a planat que se passa como parametro
+int ConjuntoPlantas::AlocaInidiceFabrica(int Planta, int &IndicePlanta){
 	for ( unsigned int i  = 0; i < Plantas.size(); i ++){
 		if( Plantas[i].NumeroDaPlanta == Planta){
 			IndicePlanta = i;
@@ -301,7 +307,8 @@ int ConjuntoPlantas::AlocaInidiceFabrica(int Planta, int &IndicePlanta){		// Alo
 }
 
 
-int ConjuntoPlantas::CorrigeReferenciaCarregamentoDeslocamentoMaisUm( int NumPlantaFornecedor,int NumCarretaUtilizada,int construcao, int NumeroDemandaSuprida, double HorarioInicioDescarregamento,  double HorarioFinalDescarregamento ){ // corrige as referencias da tarefa aumentando o numerod a demanda que é suprida em mais um
+// corrige as referencias da tarefa aumentando o numerod a demanda que é suprida em mais um
+int ConjuntoPlantas::CorrigeReferenciaCarregamentoDeslocamentoMaisUm( int NumPlantaFornecedor,int NumCarretaUtilizada,int construcao, int NumeroDemandaSuprida, double HorarioInicioDescarregamento,  double HorarioFinalDescarregamento ){
 // Emcontra o indice da planta
 	int p;
 	if( AlocaInidiceFabrica(NumPlantaFornecedor,p) == 0){
@@ -365,7 +372,8 @@ int ConjuntoPlantas::CorrigeReferenciaCarregamentoDeslocamentoMaisUm( int NumPla
 
 }
 
-int ConjuntoPlantas::CorrigeReferenciaCarregamentoDeslocamentoMenosUm(int NumPlanta, int NumCarreta,int Construcao, int Demanda, double HorarioInicioDescarregamento, double HorarioFinalDescarregamento){		// corrige as referencias da tarefa aumentando o numerod a demanda que é suprida em menos um
+// corrige as referencias da tarefa aumentando o numerod a demanda que é suprida em menos um
+int ConjuntoPlantas::CorrigeReferenciaCarregamentoDeslocamentoMenosUm(int NumPlanta, int NumCarreta,int Construcao, int Demanda, double HorarioInicioDescarregamento, double HorarioFinalDescarregamento){
 
 // Emcontra o indice da planta
 	int p;
@@ -429,7 +437,8 @@ int ConjuntoPlantas::CorrigeReferenciaCarregamentoDeslocamentoMenosUm(int NumPla
 	}
 }
 
-void ConjuntoPlantas::Imprime(int OrdenaPlantas,int OrdenaCarrtas){		// Imprime os dados das plantas
+// Imprime os dados das plantas
+void ConjuntoPlantas::Imprime(int OrdenaPlantas,int OrdenaCarrtas){
 	cout << endl << endl << " [[[[[[  Imprime plantas  ]]]]]]" << endl;
 	for( unsigned int p = 0; p < Plantas.size(); p++){
 		Plantas[p].Imprime(OrdenaPlantas, OrdenaCarrtas);
@@ -438,7 +447,8 @@ void ConjuntoPlantas::Imprime(int OrdenaPlantas,int OrdenaCarrtas){		// Imprime 
 	printf ("\n  Makespan Geral das Plantas = %.4f\n", MakespanPLantas);
 }
 
-int ConjuntoPlantas::VerificaPlantasAnalizadasPodemAtenderSeAtrazar(){		// verifica se uma das plantas em questão pode atender a demanda em questão caso de atrazar o atendimento das outras demandas da construção que se quer atender
+// verifica se uma das plantas em questão pode atender a demanda em questão caso de atrazar o atendimento das outras demandas da construção que se quer atender
+int ConjuntoPlantas::VerificaPlantasAnalizadasPodemAtenderSeAtrazar(){
 	for ( unsigned  int p = 0; p < Plantas.size(); p++){
 		if( PlantasAnalizadas[p] == -2){
 			return 1;
@@ -448,7 +458,8 @@ int ConjuntoPlantas::VerificaPlantasAnalizadasPodemAtenderSeAtrazar(){		// verif
 
 }
 
-void ConjuntoPlantas::InicializaVetorHorarioQuePlantaPodeAtender(){			// inicializa os horarios que as plantas podem atender certa demanda caso as outras forem atrazadas com o valor -1
+// inicializa os horarios que as plantas podem atender certa demanda caso as outras forem atrazadas com o valor -1
+void ConjuntoPlantas::InicializaVetorHorarioQuePlantaPodeAtender(){
 	HorarioQuePlantaPodeAtender.resize(Plantas.size());
 	HorarioQueConstrucaoPodeAtenderDemanda.resize(Plantas.size());
 	for( int p = 0; p < HorarioQuePlantaPodeAtender.size(); p++){
@@ -457,7 +468,7 @@ void ConjuntoPlantas::InicializaVetorHorarioQuePlantaPodeAtender(){			// inicial
 	}
 }
 
-double ConjuntoPlantas::RetornaMenorHorarioQueConstrucaoPode(){
+double ConjuntoPlantas::RetornaMenorHorarioQueConstrucaoPodeAtenderDemanda(){
 	double HoraAux;
 	HoraAux = DBL_MAX;
 

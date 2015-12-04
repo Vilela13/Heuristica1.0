@@ -956,7 +956,7 @@ int Construcao::AlocaAtividadeComHorarioInicio( int NumDemanda, double HoraInici
 
 
 		if( Plantas.VerificaPlantasAnalizadasPodemAtenderSeAtrazar() == 1){
-			NovaHoraInicioAtendiemnto = Plantas.RetornaMenorHorarioQueConstrucaoPode() - TempoMaximoEntreDescargas + IntervaloDeTempo;
+			NovaHoraInicioAtendiemnto = Plantas.RetornaMenorHorarioQueConstrucaoPodeAtenderDemanda() - TempoMaximoEntreDescargas + IntervaloDeTempo;
 			return -2;
 		}
 

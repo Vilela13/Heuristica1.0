@@ -15,17 +15,18 @@
 
 class Descarregamento{
 public:
-	Descarregamento();
 	double HorarioInicioDescarregamento;
 	double HorarioFinalDescarregamento;
 	int NumCarretaUtilizada;
 	int NumPlantaFornecedor;
 
-	int verifica( int carreta, int planta, double HorarioInicio, double HorarioFinal);
-	void AnulaConteudo();
-	void Imprime();
+	Descarregamento();	// construtora
+	int verifica( int carreta, int planta, double HorarioInicio, double HorarioFinal);			// verifica se os dados passados se referem ao descarregamento
+	void AnulaConteudo();			// anula o consteudo do descarregamento retornando ao estado original
+	void Imprime();				// imprime o conteudo dos descarregamento
 };
 
+// construtora
 Descarregamento::Descarregamento(){
 	HorarioInicioDescarregamento = -13;
 	HorarioFinalDescarregamento = -13;
@@ -34,12 +35,16 @@ Descarregamento::Descarregamento(){
 
 }
 
+// verifica se os dados passados se referem ao descarregamento
 int Descarregamento::verifica( int carreta, int planta, double HorarioInicio, double HorarioFinal){
+	// verifica se os dados passados são os memos que os do descarregamento
 	if( NumCarretaUtilizada == carreta &&  NumPlantaFornecedor ==  planta && HorarioInicioDescarregamento == HorarioInicio && HorarioFinalDescarregamento == HorarioFinal){
 		return 1;
 	}
 	return 0;
 }
+
+// anula o consteudo do descarregamento retornando ao estado original
 void Descarregamento::AnulaConteudo(){
 	HorarioInicioDescarregamento = -12;
 	HorarioFinalDescarregamento = -12;
@@ -47,16 +52,19 @@ void Descarregamento::AnulaConteudo(){
 	NumPlantaFornecedor = -12;
 }
 
+// imprime o conteudo dos descarregamento
 void Descarregamento::Imprime(){
 	printf ("  Planta = %d Carreta = %d Tempo[%.4f - %.4f]\n", NumPlantaFornecedor, NumCarretaUtilizada, HorarioInicioDescarregamento, HorarioFinalDescarregamento);
 }
 
-bool DecideQualDescarregamentoVemprimeiro ( Descarregamento d1, Descarregamento d2 );
+//
+bool DecideQualDescarregamentoVemPrimeiro ( Descarregamento d1, Descarregamento d2 );
 
-bool DecideQualDescarregamentoVemprimeiro ( Descarregamento d1, Descarregamento d2 ){
+bool DecideQualDescarregamentoVemPrimeiro ( Descarregamento d1, Descarregamento d2 ){
 	return ( d1.HorarioInicioDescarregamento < d2.HorarioInicioDescarregamento );
 }
 
+// classe que foi criada para guardar a distancia da construção para a planta e manter um ponteiro para a estrutura dessa planta
 class DistanciaPlanta{
 public:
 	double Distancia;
@@ -67,7 +75,6 @@ public:
 class Construcao{
 
 public:
-	Construcao();
 	int NumeroDaConstrucao;
 	int NumeroDemandas;
 	vector < int > SituacaoDemanda;
@@ -81,27 +88,30 @@ public:
 	vector < Descarregamento > Descarregamentos;
 	double Makespan;
 
-	void CalculaRankTempoDemandas(int comentarios);
-	int VerificaDisponibilidade( double InicioPossivelAlocacao, double FinalPossivelAlocacao);
-	int AlocaAtividade(double HoraInicio, double HoraFinal, int Carreta, int NumPlanta,  int Situacao, int StatusRemocao, ConjuntoPlantas& Plantas);
+	Construcao();
+	void CalculaRankTempoDemandas(int comentarios);					// Calcula o rank que decide qual construção será atendida inicialmente
+	int VerificaDisponibilidade( double InicioPossivelAlocacao, double FinalPossivelAlocacao);				// Verifica se da para colocar a demanda na construção, ela sinaliza se caso atrazar as demandas sejá possivel alocar a demanda.
+	int AlocaAtividade(double HoraInicio, double HoraFinal, int Carreta, int NumPlanta,  int Situacao, int StatusRemocao, ConjuntoPlantas& Plantas);		// Aloca uma demanda na cosntrução apartir de dados
 
-	void AlocaAtividadeSalvandoDados(int VerificaExistencia, double HoraInicio, double HoraFinal, int Carreta, int NumPlanta, int Situacao, int StatusRemocao, ConjuntoPlantas& Plantas, vector < DadosTarefa > &DadosTarefasMovidas);
-	int DeletaAtividadeLocomovendoAsOutrasTarefas(double HoraInicio, double HoraFinal, int NumDemanda,  int NumPlanta, int Carreta, ConjuntoPlantas& Plantas);
-	int DeletaAtividadeLocomovendoAsOutrasTarefasSalvandoDados(int VerificaExistencia, double HoraInicio, double HoraFinal, int NumDemanda,  int NumPlanta, int Carreta, ConjuntoPlantas& Plantas, vector < DadosTarefa > &DadosTarefasMovidasAuxiliar);
+	void AlocaAtividadeSalvandoDados(int VerificaExistencia, double HoraInicio, double HoraFinal, int Carreta, int NumPlanta, int Situacao, int StatusRemocao, ConjuntoPlantas& Plantas, vector < DadosTarefa > &DadosTarefasMovidas);			// Aloca uma demanda na cosntrução apartir de dados, dalvando os dados da demanda alocada em estrutura DadosAdicionado
+	int DeletaAtividadeLocomovendoAsOutrasTarefas(double HoraInicio, double HoraFinal, int NumDemanda,  int NumPlanta, int Carreta, ConjuntoPlantas& Plantas);				// Deleta alocação de tarefa e reordenadno as alocações para que os dados se mantenham corretos
+	int DeletaAtividadeLocomovendoAsOutrasTarefasSalvandoDados(int VerificaExistencia, double HoraInicio, double HoraFinal, int NumDemanda,  int NumPlanta, int Carreta, ConjuntoPlantas& Plantas, vector < DadosTarefa > &DadosTarefasMovidasAuxiliar);			// Deleta alocação de tarefa e reordenadno as alocações para que os dados se mantenham corretos, salvando os dados da tarefa removida em uma estrutura
 
-	int DeletaTodasAtividadesDaContrucaoSalvandoDados(int VerificaExistencia, double &HoraInicio, ConjuntoPlantas& Plantas, vector < DadosTarefa > &DadosRetirandoAux);
+	int DeletaTodasAtividadesDaContrucaoSalvandoDados(int VerificaExistencia, double &HoraInicio, ConjuntoPlantas& Plantas, vector < DadosTarefa > &DadosRetirandoAux);				// deleta todas as atividades de uma construção. Salvando atividades em estrutura
 
-	int DeletaTarefas( int VerificaExistencia, int demanda, vector < DadosTarefa > &DadosRetirando, ConjuntoPlantas& Plantas);
-	int DeletaTarefasAnteriormenteAdicionadasDados(   DadosTarefa DadosAdicionados, ConjuntoPlantas& Plantas);
-	int VerificaDescarregamentosRespeitaIntervalo();
+	int DeletaTarefas( int VerificaExistencia, int demanda, vector < DadosTarefa > &DadosRetirando, ConjuntoPlantas& Plantas);			// Deleta tarefas da demanda passada e as posteriores a esta demanda passada
+	int DeletaTarefasAnteriormenteAdicionadasDados(   DadosTarefa DadosAdicionados, ConjuntoPlantas& Plantas);		// deleta tarefa apartir de dados
+	int VerificaDescarregamentosRespeitaIntervalo();			// Verifica se os descrarregamentor na construção estão respeitando os intervalos entre elas
 
-	void RetornaHorarioInicioCarregamento( int NumDemanda, double& HoraInicio);
-	void RetornaDadosDescarregamento( int d, int& PlantaEmAnalise, int& CaminhaoEmAnalise, int& ConstrucaoEmAnalise, double& HorarioInicioAuxiliar,double& HorarioFinalAuxiliar);
-	void CalculaMakespan();
+	void RetornaHorarioInicioCarregamento( int NumDemanda, double& HoraInicio);				// retorna o horario de inicio de um certo descarregamento na construção
+	void RetornaDadosDescarregamento( int d, int& PlantaEmAnalise, int& CaminhaoEmAnalise, int& ConstrucaoEmAnalise, double& HorarioInicioAuxiliar,double& HorarioFinalAuxiliar);		// Retorna os dados de um certo descarregamento
+	void CalculaMakespan();			// Calcula o Makespan da construção
 
-	void ImprimeContrucao();
+	void ImprimeContrucao();		// Imprime os dados da construções
 
-	int AtrazaDemandasParaAtender( int NumDemanda, double HoraInicioAtendiemnto, vector < DadosTarefa > &DadosTarefasMovidasAuxiliar,ConjuntoPlantas& Plantas, int &SituacaoAlocacao, int TipoOrdenacao);
+	int AtrazaDemandasParaAtenderMaster( int NumDemanda, double HoraInicioAtendiemnto, vector < DadosTarefa > &DadosTarefasMovidasAuxiliar,ConjuntoPlantas& Plantas, int &SituacaoAlocacao, int TipoOrdenacao);
+
+	int AtrazaDemandasParaAtenderRecursao( int NumDemanda, double HoraInicioAtendiemnto, vector < DadosTarefa > &DadosTarefasMovidasAuxiliar,ConjuntoPlantas& Plantas, int &SituacaoAlocacao, int TipoOrdenacao);
 	void EncontraPlantaComMenorDistanciaParaConstrucao(  int& NumPlantaAnalisando, ConjuntoPlantas& Plantas, string frase);
 	int AlocaAtividadeComHorarioInicio( int NumDemanda, double HoraInicioAtendiemnto,double &NovaHoraInicioAtendiemnto, vector < DadosTarefa > &DadosTarefasMovidasAuxiliar,ConjuntoPlantas& Plantas, int TipoOrdenacao);
 
@@ -123,21 +133,23 @@ Construcao::Construcao(){
 	Makespan = -13;
 }
 
-void Construcao::CalculaRankTempoDemandas(int comentarios){			// Calcula o rank que decide qual construção será atendida inicialmente
+// Calcula o rank que decide qual construção será atendida inicialmente
+void Construcao::CalculaRankTempoDemandas(int comentarios){
 	RankTempoDemandas = ( TempoMaximoDeFuncionamento - TempoMinimoDeFuncionamento) / NumeroDemandas ;
 	if( comentarios == 1){
 		printf( " Rank ( Tempo / Demandas ) = %.4f\n",RankTempoDemandas);
 	}
 }
 
-int Construcao::VerificaDisponibilidade( double InicioPossivelAlocacao, double FinalPossivelAlocacao){			// Verifica se da para colocar a demanda na construção, ela sinaliza se caso atrazar as demandas sejá possivel alocar a demanda.
+// Verifica se da para colocar a demanda na construção, ela sinaliza se caso atrazar as demandas sejá possivel alocar a demanda.
+int Construcao::VerificaDisponibilidade( double InicioPossivelAlocacao, double FinalPossivelAlocacao){
 	int PossuiTarefaAnterior;
 	int PossuiTarefaPosterior;
 
 	PossuiTarefaAnterior = 0;
 	PossuiTarefaPosterior = 0;
 
-	int ParaPrograma;
+	//int ParaPrograma;
 
 	// verifica se respeita os intervalos de funcionamento da construção
 	if( InicioPossivelAlocacao < TempoMinimoDeFuncionamento){
@@ -175,31 +187,39 @@ int Construcao::VerificaDisponibilidade( double InicioPossivelAlocacao, double F
 		}
 	}
 
-
-	if( StatusAtendimento == 0) {		// se não tem nenhuma demanda atendida, se aloca a demanda
+	// se não tem nenhuma demanda atendida, se aloca a demanda
+	if( StatusAtendimento == 0) {
 		return 1;
-	}else{								// verifica a situação dessa demanda com as outras demandas
-		for( int d = 0; d < StatusAtendimento; d ++){		// Verifica se tem demanda alocada  antes e depois da alocação dessa tarefa
+	}else{
+// verifica a situação dessa demanda com as outras demandas
+
+		// percorre todas as demandas atendidas nesta construção
+		for( int d = 0; d < StatusAtendimento; d ++){
+			// Verifica se tem demanda alocada  antes dessa tarefa
 			if( Descarregamentos[d].HorarioFinalDescarregamento <= InicioPossivelAlocacao && InicioPossivelAlocacao <= Descarregamentos[d].HorarioFinalDescarregamento + TempoMaximoEntreDescargas){
 				PossuiTarefaAnterior = 1;
 			}
+			// Verifica se tem demanda alocada depois da alocação dessa tarefa
 			if( FinalPossivelAlocacao <=  Descarregamentos[d].HorarioInicioDescarregamento &&  Descarregamentos[d].HorarioInicioDescarregamento   <= FinalPossivelAlocacao + TempoMaximoEntreDescargas ){
 				PossuiTarefaPosterior = 1;
 			}
 		}
 
-		// Sinaliza a possição dessa tarefa
+// Sinaliza a possição dessa tarefa
+
+		// Entra depois de todas as tarefas alocadas
 		if ( PossuiTarefaAnterior == 1 && PossuiTarefaPosterior == 0){
-			// Entra depois de todas as tarefas alocadas
 			return 1;
 		}
+
+		// Entra no meio de duas tarefas alocadas
 		if ( PossuiTarefaAnterior == 1 && PossuiTarefaPosterior == 1){
-			// Entra no meio de duas tarefas alocadas
 			cout << endl << endl << " No meio das tarefas ->Construcao::VerificaDisponibilidade  " << endl << endl << endl;
 			return 2;
 		}
+
+		// Entra antes de todas as tarefas alocadas
 		if ( PossuiTarefaAnterior == 0 && PossuiTarefaPosterior == 1){
-			// Entra antes de todas as tarefas alocadas
 			return 3;
 		}
 
@@ -213,17 +233,18 @@ int Construcao::VerificaDisponibilidade( double InicioPossivelAlocacao, double F
 			}
 		}
 
-		if( TemTarefaAntes == 1){		// Não se pode colocar a demanda pelo fato dela não respeitar o intervalo de atendimento, mas caso se atraze as demandas ela seria alocadac
+		// Não se pode colocar a demanda pelo fato dela não respeitar o intervalo de atendimento, mas caso se atraze as demandas ela seria alocadac
+		if( TemTarefaAntes == 1){
 			return -2;
 		}
 
 		// Caso não seja possivel alocar a demanda e ela não está em nenhum dos casos acima.
 		return -1;
-
 	}
 }
 
-int Construcao::AlocaAtividade(double HoraInicio, double HoraFinal, int Carreta, int NumPlanta,  int Situacao, int StatusRemocao, ConjuntoPlantas& Plantas){		// Aloca uma demanda na cosntrução apartir de dados
+// Aloca uma demanda na cosntrução apartir de dados
+int Construcao::AlocaAtividade(double HoraInicio, double HoraFinal, int Carreta, int NumPlanta,  int Situacao, int StatusRemocao, ConjuntoPlantas& Plantas){
 
 
 // Verifica se é possivel colocar uma tarefa nesta construção
@@ -239,19 +260,24 @@ int Construcao::AlocaAtividade(double HoraInicio, double HoraFinal, int Carreta,
 	Encontrou = 0;
 	NumDemanda = -13;
 
+	// passa por todas as demanda já atendidas
 	for( int d = 0; d < StatusAtendimento; d++){
+		// caso se tenha uma demanda atendida após o horario passado
 		if( Descarregamentos[d].HorarioInicioDescarregamento > HoraInicio && Encontrou == 0){
+			// numero da demanda que se esta adicionando caso se tenha demandas atendidas apos o horario passado na função
 			NumDemanda = d;
+			// assinala que encontrou uma demanda que é atendida depois da que se quer atender
 			Encontrou = 1;
 		}
 	}
 
-// Caso tenha tarefas que atendam a construção depois dessa, ele faz a atualização dos dados dessas tarefas
+	// Caso tenha tarefas que atendam a construção depois dessa, ele faz a atualização dos dados dessas tarefas
 	if( Encontrou == 1 ){
-
+		// passa por todas as demandas até a primeira demanda atendida após a que se quer colocar
 		for( int d = StatusAtendimento - 1; d >= NumDemanda ; d--){
+			// correige as referencias do atendimento da demanda corrente tanto na planta e no caminhão
 			Plantas.CorrigeReferenciaCarregamentoDeslocamentoMaisUm( Descarregamentos[d].NumPlantaFornecedor, Descarregamentos[d].NumCarretaUtilizada, NumeroDaConstrucao, d, Descarregamentos[d].HorarioInicioDescarregamento, Descarregamentos[d].HorarioFinalDescarregamento);
-
+			// atualiza os dados do descarregamento
 			Descarregamentos[ d + 1 ].HorarioInicioDescarregamento = Descarregamentos[ d ].HorarioInicioDescarregamento;
 			Descarregamentos[ d + 1 ].HorarioFinalDescarregamento = Descarregamentos[ d ].HorarioFinalDescarregamento;
 			Descarregamentos[ d + 1 ].NumCarretaUtilizada = Descarregamentos[ d ].NumCarretaUtilizada;
@@ -260,6 +286,7 @@ int Construcao::AlocaAtividade(double HoraInicio, double HoraFinal, int Carreta,
 			SituacaoRemocao[ d + 1 ] = SituacaoRemocao[ d ];
 		}
 	}else{
+		// caso não for, o numero da demanda é o numero da ultima demanda a se atender
 		NumDemanda = StatusAtendimento;
 	}
 
@@ -304,8 +331,8 @@ int Construcao::AlocaAtividade(double HoraInicio, double HoraFinal, int Carreta,
 	return 1;
 }
 
-
-void Construcao::AlocaAtividadeSalvandoDados(int VerificaExistencia, double HoraInicio, double HoraFinal, int Carreta, int NumPlanta, int Situacao, int StatusRemocao, ConjuntoPlantas& Plantas, vector < DadosTarefa > &DadosTarefasMovidas){		// Aloca uma demanda na cosntrução apartir de dados, dalvando os dados da demanda alocada em estrutura DadosAdicionado
+// Aloca uma demanda na cosntrução apartir de dados, dalvando os dados da demanda alocada em estrutura DadosAdicionado
+void Construcao::AlocaAtividadeSalvandoDados(int VerificaExistencia, double HoraInicio, double HoraFinal, int Carreta, int NumPlanta, int Situacao, int StatusRemocao, ConjuntoPlantas& Plantas, vector < DadosTarefa > &DadosTarefasMovidas){
 
 // Verifica se é possivel colocar uma tarefa nesta construção
 	if( StatusAtendimento == NumeroDemandas){
@@ -319,19 +346,24 @@ void Construcao::AlocaAtividadeSalvandoDados(int VerificaExistencia, double Hora
 	Encontrou = 0;
 	NumDemanda = -13;
 
+	// passa por todas as demanda já atendidas
 	for( int d = 0; d < StatusAtendimento; d++){
+		// caso se tenha uma demanda atendida após o horario passado
 		if( Descarregamentos[d].HorarioInicioDescarregamento > HoraInicio && Encontrou == 0){
+			// numero da demanda que se esta adicionando caso se tenha demandas atendidas apos o horario passado na função
 			NumDemanda = d;
+			// assinala que encontrou uma demanda que é atendida depois da que se quer atender
 			Encontrou = 1;
 		}
 	}
 
 // Caso tenha tarefas que atendam a construção depois dessa, ele faz a atualização dos dados dessas tarefas
 	if( Encontrou == 1){
-
+		// passa por todas as demandas até a primeira demanda atendida após a que se quer colocar
 		for( int d = StatusAtendimento - 1; d >= NumDemanda ; d--){
+			// correige as referencias do atendimento da demanda corrente tanto na planta e no caminhão
 			Plantas.CorrigeReferenciaCarregamentoDeslocamentoMaisUm( Descarregamentos[d].NumPlantaFornecedor, Descarregamentos[d].NumCarretaUtilizada, NumeroDaConstrucao, d, Descarregamentos[d].HorarioInicioDescarregamento, Descarregamentos[d].HorarioFinalDescarregamento);
-
+			// atualiza os dados do descarregamento
 			Descarregamentos[ d + 1 ].HorarioInicioDescarregamento = Descarregamentos[ d ].HorarioInicioDescarregamento;
 			Descarregamentos[ d + 1 ].HorarioFinalDescarregamento = Descarregamentos[ d ].HorarioFinalDescarregamento;
 			Descarregamentos[ d + 1 ].NumCarretaUtilizada = Descarregamentos[ d ].NumCarretaUtilizada;
@@ -340,6 +372,7 @@ void Construcao::AlocaAtividadeSalvandoDados(int VerificaExistencia, double Hora
 			SituacaoRemocao[ d + 1 ] = SituacaoRemocao[ d ];
 		}
 	}else{
+		// caso não for, o numero da demanda é o numero da ultima demanda a se atender
 		NumDemanda = StatusAtendimento;
 	}
 
@@ -386,19 +419,21 @@ void Construcao::AlocaAtividadeSalvandoDados(int VerificaExistencia, double Hora
 	}
 }
 
-int Construcao::DeletaAtividadeLocomovendoAsOutrasTarefas(double HoraInicio, double HoraFinal, int NumDemanda,  int NumPlanta, int Carreta, ConjuntoPlantas& Plantas){		// Deleta alocação de tarefa e reordenadno as alocações para que os dados se mantenham corretos
+// Deleta alocação de tarefa e reordenadno as alocações para que os dados se mantenham corretos
+int Construcao::DeletaAtividadeLocomovendoAsOutrasTarefas(double HoraInicio, double HoraFinal, int NumDemanda,  int NumPlanta, int Carreta, ConjuntoPlantas& Plantas){
 
 // Verifica se é possivel colocar uma tarefa nesta construção
 	if( StatusAtendimento - 1 < NumDemanda){
-		cout << endl << endl << "  <<<<<<<<<<<<<  Erro! Demanda [" << NumDemanda << "] ->Construcao::DeletaAtividadeLocomovendoAsOutrasTarefas>>>>>>>>>> " << endl << endl;
+		cout << endl << endl << "  <<<<<<<<<<<<<  Erro! Demanda [" << NumDemanda << "] não existe ->Construcao::DeletaAtividadeLocomovendoAsOutrasTarefas>>>>>>>>>> " << endl << endl;
 		return 0;
 	}
 
-// Verifica se tem uma tarefa já alocada atende a cosntrução depois desta
+// Verifica se existe a tarefa a ser deletada com os dados passados
 	if( Descarregamentos[NumDemanda].verifica( Carreta, NumPlanta, HoraInicio,HoraFinal) == 1){
 
 // Deleta tarefa
 		int p;
+		// encontra o inidice da planta
 		if( Plantas.AlocaInidiceFabrica( NumPlanta, p) == 0) {
 			cout << endl << endl << "  <<<<<<<<<<<<<  Erro! planta [" << NumPlanta << "] ->Construcao::DeletaAtividadeLocomovendoAsOutrasTarefas>>>>>>>>>> " << endl << endl;
 			return 0;
@@ -431,14 +466,21 @@ int Construcao::DeletaAtividadeLocomovendoAsOutrasTarefas(double HoraInicio, dou
 
 
 // Reorganiza Tarefas
-		for( int d = NumDemanda + 1; d < StatusAtendimento; d++){
-			Plantas.CorrigeReferenciaCarregamentoDeslocamentoMenosUm(Descarregamentos[d].NumPlantaFornecedor, Descarregamentos[d].NumCarretaUtilizada, NumeroDaConstrucao, d, Descarregamentos[d].HorarioInicioDescarregamento, Descarregamentos[d].HorarioFinalDescarregamento);
-			Descarregamentos[ d - 1 ].HorarioInicioDescarregamento = Descarregamentos[ d ].HorarioInicioDescarregamento;
-			Descarregamentos[ d - 1 ].HorarioFinalDescarregamento = Descarregamentos[ d ].HorarioFinalDescarregamento;
-			Descarregamentos[ d - 1 ].NumCarretaUtilizada = Descarregamentos[ d ].NumCarretaUtilizada;
-			Descarregamentos[ d - 1 ].NumPlantaFornecedor = Descarregamentos[ d ].NumPlantaFornecedor;
-			SituacaoDemanda[ d - 1 ] = SituacaoDemanda[ d ];
-			SituacaoRemocao[ d - 1 ] = SituacaoRemocao[ d ];
+
+		// se a demanda a ser deletada não é a ultima alocada na cosntrução
+		if( NumDemanda != StatusAtendimento - 1){
+			// caso não for, percorre todas as demandas após a que se quer deletar e corrige as suas referencias
+			for( int d = NumDemanda + 1; d < StatusAtendimento; d++){
+				// corrige as referencias da planta e dao caminhão
+				Plantas.CorrigeReferenciaCarregamentoDeslocamentoMenosUm(Descarregamentos[d].NumPlantaFornecedor, Descarregamentos[d].NumCarretaUtilizada, NumeroDaConstrucao, d, Descarregamentos[d].HorarioInicioDescarregamento, Descarregamentos[d].HorarioFinalDescarregamento);
+				// corrige as referencias do descarregamento
+				Descarregamentos[ d - 1 ].HorarioInicioDescarregamento = Descarregamentos[ d ].HorarioInicioDescarregamento;
+				Descarregamentos[ d - 1 ].HorarioFinalDescarregamento = Descarregamentos[ d ].HorarioFinalDescarregamento;
+				Descarregamentos[ d - 1 ].NumCarretaUtilizada = Descarregamentos[ d ].NumCarretaUtilizada;
+				Descarregamentos[ d - 1 ].NumPlantaFornecedor = Descarregamentos[ d ].NumPlantaFornecedor;
+				SituacaoDemanda[ d - 1 ] = SituacaoDemanda[ d ];
+				SituacaoRemocao[ d - 1 ] = SituacaoRemocao[ d ];
+			}
 		}
 
 // atualiza dados da tarefa deletada
@@ -446,9 +488,11 @@ int Construcao::DeletaAtividadeLocomovendoAsOutrasTarefas(double HoraInicio, dou
 		SituacaoDemanda[StatusAtendimento - 1] = 0;
 		SituacaoRemocao[StatusAtendimento - 1] = 0;
 
+		// atualiza o numero de demandas atendidas
 		StatusAtendimento = StatusAtendimento - 1;
 
 	}else{
+		//caso não encontrou o descarregamento, se escreve os dados dele e retorna 0
 		cout << endl << endl << "  <<<<<<<<<<<<<  Erro! Planta [" << NumPlanta << "], Carreta [" << Carreta << "]";
 		cout << ", HoraInicio [" << HoraInicio << "],HoraFinal [" << HoraFinal << "] ->Construcao::DeletaAtividadeLocomovendoAsOutrasTarefas>>>>>>>>>> " << endl << endl;
 		return 0;
@@ -457,7 +501,8 @@ int Construcao::DeletaAtividadeLocomovendoAsOutrasTarefas(double HoraInicio, dou
 
 }
 
-int Construcao::DeletaAtividadeLocomovendoAsOutrasTarefasSalvandoDados(int VerificaExistencia, double HoraInicio, double HoraFinal, int NumDemanda,  int NumPlanta, int Carreta, ConjuntoPlantas& Plantas, vector < DadosTarefa > &DadosTarefasMovidasAuxiliar){		// Deleta alocação de tarefa e reordenadno as alocações para que os dados se mantenham corretos, salvando os dados da tarefa removida em uma estrutura
+// Deleta alocação de tarefa e reordenadno as alocações para que os dados se mantenham corretos, salvando os dados da tarefa removida em uma estrutura
+int Construcao::DeletaAtividadeLocomovendoAsOutrasTarefasSalvandoDados(int VerificaExistencia, double HoraInicio, double HoraFinal, int NumDemanda,  int NumPlanta, int Carreta, ConjuntoPlantas& Plantas, vector < DadosTarefa > &DadosTarefasMovidasAuxiliar){
 
 // Verifica se é possivel colocar uma tarefa nesta construção
 	if( StatusAtendimento - 1 < NumDemanda){
@@ -465,11 +510,12 @@ int Construcao::DeletaAtividadeLocomovendoAsOutrasTarefasSalvandoDados(int Verif
 		return 0;
 	}
 
-// Verifica se tem uma tarefa já alocada atende a cosntrução depois desta
+	// Verifica se existe a tarefa a ser deletada com os dados passados
 	if( Descarregamentos[NumDemanda].verifica( Carreta, NumPlanta, HoraInicio,HoraFinal) == 1){
 
 // Deleta tarefa
 		int p;
+		// encontra o inidice da planta
 		if( Plantas.AlocaInidiceFabrica( NumPlanta, p) == 0) {
 			cout << endl << endl << "  <<<<<<<<<<<<<  Erro! planta [" << NumPlanta << "] ->Construcao::DeletaAtividadeLocomovendoAsOutrasTarefasSalvandoDados>>>>>>>>>> " << endl << endl;
 			return 0;
@@ -506,14 +552,21 @@ int Construcao::DeletaAtividadeLocomovendoAsOutrasTarefasSalvandoDados(int Verif
 		Plantas.DeletaTarefa( NumPlanta, HorarioInicioPlanta, HorarioFimPlanta, NumeroDaConstrucao, NumDemanda, Carreta, HorarioInicioCarreta, HorarioFimCarreta);
 
 // Reorganiza Tarefas
-		for( int d = NumDemanda + 1; d < StatusAtendimento; d++){
-			Plantas.CorrigeReferenciaCarregamentoDeslocamentoMenosUm(Descarregamentos[d].NumPlantaFornecedor, Descarregamentos[d].NumCarretaUtilizada, NumeroDaConstrucao, d, Descarregamentos[d].HorarioInicioDescarregamento, Descarregamentos[d].HorarioFinalDescarregamento);
-			Descarregamentos[ d - 1 ].HorarioInicioDescarregamento = Descarregamentos[ d ].HorarioInicioDescarregamento;
-			Descarregamentos[ d - 1 ].HorarioFinalDescarregamento = Descarregamentos[ d ].HorarioFinalDescarregamento;
-			Descarregamentos[ d - 1 ].NumCarretaUtilizada = Descarregamentos[ d ].NumCarretaUtilizada;
-			Descarregamentos[ d - 1 ].NumPlantaFornecedor = Descarregamentos[ d ].NumPlantaFornecedor;
-			SituacaoDemanda[ d - 1 ] = SituacaoDemanda[ d ];
-			SituacaoRemocao[ d - 1 ] = SituacaoRemocao[ d ];
+
+		// se a demanda a ser deletada não é a ultima alocada na cosntrução
+		if( NumDemanda != StatusAtendimento - 1){
+			// caso não for, percorre todas as demandas após a que se quer deletar e corrige as suas referencias
+			for( int d = NumDemanda + 1; d < StatusAtendimento; d++){
+				// corrige as referencias da planta e dao caminhão
+				Plantas.CorrigeReferenciaCarregamentoDeslocamentoMenosUm(Descarregamentos[d].NumPlantaFornecedor, Descarregamentos[d].NumCarretaUtilizada, NumeroDaConstrucao, d, Descarregamentos[d].HorarioInicioDescarregamento, Descarregamentos[d].HorarioFinalDescarregamento);
+				// corrige as referencias do descarregamento
+				Descarregamentos[ d - 1 ].HorarioInicioDescarregamento = Descarregamentos[ d ].HorarioInicioDescarregamento;
+				Descarregamentos[ d - 1 ].HorarioFinalDescarregamento = Descarregamentos[ d ].HorarioFinalDescarregamento;
+				Descarregamentos[ d - 1 ].NumCarretaUtilizada = Descarregamentos[ d ].NumCarretaUtilizada;
+				Descarregamentos[ d - 1 ].NumPlantaFornecedor = Descarregamentos[ d ].NumPlantaFornecedor;
+				SituacaoDemanda[ d - 1 ] = SituacaoDemanda[ d ];
+				SituacaoRemocao[ d - 1 ] = SituacaoRemocao[ d ];
+			}
 		}
 
 // atualiza dados da tarefa deletada
@@ -521,9 +574,11 @@ int Construcao::DeletaAtividadeLocomovendoAsOutrasTarefasSalvandoDados(int Verif
 		SituacaoDemanda[StatusAtendimento - 1] = 0;
 		SituacaoRemocao[StatusAtendimento - 1] = 0;
 
+		// atualiza o numero de demandas atendidas
 		StatusAtendimento = StatusAtendimento - 1;
 
 	}else{
+		//caso não encontrou o descarregamento, se escreve os dados dele e retorna 0
 		cout << endl << endl << "  <<<<<<<<<<<<<  Erro! Planta [" << NumPlanta << "], Carreta [" << Carreta << "]";
 		cout << ", HoraInicio [" << HoraInicio << "],HoraFinal [" << HoraFinal << "] ->Construcao::DeletaAtividadeLocomovendoAsOutrasTarefasSalvandoDados>>>>>>>>>> " << endl << endl;
 		return 0;
@@ -532,9 +587,9 @@ int Construcao::DeletaAtividadeLocomovendoAsOutrasTarefasSalvandoDados(int Verif
 }
 
 
-int Construcao::DeletaTodasAtividadesDaContrucaoSalvandoDados(int VerificaExistencia, double &HoraInicio, ConjuntoPlantas& Plantas, vector < DadosTarefa > &DadosRetirandoAux){						// deleta todas as atividades de uma construção. Salvando atividades em estrutura
+// deleta todas as atividades de uma construção. Salvando atividades em estrutura
+int Construcao::DeletaTodasAtividadesDaContrucaoSalvandoDados(int VerificaExistencia, double &HoraInicio, ConjuntoPlantas& Plantas, vector < DadosTarefa > &DadosRetirandoAux){
 
-// Verifica se tem uma tarefa já alocada atende a cosntrução depois desta
 	int p;
 	int Carreta;
 
@@ -547,9 +602,12 @@ int Construcao::DeletaTodasAtividadesDaContrucaoSalvandoDados(int VerificaExiste
 // verifica se construção tem alguma demanda atendida
 	if( StatusAtendimento > 0){
 
-		HoraInicio = Descarregamentos[0].HorarioInicioDescarregamento;			// pega o horario da primeira tarefa na construção
+		// pega o horario da primeira tarefa na construção
+		HoraInicio = Descarregamentos[0].HorarioInicioDescarregamento;
 
+		// percorre todas as descargas da cosntrução
 		for( int d = 0; d < StatusAtendimento; d++){
+			// encontra o indice da fabrica
 			if( Plantas.AlocaInidiceFabrica( Descarregamentos[d].NumPlantaFornecedor, p) == 0) {
 				cout << endl << endl << "  <<<<<<<<<<<<<  Erro! planta [" << Descarregamentos[d].NumPlantaFornecedor << "] ->Construcao::DeletaAtividade>>>>>>>>>> " << endl << endl;
 				return 0;
@@ -563,25 +621,30 @@ int Construcao::DeletaTodasAtividadesDaContrucaoSalvandoDados(int VerificaExiste
 
 			Carreta = Descarregamentos[d].NumCarretaUtilizada;
 
-// salva dados da tarefa a retirar
+			// salva dados da tarefa a retirar
 			if( AdicionaElementoVetorDadosTarefa(VerificaExistencia, DadosRetirandoAux, NumeroDaConstrucao, Descarregamentos[d].NumPlantaFornecedor, Carreta, SituacaoDemanda[d], SituacaoRemocao[d], HorarioInicioPlanta, HorarioFimPlanta, Descarregamentos[d].HorarioInicioDescarregamento, Descarregamentos[d].HorarioFinalDescarregamento, HorarioFimCarreta, 'r') == 0 ){
 				cout << endl << endl << " Problema em adicionar tarefa a vetor de tarefas desalocadas -> Construcao::DeletaTodasAtividadesDaContrucaoSalvandoDados" << endl << endl;
 			}
 
-// deleta tarefa
+			// deleta tarefa tanto na planta e nao caminhão
 			Plantas.DeletaTarefa( Descarregamentos[d].NumPlantaFornecedor, HorarioInicioPlanta, HorarioFimPlanta, NumeroDaConstrucao, d, Carreta, HorarioInicioCarreta, HorarioFimCarreta);
+			// anula o conteudo do descarregamento corrente
 			Descarregamentos[ d ].AnulaConteudo();
 			SituacaoDemanda[ d ] = 0;
 			SituacaoRemocao[ d ] = 0;
 
 		}
+		// faz o status artendimento ser 0, com nenhuma demanda atendida
 		StatusAtendimento = 0;
 		return 1;
 	}
+	cout << endl << endl << "    <<<<<<<<<<<<<<<< Não possui descarregaembtos -> Construcao::DeletaTodasAtividadesDaContrucaoSalvandoDados " << endl << endl;
 	return 0;
 }
 
-int Construcao::DeletaTarefas(int VerificaExistencia, int demanda, vector < DadosTarefa > &DadosTarefasMovidas, ConjuntoPlantas& Plantas){			// Deleta tarefas da demanda passada e as posteriores a esta demanda passada
+
+// Deleta tarefas da demanda passada e as posteriores a esta demanda passada
+int Construcao::DeletaTarefas(int VerificaExistencia, int demanda, vector < DadosTarefa > &DadosTarefasMovidas, ConjuntoPlantas& Plantas){
 	double HorarioInicioConstrucao;
 	double HorarioFinalConstrucao;
 
@@ -606,8 +669,11 @@ int Construcao::DeletaTarefas(int VerificaExistencia, int demanda, vector < Dado
 	}
 
 // se retira as tarefas da demanda que se quer e as posteriores a ela
+
+	// se percorre todas as demandas apos a demanda passada, incluindo a demanda passada
 	for( int d = demanda; d < StatusAtendimento; d++){
 		Planta = Descarregamentos[d].NumPlantaFornecedor;
+		// se pega o inidice da planta
 		if( Plantas.AlocaInidiceFabrica( Planta, p) == 0) {
 			cout << endl << endl << "  <<<<<<<<<<<<<  Erro! planta [" << Planta << "] ->Construcao::DeletaAtividade>>>>>>>>>> " << endl << endl;
 			return 0;
@@ -633,20 +699,21 @@ int Construcao::DeletaTarefas(int VerificaExistencia, int demanda, vector < Dado
 		cout << "  carreta [" << Carreta << "] as " << HorarioInicioCarreta  << " até " << HorarioFimCarreta << endl << endl;
 		 */
 
-// Adiciona na estrutura a terefa retirada
+		// Adiciona na estrutura a terefa retirada
 		if( AdicionaElementoVetorDadosTarefa(VerificaExistencia, DadosTarefasMovidas,NumeroDaConstrucao, Planta, Carreta, SituacaoDemanda[d], SituacaoRemocao[d], HorarioInicioPlanta, HorarioFimPlanta,HorarioInicioConstrucao, HorarioFinalConstrucao, HorarioFimCarreta, 'r') == 0 ){
 			cout << endl << endl << " Problema em adicionar tarefa a vetor de tarefas desalocadas -> Construcao::DeletaTarefas" << endl << endl;
 			return 0;
 		}
 
-// Deleta tarefa na planta e no caminhão
+		// Deleta tarefa na planta e no caminhão
 		Plantas.DeletaTarefa( Planta, HorarioInicioPlanta, HorarioFimPlanta, NumeroDaConstrucao, d, Carreta, HorarioInicioCarreta, HorarioFimCarreta);
-// Deleta tarefa na construção
+		// Deleta tarefa na construção
 		Descarregamentos[d].AnulaConteudo();
 		SituacaoDemanda[d] = 0;
 		SituacaoRemocao[d] = 0;
 
-		DemandasRetiradas++;	// aumenta o contador das tarefas deletadas
+		// aumenta o contador das tarefas deletadas
+		DemandasRetiradas++;
 	}
 
 	// atualiza o nivel de atendimento com o número de demandas atendidas na planta
@@ -655,21 +722,29 @@ int Construcao::DeletaTarefas(int VerificaExistencia, int demanda, vector < Dado
 
 }
 
+// deleta tarefa apartir de dados
 int Construcao::DeletaTarefasAnteriormenteAdicionadasDados(   DadosTarefa DadosAdicionados, ConjuntoPlantas& Plantas){
 	int demanda;
 	int ativo;
 	ativo = 0;
 
-	// verifica se a tarefa existe na cosntrução
+// verifica se a tarefa existe na cosntrução
+
+	// percorre todas as descargas existentes na construção
 	for( int d = 0; d < StatusAtendimento; d++){
+		// verifica se os dados da estrutura passada batem com algum descarregamento
 		if( Descarregamentos[d].HorarioInicioDescarregamento == DadosAdicionados.HorariosDasTarefas[2] &&  Descarregamentos[d].HorarioFinalDescarregamento == DadosAdicionados.HorariosDasTarefas[3]){
+			// verifica se os horarios da estrutura batem com algum descarregamento
 			if( NumeroDaConstrucao == DadosAdicionados.DadosDasTarefas[0] && Descarregamentos[d].NumPlantaFornecedor == DadosAdicionados.DadosDasTarefas[1] &&  Descarregamentos[d].NumCarretaUtilizada == DadosAdicionados.DadosDasTarefas[2] ){
+				// guarda a demanda
 				demanda = d;
+				// marca como encontrada a demanda atendida
 				ativo = 1;
 			}
 		}
 	}
 
+	// caso não enconstrar a demanda, retorna 0 e escreve na tela
 	if( ativo == 0 ){
 		cout << endl << endl << "  				<<<<<<<< Probelma em deletar tarefa. Não encontrou tarefa -> Construcao::DeletaTarefasAnteriormenteAdicionadasDados" << endl;
 		DadosAdicionados.Imprimir();
@@ -686,6 +761,7 @@ int Construcao::DeletaTarefasAnteriormenteAdicionadasDados(   DadosTarefa DadosA
 
 	// Deleta tarefa
 	int p;
+	// pega o inidice da planta
 	if( Plantas.AlocaInidiceFabrica( NumPlanta, p) == 0) {
 		cout << endl << endl << "  <<<<<<<<<<<<<  Erro! planta [" << NumPlanta << "] ->Construcao::DeletaAtividade>>>>>>>>>> " << endl << endl;
 		return 0;
@@ -712,19 +788,26 @@ int Construcao::DeletaTarefasAnteriormenteAdicionadasDados(   DadosTarefa DadosA
 		 */
 
 
-// Deleta tarefa na planta e no caminhão
+	// Deleta tarefa na planta e no caminhão
 	Plantas.DeletaTarefa( NumPlanta, HorarioInicioPlanta, HorarioFimPlanta, NumeroDaConstrucao, demanda, Carreta, HorarioInicioCarreta, HorarioFimCarreta);
 
 
-	// Reorganiza Tarefas
-	for( int d = demanda + 1; d < StatusAtendimento; d++){
-		Plantas.CorrigeReferenciaCarregamentoDeslocamentoMenosUm(Descarregamentos[d].NumPlantaFornecedor, Descarregamentos[d].NumCarretaUtilizada, NumeroDaConstrucao, d, Descarregamentos[d].HorarioInicioDescarregamento, Descarregamentos[d].HorarioFinalDescarregamento);
-		Descarregamentos[ d - 1 ].HorarioInicioDescarregamento = Descarregamentos[ d ].HorarioInicioDescarregamento;
-		Descarregamentos[ d - 1 ].HorarioFinalDescarregamento = Descarregamentos[ d ].HorarioFinalDescarregamento;
-		Descarregamentos[ d - 1 ].NumCarretaUtilizada = Descarregamentos[ d ].NumCarretaUtilizada;
-		Descarregamentos[ d - 1 ].NumPlantaFornecedor = Descarregamentos[ d ].NumPlantaFornecedor;
-		SituacaoDemanda[ d - 1 ] = SituacaoDemanda[ d ];
-		SituacaoRemocao[ d - 1 ] = SituacaoRemocao[ d ];
+// Reorganiza Tarefas
+
+	// se a demanda a ser deletada não é a ultima alocada na cosntrução
+	if( demanda != StatusAtendimento - 1){
+		// caso não for, percorre todas as demandas após a que se quer deletar e corrige as suas referencias
+		for( int d = demanda + 1; d < StatusAtendimento; d++){
+			// corrige as referencias da planta e dao caminhão
+			Plantas.CorrigeReferenciaCarregamentoDeslocamentoMenosUm(Descarregamentos[d].NumPlantaFornecedor, Descarregamentos[d].NumCarretaUtilizada, NumeroDaConstrucao, d, Descarregamentos[d].HorarioInicioDescarregamento, Descarregamentos[d].HorarioFinalDescarregamento);
+			// corrige as referencias do descarregamento
+			Descarregamentos[ d - 1 ].HorarioInicioDescarregamento = Descarregamentos[ d ].HorarioInicioDescarregamento;
+			Descarregamentos[ d - 1 ].HorarioFinalDescarregamento = Descarregamentos[ d ].HorarioFinalDescarregamento;
+			Descarregamentos[ d - 1 ].NumCarretaUtilizada = Descarregamentos[ d ].NumCarretaUtilizada;
+			Descarregamentos[ d - 1 ].NumPlantaFornecedor = Descarregamentos[ d ].NumPlantaFornecedor;
+			SituacaoDemanda[ d - 1 ] = SituacaoDemanda[ d ];
+			SituacaoRemocao[ d - 1 ] = SituacaoRemocao[ d ];
+		}
 	}
 
 	// atualiza dados da tarefa deletada
@@ -740,9 +823,13 @@ int Construcao::DeletaTarefasAnteriormenteAdicionadasDados(   DadosTarefa DadosA
 
 }
 
-int Construcao::VerificaDescarregamentosRespeitaIntervalo(){			// Verifica se os descrarregamentor na construção estão respeitando os intervalos entre elas
+// Verifica se os descrarregamentor na construção estão respeitando os intervalos entre elas
+int Construcao::VerificaDescarregamentosRespeitaIntervalo(){
+	// caso existir mais de uma tarefa
 	if( StatusAtendimento > 1){
-		for( int d = 2; d < StatusAtendimento; d++){
+		// percorre todas as tarefas apos a primeira
+		for( int d = 1; d < StatusAtendimento; d++){
+			// verifica se o intervalo é respeitado
 			if( Descarregamentos[d].HorarioInicioDescarregamento - Descarregamentos[d -1].HorarioFinalDescarregamento > TempoMaximoEntreDescargas){
 				return 0;
 			}
@@ -751,15 +838,31 @@ int Construcao::VerificaDescarregamentosRespeitaIntervalo(){			// Verifica se os
 	return 1;
 }
 
-void Construcao::RetornaHorarioInicioCarregamento( int NumDemanda, double& HoraInicio){		// retorna o horario de inicio de um certo descarregamento na construção
+// retorna o horario de inicio de um certo descarregamento na construção
+void Construcao::RetornaHorarioInicioCarregamento( int NumDemanda, double& HoraInicio){
+	int ativa;
+
+	ativa = 0;
+
+	// percorre todos os descarregamento
 	for( unsigned int d = 0; d < Descarregamentos.size(); d++){
+		// verifica se a demanda é a passada na função
 		if( NumDemanda == d){
+			// retorna o horario do descarregameto da demanda
 			HoraInicio = Descarregamentos[d].HorarioInicioDescarregamento;
+			// marca que encontrou a demanda procurada
+			ativa = 1;
 		}
+	}
+
+	// escreve na tela caso não se encontrou a demanda procurada
+	if( ativa == 0){
+		cout << endl << endl <<  " <<<<<<<<<<<<<<<< Erro! Não encontrou a demanda [" << NumDemanda << "] -> Construcao::RetornaHorarioInicioCarregamento >>>>>>>>>>>>>>>>>>>>>> " << endl << endl;
 	}
 }
 
-void Construcao::RetornaDadosDescarregamento( int d, int& PlantaEmAnalise, int& 	CaminhaoEmAnalise, int& ConstrucaoEmAnalise, double& HorarioInicioAuxiliar,double& HorarioFinalAuxiliar){	// Retorna os dados de um certo descarregamento
+// Retorna os dados de um certo descarregamento
+void Construcao::RetornaDadosDescarregamento( int d, int& PlantaEmAnalise, int& 	CaminhaoEmAnalise, int& ConstrucaoEmAnalise, double& HorarioInicioAuxiliar,double& HorarioFinalAuxiliar){
 
 	PlantaEmAnalise 		=	Descarregamentos[d].NumPlantaFornecedor;
 	CaminhaoEmAnalise 		=	Descarregamentos[d].NumCarretaUtilizada;
@@ -768,51 +871,98 @@ void Construcao::RetornaDadosDescarregamento( int d, int& PlantaEmAnalise, int& 
 	HorarioFinalAuxiliar 	= 	Descarregamentos[d].HorarioFinalDescarregamento;
 }
 
-void Construcao::CalculaMakespan(){			// Calcula o Makespan da construção
+// Calcula o Makespan da construção
+void Construcao::CalculaMakespan(){
 	Makespan = 0 ;
 
 	//cout << endl << endl << "  Contrucao " << NumeroDaConstrucao << endl;
 
+	// passa por todos os descarregamentos da construção
 	for( unsigned int d = 0; d < Descarregamentos.size(); d++){
-		if( Descarregamentos[d].HorarioFinalDescarregamento  > Makespan){
+		// caso o tempo final do descarregamento for maior que o Makespan atual entra no if
+		if(  Descarregamentos[d].HorarioFinalDescarregamento  > Makespan){
+			// Atualiza o Makespan com o horario do descarregamento corrente
 			Makespan = Descarregamentos[d].HorarioFinalDescarregamento;
 			//cout << " =-=-=-=-=-";
 		}
 	}
 	//cout << "  " << Makespan ;
+	// passa por todas as demandas
 	for ( int i = 0; i < NumeroDemandas; i++){
+		// caso ela não tiver sido atendida
 		if( SituacaoDemanda[ i ] == 0 || SituacaoDemanda[ i ] == -1){
+			// acresecnta uma penalidade ao Makespan da construção
 			Makespan = Makespan + PenalidadeNaoAtendimentoDemanda * TempoMaximoDeFuncionamento;
 			//cout << endl << endl << "  " << Makespan << " -> Inviolado construcao " << NumeroDaConstrucao << endl << endl;
 		}
 	}
 }
 
+// Imprime os dados da construções
+void Construcao::ImprimeContrucao(){
 
-
-
-void Construcao::ImprimeContrucao(){		// Imprime os dados da construções
-
+	// imprime descarregamentos
 	printf( "# Contrucao %d com %d demandas, janela de tempo (%.4f - %.4f), com rank = %.4f \n",NumeroDaConstrucao, NumeroDemandas, TempoMinimoDeFuncionamento, TempoMaximoDeFuncionamento, RankTempoDemandas);
 	if( StatusAtendimento != 0){
 		for( unsigned int d = 0; d < Descarregamentos.size(); d++){
 			printf( "     * Carreta [%d-%d] atende demanda %d-%d de ( %.4f as %.4f )\n", Descarregamentos[d].NumPlantaFornecedor, Descarregamentos[d].NumCarretaUtilizada, NumeroDaConstrucao, d, Descarregamentos[d].HorarioInicioDescarregamento, Descarregamentos[d].HorarioFinalDescarregamento);
 		}
 	}
+
+	// imprime o vetor de atendimento
 	cout << "   Vetor de atendimento demandas [ ";
 	for ( int i = 0; i < NumeroDemandas; i++){
 		cout << SituacaoDemanda[ i ] << " ";
 	}
 	cout << "]" << endl;
+
+	// imprime o vetor remocao
 	cout << "   Vetor de Situacao Remocao das demandas [ ";
 	for ( int i = 0; i < NumeroDemandas; i++){
 		cout << SituacaoRemocao[ i ] << " ";
 	}
 	cout << "]" << endl;
+
+	// imprime makespan da cosntrução
 	printf ("   MAKESPAN = %.4f   Status = %d\n", Makespan, StatusAtendimento);
 }
 
-int Construcao::AtrazaDemandasParaAtender( int NumDemanda, double HoraInicioAtendiemnto, vector < DadosTarefa > &DadosTarefasMovidasAuxiliar,ConjuntoPlantas& Plantas, int &SituacaoAlocacao, int TipoOrdenacao){
+int Construcao::AtrazaDemandasParaAtenderMaster( int NumDemanda, double HoraInicioAtendiemnto, vector < DadosTarefa > &DadosTarefasMovidasAuxiliar,ConjuntoPlantas& Plantas, int &SituacaoAlocacao, int TipoOrdenacao){
+	double NovaHoraInicioAtendiemnto;
+
+	cout << endl << endl << "     ++++++++++++++++ Entra Master +++++++++++++++ "  << endl << endl;
+
+	ImprimeContrucao();
+	cout << "DadosTarefasMovidasAuxiliar" << endl;
+	ImprimeVetorDadosTarefa( DadosTarefasMovidasAuxiliar);
+
+	// aloca valor de situaçãAlocação como sendo que a tarefa que ainda naõ foi alocada pode ser alocada caso se atraze o atendimento das tarefas que são anteriores a ela
+	SituacaoAlocacao = -2;
+
+	// enquanto se puder atender a demanda coeernte se atrazar as outras, se continua no loop
+	while(SituacaoAlocacao == -2 ){
+		cout << "                      Entrou";
+		// tenta atrazar as demandas anteriores para possibilitar o atendimento da demand corrente
+		AtrazaDemandasParaAtenderRecursao( NumDemanda, HoraInicioAtendiemnto,  DadosTarefasMovidasAuxiliar,Plantas, SituacaoAlocacao, TipoOrdenacao);
+		// verifica se pode atender a demanda corrente
+		SituacaoAlocacao = AlocaAtividadeComHorarioInicio( NumDemanda, HoraInicioAtendiemnto, NovaHoraInicioAtendiemnto, DadosTarefasMovidasAuxiliar, Plantas, TipoOrdenacao);
+		// se atualiza a hora que se tem que atender a tarefa anterior a tarefa corrente que se quer alocar
+		HoraInicioAtendiemnto = NovaHoraInicioAtendiemnto;
+	}
+
+	cout << endl << endl << "     ++++++++++++++++ Sai Master +++++++++++++++ "  << endl << endl;
+	ImprimeContrucao();
+	cout << "DadosTarefasMovidasAuxiliar" << endl;
+	ImprimeVetorDadosTarefa( DadosTarefasMovidasAuxiliar);
+
+	if( SituacaoAlocacao == 1){
+		return 1;
+	}else{
+		return 0;
+	}
+}
+
+int Construcao::AtrazaDemandasParaAtenderRecursao( int NumDemanda, double HoraInicioAtendiemnto, vector < DadosTarefa > &DadosTarefasMovidasAuxiliar,ConjuntoPlantas& Plantas, int &SituacaoAlocacao, int TipoOrdenacao){
 	int ParaPrograma;
 	double NovaHoraInicioAtendiemnto;
 
@@ -850,7 +1000,7 @@ int Construcao::AtrazaDemandasParaAtender( int NumDemanda, double HoraInicioAten
 		// só entra no loop caso se puder atender a tarefa ( NumDemanda-1) caso se atrazar o atendiment de demandas anteriores
 		while( SituacaoAlocacao == -2  ){
 
-			AtrazaDemandasParaAtender( NumDemanda - 1, HoraInicioAtendiemnto,  DadosTarefasMovidasAuxiliar,Plantas, SituacaoAlocacao, TipoOrdenacao);
+			AtrazaDemandasParaAtenderRecursao( NumDemanda - 1, HoraInicioAtendiemnto,  DadosTarefasMovidasAuxiliar,Plantas, SituacaoAlocacao, TipoOrdenacao);
 			if( SituacaoAlocacao == 1){
 				SituacaoAlocacao = AlocaAtividadeComHorarioInicio( NumDemanda, HoraInicioAtendiemnto, NovaHoraInicioAtendiemnto, DadosTarefasMovidasAuxiliar, Plantas, TipoOrdenacao);
 				HoraInicioAtendiemnto = NovaHoraInicioAtendiemnto;

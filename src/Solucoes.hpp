@@ -274,7 +274,7 @@ int Solucao::AdicionaTarefa( int VerificaExistencia, int Construcao, int Demanda
 
 				cout << endl << endl << "      Função que atraza demandas - horario que pode atender construção = " << PlantasInstancia.RetornaMenorHorarioQueConstrucaoPodeAtenderDemanda() << endl << endl;
 	// função que realiza o atrazo das tarefas para atender uma demanda anterior
-				ConstrucoesInstancia.Construcoes[c].AtrazaDemandasParaAtender( Demanda, PlantasInstancia.RetornaMenorHorarioQueConstrucaoPodeAtenderDemanda() - ConstrucoesInstancia.Construcoes[c].TempoMaximoEntreDescargas + IntervaloDeTempo,DadosTarefasMovidasAuxiliar, PlantasInstancia, SituacaoAlocacao, TipoOrdenacao);
+				ConstrucoesInstancia.Construcoes[c].AtrazaDemandasParaAtenderMaster( Demanda, PlantasInstancia.RetornaMenorHorarioQueConstrucaoPodeAtenderDemanda() - ConstrucoesInstancia.Construcoes[c].TempoMaximoEntreDescargas + IntervaloDeTempo,DadosTarefasMovidasAuxiliar, PlantasInstancia, SituacaoAlocacao, TipoOrdenacao);
 
 				cout << endl << endl <<  " Fim do atraza tarefas" << endl;
 				cout << "DadosTarefasMovidasAuxiliar" << endl;
@@ -472,13 +472,10 @@ void Solucao::ProcessoViabilizacao1(int TipoOrdenacao){
 
 		if( Imprime == 1){
 			cout << endl << endl << "    deleta tarefas apos a demanda [" << ConstrucaoAnalisandoRetirada << "-" << DemandaAnalisandoRetirada << "]" << endl << endl;
-
 			cout << "DadosTarefasMovidas" << endl;
 			ImprimeVetorDadosTarefa( DadosTarefasMovidas);
-
 			ConstrucoesInstancia.ImprimeContrucoes();
 			//PlantasInstancia.Imprime(1,1);
-
 			cin >> PararPrograma;
 		}
 
@@ -499,14 +496,11 @@ void Solucao::ProcessoViabilizacao1(int TipoOrdenacao){
 
 				if( Imprime == 1){
 					cout << endl << endl << "         Aloca demanda não atendida anteriormente [ " << NovaTarefaAlocadaConstrucao << "-" << NovaTarefaAlocadaDemanda << "]" << endl << endl;
-
 					cout << endl << "  tenta alocar tarefa" << endl;
 					cout << "DadosTarefasMovidas" << endl;
 					ImprimeVetorDadosTarefa( DadosTarefasMovidas);
-
 					ConstrucoesInstancia.ImprimeContrucoes();
 					//PlantasInstancia.Imprime(1,1);
-
 					cin >> PararPrograma;
 				}
 
@@ -517,13 +511,10 @@ void Solucao::ProcessoViabilizacao1(int TipoOrdenacao){
 
 				if( Imprime == 1){
 					cout << endl << endl << "         Readiciona tarefas deletadas " << endl << endl;
-
 					cout << "DadosTarefasMovidas" << endl;
 					ImprimeVetorDadosTarefa( DadosTarefasMovidas);
-
 					ConstrucoesInstancia.ImprimeContrucoes();
 					//PlantasInstancia.Imprime(1,1);
-
 					cin >> PararPrograma;
 				}
 
@@ -531,10 +522,8 @@ void Solucao::ProcessoViabilizacao1(int TipoOrdenacao){
 				if( InviabilidadeSolucaoAnterior > ConstrucoesInstancia.NivelDeInviabilidade){
 					if( Imprime == 1){
 						cout << endl << "  								!!!!!!!!! Melhorou !!!!!!!!!!! "  << endl;
-
 						cout << "DadosTarefasMovidas" << endl;
 						ImprimeVetorDadosTarefa( DadosTarefasMovidas);
-
 						ConstrucoesInstancia.ImprimeContrucoes();
 						//PlantasInstancia.Imprime(1,1);
 
@@ -548,10 +537,8 @@ void Solucao::ProcessoViabilizacao1(int TipoOrdenacao){
 				}else{
 					if( Imprime == 1){
 						cout << endl << "  								!!!!!!!!! Nao melhorou !!!!!!!!!!! " << endl;
-
 						cout << "DadosTarefasMovidas" << endl;
 						ImprimeVetorDadosTarefa( DadosTarefasMovidas);
-
 						ConstrucoesInstancia.ImprimeContrucoes();
 						//PlantasInstancia.Imprime(1,1);
 
@@ -570,7 +557,6 @@ void Solucao::ProcessoViabilizacao1(int TipoOrdenacao){
 
 						cout << "DadosTarefasMovidas" << endl;
 						ImprimeVetorDadosTarefa( DadosTarefasMovidas);
-
 						ConstrucoesInstancia.ImprimeContrucoes();
 						//PlantasInstancia.Imprime(1,1);
 
@@ -1321,36 +1307,49 @@ Solucao::~Solucao(){
 
 class ConjuntoSolucoes{
 public:
-	ConjuntoSolucoes();
 	vector < Solucao > Solucoes;
-	void InsereSolucao(int, ConjuntoPlantas, int, ConjuntoConstrucoes,	int, double, double);
-	void CalculaMakespanSolucoes();
-	void Imprime(bool, bool, bool);
+	ConjuntoSolucoes();			// classe construtoora
+	void InsereSolucao(int, ConjuntoPlantas, int, ConjuntoConstrucoes,	int, double, double);			// carrega uma solução ao vetor das soluções
+	void CalculaMakespanSolucoes();		// calcula o makespan das soluções
+	void Imprime(bool, bool, bool);		// imprime as soluções
 	~ConjuntoSolucoes();
 
 };
 
+// classe construtoora
 ConjuntoSolucoes::ConjuntoSolucoes(){
 }
 
+// carrega uma solução ao vetor das soluções
 void ConjuntoSolucoes::InsereSolucao(int np, ConjuntoPlantas Plantas, int ne, ConjuntoConstrucoes Construcoes, int nv, double v,double TDVC){
 	Solucao S1;
+	// carrega dasos da solução
 	S1.CarregaSolucao( np, Plantas, ne, Construcoes, nv, v, TDVC);
+	// colocar a solução carregada nbo vetor de soluções
 	Solucoes.push_back(S1);
 }
 
+// calcula o makespan das soluções
 void ConjuntoSolucoes::CalculaMakespanSolucoes(){
+	// percorre por todas as soluções
 	for( unsigned  int s = 0; s <  Solucoes.size(); s++){
+		// calcula o makespan da solução corrente de suas construções
 		Solucoes[s].ConstrucoesInstancia.CalculaMakespansConstrucoes();
+		// calcula o makespan da solução corrente de suas plantas
 		Solucoes[s].PlantasInstancia.CalculaMakespanPlantas();
+		// calcula o makespan da solução
 		Solucoes[s].Makespan = Solucoes[s].ConstrucoesInstancia.MakespanConstrucoes + Solucoes[s].PlantasInstancia.MakespanPLantas;
 	}
 }
 
+// imprime as soluções
 void ConjuntoSolucoes::Imprime(bool ImprimePlanta, bool ImprimeConstrucao, bool IntervalosRespeitadosConstrucaoes){
+	// percorre por todas as soluções
 	for( unsigned  int s = 0; s <  Solucoes.size(); s++){
+		// imprime a solução corrente
 		cout << endl << endl << "   Solucao " << s << endl << endl;
 		 Solucoes[s].Imprime(ImprimePlanta,ImprimeConstrucao, IntervalosRespeitadosConstrucaoes);
+		 // escreve o makespan total da solução
 		 cout << "         Makespan total = " << Solucoes[s].Makespan << endl ;
 	}
 }

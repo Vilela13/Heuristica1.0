@@ -34,6 +34,7 @@ int VerificaElementoVetorDadosTarefaApartirEstrutura(vector < DadosTarefa >  Vet
 int AdicionaElementoVetorDadosTarefa(int VerificaExistencia, vector < DadosTarefa > &Vetor, int NumConstucao, int NumPlanta, int NumCarreta, int Situacao, int SituacaoRetirada, double HoraInicioPlanta, double HoraSaiPlanta, double HoraInicioConstrucao, double HoraSaiConstrucao, double HoraRetornaPlanta, char status);		// adiciona uma tarefa apartir de dados
 int AdicionaElementoVetorDadosTarefaApartirEstrutura(int VerificaExistencia, vector < DadosTarefa > &Vetor, DadosTarefa Dado);			// adiciona uma tarefa apartir de estrutura de dados
 
+int MergeDadosTarefa( vector < DadosTarefa > &VetorBase, vector < DadosTarefa > VetorFonte);			// Adicionaos elementos de VetorFonte ao Vetor Base
 
 void ImprimeVetorDadosTarefa( vector < DadosTarefa > Vetor);		// imprime as tarefas
 bool DecideQualTarefaVemAntes ( DadosTarefa d1, DadosTarefa d2 );
@@ -232,6 +233,24 @@ int AdicionaElementoVetorDadosTarefaApartirEstrutura(int VerificaExistencia, vec
 		Vetor[Vetor.size() - 1].InserirConteudo(Dado.DadosDasTarefas[0], Dado.DadosDasTarefas[1], Dado.DadosDasTarefas[2], Dado.DadosDasTarefas[3], Dado.DadosDasTarefas[4], Dado.HorariosDasTarefas[0] , Dado.HorariosDasTarefas[1], Dado.HorariosDasTarefas[2] , Dado.HorariosDasTarefas[3], Dado.HorariosDasTarefas[4],Dado.Status);
 		return 1;
 	}
+}
+
+// Adicionaos elementos de VetorFonte ao Vetor Base
+int MergeDadosTarefa( vector < DadosTarefa > &VetorBase, vector < DadosTarefa > VetorFonte){
+
+	// percorre todos os elementos do VetorFonte
+	for( unsigned int i = 0; i < VetorFonte.size(); i++){
+		// adiciona o elemento corrente do VetorFonte ao VetorBase
+		if( AdicionaElementoVetorDadosTarefaApartirEstrutura(0, VetorBase, VetorFonte[i]) == 0){
+			cout << endl << endl << " <<<<<<<<<<<<< Problema em adicionar elemeto no VetorBase - elemnto " << endl;
+			VetorFonte[i].Imprimir();
+			cout << "     -> MergeDadosTarefa " << endl << endl;
+			// caso não conseguir adicionar o elemento do VetorFonte no VetorBase
+			return 0;
+		}
+	}
+	// caso conseguir adicionar todos os elementos do VetorFonte no VetorBase
+	return 1;
 }
 
 // imprime as tarefas

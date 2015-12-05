@@ -44,18 +44,18 @@ using namespace std;
 #define IntervaloDeTempo 0.0083333 // meio minuto
 //0.016666; // um minuto
 
-#define PenalidadeNaoAtendimentoDemanda	500
+#define PenalidadeNaoAtendimentoDemanda	500			//penalidade de não atendiemnto da demanda, ela esta presente no processo de calculo do makespan
 
-#include "DadosSolomon.hpp"
-#include "Carretas.hpp"
-#include "Plantas.hpp"
+#include "DadosSolomon.hpp"				// classe que apartir das instancias de solomon cria uma instancia do nosso problema
+#include "Carretas.hpp"					// classe que possui as estruturas caracteristicas dos caminhões/ veículos/ britadeiras
+#include "Plantas.hpp"					// classe que possui as estruturas caracteristicas das plantas
 
-#include "DadosTarefa.hpp"
+#include "DadosTarefa.hpp"				// armazena a estrutura que armazena as tarefas, isso é essencial para os procedimentos realizados que as vezes tem que retornar ao estado inicial da solução
 
-#include "Construcoes.hpp"
-#include "Procedimento1.hpp"
-#include "Solucoes.hpp"
-#include "Heuristica.hpp"
+#include "Construcoes.hpp"				// classe que possui as estruturas caracteristicas das construções
+#include "Procedimento1.hpp"		 // procedimento construtuvo de craição de solução
+#include "Solucoes.hpp"				// possui as classes da solução e os procedimentos  viabilidade1 e viabilidade2
+#include "Heuristica.hpp"			// possui os procediemtos que cada instancia ira sofrer
 
 
 

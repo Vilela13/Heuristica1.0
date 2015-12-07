@@ -115,6 +115,8 @@ public:
 	void EncontraPlantaComMenorDistanciaParaConstrucao(  int& NumPlantaAnalisando, ConjuntoPlantas& Plantas, string frase);
 	int AlocaAtividadeComHorarioInicio( int NumDemanda, double HoraInicioAtendiemnto,double &NovaHoraInicioAtendiemnto, vector < DadosTarefa > &DadosTarefasMovidasAuxiliar,ConjuntoPlantas& Plantas, int TipoOrdenacao , string frase);
 
+	int VerificaIntegridadeDeDescrregamentos(int imprime);			// verifica a integridade entre os descarregamentos da construção
+
 	~Construcao();
 
 };
@@ -1056,7 +1058,7 @@ int Construcao::AlocaAtividadeComHorarioInicio( int NumDemanda, double HoraInici
 
 	Plantas.InicializaVetorHorarioQuePlantaPodeAtender();
 
-	int ParaPrograma;
+	//int ParaPrograma;
 
 
 	if ( NumeroDemandas > StatusAtendimento){
@@ -1120,6 +1122,50 @@ int Construcao::AlocaAtividadeComHorarioInicio( int NumDemanda, double HoraInici
 
 }
 
+// verifica a integridade entre os descarregamentos da construção
+int Construcao::VerificaIntegridadeDeDescrregamentos(int imprime){
+	// percorre todos os deslocamentos
+	for( int d1 = 0; d1 < Descarregamentos.size(); d1++){
+		// verifica se o descarregaento não possui tempo negativo
+		if( Descarregamentos[d1].HorarioInicioDescarregamento > Descarregamentos[d1].HorarioFinalDescarregamento ){
+			printf( " >>>>>>>>>>>>>> Problema! Descarregamento possui tempo negativo %.4f (%.4f-%.4f)\n",  Descarregamentos[d1].HorarioFinalDescarregamento - Descarregamentos[d1].HorarioInicioDescarregamento  , Descarregamentos[d1].HorarioInicioDescarregamento, Descarregamentos[d1].HorarioFinalDescarregamento );
+			return 0;
+		}
+		// percorre todos os deslocamentos
+		for( int d2 = 0; d2 < Descarregamentos.size(); d2++){
+			// o descarregamento não pode ser o memso que o analisado no primeiro loop
+			if( Descarregamentos[d1].HorarioInicioDescarregamento != Descarregamentos[d2].HorarioInicioDescarregamento && Descarregamentos[d1].HorarioFinalDescarregamento != Descarregamentos[d2].HorarioFinalDescarregamento){
+				// verifica se o descarregamento está contido dentro de outro descarregamento
+				if( Descarregamentos[d1].HorarioInicioDescarregamento <= Descarregamentos[d2].HorarioInicioDescarregamento && Descarregamentos[d1].HorarioFinalDescarregamento >= Descarregamentos[d2].HorarioFinalDescarregamento ){
+					printf( " >>>>>>>>>>>>>> Problema! Descarregamento (%.4f-%.4f) está contido em (%.4f-%.4f) \n", Descarregamentos[d2].HorarioInicioDescarregamento  , Descarregamentos[d2].HorarioFinalDescarregamento, Descarregamentos[d1].HorarioInicioDescarregamento, Descarregamentos[d1].HorarioFinalDescarregamento );
+					return 0;
+				}
+				// verifica se o descarregamento  contem  outro descarregamento
+				if( Descarregamentos[d1].HorarioInicioDescarregamento >= Descarregamentos[d2].HorarioInicioDescarregamento && Descarregamentos[d1].HorarioFinalDescarregamento <= Descarregamentos[d2].HorarioFinalDescarregamento ){
+					printf( " >>>>>>>>>>>>>> Problema! Descarregamento (%.4f-%.4f) contem (%.4f-%.4f) \n", Descarregamentos[d2].HorarioInicioDescarregamento  , Descarregamentos[d2].HorarioFinalDescarregamento, Descarregamentos[d1].HorarioInicioDescarregamento, Descarregamentos[d1].HorarioFinalDescarregamento );
+					return 0;
+				}
+				// verifica se o descarregamento  está parcialmente contido na parte inicial de  outro descarregamento
+				if( Descarregamentos[d1].HorarioFinalDescarregamento >= Descarregamentos[d2].HorarioInicioDescarregamento && Descarregamentos[d1].HorarioFinalDescarregamento <= Descarregamentos[d2].HorarioFinalDescarregamento ){
+					printf( " >>>>>>>>>>>>>> Problema! Descarregamento (%.4f-%.4f) está parcialmente contido na parte inicial de (%.4f-%.4f) \n", Descarregamentos[d1].HorarioInicioDescarregamento, Descarregamentos[d1].HorarioFinalDescarregamento, Descarregamentos[d2].HorarioInicioDescarregamento  , Descarregamentos[d2].HorarioFinalDescarregamento );
+					return 0;
+				}
+				// verifica se o descarregamento  está parcialmente contido na parte final de  outro descarregamento
+				if( Descarregamentos[d1].HorarioInicioDescarregamento >= Descarregamentos[d2].HorarioInicioDescarregamento && Descarregamentos[d1].HorarioInicioDescarregamento <= Descarregamentos[d2].HorarioFinalDescarregamento ){
+					printf( " >>>>>>>>>>>>>> Problema! Descarregamento (%.4f-%.4f) está parcialmente contido na parte final de (%.4f-%.4f) \n", Descarregamentos[d1].HorarioInicioDescarregamento, Descarregamentos[d1].HorarioFinalDescarregamento, Descarregamentos[d2].HorarioInicioDescarregamento  , Descarregamentos[d2].HorarioFinalDescarregamento );
+					return 0;
+				}
+
+			}
+		}
+	}
+	// os descarregamentos são integros entre se
+	if( imprime == 1){
+		cout << " Descarregamentos integros " << endl;
+	}
+	return 1;
+}
+
 Construcao::~Construcao(){		// destruidora da classe
 
 }
@@ -1148,7 +1194,11 @@ public:
 	void CalculaMakespansConstrucoes();					// Calcula o Makespan das Construções
 	int RetornaIndiceConstrucao(int Construcao, int& Indice, string frase);			// retorna o indice da construção passada
 
-	void ImprimeContrucoes();							// Imprime as construções e em seguida o nivel de inviabilidade
+	void ImprimeContrucoes(ConjuntoPlantas& Plantas, int VerificaViabilidade);								// Imprime as construções e em seguida o nivel de inviabilidade
+	int VerificacaoIntegridadeDeDescarregamentosConstrucoes(int imprime);			// faz a verificação dos descarregaemntos
+	int VerificaIndividualmenteDemandas(ConjuntoPlantas& Plantas, int imprime);		// verifica se as tarefas são integras
+
+	int VerificacaoConsistenciaTarefas(ConjuntoPlantas& Plantas, int imprime);		// verifica integridade da solução
 
 // Funções com a SituaçãoRemover
 	void ReiniciaTarefasRetiradas();			// Reinicia o status de remoção de todas as demandas de todas as construções
@@ -1163,6 +1213,8 @@ public:
 	int VerificaConstrucaoPodeAtender();			// Verifica se existe uma demanda que ainda pode ser analisada pelo algoritmo
 
 	void AlocaValoresConstrucoesAnalizadas( int IndiceConstrucaoNaoAtendida );			// 		Coloca o status 2 para as construções que já foram atendidas, e coloca 3 no status da construção passada como parametro
+	int RetornaDadosDemandaAtendida( int Construcao, int Demanda,  int &NumPlanta, int &NumCarreta, double &HorarioInicioDescarregamento, double &HorarioFinalDescarregamento, double &HorarioInicioCarregamento, double &HorarioFinalCarregamento, double &HorarioInicioDeslocamento, double &HorarioFinalDeslocamento, ConjuntoPlantas& Plantas);		// retorna dados de uma tarefa que atende uma demanda passada na função
+	int VerificaIntegridaDeDemandaAtendida( int Construcao, int Demanda, int NumPlanta, int NumCarreta, double HorarioInicioDescarregamento, double HorarioFinalDescarregamento, double HorarioInicioCarregamento, double HorarioFinalCarregamento, double HorarioInicioDeslocamento, double HorarioFinalDeslocamento, int imprime);		// verifica a integridade da tarefa
 
 	~ConjuntoConstrucoes();						// Destruidora da classe
 };
@@ -1256,7 +1308,7 @@ int ConjuntoConstrucoes::RetornaIndiceConstrucao(int Construcao, int& Indice, st
 
 
 // Imprime as construções e em seguida o nivel de inviabilidade
-void ConjuntoConstrucoes::ImprimeContrucoes(){
+void ConjuntoConstrucoes::ImprimeContrucoes(ConjuntoPlantas& Plantas, int VerificaViabilidade){
 	cout << endl << endl << " [[[[[[  Imprime construcoes  ]]]]]]" << endl;
 	// percorre todas as cosntruções
 	for(int c = 0; c < NumeroConstrucoes; c++){
@@ -1264,6 +1316,108 @@ void ConjuntoConstrucoes::ImprimeContrucoes(){
 		Construcoes[c].ImprimeContrucao();
 	}
 	printf( " Nivel de Inviabilidade = %d  Makespan Geral das Construcoes = %.4f\n", NivelDeInviabilidade, MakespanConstrucoes);
+
+	if( VerificaViabilidade == 1){
+		VerificacaoConsistenciaTarefas(Plantas, 1);
+	}
+}
+
+// faz a verificação dos descarregaemntos
+int ConjuntoConstrucoes::VerificacaoIntegridadeDeDescarregamentosConstrucoes(int imprime){
+	int Integro;
+	// inicia como integro o estado dos descarregamentos
+	Integro = 1;
+
+	if( imprime == 1) {
+		cout << endl << "          Verifica integridade Descarregaemntos  " << endl << endl;
+	}
+	// percore todas as construções
+	for( int c = 0; c < NumeroConstrucoes; c++){
+		cout << " construcao [" << Construcoes[c].NumeroDaConstrucao << "] ";
+		// verifica a integridade dos descarregamentos da construção
+		if( Construcoes[c].VerificaIntegridadeDeDescrregamentos(imprime) == 0 ){
+			cout << endl << endl << "      Problema! Descarremagentos não estão integros " << endl << endl;
+			Integro = 0;
+		}
+	}
+
+	// retorna se existe algum descarregamento que não esta integro ao retorna 0, ou 1 caso contrario
+	return Integro;
+}
+
+// verifica se as tarefas são integras
+int ConjuntoConstrucoes::VerificaIndividualmenteDemandas(ConjuntoPlantas& Plantas, int imprime){
+	int NumPlanta;
+	int NumCarreta;
+	double HorarioInicioDescarregamento;
+	double HorarioFinalDescarregamento;
+	double HorarioInicioCarregamento;
+	double HorarioFinalCarregamento;
+	double HorarioInicioDeslocamento;
+	double HorarioFinalDeslocamento;
+
+	int integridade;
+	// inicia como integro o estado dos descarregamentos
+	integridade = 1;
+
+	if( imprime == 1){
+		cout << endl << "          Verifica tarefas individualmente  " << endl << endl;
+	}
+
+	// percorre por taodas as construções
+	for( int c = 0; c < NumeroConstrucoes; c++){
+		// percorre por todas as demandas da construção
+		for( int d = 0; d < Construcoes[c].NumeroDemandas; d++){
+			// verifica se a construção foi atendida
+			if( Construcoes[c].SituacaoDemanda[d] == 1){
+				// fornece os dados do atendimento da tarefa da demanda
+				RetornaDadosDemandaAtendida( Construcoes[c].NumeroDaConstrucao, d, NumPlanta, NumCarreta, HorarioInicioDescarregamento, HorarioFinalDescarregamento, HorarioInicioCarregamento, HorarioFinalCarregamento, HorarioInicioDeslocamento, HorarioFinalDeslocamento, Plantas);
+				if( imprime == 1){
+					printf( "  - Demanda [%d-%d] => construcao [%d] no horario (%.4f-%.4f)",Construcoes[c].NumeroDaConstrucao,d,Construcoes[c].NumeroDaConstrucao,HorarioInicioDescarregamento, HorarioFinalDescarregamento);
+					printf( "  planta [%d] no horario (%.4f-%.4f) ",NumPlanta, HorarioInicioCarregamento, HorarioFinalCarregamento);
+					printf( "  carreta [%d] no horario (%.4f-%.4f) \n", NumCarreta, HorarioInicioDeslocamento, HorarioFinalDeslocamento );
+				}
+				// verifica se a tarefa é integra
+				if ( VerificaIntegridaDeDemandaAtendida(Construcoes[c].NumeroDaConstrucao, d, NumPlanta, NumCarreta, HorarioInicioDescarregamento, HorarioFinalDescarregamento, HorarioInicioCarregamento, HorarioFinalCarregamento, HorarioInicioDeslocamento, HorarioFinalDeslocamento, imprime) == 0){
+					// caso não for ele assinala na variavel de controle que se tem uma tarefa não integra
+					integridade = 0;
+				}
+
+			}
+		}
+	}
+	// retorna o estado de integridade das tarefas, 1 se todas forem integras e 0 caso tiver alguma que não é integra
+	return integridade;
+}
+
+//
+int ConjuntoConstrucoes::VerificacaoConsistenciaTarefas(ConjuntoPlantas& Plantas, int imprime){
+	int integridade;
+
+	integridade = 1;
+
+	cout << endl << endl << " ***********  Consistencia da solução ********************* " << endl << endl;
+
+	if( VerificaIndividualmenteDemandas( Plantas,imprime) == 0){
+		cout << endl << endl << "   >>>>>>>>>>>>> Probelma com integridade de demandas individuais" << endl << endl;
+		integridade = 0;
+	}
+	if( VerificacaoIntegridadeDeDescarregamentosConstrucoes(imprime) == 0){
+		cout << endl << endl << "   >>>>>>>>>>>>> Probelma com integridade de Descarregaemntos" << endl << endl;
+		integridade = 0;
+	}
+	if(Plantas.VerificaIntegridadeDeCarregamentosDasPlantas(imprime) == 0){
+		cout << endl << endl << "   >>>>>>>>>>>>> Probelma com integridade de Carregaemntos" << endl << endl;
+		integridade = 0;
+	}
+	if(Plantas.VerificaIntegridadeDeDeslocaemntosDosVeiculosDasPlantas(imprime) == 0){
+		cout << endl << endl << "   >>>>>>>>>>>>> Probelma com integridade de Deslocamentos" << endl << endl;
+		integridade = 0;
+	}
+
+	cout << endl << endl << " *********************************************************** " << endl << endl;
+
+	return integridade;
 }
 
 // ***************** Funções com a SituaçãoRemover ***************** //
@@ -1423,6 +1577,91 @@ void ConjuntoConstrucoes::AlocaValoresConstrucoesAnalizadas( int IndiceConstruca
 	}
 	// coloca o valor 3 na construção que foi passada na função
 	ConstrucoesAnalizadas[IndiceConstrucaoNaoAtendida] = 3;
+
+}
+
+// retorna dados de uma tarefa que atende uma demanda passada na função
+int ConjuntoConstrucoes::RetornaDadosDemandaAtendida( int Construcao, int Demanda, int &NumPlanta, int &NumCarreta, double &HorarioInicioDescarregamento, double &HorarioFinalDescarregamento, double &HorarioInicioCarregamento, double &HorarioFinalCarregamento, double &HorarioInicioDeslocamento, double &HorarioFinalDeslocamento, ConjuntoPlantas& Plantas){
+	// percorre todas as construções
+	for( int c = 0; c < NumeroConstrucoes; c++){
+		//verifica se a cosntrução corrente é a que se quer
+		if( Construcoes[c].NumeroDaConstrucao == Construcao ){
+			// verifica se a demanda que se quer já foi atendida
+			if( Construcoes[c].SituacaoDemanda[Demanda] == 1 ){
+				// coleta dados da planta e da carreta que se deseja
+				if( Plantas.RetornaDadosDemandaAtendida(Construcao, Demanda, HorarioInicioCarregamento, HorarioFinalCarregamento, NumPlanta, NumCarreta, HorarioInicioDeslocamento, HorarioFinalDeslocamento) == 0){
+					cout << endl << endl << "  <<<<<<<<<<<< Problema! não consegui pegar dados da planta e da carreta da demanda [" << Construcao << "-" << Demanda << "] ! -> ConjuntoConstrucoes::RetornaDadosDemandaAtendida " << endl << endl;
+					// problema em se coleta dados da planta e da carreta que se deseja
+					return 0;
+				}else{
+					// caso o descarregamento que se quer tenha a mesma planta e carreta que se verificaou pela planta e carreta que atendem a demanda, caso sim entra
+					 if( Construcoes[c].Descarregamentos[Demanda].NumPlantaFornecedor == NumPlanta && Construcoes[c].Descarregamentos[Demanda].NumCarretaUtilizada == NumCarreta){
+						 // aloca os dados
+						 HorarioInicioDescarregamento = Construcoes[c].Descarregamentos[Demanda].HorarioInicioDescarregamento;
+						 HorarioFinalDescarregamento = Construcoes[c].Descarregamentos[Demanda].HorarioFinalDescarregamento;
+						 // retorna 1, encontrou os dados procurados e não se verificou inconsistencia entre a planta, construção e a carreta
+						 return 1;
+					 }else{
+						 cout << endl << endl << "  <<<<<<<<<<<< Problema! não consegui pegar dados do descarregamento da demanda [" << Construcao << "-" << Demanda << "] ! -> ConjuntoConstrucoes::RetornaDadosDemandaAtendida " << endl << endl;
+						 // inconsistencia entre o atendimento na construção com o realizado pela planta e pala carreta, retorna 0
+						return 0;
+					 }
+				}
+			}else{
+				cout << endl << endl << "  <<<<<<<<<<<< Problema! Demanda [" << Construcao << "-" << Demanda << "] não atendida! -> ConjuntoConstrucoes::RetornaDadosDemandaAtendida " << endl << endl;
+				// demanda não atedida, retorna 0
+				return 0;
+			}
+		}
+	}
+	cout << endl << endl << "  <<<<<<<<<<<< Problema! Construção [" << Construcao << "] não encontrada! -> ConjuntoConstrucoes::RetornaDadosDemandaAtendida " << endl << endl;
+	// não encontrou a consrução que se quer, retorna 0
+	return 0;
+}
+
+// verifica a integridade da tarefa
+int ConjuntoConstrucoes::VerificaIntegridaDeDemandaAtendida( int Construcao, int Demanda, int NumPlanta, int NumCarreta, double HorarioInicioDescarregamento, double HorarioFinalDescarregamento, double HorarioInicioCarregamento, double HorarioFinalCarregamento, double HorarioInicioDeslocamento, double HorarioFinalDeslocamento, int imprime){
+	int c;
+
+	// inicia o inidce da construção
+	c = -13;
+
+	// verifica se o delocamento se inicia no mesmo horario que o carregaemnto na planta
+	if( HorarioInicioDeslocamento == HorarioInicioCarregamento){
+		// verifica se o carregamento se inicia antes do seu final
+		if( HorarioInicioCarregamento <= HorarioFinalCarregamento){
+			// verifica se tempo de deslocamento da planta até construção não seja negativo
+			if( HorarioFinalCarregamento <= HorarioInicioDescarregamento){
+				// verifica que o tempo de descarregamento na planta não seja negativo
+				if( HorarioInicioDescarregamento <= HorarioFinalDescarregamento){
+					// verifica se tempo de deslocamento da até a planta não seja negativo
+					if( HorarioFinalDescarregamento <= HorarioFinalDeslocamento){
+						if( imprime == 1){
+							cout << "     Integro " << endl;
+						}
+						return 1;
+					}else{
+						printf("       -------- Problema! HorarioFinalDescarregamento maior que HorarioFinalDeslocamento da demanda [%d-%d] -> ConjuntoConstrucoes::VerificaIntegridadeDemandaAtendida", Construcao, Demanda);
+					}
+				}else{
+					printf("       -------- Problema! HorarioInicioDescarregamento maior que HorarioFinalDescarregamento da demanda [%d-%d] -> ConjuntoConstrucoes::VerificaIntegridadeDemandaAtendida", Construcao, Demanda);
+				}
+			}else{
+				printf("       -------- Problema! HorarioFinalCarregamento maior que HorarioInicioDescarregamento da demanda [%d-%d] -> ConjuntoConstrucoes::VerificaIntegridadeDemandaAtendida", Construcao, Demanda);
+			}
+		}else{
+			printf("       -------- Problema! HorarioInicioCarregamento maior que HorarioFinalCarregamento da demanda [%d-%d] -> ConjuntoConstrucoes::VerificaIntegridadeDemandaAtendida", Construcao, Demanda);
+		}
+
+	}else{
+		printf("       -------- Problema! O horario de inicio do deslocamento e de inicio do carregamento não conicidem para a demanda [%d-%d] -> ConjuntoConstrucoes::VerificaIntegridadeDemandaAtendida", Construcao, Demanda);
+	}
+	// caso tiver algum problem, imprime os dados da tarefa e retorna 0
+	RetornaIndiceConstrucao(Construcao, c, " ConjuntoConstrucoes::VerificaIntegridadeDemandaAtendida" );
+	printf( "  - Demanda [%d-%d] => construcao [%d] no horario (%.4f-%.4f)",Construcoes[c].NumeroDaConstrucao, Demanda,Construcoes[c].NumeroDaConstrucao,HorarioInicioDescarregamento, HorarioFinalDescarregamento);
+	printf( "  planta [%d] no horario (%.4f-%.4f) ",NumPlanta, HorarioInicioCarregamento, HorarioFinalCarregamento);
+	printf( "  carreta [%d] no horario (%.4f-%.4f) \n", NumCarreta, HorarioInicioDeslocamento, HorarioFinalDeslocamento );
+	return 0;
 
 }
 

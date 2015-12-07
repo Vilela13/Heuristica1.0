@@ -114,6 +114,9 @@ void Heuristica::ExecutaProcedimentoHeuristico1(){
 
 	ConjuntoSolucoes Solucoes;
 
+	int VerificaViabilidade;
+	VerificaViabilidade = 1;
+
 
 
 
@@ -126,7 +129,7 @@ void Heuristica::ExecutaProcedimentoHeuristico1(){
 	//sort ( Prod1.ConstrucoesInstancia.Construcoes.begin(), Prod1.ConstrucoesInstancia.Construcoes.end(), DecideQualContrucaoTemMaiorRank );
 	sort ( Prod1.ConstrucoesInstancia.Construcoes.begin(), Prod1.ConstrucoesInstancia.Construcoes.end(), DecideQualContrucaoTemMenorInicioDepoisMaiorRank );
 
-	Prod1.ConstrucoesInstancia.ImprimeContrucoes();
+	Prod1.ConstrucoesInstancia.ImprimeContrucoes(Prod1.PlantasInstancia, VerificaViabilidade);
 
 	cout << endl << endl << "############################### Procedimento ConstrucaoSolucao #####################################" << endl << endl;
 
@@ -194,8 +197,8 @@ void Heuristica::ExecutaProcedimentoHeuristico1(){
 
 	Solucoes.CalculaMakespanSolucoes();
 	Solucoes.Imprime(1,1,0);
-	/*
 
+/*
 	Solucoes.Solucoes.resize(Solucoes.Solucoes.size()+1);
 	Solucoes.Solucoes[1] = Solucoes.Solucoes[0];
 

@@ -113,13 +113,16 @@ void Solucao::EncontraPlantaMenorDistanciaConstrucao( int c, int& NumPlantaAnali
 
 // imprime os dados da solução
 void Solucao::Imprime(bool ImprimePlanta, bool ImprimeConstrucao, bool IntervalosRespeitadosConstrucaoes ){
+	int VerificaViabilidade;
+	VerificaViabilidade = 1;
+
 	// Imprime os dados das plantas
 	if( ImprimePlanta == 1 ){
 		PlantasInstancia.Imprime(1,1);
 	}
 	// Imprime os dados das construções
 	if( ImprimeConstrucao == 1){
-		ConstrucoesInstancia.ImprimeContrucoes();
+		ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia, VerificaViabilidade);
 	}
 	// imprime a situação das entregas nas construções
 	if( IntervalosRespeitadosConstrucaoes == 1){
@@ -172,6 +175,9 @@ int Solucao::AdicionaTarefa( int VerificaExistencia, int Construcao, int Demanda
 	vector < DadosTarefa > DadosTarefasMovidasAuxiliar;
 
 	int SituacaoAlocacao;
+
+	int VerificaViabilidade;
+	VerificaViabilidade = 0;
 
 // inicializa os vetores que armazenam os horarios que as palnats podem atender a demanda da construção caso se caia no caso de -2 na Analise da planta. Se é inicializado com os valores maximos de Double
 	PlantasInstancia.InicializaVetorHorarioQuePlantaPodeAtender();
@@ -305,7 +311,7 @@ int Solucao::AdicionaTarefa( int VerificaExistencia, int Construcao, int Demanda
 				cout << "DadosTarefasMovidasAuxiliar" << endl;
 				ImprimeVetorDadosTarefa( DadosTarefasMovidasAuxiliar);
 
-				ConstrucoesInstancia.ImprimeContrucoes();
+				ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia, VerificaViabilidade);
 
 				cin >> ParaPrograma;
 
@@ -472,6 +478,9 @@ void Solucao::ProcessoViabilizacao1(int TipoOrdenacao){
 
 	RealizaProcessoDeAtrazarTarefas = 1;
 
+	int VerificaViabilidade;
+	VerificaViabilidade = 0;
+
 
 
 	//ConstrucoesInstancia.ImprimeContrucoes();
@@ -502,7 +511,7 @@ void Solucao::ProcessoViabilizacao1(int TipoOrdenacao){
 			cout << endl << endl << "    deleta tarefas apos a demanda [" << ConstrucaoAnalisandoRetirada << "-" << DemandaAnalisandoRetirada << "]" << endl << endl;
 			cout << "DadosTarefasMovidas" << endl;
 			ImprimeVetorDadosTarefa( DadosTarefasMovidas);
-			ConstrucoesInstancia.ImprimeContrucoes();
+			ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia, VerificaViabilidade);
 			//PlantasInstancia.Imprime(1,1);
 			cin >> PararPrograma;
 		}
@@ -530,7 +539,7 @@ void Solucao::ProcessoViabilizacao1(int TipoOrdenacao){
 					cout << endl << "  tenta alocar tarefa" << endl;
 					cout << "DadosTarefasMovidas" << endl;
 					ImprimeVetorDadosTarefa( DadosTarefasMovidas);
-					ConstrucoesInstancia.ImprimeContrucoes();
+					ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia, VerificaViabilidade);
 					//PlantasInstancia.Imprime(1,1);
 					cin >> PararPrograma;
 				}
@@ -544,7 +553,7 @@ void Solucao::ProcessoViabilizacao1(int TipoOrdenacao){
 					cout << endl << endl << "         Readiciona tarefas deletadas " << endl << endl;
 					cout << "DadosTarefasMovidas" << endl;
 					ImprimeVetorDadosTarefa( DadosTarefasMovidas);
-					ConstrucoesInstancia.ImprimeContrucoes();
+					ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia, VerificaViabilidade);
 					//PlantasInstancia.Imprime(1,1);
 					cin >> PararPrograma;
 				}
@@ -555,7 +564,7 @@ void Solucao::ProcessoViabilizacao1(int TipoOrdenacao){
 						cout << endl << "  								!!!!!!!!! Melhorou !!!!!!!!!!! "  << endl;
 						cout << "DadosTarefasMovidas" << endl;
 						ImprimeVetorDadosTarefa( DadosTarefasMovidas);
-						ConstrucoesInstancia.ImprimeContrucoes();
+						ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia, VerificaViabilidade);
 						//PlantasInstancia.Imprime(1,1);
 
 						cin >> PararPrograma;
@@ -570,7 +579,7 @@ void Solucao::ProcessoViabilizacao1(int TipoOrdenacao){
 						cout << endl << "  								!!!!!!!!! Nao melhorou !!!!!!!!!!! " << endl;
 						cout << "DadosTarefasMovidas" << endl;
 						ImprimeVetorDadosTarefa( DadosTarefasMovidas);
-						ConstrucoesInstancia.ImprimeContrucoes();
+						ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia, VerificaViabilidade);
 						//PlantasInstancia.Imprime(1,1);
 
 						cin >> PararPrograma;
@@ -588,7 +597,7 @@ void Solucao::ProcessoViabilizacao1(int TipoOrdenacao){
 
 						cout << "DadosTarefasMovidas" << endl;
 						ImprimeVetorDadosTarefa( DadosTarefasMovidas);
-						ConstrucoesInstancia.ImprimeContrucoes();
+						ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia, VerificaViabilidade);
 						//PlantasInstancia.Imprime(1,1);
 
 						cin >> PararPrograma;
@@ -610,7 +619,7 @@ void Solucao::ProcessoViabilizacao1(int TipoOrdenacao){
 					cout << "DadosTarefasMovidas" << endl;
 					ImprimeVetorDadosTarefa( DadosTarefasMovidas);
 
-					ConstrucoesInstancia.ImprimeContrucoes();
+					ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia, VerificaViabilidade);
 					//PlantasInstancia.Imprime(1,1);
 
 					cin >> PararPrograma;

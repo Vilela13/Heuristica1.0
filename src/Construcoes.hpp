@@ -1198,7 +1198,7 @@ public:
 	int VerificacaoIntegridadeDeDescarregamentosConstrucoes(int imprime);			// faz a verificação dos descarregaemntos
 	int VerificaIndividualmenteDemandas(ConjuntoPlantas& Plantas, int imprime);		// verifica se as tarefas são integras
 
-	int VerificacaoConsistenciaTarefas(ConjuntoPlantas& Plantas, int imprime);		// verifica integridade da solução
+	int VerificacaoConsistenciaTarefas(ConjuntoPlantas& Plantas, int imprime);		// verifica integridade das tarefas como um todo
 
 // Funções com a SituaçãoRemover
 	void ReiniciaTarefasRetiradas();			// Reinicia o status de remoção de todas as demandas de todas as construções
@@ -1390,26 +1390,30 @@ int ConjuntoConstrucoes::VerificaIndividualmenteDemandas(ConjuntoPlantas& Planta
 	return integridade;
 }
 
-//
+// verifica integridade das tarefas como um todo
 int ConjuntoConstrucoes::VerificacaoConsistenciaTarefas(ConjuntoPlantas& Plantas, int imprime){
 	int integridade;
-
+	// inicia como integro o estado das tarefas
 	integridade = 1;
 
 	cout << endl << endl << " ***********  Consistencia da solução ********************* " << endl << endl;
 
+	//verifica as tarefas individualmente
 	if( VerificaIndividualmenteDemandas( Plantas,imprime) == 0){
 		cout << endl << endl << "   >>>>>>>>>>>>> Probelma com integridade de demandas individuais" << endl << endl;
 		integridade = 0;
 	}
+	//verifica os descarregamentos
 	if( VerificacaoIntegridadeDeDescarregamentosConstrucoes(imprime) == 0){
 		cout << endl << endl << "   >>>>>>>>>>>>> Probelma com integridade de Descarregaemntos" << endl << endl;
 		integridade = 0;
 	}
+	//verifica os carregamentos
 	if(Plantas.VerificaIntegridadeDeCarregamentosDasPlantas(imprime) == 0){
 		cout << endl << endl << "   >>>>>>>>>>>>> Probelma com integridade de Carregaemntos" << endl << endl;
 		integridade = 0;
 	}
+	//verifica os deslocamentos
 	if(Plantas.VerificaIntegridadeDeDeslocaemntosDosVeiculosDasPlantas(imprime) == 0){
 		cout << endl << endl << "   >>>>>>>>>>>>> Probelma com integridade de Deslocamentos" << endl << endl;
 		integridade = 0;

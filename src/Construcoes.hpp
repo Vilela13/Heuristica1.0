@@ -109,11 +109,11 @@ public:
 
 	void ImprimeContrucao();		// Imprime os dados da construções
 
-	int AtrazaDemandasParaAtenderMaster( int NumDemanda, double HoraInicioAtendiemnto, vector < DadosTarefa > &DadosTarefasMovidasAuxiliar,ConjuntoPlantas& Plantas, int &SituacaoAlocacao, int TipoOrdenacao, string frase);
+	int AtrazaDemandasParaAtenderMaster( int NumDemanda, double HoraInicioAtendiemnto, vector < DadosTarefa > &DadosTarefasMovidasAuxiliar,ConjuntoPlantas& Plantas, int &SituacaoAlocacao, int TipoOrdenacao, int imprime, string frase);
 
-	int AtrazaDemandasParaAtenderRecursao( int NumDemanda, double HoraInicioAtendiemnto, vector < DadosTarefa > &DadosTarefasMovidasAuxiliar,ConjuntoPlantas& Plantas, int &SituacaoAlocacao, int TipoOrdenacao, string frase);
+	int AtrazaDemandasParaAtenderRecursao( int NumDemanda, double HoraInicioAtendiemnto, vector < DadosTarefa > &DadosTarefasMovidasAuxiliar,ConjuntoPlantas& Plantas, int &SituacaoAlocacao, int TipoOrdenacao,int imprime, string frase);
 	void EncontraPlantaComMenorDistanciaParaConstrucao(  int& NumPlantaAnalisando, ConjuntoPlantas& Plantas, string frase);
-	int AlocaAtividadeComHorarioInicio( int NumDemanda, double HoraInicioAtendiemnto,double &NovaHoraInicioAtendiemnto, vector < DadosTarefa > &DadosTarefasMovidasAuxiliar,ConjuntoPlantas& Plantas, int TipoOrdenacao , string frase);
+	int AlocaAtividadeComHorarioInicio( int NumDemanda, double HoraFimAtendiemnto, double &NovaHoraFimAtendiemnto, vector < DadosTarefa > &DadosTarefasMovidasAuxiliar,ConjuntoPlantas& Plantas, int TipoOrdenacao , string frase);
 
 	int VerificaIntegridadeDeDescrregamentos(int imprime);			// verifica a integridade entre os descarregamentos da construção
 
@@ -929,33 +929,37 @@ void Construcao::ImprimeContrucao(){
 	printf ("   MAKESPAN = %.4f   Status = %d\n", Makespan, StatusAtendimento);
 }
 
-int Construcao::AtrazaDemandasParaAtenderMaster( int NumDemanda, double HoraInicioAtendiemnto, vector < DadosTarefa > &DadosTarefasMovidasAuxiliar,ConjuntoPlantas& Plantas, int &SituacaoAlocacao, int TipoOrdenacao, string frase){
-	double NovaHoraInicioAtendiemnto;
+int Construcao::AtrazaDemandasParaAtenderMaster( int NumDemanda, double HoraFimAtendiemnto, vector < DadosTarefa > &DadosTarefasMovidasAuxiliar,ConjuntoPlantas& Plantas, int &SituacaoAlocacao, int TipoOrdenacao,int imprime, string frase){
+	double NovaHoraFimAtendiemnto;
 
-	cout << endl << endl << "     ++++++++++++++++ Entra Master +++++++++++++++ "  << endl << endl;
+	if( imprime == 1){
+		cout << endl << endl << "     ====================== Entra Master ====================== "  << endl << endl;
 
-	ImprimeContrucao();
-	cout << "DadosTarefasMovidasAuxiliar" << endl;
-	ImprimeVetorDadosTarefa( DadosTarefasMovidasAuxiliar);
+		ImprimeContrucao();
+		cout << "DadosTarefasMovidasAuxiliar" << endl;
+		ImprimeVetorDadosTarefa( DadosTarefasMovidasAuxiliar);
+	}
 
 	// aloca valor de situaçãAlocação como sendo que a tarefa que ainda naõ foi alocada pode ser alocada caso se atraze o atendimento das tarefas que são anteriores a ela
 	SituacaoAlocacao = -2;
 
 	// enquanto se puder atender a demanda coeernte se atrazar as outras, se continua no loop
 	while(SituacaoAlocacao == -2 ){
-		cout << "                      Entrou";
+
 		// tenta atrazar as demandas anteriores para possibilitar o atendimento da demand corrente
-		AtrazaDemandasParaAtenderRecursao( NumDemanda, HoraInicioAtendiemnto,  DadosTarefasMovidasAuxiliar,Plantas, SituacaoAlocacao, TipoOrdenacao, frase);
+		AtrazaDemandasParaAtenderRecursao( NumDemanda, HoraFimAtendiemnto,  DadosTarefasMovidasAuxiliar,Plantas, SituacaoAlocacao, TipoOrdenacao,imprime, frase);
 		// verifica se pode atender a demanda corrente
-		SituacaoAlocacao = AlocaAtividadeComHorarioInicio( NumDemanda, HoraInicioAtendiemnto, NovaHoraInicioAtendiemnto, DadosTarefasMovidasAuxiliar, Plantas, TipoOrdenacao,frase);
+		SituacaoAlocacao = AlocaAtividadeComHorarioInicio( NumDemanda, HoraFimAtendiemnto, NovaHoraFimAtendiemnto, DadosTarefasMovidasAuxiliar, Plantas, TipoOrdenacao,frase);
 		// se atualiza a hora que se tem que atender a tarefa anterior a tarefa corrente que se quer alocar
-		HoraInicioAtendiemnto = NovaHoraInicioAtendiemnto;
+		HoraFimAtendiemnto = NovaHoraFimAtendiemnto;
 	}
 
-	cout << endl << endl << "     ++++++++++++++++ Sai Master +++++++++++++++ "  << endl << endl;
-	ImprimeContrucao();
-	cout << "DadosTarefasMovidasAuxiliar" << endl;
-	ImprimeVetorDadosTarefa( DadosTarefasMovidasAuxiliar);
+	if( imprime == 1){
+		ImprimeContrucao();
+		cout << "DadosTarefasMovidasAuxiliar" << endl;
+		ImprimeVetorDadosTarefa( DadosTarefasMovidasAuxiliar);
+		cout << endl << endl << "     ====================== Sai Master ====================== "  << endl << endl;
+	}
 
 	if( SituacaoAlocacao == 1){
 		return 1;
@@ -964,60 +968,69 @@ int Construcao::AtrazaDemandasParaAtenderMaster( int NumDemanda, double HoraInic
 	}
 }
 
-int Construcao::AtrazaDemandasParaAtenderRecursao( int NumDemanda, double HoraInicioAtendiemnto, vector < DadosTarefa > &DadosTarefasMovidasAuxiliar,ConjuntoPlantas& Plantas, int &SituacaoAlocacao, int TipoOrdenacao, string frase){
+int Construcao::AtrazaDemandasParaAtenderRecursao( int NumDemanda, double HoraFimAtendiemnto, vector < DadosTarefa > &DadosTarefasMovidasAuxiliar,ConjuntoPlantas& Plantas, int &SituacaoAlocacao, int TipoOrdenacao,int imprime, string frase){
 	int ParaPrograma;
-	double NovaHoraInicioAtendiemnto;
+	double NovaHoraFimAtendiemnto;
 
-	ImprimeContrucao();
-	cout << "DadosTarefasMovidasAuxiliar" << endl;
-	ImprimeVetorDadosTarefa( DadosTarefasMovidasAuxiliar);
+	if( imprime == 1){
+		cout << endl << endl << "     ++++++++++++++++ Entra Sub Recursão +++++++++++++++ "  << endl << endl;
 
+		ImprimeContrucao();
+		cout << "DadosTarefasMovidasAuxiliar" << endl;
+		ImprimeVetorDadosTarefa( DadosTarefasMovidasAuxiliar);
 
-	cout << endl << endl << "       +++++++++++++++++ Atraza Demandas Para Atender  Demanda " << NumDemanda << "- A demanda [" << NumDemanda -1 << "] tem que ser atendida as " << HoraInicioAtendiemnto << endl << endl;
+		cout << endl << endl << "        ->->->->->->->-> Atraza Demandas Para Atender  Demanda [" << NumeroDaConstrucao << "-" << NumDemanda << "] - A demanda [" << NumeroDaConstrucao << "-" << NumDemanda -1 << "] tem que terminar de ser atendida as " << HoraFimAtendiemnto << endl << endl;
+	}
+
 //Deleta a demanda anterior (NumDemanda-1) a demanda que não se consegue alocar
 	DeletaAtividadeLocomovendoAsOutrasTarefasSalvandoDados(0, Descarregamentos[NumDemanda-1].HorarioInicioDescarregamento, Descarregamentos[NumDemanda-1].HorarioFinalDescarregamento, NumDemanda - 1, Descarregamentos[NumDemanda-1].NumPlantaFornecedor  , Descarregamentos[NumDemanda-1].NumCarretaUtilizada , Plantas, DadosTarefasMovidasAuxiliar);
 
-	ImprimeContrucao();
-	cout << "DadosTarefasMovidasAuxiliar" << endl;
-	ImprimeVetorDadosTarefa( DadosTarefasMovidasAuxiliar);
+	if( imprime == 1){
+		ImprimeContrucao();
+		cout << "DadosTarefasMovidasAuxiliar" << endl;
+		ImprimeVetorDadosTarefa( DadosTarefasMovidasAuxiliar);
 
-	//cin >> ParaPrograma;
+		//cin >> ParaPrograma;
 
-	cout << endl << endl << "   Tenta adicionar demanda respeitando o intervalo" << endl << endl;
+		cout << endl << endl << "  *****  Tenta adicionar demanda [" << NumeroDaConstrucao << "-" << NumDemanda -1 << "] respeitando o intervalo" << endl << endl;
+	}
 // Tenta alocar a demanda que foi retirada ( NumDemanda-1) em um horario que permite o atendiemnto da demanda atual (NumDemanda)
-	SituacaoAlocacao = AlocaAtividadeComHorarioInicio( NumDemanda - 1, HoraInicioAtendiemnto, NovaHoraInicioAtendiemnto, DadosTarefasMovidasAuxiliar, Plantas, TipoOrdenacao, frase);
+	SituacaoAlocacao = AlocaAtividadeComHorarioInicio( NumDemanda - 1, HoraFimAtendiemnto, NovaHoraFimAtendiemnto, DadosTarefasMovidasAuxiliar, Plantas, TipoOrdenacao, frase);
 
-	cout << endl << endl << "Demanda [" << NumDemanda - 1 << "] SituacaoAlocacao [" << SituacaoAlocacao << "]"<< endl << endl;
-	ImprimeContrucao();
-	cout << "DadosTarefasMovidasAuxiliar" << endl;
-	ImprimeVetorDadosTarefa( DadosTarefasMovidasAuxiliar);
+	if( imprime == 1){
+		cout << endl << endl << "             A Demanda [" << NumDemanda - 1 << "] após processo tem o SituacaoAlocacao valor de [" << SituacaoAlocacao << "]"<< endl << endl;
+		ImprimeContrucao();
+		cout << "DadosTarefasMovidasAuxiliar" << endl;
+		ImprimeVetorDadosTarefa( DadosTarefasMovidasAuxiliar);
 
-	cin >> ParaPrograma;
+		cin >> ParaPrograma;
+	}
 
 // Atualiza o horario de inicio que a nova demanda anterior temq eu ter
-	HoraInicioAtendiemnto = NovaHoraInicioAtendiemnto;
+	HoraFimAtendiemnto = NovaHoraFimAtendiemnto;
 
 // só entra para ver se vai no loop caso a demanda corrente no novo loop ( NumDemanda-1) for maior que 0, pois só se for maior que zero ela tera uma tarefa anterior para ser deslocada no procedimento AlocaAtendimentoComHorarioInicio
 	if( NumDemanda - 1 > 0){
 		// só entra no loop caso se puder atender a tarefa ( NumDemanda-1) caso se atrazar o atendiment de demandas anteriores
 		while( SituacaoAlocacao == -2  ){
 
-			AtrazaDemandasParaAtenderRecursao( NumDemanda - 1, HoraInicioAtendiemnto,  DadosTarefasMovidasAuxiliar,Plantas, SituacaoAlocacao, TipoOrdenacao, frase);
+			AtrazaDemandasParaAtenderRecursao( NumDemanda - 1, HoraFimAtendiemnto,  DadosTarefasMovidasAuxiliar,Plantas, SituacaoAlocacao, TipoOrdenacao, imprime, frase);
 			if( SituacaoAlocacao == 1){
-				SituacaoAlocacao = AlocaAtividadeComHorarioInicio( NumDemanda, HoraInicioAtendiemnto, NovaHoraInicioAtendiemnto, DadosTarefasMovidasAuxiliar, Plantas, TipoOrdenacao, frase);
-				HoraInicioAtendiemnto = NovaHoraInicioAtendiemnto;
+				SituacaoAlocacao = AlocaAtividadeComHorarioInicio( NumDemanda, HoraFimAtendiemnto, NovaHoraFimAtendiemnto, DadosTarefasMovidasAuxiliar, Plantas, TipoOrdenacao, frase);
+				HoraFimAtendiemnto = NovaHoraFimAtendiemnto;
 			}
 		}
 	}
 
-	cout << endl << endl << "  Sai da recursão -> AtrazaDemandasParaAtender " << endl << endl;
-	ImprimeContrucao();
+	if( imprime == 1){
+		ImprimeContrucao();
 
-	cout << "DadosTarefasMovidasAuxiliar" << endl;
-	ImprimeVetorDadosTarefa( DadosTarefasMovidasAuxiliar);
+		cout << "DadosTarefasMovidasAuxiliar" << endl;
+		ImprimeVetorDadosTarefa( DadosTarefasMovidasAuxiliar);
+		cout << endl << endl << "  ++++++++++++++++ Sai Sub Recursão  ++++++++++++++++ " << endl << endl;
 
-	cin >> ParaPrograma;
-
+		cin >> ParaPrograma;
+	}
 
 
 }
@@ -1029,7 +1042,7 @@ void Construcao::EncontraPlantaComMenorDistanciaParaConstrucao(  int& NumPlantaA
 	NumPlantaAnalisando = -13;
 	DistanciaConstrucaoPlanta = DBL_MAX;
 
-	for( int p = 0; p < Plantas.Plantas.size(); p++){
+	for( unsigned int p = 0; p < Plantas.Plantas.size(); p++){
 		if( DistanciaConstrucaoPlanta > DistanciaPlantas[p].Distancia){
 			// planta que ainda não foi analisada
 			if( Plantas.PlantasAnalizadas[p] == 0){
@@ -1043,7 +1056,7 @@ void Construcao::EncontraPlantaComMenorDistanciaParaConstrucao(  int& NumPlantaA
 	}
 }
 
-int Construcao::AlocaAtividadeComHorarioInicio( int NumDemanda, double HoraInicioAtendiemnto, double &NovaHoraInicioAtendiemnto, vector < DadosTarefa > &DadosTarefasMovidasAuxiliar, ConjuntoPlantas& Plantas, int TipoOrdenacao, string frase){
+int Construcao::AlocaAtividadeComHorarioInicio( int NumDemanda, double HoraFimAtendiemnto, double &NovaHoraFimAtendiemnto, vector < DadosTarefa > &DadosTarefasMovidasAuxiliar, ConjuntoPlantas& Plantas, int TipoOrdenacao, string frase){
 	double HorarioInicioPlanta;
 	double HorarioSaiDaPlanta;
 	double HorarioRetornaPlanta;
@@ -1067,7 +1080,7 @@ int Construcao::AlocaAtividadeComHorarioInicio( int NumDemanda, double HoraInici
 			EncontraPlantaComMenorDistanciaParaConstrucao( NumPlantaAnalisando, Plantas, "   &&&&&&&&&&&&& Problema em fornecer valor de  NumPlantaAnalisando em adiciona tarefa  ->Construcao::AlocaAtividadeComHorarioInicio( &&&&&&&&&&&&& ");
 			Plantas.Plantas[NumPlantaAnalisando].VeiculosDaPlanta.OrdenaCarretasPorNumeroDeTarefasRealizadas(TipoOrdenacao);
 			for( int v = 0; v < Plantas.Plantas[NumPlantaAnalisando].NumeroVeiculos; v++){
-				HorarioInicioPlanta = HoraInicioAtendiemnto -  Plantas.Plantas[NumPlantaAnalisando].DistanciaConstrucoes[NumeroDaConstrucao] -  Plantas.Plantas[NumPlantaAnalisando].TempoPlanta;
+				HorarioInicioPlanta = HoraFimAtendiemnto - Plantas.Plantas[NumPlantaAnalisando].VeiculosDaPlanta.Carretas[v].TempoParaDescarregarNaConstrucao[NumeroDaConstrucao][NumDemanda] -  Plantas.Plantas[NumPlantaAnalisando].DistanciaConstrucoes[NumeroDaConstrucao] -  Plantas.Plantas[NumPlantaAnalisando].TempoPlanta;
 				do{
 					HorarioSaiDaPlanta = HorarioInicioPlanta + Plantas.Plantas[NumPlantaAnalisando].TempoPlanta;
 					HorarioChegaContrucao = HorarioSaiDaPlanta + Plantas.Plantas[NumPlantaAnalisando].DistanciaConstrucoes[NumeroDaConstrucao];
@@ -1108,14 +1121,14 @@ int Construcao::AlocaAtividadeComHorarioInicio( int NumDemanda, double HoraInici
 
 
 		if( Plantas.VerificaPlantasAnalizadasPodemAtenderSeAtrazar() == 1){
-			NovaHoraInicioAtendiemnto = Plantas.RetornaMenorHorarioQueConstrucaoPodeAtenderDemanda() - TempoMaximoEntreDescargas + IntervaloDeTempo;
+			NovaHoraFimAtendiemnto = Plantas.RetornaMenorHorarioQueConstrucaoPodeAtenderDemanda() - TempoMaximoEntreDescargas + IntervaloDeTempo;
 			return -2;
 		}
 
 		return 0;
 
 	}else{
-		cout << endl << endl << endl << "   &&&&&&&&&&&&& Problema -> Construcao [" << NumeroDaConstrucao << "-" << NumDemanda << "] com demanda ja atendida -> Solucao::AdicionaTarefa&&&&&&&&&&&&& " << endl << endl << endl;
+		cout << endl << endl << endl << "   >>>>>>>>>>>>>>>  Problema! -> Construcao [" << NumeroDaConstrucao << "-" << NumDemanda << "] com demanda ja atendida -> Solucao::AdicionaTarefa&&&&&&&&&&&&& " << endl << endl << endl;
 		return 0;
 	}
 	return 0;
@@ -1146,12 +1159,12 @@ int Construcao::VerificaIntegridadeDeDescrregamentos(int imprime){
 					return 0;
 				}
 				// verifica se o descarregamento  está parcialmente contido na parte inicial de  outro descarregamento
-				if( Descarregamentos[d1].HorarioFinalDescarregamento >= Descarregamentos[d2].HorarioInicioDescarregamento && Descarregamentos[d1].HorarioFinalDescarregamento <= Descarregamentos[d2].HorarioFinalDescarregamento ){
+				if( Descarregamentos[d1].HorarioFinalDescarregamento > Descarregamentos[d2].HorarioInicioDescarregamento && Descarregamentos[d1].HorarioFinalDescarregamento <= Descarregamentos[d2].HorarioFinalDescarregamento ){
 					printf( " >>>>>>>>>>>>>> Problema! Descarregamento (%.4f-%.4f) está parcialmente contido na parte inicial de (%.4f-%.4f) \n", Descarregamentos[d1].HorarioInicioDescarregamento, Descarregamentos[d1].HorarioFinalDescarregamento, Descarregamentos[d2].HorarioInicioDescarregamento  , Descarregamentos[d2].HorarioFinalDescarregamento );
 					return 0;
 				}
 				// verifica se o descarregamento  está parcialmente contido na parte final de  outro descarregamento
-				if( Descarregamentos[d1].HorarioInicioDescarregamento >= Descarregamentos[d2].HorarioInicioDescarregamento && Descarregamentos[d1].HorarioInicioDescarregamento <= Descarregamentos[d2].HorarioFinalDescarregamento ){
+				if( Descarregamentos[d1].HorarioInicioDescarregamento >= Descarregamentos[d2].HorarioInicioDescarregamento && Descarregamentos[d1].HorarioInicioDescarregamento < Descarregamentos[d2].HorarioFinalDescarregamento ){
 					printf( " >>>>>>>>>>>>>> Problema! Descarregamento (%.4f-%.4f) está parcialmente contido na parte final de (%.4f-%.4f) \n", Descarregamentos[d1].HorarioInicioDescarregamento, Descarregamentos[d1].HorarioFinalDescarregamento, Descarregamentos[d2].HorarioInicioDescarregamento  , Descarregamentos[d2].HorarioFinalDescarregamento );
 					return 0;
 				}

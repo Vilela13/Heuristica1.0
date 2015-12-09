@@ -48,8 +48,9 @@ public:
 	void AlocaAtividade(double HoraInicio, double HoraFinal, int NumContrucao, int NumDemanda);		// Aloca veículo para atender a demanda
 	int DeletaAtividade(double HoraInicio, double HoraFinal, int NumContrucao, int NumDemanda);		// Deleta alocação de demanda alocada ao veículo
 
-	void Imprime(int Ordena);			// Imprime as atividades realizadas pelo veículo, pode ordena-las
-	int VerificaIntegridadeDeDeslocamentos(int Imprime);		// verifica a integridade entre os Deslocamentos da Carreta
+	void Imprime(int Ordena);														// Imprime as atividades realizadas pelo veículo, pode ordena-las
+	int VerificaIntegridadeDeDeslocamentos(int Imprime);							// verifica a integridade entre os Deslocamentos da Carreta
+
 
 	~Carreta();
 };
@@ -237,8 +238,9 @@ public:
 	int AlocaInidiceVeiculo( int NumCarretaUtilizada, int &v);		// aloca o inidice do veiculo crrespondente ao numero do caminhão
 	void Imprime(int Ordena);										// Imprime os dados dos veiculos
 
-	int RetornaDadosDeslocamento(int Construcao, int Demanda, double &HorarioInicio, double &HorarioFinal);				// retorna dados de deslocamento da deamnda de uma construção passados
-	int VerificaIntegridadeDeDeslocamentosDasCarretas(int Imprime);		// verifica a integridade entre os Deslocamentos da Carreta
+	int RetornaDadosDeslocamento(int Construcao, int Demanda, double &HorarioInicio, double &HorarioFinal);			// retorna dados de deslocamento da deamnda de uma construção passados
+	int VerificaIntegridadeDeDeslocamentosDasCarretas(int Imprime);													// verifica a integridade entre os Deslocamentos da Carreta
+
 
 	~ConjuntoCarretas();
 };
@@ -371,6 +373,8 @@ int ConjuntoCarretas::VerificaIntegridadeDeDeslocamentosDasCarretas(int Imprime)
 	// retorna se as plantas em geral tem integridade em seus carregamentos
 	return integro;
 }
+
+
 
 ConjuntoCarretas::~ConjuntoCarretas(){
 

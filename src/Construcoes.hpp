@@ -1192,7 +1192,7 @@ public:
 	int NumeroConstrucoes;
 	vector < int > ConstrucoesAnalizadas;
 
-	vector < int > ConstrucaoPodeAvaliar;
+	vector < int > ConstrucaoPodeSerSuprida;
 
 	double MakespanConstrucoes;
 	int NivelDeInviabilidade;
@@ -1539,16 +1539,16 @@ void ConjuntoConstrucoes::MarcaTarefaNaoRemovidaNoVetor(int Construcao, int Dema
 // Marca se precisa analisar a construção. Aloca 1 se a construção já teve todas as demandas atendidas, 0 as que não
 void ConjuntoConstrucoes::AlocaValoresConstrucaoPodeAtender(){
 	// inicia a estrutura de pode avaliar com o numero de construções
-	ConstrucaoPodeAvaliar.resize(NumeroConstrucoes);
+	ConstrucaoPodeSerSuprida.resize(NumeroConstrucoes);
 	// percorre todas as construções
 	for( int c = 0; c < NumeroConstrucoes; c++){
 		// entra caso a cosntrução já tenha todas as suas demandas atendidas
 		if ( Construcoes[c].NumeroDemandas == Construcoes[c].StatusAtendimento){
 			// marca que não precisa avaliar a cosntrução corrente
-			ConstrucaoPodeAvaliar[c] = 1;
+			ConstrucaoPodeSerSuprida[c] = 1;
 		}else{
 			// marca que precisa avaliar a cosntrução corrente
-			ConstrucaoPodeAvaliar[c] = 0;
+			ConstrucaoPodeSerSuprida[c] = 0;
 		}
 	}
 
@@ -1561,7 +1561,7 @@ void ConjuntoConstrucoes::AtualizaValoresConstrucaoPodeAtender(){
 		// caso todas as demandas da construção tenha suas demandas já atendidas entra
 		if ( Construcoes[c].NumeroDemandas == Construcoes[c].StatusAtendimento){
 			// marca que não precisa analisar a construção corrente
-			ConstrucaoPodeAvaliar[c] = 1;
+			ConstrucaoPodeSerSuprida[c] = 1;
 		}
 	}
 
@@ -1572,7 +1572,7 @@ int ConjuntoConstrucoes::VerificaConstrucaoPodeAtender(){
 	// percorre todas as construções
 	for( int c = 0; c < NumeroConstrucoes; c++){
 		// caso a construção corrente ainda possa ser analisada
-		if( ConstrucaoPodeAvaliar[c] == 0){
+		if( ConstrucaoPodeSerSuprida[c] == 0){
 			// caso ela possa ser analisada retorna 1
 			return 1;
 		}

@@ -187,7 +187,7 @@ void Heuristica::ExecutaProcedimentoHeuristico1(){
 
 	Solucoes.Imprime(1,1,0);
 */
-
+	/*
 
 	cout << endl << endl << "############################### Procedimento Viabilidade 1 #####################################" << endl << endl;
 
@@ -197,11 +197,12 @@ void Heuristica::ExecutaProcedimentoHeuristico1(){
 
 	Solucoes.CalculaMakespanSolucoes();
 	Solucoes.Imprime(1,1,0);
-
+*/
 
 	Solucoes.Solucoes.resize(Solucoes.Solucoes.size()+1);
 	Solucoes.Solucoes[1] = Solucoes.Solucoes[0];
-	/*
+
+
 	cout << endl << endl << "############################### Procedimento Viabilidade 2 #####################################" << endl << endl;
 
 	Solucoes.Solucoes[1].ProcessoViabilizacao2( TipoOrdenacaoVeiculos );
@@ -210,7 +211,7 @@ void Heuristica::ExecutaProcedimentoHeuristico1(){
 
 	Solucoes.CalculaMakespanSolucoes();
 	Solucoes.Solucoes[1].Imprime(1,1,1);
-*/
+
 
 }
 

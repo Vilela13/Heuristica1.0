@@ -274,7 +274,7 @@ public:
 	vector < int > PlantasAnalizadas;
 
 	vector < double > HorarioQuePlantaPodeAtender; 		// Vetor que guarda o primeiro horario que a planta pode passar a atender essa demanda caso as demandas porteriores forem atrazadas
-	vector < double > HorarioQueConstrucaoPodeAtenderDemanda;
+	vector < double > HorarioQueConstrucaoPodeReceberDemanda;
 
 	double MakespanPLantas;
 
@@ -294,7 +294,7 @@ public:
 
 	int VerificaPlantasAnalizadasPodemAtenderSeAtrazar();			// verifica se uma das plantas em questão pode atender a demanda em questão caso de atrazar o atendimento das outras demandas da construção que se quer atender
 	void InicializaVetorHorarioQuePlantaPodeAtender();				// inicializa os horarios que as plantas podem atender certa demanda e a cosntrução pode ser atendida, caso das outras demandas anteriores a esta forem atrazadas, com o valor DBL_MAX
-	double RetornaMenorHorarioQueConstrucaoPodeAtenderDemanda();	// retorna o menor horario que a construção pode recerber a demanda que não é atendida no momento
+	double RetornaMenorHorarioQueConstrucaoPodeReceberDemanda();	// retorna o menor horario que a construção pode recerber a demanda que não é atendida no momento
 
 	int RetornaDadosDemandaAtendida( int Construcao, int Demanda, double &HorarioInicio, double &HorarioFinal, int &planta, int &Carreta, double &HorarioInicioCarreta, double &HorarioFinalCarreta);				// Retorna os dados do carregaemnto de uma certa demanda passada na função
 	int VerificaIntegridadeDeCarregamentosDasPlantas(int imprime);					// verifica a integridade dos carregamentos realizados pelas plantas
@@ -572,26 +572,26 @@ int ConjuntoPlantas::VerificaPlantasAnalizadasPodemAtenderSeAtrazar(){
 void ConjuntoPlantas::InicializaVetorHorarioQuePlantaPodeAtender(){
 	// inicia os vetores com o numero de plantas
 	HorarioQuePlantaPodeAtender.resize(Plantas.size());
-	HorarioQueConstrucaoPodeAtenderDemanda.resize(Plantas.size());
+	HorarioQueConstrucaoPodeReceberDemanda.resize(Plantas.size());
 	// faz para toda planta
 	for( unsigned int p = 0; p < HorarioQuePlantaPodeAtender.size(); p++){
 		// inicia com o valor maximo de double o horario que a planta pode atender e a construção pode ser atendida
 		HorarioQuePlantaPodeAtender[p] = DBL_MAX;
-		HorarioQueConstrucaoPodeAtenderDemanda[p] = DBL_MAX;
+		HorarioQueConstrucaoPodeReceberDemanda[p] = DBL_MAX;
 	}
 }
 
 // retorna o menor horario que a construção pode recerber a demanda que não é atendida no momento
-double ConjuntoPlantas::RetornaMenorHorarioQueConstrucaoPodeAtenderDemanda(){
+double ConjuntoPlantas::RetornaMenorHorarioQueConstrucaoPodeReceberDemanda(){
 	double HoraAux;
 	HoraAux = DBL_MAX;
 
 	// faz para toda planta
 	for( int p = 0; p < HorarioQuePlantaPodeAtender.size(); p++){
 		// caso o horario que a cosntrução pode receber a demanda corrente for maior que o que a planta pode atender a demanda, entra no if
-		if( HorarioQueConstrucaoPodeAtenderDemanda[p] < HoraAux){
+		if( HorarioQueConstrucaoPodeReceberDemanda[p] < HoraAux){
 			// atualiza o menor horario que a cosntrução pode receber a demanda
-			HoraAux = HorarioQueConstrucaoPodeAtenderDemanda[p];
+			HoraAux = HorarioQueConstrucaoPodeReceberDemanda[p];
 		}
 	}
 	// retorna o menor horario que a demanda pode ser atendida

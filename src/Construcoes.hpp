@@ -933,7 +933,7 @@ int Construcao::AtrazaDemandasParaAtenderMaster( int NumDemanda, double HoraFimA
 	double NovaHoraFimAtendiemnto;
 
 	if( imprime == 1){
-		cout << endl << endl << "     ====================== Entra Master ====================== "  << endl << endl;
+		cout << endl << endl << "     ====================== Entra Master [" << NumeroDaConstrucao << "-" << NumDemanda << "] ====================== "  << endl << endl;
 
 		ImprimeContrucao();
 		cout << "DadosTarefasMovidasAuxiliar" << endl;
@@ -958,7 +958,7 @@ int Construcao::AtrazaDemandasParaAtenderMaster( int NumDemanda, double HoraFimA
 		ImprimeContrucao();
 		cout << "DadosTarefasMovidasAuxiliar" << endl;
 		ImprimeVetorDadosTarefa( DadosTarefasMovidasAuxiliar);
-		cout << endl << endl << "     ====================== Sai Master ====================== "  << endl << endl;
+		cout << endl << endl << "     ====================== Sai Master [" << NumeroDaConstrucao << "-" << NumDemanda << "] ====================== "  << endl << endl;
 	}
 
 	if( SituacaoAlocacao == 1){
@@ -975,7 +975,7 @@ int Construcao::AtrazaDemandasParaAtenderRecursao( int NumDemanda, double HoraFi
 	int SituacaoRemocaoAux;
 
 	if( imprime == 1){
-		cout << endl << endl << "     ++++++++++++++++ Entra Sub Recursão +++++++++++++++ "  << endl << endl;
+		cout << endl << endl << "     ++++++++++++++++ Entra Sub Recursão [" << NumeroDaConstrucao << "-" << NumDemanda - 1 << "] +++++++++++++++ "  << endl << endl;
 
 		ImprimeContrucao();
 		cout << "DadosTarefasMovidasAuxiliar" << endl;
@@ -1033,7 +1033,7 @@ int Construcao::AtrazaDemandasParaAtenderRecursao( int NumDemanda, double HoraFi
 
 		cout << "DadosTarefasMovidasAuxiliar" << endl;
 		ImprimeVetorDadosTarefa( DadosTarefasMovidasAuxiliar);
-		cout << endl << endl << "  ++++++++++++++++ Sai Sub Recursão  ++++++++++++++++ " << endl << endl;
+		cout << endl << endl << "  ++++++++++++++++ Sai Sub Recursão [" << NumeroDaConstrucao << "-" << NumDemanda - 1 << "] ++++++++++++++++ " << endl << endl;
 
 		cin >> ParaPrograma;
 	}
@@ -1109,7 +1109,7 @@ int Construcao::AlocaAtividadeComHorarioInicio( int NumDemanda, double HoraFimAt
 									//cout <<  "                     Caso atrazar da para alocar, demanda em analise [" << NumeroDaConstrucao << "-" << NumDemanda << "] no horario " << HorarioChegaContrucao << endl;
 									if( Plantas.PlantasAnalizadas[NumPlantaAnalisando] == 0){
 										Plantas.HorarioQuePlantaPodeAtender[NumPlantaAnalisando] = HorarioInicioPlanta;
-										Plantas.HorarioQueConstrucaoPodeAtenderDemanda[NumPlantaAnalisando] = HorarioChegaContrucao;
+										Plantas.HorarioQueConstrucaoPodeReceberDemanda[NumPlantaAnalisando] = HorarioChegaContrucao;
 									}
 									Plantas.PlantasAnalizadas[NumPlantaAnalisando] = -2;
 									HorarioInicioPlanta = Plantas.Plantas[NumPlantaAnalisando].TempoMaximoDeFuncionamento;
@@ -1128,7 +1128,7 @@ int Construcao::AlocaAtividadeComHorarioInicio( int NumDemanda, double HoraFimAt
 
 
 		if( Plantas.VerificaPlantasAnalizadasPodemAtenderSeAtrazar() == 1){
-			NovaHoraFimAtendiemnto = Plantas.RetornaMenorHorarioQueConstrucaoPodeAtenderDemanda() - TempoMaximoEntreDescargas + IntervaloDeTempo;
+			NovaHoraFimAtendiemnto = Plantas.RetornaMenorHorarioQueConstrucaoPodeReceberDemanda() - TempoMaximoEntreDescargas + IntervaloDeTempo;
 			return -2;
 		}
 

@@ -109,10 +109,10 @@ public:
 
 	void ImprimeContrucao();		// Imprime os dados da construções
 
-	int AtrazaDemandasParaAtenderMaster( int NumDemanda, double HoraInicioAtendiemnto, vector < DadosTarefa > &DadosTarefasMovidasAuxiliar,int SituacaoDemanda, int StatusRemocao, ConjuntoPlantas& Plantas, int &SituacaoAlocacao, int TipoOrdenacao, int imprime, string frase);
+	int AtrazaDemandasParaAtenderMaster( int NumDemanda, double HoraInicioAtendiemnto, vector < DadosTarefa > &DadosTarefasMovidasAuxiliar,int SituacaoDemanda, int StatusRemocao, ConjuntoPlantas& Plantas, int &SituacaoAlocacao, int TipoOrdenacao, int imprime, string frase);		// função de atrazar as demandas para atender a ultima demanda, está é a função que recebe a demanda não alocada ainda
 
 	int AtrazaDemandasParaAtenderRecursao( int NumDemanda, double HoraInicioAtendiemnto, vector < DadosTarefa > &DadosTarefasMovidasAuxiliar,ConjuntoPlantas& Plantas, int &SituacaoAlocacao, int TipoOrdenacao,int imprime, string frase);
-	void EncontraPlantaComMenorDistanciaParaConstrucao(  int& NumPlantaAnalisando, ConjuntoPlantas& Plantas, string frase);
+	void EncontraPlantaComMenorDistanciaParaConstrucao(  int& NumPlantaAnalisando, ConjuntoPlantas& Plantas, string frase);					// encontra a planta mais perto da construção e que não tenha sido analisada antes
 	int AlocaAtividadeComHorarioInicio( int NumDemanda, double HoraFimAtendiemnto, double &NovaHoraFimAtendiemnto, vector < DadosTarefa > &DadosTarefasMovidasAuxiliar,int SituacaoDemanda, int StatusRemocao,ConjuntoPlantas& Plantas, int TipoOrdenacao , string frase);
 
 	int VerificaIntegridadeDeDescrregamentos(int imprime);			// verifica a integridade entre os descarregamentos da construção
@@ -929,7 +929,9 @@ void Construcao::ImprimeContrucao(){
 	printf ("   MAKESPAN = %.4f   Status = %d\n", Makespan, StatusAtendimento);
 }
 
+// função de atrazar as demandas para atender a ultima demanda, está é a função que recebe a demanda não alocada ainda
 int Construcao::AtrazaDemandasParaAtenderMaster( int NumDemanda, double HoraFimAtendiemnto, vector < DadosTarefa > &DadosTarefasMovidasAuxiliar,int SituacaoDemanda, int StatusRemocao,ConjuntoPlantas& Plantas, int &SituacaoAlocacao, int TipoOrdenacao,int imprime, string frase){
+	// aramazena o valor auxiliar do horario final de atendiemnto na construção caso for adotado se possibilita o atendimento da demanda
 	double NovaHoraFimAtendiemnto;
 
 	if( imprime == 1){
@@ -962,17 +964,23 @@ int Construcao::AtrazaDemandasParaAtenderMaster( int NumDemanda, double HoraFimA
 	}
 
 	if( SituacaoAlocacao == 1){
+		// caso se consiga alocar a demanda, retorna 1
 		return 1;
 	}else{
+		// caso não se consiga alocar a demanda, retorna 0
 		return 0;
 	}
 }
 
+// função de atrazar as demandas para atender a ultima demanda, está é a função que recebe as demandas que serão atrasadas para que a demanda não atendida possa ser atendida
 int Construcao::AtrazaDemandasParaAtenderRecursao( int NumDemanda, double HoraFimAtendiemnto, vector < DadosTarefa > &DadosTarefasMovidasAuxiliar,ConjuntoPlantas& Plantas, int &SituacaoAlocacao, int TipoOrdenacao,int imprime, string frase){
-	int ParaPrograma;
+	// aramazena o valor auxiliar do horario final de atendiemnto na construção caso for adotado se possibilita o atendimento da demanda
 	double NovaHoraFimAtendiemnto;
+	// aramzena os valores da situação da demanda e a situação remoção da demanda retirada, para que quando a demanda for readicionada ela tenha os mesmo valores para esses campos que era anteriorment
 	int SituacaoDemandaAux;
 	int SituacaoRemocaoAux;
+	// variavel de input para parar o programa
+	int ParaPrograma;
 
 	if( imprime == 1){
 		cout << endl << endl << "     ++++++++++++++++ Entra Sub Recursão [" << NumeroDaConstrucao << "-" << NumDemanda - 1 << "] +++++++++++++++ "  << endl << endl;
@@ -1019,7 +1027,7 @@ int Construcao::AtrazaDemandasParaAtenderRecursao( int NumDemanda, double HoraFi
 	if( NumDemanda - 1 > 0){
 		// só entra no loop caso se puder atender a tarefa ( NumDemanda-1) caso se atrazar o atendiment de demandas anteriores
 		while( SituacaoAlocacao == -2  ){
-
+			// chama a função recursivamente para tentar atrazar a demanda que vem antes da demanda corrente. Isto é para possibilitar colocar a demanda corrente respeitando o tempo para atender a demanda após a demanda corrente
 			AtrazaDemandasParaAtenderRecursao( NumDemanda - 1, HoraFimAtendiemnto,  DadosTarefasMovidasAuxiliar,Plantas, SituacaoAlocacao, TipoOrdenacao, imprime, frase);
 			if( SituacaoAlocacao == 1){
 				SituacaoAlocacao = AlocaAtividadeComHorarioInicio( NumDemanda, HoraFimAtendiemnto, NovaHoraFimAtendiemnto, DadosTarefasMovidasAuxiliar, SituacaoDemandaAux,SituacaoRemocaoAux, Plantas, TipoOrdenacao, frase);
@@ -1041,24 +1049,30 @@ int Construcao::AtrazaDemandasParaAtenderRecursao( int NumDemanda, double HoraFi
 
 }
 
-
+// encontra a planta mais perto da construção e que não tenha sido analisada antes
 void Construcao::EncontraPlantaComMenorDistanciaParaConstrucao(  int& NumPlantaAnalisando, ConjuntoPlantas& Plantas, string frase){
+	// Armazena a distancia para a construção
 	double DistanciaConstrucaoPlanta;
-
+	// inicia valores das variaveis
 	NumPlantaAnalisando = -13;
 	DistanciaConstrucaoPlanta = DBL_MAX;
 
+	// percorre todas as plantas
 	for( unsigned int p = 0; p < Plantas.Plantas.size(); p++){
+		// caso a planta corrente tiver uma distancia menor que a da distancia corrente, se entra no if
 		if( DistanciaConstrucaoPlanta > DistanciaPlantas[p].Distancia){
-			// planta que ainda não foi analisada
+			// se a planta que ainda não foi analisada, se entra no if
 			if( Plantas.PlantasAnalizadas[p] == 0){
+				// armazena os dados da planta mais perto no momento
 				NumPlantaAnalisando = p;
+				// armazena a distancia da planta mais perto da construção no momento
 				DistanciaConstrucaoPlanta = DistanciaPlantas[p].Distancia;
 			}
 		}
 	}
+	// verifica se não encontrou uma planta mais perto não analisada ainda
 	if(NumPlantaAnalisando == -13){
-		cout << endl << endl << endl << frase << endl << endl << endl;
+		cout << endl << endl << " >>>>>>>>>>>>>>>> Problema!  Planta não encontrada! " << frase << endl << endl << endl;
 	}
 }
 

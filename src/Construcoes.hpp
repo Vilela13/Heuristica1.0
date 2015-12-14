@@ -1260,6 +1260,9 @@ public:
 	int RetornaDadosDemandaAtendida( int Construcao, int Demanda,  int &NumPlanta, int &NumCarreta, double &HorarioInicioDescarregamento, double &HorarioFinalDescarregamento, double &HorarioInicioCarregamento, double &HorarioFinalCarregamento, double &HorarioInicioDeslocamento, double &HorarioFinalDeslocamento, ConjuntoPlantas& Plantas);		// retorna dados de uma tarefa que atende uma demanda passada na função
 	int VerificaIntegridaDeDemandaAtendida( int Construcao, int Demanda, int NumPlanta, int NumCarreta, double HorarioInicioDescarregamento, double HorarioFinalDescarregamento, double HorarioInicioCarregamento, double HorarioFinalCarregamento, double HorarioInicioDeslocamento, double HorarioFinalDeslocamento, int imprime);		// verifica a integridade da tarefa
 
+// 	Função auxiliar a retornar a solução inicial
+	int ReadicionaDeletaTarefasApartirDeDados( vector < DadosTarefa > DadosTarefasMovidas, ConjuntoPlantas PlantasInstancia);
+
 	~ConjuntoConstrucoes();						// Destruidora da classe
 };
 
@@ -1711,6 +1714,52 @@ int ConjuntoConstrucoes::VerificaIntegridaDeDemandaAtendida( int Construcao, int
 	printf( "  carreta [%d] no horario (%.4f-%.4f) \n", NumCarreta, HorarioInicioDeslocamento, HorarioFinalDeslocamento );
 	return 0;
 
+}
+
+// ***************** Função auxiliar a retornar a solução inicial ***************** //
+
+// readiciona tarefas deletadas e deleta tarefas adicionadas visando restaurar a configuração inicial da solução
+int ConjuntoConstrucoes::ReadicionaDeletaTarefasApartirDeDados( vector < DadosTarefa > DadosTarefasMovidas, ConjuntoPlantas PlantasInstancia){
+	int c;
+
+	// percorre trodos os elementos das tarefas que foram removidas e adicionadas no vetor
+	for( int i = DadosTarefasMovidas.size() - 1 ; i >= 0; i--){
+
+		// caso a tarefa tenha sido retirada da solução, ela é adicionada novamente
+		if( DadosTarefasMovidas[i].Status == 'r'){
+			// coleta o inidice da construção
+			if(RetornaIndiceConstrucao( DadosTarefasMovidas[i].DadosDasTarefas[0]  , c, " Solucao::DeletaTarefasApartirDeDados") == 0 ){
+				return 0;
+			}
+			// Aloca a tarefa caso possivel
+			if( Construcoes[c].AlocaAtividade( DadosTarefasMovidas[i].HorariosDasTarefas[2],DadosTarefasMovidas[i].HorariosDasTarefas[3], DadosTarefasMovidas[i].DadosDasTarefas[2], DadosTarefasMovidas[i].DadosDasTarefas[1], DadosTarefasMovidas[i].DadosDasTarefas[3], DadosTarefasMovidas[i].DadosDasTarefas[4], PlantasInstancia) == 0 ){
+				cout << endl << endl << "       <<<<<<<<<<< Problema em adicionar -> Solucao::ReadicionaDeletaTarefasApartirDeDados >>>>>>>>>>>>>>>>> " << endl;
+				DadosTarefasMovidas[i].Imprimir();
+				cout << endl;
+				return 0;
+			}
+			//Atualiza o Indice de Inviabilidade da solução
+			NivelDeInviabilidade = NivelDeInviabilidade - 1;
+		}
+
+		// caso a tarefa tenha sido adicionada a solução, ela é retirada da solução
+		if( DadosTarefasMovidas[i].Status == 'a'){
+			// coleta o inidice da construção
+			if(RetornaIndiceConstrucao( DadosTarefasMovidas[i].DadosDasTarefas[0]  , c, " Solucao::DeletaTarefasApartirDeDados") == 0 ){
+				return 0;
+			}
+			// deleta a tarefa caso possivel
+			if( Construcoes[c].DeletaTarefasAnteriormenteAdicionadasDados( DadosTarefasMovidas[i], PlantasInstancia) == 0){
+				cout << endl << endl << "       <<<<<<<<<<< Problema em remover -> Solucao::ReadicionaDeletaTarefasApartirDeDados >>>>>>>>>>>>>>>>> " << endl;
+				DadosTarefasMovidas[i].Imprimir();
+				cout << endl;
+				return 0;
+			}
+			//Atualiza o Indice de Inviabilidade da solução
+			NivelDeInviabilidade = NivelDeInviabilidade + 1;
+		}
+	}
+	return 1;
 }
 
 // Destruidora da classe

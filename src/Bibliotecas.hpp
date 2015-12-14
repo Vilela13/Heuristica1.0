@@ -54,8 +54,6 @@ using namespace std;
 
 #include "Construcoes.hpp"				// classe que possui as estruturas caracteristicas das construções
 
-#include "DadosTarefa.hpp"
-
 #include "Procedimento1.hpp"		 // procedimento construtuvo de craição de solução
 
 #include "FuncoesSolucoes.hpp"

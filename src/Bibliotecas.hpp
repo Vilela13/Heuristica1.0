@@ -53,7 +53,13 @@ using namespace std;
 #include "DadosTarefa.hpp"				// armazena a estrutura que armazena as tarefas, isso é essencial para os procedimentos realizados que as vezes tem que retornar ao estado inicial da solução
 
 #include "Construcoes.hpp"				// classe que possui as estruturas caracteristicas das construções
+
+#include "DadosTarefa.hpp"
+
 #include "Procedimento1.hpp"		 // procedimento construtuvo de craição de solução
+
+#include "FuncoesSolucoes.hpp"
+
 #include "Solucoes.hpp"				// possui as classes da solução e os procedimentos  viabilidade1 e viabilidade2
 #include "Heuristica.hpp"			// possui os procediemtos que cada instancia ira sofrer
 

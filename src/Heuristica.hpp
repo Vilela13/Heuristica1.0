@@ -198,7 +198,7 @@ void Heuristica::ExecutaProcedimentoHeuristico1(){
 	Solucoes.CalculaMakespanSolucoes();
 	Solucoes.Imprime(1,1,0);
 */
-
+	/*
 	Solucoes.Solucoes.resize(Solucoes.Solucoes.size()+1);
 	Solucoes.Solucoes[1] = Solucoes.Solucoes[0];
 
@@ -211,7 +211,7 @@ void Heuristica::ExecutaProcedimentoHeuristico1(){
 
 	Solucoes.CalculaMakespanSolucoes();
 	Solucoes.Solucoes[1].Imprime(1,1,1);
-
+*/
 
 }
 

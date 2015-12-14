@@ -9,8 +9,7 @@
 #define SOLUCOES_HPP_
 
 #include "Bibliotecas.hpp"
-#include "DadosTarefa.hpp"
-#include "FuncoesSolucoes.hpp"
+
 
 class Solucao{
 public:
@@ -174,7 +173,7 @@ int Solucao::AdicionaTarefa( int VerificaExistencia, int Construcao, int Demanda
 
 	// inicializa os vetores que armazenam os horarios que as plantas podem atender a demanda da construção caso se caia no caso de -2 na Analise da planta. Se é inicializado com os valores maximos de Double
 	PlantasInstancia.InicializaVetorHorarioQuePlantaPodeAtender();
-	// aloca o indice da planta
+	// aloca o indice da construção
 	if( ConstrucoesInstancia.RetornaIndiceConstrucao(Construcao, c, " <<<<<<<<<<<<<<<<< Solucao::AdicionaTarefa  >>>>>>>>>>>>>>>>>>>>>>>>>>") == 1 ){
 		// verifica se a construção já foi atendida em sua totatlidade, cao não entra no if
 		if ( ConstrucoesInstancia.Construcoes[c].NumeroDemandas > ConstrucoesInstancia.Construcoes[c].StatusAtendimento){

@@ -221,6 +221,12 @@ void Heuristica::ExecutaProcedimentoHeuristico1(){
 	Solucoes.CalculaMakespanSolucoes();
 	Solucoes.Solucoes[1].Imprime(ImprimePlanta, ImprimeConstrucao, IntervalosRespeitadosConstrucaoes);
 
+	cout << endl << endl << "############################### Busca Local #####################################" << endl << endl;
+
+	Solucoes.Solucoes[1].RealizarBuscaLocal(1);
+
+	cout << endl << endl << "##############################################################################################" << endl << endl;
+
 
 }
 

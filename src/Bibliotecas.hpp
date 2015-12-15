@@ -58,9 +58,10 @@ using namespace std;
 
 #include "FuncoesSolucoes.hpp"
 
+#include "BuscaLocal.hpp"			// Possui a classe que realiza a busca local na solução corrente
+
 #include "Solucoes.hpp"				// possui as classes da solução e os procedimentos  viabilidade1 e viabilidade2
 
-#include "BuscaLocal.hpp"			// Possui a classe que realiza a busca local na solução corrente
 
 #include "Heuristica.hpp"			// possui os procediemtos que cada instancia ira sofrer
 

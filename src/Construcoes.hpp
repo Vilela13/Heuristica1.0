@@ -21,9 +21,12 @@ public:
 	int NumPlantaFornecedor;
 
 	Descarregamento();	// construtora
+
 	int verifica( int carreta, int planta, double HorarioInicio, double HorarioFinal);			// verifica se os dados passados se referem ao descarregamento
 	void AnulaConteudo();			// anula o consteudo do descarregamento retornando ao estado original
 	void Imprime();				// imprime o conteudo dos descarregamento
+
+	~Descarregamento();	// destruidora
 };
 
 // construtora
@@ -56,6 +59,14 @@ void Descarregamento::AnulaConteudo(){
 void Descarregamento::Imprime(){
 	printf ("  Planta = %d Carreta = %d Tempo[%.4f - %.4f]\n", NumPlantaFornecedor, NumCarretaUtilizada, HorarioInicioDescarregamento, HorarioFinalDescarregamento);
 }
+
+Descarregamento::~Descarregamento(){
+	HorarioInicioDescarregamento = -13;
+	HorarioFinalDescarregamento = -13;
+	NumCarretaUtilizada = -13;
+	NumPlantaFornecedor = -13;
+}
+
 
 //
 bool DecideQualDescarregamentoVemPrimeiro ( Descarregamento d1, Descarregamento d2 );
@@ -1210,8 +1221,20 @@ int Construcao::VerificaIntegridadeDeDescrregamentos(int imprime){
 	return 1;
 }
 
-Construcao::~Construcao(){		// destruidora da classe
-
+// destruidora da classe
+Construcao::~Construcao(){
+	NumeroDaConstrucao = -13;
+	NumeroDemandas = -13;
+	SituacaoDemanda.clear();
+	SituacaoRemocao.clear();
+	DistanciaPlantas.clear();
+	TempoMaximoEntreDescargas = -13;
+	TempoMinimoDeFuncionamento = -13;
+	TempoMaximoDeFuncionamento = -13;
+	RankTempoDemandas = -13;
+	StatusAtendimento = -13;
+	Descarregamentos.clear();
+	Makespan = -13;
 }
 
 
@@ -1234,21 +1257,22 @@ public:
 	void CalcularNivelDeInviabilidade();				// Calcula o Nivel de Inviabilidade
 	void IniciaConjuntoConstrucoes(int Numero);			// Inicializa a classe com o número das construções que se quer
 
-	void VerificaIntervaloContrucoes();					// Verifica se as construções respeitão os intervalos de atendimento entre suas demandas
-	void CalculaMakespansConstrucoes();					// Calcula o Makespan das Construções
-	int RetornaIndiceConstrucao(int Construcao, int& Indice, string frase);			// retorna o indice da construção passada
+	void VerificaIntervaloContrucoes();											// Verifica se as construções respeitão os intervalos de atendimento entre suas demandas
+	void CalculaMakespansConstrucoes();											// Calcula o Makespan das Construções
+	int RetornaIndiceConstrucao(int Construcao, int& Indice, string frase);		// retorna o indice da construção passada
 
-	void ImprimeContrucoes(ConjuntoPlantas& Plantas, int VerificaViabilidade);								// Imprime as construções e em seguida o nivel de inviabilidade
-	int VerificacaoIntegridadeDeDescarregamentosConstrucoes(int imprime);			// faz a verificação dos descarregaemntos
-	int VerificaIndividualmenteDemandas(ConjuntoPlantas& Plantas, int imprime);		// verifica se as tarefas são integras
+	void ImprimeContrucoes(ConjuntoPlantas& Plantas, int VerificaViabilidade);	// Imprime as construções e em seguida o nivel de inviabilidade
+	int VerificacaoIntegridadeDeDescarregamentosConstrucoes(int imprime);		// faz a verificação dos descarregaemntos
+	int VerificaIndividualmenteDemandas(ConjuntoPlantas& Plantas, int imprime);	// verifica se as tarefas são integras
 
-	int VerificacaoConsistenciaTarefas(ConjuntoPlantas& Plantas, int imprime);		// verifica integridade das tarefas como um todo
+	int VerificacaoConsistenciaTarefas(ConjuntoPlantas& Plantas, int imprime);	// verifica integridade das tarefas como um todo
 
 // Funções com a SituaçãoRemover
-	void ReiniciaTarefasRetiradas();			// Reinicia o status de remoção de todas as demandas de todas as construções
-	void MarcaTarefaDeletadaNoVetor(int Construcao, int Demanda, int Situacao);					// maraca a situação remoção da demanda no vetor que sinaliza a situação da demanda
-	int ConstrucaoTemTarefaParaRemover(int& Construcao, int& Demanda, int Imprimir);			// Usado em ProcessoViabilizacao1. Verifica se possui uma construção que possui demandas que ainda não foram retiradas para se tentar a viabilização da solução. Caso possuir, retorna 1 a função e é retornado os dados da construção e da demanda por parametro.
-	void MarcaTarefaNaoRemovidaNoVetor(int Construcao, int Demanda, string frase);				// marca a tarefa, demand, não removida
+	void ReiniciaTarefasRetiradas();													// Reinicia o status de remoção de todas as demandas de todas as construções
+	void MarcaTarefaDeletadaNoVetor(int Construcao, int Demanda, int Situacao);			// maraca a situação remoção da demanda no vetor que sinaliza a situação da demanda
+	int ConstrucaoTemTarefaParaRemover(int& Construcao, int& Demanda, int Imprimir);	// Usado em ProcessoViabilizacao1. Verifica se possui uma construção que possui demandas que ainda não foram retiradas para se tentar a viabilização da solução. Caso possuir, retorna 1 a função e é retornado os dados da construção e da demanda por parametro.
+
+	void MarcaTarefaNaoRemovidaNoVetor(int Construcao, int Demanda, string frase);		// marca a tarefa, demand, não removida
 
 
 // Funções com a PodeAtender
@@ -1764,7 +1788,12 @@ int ConjuntoConstrucoes::ReadicionaDeletaTarefasApartirDeDados( vector < DadosTa
 
 // Destruidora da classe
 ConjuntoConstrucoes::~ConjuntoConstrucoes(){
-
+	Construcoes.clear();
+	NumeroConstrucoes = -13;
+	ConstrucoesAnalizadas.clear();
+	ConstrucaoPodeSerSuprida.clear();;
+	MakespanConstrucoes = -13;
+	NivelDeInviabilidade = -13;
 }
 
 

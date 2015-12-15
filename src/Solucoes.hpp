@@ -29,7 +29,7 @@ public:
 
 	void CarregaSolucao(int np, ConjuntoPlantas Plantas, int ne, ConjuntoConstrucoes Construcoes, int nv, double v,double TDVC);		// Carrega os dados da instancia e a solução até o momento
 	void EncontraPlantaMenorDistanciaConstrucao(int c, int& NumPlantaAnalisando, string frase);											// encontra a planta mais perto da construção que ainda não foi analisada
-	void Imprime(bool ImprimePlanta, bool ImprimeConstrucao, bool IntervalosRespeitadosConstrucaoes);									// imprime os dados da solução
+	void Imprime(bool ImprimePlanta, bool ImprimeConstrucao, bool VerificaViabilidade);									// imprime os dados da solução
 
 	int DeletaAlocacaoTarefasPosterioresMesmaConstrucao(int VerificaExistencia, int Construcao, int Demanda, vector < DadosTarefa >& DadosTarefasMovidas);					// deleta demandas atendidas na construção após certa demanda que é passada com parametro
 	int AdicionaTarefa(int VerificaExistencia, int Construcao, int Demanda , vector < DadosTarefa > &DadosTarefasMovidas, int SituacaoDemanda, int SituacaoRemocao, int RealizaProcessoDeAtrazarTarefas, int TipoOrdenacao , int imprime, string frase);		// função que tenta alocar uma demanda
@@ -38,7 +38,7 @@ public:
 	void ReadicionaTarefas(int VerificaExistencia, int construcao, vector < DadosTarefa > &DadosTarefasMovidas, int SituacaoDemanda,int RealizaProcessoDeAtrazarTarefas, int TipoOrdenacao, int imprime);						// após adicionar uma demanda que não era alocada antes, se tenta readicionar as demandas retiradas na construção anterior
 	int ReadicionaDeletaTarefasApartirDeDados( vector < DadosTarefa > DadosTarefasMovidas);		// readiciona tarefas deletadas e deleta tarefas adicionadas visando restaurar a configuração inicial da solução
 
-	void ProcessoViabilizacao1(int );
+	void ProcessoViabilizacao1(int TipoOrdenacao,int Imprime);
 
 	int SelecionaConstrucao(int &ConstrucaoParaAtender, int &ConstrucaoParaAtenderIndice, vector < int > ConstrucoesAnalizadas);	// seleciona a construção a ser analisada no momento
 	int SelecionaPlanta(int &PlantaAtender, int &PlantaAtenderIndice, int c, vector < int > PlantasAnalizadas );					// seleciona a planta ainda não analisada e a mais perto da cosntrução que se quer
@@ -48,7 +48,7 @@ public:
 	int DeletaTarefasAposTempoPlantaPodeAtender(vector < double > &TempoPlantaPodeAtender, vector < DadosTarefa > &DadosTarefasMovidas,  int Imprime );		// deleta todas as tarefas que são atendidas após os horarios armazenados da TempoPlantaPodeAtender
 	void SinalizaTarefaAdicionadaInicialmente( int TarefaAdicionada, int IndiceConstrucaoNaoAtendida, int DemandaNaoAtendida);					// Sinalisa se a tarefa foi antendida colocando os valores 2 em sua situação remoção. Caso não, está demanda e suas posteriores na emsma construção recebem o valor -1 na situação demanda e 3 na situção remoção.
 
-	void ProcessoViabilizacao2(int);
+	void ProcessoViabilizacao2(int TipoOrdenacao, int Imprime);
 
 
 	~Solucao();
@@ -102,9 +102,8 @@ void Solucao::EncontraPlantaMenorDistanciaConstrucao( int c, int& NumPlantaAnali
 }
 
 // imprime os dados da solução
-void Solucao::Imprime(bool ImprimePlanta, bool ImprimeConstrucao, bool IntervalosRespeitadosConstrucaoes ){
-	int VerificaViabilidade;
-	VerificaViabilidade = 1;
+void Solucao::Imprime(bool ImprimePlanta, bool ImprimeConstrucao, bool VerificaViabilidade ){
+
 
 	// Imprime os dados das plantas
 	if( ImprimePlanta == 1 ){
@@ -115,7 +114,7 @@ void Solucao::Imprime(bool ImprimePlanta, bool ImprimeConstrucao, bool Intervalo
 		ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia, VerificaViabilidade);
 	}
 	// imprime a situação das entregas nas construções
-	if( IntervalosRespeitadosConstrucaoes == 1){
+	if( VerificaViabilidade == 1){
 		ConstrucoesInstancia.VerificaIntervaloContrucoes();
 	}
 }
@@ -452,7 +451,7 @@ int Solucao::ReadicionaDeletaTarefasApartirDeDados( vector < DadosTarefa > Dados
 }
 
 
-void Solucao::ProcessoViabilizacao1(int TipoOrdenacao){
+void Solucao::ProcessoViabilizacao1(int TipoOrdenacao,int Imprime){
 
 // armazena o nivel de inviabilidade anterior
 	int InviabilidadeSolucaoAnterior;
@@ -478,11 +477,8 @@ void Solucao::ProcessoViabilizacao1(int TipoOrdenacao){
 
 	RealizaProcessoDeAtrazarTarefas = 1;
 
-	// variaveis que fazem imprimir o que acontece no procedimento e se deve realizar a verificação da viabilidade da solução corrente
-	int Imprime;
+	//se deve realizar a verificação da viabilidade da solução corrente
 	int VerificaViabilidade;
-
-	Imprime = 1;
 	VerificaViabilidade = 0;
 
 
@@ -871,7 +867,7 @@ void Solucao::SinalizaTarefaAdicionadaInicialmente( int TarefaAdicionada, int In
 }
 
 
-void Solucao::ProcessoViabilizacao2(int TipoOrdenacao){
+void Solucao::ProcessoViabilizacao2(int TipoOrdenacao, int Imprime){
 	// armazena o nivel de inviabilidade anterior
 	int InviabilidadeSolucaoAnterior;
 	// dados da demanda não atendida
@@ -896,11 +892,8 @@ void Solucao::ProcessoViabilizacao2(int TipoOrdenacao){
 	// armazena as tarefas da solução que foram retiradas e adicionadas para permitir que se retorne ao estado inicial da solução depoois
 	vector < DadosTarefa > DadosTarefasMovidas;
 
-	// variaveis que fazem imprimir o que acontece no procedimento e se deve realizar a verificação da viabilidade da solução corrente
-	int Imprime;
+	// se deve realizar a verificação da viabilidade da solução corrente
 	int VerificaViabilidade;
-
-	Imprime = 1;
 	VerificaViabilidade = 0;
 
 	int PararPrograma;
@@ -1083,9 +1076,9 @@ class ConjuntoSolucoes{
 public:
 	vector < Solucao > Solucoes;
 	ConjuntoSolucoes();			// classe construtoora
-	void InsereSolucao(int, ConjuntoPlantas, int, ConjuntoConstrucoes,	int, double, double);			// carrega uma solução ao vetor das soluções
+	void InsereSolucao(int np, ConjuntoPlantas Plantas, int ne, ConjuntoConstrucoes Construcoes, int nv, double v,double TDVC);			// carrega uma solução ao vetor das soluções
 	void CalculaMakespanSolucoes();		// calcula o makespan das soluções
-	void Imprime(bool, bool, bool);		// imprime as soluções
+	void Imprime(bool ImprimePlanta, bool ImprimeConstrucao, bool VerificaViabilidade);		// imprime as soluções
 	~ConjuntoSolucoes();
 
 };
@@ -1117,12 +1110,12 @@ void ConjuntoSolucoes::CalculaMakespanSolucoes(){
 }
 
 // imprime as soluções
-void ConjuntoSolucoes::Imprime(bool ImprimePlanta, bool ImprimeConstrucao, bool IntervalosRespeitadosConstrucaoes){
+void ConjuntoSolucoes::Imprime(bool ImprimePlanta, bool ImprimeConstrucao, bool VerificaViabilidade){
 	// percorre por todas as soluções
 	for( unsigned  int s = 0; s <  Solucoes.size(); s++){
 		// imprime a solução corrente
 		cout << endl << endl << "   Solucao " << s << endl << endl;
-		 Solucoes[s].Imprime(ImprimePlanta,ImprimeConstrucao, IntervalosRespeitadosConstrucaoes);
+		 Solucoes[s].Imprime(ImprimePlanta,ImprimeConstrucao, VerificaViabilidade);
 		 // escreve o makespan total da solução
 		 cout << "         Makespan total = " << Solucoes[s].Makespan << endl ;
 	}

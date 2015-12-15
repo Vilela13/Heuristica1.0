@@ -13,7 +13,6 @@
 class Heuristica{
 
 public:
-	Heuristica();
 
 	ifstream arq;
 	int NP;
@@ -24,25 +23,27 @@ public:
 	double Velocidade;
 	double TempoDeVidaConcreto;
 
-	int  LeDados(string, int );		// le os dados da instancia
-
+	Heuristica();
+	int  LeDados(string, int );						// le os dados da instancia
 	void ExecutaProcedimentoHeuristico1();			// executa o procedimento heuristico
 
 	void LeNomeInstancia(int , string& );			// le o nome da instancia
 	void LeNumeroPlantasEntregasVeiculos(int);		// le o numero de plantas, veiculos e cosntruções
 	void LeVelocidade(int);							// le a velocidade
+
 	void LeTempoDeVidaConcreto(int);				// Le o tempo de vida do concreto
 	void LeVeiculosPorPlanta(int);					// le o numero de veículos por planta
 	void LeNumeroDemandas(int);						// le o numero de demandas por construção
+
 	void LeDistancias(int);							// le as distancias das plantas para as construções
 	void LeTempoConstrucao(int);					// le os tempos que cada caminhão leva para atender cada demanda em cada cosntrução
 	void LeTempoPlanta(int);						// le o tempo que acda planta leva para carregar um caminhão de concreto
+
 	void LeTempoMaximoEntreDescargas(int);			// le o tempo maximo permitido entre o atendimento de duas demandas seguidas em cada construção
 	void LeTempoMaximoMinimoConstrucoes(int);		// le o tempo minimo e maximo que um caminhão pode começar a descarregar em uma cosntrução
 	void LeTempoMaximoMinimoPlantas(int);			// le o tempo minimo e máximo que um caminhão pode começar a carregar em uma planta
+
 	void CalculoRankTempoDemanda(int);				// calcula o rank baseado na janela de tempo e no numero de demandas para cada cosntrução
-
-
     ~Heuristica();
 
 };
@@ -117,8 +118,16 @@ void Heuristica::ExecutaProcedimentoHeuristico1(){
 	int VerificaViabilidade;
 	VerificaViabilidade = 1;
 
+	int Imprime;
+	Imprime = 0;
 
+	bool ImprimePlanta;
+	bool ImprimeConstrucao;
+	bool IntervalosRespeitadosConstrucaoes;
 
+	ImprimePlanta = 1;
+	ImprimeConstrucao = 1;
+	IntervalosRespeitadosConstrucaoes = 0;
 
 	Prod1.CarregaDados(NP, PlantasInstancia, NE, ConstrucoesInstancia, NV, Velocidade, TempoDeVidaConcreto);
 
@@ -131,11 +140,11 @@ void Heuristica::ExecutaProcedimentoHeuristico1(){
 
 	Prod1.ConstrucoesInstancia.ImprimeContrucoes(Prod1.PlantasInstancia, VerificaViabilidade);
 
-	cout << endl << endl << "############################### Procedimento ConstrucaoSolucao #####################################" << endl << endl;
+	cout << endl << endl << "############################### Procedimento Construcao Solucao por meio de Heuristica Construtiva #####################################" << endl << endl;
 
-	Solucao = Prod1.Executa( TipoOrdenacaoVeiculos );
+	Solucao = Prod1.Executa( TipoOrdenacaoVeiculos, Imprime );
 
-	cout << endl << endl << "##############################################################################################" << endl << endl;
+	cout << endl << endl << "########################################################################################################################################" << endl << endl;
 
 	if( Solucao == 1 ){
 		cout << endl << endl << "  Solucao viavel!    " << endl << endl;
@@ -149,7 +158,7 @@ void Heuristica::ExecutaProcedimentoHeuristico1(){
 	Solucoes.CalculaMakespanSolucoes();
 
 
-	Solucoes.Imprime(1,1,0);
+	Solucoes.Imprime(ImprimePlanta, ImprimeConstrucao, IntervalosRespeitadosConstrucaoes);
 
 /*
 
@@ -187,33 +196,34 @@ void Heuristica::ExecutaProcedimentoHeuristico1(){
 
 	Solucoes.Imprime(1,1,0);
 */
-	/*
+
 
 	cout << endl << endl << "############################### Procedimento Viabilidade 1 #####################################" << endl << endl;
 
-	Solucoes.Solucoes[0].ProcessoViabilizacao1( TipoOrdenacaoVeiculos );
+	Solucoes.Solucoes[0].ProcessoViabilizacao1( TipoOrdenacaoVeiculos , Imprime);
 
 	cout << endl << endl << "##############################################################################################" << endl << endl;
 
 	Solucoes.CalculaMakespanSolucoes();
-	Solucoes.Imprime(1,1,0);
-*/
-	/*
+	Solucoes.Imprime(ImprimePlanta, ImprimeConstrucao, IntervalosRespeitadosConstrucaoes);
+
+
 	Solucoes.Solucoes.resize(Solucoes.Solucoes.size()+1);
 	Solucoes.Solucoes[1] = Solucoes.Solucoes[0];
 
 
 	cout << endl << endl << "############################### Procedimento Viabilidade 2 #####################################" << endl << endl;
 
-	Solucoes.Solucoes[1].ProcessoViabilizacao2( TipoOrdenacaoVeiculos );
+	Solucoes.Solucoes[1].ProcessoViabilizacao2( TipoOrdenacaoVeiculos, Imprime);
 
 	cout << endl << endl << "##############################################################################################" << endl << endl;
 
 	Solucoes.CalculaMakespanSolucoes();
-	Solucoes.Solucoes[1].Imprime(1,1,1);
-*/
+	Solucoes.Solucoes[1].Imprime(ImprimePlanta, ImprimeConstrucao, IntervalosRespeitadosConstrucaoes);
+
 
 }
+
 
 // le o nome da instancia
 void Heuristica::LeNomeInstancia(int comentarios, string& Instancia){
@@ -258,6 +268,7 @@ void Heuristica::LeVelocidade(int comentarios){
 		cout << " Velocidade "<<  Velocidade << endl;
 	}
 }
+
 
 // Le o tempo de vida do concreto
 void Heuristica::LeTempoDeVidaConcreto(int comentarios){
@@ -334,6 +345,7 @@ void Heuristica::LeNumeroDemandas(int comentarios){
 		}
 	}
 }
+
 
 // le as distancias das plantas para as construções
 void Heuristica::LeDistancias(int comentarios){
@@ -441,6 +453,7 @@ void Heuristica::LeTempoPlanta(int comentarios){
 	}
 }
 
+
 // le o tempo maximo permitido entre o atendimento de duas demandas seguidas em cada construção
 void Heuristica::LeTempoMaximoEntreDescargas(int comentarios){
 	if( comentarios == 1){
@@ -495,6 +508,7 @@ void Heuristica::LeTempoMaximoMinimoPlantas(int comentarios){
 		}
 	}
 }
+
 
 // calcula o rank baseado na janela de tempo e no numero de demandas para cada cosntrução
 void Heuristica::CalculoRankTempoDemanda(int comentarios){

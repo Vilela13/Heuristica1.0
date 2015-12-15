@@ -13,7 +13,6 @@
 class Procedimento1{
 
 public:
-	Procedimento1();
 
 	int NP;
 	ConjuntoPlantas PlantasInstancia;
@@ -23,22 +22,17 @@ public:
 	double Velocidade;
 	double TempoDeVidaConcreto;
 
-	void CarregaDados(int InstNP, ConjuntoPlantas InstPlantasInstancia, int InstNE, ConjuntoConstrucoes InstConstrucoesInstancia, int InstNV, double InstVelocidade, double InstTempoDeVidaConcreto);
+	Procedimento1();
 
-// Seleciona uma construção baseada em um rank que elas possuem
-	int SelecionaConstrucao(  int &ConstrucaoVaiSerSuprida, int &IndiceConstrucaoVaiSerSuprida);
-// Seleciona a planta mais perto
-	int SelecionaPlantaMenorDistanciaConstrucao( int IndiceConstrucaoVaiSerSuprida, int &PlantaMaisPerto, int &IndicePlantaMaisPerto );
-// Seleciona carreta menos utilizada
-	int SelecionaCarreta(Planta& PlantaMaisPerto, Construcao& ConstrucaoVaiSerSuprida, int  NumeroDemanda, int SituacaoDemandaAnalisada, int TipoOrdenacao);
+	void CarregaDados(int InstNP, ConjuntoPlantas InstPlantasInstancia, int InstNE, ConjuntoConstrucoes InstConstrucoesInstancia, int InstNV, double InstVelocidade, double InstTempoDeVidaConcreto);		// carrega os dados da solução
+	int SelecionaConstrucao(  int &ConstrucaoVaiSerSuprida, int &IndiceConstrucaoVaiSerSuprida);											// Seleciona uma construção baseada em um rank que elas possuem
+	int SelecionaPlantaMenorDistanciaConstrucao( int IndiceConstrucaoVaiSerSuprida, int &PlantaMaisPerto, int &IndicePlantaMaisPerto );		// Seleciona a planta mais perto
 
-// funções de verificação
-	void ConfereSeNaoEncontrouUmaPlanta( int);
-	int AdicionaTarefa(int IndiceConstrucaoVaiSerSuprida, int Demanda, int TipoOrdenacao  , int imprime);
-	void VerificaAlocacaoDemandaConstrucao(int IndiceConstrucaoVaiSerSuprida, int &Viabilidade);
+	int AdicionaTarefa(int IndiceConstrucaoVaiSerSuprida, int Demanda, int TipoOrdenacao  , int imprime);	// tenta alocar a demanda passada na função
+	void ConfereSeNaoEncontrouUmaPlanta( int  PlantaSelecionada);											// Verifica se não encontrou uma planta
+	void VerificaAlocacaoDemandaConstrucao(int IndiceConstrucaoVaiSerSuprida, int &Viabilidade);			// Verifica se consegue atender as demandas da construção
 
-// executa o procedimento de realizar o sequenciamento da produção e despache de concreto
-	int Executa(int);
+	int Executa(int TipoOrdenacao, int imprime);		// executa o procedimento de realizar o sequenciamento da produção e despache de concreto
 
     ~Procedimento1();
 };
@@ -51,6 +45,7 @@ Procedimento1::Procedimento1(){
 	TempoDeVidaConcreto = -13;
 }
 
+// carrega os dados da solução
 void Procedimento1::CarregaDados(int InstNP, ConjuntoPlantas InstPlantasInstancia, int InstNE, ConjuntoConstrucoes InstConstrucoesInstancia, int InstNV, double InstVelocidade, double InstTempoDeVidaConcreto){
 	NP = InstNP;
 	PlantasInstancia = InstPlantasInstancia;
@@ -115,20 +110,7 @@ int Procedimento1::SelecionaPlantaMenorDistanciaConstrucao( int IndiceConstrucao
 	}
 }
 
-
-// Verifica se não encontrou uma planta
-void Procedimento1::ConfereSeNaoEncontrouUmaPlanta( int  PlantaSelecionada){
-	if( PlantaSelecionada == 0){
-		cout  << endl << endl << endl;
-		cout << " ################################################################################" << endl;
-		cout << "           Não encontrou Planta para se alocar <<<<<<< Problema >>>>>>>>>>>" << endl;
-		cout << " ################################################################################" << endl;
-		cout << endl << endl;
-	}
-}
-
-
-
+// tenta alocar a demanda passada na função
 int Procedimento1::AdicionaTarefa(int IndiceConstrucaoVaiSerSuprida, int Demanda, int TipoOrdenacao  , int imprime){
 	// armazena os horarios de uma tarefa
 	double HorarioInicioPlanta;
@@ -308,6 +290,18 @@ int Procedimento1::AdicionaTarefa(int IndiceConstrucaoVaiSerSuprida, int Demanda
 	return 0;
 }
 
+// Verifica se não encontrou uma planta
+void Procedimento1::ConfereSeNaoEncontrouUmaPlanta( int  PlantaSelecionada){
+	if( PlantaSelecionada == 0){
+		cout  << endl << endl << endl;
+		cout << " ################################################################################" << endl;
+		cout << "           Não encontrou Planta para se alocar <<<<<<< Problema >>>>>>>>>>>" << endl;
+		cout << " ################################################################################" << endl;
+		cout << endl << endl;
+	}
+}
+
+
 // Verifica se consegue atender as demandas da construção
 void Procedimento1::VerificaAlocacaoDemandaConstrucao( int IndiceConstrucaoVaiSerSuprida, int &Viabilidade){
 	if( ConstrucoesInstancia.Construcoes[IndiceConstrucaoVaiSerSuprida].StatusAtendimento < ConstrucoesInstancia.Construcoes[IndiceConstrucaoVaiSerSuprida].NumeroDemandas ){
@@ -320,7 +314,7 @@ void Procedimento1::VerificaAlocacaoDemandaConstrucao( int IndiceConstrucaoVaiSe
 }
 
 // executa o procedimento de construção da solução
-int Procedimento1::Executa( int TipoOrdenacao){
+int Procedimento1::Executa( int TipoOrdenacao, int imprime){
 
 	int ConstrucaoVaiSerSuprida;
 	int IndiceConstrucaoVaiSerSuprida;
@@ -337,8 +331,7 @@ int Procedimento1::Executa( int TipoOrdenacao){
 
 	Viabilidade = 1;
 
-	int imprime;
-	imprime = 1;
+
 
 	// faz com que nenhuma construção tenha sido avaliada para o atendimento de suas demandas
 	ConstrucoesInstancia.InicializaConstrucoesAnalizadas();
@@ -357,9 +350,8 @@ int Procedimento1::Executa( int TipoOrdenacao){
 
 				PermiteAtendimentoDemanda = AdicionaTarefa(IndiceConstrucaoVaiSerSuprida,Demanda, TipoOrdenacao  , imprime);
 
-				ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia, 0);
-
 				if ( imprime == 1){
+					ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia, 0);
 					if( PermiteAtendimentoDemanda == 0){
 						cout << endl << endl << "  Não consegue colocar mais demandas da construção [" << ConstrucoesInstancia.Construcoes[IndiceConstrucaoVaiSerSuprida].NumeroDaConstrucao << "]" << endl << endl;
 					}

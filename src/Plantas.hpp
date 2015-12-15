@@ -219,14 +219,14 @@ void Planta::ImprimeDistancias(){
 // verifica a integridade entre os Carregamentos da planta
 int Planta::VerificaIntegridadeDeCarregamentos(int imprime){
 	// percorre todos os carregamentos
-	for( int c1 = 0; c1 < Carregamentos.size(); c1++){
+	for( int c1 = 0; c1 < (int) Carregamentos.size(); c1++){
 		// verifica se o carregamento não possui tempo negativo
 		if( Carregamentos[c1].HorarioInicioCarregamento > Carregamentos[c1].HorarioFinalCarregamento ){
 			printf( " >>>>>>>>>>>>>> Problema! Carregamento possui tempo negativo %.4f (%.4f-%.4f)\n",  Carregamentos[c1].HorarioFinalCarregamento - Carregamentos[c1].HorarioInicioCarregamento  , Carregamentos[c1].HorarioInicioCarregamento, Carregamentos[c1].HorarioFinalCarregamento );
 			return 0;
 		}
 		// percorre todos os carregamentos
-		for( int c2 = 0; c2 < Carregamentos.size(); c2++){
+		for( int c2 = 0; c2 < (int)  Carregamentos.size(); c2++){
 			// o Carregamento não pode ser o memso que o analisado no primeiro loop
 			if( Carregamentos[c1].HorarioInicioCarregamento != Carregamentos[c2].HorarioInicioCarregamento && Carregamentos[c1].HorarioFinalCarregamento != Carregamentos[c2].HorarioFinalCarregamento){
 				// verifica se o Carregamento está contido dentro de outro Carregamento
@@ -587,7 +587,7 @@ double ConjuntoPlantas::RetornaMenorHorarioQueConstrucaoPodeReceberDemanda(){
 	HoraAux = DBL_MAX;
 
 	// faz para toda planta
-	for( int p = 0; p < HorarioQuePlantaPodeAtender.size(); p++){
+	for( int p = 0; p < (int) HorarioQuePlantaPodeAtender.size(); p++){
 		// caso o horario que a cosntrução pode receber a demanda corrente for maior que o que a planta pode atender a demanda, entra no if
 		if( HorarioQueConstrucaoPodeReceberDemanda[p] < HoraAux){
 			// atualiza o menor horario que a cosntrução pode receber a demanda
@@ -636,7 +636,7 @@ int ConjuntoPlantas::VerificaIntegridadeDeCarregamentosDasPlantas(int imprime){
 		cout << endl << endl << "  Verifica integridade carregamentos " << endl << endl;
 	}
 	// passa por todas as plantas
-	for( int p = 0; p < Plantas.size(); p++){
+	for( int p = 0; p < (int) Plantas.size(); p++){
 		if( imprime == 1){
 			cout << " planta [" << Plantas[p].NumeroDaPlanta << "] ";
 		}
@@ -660,7 +660,7 @@ int ConjuntoPlantas::VerificaIntegridadeDeDeslocaemntosDosVeiculosDasPlantas(int
 		cout << endl << "          Verifica integridade Deslocamentos  " << endl << endl;
 	}
 	// passa por todas as plantas
-	for( int p = 0; p < Plantas.size(); p++){
+	for( int p = 0; p < (int) Plantas.size(); p++){
 		if( imprime == 1){
 			cout << "   Planta [" << Plantas[p].NumeroDaPlanta << "]" << endl ;
 		}

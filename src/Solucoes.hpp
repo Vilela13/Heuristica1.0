@@ -343,7 +343,7 @@ int Solucao::ProcessoParaAlocarTarefaNaoAtendida(int VerificaExistencia, int Con
 	}
 
 	// percorre todas as construções
-	for( unsigned int contrucoes = 0; contrucoes < ConstrucoesInstancia.Construcoes.size(); contrucoes++){
+	for(  int contrucoes = 0; contrucoes < (int) ConstrucoesInstancia.Construcoes.size(); contrucoes++){
 		// percorre todas as demandas da construção corrente
 		for ( int demandas = 0; demandas < ConstrucoesInstancia.Construcoes[contrucoes].NumeroDemandas; demandas++){
 			// não tenta aloca demandas da construçãoq ue teve uma demanda retirada anteriormente
@@ -689,13 +689,11 @@ int Solucao::SelecionaPlanta( int &PlantaAtender, int &PlantaAtenderIndice, int 
 int  Solucao::ProcuraConstrucaoNaoAtendida(int &ConstrucaoNaoAtendida, int &DemandaNaoAtendida){
 
 	int ConstrucaoTemporario;
-	int IndiceConstrucaoTemporario;
 	int DemandaTemporaria;
 	double DistanciaPlantaTemporaria;
 
 	// inicia valores das variaveis
 	ConstrucaoTemporario = -13;
-	IndiceConstrucaoTemporario = -13;
 	DemandaTemporaria = -13;
 	DistanciaPlantaTemporaria = DBL_MAX;
 
@@ -712,7 +710,6 @@ int  Solucao::ProcuraConstrucaoNaoAtendida(int &ConstrucaoNaoAtendida, int &Dema
 						// atualiza as variaveis com a demanda corrente
 						DistanciaPlantaTemporaria = ConstrucoesInstancia.Construcoes[i].DistanciaPlantas[p].Distancia;
 						ConstrucaoTemporario = ConstrucoesInstancia.Construcoes[i].NumeroDaConstrucao;
-						IndiceConstrucaoTemporario = i;
 						DemandaTemporaria = d;
 					}
 				}
@@ -935,7 +932,7 @@ void Solucao::ProcessoViabilizacao2(int TipoOrdenacao, int Imprime){
 		// deleta todas as tarefas que são atendidas após os horarios armazenados da TempoPlantaPodeAtender
 		DeletouAlgumaTarefa = DeletaTarefasAposTempoPlantaPodeAtender(TempoPlantaPodeAtender, DadosTarefasMovidas,  Imprime );
 		if( Imprime == 1){
-			cout << "          <<<<<<<<<<< Detetou tarefas >>>>>>>>>>>>>> ";
+			cout << "          <<<<<<<<<<< Detetou tarefas => " << DeletouAlgumaTarefa << " >>>>>>>>>>>>>> ";
 			ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia, 0);
 			cin >> PararPrograma;
 		}

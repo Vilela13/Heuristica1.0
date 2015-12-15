@@ -327,7 +327,7 @@ int Procedimento1::Executa( int TipoOrdenacao, int imprime){
 	int Viabilidade;
 	int PermiteAtendimentoDemanda;
 
-	int paraPrograma;
+	//int paraPrograma;
 
 	Viabilidade = 1;
 

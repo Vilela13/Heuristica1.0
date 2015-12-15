@@ -43,6 +43,7 @@ bool DecideQualTarefaVemAntes ( DadosTarefa d1, DadosTarefa d2 );
 
 // construtora vazia da classe
 DadosTarefa::DadosTarefa(){
+	Status = -13;
 }
 
 // inicia o conteudo das esruturas vector DadosDasTarefas e HorariosDasTarefas

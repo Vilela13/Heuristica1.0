@@ -164,14 +164,14 @@ void Carreta::Imprime(int Ordena){
 // verifica a integridade entre os Deslocamentos da Carreta
 int Carreta::VerificaIntegridadeDeDeslocamentos(int Imprime){
 	// percorre todos os Deslocamentos
-	for( int d1 = 0; d1 < Deslocamentos.size(); d1++){
+	for( unsigned int d1 = 0; d1 < Deslocamentos.size(); d1++){
 		// verifica se o Deslocamento não possui tempo negativo
 		if( Deslocamentos[d1].HorarioInicioDeslocamento > Deslocamentos[d1].HorarioFinalDeslocamento ){
 			printf( " >>>>>>>>>>>>>> Problema! Deslocamento possui tempo negativo %.4f (%.4f-%.4f)\n",  Deslocamentos[d1].HorarioFinalDeslocamento - Deslocamentos[d1].HorarioInicioDeslocamento  , Deslocamentos[d1].HorarioInicioDeslocamento, Deslocamentos[d1].HorarioFinalDeslocamento );
 			return 0;
 		}
 		// percorre todos os Deslocamentos
-		for( int d2 = 0; d2 < Deslocamentos.size(); d2++){
+		for( unsigned int d2 = 0; d2 < Deslocamentos.size(); d2++){
 			// o Deslocamento não pode ser o memso que o analisado no primeiro loop
 			if( Deslocamentos[d1].HorarioInicioDeslocamento != Deslocamentos[d2].HorarioInicioDeslocamento && Deslocamentos[d1].HorarioFinalDeslocamento != Deslocamentos[d2].HorarioFinalDeslocamento){
 				// verifica se o Deslocamento está contido dentro de outro Deslocamento

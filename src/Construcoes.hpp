@@ -111,7 +111,7 @@ public:
 
 	int AtrazaDemandasParaAtenderMaster( int NumDemanda, double HoraInicioAtendiemnto, vector < DadosTarefa > &DadosTarefasMovidasAuxiliar,int SituacaoDemanda, int StatusRemocao, ConjuntoPlantas& Plantas, int &SituacaoAlocacao, int TipoOrdenacao, int imprime, string frase);		// função de atrazar as demandas para atender a ultima demanda, está é a função que recebe a demanda não alocada ainda
 
-	int AtrazaDemandasParaAtenderRecursao( int NumDemanda, double HoraInicioAtendiemnto, vector < DadosTarefa > &DadosTarefasMovidasAuxiliar,ConjuntoPlantas& Plantas, int &SituacaoAlocacao, int TipoOrdenacao,int imprime, string frase);			// função de atrazar as demandas para atender a ultima demanda, está é a função que recebe as demandas que serão atrasadas para que a demanda não atendida possa ser atendida
+	void AtrazaDemandasParaAtenderRecursao( int NumDemanda, double HoraInicioAtendiemnto, vector < DadosTarefa > &DadosTarefasMovidasAuxiliar,ConjuntoPlantas& Plantas, int &SituacaoAlocacao, int TipoOrdenacao,int imprime, string frase);			// função de atrazar as demandas para atender a ultima demanda, está é a função que recebe as demandas que serão atrasadas para que a demanda não atendida possa ser atendida
 	void EncontraPlantaComMenorDistanciaParaConstrucao(  int& NumPlantaAnalisando, ConjuntoPlantas& Plantas, string frase);					// encontra a planta mais perto da construção e que não tenha sido analisada antes
 	int AlocaAtividadeComHorarioInicio( int NumDemanda, double HoraFimAtendiemnto, double &NovaHoraFimAtendiemnto, vector < DadosTarefa > &DadosTarefasMovidasAuxiliar,int SituacaoDemanda, int StatusRemocao,ConjuntoPlantas& Plantas, int TipoOrdenacao , string frase);
 
@@ -847,7 +847,7 @@ void Construcao::RetornaHorarioInicioCarregamento( int NumDemanda, double& HoraI
 	ativa = 0;
 
 	// percorre todos os descarregamento
-	for( unsigned int d = 0; d < Descarregamentos.size(); d++){
+	for(  int d = 0; d < (int) Descarregamentos.size(); d++){
 		// verifica se a demanda é a passada na função
 		if( NumDemanda == d){
 			// retorna o horario do descarregameto da demanda
@@ -973,7 +973,7 @@ int Construcao::AtrazaDemandasParaAtenderMaster( int NumDemanda, double HoraFimA
 }
 
 // função de atrazar as demandas para atender a ultima demanda, está é a função que recebe as demandas que serão atrasadas para que a demanda não atendida possa ser atendida
-int Construcao::AtrazaDemandasParaAtenderRecursao( int NumDemanda, double HoraFimAtendiemnto, vector < DadosTarefa > &DadosTarefasMovidasAuxiliar,ConjuntoPlantas& Plantas, int &SituacaoAlocacao, int TipoOrdenacao,int imprime, string frase){
+void Construcao::AtrazaDemandasParaAtenderRecursao( int NumDemanda, double HoraFimAtendiemnto, vector < DadosTarefa > &DadosTarefasMovidasAuxiliar,ConjuntoPlantas& Plantas, int &SituacaoAlocacao, int TipoOrdenacao,int imprime, string frase){
 	// aramazena o valor auxiliar do horario final de atendiemnto na construção caso for adotado se possibilita o atendimento da demanda
 	double NovaHoraFimAtendiemnto;
 	// aramzena os valores da situação da demanda e a situação remoção da demanda retirada, para que quando a demanda for readicionada ela tenha os mesmo valores para esses campos que era anteriorment
@@ -1169,14 +1169,14 @@ int Construcao::AlocaAtividadeComHorarioInicio( int NumDemanda, double HoraFimAt
 // verifica a integridade entre os descarregamentos da construção
 int Construcao::VerificaIntegridadeDeDescrregamentos(int imprime){
 	// percorre todos os deslocamentos
-	for( int d1 = 0; d1 < Descarregamentos.size(); d1++){
+	for( int d1 = 0; d1 < (int)  Descarregamentos.size(); d1++){
 		// verifica se o descarregaento não possui tempo negativo
 		if( Descarregamentos[d1].HorarioInicioDescarregamento > Descarregamentos[d1].HorarioFinalDescarregamento ){
 			printf( " >>>>>>>>>>>>>> Problema! Descarregamento possui tempo negativo %.4f (%.4f-%.4f)\n",  Descarregamentos[d1].HorarioFinalDescarregamento - Descarregamentos[d1].HorarioInicioDescarregamento  , Descarregamentos[d1].HorarioInicioDescarregamento, Descarregamentos[d1].HorarioFinalDescarregamento );
 			return 0;
 		}
 		// percorre todos os deslocamentos
-		for( int d2 = 0; d2 < Descarregamentos.size(); d2++){
+		for( int d2 = 0; d2 < (int) Descarregamentos.size(); d2++){
 			// o descarregamento não pode ser o memso que o analisado no primeiro loop
 			if( Descarregamentos[d1].HorarioInicioDescarregamento != Descarregamentos[d2].HorarioInicioDescarregamento && Descarregamentos[d1].HorarioFinalDescarregamento != Descarregamentos[d2].HorarioFinalDescarregamento){
 				// verifica se o descarregamento está contido dentro de outro descarregamento

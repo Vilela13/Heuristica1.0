@@ -29,22 +29,18 @@ public:
 
 	void CarregaSolucao(int np, ConjuntoPlantas Plantas, int ne, ConjuntoConstrucoes Construcoes, int nv, double v,double TDVC);		// Carrega os dados da instancia e a solução até o momento
 	void Imprime(bool ImprimePlanta, bool ImprimeConstrucao, bool VerificaViabilidade);									// imprime os dados da solução
-
 	int DeletaAlocacaoTarefasPosterioresMesmaConstrucao(int VerificaExistencia, int Construcao, int Demanda, vector < DadosTarefa >& DadosTarefasMovidas);					// deleta demandas atendidas na construção após certa demanda que é passada com parametro
+
 	int ProcessoParaAlocarTarefaNaoAtendida(int VerificaExistencia,  int Construcao, int Demanda, int& NovaTarefaAlocadaConstrucao , int& NovaTarefaAlocadaDemanda ,  vector < DadosTarefa > &DadosTarefasMovidas, int SituacaoDemanda, int SituacaoRetirada,int RealizaProcessoDeAtrazarTarefas, int TipoOrdenacao, int imprime);				// Tenta alocar uma demanda que não era alocada anteriormente
-
 	void ReadicionaTarefas(int VerificaExistencia, int construcao, vector < DadosTarefa > &DadosTarefasMovidas, int SituacaoDemanda,int RealizaProcessoDeAtrazarTarefas, int TipoOrdenacao, int imprime);						// após adicionar uma demanda que não era alocada antes, se tenta readicionar as demandas retiradas na construção anterior
-
-
 	void ProcessoViabilizacao1(int TipoOrdenacao,int Imprime);
 
 	int SelecionaConstrucao(int &ConstrucaoParaAtender, int &ConstrucaoParaAtenderIndice, vector < int > ConstrucoesAnalizadas);	// seleciona a construção a ser analisada no momento
 	int  ProcuraConstrucaoNaoAtendida(int &ConstrucaoNaoAtendida, int &DemandaNaoAtendida);																	// Encontra a construção que possui a menor distancia a uma planta dentre todas as construções com demandas não atendidas
-
 	void AlocaTempoPlantaPodeAtenderDemanda(int IndiceConstrucaoNaoAtendida, vector < double > &TempoPlantaConsegueAtender, int Imprime);					// Aloca o tempo inicial que se pode sair uma carreta da planta para suprir a construção passada
+
 	int DeletaTarefasAposTempoPlantaPodeAtender(vector < double > &TempoPlantaPodeAtender, vector < DadosTarefa > &DadosTarefasMovidas,  int Imprime );		// deleta todas as tarefas que são atendidas após os horarios armazenados da TempoPlantaPodeAtender
 	void SinalizaTarefaAdicionadaInicialmente( int TarefaAdicionada, int IndiceConstrucaoNaoAtendida, int DemandaNaoAtendida);					// Sinalisa se a tarefa foi antendida colocando os valores 2 em sua situação remoção. Caso não, está demanda e suas posteriores na emsma construção recebem o valor -1 na situação demanda e 3 na situção remoção.
-
 	void ProcessoViabilizacao2(int TipoOrdenacao, int Imprime);
 
 	void RealizarBuscaLocal(int Imprime);
@@ -92,7 +88,6 @@ void Solucao::Imprime(bool ImprimePlanta, bool ImprimeConstrucao, bool VerificaV
 	}
 }
 
-
 // deleta demandas atendidas na construção após certa demanda que é passada com parametro
 int Solucao::DeletaAlocacaoTarefasPosterioresMesmaConstrucao(int VerificaExistencia, int Construcao, int Demanda, vector < DadosTarefa >& DadosTarefasMovidas){
 	int c;
@@ -114,7 +109,6 @@ int Solucao::DeletaAlocacaoTarefasPosterioresMesmaConstrucao(int VerificaExisten
 	return 0;
 
 }
-
 
 
 // Tenta alocar uma demanda que não era alocada anteriormente
@@ -164,7 +158,6 @@ int Solucao::ProcessoParaAlocarTarefaNaoAtendida(int VerificaExistencia, int Con
 	return 0;
 }
 
-
 // após adicionar uma demanda que não era alocada antes, se tenta readicionar as demandas retiradas na construção anterior
 void Solucao::ReadicionaTarefas(int VerificaExistencia, int construcao, vector < DadosTarefa > &DadosTarefasMovidas, int SituacaoDemanda,int RealizaProcessoDeAtrazarTarefas, int TipoOrdenacao, int imprime){
 	int c;
@@ -194,8 +187,6 @@ void Solucao::ReadicionaTarefas(int VerificaExistencia, int construcao, vector <
 	}
 
 }
-
-
 
 
 void Solucao::ProcessoViabilizacao1(int TipoOrdenacao,int Imprime){
@@ -444,7 +435,6 @@ int  Solucao::ProcuraConstrucaoNaoAtendida(int &ConstrucaoNaoAtendida, int &Dema
 	return 1;
 }
 
-
 // Aloca o tempo que se pode começar a carregar uma carreta da planta para suprir a construção passada
 void Solucao::AlocaTempoPlantaPodeAtenderDemanda(int IndiceConstrucaoNaoAtendida, vector < double > &TempoPlantaConsegueAtender, int Imprime){
 
@@ -487,6 +477,7 @@ void Solucao::AlocaTempoPlantaPodeAtenderDemanda(int IndiceConstrucaoNaoAtendida
 		cout << endl << endl;
 	}
 }
+
 
 // deleta todas as tarefas que são atendidas após os horarios armazenados da TempoPlantaPodeAtender
 int Solucao::DeletaTarefasAposTempoPlantaPodeAtender(vector < double > &TempoPlantaPodeAtender, vector < DadosTarefa > &DadosTarefasMovidas,  int Imprime){
@@ -784,7 +775,7 @@ void Solucao::RealizarBuscaLocal(int Imprime){
 
 	busca.CarregaSolucao( NP, PlantasInstancia, NE,	ConstrucoesInstancia, NV, Velocidade, TempoDeVidaConcreto);
 
-	busca.BuscaLocalRetiraTarefasUmaConstrucao(Imprime);
+	//busca.BuscaLocalRetiraTarefasUmaConstrucao(Imprime);
 
 
 

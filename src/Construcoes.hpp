@@ -1291,6 +1291,7 @@ public:
 
 	void EncontraPlantaMenorDistanciaConstrucao( int c, int& NumPlantaAnalisando, ConjuntoPlantas &PlantasInstancia, string frase);		// encontra a planta mais perto da construção que ainda não foi analisada
 	int AdicionaTarefa( int VerificaExistencia, int Construcao, int Demanda , vector < DadosTarefa > &DadosTarefasMovidas, int SituacaoDemanda, int SituacaoRemocao, int RealizaProcessoDeAtrazarTarefas, int TipoOrdenacao , ConjuntoPlantas &PlantasInstancia, int imprime, string frase);		// função que tenta alocar uma demanda
+	int AdicionaTarefaComVeiculoFixo( int VerificaExistencia, int Construcao, int Demanda , int Planta, int Carreta, vector < DadosTarefa > &DadosTarefasMovidas, int SituacaoDemanda, int SituacaoRemocao, int RealizaProcessoDeAtrazarTarefas, int TipoOrdenacao , ConjuntoPlantas &PlantasInstancia, int imprime, string frase);
 
 	~ConjuntoConstrucoes();						// Destruidora da classe
 };
@@ -1752,17 +1753,17 @@ int ConjuntoConstrucoes::ReadicionaDeletaTarefasApartirDeDados( vector < DadosTa
 	int c;
 
 	// percorre trodos os elementos das tarefas que foram removidas e adicionadas no vetor
-	for( int i = DadosTarefasMovidas.size() - 1 ; i >= 0; i--){
+	for( int i = (int) DadosTarefasMovidas.size() - 1 ; i >= 0; i--){
 
 		// caso a tarefa tenha sido retirada da solução, ela é adicionada novamente
 		if( DadosTarefasMovidas[i].Status == 'r'){
 			// coleta o inidice da construção
-			if(RetornaIndiceConstrucao( DadosTarefasMovidas[i].DadosDasTarefas[0]  , c, " Solucao::DeletaTarefasApartirDeDados") == 0 ){
+			if(RetornaIndiceConstrucao( DadosTarefasMovidas[i].DadosDasTarefas[0]  , c, " ConjuntoConstrucoes::ReadicionaDeletaTarefasApartirDeDados") == 0 ){
 				return 0;
 			}
 			// Aloca a tarefa caso possivel
 			if( Construcoes[c].AlocaAtividade( DadosTarefasMovidas[i].HorariosDasTarefas[2],DadosTarefasMovidas[i].HorariosDasTarefas[3], DadosTarefasMovidas[i].DadosDasTarefas[2], DadosTarefasMovidas[i].DadosDasTarefas[1], DadosTarefasMovidas[i].DadosDasTarefas[3], DadosTarefasMovidas[i].DadosDasTarefas[4], PlantasInstancia) == 0 ){
-				cout << endl << endl << "       <<<<<<<<<<< Problema em adicionar -> Solucao::ReadicionaDeletaTarefasApartirDeDados >>>>>>>>>>>>>>>>> " << endl;
+				cout << endl << endl << "       <<<<<<<<<<< Problema em adicionar -> ConjuntoConstrucoes::ReadicionaDeletaTarefasApartirDeDados >>>>>>>>>>>>>>>>> " << endl;
 				DadosTarefasMovidas[i].Imprimir();
 				cout << endl;
 				return 0;
@@ -1774,12 +1775,12 @@ int ConjuntoConstrucoes::ReadicionaDeletaTarefasApartirDeDados( vector < DadosTa
 		// caso a tarefa tenha sido adicionada a solução, ela é retirada da solução
 		if( DadosTarefasMovidas[i].Status == 'a'){
 			// coleta o inidice da construção
-			if(RetornaIndiceConstrucao( DadosTarefasMovidas[i].DadosDasTarefas[0]  , c, " Solucao::DeletaTarefasApartirDeDados") == 0 ){
+			if(RetornaIndiceConstrucao( DadosTarefasMovidas[i].DadosDasTarefas[0]  , c, " ConjuntoConstrucoes::ReadicionaDeletaTarefasApartirDeDados") == 0 ){
 				return 0;
 			}
 			// deleta a tarefa caso possivel
 			if( Construcoes[c].DeletaTarefasAnteriormenteAdicionadasDados( DadosTarefasMovidas[i], PlantasInstancia) == 0){
-				cout << endl << endl << "       <<<<<<<<<<< Problema em remover -> Solucao::ReadicionaDeletaTarefasApartirDeDados >>>>>>>>>>>>>>>>> " << endl;
+				cout << endl << endl << "       <<<<<<<<<<< Problema em remover -> ConjuntoConstrucoes::ReadicionaDeletaTarefasApartirDeDados >>>>>>>>>>>>>>>>> " << endl;
 				DadosTarefasMovidas[i].Imprimir();
 				cout << endl;
 				return 0;
@@ -1847,7 +1848,7 @@ int ConjuntoConstrucoes::AdicionaTarefa( int VerificaExistencia, int Construcao,
 	// inicializa os vetores que armazenam os horarios que as plantas podem atender a demanda da construção caso se caia no caso de -2 na Analise da planta. Se é inicializado com os valores maximos de Double
 	PlantasInstancia.InicializaVetorHorarioQuePlantaPodeAtender();
 	// aloca o indice da construção
-	if( RetornaIndiceConstrucao(Construcao, c, " <<<<<<<<<<<<<<<<< BuscaLocal::AdicionaTarefa  >>>>>>>>>>>>>>>>>>>>>>>>>>") == 1 ){
+	if( RetornaIndiceConstrucao(Construcao, c, " <<<<<<<<<<<<<<<<< ConjuntoConstrucoes::AdicionaTarefa  >>>>>>>>>>>>>>>>>>>>>>>>>>") == 1 ){
 		// verifica se a construção já foi atendida em sua totatlidade, cao não entra no if
 		if ( Construcoes[c].NumeroDemandas > Construcoes[c].StatusAtendimento){
 			// faz com que nenhuma planta tenha sido analisada até o momento
@@ -1855,7 +1856,7 @@ int ConjuntoConstrucoes::AdicionaTarefa( int VerificaExistencia, int Construcao,
 			// só entra no loop enquanto se tem uma planta para analisar
 			while( PlantasInstancia.AnalizouTodasPLanats() == 0){
 				// encontra a planta mais perto d aconstrução
-				EncontraPlantaMenorDistanciaConstrucao(c,  p , PlantasInstancia, "   &&&&&&&&&&&&& Problema em fornecer valor de   p  em adiciona tarefa  ->BuscaLocal::AdicionaTarefa &&&&&&&&&&&&& ");
+				EncontraPlantaMenorDistanciaConstrucao(c,  p , PlantasInstancia, "   &&&&&&&&&&&&& Problema em fornecer valor de   p  em adiciona tarefa  ->ConjuntoConstrucoes::AdicionaTarefa &&&&&&&&&&&&& ");
 				// ordena as britadeiras
 				PlantasInstancia.Plantas[ p ].VeiculosDaPlanta.OrdenaCarretasPorNumeroDeTarefasRealizadas(TipoOrdenacao);
 				// percorre todos os veículos da planta
@@ -1922,7 +1923,7 @@ int ConjuntoConstrucoes::AdicionaTarefa( int VerificaExistencia, int Construcao,
 				}
 			}
 			if( imprime == 1){
-				cout << "   &&&&&&&&&&&&& Nao consigo atender contrucao [" << Construcoes[c].NumeroDaConstrucao << "-" << Demanda << "]   sem atrazar as outra demandas -> BuscaLocal::AdicionaTarefa &&&&&&&&&&&&& " << endl;
+				cout << "   &&&&&&&&&&&&& Nao consigo atender contrucao [" << Construcoes[c].NumeroDaConstrucao << "-" << Demanda << "]   sem atrazar as outra demandas -> ConjuntoConstrucoes::AdicionaTarefa &&&&&&&&&&&&& " << endl;
 
 				cout << endl << endl <<  " SituacaoPlantaAtenderCasoAtrazar" << endl;
 				ImprimeVetorInt( PlantasInstancia.PlantasAnalizadas );
@@ -1950,7 +1951,7 @@ int ConjuntoConstrucoes::AdicionaTarefa( int VerificaExistencia, int Construcao,
 					}
 					// funde as tarefas adicionadas e retiradas no processo de atraso e as do procedimento corrente
 					if( MergeDadosTarefa( DadosTarefasMovidas, DadosTarefasMovidasAuxiliar) == 0 ){
-						cout << endl << endl << " <<<<<<<<<<<< Problema em adicionar DadosTarefasMovidasAuxiliar em DadosTarefasMovidas, DadosTarefasMovidasAuxiliar -> BuscaLocal::AdicionaTarefa  [[[" << frase << "]]] >>>>>>>>>>>>> " << endl << endl;
+						cout << endl << endl << " <<<<<<<<<<<< Problema em adicionar DadosTarefasMovidasAuxiliar em DadosTarefasMovidas, DadosTarefasMovidasAuxiliar -> ConjuntoConstrucoes::AdicionaTarefa  [[[" << frase << "]]] >>>>>>>>>>>>> " << endl << endl;
 					}
 					if( imprime == 1){
 						cout << endl << endl << "Merge DadosTarefasMovidasAuxiliar com DadosTarefasMovidas" << endl << endl;
@@ -1970,7 +1971,7 @@ int ConjuntoConstrucoes::AdicionaTarefa( int VerificaExistencia, int Construcao,
 				}else{
 					// retorna a solução até o ponto que ela estava antes do processo de atraso das demandas para atender a ultima demanda
 					if( ReadicionaDeletaTarefasApartirDeDados(  DadosTarefasMovidasAuxiliar, PlantasInstancia ) == 0){
-						cout << endl << endl << "   problema em adicionar e deletar tarefas para se retornar a solução inicial -> BuscaLocal::AdicionaTarefa" << endl << endl;
+						cout << endl << endl << "   problema em adicionar e deletar tarefas para se retornar a solução inicial -> ConjuntoConstrucoes::AdicionaTarefa" << endl << endl;
 					}
 				}
 				// limpa as demandas adicionadas e retiradas no processo de atraso de demandas para atender a ultima demanda
@@ -1986,7 +1987,7 @@ int ConjuntoConstrucoes::AdicionaTarefa( int VerificaExistencia, int Construcao,
 				}
 			}
 			if( imprime == 1){
-				cout << "   &&&&&&&&&&&&& Nao consigo atender contrucao [" << Construcoes[c].NumeroDaConstrucao << "-" << Demanda << "]   MESMO SE atrazar as outra demandas -> BuscaLocal::AdicionaTarefa &&&&&&&&&&&&& " << endl;
+				cout << "   &&&&&&&&&&&&& Nao consigo atender contrucao [" << Construcoes[c].NumeroDaConstrucao << "-" << Demanda << "]   MESMO SE atrazar as outra demandas -> ConjuntoConstrucoes::AdicionaTarefa &&&&&&&&&&&&& " << endl;
 			}
 			// retorna 0 caso não conseguir atender a demansa em qeustão
 			return 0;
@@ -1996,11 +1997,244 @@ int ConjuntoConstrucoes::AdicionaTarefa( int VerificaExistencia, int Construcao,
 			return 0;
 		}
 	}
-	cout << endl << endl << endl << "      <<<<<<<<<<<< Passou por toda a função e não entrou em nada!!! OLHAR ISSO!  -> BuscaLocal::AdicionaTarefa " << endl << endl << endl;
+	cout << endl << endl << endl << "      <<<<<<<<<<<< Passou por toda a função e não entrou em nada!!! OLHAR ISSO!  -> ConjuntoConstrucoes::AdicionaTarefa " << endl << endl << endl;
 	// retorna 0 pois não encontrou a cosntrução passada
 	return 0;
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// função que tenta alocar uma demanda
+int ConjuntoConstrucoes::AdicionaTarefaComVeiculoFixo( int VerificaExistencia, int Construcao, int Demanda , int Planta, int Carreta, vector < DadosTarefa > &DadosTarefasMovidas, int SituacaoDemanda, int SituacaoRemocao, int RealizaProcessoDeAtrazarTarefas, int TipoOrdenacao , ConjuntoPlantas &PlantasInstancia, int imprime, string frase){
+	// armazena os horarios de uma tarefa
+	double HorarioInicioPlanta;
+	double HorarioSaiDaPlanta;
+	double HorarioRetornaPlanta;
+	double HorarioChegaContrucao;
+	double HorarioSaiConstrucao;
+	// arqmazena os estados de disponibilidade da tarefa na planta, na coonstrução e no caminhão
+	int DisponibilidadePlanta;
+	int DisponibilidadeConstrucao;
+	int DisponibilidadeCarreta;
+	// indice da construção e planta
+	int c;
+	int  p ;
+	int v;
+
+	// Guarda as tarefas movidada no processo de mudar o horario de atendimento de uma demanda anterior visando atender uma posterior
+	vector < DadosTarefa > DadosTarefasMovidasAuxiliar;
+
+	// variaveis de controle
+	int SituacaoAlocacao;
+
+	// variavel que indica se ira realizar a verificação da solução
+	int VerificaViabilidade;
+	VerificaViabilidade = 0;
+
+	int SituacaoPlanta;
+	double HorarioQuePlantaPodeAtender;
+	double HorarioQueConstrucaoPodeReceberDemanda;
+
+	int ParaPrograma;
+
+	PlantasInstancia.AlocaInidiceFabrica(Planta,p);
+	SituacaoPlanta = 0;
+	PlantasInstancia.Plantas[p].VeiculosDaPlanta.AlocaInidiceVeiculo(Carreta, v);
+
+	HorarioQuePlantaPodeAtender = DBL_MAX;
+	HorarioQueConstrucaoPodeReceberDemanda = DBL_MAX;
+
+	// aloca o indice da construção
+	if( RetornaIndiceConstrucao(Construcao, c, " <<<<<<<<<<<<<<<<< ConjuntoConstrucoes::AdicionaTarefaComVeiculoFixo  >>>>>>>>>>>>>>>>>>>>>>>>>>") == 1 ){
+		// verifica se a construção já foi atendida em sua totatlidade, cao não entra no if
+		if ( Construcoes[c].NumeroDemandas > Construcoes[c].StatusAtendimento){
+			// inicializa o tempo inicio que a planta corrente ira começar a analise se pode atender a demanda corrente, caso
+			if( ( Construcoes[c].TempoMinimoDeFuncionamento - PlantasInstancia.Plantas[ p ].DistanciaConstrucoes[ Construcoes[c].NumeroDaConstrucao ] - PlantasInstancia.Plantas[ p ].TempoPlanta ) > PlantasInstancia.Plantas[ p ].TempoMinimoDeFuncionamento ){
+				//caso o tempo de inicio do carregamento da britadeira na plantar for restrito pela construção.
+				HorarioInicioPlanta = Construcoes[c].TempoMinimoDeFuncionamento - PlantasInstancia.Plantas[ p ].DistanciaConstrucoes[ Construcoes[c].NumeroDaConstrucao ] - PlantasInstancia.Plantas[ p ].TempoPlanta;
+			}else{
+				//caso o tempo de inicio do carregamento da britadeira na plantar for restrito pela planta.
+				HorarioInicioPlanta = PlantasInstancia.Plantas[ p ].TempoMinimoDeFuncionamento;
+			}
+			// enquanto estiver na janela de tempo possivel para atendimeto se realiza o loop abaixo.
+			do{
+				// atualiza os horarios na construção e planta
+				HorarioSaiDaPlanta = HorarioInicioPlanta + PlantasInstancia.Plantas[ p ].TempoPlanta;
+				HorarioChegaContrucao = HorarioSaiDaPlanta + PlantasInstancia.Plantas[ p ].DistanciaConstrucoes[ Construcoes[c].NumeroDaConstrucao];
+				HorarioSaiConstrucao = HorarioChegaContrucao +  PlantasInstancia.Plantas[ p ].VeiculosDaPlanta.Carretas[v].TempoParaDescarregarNaConstrucao[ Construcoes[c].NumeroDaConstrucao ][ Demanda ];
+				HorarioRetornaPlanta = HorarioSaiConstrucao + PlantasInstancia.Plantas[ p ].DistanciaConstrucoes[ Construcoes[c].NumeroDaConstrucao ];
+
+				// verifica se é possivel realizar o atendiemnto da demanda tanto na planta, construção e carreta
+				DisponibilidadePlanta = PlantasInstancia.Plantas[ p ].VerificaDisponibilidade(HorarioInicioPlanta, HorarioSaiDaPlanta );
+				DisponibilidadeConstrucao = Construcoes[c].VerificaDisponibilidade( HorarioChegaContrucao, HorarioSaiConstrucao );
+				DisponibilidadeCarreta = PlantasInstancia.Plantas[ p ].VeiculosDaPlanta.Carretas[v].VerificaDisponibilidade( HorarioInicioPlanta, HorarioRetornaPlanta );
+
+				// caso se puder realizar a terefa se entra nos If
+				if( DisponibilidadePlanta == 1){
+					if( DisponibilidadeCarreta == 1){
+						if( DisponibilidadeConstrucao == 1 || DisponibilidadeConstrucao == 2 || DisponibilidadeConstrucao == 3){
+							// se consegue atender a demanda com essa planta, carreta e nessa construção
+							Construcoes[c].AlocaAtividadeSalvandoDados(VerificaExistencia, HorarioChegaContrucao, HorarioSaiConstrucao, PlantasInstancia.Plantas[ p ].VeiculosDaPlanta.Carretas[v].NumeroDaCarreta, PlantasInstancia.Plantas[ p ].NumeroDaPlanta, SituacaoDemanda, SituacaoRemocao, PlantasInstancia, DadosTarefasMovidas);
+							// se dieminui o nível de iniviabilidade da solução
+							NivelDeInviabilidade = NivelDeInviabilidade - 1;
+							// retorna 1 indicando que se foi possivel alocar a demanda corrente
+							return 1;
+						}else{
+							// caso se possa atender a demanda se atender as demandas anterior em um horario diferente
+							if( DisponibilidadeConstrucao == -2){
+								// caso for  aprimeira vez que se verifique a valor -2 para a DisponibilidadeConstrução, se atualiza os hoarios iniciais tanto na planta e na construção que a planta corrente pode vir a atender a construção
+								if( SituacaoPlanta == 0){
+									HorarioQuePlantaPodeAtender = HorarioInicioPlanta;
+									HorarioQueConstrucaoPodeReceberDemanda = HorarioChegaContrucao;
+								}
+								// se atualiza a situação da planta corrente com -2 e coloca o tempo de inicio da planta como o tempo maximo de funcionamento da planta para se forçar sair do loop do while
+								SituacaoPlanta = -2;
+								HorarioInicioPlanta = PlantasInstancia.Plantas[ p ].TempoMaximoDeFuncionamento + IntervaloDeTempo;
+
+								if( imprime == 1){
+									cout <<  "           (-) Caso atrazar da para alocar, demanda em analise [" << Construcao << "-" << Demanda<< "] no horario " << HorarioChegaContrucao << " na planta [" << PlantasInstancia.Plantas[ p ].NumeroDaPlanta << "] no veiculo [" << v << "]" << endl;
+								}
+							}
+						}
+					}
+				}
+				// acrescenta o horario do inicio da planta para se percorrer todos os possiveis horarios de alocação da demanda por essa planta corrente
+				HorarioInicioPlanta = HorarioInicioPlanta + IntervaloDeTempo;
+			// realiza o loop até que os intervalos de de funcionamento da planta e da construção ainda sejam respeitados
+			}while( HorarioInicioPlanta <= PlantasInstancia.Plantas[ p ].TempoMaximoDeFuncionamento ||  HorarioChegaContrucao <= Construcoes[c].TempoMaximoDeFuncionamento);
+		}
+
+		if( imprime == 1){
+			cout << "   &&&&&&&&&&&&& Nao consigo atender contrucao [" << Construcoes[c].NumeroDaConstrucao << "-" << Demanda << "]   sem atrazar as outra demandas -> ConjuntoConstrucoes::AdicionaTarefaComVeiculoFixo &&&&&&&&&&&&& " << endl;
+			cout << endl << endl <<  " SituacaoPlantaAtenderCasoAtrazar [" << SituacaoPlanta << "]" << endl;
+			cout <<   " HorarioQuePlantaPodeAtender [" << HorarioQuePlantaPodeAtender << "]" << endl;
+			cout <<   " HorarioQueConstrucaoPodeReceberDemanda [" << HorarioQueConstrucaoPodeReceberDemanda << "]" <<endl;
+			cin >> ParaPrograma;
+		}
+
+		// caso não se tenha conseguido atender a demanda corrente, se verifica se tem alguma planta que pode atender a demanda caso se mude o horario de atendiemnto das outras demandas posteriores a está. Caso se possa, se entra no if e tenta mudar o horario das demandas anteriores para se tentar atender a demanda corrente
+		if(  SituacaoPlanta == -2){
+			cout << endl << endl << "                 ------------- Implementa AtrazaDemandasParaAtenderMaster com planta e veiculo fixo " << endl << endl;
+			/*
+
+			// limpa o vetor que aramzena as tarefas adicionadas e removidas no processo de atraso
+			DadosTarefasMovidasAuxiliar.clear();
+			if( imprime == 1){
+				cout << endl << endl << "      Função que atraza demandas - horario que pode atender construção = " << HorarioQueConstrucaoPodeReceberDemanda << endl << endl;
+			}
+			// função que realiza o atraso das tarefas para atender uma demanda anterior, caso cosnseguir alocar entra no if
+			if ( Construcoes[c].AtrazaDemandasParaAtenderMaster( Demanda, PlantasInstancia.RetornaMenorHorarioQueConstrucaoPodeReceberDemanda() - Construcoes[c].TempoMaximoEntreDescargas  + IntervaloDeTempo,DadosTarefasMovidasAuxiliar, SituacaoDemanda, SituacaoRemocao, PlantasInstancia, SituacaoAlocacao, TipoOrdenacao, imprime, frase) == 1 ){
+				if( imprime == 1){
+					cout << endl << endl << "       ******* adicionei demanda [" << Construcoes[c].NumeroDaConstrucao << "-" << Demanda << "] com o processo de atraso " << endl << endl;
+					cout << "DadosTarefasMovidasAuxiliar" << endl;
+					ImprimeVetorDadosTarefa( DadosTarefasMovidasAuxiliar);
+					cin >> ParaPrograma;
+				}
+				// funde as tarefas adicionadas e retiradas no processo de atraso e as do procedimento corrente
+				if( MergeDadosTarefa( DadosTarefasMovidas, DadosTarefasMovidasAuxiliar) == 0 ){
+					cout << endl << endl << " <<<<<<<<<<<< Problema em adicionar DadosTarefasMovidasAuxiliar em DadosTarefasMovidas, DadosTarefasMovidasAuxiliar -> BuscaLocal::AdicionaTarefa  [[[" << frase << "]]] >>>>>>>>>>>>> " << endl << endl;
+				}
+				if( imprime == 1){
+					cout << endl << endl << "Merge DadosTarefasMovidasAuxiliar com DadosTarefasMovidas" << endl << endl;
+
+					cout << "DadosTarefasMovidasAuxiliar" << endl;
+					ImprimeVetorDadosTarefa( DadosTarefasMovidasAuxiliar);
+					cout << "DadosTarefasMovidas" << endl;
+					ImprimeVetorDadosTarefa( DadosTarefasMovidas);
+
+					cin >> ParaPrograma;
+				}
+				// limpa as demandas adicionadas e retiradas no processo de atraso de demandas para atender a ultima demanda
+				DadosTarefasMovidasAuxiliar.clear();
+				// retorna 1, conseguiu alocar a demanda em questão
+				return 1;
+			// caso não se consiga alocar a demanda
+			}else{
+				// retorna a solução até o ponto que ela estava antes do processo de atraso das demandas para atender a ultima demanda
+				if( ReadicionaDeletaTarefasApartirDeDados(  DadosTarefasMovidasAuxiliar, PlantasInstancia ) == 0){
+					cout << endl << endl << "   problema em adicionar e deletar tarefas para se retornar a solução inicial -> BuscaLocal::AdicionaTarefa" << endl << endl;
+				}
+			}
+			// limpa as demandas adicionadas e retiradas no processo de atraso de demandas para atender a ultima demanda
+			DadosTarefasMovidasAuxiliar.clear();
+			if( imprime == 1){
+				cout << endl << endl <<  " Fim do atraza tarefas" << endl;
+				cout << "DadosTarefasMovidasAuxiliar" << endl;
+				ImprimeVetorDadosTarefa( DadosTarefasMovidasAuxiliar);
+
+				ImprimeContrucoes(PlantasInstancia, VerificaViabilidade);
+
+				cin >> ParaPrograma;
+			}
+			*/
+		}
+		if( imprime == 1){
+			cout << "   &&&&&&&&&&&&& Nao consigo atender contrucao [" << Construcoes[c].NumeroDaConstrucao << "-" << Demanda << "]   MESMO SE atrazar as outra demandas -> ConjuntoConstrucoes::AdicionaTarefaComVeiculoFixo &&&&&&&&&&&&& " << endl;
+		}
+		// retorna 0 caso não conseguir atender a demansa em qeustão
+		return 0;
+	}else{
+		cout << endl << endl << endl << "   &&&&&&&&&&&&& Problema -> Construcao [" << c << "-" << Demanda << "] com demanda ja atendida -> ConjuntoConstrucoes::AdicionaTarefaComVeiculoFixo &&&&&&&&&&&&& " << endl << endl << endl;
+		// retorna 0 pois a demanda que se quer atender já estiver sido atendida
+		return 0;
+	}
+	cout << endl << endl << endl << "      <<<<<<<<<<<< Passou por toda a função e não entrou em nada!!! OLHAR ISSO!  -> ConjuntoConstrucoes::AdicionaTarefaComVeiculoFixo " << endl << endl << endl;
+	// retorna 0 pois não encontrou a cosntrução passada
+	return 0;
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 // Destruidora da classe
 ConjuntoConstrucoes::~ConjuntoConstrucoes(){

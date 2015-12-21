@@ -43,7 +43,7 @@ public:
 	void SinalizaTarefaAdicionadaInicialmente( int TarefaAdicionada, int IndiceConstrucaoNaoAtendida, int DemandaNaoAtendida);					// Sinalisa se a tarefa foi antendida colocando os valores 2 em sua situação remoção. Caso não, está demanda e suas posteriores na emsma construção recebem o valor -1 na situação demanda e 3 na situção remoção.
 	void ProcessoViabilizacao2(int TipoOrdenacao, int Imprime);
 
-	void RealizarBuscaLocal(int Imprime);
+	void RealizarBuscaLocal(int imprime);
 
 	~Solucao();
 };
@@ -770,12 +770,22 @@ void Solucao::ProcessoViabilizacao2(int TipoOrdenacao, int Imprime){
 }
 
 
-void Solucao::RealizarBuscaLocal(int Imprime){
+void Solucao::RealizarBuscaLocal(int imprime){
 	BuscaLocal busca;
+	int NumeroDeVezes;
+	int ParaPrograma;
+
+	NumeroDeVezes = 0;
 
 	busca.CarregaSolucao( NP, PlantasInstancia, NE,	ConstrucoesInstancia, NV, Velocidade, TempoDeVidaConcreto);
 
-	busca.BuscaLocalRetiraTarefasUmaConstrucao(Imprime);
+
+	while ( busca.BuscaLocalTentaRealizarTarefasComOutosVeiculos(0,0) == 1){
+		CarregaSolucao(busca.NP, busca.PlantasInstancia, busca.NE, busca.ConstrucoesInstancia, busca.NV , busca.Velocidade , busca.TempoDeVidaConcreto);
+		NumeroDeVezes++;
+		cout << " roda " << NumeroDeVezes << endl;
+		cin >> ParaPrograma;
+	}
 
 
 

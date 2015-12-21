@@ -243,7 +243,7 @@ int MergeDadosTarefa( vector < DadosTarefa > &VetorBase, vector < DadosTarefa > 
 	for( unsigned int i = 0; i < VetorFonte.size(); i++){
 		// adiciona o elemento corrente do VetorFonte ao VetorBase
 		if( AdicionaElementoVetorDadosTarefaApartirEstrutura(0, VetorBase, VetorFonte[i]) == 0){
-			cout << endl << endl << " <<<<<<<<<<<<< Problema em adicionar elemeto no VetorBase - elemnto " << endl;
+			cout << endl << endl << " <<<<<<<<<<<<< Problema em adicionar elemeto no VetorBase - elemento " << endl;
 			VetorFonte[i].Imprimir();
 			cout << "     -> MergeDadosTarefa " << endl << endl;
 			// caso não conseguir adicionar o elemento do VetorFonte no VetorBase

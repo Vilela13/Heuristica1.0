@@ -82,10 +82,6 @@ void Solucao::Imprime(bool ImprimePlanta, bool ImprimeConstrucao, bool VerificaV
 	if( ImprimeConstrucao == 1){
 		ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia, VerificaViabilidade);
 	}
-	// imprime a situação das entregas nas construções
-	if( VerificaViabilidade == 1){
-		ConstrucoesInstancia.VerificaIntervaloContrucoes();
-	}
 }
 
 // deleta demandas atendidas na construção após certa demanda que é passada com parametro
@@ -780,7 +776,7 @@ void Solucao::RealizarBuscaLocal(int imprime){
 	busca.CarregaSolucao( NP, PlantasInstancia, NE,	ConstrucoesInstancia, NV, Velocidade, TempoDeVidaConcreto);
 
 
-	while ( busca.BuscaLocalTentaRealizarTarefasComOutosVeiculos(0,0) == 1){
+	while ( busca.BuscaLocalTentaRealizarTarefasComOutosVeiculos(1,0) == 1){
 		CarregaSolucao(busca.NP, busca.PlantasInstancia, busca.NE, busca.ConstrucoesInstancia, busca.NV , busca.Velocidade , busca.TempoDeVidaConcreto);
 		NumeroDeVezes++;
 		cout << " roda " << NumeroDeVezes << endl;

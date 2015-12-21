@@ -142,6 +142,9 @@ int BuscaLocal::BuscaLocalTentaRealizarTarefasComOutosVeiculos(int Imprime, int 
 
 	int ParaPrograma;
 
+	int ImprimeAicionaTarefa;
+	ImprimeAicionaTarefa = 1;
+
 	ConstrucoesInstancia.InicializaConstrucoesAnalizadas();
 
 	if( Imprime == 1){
@@ -189,7 +192,7 @@ int BuscaLocal::BuscaLocalTentaRealizarTarefasComOutosVeiculos(int Imprime, int 
 					}
 
 					DadosTarefasMovidasAdicionaTarefa.clear();
-					if( ConstrucoesInstancia.AdicionaTarefaComVeiculoFixo( 0 , ConstrucoesInstancia.Construcoes[IndiceConstrucaoEscolhida].NumeroDaConstrucao, DemandaRetirar , PlantasInstancia.Plantas[p].NumeroDaPlanta, PlantasInstancia.Plantas[p].VeiculosDaPlanta.Carretas[v].NumeroDaCarreta, DadosTarefasMovidasAdicionaTarefa, 1, 0, 1, 1 , PlantasInstancia, 0,"  <<<<< BuscaLocal::BuscaLocalRetiraTarefasUmaConstrucao >>> ") == 1){
+					if( ConstrucoesInstancia.AdicionaTarefaComVeiculoFixo( 0 , ConstrucoesInstancia.Construcoes[IndiceConstrucaoEscolhida].NumeroDaConstrucao, DemandaRetirar , PlantasInstancia.Plantas[p].NumeroDaPlanta, PlantasInstancia.Plantas[p].VeiculosDaPlanta.Carretas[v].NumeroDaCarreta, DadosTarefasMovidasAdicionaTarefa, 1, 0, 1, 1 , PlantasInstancia, ImprimeAicionaTarefa,"  <<<<< BuscaLocal::BuscaLocalRetiraTarefasUmaConstrucao >>> ") == 1){
 
 						if( Imprime == 1){
 							cout << endl << endl << " >+< Adicionou [" << ConstrucaoEscolhida << "-" << DemandaRetirar << "]" << endl;

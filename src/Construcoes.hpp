@@ -1287,7 +1287,7 @@ public:
 	int VerificaIntegridaDeDemandaAtendida( int Construcao, int Demanda, int NumPlanta, int NumCarreta, double HorarioInicioDescarregamento, double HorarioFinalDescarregamento, double HorarioInicioCarregamento, double HorarioFinalCarregamento, double HorarioInicioDeslocamento, double HorarioFinalDeslocamento, int imprime);		// verifica a integridade da tarefa
 
 // 	Função auxiliar a retornar a solução inicial
-	int ReadicionaDeletaTarefasApartirDeDados( vector < DadosTarefa > DadosTarefasMovidas, ConjuntoPlantas PlantasInstancia);
+	int ReadicionaDeletaTarefasApartirDeDados( vector < DadosTarefa > DadosTarefasMovidas, ConjuntoPlantas &PlantasInstancia);
 
 	void EncontraPlantaMenorDistanciaConstrucao( int c, int& NumPlantaAnalisando, ConjuntoPlantas &PlantasInstancia, string frase);		// encontra a planta mais perto da construção que ainda não foi analisada
 	int AdicionaTarefa( int VerificaExistencia, int Construcao, int Demanda , vector < DadosTarefa > &DadosTarefasMovidas, int SituacaoDemanda, int SituacaoRemocao, int RealizaProcessoDeAtrazarTarefas, int TipoOrdenacao , ConjuntoPlantas &PlantasInstancia, int imprime, string frase);		// função que tenta alocar uma demanda
@@ -1748,7 +1748,7 @@ int ConjuntoConstrucoes::VerificaIntegridaDeDemandaAtendida( int Construcao, int
 // ***************** Função auxiliar a retornar a solução inicial ***************** //
 
 // readiciona tarefas deletadas e deleta tarefas adicionadas visando restaurar a configuração inicial da solução
-int ConjuntoConstrucoes::ReadicionaDeletaTarefasApartirDeDados( vector < DadosTarefa > DadosTarefasMovidas, ConjuntoPlantas PlantasInstancia){
+int ConjuntoConstrucoes::ReadicionaDeletaTarefasApartirDeDados( vector < DadosTarefa > DadosTarefasMovidas, ConjuntoPlantas &PlantasInstancia){
 	int c;
 
 	// percorre trodos os elementos das tarefas que foram removidas e adicionadas no vetor

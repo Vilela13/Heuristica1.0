@@ -136,47 +136,68 @@ int BuscaLocal::BuscaLocalRetiraTarefasUmaConstrucao(int Imprime){
 	int IndiceConstrucaoComDeandaRetirar;
 
 
-	vector < DadosTarefa > DadosTarefasMovidasConstrucaoEscolhida;
-	vector < DadosTarefa > DadosTarefasMovidasAdicionaTarefaDeslocada;
+	vector < DadosTarefa > DadosTarefasMovidas;
 
 	double MakespanAnterior;
+
+	int ParaPrograma;
 
 
 	if( ConstrucoesInstancia.Construcoes.size() > 1){
 		// Faz com que nenhuma construção tenha sido retirada no procedimento
 		ConstrucoesInstancia.InicializaConstrucoesAnalizadas();
 
-		MakespanAnterior = CalculaMakespanSolucoes();
+		if( Imprime == 1){
+			ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia, 0);
+			PlantasInstancia.Imprime(1,1);
+			cin >> ParaPrograma;
+		}
 
 		while( VerificaSeTemUmValorVetorInt( 0, ConstrucoesInstancia.ConstrucoesAnalizadas ) == 1){
 			// reinicia o estado de deslocamento e remoção de todas as demandas de todas as construções
 			ConstrucoesInstancia.ReiniciaTarefasRetiradas();
-
 
 			if( SelecionaConstrucao( ConstrucaoEscolhida, IndiceConstrucaoEscolhida) == 0){
 				cout << endl << endl << "       >>>>>>>>>> Problema! Não encontrou uma construção para ser analisada na busca local! -> BuscaLocal::BuscaLocalRetiraTarefasUmaConstrucao" << endl << endl;
 			}
 
 			if( Imprime == 1){
-				cout << endl <<  " Escolheu a construção [" << ConstrucaoEscolhida << "] para retirar suas demandas " << endl ;
+				cout << endl <<  "  >>>>>>>>>>>>>>>>>>>>  Escolheu a construção [" << ConstrucaoEscolhida << "] para retirar suas demandas " << endl ;
 			}
 
-			if( ConstrucoesInstancia.Construcoes[IndiceConstrucaoEscolhida].DeletaTarefas(0, 0,DadosTarefasMovidasConstrucaoEscolhida, PlantasInstancia) == 0){
-				cout << endl << endl << "       >>>>>>>>>> Problema! Não consegui deletar todas as demandas da construção [" << ConstrucaoEscolhida << "] ! -> BuscaLocal::BuscaLocalRetiraTarefasUmaConstrucao" << endl << endl;
-			}
+			for( int DemandaRetirar = 0; DemandaRetirar < ConstrucoesInstancia.Construcoes[IndiceConstrucaoEscolhida].StatusAtendimento; DemandaRetirar++){
+				DadosTarefasMovidas.clear();
+				MakespanAnterior = CalculaMakespanSolucoes();
 
-			while( ExisteConstrucaoParaRetirar( IndiceConstrucaoEscolhida, ConstrucaoComDeandaRetirar, IndiceConstrucaoComDeandaRetirar) == 1 ){
+				if( ConstrucoesInstancia.Construcoes[IndiceConstrucaoEscolhida].DeletaTarefas(0, DemandaRetirar,DadosTarefasMovidas, PlantasInstancia) == 0){
+					cout << endl << endl << "       >>>>>>>>>> Problema! Não consegui deletar todas as demandas da construção [" << ConstrucaoEscolhida << "] ! -> BuscaLocal::BuscaLocalRetiraTarefasUmaConstrucao" << endl << endl;
+				}
 
-
+				if( Imprime == 1){
+					cout << endl <<  "  >>>>>>  Deletou demandas apartir de [" << ConstrucaoEscolhida << "-" << DemandaRetirar << "] " << endl ;
+					cout << endl <<  "         Dados das tarefas movidas" << endl;
+					ImprimeVetorDadosTarefa(DadosTarefasMovidas);
+					cin >> ParaPrograma;
+				}
 
 				if( CalculaMakespanSolucoes() < MakespanAnterior ){
 					// retorna um caso consiga melhorar a solução
+					if( Imprime == 1){
+						cout << endl << endl << " [[[[[[[[[[[[[[[[[[[ Melhorou a Solução ]]]]]]]]]]]]]]]]]]]]]" << endl << endl;
+					}
 					return 1;
+				}else{
+					cout << endl << endl << " Inicio Retorna solução inicial" << endl << endl;
+					ConstrucoesInstancia.ReadicionaDeletaTarefasApartirDeDados(  DadosTarefasMovidas, PlantasInstancia );
+					cout << endl << endl << " Final Retorna solução inicial" << endl << endl;
+					ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia, 0);
+					PlantasInstancia.Imprime(1,1);
+					cin >> ParaPrograma;
+
 				}
+
 			}
-
 			ConstrucoesInstancia.ConstrucoesAnalizadas[IndiceConstrucaoEscolhida] = 1;
-
 			ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia,0);
 
 		}

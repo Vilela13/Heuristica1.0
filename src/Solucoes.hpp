@@ -775,7 +775,7 @@ void Solucao::RealizarBuscaLocal(int Imprime){
 
 	busca.CarregaSolucao( NP, PlantasInstancia, NE,	ConstrucoesInstancia, NV, Velocidade, TempoDeVidaConcreto);
 
-	//busca.BuscaLocalRetiraTarefasUmaConstrucao(Imprime);
+	busca.BuscaLocalRetiraTarefasUmaConstrucao(Imprime);
 
 
 

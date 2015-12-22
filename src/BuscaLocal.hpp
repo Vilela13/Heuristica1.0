@@ -35,6 +35,7 @@ public:
 
 
 	int BuscaLocalTentaRealizarTarefasComOutosVeiculos(int Imprime, int ImprimeEstruturas);			// busca local que se verifica se a demanda pode ser melhor atendida caso se realize o seu atendimento com outro caminhão/veículo
+	int BuscaLocalMudaOrdemAtendiemntoConstrucoes(int Imprime, int ImprimeEstruturas);
 
 	~BuscaLocal();
 };
@@ -209,7 +210,7 @@ int BuscaLocal::BuscaLocalTentaRealizarTarefasComOutosVeiculos(int Imprime, int 
 						// enquanto se consegue recolocar demandas e se tem demandas para se recolocar se continua no while
 						while( Recolocar == 1 && DemandaRecolocar <   ConstrucoesInstancia.Construcoes[IndiceConstrucaoEscolhida].NumeroDemandas){
 							// se tenta recolocar a demanda corrente
-							Recolocar = ConstrucoesInstancia.AdicionaTarefa( 0 , ConstrucoesInstancia.Construcoes[IndiceConstrucaoEscolhida].NumeroDaConstrucao, DemandaRecolocar , DadosTarefasMovidasAdicionaTarefa, 1, 0, 1, 1 , PlantasInstancia, 0,"  <<<<< BuscaLocal::BuscaLocalRetiraTarefasUmaConstrucao >>> ");
+							Recolocar = ConstrucoesInstancia.AdicionaTarefa( 0 , ConstrucoesInstancia.Construcoes[IndiceConstrucaoEscolhida].NumeroDaConstrucao, DemandaRecolocar , DadosTarefasMovidasAdicionaTarefa, 1, 0, 1, 1 , PlantasInstancia, ImprimeDadosAdicionaTarefa,"  <<<<< BuscaLocal::BuscaLocalRetiraTarefasUmaConstrucao >>> ");
 
 							if( Imprime == 1){
 								cout << endl << endl << " >+< Recoloca [" << ConstrucaoEscolhida << "-" << DemandaRecolocar << "] -> " << Recolocar << endl << endl;
@@ -285,6 +286,120 @@ int BuscaLocal::BuscaLocalTentaRealizarTarefasComOutosVeiculos(int Imprime, int 
 	ConstrucoesInstancia.CalcularNivelDeInviabilidade();
 	// retona 0 mostrando que não se conseguiu melhorar a solução que se tinha
 	return 0;
+}
+
+int BuscaLocal::BuscaLocalMudaOrdemAtendiemntoConstrucoes(int Imprime, int ImprimeEstruturas){
+
+	// verifica se atendeu a demanda que será reatendida ou não
+	int Recolocar;
+	// indice da demanda a ser recolocada
+	int DemandaRecolocar;
+
+	// dados das tarefas movidas duarante o procedimento que serão utilizadas ara retornar ao estado anterior da solução caso se piore a solução que se tinha
+	vector < DadosTarefa > DadosTarefasMovidasEtapa1;
+	vector < DadosTarefa > DadosTarefasMovidasEtapa2;
+
+	// makespan da solução anterior que se tinha
+	double MakespanAnterior;
+
+	// variavel que controla se ira imprimir o procedimento de locação de tarefas
+	int ImprimeDadosAdicionaTarefa;
+
+	ImprimeDadosAdicionaTarefa = 0;
+
+	int ParaPrograma;
+
+	// armazena o makespan da solução corrente
+	MakespanAnterior = CalculaMakespanSolucao();
+
+	// percorre todas as construções
+	for( int c1 = 0; c1 < (int) ConstrucoesInstancia.Construcoes.size(); c1++){
+		// percorre todas as demandas da construção
+		for( int d1; d1 < (int) ConstrucoesInstancia.Construcoes[c1].NumeroDemandas; d1++ ){
+			// limpa o conteudo do vetor que guarda os dados da tarefas movidas durante o processo
+			DadosTarefasMovidasEtapa1.clear();
+			//deleta todas as tarefas na construção partindo como inicio a demanda corrente
+			if( ConstrucoesInstancia.Construcoes[c1].DeletaTarefas(0, d1,DadosTarefasMovidasEtapa1, PlantasInstancia) == 0){
+				cout << endl << endl << "       >>>>>>>>>> Problema! Não consegui deletar todas as demandas da construção [" << ConstrucoesInstancia.Construcoes[c1].NumeroDaConstrucao << "] ! -> BuscaLocal::BuscaLocalRetiraTarefasUmaConstrucao" << endl << endl;
+			}
+			// percorre todas as demandas da construção
+			for( int c2 = 0; c2 < (int) ConstrucoesInstancia.Construcoes.size(); c2++){
+				// só não analisa a construção que é a mesma que a do primeiro loop
+				if( c1 != c2){
+					//
+					DadosTarefasMovidasEtapa2.clear();
+					if( ConstrucoesInstancia.Construcoes[c2].DeletaTarefas(0, 0,DadosTarefasMovidasEtapa2, PlantasInstancia) == 0){
+						cout << endl << endl << "       >>>>>>>>>> Problema! Não consegui deletar todas as demandas da construção [" << ConstrucoesInstancia.Construcoes[c2].NumeroDaConstrucao << "] ! -> BuscaLocal::BuscaLocalRetiraTarefasUmaConstrucao" << endl << endl;
+					}
+
+					//recoloca demandas da construção 2
+
+					DemandaRecolocar = 0;
+					// inicia a variavel de controle como se a demanda foi recolocada
+					Recolocar = 1;
+					// enquanto se consegue recolocar demandas e se tem demandas para se recolocar se continua no while
+					while( Recolocar == 1 && DemandaRecolocar <   ConstrucoesInstancia.Construcoes[c2].NumeroDemandas){
+						// se tenta recolocar a demanda corrente
+						Recolocar = ConstrucoesInstancia.AdicionaTarefa( 0 , ConstrucoesInstancia.Construcoes[c2].NumeroDaConstrucao, DemandaRecolocar , DadosTarefasMovidasEtapa2, 1, 0, 1, 1 , PlantasInstancia, ImprimeDadosAdicionaTarefa,"  <<<<< BuscaLocal::BuscaLocalRetiraTarefasUmaConstrucao >>> ");
+
+						if( Imprime == 1){
+							cout << endl << endl << " >+< Recoloca [" << ConstrucoesInstancia.Construcoes[c2].NumeroDaConstrucao << "-" << DemandaRecolocar << "] -> " << Recolocar << endl << endl;
+						}
+						if( ImprimeEstruturas == 1){
+							ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia, 0);
+							PlantasInstancia.Imprime(1,1);
+							cout << "      DadosTarefasMovidasEtapa2 " << endl ;
+							ImprimeVetorDadosTarefa(DadosTarefasMovidasEtapa2);
+							cin >> ParaPrograma;
+						}
+						// se aumenta o inidice da demanda que se ira recolocar
+						DemandaRecolocar++;
+					}
+
+					//recoloca demandas da construção 1
+
+					DemandaRecolocar = d1;
+					// inicia a variavel de controle como se a demanda foi recolocada
+					Recolocar = 1;
+					// enquanto se consegue recolocar demandas e se tem demandas para se recolocar se continua no while
+					while( Recolocar == 1 && DemandaRecolocar <   ConstrucoesInstancia.Construcoes[c1].NumeroDemandas){
+						// se tenta recolocar a demanda corrente
+						Recolocar = ConstrucoesInstancia.AdicionaTarefa( 0 , ConstrucoesInstancia.Construcoes[c1].NumeroDaConstrucao, DemandaRecolocar , DadosTarefasMovidasEtapa2, 1, 0, 1, 1 , PlantasInstancia, ImprimeDadosAdicionaTarefa,"  <<<<< BuscaLocal::BuscaLocalRetiraTarefasUmaConstrucao >>> ");
+
+						if( Imprime == 1){
+							cout << endl << endl << " >+< Recoloca [" << ConstrucoesInstancia.Construcoes[c1].NumeroDaConstrucao << "-" << DemandaRecolocar << "] -> " << Recolocar << endl << endl;
+						}
+						if( ImprimeEstruturas == 1){
+							ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia, 0);
+							PlantasInstancia.Imprime(1,1);
+							cout << "      DadosTarefasMovidasEtapa2 " << endl ;
+							ImprimeVetorDadosTarefa(DadosTarefasMovidasEtapa2);
+							cin >> ParaPrograma;
+						}
+						// se aumenta o inidice da demanda que se ira recolocar
+						DemandaRecolocar++;
+					}
+					// calcula o nivel de inviabilidade da solução até o momento
+					ConstrucoesInstancia.CalcularNivelDeInviabilidade();
+
+					if( CalculaMakespanSolucao() < MakespanAnterior && Recolocar == 1){
+						// se limpa os vetores que armazenavam os dados de tarefas movidas durante o processo
+						DadosTarefasMovidasEtapa1.clear();
+						DadosTarefasMovidasEtapa2.clear();
+						return 1;
+					}
+					// se retorna a solução até o ponto onde se deletou as demandas da construção corrente
+					ConstrucoesInstancia.ReadicionaDeletaTarefasApartirDeDados(  DadosTarefasMovidasEtapa2, PlantasInstancia );
+				}
+			}
+			// se retorna a solução inicial
+			ConstrucoesInstancia.ReadicionaDeletaTarefasApartirDeDados(  DadosTarefasMovidasEtapa1, PlantasInstancia );
+
+		}
+
+	}
+
+
 }
 
 BuscaLocal::~BuscaLocal(){

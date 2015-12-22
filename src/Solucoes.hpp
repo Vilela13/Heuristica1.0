@@ -43,7 +43,7 @@ public:
 	void SinalizaTarefaAdicionadaInicialmente( int TarefaAdicionada, int IndiceConstrucaoNaoAtendida, int DemandaNaoAtendida);					// Sinalisa se a tarefa foi antendida colocando os valores 2 em sua situação remoção. Caso não, está demanda e suas posteriores na emsma construção recebem o valor -1 na situação demanda e 3 na situção remoção.
 	void ProcessoViabilizacao2(int TipoOrdenacao, int Imprime);
 
-	void RealizarBuscaLocal(int imprime);
+	void RealizarBuscaLocalCaminhao(int imprime);
 
 	~Solucao();
 };
@@ -766,25 +766,35 @@ void Solucao::ProcessoViabilizacao2(int TipoOrdenacao, int Imprime){
 }
 
 
-void Solucao::RealizarBuscaLocal(int imprime){
+void Solucao::RealizarBuscaLocalCaminhao(int imprime){
+	// calsse da busca local
 	BuscaLocal busca;
+
+	// variaveis d econtrole do processo, para contar o numero de iterações e para parar o programa
 	int NumeroDeVezes;
 	int ParaPrograma;
+	int ImprimeEstruturas;
 
+	// inicializa o numero de iterações como zero
 	NumeroDeVezes = 0;
+	ImprimeEstruturas = 0;
 
+	// carrega os dados da solução para a classe da busca local
 	busca.CarregaSolucao( NP, PlantasInstancia, NE,	ConstrucoesInstancia, NV, Velocidade, TempoDeVidaConcreto);
 
-
-	while ( busca.BuscaLocalTentaRealizarTarefasComOutosVeiculos(1,0) == 1){
+	// equanto o procediemnto da busca local melhorar a solução que se tem, se continua no while
+	while ( busca.BuscaLocalTentaRealizarTarefasComOutosVeiculos(imprime, ImprimeEstruturas) == 1){
+		// carrega a nova solução que se obteve
 		CarregaSolucao(busca.NP, busca.PlantasInstancia, busca.NE, busca.ConstrucoesInstancia, busca.NV , busca.Velocidade , busca.TempoDeVidaConcreto);
+		// aumenta o numero de iterações em 1
 		NumeroDeVezes++;
-		cout << " roda " << NumeroDeVezes << endl;
-		cin >> ParaPrograma;
+
+		if( imprime == 1){
+			cout << " iteração " << NumeroDeVezes << endl;
+			cin >> ParaPrograma;
+		}
+
 	}
-
-
-
 }
 
 Solucao::~Solucao(){

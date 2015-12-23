@@ -237,6 +237,14 @@ void Heuristica::ExecutaProcedimentoHeuristico1(){
 
 	Solucoes.Solucoes[1].Imprime(ImprimePlanta, ImprimeConstrucao, IntervalosRespeitadosConstrucaoes);
 
+	cout << endl << endl << "############################### Busca Local 3 (planta) #####################################" << endl << endl;
+
+	Solucoes.Solucoes[1].RealizarBuscaLocalPlanta(1);
+
+	cout << endl << endl << "##############################################################################################" << endl << endl;
+
+	Solucoes.Solucoes[1].Imprime(ImprimePlanta, ImprimeConstrucao, IntervalosRespeitadosConstrucaoes);
+
 
 
 }

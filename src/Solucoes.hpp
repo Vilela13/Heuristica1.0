@@ -45,6 +45,7 @@ public:
 
 	void RealizarBuscaLocalCaminhao(int imprime);
 	void RealizarBuscaLocalConstrucao(int imprime);
+	void RealizarBuscaLocalPlanta(int imprime);
 
 	~Solucao();
 };
@@ -816,6 +817,38 @@ void Solucao::RealizarBuscaLocalConstrucao(int imprime){
 
 	// equanto o procediemnto da busca local melhorar a solução que se tem, se continua no while
 	while ( busca.BuscaLocalMudaOrdemAtendiemntoConstrucoes(imprime, ImprimeEstruturas) == 1){
+		// carrega a nova solução que se obteve
+		CarregaSolucao(busca.NP, busca.PlantasInstancia, busca.NE, busca.ConstrucoesInstancia, busca.NV , busca.Velocidade , busca.TempoDeVidaConcreto);
+		// aumenta o numero de iterações em 1
+		NumeroDeVezes++;
+
+		if( imprime == 1){
+			cout << " iteração " << NumeroDeVezes << endl;
+			cin >> ParaPrograma;
+		}
+
+	}
+}
+
+
+void Solucao::RealizarBuscaLocalPlanta(int imprime){
+	// calsse da busca local
+	BuscaLocal busca;
+
+	// variaveis d econtrole do processo, para contar o numero de iterações e para parar o programa
+	int NumeroDeVezes;
+	int ParaPrograma;
+	int ImprimeEstruturas;
+
+	// inicializa o numero de iterações como zero
+	NumeroDeVezes = 0;
+	ImprimeEstruturas = 0;
+
+	// carrega os dados da solução para a classe da busca local
+	busca.CarregaSolucao( NP, PlantasInstancia, NE,	ConstrucoesInstancia, NV, Velocidade, TempoDeVidaConcreto);
+
+	// equanto o procediemnto da busca local melhorar a solução que se tem, se continua no while
+	while ( busca.BuscaLocalTrocaPlantaAtendimento(imprime, ImprimeEstruturas) == 1){
 		// carrega a nova solução que se obteve
 		CarregaSolucao(busca.NP, busca.PlantasInstancia, busca.NE, busca.ConstrucoesInstancia, busca.NV , busca.Velocidade , busca.TempoDeVidaConcreto);
 		// aumenta o numero de iterações em 1

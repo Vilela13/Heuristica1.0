@@ -136,6 +136,8 @@ public:
 	int AlocaAtividadeComHorarioFinalAtendimentoComVeiculoFixo( int NumDemanda, int NumPlanta, int NumCarreta, double HoraFimAtendimento, double &NovaHoraFimAtendimento, vector < DadosTarefa > &DadosTarefasMovidasAuxiliar, int SituacaoDemanda, int StatusRemocao, ConjuntoPlantas& Plantas, int TipoOrdenacao, string frase);		// aloca atividade sabedno que ela tem que começar em um certo hoario, este horaio é determinado pelo horaio que ela tem que terminar. Nesse caso se tem que realizar o atendimeto com o veículo passado na função
 	int AtrazaDemandasParaAtenderMasterComVeiculoFixo( int NumDemanda, int NumPlanta, int NumCarreta, double HoraFimAtendimento, vector < DadosTarefa > &DadosTarefasMovidasAuxiliar,int SituacaoDemanda, int StatusRemocao,ConjuntoPlantas& Plantas, int &SituacaoAlocacao, int TipoOrdenacao,int imprime, string frase);
 
+	int DemandaNaoatendida( int &DemandaNaoAtendida);			// retorna a demanda não atendida na construção por parametro, retorna 1 se tive demanda não atendida e zero se a construção já tiver sido completamente atendida
+
 	~Construcao();
 
 };
@@ -1373,6 +1375,24 @@ int Construcao::AtrazaDemandasParaAtenderMasterComVeiculoFixo( int NumDemanda, i
 	}
 }
 
+// retorna a demanda não atendida na construção por parametro, retorna 1 se tive demanda não atendida e zero se a construção já tiver sido completamente atendida
+int Construcao::DemandaNaoatendida( int &DemandaNaoAtendida){
+	DemandaNaoAtendida = -13;
+
+	// percorre todas as demandas da construção
+	for( int d = 0; d < NumeroDemandas; d++){
+		// caso a demanda não tenha sido atendida se entra no if
+		if( SituacaoDemanda[d] == 0 ){
+			// se retorna a demanda não atendida
+			DemandaNaoAtendida = d;
+			// retorna 1 mostrando que tem uma demanda não atendida
+			return 1;
+		}
+	}
+	// retorna 0 mostrando que não tem demanda não atendida
+	return 0;
+}
+
 // destruidora da classe
 Construcao::~Construcao(){
 	NumeroDaConstrucao = -13;
@@ -1448,6 +1468,8 @@ public:
 	void EncontraPlantaMenorDistanciaConstrucao( int c, int& NumPlantaAnalisando, ConjuntoPlantas &PlantasInstancia, string frase);		// encontra a planta mais perto da construção que ainda não foi analisada
 	int AdicionaTarefa( int VerificaExistencia, int Construcao, int Demanda , vector < DadosTarefa > &DadosTarefasMovidas, int SituacaoDemanda, int SituacaoRemocao, int RealizaProcessoDeAtrazarTarefas, int TipoOrdenacao , ConjuntoPlantas &PlantasInstancia, int imprime, string frase);		// função que tenta alocar uma demanda
 	int AdicionaTarefaComVeiculoFixo( int VerificaExistencia, int Construcao, int Demanda , int Planta, int Carreta, vector < DadosTarefa > &DadosTarefasMovidas, int SituacaoDemanda, int SituacaoRemocao, int RealizaProcessoDeAtrazarTarefas, int TipoOrdenacao , ConjuntoPlantas &PlantasInstancia, int imprime, string frase);
+
+	int RetornaConstrucaoQuePodeSerAtendidaComMenorIndice( int &Construcao, int &IndiceConstrucao);
 
 	~ConjuntoConstrucoes();						// Destruidora da classe
 };
@@ -2360,6 +2382,32 @@ int ConjuntoConstrucoes::AdicionaTarefaComVeiculoFixo( int VerificaExistencia, i
 	// retorna 0 pois não encontrou a cosntrução passada
 	return 0;
 
+}
+
+int ConjuntoConstrucoes::RetornaConstrucaoQuePodeSerAtendidaComMenorIndice( int &Construcao, int &IndiceConstrucao){
+	int Ativo;
+	double RankInicial;
+
+	Ativo = 0;
+	RankInicial = DBL_MAX;
+
+	for( int c = 0; c < (int) Construcoes.size(); c++){
+		if ( RankInicial > Construcoes[c].RankTempoDemandas){
+			// Seleciona a construção que não possui todas as suas demandas já atendidas e que ainda não foi analisada
+			if(Construcoes[c].StatusAtendimento < Construcoes[c].NumeroDemandas &&  ConstrucaoPodeSerSuprida[c] == 0){
+				Construcao = Construcoes[c].NumeroDaConstrucao;
+				IndiceConstrucao = c;
+				RankInicial = Construcoes[c].RankTempoDemandas;
+				Ativo = 1;
+			}
+		}
+	}
+
+	if( Ativo == 1){
+		return 1;
+	}else{
+		return 0;
+	}
 }
 
 // Destruidora da classe

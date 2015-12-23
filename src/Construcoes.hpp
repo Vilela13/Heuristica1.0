@@ -2093,8 +2093,6 @@ int ConjuntoConstrucoes::AdicionaTarefa( int VerificaExistencia, int Construcao,
 				}
 			}
 			if( imprime == 1){
-				cout << "   &&&&&&&&&&&&& Nao consigo atender contrucao [" << Construcoes[c].NumeroDaConstrucao << "-" << Demanda << "]   sem atrazar as outra demandas -> ConjuntoConstrucoes::AdicionaTarefa &&&&&&&&&&&&& " << endl;
-
 				cout << endl << endl <<  " SituacaoPlantaAtenderCasoAtrazar" << endl;
 				ImprimeVetorInt( PlantasInstancia.PlantasAnalizadas );
 				cout <<   " HorarioQuePlantaPodeAtender" << endl;
@@ -2106,6 +2104,11 @@ int ConjuntoConstrucoes::AdicionaTarefa( int VerificaExistencia, int Construcao,
 
 			// caso não se tenha conseguido atender a demanda corrente, se verifica se tem alguma planta que pode atender a demanda caso se mude o horario de atendiemnto das outras demandas posteriores a está. Caso se possa, se entra no if e tenta mudar o horario das demandas anteriores para se tentar atender a demanda corrente
 			if( PlantasInstancia.VerificaPlantasAnalizadasPodemAtenderSeAtrazar() == 1){
+
+				if( imprime == 1){
+						cout << "   &&&&&&&&&&&&& Nao consigo atender contrucao [" << Construcoes[c].NumeroDaConstrucao << "-" << Demanda << "]   sem atrazar as outra demandas -> ConjuntoConstrucoes::AdicionaTarefa &&&&&&&&&&&&& " << endl;
+				}
+
 				// limpa o vetor que aramzena as tarefas adicionadas e removidas no processo de atraso
 				DadosTarefasMovidasAuxiliar.clear();
 				if( imprime == 1){
@@ -2280,7 +2283,6 @@ int ConjuntoConstrucoes::AdicionaTarefaComVeiculoFixo( int VerificaExistencia, i
 		}
 
 		if( imprime == 1){
-			cout << "   &&&&&&&&&&&&& Nao consigo atender contrucao [" << Construcoes[c].NumeroDaConstrucao << "-" << Demanda << "]   sem atrazar as outra demandas -> ConjuntoConstrucoes::AdicionaTarefaComVeiculoFixo &&&&&&&&&&&&& " << endl;
 			cout << endl << endl <<  " SituacaoPlantaAtenderCasoAtrazar [" << SituacaoPlanta << "]" << endl;
 			cout <<   " HorarioQuePlantaPodeAtender [" << HorarioQuePlantaPodeAtender << "]" << endl;
 			cout <<   " HorarioQueConstrucaoPodeReceberDemanda [" << HorarioQueConstrucaoPodeReceberDemanda << "]" <<endl;
@@ -2289,6 +2291,9 @@ int ConjuntoConstrucoes::AdicionaTarefaComVeiculoFixo( int VerificaExistencia, i
 
 		// caso não se tenha conseguido atender a demanda corrente, se verifica se tem alguma planta que pode atender a demanda caso se mude o horario de atendiemnto das outras demandas posteriores a está. Caso se possa, se entra no if e tenta mudar o horario das demandas anteriores para se tentar atender a demanda corrente
 		if(  SituacaoPlanta == -2){
+			if( imprime == 1){
+				cout << "   &&&&&&&&&&&&& Nao consigo atender contrucao [" << Construcoes[c].NumeroDaConstrucao << "-" << Demanda << "]   sem atrazar as outra demandas -> ConjuntoConstrucoes::AdicionaTarefaComVeiculoFixo &&&&&&&&&&&&& " << endl;
+			}
 
 			// limpa o vetor que aramzena as tarefas adicionadas e removidas no processo de atraso
 			DadosTarefasMovidasAuxiliar.clear();

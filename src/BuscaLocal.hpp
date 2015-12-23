@@ -277,7 +277,7 @@ int BuscaLocal::BuscaLocalTentaRealizarTarefasComOutosVeiculos(int Imprime, int 
 		// marca a solução corrente como já analisada
 		ConstrucoesInstancia.ConstrucoesAnalizadas[IndiceConstrucaoEscolhida] = 1;
 	}
-	// retorna zero caso não consiga melhorar a solução
+
 
 	if( Imprime == 1){
 		cout << endl << endl << "        -------- Não melhorou a solução ------ " << endl << endl;
@@ -315,13 +315,17 @@ int BuscaLocal::BuscaLocalMudaOrdemAtendiemntoConstrucoes(int Imprime, int Impri
 	// percorre todas as construções
 	for( int c1 = 0; c1 < (int) ConstrucoesInstancia.Construcoes.size(); c1++){
 		// percorre todas as demandas da construção
-		for( int d1; d1 < (int) ConstrucoesInstancia.Construcoes[c1].NumeroDemandas; d1++ ){
+		for( int d1 = 0; d1 < (int) ConstrucoesInstancia.Construcoes[c1].NumeroDemandas; d1++ ){
 			// limpa o conteudo do vetor que guarda os dados da tarefas movidas durante o processo
 			DadosTarefasMovidasEtapa1.clear();
 			//deleta todas as tarefas na construção partindo como inicio a demanda corrente
 			if( ConstrucoesInstancia.Construcoes[c1].DeletaTarefas(0, d1,DadosTarefasMovidasEtapa1, PlantasInstancia) == 0){
 				cout << endl << endl << "       >>>>>>>>>> Problema! Não consegui deletar todas as demandas da construção [" << ConstrucoesInstancia.Construcoes[c1].NumeroDaConstrucao << "] ! -> BuscaLocal::BuscaLocalRetiraTarefasUmaConstrucao" << endl << endl;
 			}
+			if( Imprime == 1){
+				cout << endl << endl << "	Etapa 1 -> Deleta tarefas da construção [" << ConstrucoesInstancia.Construcoes[c1].NumeroDaConstrucao << "-" << d1 << "]" << endl << endl;
+			}
+
 			// percorre todas as demandas da construção
 			for( int c2 = 0; c2 < (int) ConstrucoesInstancia.Construcoes.size(); c2++){
 				// só não analisa a construção que é a mesma que a do primeiro loop
@@ -330,6 +334,10 @@ int BuscaLocal::BuscaLocalMudaOrdemAtendiemntoConstrucoes(int Imprime, int Impri
 					DadosTarefasMovidasEtapa2.clear();
 					if( ConstrucoesInstancia.Construcoes[c2].DeletaTarefas(0, 0,DadosTarefasMovidasEtapa2, PlantasInstancia) == 0){
 						cout << endl << endl << "       >>>>>>>>>> Problema! Não consegui deletar todas as demandas da construção [" << ConstrucoesInstancia.Construcoes[c2].NumeroDaConstrucao << "] ! -> BuscaLocal::BuscaLocalRetiraTarefasUmaConstrucao" << endl << endl;
+					}
+
+					if( Imprime == 1){
+						cout << endl << endl << "		Etapa 2 -> Deleta tarefas da construção [" << ConstrucoesInstancia.Construcoes[c2].NumeroDaConstrucao << "]" << endl << endl;
 					}
 
 					//recoloca demandas da construção 2
@@ -343,7 +351,7 @@ int BuscaLocal::BuscaLocalMudaOrdemAtendiemntoConstrucoes(int Imprime, int Impri
 						Recolocar = ConstrucoesInstancia.AdicionaTarefa( 0 , ConstrucoesInstancia.Construcoes[c2].NumeroDaConstrucao, DemandaRecolocar , DadosTarefasMovidasEtapa2, 1, 0, 1, 1 , PlantasInstancia, ImprimeDadosAdicionaTarefa,"  <<<<< BuscaLocal::BuscaLocalRetiraTarefasUmaConstrucao >>> ");
 
 						if( Imprime == 1){
-							cout << endl << endl << " >+< Recoloca [" << ConstrucoesInstancia.Construcoes[c2].NumeroDaConstrucao << "-" << DemandaRecolocar << "] -> " << Recolocar << endl << endl;
+							cout << endl << endl << "			>+< Recoloca [" << ConstrucoesInstancia.Construcoes[c2].NumeroDaConstrucao << "-" << DemandaRecolocar << "] -> " << Recolocar << endl << endl;
 						}
 						if( ImprimeEstruturas == 1){
 							ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia, 0);
@@ -357,17 +365,14 @@ int BuscaLocal::BuscaLocalMudaOrdemAtendiemntoConstrucoes(int Imprime, int Impri
 					}
 
 					//recoloca demandas da construção 1
-
 					DemandaRecolocar = d1;
-					// inicia a variavel de controle como se a demanda foi recolocada
-					Recolocar = 1;
 					// enquanto se consegue recolocar demandas e se tem demandas para se recolocar se continua no while
 					while( Recolocar == 1 && DemandaRecolocar <   ConstrucoesInstancia.Construcoes[c1].NumeroDemandas){
 						// se tenta recolocar a demanda corrente
 						Recolocar = ConstrucoesInstancia.AdicionaTarefa( 0 , ConstrucoesInstancia.Construcoes[c1].NumeroDaConstrucao, DemandaRecolocar , DadosTarefasMovidasEtapa2, 1, 0, 1, 1 , PlantasInstancia, ImprimeDadosAdicionaTarefa,"  <<<<< BuscaLocal::BuscaLocalRetiraTarefasUmaConstrucao >>> ");
 
 						if( Imprime == 1){
-							cout << endl << endl << " >+< Recoloca [" << ConstrucoesInstancia.Construcoes[c1].NumeroDaConstrucao << "-" << DemandaRecolocar << "] -> " << Recolocar << endl << endl;
+							cout << endl << endl << "				>+++< Recoloca [" << ConstrucoesInstancia.Construcoes[c1].NumeroDaConstrucao << "-" << DemandaRecolocar << "] -> " << Recolocar << endl << endl;
 						}
 						if( ImprimeEstruturas == 1){
 							ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia, 0);
@@ -383,6 +388,9 @@ int BuscaLocal::BuscaLocalMudaOrdemAtendiemntoConstrucoes(int Imprime, int Impri
 					ConstrucoesInstancia.CalcularNivelDeInviabilidade();
 
 					if( CalculaMakespanSolucao() < MakespanAnterior && Recolocar == 1){
+						if( Imprime == 1){
+							cout << endl << endl << "  [[[[[[[[[[[[ Melhorou a solução ]]]]]]]]]]]]]]]] " << endl << endl;
+						}
 						// se limpa os vetores que armazenavam os dados de tarefas movidas durante o processo
 						DadosTarefasMovidasEtapa1.clear();
 						DadosTarefasMovidasEtapa2.clear();
@@ -390,14 +398,27 @@ int BuscaLocal::BuscaLocalMudaOrdemAtendiemntoConstrucoes(int Imprime, int Impri
 					}
 					// se retorna a solução até o ponto onde se deletou as demandas da construção corrente
 					ConstrucoesInstancia.ReadicionaDeletaTarefasApartirDeDados(  DadosTarefasMovidasEtapa2, PlantasInstancia );
+					if( Imprime == 1){
+						cout << endl << endl << "		Fim da Etapa 2 " << endl << endl;
+					}
 				}
 			}
 			// se retorna a solução inicial
 			ConstrucoesInstancia.ReadicionaDeletaTarefasApartirDeDados(  DadosTarefasMovidasEtapa1, PlantasInstancia );
+			if( Imprime == 1){
+				cout << endl << endl << "	Fim da Etapa 1 " << endl << endl;
+			}
 
 		}
 
 	}
+	if( Imprime == 1){
+		cout << endl << endl << "        -------- Não melhorou a solução ------ " << endl << endl;
+	}
+	// calcula o nivel de inviabilidade da solução
+	ConstrucoesInstancia.CalcularNivelDeInviabilidade();
+	// retona 0 mostrando que não se conseguiu melhorar a solução que se tinha
+	return 0;
 
 
 }

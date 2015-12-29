@@ -447,6 +447,7 @@ int BuscaLocal::BuscaLocalTrocaPlantaAtendimento(int Imprime, int ImprimeEstrutu
 	// dados das tarefas movidas duarante o procedimento que serão utilizadas ara retornar ao estado anterior da solução caso se piore a solução que se tinha
 	vector < DadosTarefa > DadosTarefasMovidasEtapa1;
 	vector < DadosTarefa > DadosTarefasMovidasEtapa2;
+	vector < DadosTarefa > TarefasDeletdas;
 
 	int DemandaNaoAtendida;
 
@@ -463,106 +464,131 @@ int BuscaLocal::BuscaLocalTrocaPlantaAtendimento(int Imprime, int ImprimeEstrutu
 
 	double MakespanAnterior;
 
+	int PrimeiraDemandaTirada;
+
+	int  DemandaNaoAtendidaSemPlantaFixa;
+
 	int ParaPrograma;
 
 	MakespanAnterior = CalculaMakespanSolucao();
 
-	// percorre todas as plantas
-	for( int p = 0; p < (int) PlantasInstancia.Plantas.size(); p++){
-		DadosTarefasMovidasEtapa1.clear();
-		// percorre todas as construções
-		if( Imprime == 1){
-			cout << endl << endl << "	Inicio Etapa 1 -> Planta [" << PlantasInstancia.Plantas[p].NumeroDaPlanta << "]" << endl << endl;
-			cin >> ParaPrograma;
-		}
+	if( (int) PlantasInstancia.Plantas.size() > 1){
 
-		for( int c1 = 0; c1 < (int) ConstrucoesInstancia.Construcoes.size();c1++){
-			// inicializa as variaveis de controle da demanda analisada e se deletou a demanda analisada como zero
-			DemandaAnalise = 0;
-			DeletouDemanda = 0;
-			// faz enquanto não se encontrar uma deamnda para excluir ou se percorrer todas as demandas da construção corrente
-			while( DeletouDemanda == 0 || DemandaAnalise < ConstrucoesInstancia.Construcoes[c1].NumeroDemandas){
-				// verifica os dados da demanda corrente
-				if( ConstrucoesInstancia.RetornaDadosDemandaAtendida( ConstrucoesInstancia.Construcoes[c1].NumeroDaConstrucao, DemandaAnalise,  NumPlanta, NumCarreta, HorarioInicioDescarregamento, HorarioFinalDescarregamento, HorarioInicioCarregamento, HorarioFinalCarregamento, HorarioInicioDeslocamento, HorarioFinalDeslocamento, PlantasInstancia) == 0){
-					cout << endl << endl << "   <<<<<<<<<< Problema em encontrar a tarefa da construção [" << ConstrucoesInstancia.Construcoes[c1].NumeroDaConstrucao << "-" << DemandaAnalise << "]" << endl << endl;
-				}
-				// verifica se a deamnda corrente é atendida pela planta em questão
-				if( NumPlanta == PlantasInstancia.Plantas[p].NumeroDaPlanta ){
-					// deleta a tarefa que é atendida pela planta em questão e as demandas posteriores a sestá na construção
-					DeletouDemanda = ConstrucoesInstancia.Construcoes[c1].DeletaTarefas( 0, DemandaAnalise, DadosTarefasMovidasEtapa1, PlantasInstancia);
+	// analisa as plantas e retira as tarefas qyue a planta atende no momento
 
-					if( Imprime == 1){
-						cout << endl << endl << "		Deletou construção [" <<  ConstrucoesInstancia.Construcoes[c1].NumeroDaConstrucao << "-" << DemandaAnalise << "]" << endl << endl;
-						cin >> ParaPrograma;
+		// percorre todas as plantas
+		for( int p1 = 0; p1 < (int) PlantasInstancia.Plantas.size(); p1++){
+
+			DadosTarefasMovidasEtapa1.clear();
+			// percorre todas as construções
+			if( Imprime == 1){
+				cout << endl << endl << "	Inicio Etapa 1 -> Planta [" << PlantasInstancia.Plantas[p1].NumeroDaPlanta << "]" << endl << endl;
+				cin >> ParaPrograma;
+			}
+
+			for( int c1 = 0; c1 < (int) ConstrucoesInstancia.Construcoes.size();c1++){
+				// inicializa as variaveis de controle da demanda analisada e se deletou a demanda analisada como zero
+				DemandaAnalise = 0;
+				DeletouDemanda = 0;
+				// faz enquanto não se encontrar uma deamnda para excluir ou se percorrer todas as demandas da construção corrente
+				while( DeletouDemanda == 0 && DemandaAnalise < ConstrucoesInstancia.Construcoes[c1].NumeroDemandas){
+					// verifica os dados da demanda corrente
+					if( ConstrucoesInstancia.RetornaDadosDemandaAtendida( ConstrucoesInstancia.Construcoes[c1].NumeroDaConstrucao, DemandaAnalise,  NumPlanta, NumCarreta, HorarioInicioDescarregamento, HorarioFinalDescarregamento, HorarioInicioCarregamento, HorarioFinalCarregamento, HorarioInicioDeslocamento, HorarioFinalDeslocamento, PlantasInstancia) == 0){
+						cout << endl << endl << "   <<<<<<<<<< Problema em encontrar a tarefa da construção [" << ConstrucoesInstancia.Construcoes[c1].NumeroDaConstrucao << "-" << DemandaAnalise << "]" << endl << endl;
 					}
+					// verifica se a deamnda corrente é atendida pela planta em questão
+					if( NumPlanta == PlantasInstancia.Plantas[p1].NumeroDaPlanta ){
+						// deleta a tarefa que é atendida pela planta em questão e as demandas posteriores a sestá na construção
+						DeletouDemanda = ConstrucoesInstancia.Construcoes[c1].DeletaTarefas( 0, DemandaAnalise, DadosTarefasMovidasEtapa1, PlantasInstancia);
 
+						if( Imprime == 1){
+							cout << endl << endl << "		Deletou construção [" <<  ConstrucoesInstancia.Construcoes[c1].NumeroDaConstrucao << "-" << DemandaAnalise << "]  => DeletouDemanda (" << DeletouDemanda << ")" << endl << endl;
+						}
+
+					}
+					// passa para a proxima demanda para se analisa-la
+					DemandaAnalise++;
 				}
-				// passa para a proxima demanda para se analisa-la
-				DemandaAnalise++;
+			}
+
+			if( Imprime == 1){
+				cout << endl << endl << "		Deletou tarefas realizadas pela planta [" << p1 << "] " << endl << endl;
+				PlantasInstancia.Imprime(1,1);
+				ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia , 0);
+				cin >> ParaPrograma;
 			}
 
 
+			// reacrecenta as demandas tiradas
 
-			// percorre todas as construções
-			for( int c2 = 0; c2 < (int) ConstrucoesInstancia.Construcoes.size();c2++){
-				if( ConstrucoesInstancia.Construcoes[c2].DemandaNaoatendida( DemandaNaoAtendida) == 1){
+			for( int c1 = 0; c1 < (int) ConstrucoesInstancia.Construcoes.size();c1++){
+
+				PrimeiraDemandaTirada = -1;
+				while( ConstrucoesInstancia.Construcoes[c1].DemandaNaoatendida( DemandaNaoAtendida) == 1){
+					if( PrimeiraDemandaTirada == -1){
+						PrimeiraDemandaTirada = DemandaNaoAtendida;
+					}
 
 					if( Imprime == 1){
-						cout << endl << endl << "		Inicio Etapa 2 -> Construcao [" <<ConstrucoesInstancia.Construcoes[c2].NumeroDaConstrucao << "-" << DemandaNaoAtendida << "]" << endl << endl;
+						cout << endl << endl << "		Inicio Etapa 2 -> Construcao [" <<ConstrucoesInstancia.Construcoes[c1].NumeroDaConstrucao << "-" << DemandaNaoAtendida << "]" << endl << endl;
 						cin >> ParaPrograma;
 					}
 
-					// percorre todos dos veículos da planta ecorrente
-					for( int v = 0; v < (int) PlantasInstancia.Plantas[p].VeiculosDaPlanta.Carretas.size(); v++){
+					for( int p2 = 0; p2 < (int) PlantasInstancia.Plantas.size(); p2++){
+						if( p1 != p2){
+							// percorre todos dos veículos da planta ecorrente
+							for( int v = 0; v < (int) PlantasInstancia.Plantas[p2].VeiculosDaPlanta.Carretas.size(); v++){
 
-						DadosTarefasMovidasEtapa2.clear();
+								DadosTarefasMovidasEtapa2.clear();
 
-						if( ConstrucoesInstancia.AdicionaTarefaComVeiculoFixo( 0 , ConstrucoesInstancia.Construcoes[c2].NumeroDaConstrucao, DemandaNaoAtendida , PlantasInstancia.Plantas[p].NumeroDaPlanta, PlantasInstancia.Plantas[p].VeiculosDaPlanta.Carretas[v].NumeroDaCarreta, DadosTarefasMovidasEtapa2, 1, 0, 1, 1 , PlantasInstancia, ImprimeDadosAdicionaTarefa,"  <<<<< BuscaLocal::BuscaLocalTrocaPlantaAtendimento >>> ") == 1){
+								if( ConstrucoesInstancia.AdicionaTarefaComVeiculoFixo( 0 , ConstrucoesInstancia.Construcoes[c1].NumeroDaConstrucao, DemandaNaoAtendida , PlantasInstancia.Plantas[p2].NumeroDaPlanta, PlantasInstancia.Plantas[p2].VeiculosDaPlanta.Carretas[v].NumeroDaCarreta, DadosTarefasMovidasEtapa2, 1, 0, 1, 1 , PlantasInstancia, ImprimeDadosAdicionaTarefa,"  <<<<< BuscaLocal::BuscaLocalTrocaPlantaAtendimento >>> ") == 1){
 
-							if( Imprime == 1){
-								cout << endl << endl << "			>+ v +< Readicionou Construcao [" <<ConstrucoesInstancia.Construcoes[c2].NumeroDaConstrucao << "-" << DemandaNaoAtendida << "] com veiculo [" << PlantasInstancia.Plantas[p].NumeroDaPlanta << "-" << v << "]" << endl << endl;
-								cin >> ParaPrograma;
-							}
-
-
-							ReadicionouDemanda = 1;
-							ConstrucoesInstancia.AlocaValoresConstrucaoPodeAtender();
-
-							while( VerificaTodosValoresVetorInt( 1, ConstrucoesInstancia.ConstrucaoPodeSerSuprida) == 0 && ReadicionouDemanda == 1){
-
-								if( ConstrucoesInstancia.RetornaConstrucaoQuePodeSerAtendidaComMenorIndice( ConstrucaoAtender, IndiceConstrucaoAtender) == 0){
-									cout << endl << endl << " <<<<<<<<<<<<  Problema em encontrar construção  >>>>>>>>>>>>> " << endl << endl;
-								}
-								if( ConstrucoesInstancia.Construcoes[c2].DemandaNaoatendida( DemandaNaoAtendida) == 0){
-									cout << endl << endl << " <<<<<<<<<<<<  Problema em encontrar construção  >>>>>>>>>>>>> " << endl << endl;
-								}
-
-								while( DemandaNaoAtendida < ConstrucoesInstancia.Construcoes[IndiceConstrucaoAtender].NumeroDemandas && ReadicionouDemanda == 1){
-									ReadicionouDemanda = ConstrucoesInstancia.AdicionaTarefa( 0 , ConstrucoesInstancia.Construcoes[IndiceConstrucaoAtender].NumeroDaConstrucao,  DemandaNaoAtendida , DadosTarefasMovidasEtapa2, 1, 0, 1, 1 , PlantasInstancia, ImprimeDadosAdicionaTarefa,"  <<<<< BuscaLocal::BuscaLocalTrocaPlantaAtendimento >>> ");
-
-									if( Imprime == 1 && ReadicionouDemanda == 1){
-										cout << endl << endl << "				>+< Readicionou Construcao [" << ConstrucoesInstancia.Construcoes[IndiceConstrucaoAtender].NumeroDaConstrucao << "-" << DemandaNaoAtendida << "] com veiculo [" << PlantasInstancia.Plantas[p].NumeroDaPlanta << "-" << v << "]" << endl << endl;
+									if( Imprime == 1){
+										cout  << endl << "			>+ v +< Readicionou Construcao [" <<ConstrucoesInstancia.Construcoes[c1].NumeroDaConstrucao << "-" << DemandaNaoAtendida << "] com veiculo [" << PlantasInstancia.Plantas[p2].NumeroDaPlanta << "-" << v << "]" << endl << endl;
 										cin >> ParaPrograma;
 									}
 
-									DemandaNaoAtendida++;
+									ReadicionouDemanda = 1;
+									ConstrucoesInstancia.AlocaValoresConstrucaoPodeAtender();
+
+									while( VerificaTodosValoresVetorInt( 1, ConstrucoesInstancia.ConstrucaoPodeSerSuprida) == 0 && ReadicionouDemanda == 1){
+
+										if( ConstrucoesInstancia.RetornaConstrucaoQuePodeSerAtendidaComMenorIndice( ConstrucaoAtender, IndiceConstrucaoAtender) == 0){
+											cout << endl << endl << " <<<<<<<<<<<<  Problema em encontrar construção  >>>>>>>>>>>>> " << endl << endl;
+										}
+										if( ConstrucoesInstancia.Construcoes[IndiceConstrucaoAtender].DemandaNaoatendida( DemandaNaoAtendidaSemPlantaFixa) == 0){
+											cout << endl << endl << " <<<<<<<<<<<<  Problema em encontrar construção  >>>>>>>>>>>>> " << endl << endl;
+										}
+
+										while( DemandaNaoAtendidaSemPlantaFixa < ConstrucoesInstancia.Construcoes[IndiceConstrucaoAtender].NumeroDemandas && ReadicionouDemanda == 1){
+											ReadicionouDemanda = ConstrucoesInstancia.AdicionaTarefa( 0 , ConstrucoesInstancia.Construcoes[IndiceConstrucaoAtender].NumeroDaConstrucao,   DemandaNaoAtendidaSemPlantaFixa , DadosTarefasMovidasEtapa2, 1, 0, 1, 1 , PlantasInstancia, ImprimeDadosAdicionaTarefa,"  <<<<< BuscaLocal::BuscaLocalTrocaPlantaAtendimento >>> ");
+
+											if( Imprime == 1 && ReadicionouDemanda == 1){
+												cout  << endl << "				>+< Readicionou Construcao [" << ConstrucoesInstancia.Construcoes[IndiceConstrucaoAtender].NumeroDaConstrucao << "-" <<  DemandaNaoAtendidaSemPlantaFixa << "] "<< endl << endl;
+												cin >> ParaPrograma;
+											}
+
+											DemandaNaoAtendidaSemPlantaFixa++;
+										}
+
+										ConstrucoesInstancia.AtualizaValoresConstrucaoPodeAtender();
+
+									}
+
+									if( ReadicionouDemanda == 1 && CalculaMakespanSolucao() < MakespanAnterior){
+										if( Imprime == 1){
+											cout << endl << endl << "  [[[[[[[[[[[[ Melhorou a solução ]]]]]]]]]]]]]]]] " << endl << endl;
+										}
+										// se limpa os vetores que armazenavam os dados de tarefas movidas durante o processo
+										DadosTarefasMovidasEtapa1.clear();
+										DadosTarefasMovidasEtapa2.clear();
+										// retorna 1 que corresponde que melhorou a solução
+										return 1;
+									}
+
+
+
 								}
-
-								ConstrucoesInstancia.AtualizaValoresConstrucaoPodeAtender();
-
-							}
-
-							if( ReadicionouDemanda == 1 && CalculaMakespanSolucao() < MakespanAnterior){
-								if( Imprime == 1){
-									cout << endl << endl << "  [[[[[[[[[[[[ Melhorou a solução ]]]]]]]]]]]]]]]] " << endl << endl;
-								}
-								// se limpa os vetores que armazenavam os dados de tarefas movidas durante o processo
-								DadosTarefasMovidasEtapa1.clear();
-								DadosTarefasMovidasEtapa2.clear();
-								// retorna 1 que corresponde que melhorou a solução
-								return 1;
-							}else{
-								// se retorna a solução até o ponto onde se deletou as demandas da construção corrente
 								ConstrucoesInstancia.ReadicionaDeletaTarefasApartirDeDados(  DadosTarefasMovidasEtapa2, PlantasInstancia );
 								if( Imprime == 1){
 									cout << endl << endl << "		Fim da Etapa 2 " << endl << endl;
@@ -571,26 +597,31 @@ int BuscaLocal::BuscaLocalTrocaPlantaAtendimento(int Imprime, int ImprimeEstrutu
 							}
 						}
 					}
+					ReadicionouDemanda = ConstrucoesInstancia.AdicionaTarefa( 0 , ConstrucoesInstancia.Construcoes[IndiceConstrucaoAtender].NumeroDaConstrucao,   DemandaNaoAtendida , DadosTarefasMovidasEtapa2, 1, 0, 1, 1 , PlantasInstancia, ImprimeDadosAdicionaTarefa,"  <<<<< BuscaLocal::BuscaLocalTrocaPlantaAtendimento >>> ");
 				}
+
+				if( PrimeiraDemandaTirada != -1){
+					if( ConstrucoesInstancia.Construcoes[c1].DeletaTarefas( 0, PrimeiraDemandaTirada, TarefasDeletdas, PlantasInstancia) == 0){
+						cout << endl << endl << "     <<<<<<<<<<<<<<<<<<< Problema em deletar tarfeas >>>>>>>>>>>>> " << endl << endl;
+					}
+				}
+
+
+
 			}
 
-
-
-
-
-
+			// se retorna a solução até o ponto onde se deletou as demandas da construção corrente
+			ConstrucoesInstancia.ReadicionaDeletaTarefasApartirDeDados(  DadosTarefasMovidasEtapa1, PlantasInstancia );
+			if( Imprime == 1){
+				cout << endl << endl << "	Fim da Etapa 1 " << endl << endl;
+				PlantasInstancia.Imprime(1,1);
+				ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia , 0);
+				cin >> ParaPrograma;
+			}
 		}
 
-		// se retorna a solução até o ponto onde se deletou as demandas da construção corrente
-		ConstrucoesInstancia.ReadicionaDeletaTarefasApartirDeDados(  DadosTarefasMovidasEtapa1, PlantasInstancia );
-		if( Imprime == 1){
-			cout << endl << endl << "	Fim da Etapa 1 " << endl << endl;
-			cin >> ParaPrograma;
-		}
+
 	}
-
-
-
 
 	// retona 0 mostrando que não se conseguiu melhorar a solução que se tinha
 	return 0;

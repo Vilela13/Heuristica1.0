@@ -239,7 +239,7 @@ void Heuristica::ExecutaProcedimentoHeuristico1(){
 
 	cout << endl << endl << "############################### Busca Local 3 (planta) #####################################" << endl << endl;
 
-	Solucoes.Solucoes[1].RealizarBuscaLocalPlanta(1);
+	Solucoes.Solucoes[1].RealizarBuscaLocalPlanta(0);
 
 	cout << endl << endl << "##############################################################################################" << endl << endl;
 

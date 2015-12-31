@@ -457,12 +457,18 @@ int BuscaLocal::BuscaLocalMudaOrdemAtendiemntoConstrucoes(int Imprime, int Impri
 
 int BuscaLocal::BuscaLocalTrocaPlantaAtendimento(int Imprime, int ImprimeEstruturas){
 
+	// makespan da solução anterior que se tinha
+	double MakespanAnterior;
+
+	// variaveis que guardam a demanda deletada na etapa um e o status do procedimento de se deletar tal demanda
 	int DemandaAnalise;
 	int DeletouDemanda;
 
+	// variaveis que armazenam a planta e a carreta da tarefa analisada para ser deletada caso for atendida pela planta em questão
 	int NumPlanta;
 	int NumCarreta;
 
+	// variaveis que armazenam os horarios da tarefa analisada para ser deletada caso for atendida pela planta em questão
 	double HorarioInicioDescarregamento;
 	double HorarioFinalDescarregamento;
 	double HorarioInicioCarregamento;
@@ -473,38 +479,37 @@ int BuscaLocal::BuscaLocalTrocaPlantaAtendimento(int Imprime, int ImprimeEstrutu
 	// dados das tarefas movidas duarante o procedimento que serão utilizadas ara retornar ao estado anterior da solução caso se piore a solução que se tinha
 	vector < DadosTarefa > DadosTarefasMovidasEtapa1;
 	vector < DadosTarefa > DadosTarefasMovidasEtapa2;
-	vector < DadosTarefa > TarefasDeletdas;
+	// dados das tarefas movidas entre as etapas 1 e 2
+	vector < DadosTarefa > DadosTarefasMovidasEntreEtapa1e2;
 
+	// demanda não atendida na etapa 2 que se tentara reatender
 	int DemandaNaoAtendida;
+
+	// variavel que controla se a demanda foi reinserida
+	int ReadicionouDemanda;
+
+	// dados da cosntrução que terá suas demandas reinseridas na etapa 2
+	int ConstrucaoAtender;
+	int IndiceConstrucaoAtender;
+	// demanda que será reinserida na etapa dois mas que não possui um veículo do qual ela tem que ser atendida obrigatoriamente
+	int  DemandaNaoAtendidaSemPlantaFixa;
+
+	int ParaPrograma;
 
 	// imprime os dados dos processos de adicionar as tarefas caso for 1, 0 caso vontrario
 	int ImprimeDadosAdicionaTarefa;
 
 	ImprimeDadosAdicionaTarefa = 0;
 
-	// variavel que controla se a demanda foi reinserida
-	int ReadicionouDemanda;
-
-	int ConstrucaoAtender;
-	int IndiceConstrucaoAtender;
-
-	double MakespanAnterior;
-
-	int PrimeiraDemandaTirada;
-
-	int  DemandaNaoAtendidaSemPlantaFixa;
-
-	int ParaPrograma;
-
+	// armazena o makespan da solução corrente
 	MakespanAnterior = CalculaMakespanSolucao();
 
+	// verifica se a instancia tem mais de uma planta
 	if( (int) PlantasInstancia.Plantas.size() > 1){
-
-	// analisa as plantas e retira as tarefas qyue a planta atende no momento
 
 		// percorre todas as plantas
 		for( int p1 = 0; p1 < (int) PlantasInstancia.Plantas.size(); p1++){
-
+			// limpa o conteudo do vetor que guarda os dados da tarefas movidas durante a etapa 1
 			DadosTarefasMovidasEtapa1.clear();
 			// percorre todas as construções
 			if( Imprime == 1){
@@ -512,6 +517,10 @@ int BuscaLocal::BuscaLocalTrocaPlantaAtendimento(int Imprime, int ImprimeEstrutu
 				cin >> ParaPrograma;
 			}
 
+
+ // deleta as demandas atendidas pela planta corrente
+
+			// percorre todas as construções
 			for( int c1 = 0; c1 < (int) ConstrucoesInstancia.Construcoes.size();c1++){
 				// inicializa as variaveis de controle da demanda analisada e se deletou a demanda analisada como zero
 				DemandaAnalise = 0;
@@ -536,71 +545,82 @@ int BuscaLocal::BuscaLocalTrocaPlantaAtendimento(int Imprime, int ImprimeEstrutu
 					DemandaAnalise++;
 				}
 			}
-
+			// calcula o nivel de inviabilidade da solução
+			ConstrucoesInstancia.CalcularNivelDeInviabilidade();
 			if( Imprime == 1){
 				cout << endl << endl << "		Deletou tarefas realizadas pela planta [" << p1 << "] " << endl << endl;
 				PlantasInstancia.Imprime(1,1);
 				ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia , 0);
 				cin >> ParaPrograma;
 			}
-
-
-			// reacrecenta as demandas tiradas
-
+			// percorre todas as construções
 			for( int c1 = 0; c1 < (int) ConstrucoesInstancia.Construcoes.size();c1++){
 
-				PrimeiraDemandaTirada = -1;
+				DadosTarefasMovidasEntreEtapa1e2.clear();
+
+				// responsavel por armazenar a primeira demanda na construção corrente que é atendida pela planta em analise
+
+
+				// enquanto a cosntrução corrente tiver uma demanda que foi deltada no processo anterior se continua no while
 				while( ConstrucoesInstancia.Construcoes[c1].DemandaNaoatendida( DemandaNaoAtendida) == 1){
-					if( PrimeiraDemandaTirada == -1){
-						PrimeiraDemandaTirada = DemandaNaoAtendida;
-					}
 
 					if( Imprime == 1){
 						cout << endl << endl << "		Inicio Etapa 2 -> Construcao [" <<ConstrucoesInstancia.Construcoes[c1].NumeroDaConstrucao << "-" << DemandaNaoAtendida << "]" << endl << endl;
 						cin >> ParaPrograma;
 					}
 
+					// percorre todas as plantas
 					for( int p2 = 0; p2 < (int) PlantasInstancia.Plantas.size(); p2++){
+						// só não é avaliado a planta que é a mesma planta da etapa 1
 						if( p1 != p2){
-							// percorre todos dos veículos da planta ecorrente
+							// percorre todos dos veículos da planta corrente
 							for( int v = 0; v < (int) PlantasInstancia.Plantas[p2].VeiculosDaPlanta.Carretas.size(); v++){
-
+								// limpa o conteudo do vetor que guarda os dados da tarefas movidas durante a etapa 2
 								DadosTarefasMovidasEtapa2.clear();
 
-								if( ConstrucoesInstancia.AdicionaTarefaComVeiculoFixo( 0 , ConstrucoesInstancia.Construcoes[c1].NumeroDaConstrucao, DemandaNaoAtendida , PlantasInstancia.Plantas[p2].NumeroDaPlanta, PlantasInstancia.Plantas[p2].VeiculosDaPlanta.Carretas[v].NumeroDaCarreta, DadosTarefasMovidasEtapa2, 1, 0, 1, 1 , PlantasInstancia, ImprimeDadosAdicionaTarefa,"  <<<<< BuscaLocal::BuscaLocalTrocaPlantaAtendimento >>> ") == 1){
+// reacrescenta a primeira demanda tirada com uma certa planta que não é a que ela foi atendida na solução inicial
 
+								// tenta alocar a demanda corrente com um certo veiculo, caso se consiga alocar a demanda se entra no if
+								if( ConstrucoesInstancia.AdicionaTarefaComVeiculoFixo( 0 , ConstrucoesInstancia.Construcoes[c1].NumeroDaConstrucao, DemandaNaoAtendida , PlantasInstancia.Plantas[p2].NumeroDaPlanta, PlantasInstancia.Plantas[p2].VeiculosDaPlanta.Carretas[v].NumeroDaCarreta, DadosTarefasMovidasEtapa2, 1, 0, 1, 1 , PlantasInstancia, ImprimeDadosAdicionaTarefa,"  <<<<< BuscaLocal::BuscaLocalTrocaPlantaAtendimento >>> ") == 1){
 									if( Imprime == 1){
 										cout  << endl << "			>+ v +< Readicionou Construcao [" <<ConstrucoesInstancia.Construcoes[c1].NumeroDaConstrucao << "-" << DemandaNaoAtendida << "] com veiculo [" << PlantasInstancia.Plantas[p2].NumeroDaPlanta << "-" << v << "]" << endl << endl;
 										cin >> ParaPrograma;
 									}
-
+									// calcula o nivel de inviabilidade da solução
+									ConstrucoesInstancia.CalcularNivelDeInviabilidade();
+									// marac a variavel como se conseguiu alicar a demanda
 									ReadicionouDemanda = 1;
+									// marca as construções que possuem demandas que ainda não foram atendidas como candidadtas a serem avaliadas para o atenidmento de suas demandas
 									ConstrucoesInstancia.AlocaValoresConstrucaoPodeAtender();
-
+									// caso se tenha uma construção que ainda possa ter uma demanda atendida e se tenha conseguido atender a ultima demanda analisada, se entra no while. Este processo é realizado até que todas as demnadas tenham sido atendidas ou não se consiga se recolocar alguma demanda que foi desalocada.
 									while( VerificaTodosValoresVetorInt( 1, ConstrucoesInstancia.ConstrucaoPodeSerSuprida) == 0 && ReadicionouDemanda == 1){
-
+										// se armazena os dados da construção mais proeminente a se ter uma demanda reinserida no momento
 										if( ConstrucoesInstancia.RetornaConstrucaoQuePodeSerAtendidaComMenorIndice( ConstrucaoAtender, IndiceConstrucaoAtender) == 0){
 											cout << endl << endl << " <<<<<<<<<<<<  Problema em encontrar construção  >>>>>>>>>>>>> " << endl << endl;
 										}
+										// se armazena a primeira demanda na cosntrução corrente que terá suas demandas reinseridas
 										if( ConstrucoesInstancia.Construcoes[IndiceConstrucaoAtender].DemandaNaoatendida( DemandaNaoAtendidaSemPlantaFixa) == 0){
 											cout << endl << endl << " <<<<<<<<<<<<  Problema em encontrar construção  >>>>>>>>>>>>> " << endl << endl;
 										}
 
+										// enquanto todas as demandas da construção corrente não tiverem sido atendidas ou se não consiga atender uma dessas demandas, se continua no while
 										while( DemandaNaoAtendidaSemPlantaFixa < ConstrucoesInstancia.Construcoes[IndiceConstrucaoAtender].NumeroDemandas && ReadicionouDemanda == 1){
+											// tenta readicionar a demanda corrente que foi retirada na etapa 1, sendo que não precisa ser utilizando um veículo especifico
 											ReadicionouDemanda = ConstrucoesInstancia.AdicionaTarefa( 0 , ConstrucoesInstancia.Construcoes[IndiceConstrucaoAtender].NumeroDaConstrucao,   DemandaNaoAtendidaSemPlantaFixa , DadosTarefasMovidasEtapa2, 1, 0, 1, 1 , PlantasInstancia, ImprimeDadosAdicionaTarefa,"  <<<<< BuscaLocal::BuscaLocalTrocaPlantaAtendimento >>> ");
 
 											if( Imprime == 1 && ReadicionouDemanda == 1){
 												cout  << endl << "				>+< Readicionou Construcao [" << ConstrucoesInstancia.Construcoes[IndiceConstrucaoAtender].NumeroDaConstrucao << "-" <<  DemandaNaoAtendidaSemPlantaFixa << "] "<< endl << endl;
 												cin >> ParaPrograma;
 											}
-
+											// se passa para a proxima demanda que tem que ser reinserida na cosntrução corrente
 											DemandaNaoAtendidaSemPlantaFixa++;
 										}
-
+										// calcula o nivel de inviabilidade da solução
+										ConstrucoesInstancia.CalcularNivelDeInviabilidade();
+										// se atualizia as construções que ainda tem demandas que temq ue ser reinseridas
 										ConstrucoesInstancia.AtualizaValoresConstrucaoPodeAtender();
-
 									}
-
+									// verifica se foi readicionado todas as demandas e se o novo makespan da solução corrente é melhor que o makespan da solução antiga, caso sim, entra no if
 									if( ReadicionouDemanda == 1 && CalculaMakespanSolucao() < MakespanAnterior){
 										if( Imprime == 1){
 											cout << endl << endl << "  [[[[[[[[[[[[ Melhorou a solução ]]]]]]]]]]]]]]]] " << endl << endl;
@@ -611,10 +631,8 @@ int BuscaLocal::BuscaLocalTrocaPlantaAtendimento(int Imprime, int ImprimeEstrutu
 										// retorna 1 que corresponde que melhorou a solução
 										return 1;
 									}
-
-
-
 								}
+								// caso não se conseguiu melhorar a solução, se retorna o estado da solução antes de se realizar os procediemntos da etapa 2 corrente
 								ConstrucoesInstancia.ReadicionaDeletaTarefasApartirDeDados(  DadosTarefasMovidasEtapa2, PlantasInstancia );
 								if( Imprime == 1){
 									cout << endl << endl << "		Fim da Etapa 2 " << endl << endl;
@@ -623,17 +641,16 @@ int BuscaLocal::BuscaLocalTrocaPlantaAtendimento(int Imprime, int ImprimeEstrutu
 							}
 						}
 					}
-					ReadicionouDemanda = ConstrucoesInstancia.AdicionaTarefa( 0 , ConstrucoesInstancia.Construcoes[IndiceConstrucaoAtender].NumeroDaConstrucao,   DemandaNaoAtendida , DadosTarefasMovidasEtapa2, 1, 0, 1, 1 , PlantasInstancia, ImprimeDadosAdicionaTarefa,"  <<<<< BuscaLocal::BuscaLocalTrocaPlantaAtendimento >>> ");
+					// readiciono a demanda que se estava se querendo colocar com um veiculo fixo utilizando o processo normal de se adicionar uma tarefa. *********** -> IMPORTANTE: apesar de se registrar a alocação dessa demanda na estrutura das tarefas movidas na etapa 2, ela não será considerada no processo de retorno para a solução antes da etapa 2 que será realizada em seguida. Pois a estrutura DadosTarefasMovidasEtapa2 é zerada ao se reiniciar a etapa 2. com isso essa demanda será considerada no procediemnto seguinte da etapa 2 como sendo parte da solução inicial fornecida pela etapa 1
+					ReadicionouDemanda = ConstrucoesInstancia.AdicionaTarefa( 0 , ConstrucoesInstancia.Construcoes[IndiceConstrucaoAtender].NumeroDaConstrucao,   DemandaNaoAtendida , DadosTarefasMovidasEntreEtapa1e2, 1, 0, 1, 1 , PlantasInstancia, ImprimeDadosAdicionaTarefa,"  <<<<< BuscaLocal::BuscaLocalTrocaPlantaAtendimento >>> ");
 				}
 
-				if( PrimeiraDemandaTirada != -1){
-					if( ConstrucoesInstancia.Construcoes[c1].DeletaTarefas( 0, PrimeiraDemandaTirada, TarefasDeletdas, PlantasInstancia) == 0){
-						cout << endl << endl << "     <<<<<<<<<<<<<<<<<<< Problema em deletar tarfeas >>>>>>>>>>>>> " << endl << endl;
-					}
+// após se tentar realizar o processo de se atender as demandas de uma cosntrução com uma planta que sejá diferente que a que ela é atendida na construção inicial e não se conseguiu melhorar o makespan da solução, se deleta as demandas que foram reinseridas no processo da Etapa 2 e não foram contabilizadas nos movimentos de retorno da solução antes de se realizar a etapa 2. Estas foram guardadas em DadosTarefasMovidasEntreEtapa1e2
+
+				// caso não se conseguiu melhorar a solução, se retorna o estado da solução antes de se realizar os procediemntos da etapa 2 que foram realizados na cosntrução corrente tentando atender as demandas dessa construção com um veículo fixo
+				if( ConstrucoesInstancia.ReadicionaDeletaTarefasApartirDeDados(  DadosTarefasMovidasEntreEtapa1e2, PlantasInstancia ) == 0) {
+					cout << endl << endl << "                     <<<<<<<< Problema em retornar a solução entre a etapa 1 e 2 -> BuscaLocal::BuscaLocalTrocaPlantaAtendimento >>>>>>>>>>>>> " << endl << endl;
 				}
-
-
-
 			}
 
 			// se retorna a solução até o ponto onde se deletou as demandas da construção corrente
@@ -648,6 +665,17 @@ int BuscaLocal::BuscaLocalTrocaPlantaAtendimento(int Imprime, int ImprimeEstrutu
 
 
 	}
+
+
+
+	// *************>>>>>>>>>>>>> colocar nas outras duas buscas locais para eviatr uso indevido de memoria
+
+
+
+	DadosTarefasMovidasEtapa1.clear();
+	DadosTarefasMovidasEtapa2.clear();
+
+
 
 	// retona 0 mostrando que não se conseguiu melhorar a solução que se tinha
 	return 0;

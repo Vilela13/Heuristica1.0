@@ -25,7 +25,7 @@ public:
 
 	Heuristica();
 	int  LeDados(string, int );						// le os dados da instancia
-	void ExecutaProcedimentoHeuristico1();			// executa o procedimento heuristico
+	void ExecutaProcedimentoHeuristico1(string NomeInstancia);			// executa o procedimento heuristico
 
 	void LeNomeInstancia(int , string& );			// le o nome da instancia
 	void LeNumeroPlantasEntregasVeiculos(int);		// le o numero de plantas, veiculos e cosntruções
@@ -104,7 +104,7 @@ int Heuristica::LeDados(string Nome, int comentarios){
 }
 
 // executa o procedimento heuristico
-void Heuristica::ExecutaProcedimentoHeuristico1(){
+void Heuristica::ExecutaProcedimentoHeuristico1(string NomeInstancia){
 	Procedimento1 Prod1;
 	int Solucao;
 	Solucao = 0;
@@ -128,6 +128,8 @@ void Heuristica::ExecutaProcedimentoHeuristico1(){
 	ImprimePlanta = 1;
 	ImprimeConstrucao = 1;
 	IntervalosRespeitadosConstrucaoes = 0;
+
+	cout << endl << endl << endl << endl << " Nome = " <<  NomeInstancia << endl << endl << endl << endl;
 
 	Prod1.CarregaDados(NP, PlantasInstancia, NE, ConstrucoesInstancia, NV, Velocidade, TempoDeVidaConcreto);
 
@@ -160,91 +162,99 @@ void Heuristica::ExecutaProcedimentoHeuristico1(){
 
 	Solucoes.Imprime(ImprimePlanta, ImprimeConstrucao, IntervalosRespeitadosConstrucaoes);
 
-/*
+	if( Solucoes.Solucoes[0].ConstrucoesInstancia.NivelDeInviabilidade != 0){
 
-	cout << endl << endl << "  coletando dados " << endl << endl;
+	/*
 
-	Solucoes.Solucoes[0].ConstrucoesInstancia.Construcoes[1].ImprimeContrucao();
+		cout << endl << endl << "  coletando dados " << endl << endl;
 
-	cout << endl << endl << "  coletando tarefa " << endl << endl;
+		Solucoes.Solucoes[0].ConstrucoesInstancia.Construcoes[1].ImprimeContrucao();
 
-	Solucoes.Solucoes[0].ConstrucoesInstancia.Construcoes[1].Descarregamentos[1].Imprime();
+		cout << endl << endl << "  coletando tarefa " << endl << endl;
 
-	double HoraInicio;
-	double HoraFinal;
-	int NumDemanda;
-	int NumPlanta;
-	int Carreta;
+		Solucoes.Solucoes[0].ConstrucoesInstancia.Construcoes[1].Descarregamentos[1].Imprime();
 
-	HoraInicio = Solucoes.Solucoes[0].ConstrucoesInstancia.Construcoes[1].Descarregamentos[1].HorarioInicioDescarregamento;
-	HoraFinal = Solucoes.Solucoes[0].ConstrucoesInstancia.Construcoes[1].Descarregamentos[1].HorarioFinalDescarregamento;
-	NumDemanda = 1;
-	NumPlanta = Solucoes.Solucoes[0].ConstrucoesInstancia.Construcoes[1].Descarregamentos[1].NumPlantaFornecedor;
-	Carreta = Solucoes.Solucoes[0].ConstrucoesInstancia.Construcoes[1].Descarregamentos[1].NumCarretaUtilizada;
+		double HoraInicio;
+		double HoraFinal;
+		int NumDemanda;
+		int NumPlanta;
+		int Carreta;
 
-
-
-	Solucoes.Solucoes[0].ConstrucoesInstancia.Construcoes[1].DeletaAtividadeLocomovendoAsOutrasTarefas(HoraInicio, HoraFinal, NumDemanda, NumPlanta, Carreta, Solucoes.Solucoes[0].PlantasInstancia);
-
-	cout << endl << endl << "  Retira tarefa " << endl << endl;
-
-	Solucoes.Imprime(1,1,0);
-
-	cout << endl << endl << "  Readiciona tarefa " << endl << endl;
-
-	Solucoes.Solucoes[0].ConstrucoesInstancia.Construcoes[1].AlocaAtividade(HoraInicio, HoraFinal, Carreta, NumPlanta,  0, 1, Solucoes.Solucoes[0].PlantasInstancia);
-
-	Solucoes.Imprime(1,1,0);
-*/
+		HoraInicio = Solucoes.Solucoes[0].ConstrucoesInstancia.Construcoes[1].Descarregamentos[1].HorarioInicioDescarregamento;
+		HoraFinal = Solucoes.Solucoes[0].ConstrucoesInstancia.Construcoes[1].Descarregamentos[1].HorarioFinalDescarregamento;
+		NumDemanda = 1;
+		NumPlanta = Solucoes.Solucoes[0].ConstrucoesInstancia.Construcoes[1].Descarregamentos[1].NumPlantaFornecedor;
+		Carreta = Solucoes.Solucoes[0].ConstrucoesInstancia.Construcoes[1].Descarregamentos[1].NumCarretaUtilizada;
 
 
-	cout << endl << endl << "############################### Procedimento Viabilidade 1 #####################################" << endl << endl;
 
-	Solucoes.Solucoes[0].ProcessoViabilizacao1( TipoOrdenacaoVeiculos , Imprime);
+		Solucoes.Solucoes[0].ConstrucoesInstancia.Construcoes[1].DeletaAtividadeLocomovendoAsOutrasTarefas(HoraInicio, HoraFinal, NumDemanda, NumPlanta, Carreta, Solucoes.Solucoes[0].PlantasInstancia);
 
-	cout << endl << endl << "##############################################################################################" << endl << endl;
+		cout << endl << endl << "  Retira tarefa " << endl << endl;
 
-	Solucoes.CalculaMakespanSolucoes();
-	Solucoes.Imprime(ImprimePlanta, ImprimeConstrucao, IntervalosRespeitadosConstrucaoes);
+		Solucoes.Imprime(1,1,0);
+
+		cout << endl << endl << "  Readiciona tarefa " << endl << endl;
+
+		Solucoes.Solucoes[0].ConstrucoesInstancia.Construcoes[1].AlocaAtividade(HoraInicio, HoraFinal, Carreta, NumPlanta,  0, 1, Solucoes.Solucoes[0].PlantasInstancia);
+
+		Solucoes.Imprime(1,1,0);
+	*/
 
 
-	Solucoes.Solucoes.resize(Solucoes.Solucoes.size()+1);
-	Solucoes.Solucoes[1] = Solucoes.Solucoes[0];
+		cout << endl << endl << "############################### Procedimento Viabilidade 1 #####################################" << endl << endl;
+
+		Solucoes.Solucoes[0].ProcessoViabilizacao1( TipoOrdenacaoVeiculos , Imprime);
+
+		cout << endl << endl << "##############################################################################################" << endl << endl;
+
+		Solucoes.CalculaMakespanSolucoes();
+		Solucoes.Imprime(ImprimePlanta, ImprimeConstrucao, IntervalosRespeitadosConstrucaoes);
 
 
-	cout << endl << endl << "############################### Procedimento Viabilidade 2 #####################################" << endl << endl;
 
-	Solucoes.Solucoes[1].ProcessoViabilizacao2( TipoOrdenacaoVeiculos, Imprime);
+		if( Solucoes.Solucoes[0].ConstrucoesInstancia.NivelDeInviabilidade != 0){
 
-	cout << endl << endl << "##############################################################################################" << endl << endl;
 
-	Solucoes.CalculaMakespanSolucoes();
-	Solucoes.Solucoes[1].Imprime(ImprimePlanta, ImprimeConstrucao, IntervalosRespeitadosConstrucaoes);
+			cout << endl << endl << "############################### Procedimento Viabilidade 2 #####################################" << endl << endl;
 
-	cout << endl << endl << "############################### Busca Local 1 (caminhão) #####################################" << endl << endl;
+			Solucoes.Solucoes[0].ProcessoViabilizacao2( TipoOrdenacaoVeiculos, Imprime);
 
-	Solucoes.Solucoes[1].RealizarBuscaLocalCaminhao(0);
+			cout << endl << endl << "##############################################################################################" << endl << endl;
 
-	cout << endl << endl << "##############################################################################################" << endl << endl;
+			Solucoes.CalculaMakespanSolucoes();
+			Solucoes.Solucoes[0].Imprime(ImprimePlanta, ImprimeConstrucao, IntervalosRespeitadosConstrucaoes);
+		}
+	}
 
-	Solucoes.Solucoes[1].Imprime(ImprimePlanta, ImprimeConstrucao, IntervalosRespeitadosConstrucaoes);
+	if( Solucoes.Solucoes[0].ConstrucoesInstancia.NivelDeInviabilidade == 0){
 
-	cout << endl << endl << "############################### Busca Local 2 (construcao) #####################################" << endl << endl;
+		cout << endl << endl << "############################### Busca Local 1 (caminhão) #####################################" << endl << endl;
 
-	Solucoes.Solucoes[1].RealizarBuscaLocalConstrucao(0);
+		Solucoes.Solucoes[0].RealizarBuscaLocalCaminhao(0);
 
-	cout << endl << endl << "##############################################################################################" << endl << endl;
+		cout << endl << endl << "##############################################################################################" << endl << endl;
 
-	Solucoes.Solucoes[1].Imprime(ImprimePlanta, ImprimeConstrucao, IntervalosRespeitadosConstrucaoes);
+		Solucoes.Solucoes[0].Imprime(ImprimePlanta, ImprimeConstrucao, IntervalosRespeitadosConstrucaoes);
 
-	cout << endl << endl << "############################### Busca Local 3 (planta) #####################################" << endl << endl;
+		cout << endl << endl << "############################### Busca Local 2 (construcao) #####################################" << endl << endl;
 
-	Solucoes.Solucoes[1].RealizarBuscaLocalPlanta(0);
+		Solucoes.Solucoes[0].RealizarBuscaLocalConstrucao(0);
 
-	cout << endl << endl << "##############################################################################################" << endl << endl;
+		cout << endl << endl << "##############################################################################################" << endl << endl;
 
-	Solucoes.Solucoes[1].Imprime(ImprimePlanta, ImprimeConstrucao, IntervalosRespeitadosConstrucaoes);
+		Solucoes.Solucoes[0].Imprime(ImprimePlanta, ImprimeConstrucao, IntervalosRespeitadosConstrucaoes);
 
+		cout << endl << endl << "############################### Busca Local 3 (planta) #####################################" << endl << endl;
+
+		Solucoes.Solucoes[0].RealizarBuscaLocalPlanta(0);
+
+		cout << endl << endl << "##############################################################################################" << endl << endl;
+
+		Solucoes.Solucoes[0].Imprime(ImprimePlanta, ImprimeConstrucao, IntervalosRespeitadosConstrucaoes);
+	}else{
+		cout << endl << endl << "				Solução Inviavel " << endl << endl;
+	}
 
 
 }

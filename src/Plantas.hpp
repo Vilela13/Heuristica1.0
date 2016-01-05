@@ -64,7 +64,7 @@ public:
 	int DeletaAtividade(double HoraInicio, double HoraFinal, int NumConstrucao, int NumDemanda, int Carreta);	// Deleta tarefa na planta
 
 	void CalculaMakespan();										// calcula o Makes pan da Planta
-	void Imprime(int OrdenaPlantas, int OrdenaCarretas);		// Imprime dados da planta
+	void Imprime(int OrdenaPlantas, int OrdenaCarretas, int ImprimeArquivo, PonteiroArquivo  &Arquivo);		// Imprime dados da planta
 	void ImprimeDistancias();									// Imprime as distancias da planta as construções
 
 	int VerificaIntegridadeDeCarregamentos(int imprime); 					// verifica a integridade entre os Carregamentos da planta
@@ -185,8 +185,12 @@ void Planta::CalculaMakespan(){
 }
 
 // Imprime dados da planta
-void Planta::Imprime(int OrdenaPlantas, int OrdenaCarretas){
+void Planta::Imprime(int OrdenaPlantas, int OrdenaCarretas, int ImprimeArquivo, PonteiroArquivo  &Arquivo){
 	printf ("\n# Planta %d com %d veiculos, funciona de (%.4f - %.4f)\n", NumeroDaPlanta,NumeroVeiculos,TempoMinimoDeFuncionamento, TempoMaximoDeFuncionamento);
+
+	if( ImprimeArquivo == 1){
+		fprintf( Arquivo, "\n# Planta %d com %d veiculos, funciona de (%.4f - %.4f)\n", NumeroDaPlanta,NumeroVeiculos,TempoMinimoDeFuncionamento, TempoMaximoDeFuncionamento);
+	}
 
 	// entra acso se tiver que ordenar os carregamentos em ordem crescente
 	if(OrdenaPlantas == 1){
@@ -196,18 +200,30 @@ void Planta::Imprime(int OrdenaPlantas, int OrdenaCarretas){
 	// caso existir carregamento, entrar
 	if ( Carregamentos.size() != 0 ){
 		cout << "   Carregamentos " << endl;
+		if( ImprimeArquivo == 1){
+			fprintf( Arquivo, "   Carregamentos \n");
+		}
 		// percorrer todos os carregamentos
 		for( unsigned int c = 0; c < Carregamentos.size(); c++){
 			// imprimir o carregamento
 			printf ("    * Caminhao [%d - %d] para suprir construcao [%d - %d] das ( %.4f as %.4f)\n", NumeroDaPlanta, Carregamentos[c].NumCarretaUtilizada, Carregamentos[c].NumeroConstrucao, Carregamentos[c].NumeroDemandaSuprida, Carregamentos[c].HorarioInicioCarregamento, Carregamentos[c].HorarioFinalCarregamento);
+			if( ImprimeArquivo == 1){
+				fprintf( Arquivo, "    * Caminhao [%d - %d] para suprir construcao [%d - %d] das ( %.4f as %.4f)\n", NumeroDaPlanta, Carregamentos[c].NumCarretaUtilizada, Carregamentos[c].NumeroConstrucao, Carregamentos[c].NumeroDemandaSuprida, Carregamentos[c].HorarioInicioCarregamento, Carregamentos[c].HorarioFinalCarregamento);
+			}
 		}
 	}
 // Imprime os veículos da planta
 	cout <<  "    =>  Veiculos da Planta " << NumeroDaPlanta << " <= " << endl;
+	if( ImprimeArquivo == 1){
+		fprintf( Arquivo, "    =>  Veiculos da Planta %d <= \n", NumeroDaPlanta);
+	}
 	// imprimir os veiculos da planta
 	VeiculosDaPlanta.Imprime(OrdenaCarretas);
 	// imprimir o makespan da planta
 	cout << "   Makespan = " << Makespan << endl;
+	if( ImprimeArquivo == 1){
+		fprintf( Arquivo, 	"   Makespan = %f \n", Makespan);
+	}
 
 }
 
@@ -301,7 +317,7 @@ public:
 
 	int CorrigeReferenciaCarregamentoDeslocamentoMaisUm(int NumPlantaFornecedor,int NumCarretaUtilizada,int construcao, int NumeroDemandaSuprida, double HorarioInicioDescarregamento,  double HorarioFinalDescarregamento);		// corrige as referencias da tarefa aumentando o numerod a demanda que é suprida em mais um
 	int CorrigeReferenciaCarregamentoDeslocamentoMenosUm(int NumPlanta, int NumCarreta,int Construcao, int Demanda, double HorarioInicioDescarregamento, double HorarioFinalDescarregamento);					// corrige as referencias da tarefa aumentando o numerod a demanda que é suprida em menos um
-	void Imprime(int OrdenaPlantas,int OrdenaCarrtas);		// Imprime os dados das plantas
+	void Imprime(int OrdenaPlantas,int OrdenaCarrtas, int ImprimeArquivo, PonteiroArquivo  &Arquivo);		// Imprime os dados das plantas
 
 	int VerificaPlantasAnalizadasPodemAtenderSeAtrazar();			// verifica se uma das plantas em questão pode atender a demanda em questão caso de atrazar o atendimento das outras demandas da construção que se quer atender
 	void InicializaVetorHorarioQuePlantaPodeAtender();				// inicializa os horarios que as plantas podem atender certa demanda e a cosntrução pode ser atendida, caso das outras demandas anteriores a esta forem atrazadas, com o valor DBL_MAX
@@ -553,15 +569,21 @@ int ConjuntoPlantas::CorrigeReferenciaCarregamentoDeslocamentoMenosUm(int NumPla
 }
 
 // Imprime os dados das plantas
-void ConjuntoPlantas::Imprime(int OrdenaPlantas,int OrdenaCarrtas){
+void ConjuntoPlantas::Imprime(int OrdenaPlantas,int OrdenaCarrtas , int ImprimeArquivo, PonteiroArquivo  &Arquivo){
 	cout << endl << endl << " [[[[[[  Imprime plantas  ]]]]]]" << endl;
+	if( ImprimeArquivo == 1){
+		fprintf( Arquivo, "\n\n  [[[[[[  Imprime plantas  ]]]]]]\n");
+	}
 	// percorre todas as plantas
 	for( unsigned int p = 0; p < Plantas.size(); p++){
 		// imprime a planta corrente
-		Plantas[p].Imprime(OrdenaPlantas, OrdenaCarrtas);
+		Plantas[p].Imprime(OrdenaPlantas, OrdenaCarrtas, ImprimeArquivo, Arquivo);
 	}
 	// escreve o makespan das plantas
 	printf ("\n  Makespan Geral das Plantas = %.4f\n", MakespanPLantas);
+	if( ImprimeArquivo == 1){
+		fprintf( Arquivo, "\n  Makespan Geral das Plantas = %.4f\n", MakespanPLantas);
+	}
 }
 
 // verifica se uma das plantas em questão pode atender a demanda em questão caso de atrazar o atendimento das outras demandas da construção que se quer atender

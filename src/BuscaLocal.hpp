@@ -114,6 +114,12 @@ double BuscaLocal::CalculaMakespanSolucao(){
 // busca local que se verifica se a demanda pode ser melhor atendida caso se realize o seu atendimento com outro caminhão/veículo
 int BuscaLocal::BuscaLocalTentaRealizarTarefasComOutosVeiculos(int Imprime, int ImprimeEstruturas){
 
+	// ponteiro para o arquivo que se irá salvar os dados
+	PonteiroArquivo  Arquivo;
+	// variavel que controla se irá escrever os dados em um aruivo, é inicializada com 0
+	int ImprimeArquivo;
+	ImprimeArquivo = 0;
+
 	// daods da cosntrução e da demanda
 	int ConstrucaoEscolhida;
 	int IndiceConstrucaoEscolhida;
@@ -144,7 +150,7 @@ int BuscaLocal::BuscaLocalTentaRealizarTarefasComOutosVeiculos(int Imprime, int 
 	}
 	if( ImprimeEstruturas == 1){
 		ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia, 0);
-		PlantasInstancia.Imprime(1,1);
+		PlantasInstancia.Imprime(1,1, ImprimeArquivo, Arquivo);
 		cin >> ParaPrograma;
 	}
 
@@ -204,7 +210,7 @@ int BuscaLocal::BuscaLocalTentaRealizarTarefasComOutosVeiculos(int Imprime, int 
 						}
 						if( ImprimeEstruturas == 1){
 							ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia, 0);
-							PlantasInstancia.Imprime(1,1);
+							PlantasInstancia.Imprime(1,1, ImprimeArquivo, Arquivo);
 							cout << "      DadosTarefasMovidasAdicionaTarefa " << endl ;
 							ImprimeVetorDadosTarefa( DadosTarefasMovidasReadicaoDeDemandas );
 							cin >> ParaPrograma;
@@ -226,7 +232,7 @@ int BuscaLocal::BuscaLocalTentaRealizarTarefasComOutosVeiculos(int Imprime, int 
 							}
 							if( ImprimeEstruturas == 1){
 								ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia, 0);
-								PlantasInstancia.Imprime(1,1);
+								PlantasInstancia.Imprime(1,1, ImprimeArquivo, Arquivo);
 								cout << "      DadosTarefasMovidasAdicionaTarefa " << endl ;
 								ImprimeVetorDadosTarefa( DadosTarefasMovidasReadicaoDeDemandas );
 								cin >> ParaPrograma;
@@ -246,7 +252,7 @@ int BuscaLocal::BuscaLocalTentaRealizarTarefasComOutosVeiculos(int Imprime, int 
 							}
 							if( ImprimeEstruturas == 1){
 								ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia, 1);
-								PlantasInstancia.Imprime(1,1);
+								PlantasInstancia.Imprime(1,1, ImprimeArquivo, Arquivo);
 								cin >> ParaPrograma;
 							}
 							// se limpa os vetores que armazenavam os dados de tarefas movidas durante o processo
@@ -263,7 +269,7 @@ int BuscaLocal::BuscaLocalTentaRealizarTarefasComOutosVeiculos(int Imprime, int 
 							}
 							if( ImprimeEstruturas == 1){
 								ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia, 0);
-								PlantasInstancia.Imprime(1,1);
+								PlantasInstancia.Imprime(1,1, ImprimeArquivo, Arquivo);
 								cin >> ParaPrograma;
 							}
 
@@ -279,7 +285,7 @@ int BuscaLocal::BuscaLocalTentaRealizarTarefasComOutosVeiculos(int Imprime, int 
 			}
 			if( ImprimeEstruturas == 1){
 				ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia, 0);
-				PlantasInstancia.Imprime(1,1);
+				PlantasInstancia.Imprime(1,1, ImprimeArquivo, Arquivo);
 				cin >> ParaPrograma;
 			}
 
@@ -303,6 +309,12 @@ int BuscaLocal::BuscaLocalTentaRealizarTarefasComOutosVeiculos(int Imprime, int 
 
 // busca local que se verifica caso a ordem de decisão de atendiemnto das demandas de duas construções forem invertidas se irá obter uma melhor solução para o problema
 int BuscaLocal::BuscaLocalMudaOrdemAtendiemntoConstrucoes(int Imprime, int ImprimeEstruturas){
+
+	// ponteiro para o arquivo que se irá salvar os dados
+	PonteiroArquivo  Arquivo;
+	// variavel que controla se irá escrever os dados em um aruivo, é inicializada com 0
+	int ImprimeArquivo;
+	ImprimeArquivo = 0;
 
 	// verifica se atendeu a demanda que será reatendida ou não
 	int Recolocar;
@@ -383,7 +395,7 @@ int BuscaLocal::BuscaLocalMudaOrdemAtendiemntoConstrucoes(int Imprime, int Impri
 							}
 							if( ImprimeEstruturas == 1){
 								ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia, 0);
-								PlantasInstancia.Imprime(1,1);
+								PlantasInstancia.Imprime(1,1, ImprimeArquivo, Arquivo);
 								cout << "      DadosTarefasMovidasEtapa2 " << endl ;
 								ImprimeVetorDadosTarefa(DadosTarefasMovidasEtapa2);
 								cin >> ParaPrograma;
@@ -407,7 +419,7 @@ int BuscaLocal::BuscaLocalMudaOrdemAtendiemntoConstrucoes(int Imprime, int Impri
 							}
 							if( ImprimeEstruturas == 1){
 								ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia, 0);
-								PlantasInstancia.Imprime(1,1);
+								PlantasInstancia.Imprime(1,1, ImprimeArquivo, Arquivo);
 								cout << "      DadosTarefasMovidasEtapa2 " << endl ;
 								ImprimeVetorDadosTarefa(DadosTarefasMovidasEtapa2);
 								cin >> ParaPrograma;
@@ -462,6 +474,12 @@ int BuscaLocal::BuscaLocalMudaOrdemAtendiemntoConstrucoes(int Imprime, int Impri
 
 
 int BuscaLocal::BuscaLocalTrocaPlantaAtendimento(int Imprime, int ImprimeEstruturas){
+
+	// ponteiro para o arquivo que se irá salvar os dados
+	PonteiroArquivo  Arquivo;
+	// variavel que controla se irá escrever os dados em um aruivo, é inicializada com 0
+	int ImprimeArquivo;
+	ImprimeArquivo = 0;
 
 	// makespan da solução anterior que se tinha
 	double MakespanAnterior;
@@ -555,7 +573,7 @@ int BuscaLocal::BuscaLocalTrocaPlantaAtendimento(int Imprime, int ImprimeEstrutu
 			ConstrucoesInstancia.CalcularNivelDeInviabilidade();
 			if( Imprime == 1){
 				cout << endl << endl << "		Deletou tarefas realizadas pela planta [" << p1 << "] " << endl << endl;
-				PlantasInstancia.Imprime(1,1);
+				PlantasInstancia.Imprime(1,1, ImprimeArquivo, Arquivo);
 				ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia , 0);
 				cin >> ParaPrograma;
 			}
@@ -663,7 +681,7 @@ int BuscaLocal::BuscaLocalTrocaPlantaAtendimento(int Imprime, int ImprimeEstrutu
 			ConstrucoesInstancia.ReadicionaDeletaTarefasApartirDeDados(  DadosTarefasMovidasEtapa1, PlantasInstancia );
 			if( Imprime == 1){
 				cout << endl << endl << "	Fim da Etapa 1 " << endl << endl;
-				PlantasInstancia.Imprime(1,1);
+				PlantasInstancia.Imprime(1,1, ImprimeArquivo, Arquivo);
 				ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia , 0);
 				cin >> ParaPrograma;
 			}

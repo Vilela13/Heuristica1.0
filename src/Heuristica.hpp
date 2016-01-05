@@ -227,7 +227,7 @@ void Heuristica::ExecutaProcedimentoHeuristico1(string NomeInstancia){
 	Solucoes.CalculaMakespanSolucoes();
 
 
-	Solucoes.Imprime(ImprimePlanta, ImprimeConstrucao, IntervalosRespeitadosConstrucaoes );
+	Solucoes.Imprime(ImprimePlanta, ImprimeConstrucao, IntervalosRespeitadosConstrucaoes, ImprimeArquivo, Arquivo);
 
 	if( Solucoes.Solucoes[0].ConstrucoesInstancia.NivelDeInviabilidade != 0){
 
@@ -276,7 +276,7 @@ void Heuristica::ExecutaProcedimentoHeuristico1(string NomeInstancia){
 		cout << endl << endl << "##############################################################################################" << endl << endl;
 
 		Solucoes.CalculaMakespanSolucoes();
-		Solucoes.Imprime(ImprimePlanta, ImprimeConstrucao, IntervalosRespeitadosConstrucaoes);
+		Solucoes.Imprime(ImprimePlanta, ImprimeConstrucao, IntervalosRespeitadosConstrucaoes, ImprimeArquivo, Arquivo);
 
 
 
@@ -290,7 +290,7 @@ void Heuristica::ExecutaProcedimentoHeuristico1(string NomeInstancia){
 			cout << endl << endl << "##############################################################################################" << endl << endl;
 
 			Solucoes.CalculaMakespanSolucoes();
-			Solucoes.Solucoes[0].Imprime(ImprimePlanta, ImprimeConstrucao, IntervalosRespeitadosConstrucaoes);
+			Solucoes.Solucoes[0].Imprime(ImprimePlanta, ImprimeConstrucao, IntervalosRespeitadosConstrucaoes, ImprimeArquivo, Arquivo);
 		}
 	}
 
@@ -302,7 +302,7 @@ void Heuristica::ExecutaProcedimentoHeuristico1(string NomeInstancia){
 
 		cout << endl << endl << "##############################################################################################" << endl << endl;
 
-		Solucoes.Solucoes[0].Imprime(ImprimePlanta, ImprimeConstrucao, IntervalosRespeitadosConstrucaoes);
+		Solucoes.Solucoes[0].Imprime(ImprimePlanta, ImprimeConstrucao, IntervalosRespeitadosConstrucaoes, ImprimeArquivo, Arquivo);
 
 		cout << endl << endl << "############################### Busca Local 2 (construcao) #####################################" << endl << endl;
 
@@ -310,7 +310,7 @@ void Heuristica::ExecutaProcedimentoHeuristico1(string NomeInstancia){
 
 		cout << endl << endl << "##############################################################################################" << endl << endl;
 
-		Solucoes.Solucoes[0].Imprime(ImprimePlanta, ImprimeConstrucao, IntervalosRespeitadosConstrucaoes);
+		Solucoes.Solucoes[0].Imprime(ImprimePlanta, ImprimeConstrucao, IntervalosRespeitadosConstrucaoes, ImprimeArquivo, Arquivo);
 
 		cout << endl << endl << "############################### Busca Local 3 (planta) #####################################" << endl << endl;
 
@@ -318,7 +318,7 @@ void Heuristica::ExecutaProcedimentoHeuristico1(string NomeInstancia){
 
 		cout << endl << endl << "##############################################################################################" << endl << endl;
 
-		Solucoes.Solucoes[0].Imprime(ImprimePlanta, ImprimeConstrucao, IntervalosRespeitadosConstrucaoes);
+		Solucoes.Solucoes[0].Imprime(ImprimePlanta, ImprimeConstrucao, IntervalosRespeitadosConstrucaoes, ImprimeArquivo, Arquivo);
 	}else{
 		cout << endl << endl << "				Solução Inviavel " << endl << endl;
 	}

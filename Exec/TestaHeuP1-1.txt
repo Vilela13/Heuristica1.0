@@ -1,11 +1,2 @@
-TestaHeuP1-1.txt
 
-
-   Solucao 0
-
-         Makespan total = 25.0333
- TestaHeuP1-1.txt 
-  TestaHeuP1-1.txt 
-  TestaHeuP1-1.txt 
-  TestaHeuP1-1.txt 
- 
+  Makespan Geral das Plantas = 17.0083

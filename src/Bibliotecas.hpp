@@ -46,6 +46,8 @@ using namespace std;
 
 #define PenalidadeNaoAtendimentoDemanda	500			//penalidade de não atendiemnto da demanda, ela esta presente no processo de calculo do makespan
 
+#define  PonteiroArquivo FILE*
+
 #include "DadosSolomon.hpp"				// classe que apartir das instancias de solomon cria uma instancia do nosso problema
 #include "Carretas.hpp"					// classe que possui as estruturas caracteristicas dos caminhões/ veículos/ britadeiras
 #include "Plantas.hpp"					// classe que possui as estruturas caracteristicas das plantas

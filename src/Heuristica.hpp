@@ -105,18 +105,38 @@ int Heuristica::LeDados(string Nome, int comentarios){
 
 // executa o procedimento heuristico
 void Heuristica::ExecutaProcedimentoHeuristico1(string NomeInstancia){
+
+	// ponteiro para o arquivo que se irá salvar os dados
+	PonteiroArquivo  Arquivo;
+
+	// caminho para o arquivo que se irá salvar os dados
+	string Caminho;
+
+	// variavel que controla se irá escrever os dados em um aruivo, é inicializada com 0
+	int ImprimeArquivo;
+	ImprimeArquivo = 0;
+
+	// variavel que faz o progrma parar
+	int ParaPrograma;
+
+	// classe do procediemnto construtivo
 	Procedimento1 Prod1;
+
+	// variavel que armazena o estado da solução, inicializada com zero
 	int Solucao;
 	Solucao = 0;
 
+	// ordena na ordem do menor número de tarefas para o maior se colocar o valor 1, ordena na ordem do maior número de tarefas para o menor se colocar o valor 2
 	int TipoOrdenacaoVeiculos;
-// ordena na ordem do menor número de tarefas para o maior se colocar o valor 1, ordena na ordem do maior número de tarefas para o menor se colocar o valor 2
 	TipoOrdenacaoVeiculos = 1;
 
+	// classe que armazena todas as soluções do procediemnto
 	ConjuntoSolucoes Solucoes;
 
+	// variavel que informa se irá realizar a verificação da viabilidade ou não, inicializa com 1 que é que vai ter a verificação da viabilidade
 	int VerificaViabilidade;
 	VerificaViabilidade = 1;
+
 
 	int Imprime;
 	Imprime = 0;
@@ -129,7 +149,54 @@ void Heuristica::ExecutaProcedimentoHeuristico1(string NomeInstancia){
 	ImprimeConstrucao = 1;
 	IntervalosRespeitadosConstrucaoes = 0;
 
-	cout << endl << endl << endl << endl << " Nome = " <<  NomeInstancia << endl << endl << endl << endl;
+	// fornece o caminnho onde será criado o arquivo
+	Caminho =  "./Exec/";
+	// acrescenta o nome do arquivo ao caminho
+	Caminho +=  NomeInstancia;
+
+	//cria a pasta Exec para salvar os dados da execução
+	if(!opendir ("Exec")){
+		cout <<  "\n Nao tem diretorio \"Exec\"!!            FUDEU MUITO!! \n" << endl;
+
+		if(system("mkdir Exec;") == 0){
+			cout << " Criou pasta Exec" << endl;
+		}else{
+			cout << " Problema ao criar pasta Exec" << endl;
+		}
+
+		/* Outra maneira de criar arquivos
+		SituacaoDiretorio = mkdir("./myfolder", S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+		*/
+
+		if(!opendir ("Exec")){
+			cout << "\n Nao tem diretorio \"Exec\"!!             FUDEU MUITO!! \n" << endl;
+		}else{
+			cout << " Tem diretorio \"Exec\" !!  " << endl;
+		}
+	}else{
+		cout << " Tem diretorio \"Exec\" !!  " << endl;
+	}
+
+	// escreve o endereço do arquivo
+	cout << endl << endl << endl << Caminho << "   -  " <<  Caminho.c_str() <<  endl << endl << endl;
+	// abre o arquivo
+	Arquivo = fopen (Caminho.c_str(), "a");
+
+	// verifica se abriu o arquivo
+	if(!Arquivo ){
+		// caso não escreve está mensagem
+		cout <<  endl << endl <<  endl << endl <<  "  Fudeu muito " <<  endl << endl <<  endl << endl;
+		cin >> ParaPrograma;
+	}else{
+		// caso sim se marca que se irá escrever no arquivo os dados da execução
+		ImprimeArquivo = 1;
+	}
+
+	// escreve o nome da instancia no arquivo de saida
+	fprintf( Arquivo," %s \n ",  NomeInstancia.c_str());
+
+
+
 
 	Prod1.CarregaDados(NP, PlantasInstancia, NE, ConstrucoesInstancia, NV, Velocidade, TempoDeVidaConcreto);
 
@@ -160,7 +227,7 @@ void Heuristica::ExecutaProcedimentoHeuristico1(string NomeInstancia){
 	Solucoes.CalculaMakespanSolucoes();
 
 
-	Solucoes.Imprime(ImprimePlanta, ImprimeConstrucao, IntervalosRespeitadosConstrucaoes);
+	Solucoes.Imprime(ImprimePlanta, ImprimeConstrucao, IntervalosRespeitadosConstrucaoes );
 
 	if( Solucoes.Solucoes[0].ConstrucoesInstancia.NivelDeInviabilidade != 0){
 
@@ -256,6 +323,7 @@ void Heuristica::ExecutaProcedimentoHeuristico1(string NomeInstancia){
 		cout << endl << endl << "				Solução Inviavel " << endl << endl;
 	}
 
+	fclose (Arquivo);
 
 }
 

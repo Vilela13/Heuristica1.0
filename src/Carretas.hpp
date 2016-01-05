@@ -54,7 +54,7 @@ public:
 	void AlocaAtividade(double HoraInicio, double HoraFinal, int NumContrucao, int NumDemanda);		// Aloca veículo para atender a demanda
 	int DeletaAtividade(double HoraInicio, double HoraFinal, int NumContrucao, int NumDemanda);		// Deleta alocação de demanda alocada ao veículo
 
-	void Imprime(int Ordena);														// Imprime as atividades realizadas pelo veículo, pode ordena-las
+	void Imprime(int Ordena, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo);														// Imprime as atividades realizadas pelo veículo, pode ordena-las
 	int VerificaIntegridadeDeDeslocamentos(int Imprime);							// verifica a integridade entre os Deslocamentos da Carreta
 
 
@@ -153,17 +153,27 @@ int Carreta::DeletaAtividade(double HoraInicio, double HoraFinal, int NumContruc
 }
 
 // Imprime as atividades realizadas pelo veículo, pode ordena-las
-void Carreta::Imprime(int Ordena){
+void Carreta::Imprime(int Ordena, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo){
 	// caso se tiver que ordena-las
 	if( Ordena == 1){
 		sort (Deslocamentos.begin(), Deslocamentos.end(), DecideQualMenorInicioTempoDeslocamento);
 	}
 
-	cout << "# Carreta [" << NumeroPlanta << "-" << NumeroDaCarreta << "] que atendeu " << NumeroDeDemandasAntendidas << " demandas" << endl;
+	if( ImprimeSolucao == 1){
+		cout << "# Carreta [" << NumeroPlanta << "-" << NumeroDaCarreta << "] que atendeu " << NumeroDeDemandasAntendidas << " demandas" << endl;
+	}
+	if( ImprimeArquivo == 1){
+		fprintf( Arquivo, "# Carreta [%d-%d] que atendeu %d demandas \n ", NumeroPlanta, NumeroDaCarreta, NumeroDeDemandasAntendidas);
+	}
 	// percorre todos os delocamentos
 	for( int d = 0; d < NumeroDeDemandasAntendidas; d++){
-		// imprime o deslocamento corrente
-		printf( "    *  Atender a [%d-%d] de (%.4f - %.4f)\n", Deslocamentos[d].NumeroConstrucao, Deslocamentos[d].NumeroDemandaSuprida, Deslocamentos[d].HorarioInicioDeslocamento, Deslocamentos[d].HorarioFinalDeslocamento);
+		if( ImprimeSolucao == 1){
+			// imprime o deslocamento corrente
+			printf( "    *  Atender a [%d-%d] de (%.4f - %.4f)\n", Deslocamentos[d].NumeroConstrucao, Deslocamentos[d].NumeroDemandaSuprida, Deslocamentos[d].HorarioInicioDeslocamento, Deslocamentos[d].HorarioFinalDeslocamento);
+		}
+		if( ImprimeArquivo == 1){
+			fprintf( Arquivo,"    *  Atender a [%d-%d] de (%.4f - %.4f)\n", Deslocamentos[d].NumeroConstrucao, Deslocamentos[d].NumeroDemandaSuprida, Deslocamentos[d].HorarioInicioDeslocamento, Deslocamentos[d].HorarioFinalDeslocamento);
+		}
 	}
 }
 
@@ -247,7 +257,7 @@ public:
 	int DeletaTarefa(  int NumeroCaminhao, double HoraInicio, double HoraFinal, int NumContrucao, int NumDemanda);		// deleta tarefa realizada por um veiculo
 
 	int AlocaInidiceVeiculo( int NumCarretaUtilizada, int &v);		// aloca o inidice do veiculo crrespondente ao numero do caminhão
-	void Imprime(int Ordena);										// Imprime os dados dos veiculos
+	void Imprime(int Ordena, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo);										// Imprime os dados dos veiculos
 
 	int RetornaDadosDeslocamento(int Construcao, int Demanda, double &HorarioInicio, double &HorarioFinal);			// retorna dados de deslocamento da deamnda de uma construção passados
 	int VerificaIntegridadeDeDeslocamentosDasCarretas(int Imprime);													// verifica a integridade entre os Deslocamentos da Carreta
@@ -330,17 +340,23 @@ int ConjuntoCarretas::AlocaInidiceVeiculo( int NumCarretaUtilizada, int &v){
 }
 
 // Imprime os dados dos veiculos
-void ConjuntoCarretas::Imprime(int Ordena){
+void ConjuntoCarretas::Imprime(int Ordena, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo){
 	// caso se queira ordenar as carretas
 	if(Ordena == 1){
 		sort (Carretas.begin(), Carretas.end(), DecideCarretaAnterior);
 	}
 
-	cout  << " [[[[[[  Imprime carretas  ]]]]]]" << endl;
+	if( ImprimeSolucao == 1){
+		cout  << " [[[[[[  Imprime carretas  ]]]]]]" << endl;
+	}
+	if( ImprimeArquivo == 1){
+		fprintf( Arquivo," [[[[[[  Imprime carretas  ]]]]]]\n" );
+	}
+
 	// percorre todas as carretas
 	for( unsigned int c = 0; c < Carretas.size(); c++){
 		// imprime os dados da carreta
-		Carretas[c].Imprime(Ordena);
+		Carretas[c].Imprime(Ordena, ImprimeSolucao, ImprimeArquivo, Arquivo);
 	}
 }
 

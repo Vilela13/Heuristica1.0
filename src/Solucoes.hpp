@@ -28,7 +28,7 @@ public:
 	Solucao();
 
 	void CarregaSolucao(int np, ConjuntoPlantas Plantas, int ne, ConjuntoConstrucoes Construcoes, int nv, double v,double TDVC);		// Carrega os dados da instancia e a solução até o momento
-	void Imprime(bool ImprimePlanta, bool ImprimeConstrucao, bool VerificaViabilidade, int ImprimeArquivo, PonteiroArquivo  &Arquivo);									// imprime os dados da solução
+	void Imprime(bool ImprimePlanta, bool ImprimeConstrucao, bool VerificaViabilidade, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo);									// imprime os dados da solução
 	int DeletaAlocacaoTarefasPosterioresMesmaConstrucao(int VerificaExistencia, int Construcao, int Demanda, vector < DadosTarefa >& DadosTarefasMovidas);					// deleta demandas atendidas na construção após certa demanda que é passada com parametro
 
 	int ProcessoParaAlocarTarefaNaoAtendida(int VerificaExistencia,  int Construcao, int Demanda, int& NovaTarefaAlocadaConstrucao , int& NovaTarefaAlocadaDemanda ,  vector < DadosTarefa > &DadosTarefasMovidas, int SituacaoDemanda, int SituacaoRetirada,int RealizaProcessoDeAtrazarTarefas, int TipoOrdenacao, int imprime);				// Tenta alocar uma demanda que não era alocada anteriormente
@@ -73,12 +73,12 @@ void Solucao::CarregaSolucao(int np, ConjuntoPlantas Plantas, int ne, ConjuntoCo
 }
 
 // imprime os dados da solução
-void Solucao::Imprime(bool ImprimePlanta, bool ImprimeConstrucao, bool VerificaViabilidade , int ImprimeArquivo, PonteiroArquivo  &Arquivo){
+void Solucao::Imprime(bool ImprimePlanta, bool ImprimeConstrucao, bool VerificaViabilidade ,  int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo){
 
 
 	// Imprime os dados das plantas
 	if( ImprimePlanta == 1 ){
-		PlantasInstancia.Imprime(1,1, ImprimeArquivo, Arquivo);
+		PlantasInstancia.Imprime(1,1, ImprimeSolucao, ImprimeArquivo, Arquivo);
 	}
 	// Imprime os dados das construções
 	if( ImprimeConstrucao == 1){
@@ -878,7 +878,7 @@ public:
 	ConjuntoSolucoes();			// classe construtoora
 	void InsereSolucao(int np, ConjuntoPlantas Plantas, int ne, ConjuntoConstrucoes Construcoes, int nv, double v,double TDVC);			// carrega uma solução ao vetor das soluções
 	void CalculaMakespanSolucoes();		// calcula o makespan das soluções
-	void Imprime(bool ImprimePlanta, bool ImprimeConstrucao, bool VerificaViabilidade, int ImprimeArquivo, PonteiroArquivo  &Arquivo);		// imprime as soluções
+	void Imprime(bool ImprimePlanta, bool ImprimeConstrucao, bool VerificaViabilidade, int ImprimeSolucao , int ImprimeArquivo, PonteiroArquivo  &Arquivo);		// imprime as soluções
 	~ConjuntoSolucoes();
 
 };
@@ -910,17 +910,21 @@ void ConjuntoSolucoes::CalculaMakespanSolucoes(){
 }
 
 // imprime as soluções
-void ConjuntoSolucoes::Imprime(bool ImprimePlanta, bool ImprimeConstrucao, bool VerificaViabilidade, int ImprimeArquivo, PonteiroArquivo  &Arquivo){
+void ConjuntoSolucoes::Imprime(bool ImprimePlanta, bool ImprimeConstrucao, bool VerificaViabilidade, int ImprimeSolucao ,int ImprimeArquivo, PonteiroArquivo  &Arquivo){
 	// percorre por todas as soluções
 	for( unsigned  int s = 0; s <  Solucoes.size(); s++){
-		// imprime a solução corrente
-		cout << endl << endl << "   Solucao " << s << endl << endl;
+		if( ImprimeSolucao == 1){
+			// imprime a solução corrente
+			cout << endl << endl << "   Solucao " << s << endl << endl;
+		}
 		if( ImprimeArquivo == 1){
 			fprintf( Arquivo, "\n\n   Solucao %d \n\n", s);
 		}
-		 Solucoes[s].Imprime(ImprimePlanta,ImprimeConstrucao, VerificaViabilidade, ImprimeArquivo, Arquivo);
+		 Solucoes[s].Imprime(ImprimePlanta,ImprimeConstrucao, VerificaViabilidade, ImprimeSolucao, ImprimeArquivo, Arquivo);
 		 // escreve o makespan total da solução
-		 cout << "         Makespan total = " << Solucoes[s].Makespan << endl ;
+		 if( ImprimeSolucao == 1){
+			 cout << "         Makespan total = " << Solucoes[s].Makespan << endl ;
+		 }
 		 if( ImprimeArquivo == 1){
 			fprintf( Arquivo, "         Makespan total = %f", Solucoes[s].Makespan);
 		}

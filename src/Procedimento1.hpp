@@ -106,7 +106,16 @@ void Procedimento1::VerificaAlocacaoDemandaConstrucao( int IndiceConstrucaoVaiSe
 // executa o procedimento de construção da solução
 int Procedimento1::Executa( int TipoOrdenacao, int imprime){
 
-	int ConstrucaoVaiSerSuprida;
+	// ponteiro para o arquivo que se irá salvar os dados
+	PonteiroArquivo  Arquivo;
+	// variavel que controla se irá escrever os dados em um aruivo, é inicializada com 0
+	int ImprimeArquivo;
+	ImprimeArquivo = 0;
+
+	int ImprimeSolucao;
+	ImprimeSolucao = 1;
+
+			int ConstrucaoVaiSerSuprida;
 	int IndiceConstrucaoVaiSerSuprida;
 
 
@@ -144,7 +153,7 @@ int Procedimento1::Executa( int TipoOrdenacao, int imprime){
 				PermiteAtendimentoDemanda = ConstrucoesInstancia.AdicionaTarefa( 0, ConstrucaoVaiSerSuprida, Demanda , DadosTarefasMovidasAuxiliar, 1, 0, RealizaProcessoDeAtrazarTarefas, TipoOrdenacao , PlantasInstancia, imprime, " -> Procedimento1::Executa ");
 
 				if ( imprime == 1){
-					ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia, 0);
+					ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia, 0, ImprimeSolucao,ImprimeArquivo,Arquivo);
 					if( PermiteAtendimentoDemanda == 0){
 						cout << endl << endl << "  Não consegue colocar mais demandas da construção [" << ConstrucoesInstancia.Construcoes[IndiceConstrucaoVaiSerSuprida].NumeroDaConstrucao << "]" << endl << endl;
 					}

@@ -152,7 +152,7 @@ int BuscaLocal::BuscaLocalTentaRealizarTarefasComOutosVeiculos(int Imprime, int 
 		cout << endl << endl << "############################### BuscaLocalTentaRealizarTarefasComOutosVeiculos #####################################" << endl << endl;
 	}
 	if( ImprimeEstruturas == 1){
-		ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia, 0);
+		ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia, 0, ImprimeSolucao,ImprimeArquivo,Arquivo);
 		PlantasInstancia.Imprime(1,1,ImprimeSolucao, ImprimeArquivo, Arquivo);
 		cin >> ParaPrograma;
 	}
@@ -212,7 +212,7 @@ int BuscaLocal::BuscaLocalTentaRealizarTarefasComOutosVeiculos(int Imprime, int 
 							cout << endl << endl << " >+< Adicionou [" << ConstrucaoEscolhida << "-" << DemandaRetirar << "]" << endl;
 						}
 						if( ImprimeEstruturas == 1){
-							ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia, 0);
+							ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia, 0, ImprimeSolucao,ImprimeArquivo,Arquivo);
 							PlantasInstancia.Imprime(1,1, ImprimeSolucao, ImprimeArquivo, Arquivo);
 							cout << "      DadosTarefasMovidasAdicionaTarefa " << endl ;
 							ImprimeVetorDadosTarefa( DadosTarefasMovidasReadicaoDeDemandas );
@@ -234,7 +234,7 @@ int BuscaLocal::BuscaLocalTentaRealizarTarefasComOutosVeiculos(int Imprime, int 
 								cout << endl << endl << " >+< Recoloca [" << ConstrucaoEscolhida << "-" << DemandaRecolocar << "] -> " << Recolocar << endl << endl;
 							}
 							if( ImprimeEstruturas == 1){
-								ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia, 0);
+								ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia, 0, ImprimeSolucao,ImprimeArquivo,Arquivo);
 								PlantasInstancia.Imprime(1,1, ImprimeSolucao, ImprimeArquivo, Arquivo);
 								cout << "      DadosTarefasMovidasAdicionaTarefa " << endl ;
 								ImprimeVetorDadosTarefa( DadosTarefasMovidasReadicaoDeDemandas );
@@ -254,7 +254,7 @@ int BuscaLocal::BuscaLocalTentaRealizarTarefasComOutosVeiculos(int Imprime, int 
 								cout << endl << endl << " [[[[[[[[[[[[[[[[[[[ Melhorou a Solução ]]]]]]]]]]]]]]]]]]]]]" << endl << endl;
 							}
 							if( ImprimeEstruturas == 1){
-								ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia, 1);
+								ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia, 1, ImprimeSolucao,ImprimeArquivo,Arquivo);
 								PlantasInstancia.Imprime(1,1, ImprimeSolucao, ImprimeArquivo, Arquivo);
 								cin >> ParaPrograma;
 							}
@@ -271,7 +271,7 @@ int BuscaLocal::BuscaLocalTentaRealizarTarefasComOutosVeiculos(int Imprime, int 
 								cout << endl << endl << "     ----  Não melhorou, continua" << endl << endl;
 							}
 							if( ImprimeEstruturas == 1){
-								ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia, 0);
+								ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia, 0, ImprimeSolucao,ImprimeArquivo,Arquivo);
 								PlantasInstancia.Imprime(1,1, ImprimeSolucao, ImprimeArquivo, Arquivo);
 								cin >> ParaPrograma;
 							}
@@ -287,7 +287,7 @@ int BuscaLocal::BuscaLocalTentaRealizarTarefasComOutosVeiculos(int Imprime, int 
 				cout << endl << endl << " Final Retorna solução inicial" << endl << endl;
 			}
 			if( ImprimeEstruturas == 1){
-				ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia, 0);
+				ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia, 0, ImprimeSolucao,ImprimeArquivo,Arquivo);
 				PlantasInstancia.Imprime(1,1, ImprimeSolucao , ImprimeArquivo, Arquivo);
 				cin >> ParaPrograma;
 			}
@@ -400,7 +400,7 @@ int BuscaLocal::BuscaLocalMudaOrdemAtendiemntoConstrucoes(int Imprime, int Impri
 								cout << endl << endl << "			>+< Recoloca [" << ConstrucoesInstancia.Construcoes[c2].NumeroDaConstrucao << "-" << DemandaRecolocar << "] -> " << Recolocar << endl << endl;
 							}
 							if( ImprimeEstruturas == 1){
-								ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia, 0);
+								ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia, 0, ImprimeSolucao,ImprimeArquivo,Arquivo);
 								PlantasInstancia.Imprime(1,1, ImprimeSolucao, ImprimeArquivo, Arquivo);
 								cout << "      DadosTarefasMovidasEtapa2 " << endl ;
 								ImprimeVetorDadosTarefa(DadosTarefasMovidasEtapa2);
@@ -424,7 +424,7 @@ int BuscaLocal::BuscaLocalMudaOrdemAtendiemntoConstrucoes(int Imprime, int Impri
 								cout << endl << endl << "				>+++< Recoloca [" << ConstrucoesInstancia.Construcoes[c1].NumeroDaConstrucao << "-" << DemandaRecolocar << "] -> " << Recolocar << endl << endl;
 							}
 							if( ImprimeEstruturas == 1){
-								ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia, 0);
+								ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia, 0, ImprimeSolucao,ImprimeArquivo,Arquivo);
 								PlantasInstancia.Imprime(1,1, ImprimeSolucao, ImprimeArquivo, Arquivo);
 								cout << "      DadosTarefasMovidasEtapa2 " << endl ;
 								ImprimeVetorDadosTarefa(DadosTarefasMovidasEtapa2);
@@ -583,7 +583,7 @@ int BuscaLocal::BuscaLocalTrocaPlantaAtendimento(int Imprime, int ImprimeEstrutu
 			if( Imprime == 1){
 				cout << endl << endl << "		Deletou tarefas realizadas pela planta [" << p1 << "] " << endl << endl;
 				PlantasInstancia.Imprime(1,1, ImprimeSolucao, ImprimeArquivo, Arquivo);
-				ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia , 0);
+				ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia , 0, ImprimeSolucao,ImprimeArquivo,Arquivo);
 				cin >> ParaPrograma;
 			}
 			// percorre todas as construções
@@ -691,7 +691,7 @@ int BuscaLocal::BuscaLocalTrocaPlantaAtendimento(int Imprime, int ImprimeEstrutu
 			if( Imprime == 1){
 				cout << endl << endl << "	Fim da Etapa 1 " << endl << endl;
 				PlantasInstancia.Imprime(1,1,ImprimeSolucao, ImprimeArquivo, Arquivo);
-				ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia , 0);
+				ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia , 0, ImprimeSolucao,ImprimeArquivo,Arquivo);
 				cin >> ParaPrograma;
 			}
 		}

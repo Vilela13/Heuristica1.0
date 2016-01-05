@@ -82,7 +82,7 @@ void Solucao::Imprime(bool ImprimePlanta, bool ImprimeConstrucao, bool VerificaV
 	}
 	// Imprime os dados das construções
 	if( ImprimeConstrucao == 1){
-		ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia, VerificaViabilidade);
+		ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia, VerificaViabilidade, ImprimeSolucao, ImprimeArquivo, Arquivo);
 	}
 }
 
@@ -189,7 +189,16 @@ void Solucao::ReadicionaTarefas(int VerificaExistencia, int construcao, vector <
 
 void Solucao::ProcessoViabilizacao1(int TipoOrdenacao,int Imprime){
 
-// armazena o nivel de inviabilidade anterior
+	// ponteiro para o arquivo que se irá salvar os dados
+		PonteiroArquivo  Arquivo;
+		// variavel que controla se irá escrever os dados em um aruivo, é inicializada com 0
+		int ImprimeArquivo;
+		ImprimeArquivo = 0;
+
+		int ImprimeSolucao;
+		ImprimeSolucao = 1;
+
+		// armazena o nivel de inviabilidade anterior
 	int InviabilidadeSolucaoAnterior;
 // armazana os dados da tarefa a ser retirada
 	int ConstrucaoAnalisandoRetirada;
@@ -240,7 +249,7 @@ void Solucao::ProcessoViabilizacao1(int TipoOrdenacao,int Imprime){
 			cout << endl << endl << "    deleta tarefas apos a demanda [" << ConstrucaoAnalisandoRetirada << "-" << DemandaAnalisandoRetirada << "]" << endl << endl;
 			cout << "DadosTarefasMovidas" << endl;
 			ImprimeVetorDadosTarefa( DadosTarefasMovidas);
-			ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia, VerificaViabilidade);
+			ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia, VerificaViabilidade, ImprimeSolucao,ImprimeArquivo,Arquivo);
 			//PlantasInstancia.Imprime(1,1);
 			cin >> PararPrograma;
 		}
@@ -259,7 +268,7 @@ void Solucao::ProcessoViabilizacao1(int TipoOrdenacao,int Imprime){
 					cout << endl << "  tenta alocar tarefa" << endl;
 					cout << "DadosTarefasMovidas" << endl;
 					ImprimeVetorDadosTarefa( DadosTarefasMovidas);
-					ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia, VerificaViabilidade);
+					ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia, VerificaViabilidade, ImprimeSolucao,ImprimeArquivo,Arquivo);
 					//PlantasInstancia.Imprime(1,1);
 					cin >> PararPrograma;
 				}
@@ -271,7 +280,7 @@ void Solucao::ProcessoViabilizacao1(int TipoOrdenacao,int Imprime){
 					cout << endl << endl << "         Readicionou tarefas deletadas no inicio do procedimento " << endl << endl;
 					cout << "DadosTarefasMovidas" << endl;
 					ImprimeVetorDadosTarefa( DadosTarefasMovidas);
-					ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia, VerificaViabilidade);
+					ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia, VerificaViabilidade, ImprimeSolucao,ImprimeArquivo,Arquivo);
 					//PlantasInstancia.Imprime(1,1);
 					cin >> PararPrograma;
 				}
@@ -281,7 +290,7 @@ void Solucao::ProcessoViabilizacao1(int TipoOrdenacao,int Imprime){
 						cout << endl << "  								!!!!!!!!! Melhorou !!!!!!!!!!! "  << endl;
 						cout << "DadosTarefasMovidas" << endl;
 						ImprimeVetorDadosTarefa( DadosTarefasMovidas);
-						ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia, VerificaViabilidade);
+						ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia, VerificaViabilidade, ImprimeSolucao,ImprimeArquivo,Arquivo);
 						//PlantasInstancia.Imprime(1,1);
 
 						cin >> PararPrograma;
@@ -295,7 +304,7 @@ void Solucao::ProcessoViabilizacao1(int TipoOrdenacao,int Imprime){
 						cout << endl << "  								!!!!!!!!! Nao melhorou !!!!!!!!!!! " << endl;
 						cout << "DadosTarefasMovidas" << endl;
 						ImprimeVetorDadosTarefa( DadosTarefasMovidas);
-						ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia, VerificaViabilidade);
+						ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia, VerificaViabilidade, ImprimeSolucao,ImprimeArquivo,Arquivo);
 						//PlantasInstancia.Imprime(1,1);
 
 						cin >> PararPrograma;
@@ -313,7 +322,7 @@ void Solucao::ProcessoViabilizacao1(int TipoOrdenacao,int Imprime){
 
 						cout << "DadosTarefasMovidas" << endl;
 						ImprimeVetorDadosTarefa( DadosTarefasMovidas);
-						ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia, VerificaViabilidade);
+						ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia, VerificaViabilidade, ImprimeSolucao,ImprimeArquivo,Arquivo);
 						//PlantasInstancia.Imprime(1,1);
 
 						cin >> PararPrograma;
@@ -334,7 +343,7 @@ void Solucao::ProcessoViabilizacao1(int TipoOrdenacao,int Imprime){
 					cout << "DadosTarefasMovidas" << endl;
 					ImprimeVetorDadosTarefa( DadosTarefasMovidas);
 
-					ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia, VerificaViabilidade);
+					ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia, VerificaViabilidade, ImprimeSolucao,ImprimeArquivo,Arquivo);
 					//PlantasInstancia.Imprime(1,1);
 
 					cin >> PararPrograma;
@@ -568,7 +577,16 @@ void Solucao::SinalizaTarefaAdicionadaInicialmente( int TarefaAdicionada, int In
 
 
 void Solucao::ProcessoViabilizacao2(int TipoOrdenacao, int Imprime){
-	// armazena o nivel de inviabilidade anterior
+	// ponteiro para o arquivo que se irá salvar os dados
+			PonteiroArquivo  Arquivo;
+			// variavel que controla se irá escrever os dados em um aruivo, é inicializada com 0
+			int ImprimeArquivo;
+			ImprimeArquivo = 0;
+
+			int ImprimeSolucao;
+			ImprimeSolucao = 1;
+
+			// armazena o nivel de inviabilidade anterior
 	int InviabilidadeSolucaoAnterior;
 	// dados da demanda não atendida
 	int	ConstrucaoNaoAtendida;
@@ -605,7 +623,7 @@ void Solucao::ProcessoViabilizacao2(int TipoOrdenacao, int Imprime){
 
 	if( Imprime == 1){
 		cout << endl << endl << "                        Situacao ao entra no Viabilidade2 " << endl << endl;
-		ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia, 0);
+		ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia, 0, ImprimeSolucao,ImprimeArquivo,Arquivo);
 	}
 
 // Encontra demanda ainda não atendida
@@ -636,7 +654,7 @@ void Solucao::ProcessoViabilizacao2(int TipoOrdenacao, int Imprime){
 		DeletouAlgumaTarefa = DeletaTarefasAposTempoPlantaPodeAtender(TempoPlantaPodeAtender, DadosTarefasMovidas,  Imprime );
 		if( Imprime == 1){
 			cout << "          <<<<<<<<<<< Detetou tarefas => " << DeletouAlgumaTarefa << " >>>>>>>>>>>>>> ";
-			ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia, 0);
+			ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia, 0, ImprimeSolucao,ImprimeArquivo,Arquivo);
 			cin >> PararPrograma;
 		}
 
@@ -667,7 +685,7 @@ void Solucao::ProcessoViabilizacao2(int TipoOrdenacao, int Imprime){
 		}else{
 			if( Imprime == 1){
 				cout << "   						<<<<<<<<<<< Coloca tarefa não alocada anterioremnte [" <<  ConstrucaoNaoAtendida << "-" << DemandaNaoAtendida << "]  >>>>>>>>>>>>>>> ";
-				ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia, 0);
+				ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia, 0, ImprimeSolucao,ImprimeArquivo,Arquivo);
 				ImprimeDadosRetiradoAdicionadoVetorConstrucaoAnalisada( 1, DadosTarefasMovidas, 1, ConstrucoesInstancia.ConstrucoesAnalizadas, 0);
 				cin >> PararPrograma;
 			}
@@ -731,7 +749,7 @@ void Solucao::ProcessoViabilizacao2(int TipoOrdenacao, int Imprime){
 			ConstrucoesInstancia.CalcularNivelDeInviabilidade();
 			if( Imprime == 1){
 				cout << endl << endl << "   <<<<<<<<<<< Finaliza Processo Readiciona Demandas   >>>>>>>>>>>>>>> " << endl << endl;
-				ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia, VerificaViabilidade);
+				ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia, VerificaViabilidade, ImprimeSolucao,ImprimeArquivo,Arquivo);
 				cin >> PararPrograma;
 				//PlantasInstancia.Imprime(1,1);
 			}
@@ -739,7 +757,7 @@ void Solucao::ProcessoViabilizacao2(int TipoOrdenacao, int Imprime){
 			if( InviabilidadeSolucaoAnterior > ConstrucoesInstancia.NivelDeInviabilidade){
 				if( Imprime == 1){
 					cout << endl << endl << "    Melhorou !!!!!!" << endl << endl;
-					ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia, VerificaViabilidade);
+					ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia, VerificaViabilidade, ImprimeSolucao,ImprimeArquivo,Arquivo);
 				}
 				// limpa o conteudo dos vetores que guardam os dados das tarefas retiradas e adicionadas
 				DadosTarefasMovidas.clear();
@@ -748,7 +766,7 @@ void Solucao::ProcessoViabilizacao2(int TipoOrdenacao, int Imprime){
 			}else{
 				if( Imprime == 1){
 					cout << endl << endl << "    Não melhorou !!!!!!" << endl << endl;
-					ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia, VerificaViabilidade);
+					ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia, VerificaViabilidade, ImprimeSolucao,ImprimeArquivo,Arquivo);
 					cin >> PararPrograma;
 				}
 				// retorna a solução a  consição inicial

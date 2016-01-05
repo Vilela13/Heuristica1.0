@@ -123,7 +123,7 @@ public:
 	void RetornaDadosDescarregamento( int d, int& PlantaEmAnalise, int& CaminhaoEmAnalise, int& ConstrucaoEmAnalise, double& HorarioInicioAuxiliar,double& HorarioFinalAuxiliar);		// Retorna os dados de um certo descarregamento
 	void CalculaMakespan();			// Calcula o Makespan da construção
 
-	void ImprimeContrucao();		// Imprime os dados da construções
+	void ImprimeContrucao(int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo);		// Imprime os dados da construções
 
 	int AtrazaDemandasParaAtenderMaster( int NumDemanda, double HoraInicioAtendiemnto, vector < DadosTarefa > &DadosTarefasMovidasAuxiliar,int SituacaoDemanda, int StatusRemocao, ConjuntoPlantas& Plantas, int &SituacaoAlocacao, int TipoOrdenacao, int imprime, string frase);		// função de atrazar as demandas para atender a ultima demanda, está é a função que recebe a demanda não alocada ainda
 
@@ -922,43 +922,83 @@ void Construcao::CalculaMakespan(){
 }
 
 // Imprime os dados da construções
-void Construcao::ImprimeContrucao(){
+void Construcao::ImprimeContrucao(int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo){
 
 	// imprime descarregamentos
-	printf( "# Contrucao %d com %d demandas, janela de tempo (%.4f - %.4f), com rank = %.4f \n",NumeroDaConstrucao, NumeroDemandas, TempoMinimoDeFuncionamento, TempoMaximoDeFuncionamento, RankTempoDemandas);
+	if( ImprimeSolucao == 1){
+		printf( "# Contrucao %d com %d demandas, janela de tempo (%.4f - %.4f), com rank = %.4f \n",NumeroDaConstrucao, NumeroDemandas, TempoMinimoDeFuncionamento, TempoMaximoDeFuncionamento, RankTempoDemandas);
+	}
+	if( ImprimeArquivo ==1 ){
+		fprintf( Arquivo, "# Contrucao %d com %d demandas, janela de tempo (%.4f - %.4f), com rank = %.4f \n",NumeroDaConstrucao, NumeroDemandas, TempoMinimoDeFuncionamento, TempoMaximoDeFuncionamento, RankTempoDemandas);
+	}
 	if( StatusAtendimento != 0){
 		for( unsigned int d = 0; d < Descarregamentos.size(); d++){
-			printf( "     * Carreta [%d-%d] atende demanda %d-%d de ( %.4f as %.4f )\n", Descarregamentos[d].NumPlantaFornecedor, Descarregamentos[d].NumCarretaUtilizada, NumeroDaConstrucao, d, Descarregamentos[d].HorarioInicioDescarregamento, Descarregamentos[d].HorarioFinalDescarregamento);
+			if( ImprimeSolucao == 1){
+				printf( "     * Carreta [%d-%d] atende demanda %d-%d de ( %.4f as %.4f )\n", Descarregamentos[d].NumPlantaFornecedor, Descarregamentos[d].NumCarretaUtilizada, NumeroDaConstrucao, d, Descarregamentos[d].HorarioInicioDescarregamento, Descarregamentos[d].HorarioFinalDescarregamento);
+			}
+			if( ImprimeArquivo ==1 ){
+				fprintf( Arquivo, "     * Carreta [%d-%d] atende demanda %d-%d de ( %.4f as %.4f )\n", Descarregamentos[d].NumPlantaFornecedor, Descarregamentos[d].NumCarretaUtilizada, NumeroDaConstrucao, d, Descarregamentos[d].HorarioInicioDescarregamento, Descarregamentos[d].HorarioFinalDescarregamento);
+			}
 		}
 	}
 
-	// imprime o vetor de atendimento
-	cout << "   Vetor de atendimento demandas [ ";
-	for ( int i = 0; i < NumeroDemandas; i++){
-		cout << SituacaoDemanda[ i ] << " ";
-	}
-	cout << "]" << endl;
+	if( ImprimeSolucao == 1){
+		// imprime o vetor de atendimento
+		cout << "   Vetor de atendimento demandas [ ";
+		for ( int i = 0; i < NumeroDemandas; i++){
+			cout << SituacaoDemanda[ i ] << " ";
+		}
+		cout << "]" << endl;
 
-	// imprime o vetor remocao
-	cout << "   Vetor de Situacao Remocao das demandas [ ";
-	for ( int i = 0; i < NumeroDemandas; i++){
-		cout << SituacaoRemocao[ i ] << " ";
-	}
-	cout << "]" << endl;
+		// imprime o vetor remocao
+		cout << "   Vetor de Situacao Remocao das demandas [ ";
+		for ( int i = 0; i < NumeroDemandas; i++){
+			cout << SituacaoRemocao[ i ] << " ";
+		}
+		cout << "]" << endl;
 
-	// imprime makespan da cosntrução
-	printf ("   MAKESPAN = %.4f   Status = %d\n", Makespan, StatusAtendimento);
+		// imprime makespan da cosntrução
+		printf ("   MAKESPAN = %.4f   Status = %d\n", Makespan, StatusAtendimento);
+	}
+
+	if( ImprimeArquivo ==1 ){
+		fprintf( Arquivo,"   Vetor de atendimento demandas [ ");
+		for ( int i = 0; i < NumeroDemandas; i++){
+			fprintf( Arquivo," %d ", SituacaoDemanda[ i ]);
+		}
+		fprintf( Arquivo,"]\n");
+
+		// imprime o vetor remocao
+		fprintf( Arquivo,"    Vetor de Situacao Remocao das demandas [ ");
+		for ( int i = 0; i < NumeroDemandas; i++){
+			fprintf( Arquivo," %d ", SituacaoRemocao[ i ]);
+		}
+		fprintf( Arquivo,"]\n");
+
+		// imprime makespan da cosntrução
+		fprintf( Arquivo,"   MAKESPAN = %.4f   Status = %d\n", Makespan, StatusAtendimento);
+	}
+
 }
 
 // função de atrazar as demandas para atender a ultima demanda, está é a função que recebe a demanda não alocada ainda
 int Construcao::AtrazaDemandasParaAtenderMaster( int NumDemanda, double HoraFimAtendimento, vector < DadosTarefa > &DadosTarefasMovidasAuxiliar,int SituacaoDemanda, int StatusRemocao,ConjuntoPlantas& Plantas, int &SituacaoAlocacao, int TipoOrdenacao,int imprime, string frase){
+	// ponteiro para o arquivo que se irá salvar os dados
+	PonteiroArquivo  Arquivo;
+	// variavel que controla se irá escrever os dados em um aruivo, é inicializada com 0
+	int ImprimeArquivo;
+	ImprimeArquivo = 0;
+
+	int ImprimeSolucao;
+	ImprimeSolucao = 1;
+
 	// aramazena o valor auxiliar do horario final de atendiemnto na construção caso for adotado se possibilita o atendimento da demanda
 	double NovaHoraFimAtendimento;
 
 	if( imprime == 1){
 		cout << endl << endl << "     ====================== Entra Master [" << NumeroDaConstrucao << "-" << NumDemanda << "] ====================== "  << endl << endl;
 
-		ImprimeContrucao();
+		ImprimeContrucao( ImprimeSolucao,ImprimeArquivo,Arquivo);
 		cout << "DadosTarefasMovidasAuxiliar" << endl;
 		ImprimeVetorDadosTarefa( DadosTarefasMovidasAuxiliar);
 	}
@@ -978,7 +1018,7 @@ int Construcao::AtrazaDemandasParaAtenderMaster( int NumDemanda, double HoraFimA
 	}
 
 	if( imprime == 1){
-		ImprimeContrucao();
+		ImprimeContrucao(ImprimeSolucao,ImprimeArquivo,Arquivo);
 		cout << "DadosTarefasMovidasAuxiliar" << endl;
 		ImprimeVetorDadosTarefa( DadosTarefasMovidasAuxiliar);
 		cout << endl << endl << "     ====================== Sai Master [" << NumeroDaConstrucao << "-" << NumDemanda << "] ====================== "  << endl << endl;
@@ -995,6 +1035,15 @@ int Construcao::AtrazaDemandasParaAtenderMaster( int NumDemanda, double HoraFimA
 
 // função de atrazar as demandas para atender a ultima demanda, está é a função que recebe as demandas que serão atrasadas para que a demanda não atendida possa ser atendida
 void Construcao::AtrazaDemandasParaAtenderRecursao( int NumDemanda, double HoraFimAtendimento, vector < DadosTarefa > &DadosTarefasMovidasAuxiliar,ConjuntoPlantas& Plantas, int &SituacaoAlocacao, int TipoOrdenacao,int imprime, string frase){
+	// ponteiro para o arquivo que se irá salvar os dados
+	PonteiroArquivo  Arquivo;
+	// variavel que controla se irá escrever os dados em um aruivo, é inicializada com 0
+	int ImprimeArquivo;
+	ImprimeArquivo = 0;
+
+	int ImprimeSolucao;
+	ImprimeSolucao = 1;
+
 	// aramazena o valor auxiliar do horario final de atendiemnto na construção caso for adotado se possibilita o atendimento da demanda
 	double NovaHoraFimAtendimento;
 	// aramzena os valores da situação da demanda e a situação remoção da demanda retirada, para que quando a demanda for readicionada ela tenha os mesmo valores para esses campos que era anteriorment
@@ -1006,7 +1055,7 @@ void Construcao::AtrazaDemandasParaAtenderRecursao( int NumDemanda, double HoraF
 	if( imprime == 1){
 		cout << endl << endl << "     ++++++++++++++++ Entra Sub Recursão [" << NumeroDaConstrucao << "-" << NumDemanda - 1 << "] +++++++++++++++ "  << endl << endl;
 
-		ImprimeContrucao();
+		ImprimeContrucao(ImprimeSolucao,ImprimeArquivo,Arquivo);
 		cout << "DadosTarefasMovidasAuxiliar" << endl;
 		ImprimeVetorDadosTarefa( DadosTarefasMovidasAuxiliar);
 
@@ -1018,7 +1067,7 @@ void Construcao::AtrazaDemandasParaAtenderRecursao( int NumDemanda, double HoraF
 	//Deleta a demanda anterior (NumDemanda-1) a demanda que não se consegue alocar
 	DeletaAtividadeLocomovendoAsOutrasTarefasSalvandoDados(0, Descarregamentos[NumDemanda-1].HorarioInicioDescarregamento, Descarregamentos[NumDemanda-1].HorarioFinalDescarregamento, NumDemanda - 1, Descarregamentos[NumDemanda-1].NumPlantaFornecedor  , Descarregamentos[NumDemanda-1].NumCarretaUtilizada , Plantas, DadosTarefasMovidasAuxiliar);
 	if( imprime == 1){
-		ImprimeContrucao();
+		ImprimeContrucao(ImprimeSolucao,ImprimeArquivo,Arquivo);
 		cout << "DadosTarefasMovidasAuxiliar" << endl;
 		ImprimeVetorDadosTarefa( DadosTarefasMovidasAuxiliar);
 
@@ -1030,7 +1079,7 @@ void Construcao::AtrazaDemandasParaAtenderRecursao( int NumDemanda, double HoraF
 	SituacaoAlocacao = AlocaAtividadeComHorarioFinalAtendimento( NumDemanda - 1, HoraFimAtendimento, NovaHoraFimAtendimento, DadosTarefasMovidasAuxiliar,SituacaoDemandaAux,SituacaoRemocaoAux,  Plantas, TipoOrdenacao, frase);
 	if( imprime == 1){
 		cout << endl << endl << "             A Demanda [" << NumDemanda - 1 << "] após processo tem o SituacaoAlocacao valor de [" << SituacaoAlocacao << "]"<< endl << endl;
-		ImprimeContrucao();
+		ImprimeContrucao(ImprimeSolucao,ImprimeArquivo,Arquivo);
 		cout << "DadosTarefasMovidasAuxiliar" << endl;
 		ImprimeVetorDadosTarefa( DadosTarefasMovidasAuxiliar);
 
@@ -1054,7 +1103,7 @@ void Construcao::AtrazaDemandasParaAtenderRecursao( int NumDemanda, double HoraF
 		}
 	}
 	if( imprime == 1){
-		ImprimeContrucao();
+		ImprimeContrucao(ImprimeSolucao,ImprimeArquivo,Arquivo);
 
 		cout << "DadosTarefasMovidasAuxiliar" << endl;
 		ImprimeVetorDadosTarefa( DadosTarefasMovidasAuxiliar);
@@ -1334,13 +1383,22 @@ int Construcao::AlocaAtividadeComHorarioFinalAtendimentoComVeiculoFixo( int NumD
 
 // função de atrazar as demandas para atender a ultima demanda, está é a função que recebe a demanda não alocada ainda
 int Construcao::AtrazaDemandasParaAtenderMasterComVeiculoFixo( int NumDemanda, int NumPlanta, int NumCarreta, double HoraFimAtendimento, vector < DadosTarefa > &DadosTarefasMovidasAuxiliar,int SituacaoDemanda, int StatusRemocao,ConjuntoPlantas& Plantas, int &SituacaoAlocacao, int TipoOrdenacao,int imprime, string frase){
+	// ponteiro para o arquivo que se irá salvar os dados
+	PonteiroArquivo  Arquivo;
+	// variavel que controla se irá escrever os dados em um aruivo, é inicializada com 0
+	int ImprimeArquivo;
+	ImprimeArquivo = 0;
+
+	int ImprimeSolucao;
+	ImprimeSolucao = 1;
+
 	// aramazena o valor auxiliar do horario final de atendiemnto na construção caso for adotado se possibilita o atendimento da demanda
 	double NovaHoraFimAtendimento;
 
 	if( imprime == 1){
 		cout << endl << endl << "     ====================== Entra Master [" << NumeroDaConstrucao << "-" << NumDemanda << "] -> Construcao::AtrazaDemandasParaAtenderMasterComVeiculoFixo ====================== "  << endl << endl;
 
-		ImprimeContrucao();
+		ImprimeContrucao(ImprimeSolucao,ImprimeArquivo,Arquivo);
 		cout << "DadosTarefasMovidasAuxiliar" << endl;
 		ImprimeVetorDadosTarefa( DadosTarefasMovidasAuxiliar);
 	}
@@ -1360,7 +1418,7 @@ int Construcao::AtrazaDemandasParaAtenderMasterComVeiculoFixo( int NumDemanda, i
 	}
 
 	if( imprime == 1){
-		ImprimeContrucao();
+		ImprimeContrucao( ImprimeSolucao,ImprimeArquivo,Arquivo);
 		cout << "DadosTarefasMovidasAuxiliar" << endl;
 		ImprimeVetorDadosTarefa( DadosTarefasMovidasAuxiliar);
 		cout << endl << endl << "     ====================== Sai Master [" << NumeroDaConstrucao << "-" << NumDemanda << "] -> Construcao::AtrazaDemandasParaAtenderMasterComVeiculoFixo ====================== "  << endl << endl;
@@ -1437,13 +1495,13 @@ public:
 
 	void CalculaMakespansConstrucoes();											// Calcula o Makespan das Construções
 	int RetornaIndiceConstrucao(int Construcao, int& Indice, string frase);		// retorna o indice da construção passada
-	void ImprimeContrucoes(ConjuntoPlantas& Plantas, int VerificaViabilidade);	// Imprime as construções e em seguida o nivel de inviabilidade
+	void ImprimeContrucoes(ConjuntoPlantas& Plantas, int VerificaViabilidade ,  int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo);	// Imprime as construções e em seguida o nivel de inviabilidade
 
-	int VerificacaoIntegridadeDeDescarregamentosConstrucoes(int imprime);		// faz a verificação dos descarregaemntos
-	int VerificaIndividualmenteDemandas(ConjuntoPlantas& Plantas, int imprime);	// verifica se as tarefas são integras
+	int VerificacaoIntegridadeDeDescarregamentosConstrucoes(int imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo);		// faz a verificação dos descarregaemntos
+	int VerificaIndividualmenteDemandas(ConjuntoPlantas& Plantas, int imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo);	// verifica se as tarefas são integras
 	int VerificaIntervaloContrucoes();											// Verifica se as construções respeitão os intervalos de atendimento entre suas demandas
 
-	int VerificacaoConsistenciaTarefas(ConjuntoPlantas& Plantas, int imprime);	// verifica integridade das tarefas como um todo
+	int VerificacaoConsistenciaTarefas(ConjuntoPlantas& Plantas, int imprime,  int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo);	// verifica integridade das tarefas como um todo
 
 // Funções com a SituaçãoRemover
 	void ReiniciaTarefasRetiradas();													// Reinicia o status de remoção de todas as demandas de todas as construções
@@ -1544,23 +1602,33 @@ int ConjuntoConstrucoes::RetornaIndiceConstrucao(int Construcao, int& Indice, st
 }
 
 // Imprime as construções e em seguida o nivel de inviabilidade
-void ConjuntoConstrucoes::ImprimeContrucoes(ConjuntoPlantas& Plantas, int VerificaViabilidade){
-	cout << endl << endl << " [[[[[[  Imprime construcoes  ]]]]]]" << endl;
+void ConjuntoConstrucoes::ImprimeContrucoes(ConjuntoPlantas& Plantas, int VerificaViabilidade ,  int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo){
+	if( ImprimeSolucao == 1){
+		cout << endl << endl << " [[[[[[  Imprime construcoes  ]]]]]]" << endl;
+	}
+	if( ImprimeArquivo == 1){
+		fprintf( Arquivo, "\n\n [[[[[[  Imprime construcoes  ]]]]]] \n ");
+	}
 	// percorre todas as cosntruções
 	for(int c = 0; c < NumeroConstrucoes; c++){
 		// iomprime a construção corrente
-		Construcoes[c].ImprimeContrucao();
+		Construcoes[c].ImprimeContrucao( ImprimeSolucao,ImprimeArquivo, Arquivo);
 	}
-	printf( " Nivel de Inviabilidade = %d  Makespan Geral das Construcoes = %.4f\n", NivelDeInviabilidade, MakespanConstrucoes);
+	if( ImprimeSolucao == 1){
+		printf( " Nivel de Inviabilidade = %d  Makespan Geral das Construcoes = %.4f\n", NivelDeInviabilidade, MakespanConstrucoes);
+	}
+	if( ImprimeArquivo == 1){
+		fprintf( Arquivo, " Nivel de Inviabilidade = %d  Makespan Geral das Construcoes = %.4f\n", NivelDeInviabilidade, MakespanConstrucoes);
+	}
 
 	if( VerificaViabilidade == 1){
-		VerificacaoConsistenciaTarefas(Plantas, 1);
+		VerificacaoConsistenciaTarefas(Plantas, 1, ImprimeSolucao,ImprimeArquivo, Arquivo);
 	}
 }
 
 
 // faz a verificação dos descarregaemntos
-int ConjuntoConstrucoes::VerificacaoIntegridadeDeDescarregamentosConstrucoes(int imprime){
+int ConjuntoConstrucoes::VerificacaoIntegridadeDeDescarregamentosConstrucoes(int imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo){
 	int Integro;
 	// inicia como integro o estado dos descarregamentos
 	Integro = 1;
@@ -1583,7 +1651,7 @@ int ConjuntoConstrucoes::VerificacaoIntegridadeDeDescarregamentosConstrucoes(int
 }
 
 // verifica se as tarefas são integras
-int ConjuntoConstrucoes::VerificaIndividualmenteDemandas(ConjuntoPlantas& Plantas, int imprime){
+int ConjuntoConstrucoes::VerificaIndividualmenteDemandas(ConjuntoPlantas& Plantas, int imprime,  int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo){
 	int NumPlanta;
 	int NumCarreta;
 	double HorarioInicioDescarregamento;
@@ -1598,7 +1666,12 @@ int ConjuntoConstrucoes::VerificaIndividualmenteDemandas(ConjuntoPlantas& Planta
 	integridade = 1;
 
 	if( imprime == 1){
-		cout << endl << "          Verifica tarefas individualmente  " << endl << endl;
+		if( ImprimeSolucao == 1){
+			cout << endl << "          Verifica tarefas individualmente  " << endl << endl;
+		}
+		if( ImprimeArquivo == 1){
+			fprintf( Arquivo, "\n           Verifica tarefas individualmente \n\n");
+		}
 	}
 
 	// percorre por taodas as construções
@@ -1610,9 +1683,16 @@ int ConjuntoConstrucoes::VerificaIndividualmenteDemandas(ConjuntoPlantas& Planta
 				// fornece os dados do atendimento da tarefa da demanda
 				RetornaDadosDemandaAtendida( Construcoes[c].NumeroDaConstrucao, d, NumPlanta, NumCarreta, HorarioInicioDescarregamento, HorarioFinalDescarregamento, HorarioInicioCarregamento, HorarioFinalCarregamento, HorarioInicioDeslocamento, HorarioFinalDeslocamento, Plantas);
 				if( imprime == 1){
-					printf( "  - Demanda [%d-%d] => construcao [%d] no horario (%.4f-%.4f)",Construcoes[c].NumeroDaConstrucao,d,Construcoes[c].NumeroDaConstrucao,HorarioInicioDescarregamento, HorarioFinalDescarregamento);
-					printf( "  planta [%d] no horario (%.4f-%.4f) ",NumPlanta, HorarioInicioCarregamento, HorarioFinalCarregamento);
-					printf( "  carreta [%d] no horario (%.4f-%.4f) \n", NumCarreta, HorarioInicioDeslocamento, HorarioFinalDeslocamento );
+					if( ImprimeSolucao == 1){
+						printf( "  - Demanda [%d-%d] => construcao [%d] no horario (%.4f-%.4f)",Construcoes[c].NumeroDaConstrucao,d,Construcoes[c].NumeroDaConstrucao,HorarioInicioDescarregamento, HorarioFinalDescarregamento);
+						printf( "  planta [%d] no horario (%.4f-%.4f) ",NumPlanta, HorarioInicioCarregamento, HorarioFinalCarregamento);
+						printf( "  carreta [%d] no horario (%.4f-%.4f) \n", NumCarreta, HorarioInicioDeslocamento, HorarioFinalDeslocamento );
+					}
+					if( ImprimeArquivo == 1){
+						fprintf( Arquivo, "  - Demanda [%d-%d] => construcao [%d] no horario (%.4f-%.4f)",Construcoes[c].NumeroDaConstrucao,d,Construcoes[c].NumeroDaConstrucao,HorarioInicioDescarregamento, HorarioFinalDescarregamento);
+						fprintf( Arquivo,  "  planta [%d] no horario (%.4f-%.4f) ",NumPlanta, HorarioInicioCarregamento, HorarioFinalCarregamento);
+						fprintf( Arquivo, "  carreta [%d] no horario (%.4f-%.4f) \n", NumCarreta, HorarioInicioDeslocamento, HorarioFinalDeslocamento );
+					}
 				}
 				// verifica se a tarefa é integra
 				if ( VerificaIntegridaDeDemandaAtendida(Construcoes[c].NumeroDaConstrucao, d, NumPlanta, NumCarreta, HorarioInicioDescarregamento, HorarioFinalDescarregamento, HorarioInicioCarregamento, HorarioFinalCarregamento, HorarioInicioDeslocamento, HorarioFinalDeslocamento, imprime) == 0){
@@ -1653,42 +1733,78 @@ int ConjuntoConstrucoes::VerificaIntervaloContrucoes(){
 
 
 // verifica integridade das tarefas como um todo
-int ConjuntoConstrucoes::VerificacaoConsistenciaTarefas(ConjuntoPlantas& Plantas, int imprime){
+int ConjuntoConstrucoes::VerificacaoConsistenciaTarefas(ConjuntoPlantas& Plantas, int imprime,  int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo){
 	int integridade;
 	// inicia como integro o estado das tarefas
 	integridade = 1;
 
-	cout << endl << endl << " ***********  Consistencia da solução ********************* " << endl << endl;
+	if( ImprimeSolucao == 1){
+		cout << endl << endl << " ***********  Consistencia da solução ********************* " << endl << endl;
+	}
+
+	if( ImprimeArquivo == 1){
+		fprintf (Arquivo, " \n\n ***********  Consistencia da solução ********************* \n\n");
+	}
 
 	//verifica as tarefas individualmente
-	if( VerificaIndividualmenteDemandas( Plantas,imprime) == 0){
-		cout << endl << endl << "   >>>>>>>>>>>>> Probelma com integridade de demandas individuais" << endl << endl;
+	if( VerificaIndividualmenteDemandas( Plantas,imprime, ImprimeSolucao,ImprimeArquivo, Arquivo) == 0){
+		if( ImprimeSolucao == 1){
+			cout << endl << endl << "   >>>>>>>>>>>>> Probelma com integridade de demandas individuais" << endl << endl;
+		}
+		if( ImprimeArquivo == 1){
+			fprintf (Arquivo, " \n\n    >>>>>>>>>>>>> Probelma com integridade de demandas individuais \n\n");
+		}
 		integridade = 0;
 	}
 	//verifica os descarregamentos
-	if( VerificacaoIntegridadeDeDescarregamentosConstrucoes(imprime) == 0){
-		cout << endl << endl << "   >>>>>>>>>>>>> Probelma com integridade de Descarregaemntos" << endl << endl;
+	if( VerificacaoIntegridadeDeDescarregamentosConstrucoes(imprime, ImprimeSolucao,ImprimeArquivo, Arquivo) == 0){
+		if( ImprimeSolucao == 1){
+			cout << endl << endl << "   >>>>>>>>>>>>> Probelma com integridade de Descarregaemntos" << endl << endl;
+		}
+		if( ImprimeArquivo == 1){
+			fprintf (Arquivo, " \n\n    >>>>>>>>>>>>> Probelma com integridade de Descarregaemntos \n\n");
+		}
 		integridade = 0;
 	}
 	//verifica intervalo entre descarregamentos descarregamentos
 	if( VerificaIntervaloContrucoes() == 0){
-		cout << endl << endl << "   >>>>>>>>>>>>> Probelma com integridade com o tempo entre os Descarregaemntos" << endl << endl;
+		if( ImprimeSolucao == 1){
+			cout << endl << endl << "   >>>>>>>>>>>>> Probelma com integridade com o tempo entre os Descarregaemntos" << endl << endl;
+		}
+		if( ImprimeArquivo == 1){
+			fprintf (Arquivo, " \n\n   >>>>>>>>>>>>> Probelma com integridade com o tempo entre os Descarregaemntos \n\n");
+		}
 		integridade = 0;
 	}
 	//verifica os carregamentos
 	if(Plantas.VerificaIntegridadeDeCarregamentosDasPlantas(imprime) == 0){
-		cout << endl << endl << "   >>>>>>>>>>>>> Probelma com integridade de Carregaemntos" << endl << endl;
+		if( ImprimeSolucao == 1){
+			cout << endl << endl << "   >>>>>>>>>>>>> Probelma com integridade de Carregaemntos" << endl << endl;
+		}
+		if( ImprimeArquivo == 1){
+			fprintf (Arquivo, " \n\n   >>>>>>>>>>>>> Probelma com integridade de Carregaemntos \n\n");
+		}
 		integridade = 0;
 	}
 	//verifica os deslocamentos
 	if(Plantas.VerificaIntegridadeDeDeslocaemntosDosVeiculosDasPlantas(imprime) == 0){
-		cout << endl << endl << "   >>>>>>>>>>>>> Probelma com integridade de Deslocamentos" << endl << endl;
+		if( ImprimeSolucao == 1){
+			cout << endl << endl << "   >>>>>>>>>>>>> Probelma com integridade de Deslocamentos" << endl << endl;
+		}
+		if( ImprimeArquivo == 1){
+			fprintf (Arquivo, " \n\n   >>>>>>>>>>>>> Probelma com integridade de Deslocamentos \n\n");
+		}
 		integridade = 0;
 	}
 
 
 
-	cout << endl << endl << " *********************************************************** " << endl << endl;
+	if( ImprimeSolucao == 1){
+		cout << endl << endl << " *********************************************************** " << endl << endl;
+	}
+	if( ImprimeArquivo == 1){
+		fprintf (Arquivo, "\n\n *********************************************************** \n\n");
+	}
 
 	return integridade;
 }
@@ -2011,7 +2127,16 @@ void ConjuntoConstrucoes::EncontraPlantaMenorDistanciaConstrucao( int c, int& Nu
 
 // função que tenta alocar uma demanda
 int ConjuntoConstrucoes::AdicionaTarefa( int VerificaExistencia, int Construcao, int Demanda , vector < DadosTarefa > &DadosTarefasMovidas, int SituacaoDemanda, int SituacaoRemocao, int RealizaProcessoDeAtrazarTarefas, int TipoOrdenacao , ConjuntoPlantas &PlantasInstancia, int imprime, string frase){
-	// armazena os horarios de uma tarefa
+	// ponteiro para o arquivo que se irá salvar os dados
+	PonteiroArquivo  Arquivo;
+	// variavel que controla se irá escrever os dados em um aruivo, é inicializada com 0
+	int ImprimeArquivo;
+	ImprimeArquivo = 0;
+
+	int ImprimeSolucao;
+	ImprimeSolucao = 1;
+
+		// armazena os horarios de uma tarefa
 	double HorarioInicioPlanta;
 	double HorarioSaiDaPlanta;
 	double HorarioRetornaPlanta;
@@ -2176,7 +2301,7 @@ int ConjuntoConstrucoes::AdicionaTarefa( int VerificaExistencia, int Construcao,
 					cout << "DadosTarefasMovidasAuxiliar" << endl;
 					ImprimeVetorDadosTarefa( DadosTarefasMovidasAuxiliar);
 
-					ImprimeContrucoes(PlantasInstancia, VerificaViabilidade);
+					ImprimeContrucoes(PlantasInstancia, VerificaViabilidade, ImprimeSolucao,ImprimeArquivo,Arquivo);
 
 					cin >> ParaPrograma;
 				}
@@ -2200,7 +2325,16 @@ int ConjuntoConstrucoes::AdicionaTarefa( int VerificaExistencia, int Construcao,
 
 // função que tenta alocar uma demanda
 int ConjuntoConstrucoes::AdicionaTarefaComVeiculoFixo( int VerificaExistencia, int Construcao, int Demanda , int Planta, int Carreta, vector < DadosTarefa > &DadosTarefasMovidas, int SituacaoDemanda, int SituacaoRemocao, int RealizaProcessoDeAtrazarTarefas, int TipoOrdenacao , ConjuntoPlantas &PlantasInstancia, int imprime, string frase){
-	// armazena os horarios de uma tarefa
+	// ponteiro para o arquivo que se irá salvar os dados
+		PonteiroArquivo  Arquivo;
+		// variavel que controla se irá escrever os dados em um aruivo, é inicializada com 0
+		int ImprimeArquivo;
+		ImprimeArquivo = 0;
+
+		int ImprimeSolucao;
+		ImprimeSolucao = 1;
+
+		// armazena os horarios de uma tarefa
 	double HorarioInicioPlanta;
 	double HorarioSaiDaPlanta;
 	double HorarioRetornaPlanta;
@@ -2362,7 +2496,7 @@ int ConjuntoConstrucoes::AdicionaTarefaComVeiculoFixo( int VerificaExistencia, i
 				cout << "DadosTarefasMovidasAuxiliar" << endl;
 				ImprimeVetorDadosTarefa( DadosTarefasMovidasAuxiliar);
 
-				ImprimeContrucoes(PlantasInstancia, VerificaViabilidade);
+				ImprimeContrucoes(PlantasInstancia, VerificaViabilidade, ImprimeSolucao,ImprimeArquivo,Arquivo);
 
 				cin >> ParaPrograma;
 			}

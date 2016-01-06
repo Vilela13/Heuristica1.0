@@ -121,7 +121,7 @@ int BuscaLocal::BuscaLocalTentaRealizarTarefasComOutosVeiculos(int Imprime, int 
 	ImprimeArquivo = 0;
 
 	int ImprimeSolucao;
-	ImprimeSolucao = 1;
+	ImprimeSolucao = 0;
 
 	// daods da cosntrução e da demanda
 	int ConstrucaoEscolhida;
@@ -593,14 +593,10 @@ int BuscaLocal::BuscaLocalTrocaPlantaAtendimento(int Imprime, int ImprimeEstrutu
 				// limpa as demandas que são colocadas durante o processo da Etapa 1 e antes de cada Etapa 2
 				DadosTarefasMovidasEmUmaConstrucaoEtapa1.clear();
 
-
-
-
-
-				/// PROBLEMA ESTÁ NESTE WHILE !!!!!!!!!!!!!!!! ENTRA EM LOOP  INFINITO!!!!!!!!!!!!!!!
-
-
-
+				if( Imprime == 1){
+					cout << endl << endl << "		Inicio Etapa 2 -> Construcao [" <<ConstrucoesInstancia.Construcoes[c1].NumeroDaConstrucao << "]" << endl ;
+					cin >> ParaPrograma;
+				}
 
 
 				ReadicionouDemandaProcessoEtapa1 = 1;
@@ -609,7 +605,7 @@ int BuscaLocal::BuscaLocalTrocaPlantaAtendimento(int Imprime, int ImprimeEstrutu
 				while( ConstrucoesInstancia.Construcoes[c1].DemandaNaoatendida( DemandaNaoAtendida) == 1 && ReadicionouDemandaProcessoEtapa1 == 1){
 
 					if( Imprime == 1){
-						cout << endl << endl << "		Inicio Etapa 2 -> Construcao [" <<ConstrucoesInstancia.Construcoes[c1].NumeroDaConstrucao << "-" << DemandaNaoAtendida << "]" << endl << endl;
+						cout << endl << endl << "			Analise demanda [" <<ConstrucoesInstancia.Construcoes[c1].NumeroDaConstrucao << "-" << DemandaNaoAtendida << "]" << endl ;
 						cin >> ParaPrograma;
 					}
 
@@ -627,7 +623,7 @@ int BuscaLocal::BuscaLocalTrocaPlantaAtendimento(int Imprime, int ImprimeEstrutu
 								// tenta alocar a demanda corrente com um certo veiculo, caso se consiga alocar a demanda se entra no if
 								if( ConstrucoesInstancia.AdicionaTarefaComVeiculoFixo( 0 , ConstrucoesInstancia.Construcoes[c1].NumeroDaConstrucao, DemandaNaoAtendida , PlantasInstancia.Plantas[p2].NumeroDaPlanta, PlantasInstancia.Plantas[p2].VeiculosDaPlanta.Carretas[v].NumeroDaCarreta, DadosTarefasMovidasEtapa2, 1, 0, 1, 1 , PlantasInstancia, ImprimeDadosAdicionaTarefa,"  <<<<< BuscaLocal::BuscaLocalTrocaPlantaAtendimento >>> ") == 1){
 									if( Imprime == 1){
-										cout  << endl << "			>+ v +< Readicionou Construcao [" <<ConstrucoesInstancia.Construcoes[c1].NumeroDaConstrucao << "-" << DemandaNaoAtendida << "] com veiculo [" << PlantasInstancia.Plantas[p2].NumeroDaPlanta << "-" << v << "]" << endl << endl;
+										cout  << endl << "				>+ v +< Readicionou Construcao [" <<ConstrucoesInstancia.Construcoes[c1].NumeroDaConstrucao << "-" << DemandaNaoAtendida << "] com veiculo [" << PlantasInstancia.Plantas[p2].NumeroDaPlanta << "-" << v << "]" << endl ;
 										cin >> ParaPrograma;
 									}
 									// calcula o nivel de inviabilidade da solução
@@ -653,7 +649,7 @@ int BuscaLocal::BuscaLocalTrocaPlantaAtendimento(int Imprime, int ImprimeEstrutu
 											ReadicionouDemanda = ConstrucoesInstancia.AdicionaTarefa( 0 , ConstrucoesInstancia.Construcoes[IndiceConstrucaoAtender].NumeroDaConstrucao,   DemandaNaoAtendidaSemPlantaFixa , DadosTarefasMovidasEtapa2, 1, 0, 1, 1 , PlantasInstancia, ImprimeDadosAdicionaTarefa,"  <<<<< BuscaLocal::BuscaLocalTrocaPlantaAtendimento >>> ");
 
 											if( Imprime == 1 && ReadicionouDemanda == 1){
-												cout  << endl << "				>+< Readicionou Construcao [" << ConstrucoesInstancia.Construcoes[IndiceConstrucaoAtender].NumeroDaConstrucao << "-" <<  DemandaNaoAtendidaSemPlantaFixa << "] "<< endl << endl;
+												cout  << endl << "					>+< Readicionou Construcao [" << ConstrucoesInstancia.Construcoes[IndiceConstrucaoAtender].NumeroDaConstrucao << "-" <<  DemandaNaoAtendidaSemPlantaFixa << "] "<< endl ;
 												cin >> ParaPrograma;
 											}
 											// se passa para a proxima demanda que tem que ser reinserida na cosntrução corrente
@@ -680,23 +676,32 @@ int BuscaLocal::BuscaLocalTrocaPlantaAtendimento(int Imprime, int ImprimeEstrutu
 									}
 								}else{
 									if( Imprime == 1){
-										cout << endl << "               Não consegui alocar demanda [" << ConstrucoesInstancia.Construcoes[c1].NumeroDaConstrucao << "-" << DemandaNaoAtendida << "] com o veículo [" << PlantasInstancia.Plantas[p2].NumeroDaPlanta << "-" << PlantasInstancia.Plantas[p2].VeiculosDaPlanta.Carretas[v].NumeroDaCarreta << "] " << endl;
+										cout << endl << "               			Não consegui alocar demanda [" << ConstrucoesInstancia.Construcoes[c1].NumeroDaConstrucao << "-" << DemandaNaoAtendida << "] com o veículo [" << PlantasInstancia.Plantas[p2].NumeroDaPlanta << "-" << PlantasInstancia.Plantas[p2].VeiculosDaPlanta.Carretas[v].NumeroDaCarreta << "] " << endl;
 									}
 
 								}
 								// caso não se conseguiu melhorar a solução, se retorna o estado da solução antes de se realizar os procediemntos da etapa 2 corrente
 								ConstrucoesInstancia.ReadicionaDeletaTarefasApartirDeDados(  DadosTarefasMovidasEtapa2, PlantasInstancia );
 								if( Imprime == 1){
-									cout << endl << endl << "		Fim da Etapa 2 " << endl << endl;
+									cout << endl << endl << "			Fim analise demanda " << endl ;
 									cin >> ParaPrograma;
 								}
 							}
 						}
 					}
 					// readiciono a demanda que se estava se querendo colocar com um veiculo fixo utilizando o processo normal de se adicionar uma tarefa. *********** -> IMPORTANTE: apesar de se registrar a alocação dessa demanda na estrutura das tarefas movidas na etapa 2, ela não será considerada no processo de retorno para a solução antes da etapa 2 que será realizada em seguida. Pois a estrutura DadosTarefasMovidasEtapa2 é zerada ao se reiniciar a etapa 2. com isso essa demanda será considerada no procediemnto seguinte da etapa 2 como sendo parte da solução inicial fornecida pela etapa 1
-					ReadicionouDemandaProcessoEtapa1 = ConstrucoesInstancia.AdicionaTarefa( 0 , ConstrucoesInstancia.Construcoes[IndiceConstrucaoAtender].NumeroDaConstrucao,   DemandaNaoAtendida , DadosTarefasMovidasEmUmaConstrucaoEtapa1, 1, 0, 1, 1 , PlantasInstancia, ImprimeDadosAdicionaTarefa,"  <<<<< BuscaLocal::BuscaLocalTrocaPlantaAtendimento >>> ");
+					ReadicionouDemandaProcessoEtapa1 = ConstrucoesInstancia.AdicionaTarefa( 0 , ConstrucoesInstancia.Construcoes[c1].NumeroDaConstrucao,   DemandaNaoAtendida , DadosTarefasMovidasEmUmaConstrucaoEtapa1, 1, 0, 1, 1 , PlantasInstancia, ImprimeDadosAdicionaTarefa,"  <<<<< BuscaLocal::BuscaLocalTrocaPlantaAtendimento >>> ");
+
+					if( Imprime == 1){
+						cout << endl << endl << "     ReadicionouDemandaProcessoEtapa1 [" << ReadicionouDemandaProcessoEtapa1 << "] a demanda [ " << ConstrucoesInstancia.Construcoes[c1].NumeroDaConstrucao << "-" << DemandaNaoAtendida << "]" << endl << endl;
+					}
+
 				}
 
+				if( Imprime == 1){
+					cout << endl << endl << "		Fim Etapa 2 -> Construcao [" <<ConstrucoesInstancia.Construcoes[c1].NumeroDaConstrucao << "]" << endl ;
+					cin >> ParaPrograma;
+				}
 // após se tentar realizar o processo de se atender as demandas de uma cosntrução com uma planta que sejá diferente que a que ela é atendida na construção inicial e não se conseguiu melhorar o makespan da solução, se deleta as demandas que foram reinseridas no processo da Etapa 2 e não foram contabilizadas nos movimentos de retorno da solução antes de se realizar a etapa 2. Estas foram guardadas em DadosTarefasMovidasEmUmaConstrucaoEtapa1
 
 				// caso não se conseguiu melhorar a solução, se retorna o estado da solução antes de se realizar os procediemntos da etapa 2 que foram realizados na cosntrução corrente tentando atender as demandas dessa construção com um veículo fixo
@@ -708,7 +713,7 @@ int BuscaLocal::BuscaLocalTrocaPlantaAtendimento(int Imprime, int ImprimeEstrutu
 			// se retorna a solução até o ponto onde se deletou as demandas da construção corrente
 			ConstrucoesInstancia.ReadicionaDeletaTarefasApartirDeDados(  DadosTarefasMovidasEtapa1, PlantasInstancia );
 			if( Imprime == 1){
-				cout << endl << endl << "	Fim da Etapa 1 " << endl << endl;
+				cout << endl << endl << "	Fim da Etapa 1 -> Planta [" << PlantasInstancia.Plantas[p1].NumeroDaPlanta << "]" << endl << endl;
 				PlantasInstancia.Imprime(1,1,ImprimeSolucao, ImprimeArquivo, Arquivo);
 				ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia , 0, ImprimeSolucao,ImprimeArquivo,Arquivo);
 				cin >> ParaPrograma;

@@ -114,11 +114,11 @@ void Heuristica::ExecutaProcedimentoHeuristico1(string NomeInstancia){
 
 	// variavel que controla se irá escrever os dados em um aruivo, é inicializada com 0
 	int ImprimeArquivo;
-	ImprimeArquivo = 0;
+	ImprimeArquivo = 1;
 
 	// variavel que controla se imprime na tela a solução e os procediemntos
 	int ImprimeSolucao;
-	ImprimeSolucao = 1;
+	ImprimeSolucao = 0;
 
 	int Imprime;
 	Imprime = 0;
@@ -254,7 +254,7 @@ void Heuristica::ExecutaProcedimentoHeuristico1(string NomeInstancia){
 		fprintf( Arquivo,"\n\n############################### Procedimento Construcao Solucao por meio de Heuristica Construtiva #####################################\n");
 	}
 
-	Solucao = Prod1.Executa( TipoOrdenacaoVeiculos, ImprimeProcedimentoConstrutivo );
+	Solucao = Prod1.Executa( TipoOrdenacaoVeiculos, ImprimeProcedimentoConstrutivo, ImprimeSolucao, ImprimeArquivo, Arquivo );
 
 	if( ImprimeSolucao == 1){
 		cout << endl << endl << "########################################################################################################################################" << endl << endl;
@@ -361,13 +361,10 @@ void Heuristica::ExecutaProcedimentoHeuristico1(string NomeInstancia){
 		Solucoes.Imprime(ImprimePlanta, ImprimeConstrucao, IntervalosRespeitadosConstrucaoes, ImprimeSolucao, ImprimeArquivo, Arquivo);
 
 		if( Solucoes.Solucoes[0].ConstrucoesInstancia.NivelDeInviabilidade == 0){
-			printf(" %.4f \t", Solucoes.Solucoes[0].Makespan);
+			printf(" %.4f \t   ------ \t", Solucoes.Solucoes[0].Makespan);
 		}else{
 			printf("   ------ \t");
 		}
-
-
-		cin >> ParaPrograma;
 
 		if( Solucoes.Solucoes[0].ConstrucoesInstancia.NivelDeInviabilidade != 0){
 
@@ -390,12 +387,13 @@ void Heuristica::ExecutaProcedimentoHeuristico1(string NomeInstancia){
 
 			Solucoes.CalculaMakespanSolucoes();
 			Solucoes.Solucoes[0].Imprime(ImprimePlanta, ImprimeConstrucao, IntervalosRespeitadosConstrucaoes, ImprimeSolucao, ImprimeArquivo, Arquivo);
-		}
 
-		if( Solucoes.Solucoes[0].ConstrucoesInstancia.NivelDeInviabilidade == 0){
-			printf(" %.4f \t", Solucoes.Solucoes[0].Makespan);
-		}else{
-			printf(" ------ \t");
+
+			if( Solucoes.Solucoes[0].ConstrucoesInstancia.NivelDeInviabilidade == 0){
+				printf(" %.4f \t", Solucoes.Solucoes[0].Makespan);
+			}else{
+				printf(" ------ \t");
+			}
 		}
 	}else{
 		printf(" ------ \t ------ \t");
@@ -419,7 +417,7 @@ void Heuristica::ExecutaProcedimentoHeuristico1(string NomeInstancia){
 			fprintf( Arquivo,"\n##############################################################################################\n\n");
 		}
 
-		Solucoes.Solucoes[0].Imprime(ImprimePlanta, ImprimeConstrucao, IntervalosRespeitadosConstrucaoes,ImprimeSolucao, ImprimeArquivo, Arquivo);
+		//Solucoes.Solucoes[0].Imprime(ImprimePlanta, ImprimeConstrucao, IntervalosRespeitadosConstrucaoes,ImprimeSolucao, ImprimeArquivo, Arquivo);
 
 		Solucoes.CalculaMakespanSolucoes();
 		if( Solucoes.Solucoes[0].ConstrucoesInstancia.NivelDeInviabilidade == 0){
@@ -433,9 +431,6 @@ void Heuristica::ExecutaProcedimentoHeuristico1(string NomeInstancia){
 			fprintf( Arquivo,"\n\n############################### Busca Local 2 (construcao) ###################################\n");
 		}
 
-
-
-		cin >> ParaPrograma;
 
 		Solucoes.Solucoes[0].RealizarBuscaLocalConstrucao(ImprimeBusca, ImprimeSolucao, ImprimeArquivo, Arquivo);
 
@@ -459,11 +454,6 @@ void Heuristica::ExecutaProcedimentoHeuristico1(string NomeInstancia){
 		if( ImprimeArquivo == 1){
 			fprintf( Arquivo,"\n\n############################### Busca Local 3 (planta) #######################################\n");
 		}
-
-
-
-		cin >> ParaPrograma;
-
 
 		Solucoes.Solucoes[0].RealizarBuscaLocalPlanta(ImprimeBusca, ImprimeSolucao, ImprimeArquivo, Arquivo);
 

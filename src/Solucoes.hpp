@@ -906,8 +906,8 @@ void Solucao::RealizarBuscaLocalPlanta(int imprime, int ImprimeSolucao, int Impr
 
 	// inicializa o numero de iterações como zero
 	NumeroDeVezes = 0;
-	ImprimeEstruturas = 1;
-	ImprimeProcedimento = 1;
+	ImprimeEstruturas = 0;
+	ImprimeProcedimento = 0;
 
 	// carrega os dados da solução para a classe da busca local
 	busca.CarregaSolucao( NP, PlantasInstancia, NE,	ConstrucoesInstancia, NV, Velocidade, TempoDeVidaConcreto);

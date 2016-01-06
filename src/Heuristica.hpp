@@ -71,7 +71,7 @@ int Heuristica::LeDados(string Nome, int comentarios){
 	CaminhoArquivo1 += Nome;
 
 	// escreve o arquivo que foi lido
-	cout << " Arquivo a abrir : " << CaminhoArquivo1.c_str() << endl;
+	//cout << " Arquivo a abrir : " << CaminhoArquivo1.c_str() << endl;
 
 	// abre o arquivo da instancia
 	arq.open(CaminhoArquivo1.c_str());
@@ -118,7 +118,12 @@ void Heuristica::ExecutaProcedimentoHeuristico1(string NomeInstancia){
 
 	// variavel que controla se imprime na tela a solução e os procediemntos
 	int ImprimeSolucao;
-	ImprimeSolucao = 1;
+	ImprimeSolucao = 0;
+
+	// Exscrever a dadta
+	 time_t timer;
+	 char buffer[26];
+	 struct tm* tm_info;
 
 	// variavel que faz o progrma parar
 	int ParaPrograma;
@@ -151,7 +156,7 @@ void Heuristica::ExecutaProcedimentoHeuristico1(string NomeInstancia){
 
 	ImprimePlanta = 1;
 	ImprimeConstrucao = 1;
-	IntervalosRespeitadosConstrucaoes = 0;
+	IntervalosRespeitadosConstrucaoes = 1;
 
 	// fornece o caminnho onde será criado o arquivo
 	Caminho =  "./Exec/";
@@ -160,10 +165,14 @@ void Heuristica::ExecutaProcedimentoHeuristico1(string NomeInstancia){
 
 	//cria a pasta Exec para salvar os dados da execução
 	if(!opendir ("Exec")){
-		cout <<  "\n Nao tem diretorio \"Exec\"!!            FUDEU MUITO!! \n" << endl;
+		if( ImprimeSolucao == 1){
+			cout <<  "\n Nao tem diretorio \"Exec\"!!            FUDEU MUITO!! \n" << endl;
+		}
 
 		if(system("mkdir Exec;") == 0){
-			cout << " Criou pasta Exec" << endl;
+			if( ImprimeSolucao == 1){
+				cout << " Criou pasta Exec" << endl;
+			}
 		}else{
 			cout << " Problema ao criar pasta Exec" << endl;
 		}
@@ -175,14 +184,21 @@ void Heuristica::ExecutaProcedimentoHeuristico1(string NomeInstancia){
 		if(!opendir ("Exec")){
 			cout << "\n Nao tem diretorio \"Exec\"!!             FUDEU MUITO!! \n" << endl;
 		}else{
-			cout << " Tem diretorio \"Exec\" !!  " << endl;
+			if( ImprimeSolucao == 1){
+				cout << " Tem diretorio \"Exec\" !!  " << endl;
+			}
 		}
 	}else{
-		cout << " Tem diretorio \"Exec\" !!  " << endl;
+		if( ImprimeSolucao == 1){
+			cout << " Tem diretorio \"Exec\" !!  " << endl;
+		}
 	}
 
 	// escreve o endereço do arquivo
-	cout << endl << endl << endl << Caminho << "   -  " <<  Caminho.c_str() <<  endl << endl << endl;
+	//cout << endl << endl << endl << Caminho << "   -  " <<  Caminho.c_str() <<  endl << endl << endl;
+
+	cout << NomeInstancia << '\t';
+
 	// abre o arquivo
 	Arquivo = fopen (Caminho.c_str(), "a");
 
@@ -196,9 +212,18 @@ void Heuristica::ExecutaProcedimentoHeuristico1(string NomeInstancia){
 		ImprimeArquivo = 1;
 	}
 
+	// coleta a data e a hora
+	time(&timer);
+	tm_info = localtime(&timer);
+	strftime(buffer, 26, " * %H:%M:%S de %d:%m:%Y", tm_info);
+
 	if( ImprimeArquivo == 1){
+		fprintf(Arquivo,"\n\n ----- Execução as %s ----- \n\n", buffer);
 		// escreve o nome da instancia no arquivo de saida
 		fprintf( Arquivo," %s \n ",  NomeInstancia.c_str());
+	}
+	if( ImprimeSolucao == 1){
+		printf("\n\n ----- Execução as %s ----- \n\n", buffer);
 	}
 
 
@@ -212,13 +237,13 @@ void Heuristica::ExecutaProcedimentoHeuristico1(string NomeInstancia){
 	//sort ( Prod1.ConstrucoesInstancia.Construcoes.begin(), Prod1.ConstrucoesInstancia.Construcoes.end(), DecideQualContrucaoTemMaiorRank );
 	sort ( Prod1.ConstrucoesInstancia.Construcoes.begin(), Prod1.ConstrucoesInstancia.Construcoes.end(), DecideQualContrucaoTemMenorInicioDepoisMaiorRank );
 
-	Prod1.ConstrucoesInstancia.ImprimeContrucoes(Prod1.PlantasInstancia, VerificaViabilidade, ImprimeSolucao,ImprimeArquivo,Arquivo);
+	//Prod1.ConstrucoesInstancia.ImprimeContrucoes(Prod1.PlantasInstancia, VerificaViabilidade, ImprimeSolucao,ImprimeArquivo,Arquivo);
 
 	if( ImprimeSolucao == 1){
 		cout << endl << endl << "############################### Procedimento Construcao Solucao por meio de Heuristica Construtiva #####################################" << endl << endl;
 	}
 	if( ImprimeArquivo == 1){
-		fprintf( Arquivo,"\n\n############################### Procedimento Construcao Solucao por meio de Heuristica Construtiva #####################################\n\n");
+		fprintf( Arquivo,"\n\n############################### Procedimento Construcao Solucao por meio de Heuristica Construtiva #####################################\n");
 	}
 
 	Solucao = Prod1.Executa( TipoOrdenacaoVeiculos, Imprime );
@@ -227,19 +252,27 @@ void Heuristica::ExecutaProcedimentoHeuristico1(string NomeInstancia){
 		cout << endl << endl << "########################################################################################################################################" << endl << endl;
 	}
 	if( ImprimeArquivo == 1){
-		fprintf( Arquivo,"\n\n########################################################################################################################################\n\n");
+		fprintf( Arquivo,"\n########################################################################################################################################\n\n");
 	}
 
 	if( Solucao == 1 ){
 		if( ImprimeSolucao == 1){
-			cout << endl << endl << "  Solucao inicial viavel!    " << endl << endl;
+			cout << endl << endl;
+		}
+		cout << " \t VIAVEL ";
+		if( ImprimeSolucao == 1){
+			cout << endl << endl;
 		}
 		if( ImprimeArquivo == 1){
 			fprintf( Arquivo,"\n\n  Solucao inicial viavel!    \n\n");
 		}
 	}else{
 		if( ImprimeSolucao == 1){
-			cout << endl << endl << "  Solucao inicial inviavel!    " << endl << endl;
+			cout << endl << endl;
+		}
+		cout << " \t INVIAVEL ";
+		if( ImprimeSolucao == 1){
+			cout << endl << endl;
 		}
 		if( ImprimeArquivo == 1){
 			fprintf( Arquivo,"\n\n  Solucao inicial inviavel!    \n\n");
@@ -251,8 +284,14 @@ void Heuristica::ExecutaProcedimentoHeuristico1(string NomeInstancia){
 
 	Solucoes.CalculaMakespanSolucoes();
 
+	if(Solucoes.Solucoes[0].ConstrucoesInstancia.NivelDeInviabilidade == 0){
+		printf("         %.4f \t", Solucoes.Solucoes[0].Makespan);
+	}else{
+		printf("        ------ \t");
+	}
 
-	Solucoes.Imprime(ImprimePlanta, ImprimeConstrucao, IntervalosRespeitadosConstrucaoes, ImprimeSolucao , ImprimeArquivo, Arquivo);
+
+	//Solucoes.Imprime(ImprimePlanta, ImprimeConstrucao, IntervalosRespeitadosConstrucaoes, ImprimeSolucao , ImprimeArquivo, Arquivo);
 
 	if( Solucoes.Solucoes[0].ConstrucoesInstancia.NivelDeInviabilidade != 0){
 
@@ -298,7 +337,7 @@ void Heuristica::ExecutaProcedimentoHeuristico1(string NomeInstancia){
 			cout << endl << endl << "############################### Procedimento Viabilidade 1 #####################################" << endl << endl;
 		}
 		if( ImprimeArquivo == 1){
-			fprintf( Arquivo,"\n\n############################### Procedimento Viabilidade 1 #####################################\n\n");
+			fprintf( Arquivo,"\n\n############################### Procedimento Viabilidade 1 #####################################\n");
 		}
 
 		Solucoes.Solucoes[0].ProcessoViabilizacao1( TipoOrdenacaoVeiculos , Imprime);
@@ -307,13 +346,17 @@ void Heuristica::ExecutaProcedimentoHeuristico1(string NomeInstancia){
 			cout << endl << endl << "##############################################################################################" << endl << endl;
 		}
 		if( ImprimeArquivo == 1){
-			fprintf( Arquivo,"\n\n########################################################################################################################################\n\n");
+			fprintf( Arquivo,"\n##############################################################################################\n\n");
 		}
 
 		Solucoes.CalculaMakespanSolucoes();
 		Solucoes.Imprime(ImprimePlanta, ImprimeConstrucao, IntervalosRespeitadosConstrucaoes, ImprimeSolucao, ImprimeArquivo, Arquivo);
 
-
+		if( Solucoes.Solucoes[0].ConstrucoesInstancia.NivelDeInviabilidade == 0){
+			printf(" %.4f \t", Solucoes.Solucoes[0].Makespan);
+		}else{
+			printf("   ------ \t");
+		}
 
 		if( Solucoes.Solucoes[0].ConstrucoesInstancia.NivelDeInviabilidade != 0){
 
@@ -322,7 +365,7 @@ void Heuristica::ExecutaProcedimentoHeuristico1(string NomeInstancia){
 				cout << endl << endl << "############################### Procedimento Viabilidade 2 #####################################" << endl << endl;
 			}
 			if( ImprimeArquivo == 1){
-				fprintf( Arquivo,"\n\n############################### Procedimento Viabilidade 2 #####################################\n\n");
+				fprintf( Arquivo,"\n\n############################### Procedimento Viabilidade 2 #####################################\n");
 			}
 
 			Solucoes.Solucoes[0].ProcessoViabilizacao2( TipoOrdenacaoVeiculos, Imprime);
@@ -331,12 +374,20 @@ void Heuristica::ExecutaProcedimentoHeuristico1(string NomeInstancia){
 				cout << endl << endl << "##############################################################################################" << endl << endl;
 			}
 			if( ImprimeArquivo == 1){
-				fprintf( Arquivo,"\n\n########################################################################################################################################\n\n");
+				fprintf( Arquivo,"\n##############################################################################################\n\n");
 			}
 
 			Solucoes.CalculaMakespanSolucoes();
 			Solucoes.Solucoes[0].Imprime(ImprimePlanta, ImprimeConstrucao, IntervalosRespeitadosConstrucaoes, ImprimeSolucao, ImprimeArquivo, Arquivo);
 		}
+
+		if( Solucoes.Solucoes[0].ConstrucoesInstancia.NivelDeInviabilidade == 0){
+			printf(" %.4f \t", Solucoes.Solucoes[0].Makespan);
+		}else{
+			printf(" ------ \t");
+		}
+	}else{
+		printf(" ------ \t ------ \t");
 	}
 
 	if( Solucoes.Solucoes[0].ConstrucoesInstancia.NivelDeInviabilidade == 0){
@@ -345,7 +396,7 @@ void Heuristica::ExecutaProcedimentoHeuristico1(string NomeInstancia){
 			cout << endl << endl << "############################### Busca Local 1 (caminhão) #####################################" << endl << endl;
 		}
 		if( ImprimeArquivo == 1){
-			fprintf( Arquivo,"\n\n############################### Busca Local 1 (caminhão) #####################################\n\n");
+			fprintf( Arquivo,"\n\n############################### Busca Local 1 (caminhão) #####################################\n");
 		}
 
 		Solucoes.Solucoes[0].RealizarBuscaLocalCaminhao(0);
@@ -354,16 +405,21 @@ void Heuristica::ExecutaProcedimentoHeuristico1(string NomeInstancia){
 			cout << endl << endl << "##############################################################################################" << endl << endl;
 		}
 		if( ImprimeArquivo == 1){
-			fprintf( Arquivo,"\n\n########################################################################################################################################\n\n");
+			fprintf( Arquivo,"\n##############################################################################################\n\n");
 		}
 
 		//Solucoes.Solucoes[0].Imprime(ImprimePlanta, ImprimeConstrucao, IntervalosRespeitadosConstrucaoes,ImprimeSolucao, ImprimeArquivo, Arquivo);
 
+		Solucoes.CalculaMakespanSolucoes();
+		if( Solucoes.Solucoes[0].ConstrucoesInstancia.NivelDeInviabilidade == 0){
+			printf(" %.4f \t", Solucoes.Solucoes[0].Makespan);
+		}
+
 		if( ImprimeSolucao == 1){
-			cout << endl << endl << "############################### Busca Local 2 (construcao) #####################################" << endl << endl;
+			cout << endl << endl << "############################### Busca Local 2 (construcao) ###################################" << endl << endl;
 		}
 		if( ImprimeArquivo == 1){
-			fprintf( Arquivo,"\n\n############################### Busca Local 2 (construcao) #####################################\n\n");
+			fprintf( Arquivo,"\n\n############################### Busca Local 2 (construcao) ###################################\n");
 		}
 
 		Solucoes.Solucoes[0].RealizarBuscaLocalConstrucao(0);
@@ -372,16 +428,21 @@ void Heuristica::ExecutaProcedimentoHeuristico1(string NomeInstancia){
 			cout << endl << endl << "##############################################################################################" << endl << endl;
 		}
 		if( ImprimeArquivo == 1){
-			fprintf( Arquivo,"\n\n########################################################################################################################################\n\n");
+			fprintf( Arquivo,"\n##############################################################################################\n\n");
 		}
 
 		//Solucoes.Solucoes[0].Imprime(ImprimePlanta, ImprimeConstrucao, IntervalosRespeitadosConstrucaoes,ImprimeSolucao, ImprimeArquivo, Arquivo);
 
+		Solucoes.CalculaMakespanSolucoes();
+		if( Solucoes.Solucoes[0].ConstrucoesInstancia.NivelDeInviabilidade == 0){
+			printf(" %.4f \t", Solucoes.Solucoes[0].Makespan);
+		}
+
 		if( ImprimeSolucao == 1){
-			cout << endl << endl << "############################### Busca Local 3 (planta) #####################################" << endl << endl;
+			cout << endl << endl << "############################### Busca Local 3 (planta) #######################################" << endl << endl;
 		}
 		if( ImprimeArquivo == 1){
-			fprintf( Arquivo,"\n\n############################### Busca Local 3 (planta) #####################################\n\n");
+			fprintf( Arquivo,"\n\n############################### Busca Local 3 (planta) #######################################\n");
 		}
 
 		Solucoes.Solucoes[0].RealizarBuscaLocalPlanta(0);
@@ -390,11 +451,19 @@ void Heuristica::ExecutaProcedimentoHeuristico1(string NomeInstancia){
 			cout << endl << endl << "##############################################################################################" << endl << endl;
 		}
 		if( ImprimeArquivo == 1){
-			fprintf( Arquivo,"\n\n########################################################################################################################################\n\n");
+			fprintf( Arquivo,"\n##############################################################################################\n\n");
 		}
 
 		Solucoes.Solucoes[0].Imprime(ImprimePlanta, ImprimeConstrucao, IntervalosRespeitadosConstrucaoes, ImprimeSolucao, ImprimeArquivo, Arquivo);
+
+		Solucoes.CalculaMakespanSolucoes();
+		if( Solucoes.Solucoes[0].ConstrucoesInstancia.NivelDeInviabilidade == 0){
+			printf(" %.4f \n", Solucoes.Solucoes[0].Makespan);
+		}
+
 	}else{
+		printf(" ------ \t ------ \t ------ \n");
+
 		if( ImprimeSolucao == 1){
 			cout << endl << endl << "				Solução Inviavel " << endl << endl;
 		}

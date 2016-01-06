@@ -67,7 +67,7 @@ public:
 	void Imprime(int OrdenaPlantas, int OrdenaCarretas, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo);		// Imprime dados da planta
 	void ImprimeDistancias();									// Imprime as distancias da planta as construções
 
-	int VerificaIntegridadeDeCarregamentos(int imprime); 					// verifica a integridade entre os Carregamentos da planta
+	int VerificaIntegridadeDeCarregamentos(int imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo); 					// verifica a integridade entre os Carregamentos da planta
 
 	~Planta();			// destruidora
 
@@ -252,12 +252,17 @@ void Planta::ImprimeDistancias(){
 }
 
 // verifica a integridade entre os Carregamentos da planta
-int Planta::VerificaIntegridadeDeCarregamentos(int imprime){
+int Planta::VerificaIntegridadeDeCarregamentos(int imprime,int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo){
 	// percorre todos os carregamentos
 	for( int c1 = 0; c1 < (int) Carregamentos.size(); c1++){
 		// verifica se o carregamento não possui tempo negativo
 		if( Carregamentos[c1].HorarioInicioCarregamento > Carregamentos[c1].HorarioFinalCarregamento ){
-			printf( " >>>>>>>>>>>>>> Problema! Carregamento possui tempo negativo %.4f (%.4f-%.4f)\n",  Carregamentos[c1].HorarioFinalCarregamento - Carregamentos[c1].HorarioInicioCarregamento  , Carregamentos[c1].HorarioInicioCarregamento, Carregamentos[c1].HorarioFinalCarregamento );
+			if( ImprimeSolucao == 1){
+				printf( " >>>>>>>>>>>>>> Problema! Carregamento possui tempo negativo %.4f (%.4f-%.4f)\n",  Carregamentos[c1].HorarioFinalCarregamento - Carregamentos[c1].HorarioInicioCarregamento  , Carregamentos[c1].HorarioInicioCarregamento, Carregamentos[c1].HorarioFinalCarregamento );
+			}
+			if(ImprimeArquivo ==1 ){
+				fprintf(Arquivo, " >>>>>>>>>>>>>> Problema! Carregamento possui tempo negativo %.4f (%.4f-%.4f)\n",  Carregamentos[c1].HorarioFinalCarregamento - Carregamentos[c1].HorarioInicioCarregamento  , Carregamentos[c1].HorarioInicioCarregamento, Carregamentos[c1].HorarioFinalCarregamento );
+			}
 			return 0;
 		}
 		// percorre todos os carregamentos
@@ -266,22 +271,42 @@ int Planta::VerificaIntegridadeDeCarregamentos(int imprime){
 			if( Carregamentos[c1].HorarioInicioCarregamento != Carregamentos[c2].HorarioInicioCarregamento && Carregamentos[c1].HorarioFinalCarregamento != Carregamentos[c2].HorarioFinalCarregamento){
 				// verifica se o Carregamento está contido dentro de outro Carregamento
 				if( Carregamentos[c1].HorarioInicioCarregamento <= Carregamentos[c2].HorarioInicioCarregamento && Carregamentos[c1].HorarioFinalCarregamento >= Carregamentos[c2].HorarioFinalCarregamento ){
-					printf( " >>>>>>>>>>>>>> Problema! Carregamento (%.4f-%.4f) está contido em (%.4f-%.4f) \n", Carregamentos[c2].HorarioInicioCarregamento  , Carregamentos[c2].HorarioFinalCarregamento, Carregamentos[c1].HorarioInicioCarregamento, Carregamentos[c1].HorarioFinalCarregamento );
+					if( ImprimeSolucao == 1){
+						printf( " >>>>>>>>>>>>>> Problema! Carregamento (%.4f-%.4f) está contido em (%.4f-%.4f) \n", Carregamentos[c2].HorarioInicioCarregamento  , Carregamentos[c2].HorarioFinalCarregamento, Carregamentos[c1].HorarioInicioCarregamento, Carregamentos[c1].HorarioFinalCarregamento );
+					}
+					if(ImprimeArquivo ==1 ){
+						fprintf(Arquivo," >>>>>>>>>>>>>> Problema! Carregamento (%.4f-%.4f) está contido em (%.4f-%.4f) \n", Carregamentos[c2].HorarioInicioCarregamento  , Carregamentos[c2].HorarioFinalCarregamento, Carregamentos[c1].HorarioInicioCarregamento, Carregamentos[c1].HorarioFinalCarregamento );
+					}
 					return 0;
 				}
 				// verifica se o Carregamento  contem  outro Carregamento
 				if( Carregamentos[c1].HorarioInicioCarregamento >= Carregamentos[c2].HorarioInicioCarregamento && Carregamentos[c1].HorarioFinalCarregamento <= Carregamentos[c2].HorarioFinalCarregamento ){
-					printf( " >>>>>>>>>>>>>> Problema! Carregamento (%.4f-%.4f) contem (%.4f-%.4f) \n", Carregamentos[c2].HorarioInicioCarregamento  , Carregamentos[c2].HorarioFinalCarregamento, Carregamentos[c1].HorarioInicioCarregamento, Carregamentos[c1].HorarioFinalCarregamento );
+					if( ImprimeSolucao == 1){
+						printf( " >>>>>>>>>>>>>> Problema! Carregamento (%.4f-%.4f) contem (%.4f-%.4f) \n", Carregamentos[c2].HorarioInicioCarregamento  , Carregamentos[c2].HorarioFinalCarregamento, Carregamentos[c1].HorarioInicioCarregamento, Carregamentos[c1].HorarioFinalCarregamento );
+					}
+					if(ImprimeArquivo ==1 ){
+						fprintf(Arquivo," >>>>>>>>>>>>>> Problema! Carregamento (%.4f-%.4f) contem (%.4f-%.4f) \n", Carregamentos[c2].HorarioInicioCarregamento  , Carregamentos[c2].HorarioFinalCarregamento, Carregamentos[c1].HorarioInicioCarregamento, Carregamentos[c1].HorarioFinalCarregamento );
+					}
 					return 0;
 				}
 				// verifica se o Carregamento  está parcialmente contido na parte inicial de  outro Carregamento
 				if( Carregamentos[c1].HorarioFinalCarregamento >= Carregamentos[c2].HorarioInicioCarregamento && Carregamentos[c1].HorarioFinalCarregamento <= Carregamentos[c2].HorarioFinalCarregamento ){
-					printf( " >>>>>>>>>>>>>> Problema! Carregamento (%.4f-%.4f) está parcialmente contido na parte inicial de (%.4f-%.4f) \n", Carregamentos[c1].HorarioInicioCarregamento, Carregamentos[c1].HorarioFinalCarregamento, Carregamentos[c2].HorarioInicioCarregamento  , Carregamentos[c2].HorarioFinalCarregamento );
+					if( ImprimeSolucao == 1){
+						printf( " >>>>>>>>>>>>>> Problema! Carregamento (%.4f-%.4f) está parcialmente contido na parte inicial de (%.4f-%.4f) \n", Carregamentos[c1].HorarioInicioCarregamento, Carregamentos[c1].HorarioFinalCarregamento, Carregamentos[c2].HorarioInicioCarregamento  , Carregamentos[c2].HorarioFinalCarregamento );
+					}
+					if(ImprimeArquivo ==1 ){
+						fprintf(Arquivo, " >>>>>>>>>>>>>> Problema! Carregamento (%.4f-%.4f) está parcialmente contido na parte inicial de (%.4f-%.4f) \n", Carregamentos[c1].HorarioInicioCarregamento, Carregamentos[c1].HorarioFinalCarregamento, Carregamentos[c2].HorarioInicioCarregamento  , Carregamentos[c2].HorarioFinalCarregamento );
+					}
 					return 0;
 				}
 				// verifica se o Carregamento  está parcialmente contido na parte final de  outro Carregamento
 				if( Carregamentos[c1].HorarioInicioCarregamento >= Carregamentos[c2].HorarioInicioCarregamento && Carregamentos[c1].HorarioInicioCarregamento <= Carregamentos[c2].HorarioFinalCarregamento ){
-					printf( " >>>>>>>>>>>>>> Problema! Carregamento (%.4f-%.4f) está parcialmente contido na parte final de (%.4f-%.4f) \n", Carregamentos[c1].HorarioInicioCarregamento, Carregamentos[c1].HorarioFinalCarregamento, Carregamentos[c2].HorarioInicioCarregamento  , Carregamentos[c2].HorarioFinalCarregamento );
+					if( ImprimeSolucao == 1){
+						printf( " >>>>>>>>>>>>>> Problema! Carregamento (%.4f-%.4f) está parcialmente contido na parte final de (%.4f-%.4f) \n", Carregamentos[c1].HorarioInicioCarregamento, Carregamentos[c1].HorarioFinalCarregamento, Carregamentos[c2].HorarioInicioCarregamento  , Carregamentos[c2].HorarioFinalCarregamento );
+					}
+					if(ImprimeArquivo ==1 ){
+						fprintf(Arquivo, " >>>>>>>>>>>>>> Problema! Carregamento (%.4f-%.4f) está parcialmente contido na parte final de (%.4f-%.4f) \n", Carregamentos[c1].HorarioInicioCarregamento, Carregamentos[c1].HorarioFinalCarregamento, Carregamentos[c2].HorarioInicioCarregamento  , Carregamentos[c2].HorarioFinalCarregamento );
+					}
 					return 0;
 				}
 
@@ -290,7 +315,12 @@ int Planta::VerificaIntegridadeDeCarregamentos(int imprime){
 	}
 	// os Carregamentos são integros entre se
 	if( imprime == 1){
-		cout << " Carregamentos integros " << endl;
+		if( ImprimeSolucao == 1){
+			cout << " Carregamentos integros " << endl;
+		}
+		if(ImprimeArquivo ==1 ){
+			fprintf(Arquivo, " Carregamentos integros \n");
+		}
 	}
 	return 1;
 }
@@ -337,8 +367,8 @@ public:
 	double RetornaMenorHorarioQueConstrucaoPodeReceberDemanda();	// retorna o menor horario que a construção pode recerber a demanda que não é atendida no momento
 
 	int RetornaDadosDemandaAtendida( int Construcao, int Demanda, double &HorarioInicio, double &HorarioFinal, int &planta, int &Carreta, double &HorarioInicioCarreta, double &HorarioFinalCarreta);				// Retorna os dados do carregaemnto de uma certa demanda passada na função
-	int VerificaIntegridadeDeCarregamentosDasPlantas(int imprime);					// verifica a integridade dos carregamentos realizados pelas plantas
-	int VerificaIntegridadeDeDeslocaemntosDosVeiculosDasPlantas(int imprime);		// verifica a integridade dos deslocamentos realizados pelos veiculos das plantas
+	int VerificaIntegridadeDeCarregamentosDasPlantas(int imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo);					// verifica a integridade dos carregamentos realizados pelas plantas
+	int VerificaIntegridadeDeDeslocaemntosDosVeiculosDasPlantas(int imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo);		// verifica a integridade dos deslocamentos realizados pelos veiculos das plantas
 
 	~ConjuntoPlantas();		// destruidora
 };
@@ -677,21 +707,31 @@ int ConjuntoPlantas::RetornaDadosDemandaAtendida(int Construcao, int Demanda, do
 }
 
 // verifica a integridade dos carregamentos realizados pelas plantas
-int ConjuntoPlantas::VerificaIntegridadeDeCarregamentosDasPlantas(int imprime){
+int ConjuntoPlantas::VerificaIntegridadeDeCarregamentosDasPlantas(int imprime,int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo){
 	int integro;
 	// inicia com integro o estado dos carregamentos
 	integro = 1;
 
 	if( imprime == 1){
-		cout << endl << endl << "  Verifica integridade carregamentos " << endl << endl;
+		if( ImprimeSolucao == 1){
+			cout << endl << endl << "  Verifica integridade carregamentos " << endl << endl;
+		}
+		if(  ImprimeArquivo == 1){
+			fprintf( Arquivo, "\n\n  Verifica integridade carregamentos \n\n");
+		}
 	}
 	// passa por todas as plantas
 	for( int p = 0; p < (int) Plantas.size(); p++){
 		if( imprime == 1){
-			cout << " planta [" << Plantas[p].NumeroDaPlanta << "] ";
+			if( ImprimeSolucao == 1){
+				cout << " planta [" << Plantas[p].NumeroDaPlanta << "] ";
+			}
+			if(  ImprimeArquivo == 1){
+				fprintf( Arquivo, " planta [%d] ",  Plantas[p].NumeroDaPlanta);
+			}
 		}
 		// verica a integridade dos carregamentos da planta corrente
-		if ( Plantas[p].VerificaIntegridadeDeCarregamentos(imprime) == 0){
+		if ( Plantas[p].VerificaIntegridadeDeCarregamentos(imprime, ImprimeSolucao, ImprimeArquivo,Arquivo) == 0){
 			// caso não for integro, atualiza a variavel de saida
 			integro = 0;
 		}
@@ -701,21 +741,31 @@ int ConjuntoPlantas::VerificaIntegridadeDeCarregamentosDasPlantas(int imprime){
 }
 
 // verifica a integridade dos deslocamentos realizados pelos veiculos das plantas
-int ConjuntoPlantas::VerificaIntegridadeDeDeslocaemntosDosVeiculosDasPlantas(int imprime){
+int ConjuntoPlantas::VerificaIntegridadeDeDeslocaemntosDosVeiculosDasPlantas(int imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo){
 	int integro;
 	// inicia como integro o estado dos deslocamentos
 	integro = 1;
 
 	if( imprime == 1){
-		cout << endl << "          Verifica integridade Deslocamentos  " << endl << endl;
+		if( ImprimeSolucao == 1){
+			cout << endl << "          Verifica integridade Deslocamentos  " << endl << endl;
+		}
+		if(  ImprimeArquivo == 1){
+			fprintf( Arquivo, "\n          Verifica integridade Deslocamentos  \n\n" );
+		}
 	}
 	// passa por todas as plantas
 	for( int p = 0; p < (int) Plantas.size(); p++){
 		if( imprime == 1){
-			cout << "   Planta [" << Plantas[p].NumeroDaPlanta << "]" << endl ;
+			if( ImprimeSolucao == 1){
+				cout << "   Planta [" << Plantas[p].NumeroDaPlanta << "]" << endl ;
+			}
+			if(  ImprimeArquivo == 1){
+				fprintf( Arquivo,"   Planta [%d]\n",  Plantas[p].NumeroDaPlanta);
+			}
 		}
 		// verifica a integridade dos deslocaentos dos veiculos da planta
-		if( Plantas[p].VeiculosDaPlanta.VerificaIntegridadeDeDeslocamentosDasCarretas(imprime) == 0){
+		if( Plantas[p].VeiculosDaPlanta.VerificaIntegridadeDeDeslocamentosDasCarretas(imprime, ImprimeSolucao, ImprimeArquivo, Arquivo) == 0){
 			// caso não for integro, atualiza a variavel de saida
 			integro = 0;
 		}

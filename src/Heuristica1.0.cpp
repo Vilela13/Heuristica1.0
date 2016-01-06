@@ -32,7 +32,7 @@ int main(int argc, char **argv) {
 
 
 
-		EscreveDadosLidosNaTela = 1;
+		EscreveDadosLidosNaTela = 0;
 
 	// -------------------------- Le arquivo com as instancias de Solomon e as guarda em uma lista ----------------------- //
 
@@ -118,11 +118,27 @@ int main(int argc, char **argv) {
 
 		Heuristica *Instancia;
 
+		// Exscrever a dadta
+		 time_t timer;
+		 char buffer[26];
+		 struct tm* tm_info;
+
+		 // coleta a data e a hora
+		time(&timer);
+		tm_info = localtime(&timer);
+		strftime(buffer, 26, " * %H:%M:%S de %d:%m:%Y", tm_info);
+
+		// escreve a hora da execucao e a parte inicial da tabela
+		printf("\n\n ----- Execução as %s ----- \n\n", buffer);
+		printf(" Nome_Instancia \t Situacao_Inicial \t Makespan \t Viabilidade1 \t Viabilidade2  \t BuscaLocal1 \t BuscaLocal2 \t BuscaLocal3 \n");
+
 		while( !ListaInstancias.empty()){
 			it = ListaInstancias.begin();
 			Nome = *it;
 			ListaInstancias.pop_front();
-			cout << " Modelo => " << Nome << endl << endl;
+
+			//cout << " Modelo => " << Nome << endl << endl;
+
 			Instancia = new Heuristica;
 
 			if( Instancia->LeDados(Nome, EscreveDadosLidosNaTela) == 1){

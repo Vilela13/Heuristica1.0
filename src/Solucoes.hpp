@@ -84,6 +84,14 @@ void Solucao::Imprime(bool ImprimePlanta, bool ImprimeConstrucao, bool VerificaV
 	if( ImprimeConstrucao == 1){
 		ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia, VerificaViabilidade, ImprimeSolucao, ImprimeArquivo, Arquivo);
 	}
+
+	if( ImprimeSolucao == 1){
+		printf("     MAKESPAN GERAL = %.4f \n", PlantasInstancia.MakespanPLantas + ConstrucoesInstancia.MakespanConstrucoes);
+	}
+	if(ImprimeArquivo == 1){
+		fprintf(Arquivo, "     MAKESPAN GERAL = %.4f \n", PlantasInstancia.MakespanPLantas + ConstrucoesInstancia.MakespanConstrucoes);
+	}
+
 }
 
 // deleta demandas atendidas na construção após certa demanda que é passada com parametro

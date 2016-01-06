@@ -839,7 +839,7 @@ void Solucao::RealizarBuscaLocalCaminhao(int imprime, int ImprimeSolucao, int Im
 				cout << " iteração " << NumeroDeVezes << "    Solução = " << Makespan << endl;
 			}
 			if( ImprimeArquivo == 1){
-				fprintf( Arquivo, "  Iteração %d     Solução = %.4f \n",  NumeroDeVezes , Makespan);
+				fprintf( Arquivo, "  Iteração %d     Solução = %f \n",  NumeroDeVezes , Makespan);
 			}
 		}
 
@@ -886,7 +886,7 @@ void Solucao::RealizarBuscaLocalConstrucao(int imprime, int ImprimeSolucao, int 
 				cout << " iteração " << NumeroDeVezes << "    Solução = " << Makespan << endl;
 			}
 			if( ImprimeArquivo == 1){
-				fprintf( Arquivo, "  Iteração %d     Solução = %.4f \n",  NumeroDeVezes , Makespan);
+				fprintf( Arquivo, "  Iteração %d     Solução = %f \n",  NumeroDeVezes , Makespan);
 			}
 		}
 
@@ -934,7 +934,7 @@ void Solucao::RealizarBuscaLocalPlanta(int imprime, int ImprimeSolucao, int Impr
 				cout << " iteração " << NumeroDeVezes << "    Solução = " << Makespan << endl;
 			}
 			if( ImprimeArquivo == 1){
-				fprintf( Arquivo, "  Iteração %d     Solução = %.4f \n",  NumeroDeVezes , Makespan);
+				fprintf( Arquivo, "  Iteração %d     Solução = %f \n",  NumeroDeVezes , Makespan);
 			}
 		}
 

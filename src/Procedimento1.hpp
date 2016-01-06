@@ -144,7 +144,8 @@ int Procedimento1::Executa( int TipoOrdenacao, int imprime, int ImprimeSolucao, 
 		ConstrucaoSelecionada = SelecionaConstrucao( ConstrucaoVaiSerSuprida, IndiceConstrucaoVaiSerSuprida);
 		if( ConstrucaoSelecionada == 1){
 			// marca a construção escolhida como já analisada
-			ConstrucoesInstancia.ConstrucoesAnalizadas[IndiceConstrucaoVaiSerSuprida] =  1;
+			ConstrucoesInstancia.ConstrucoesAnalizadas[ConstrucaoVaiSerSuprida] =  1;
+
 			// Entrar no loop enqaunto tiver demandas a serem atendidas e planatas que ainda puderem atender a demanda
 			do{
 				// atualiza a demanda que será analisada para ser atendida

@@ -527,9 +527,14 @@ int Construcao::DeletaAtividadeLocomovendoAsOutrasTarefas(double HoraInicio, dou
 // Deleta alocação de tarefa e reordenadno as alocações para que os dados se mantenham corretos, salvando os dados da tarefa removida em uma estrutura
 int Construcao::DeletaAtividadeLocomovendoAsOutrasTarefasSalvandoDados(int VerificaExistencia, double HoraInicio, double HoraFinal, int NumDemanda,  int NumPlanta, int Carreta, ConjuntoPlantas& Plantas, vector < DadosTarefa > &DadosTarefasMovidasAuxiliar){
 
+	int Para;
+
 // Verifica se é possivel colocar uma tarefa nesta construção
 	if( StatusAtendimento - 1 < NumDemanda){
-		cout << endl << endl << "  <<<<<<<<<<<<<  Erro! Demanda [" << NumDemanda << "] ->Construcao::DeletaAtividadeLocomovendoAsOutrasTarefasSalvandoDados>>>>>>>>>> " << endl << endl;
+		cout << endl << endl;
+		cout << endl << endl << "  <<<<<<<<<<<<<  Erro! Demanda [" << NumeroDaConstrucao << "-" << NumDemanda << "] StatusAtendimento ("<< StatusAtendimento << ") ->Construcao::DeletaAtividadeLocomovendoAsOutrasTarefasSalvandoDados>>>>>>>>>> " << endl << endl;
+		cout << endl << endl;
+		cin >> Para;
 		return 0;
 	}
 
@@ -1942,6 +1947,7 @@ int ConjuntoConstrucoes::ConstrucaoTemTarefaParaRemover(int& Construcao, int& De
 	}
 	if( Ativo == 1){
 		if( Imprimir == 1){
+			cout << endl << endl;
 			cout << " Selecionou construcao " << Construcao << "-" << Demanda << " com janela de tempo ";
 			cout <<  Construcoes[Construcao].TempoMinimoDeFuncionamento << "-" << Construcoes[Construcao].TempoMaximoDeFuncionamento;
 			cout << " -> ConstrucaoTarefaRemover" << endl ;

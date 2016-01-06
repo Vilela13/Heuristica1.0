@@ -363,7 +363,7 @@ void Heuristica::ExecutaProcedimentoHeuristico1(string NomeInstancia){
 		if( Solucoes.Solucoes[0].ConstrucoesInstancia.NivelDeInviabilidade == 0){
 			printf(" %.4f \t   ------ \t", Solucoes.Solucoes[0].Makespan);
 		}else{
-			printf("   ------ \t");
+			printf(" ------ \t");
 		}
 
 		if( Solucoes.Solucoes[0].ConstrucoesInstancia.NivelDeInviabilidade != 0){

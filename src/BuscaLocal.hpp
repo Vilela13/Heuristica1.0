@@ -521,6 +521,8 @@ int BuscaLocal::BuscaLocalTrocaPlantaAtendimento(int Imprime, int ImprimeEstrutu
 	// variavel que controla se a demanda foi reinserida
 	int ReadicionouDemanda;
 
+	int ReadicionouDemandaProcessoEtapa1;
+
 	// dados da cosntrução que terá suas demandas reinseridas na etapa 2
 	int ConstrucaoAtender;
 	int IndiceConstrucaoAtender;
@@ -591,8 +593,20 @@ int BuscaLocal::BuscaLocalTrocaPlantaAtendimento(int Imprime, int ImprimeEstrutu
 				// limpa as demandas que são colocadas durante o processo da Etapa 1 e antes de cada Etapa 2
 				DadosTarefasMovidasEmUmaConstrucaoEtapa1.clear();
 
+
+
+
+
+				/// PROBLEMA ESTÁ NESTE WHILE !!!!!!!!!!!!!!!! ENTRA EM LOOP  INFINITO!!!!!!!!!!!!!!!
+
+
+
+
+
+				ReadicionouDemandaProcessoEtapa1 = 1;
+
 				// enquanto a cosntrução corrente tiver uma demanda que foi deltada no processo anterior se continua no while
-				while( ConstrucoesInstancia.Construcoes[c1].DemandaNaoatendida( DemandaNaoAtendida) == 1){
+				while( ConstrucoesInstancia.Construcoes[c1].DemandaNaoatendida( DemandaNaoAtendida) == 1 && ReadicionouDemandaProcessoEtapa1 == 1){
 
 					if( Imprime == 1){
 						cout << endl << endl << "		Inicio Etapa 2 -> Construcao [" <<ConstrucoesInstancia.Construcoes[c1].NumeroDaConstrucao << "-" << DemandaNaoAtendida << "]" << endl << endl;
@@ -664,6 +678,11 @@ int BuscaLocal::BuscaLocalTrocaPlantaAtendimento(int Imprime, int ImprimeEstrutu
 										// retorna 1 que corresponde que melhorou a solução
 										return 1;
 									}
+								}else{
+									if( Imprime == 1){
+										cout << endl << "               Não consegui alocar demanda [" << ConstrucoesInstancia.Construcoes[c1].NumeroDaConstrucao << "-" << DemandaNaoAtendida << "] com o veículo [" << PlantasInstancia.Plantas[p2].NumeroDaPlanta << "-" << PlantasInstancia.Plantas[p2].VeiculosDaPlanta.Carretas[v].NumeroDaCarreta << "] " << endl;
+									}
+
 								}
 								// caso não se conseguiu melhorar a solução, se retorna o estado da solução antes de se realizar os procediemntos da etapa 2 corrente
 								ConstrucoesInstancia.ReadicionaDeletaTarefasApartirDeDados(  DadosTarefasMovidasEtapa2, PlantasInstancia );
@@ -675,7 +694,7 @@ int BuscaLocal::BuscaLocalTrocaPlantaAtendimento(int Imprime, int ImprimeEstrutu
 						}
 					}
 					// readiciono a demanda que se estava se querendo colocar com um veiculo fixo utilizando o processo normal de se adicionar uma tarefa. *********** -> IMPORTANTE: apesar de se registrar a alocação dessa demanda na estrutura das tarefas movidas na etapa 2, ela não será considerada no processo de retorno para a solução antes da etapa 2 que será realizada em seguida. Pois a estrutura DadosTarefasMovidasEtapa2 é zerada ao se reiniciar a etapa 2. com isso essa demanda será considerada no procediemnto seguinte da etapa 2 como sendo parte da solução inicial fornecida pela etapa 1
-					ReadicionouDemanda = ConstrucoesInstancia.AdicionaTarefa( 0 , ConstrucoesInstancia.Construcoes[IndiceConstrucaoAtender].NumeroDaConstrucao,   DemandaNaoAtendida , DadosTarefasMovidasEmUmaConstrucaoEtapa1, 1, 0, 1, 1 , PlantasInstancia, ImprimeDadosAdicionaTarefa,"  <<<<< BuscaLocal::BuscaLocalTrocaPlantaAtendimento >>> ");
+					ReadicionouDemandaProcessoEtapa1 = ConstrucoesInstancia.AdicionaTarefa( 0 , ConstrucoesInstancia.Construcoes[IndiceConstrucaoAtender].NumeroDaConstrucao,   DemandaNaoAtendida , DadosTarefasMovidasEmUmaConstrucaoEtapa1, 1, 0, 1, 1 , PlantasInstancia, ImprimeDadosAdicionaTarefa,"  <<<<< BuscaLocal::BuscaLocalTrocaPlantaAtendimento >>> ");
 				}
 
 // após se tentar realizar o processo de se atender as demandas de uma cosntrução com uma planta que sejá diferente que a que ela é atendida na construção inicial e não se conseguiu melhorar o makespan da solução, se deleta as demandas que foram reinseridas no processo da Etapa 2 e não foram contabilizadas nos movimentos de retorno da solução antes de se realizar a etapa 2. Estas foram guardadas em DadosTarefasMovidasEmUmaConstrucaoEtapa1

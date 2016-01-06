@@ -43,9 +43,11 @@ public:
 	void SinalizaTarefaAdicionadaInicialmente( int TarefaAdicionada, int IndiceConstrucaoNaoAtendida, int DemandaNaoAtendida);					// Sinalisa se a tarefa foi antendida colocando os valores 2 em sua situação remoção. Caso não, está demanda e suas posteriores na emsma construção recebem o valor -1 na situação demanda e 3 na situção remoção.
 	void ProcessoViabilizacao2(int TipoOrdenacao, int Imprime);
 
-	void RealizarBuscaLocalCaminhao(int imprime);
-	void RealizarBuscaLocalConstrucao(int imprime);
-	void RealizarBuscaLocalPlanta(int imprime);
+	void CalculaMakespan();
+
+	void RealizarBuscaLocalCaminhao(int imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo);
+	void RealizarBuscaLocalConstrucao(int imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo);
+	void RealizarBuscaLocalPlanta(int imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo);
 
 	~Solucao();
 };
@@ -793,96 +795,147 @@ void Solucao::ProcessoViabilizacao2(int TipoOrdenacao, int Imprime){
 	}
 }
 
+void Solucao::CalculaMakespan(){
+	 Makespan = PlantasInstancia.MakespanPLantas + ConstrucoesInstancia.MakespanConstrucoes;
+}
 
-void Solucao::RealizarBuscaLocalCaminhao(int imprime){
+void Solucao::RealizarBuscaLocalCaminhao(int imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo){
 	// calsse da busca local
 	BuscaLocal busca;
 
 	// variaveis d econtrole do processo, para contar o numero de iterações e para parar o programa
 	int NumeroDeVezes;
-	int ParaPrograma;
+	//int ParaPrograma;
 	int ImprimeEstruturas;
+	int ImprimeProcedimento;
 
 	// inicializa o numero de iterações como zero
 	NumeroDeVezes = 0;
 	ImprimeEstruturas = 0;
+	ImprimeProcedimento = 0;
 
 	// carrega os dados da solução para a classe da busca local
 	busca.CarregaSolucao( NP, PlantasInstancia, NE,	ConstrucoesInstancia, NV, Velocidade, TempoDeVidaConcreto);
 
 	// equanto o procediemnto da busca local melhorar a solução que se tem, se continua no while
-	while ( busca.BuscaLocalTentaRealizarTarefasComOutosVeiculos(imprime, ImprimeEstruturas) == 1){
+	while ( busca.BuscaLocalTentaRealizarTarefasComOutosVeiculos(ImprimeProcedimento, ImprimeEstruturas) == 1){
 		// carrega a nova solução que se obteve
 		CarregaSolucao(busca.NP, busca.PlantasInstancia, busca.NE, busca.ConstrucoesInstancia, busca.NV , busca.Velocidade , busca.TempoDeVidaConcreto);
+
+		// calcula o makespan geral
+		CalculaMakespan();
 		// aumenta o numero de iterações em 1
 		NumeroDeVezes++;
 
+		// cacula o nivel de iniviabilidade para se verificar se a solução continua viavel
+		ConstrucoesInstancia.CalcularNivelDeInviabilidade();
+		// verifica status da da solução
+		if( ConstrucoesInstancia.NivelDeInviabilidade != 0 ){
+			cout << endl << endl << endl << "         >>>>>>>>>>>>>  Probelam com a viabilidade da solução na busca local 1 (caminhão) <<<<<<<<<<<< " << endl << endl << endl;
+		}
+
 		if( imprime == 1){
-			cout << " iteração " << NumeroDeVezes << endl;
-			cin >> ParaPrograma;
+			if( ImprimeSolucao == 1){
+				cout << " iteração " << NumeroDeVezes << "    Solução = " << Makespan << endl;
+			}
+			if( ImprimeArquivo == 1){
+				fprintf( Arquivo, "  Iteração %d     Solução = %.4f \n",  NumeroDeVezes , Makespan);
+			}
 		}
 
 	}
 }
 
-void Solucao::RealizarBuscaLocalConstrucao(int imprime){
+void Solucao::RealizarBuscaLocalConstrucao(int imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo){
 	// calsse da busca local
 	BuscaLocal busca;
 
 	// variaveis d econtrole do processo, para contar o numero de iterações e para parar o programa
 	int NumeroDeVezes;
-	int ParaPrograma;
+	//int ParaPrograma;
 	int ImprimeEstruturas;
+	int ImprimeProcedimento;
 
 	// inicializa o numero de iterações como zero
 	NumeroDeVezes = 0;
 	ImprimeEstruturas = 0;
+	ImprimeProcedimento = 0;
 
 	// carrega os dados da solução para a classe da busca local
 	busca.CarregaSolucao( NP, PlantasInstancia, NE,	ConstrucoesInstancia, NV, Velocidade, TempoDeVidaConcreto);
 
 	// equanto o procediemnto da busca local melhorar a solução que se tem, se continua no while
-	while ( busca.BuscaLocalMudaOrdemAtendiemntoConstrucoes(imprime, ImprimeEstruturas) == 1){
+	while ( busca.BuscaLocalMudaOrdemAtendiemntoConstrucoes(ImprimeProcedimento, ImprimeEstruturas) == 1){
 		// carrega a nova solução que se obteve
 		CarregaSolucao(busca.NP, busca.PlantasInstancia, busca.NE, busca.ConstrucoesInstancia, busca.NV , busca.Velocidade , busca.TempoDeVidaConcreto);
+
+		// calcula o makespan geral
+		CalculaMakespan();
 		// aumenta o numero de iterações em 1
 		NumeroDeVezes++;
 
+		// cacula o nivel de iniviabilidade para se verificar se a solução continua viavel
+		ConstrucoesInstancia.CalcularNivelDeInviabilidade();
+		// verifica status da da solução
+		if( ConstrucoesInstancia.NivelDeInviabilidade != 0 ){
+			cout << endl << endl << endl << "         >>>>>>>>>>>>>  Probelam com a viabilidade da solução na busca local 2 (construções) <<<<<<<<<<<< " << endl << endl << endl;
+		}
+
 		if( imprime == 1){
-			cout << " iteração " << NumeroDeVezes << endl;
-			cin >> ParaPrograma;
+			if( ImprimeSolucao == 1){
+				cout << " iteração " << NumeroDeVezes << "    Solução = " << Makespan << endl;
+			}
+			if( ImprimeArquivo == 1){
+				fprintf( Arquivo, "  Iteração %d     Solução = %.4f \n",  NumeroDeVezes , Makespan);
+			}
 		}
 
 	}
 }
 
 
-void Solucao::RealizarBuscaLocalPlanta(int imprime){
+void Solucao::RealizarBuscaLocalPlanta(int imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo){
 	// calsse da busca local
 	BuscaLocal busca;
 
 	// variaveis d econtrole do processo, para contar o numero de iterações e para parar o programa
 	int NumeroDeVezes;
-	int ParaPrograma;
+	//int ParaPrograma;
 	int ImprimeEstruturas;
+	int ImprimeProcedimento;
 
 	// inicializa o numero de iterações como zero
 	NumeroDeVezes = 0;
 	ImprimeEstruturas = 0;
+	ImprimeProcedimento = 0;
 
 	// carrega os dados da solução para a classe da busca local
 	busca.CarregaSolucao( NP, PlantasInstancia, NE,	ConstrucoesInstancia, NV, Velocidade, TempoDeVidaConcreto);
 
 	// equanto o procediemnto da busca local melhorar a solução que se tem, se continua no while
-	while ( busca.BuscaLocalTrocaPlantaAtendimento(imprime, ImprimeEstruturas) == 1){
+	while ( busca.BuscaLocalTrocaPlantaAtendimento(ImprimeProcedimento, ImprimeEstruturas) == 1){
 		// carrega a nova solução que se obteve
 		CarregaSolucao(busca.NP, busca.PlantasInstancia, busca.NE, busca.ConstrucoesInstancia, busca.NV , busca.Velocidade , busca.TempoDeVidaConcreto);
+
+		// calcula o makespan geral
+		CalculaMakespan();
 		// aumenta o numero de iterações em 1
 		NumeroDeVezes++;
 
+		// cacula o nivel de iniviabilidade para se verificar se a solução continua viavel
+		ConstrucoesInstancia.CalcularNivelDeInviabilidade();
+		// verifica status da da solução
+		if( ConstrucoesInstancia.NivelDeInviabilidade != 0 ){
+			cout << endl << endl << endl << "         >>>>>>>>>>>>>  Probelam com a viabilidade da solução na busca local 3 (planta) <<<<<<<<<<<< " << endl << endl << endl;
+		}
+
 		if( imprime == 1){
-			cout << " iteração " << NumeroDeVezes << endl;
-			cin >> ParaPrograma;
+			if( ImprimeSolucao == 1){
+				cout << " iteração " << NumeroDeVezes << "    Solução = " << Makespan << endl;
+			}
+			if( ImprimeArquivo == 1){
+				fprintf( Arquivo, "  Iteração %d     Solução = %.4f \n",  NumeroDeVezes , Makespan);
+			}
 		}
 
 	}

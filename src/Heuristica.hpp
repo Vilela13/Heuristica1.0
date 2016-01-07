@@ -123,6 +123,9 @@ void Heuristica::ExecutaProcedimentoHeuristico1(string NomeInstancia){
 	int Imprime;
 	Imprime = 0;
 
+	time_t InicioExecucao, FinalExecucao;
+	double TempoExecucao;
+
 	bool ImprimePlanta;
 	bool ImprimeConstrucao;
 	bool IntervalosRespeitadosConstrucaoes;
@@ -234,6 +237,8 @@ void Heuristica::ExecutaProcedimentoHeuristico1(string NomeInstancia){
 		printf("\n\n ----- Execução as %s ----- \n\n", buffer);
 	}
 
+	// coleta o horario inicial
+	InicioExecucao = time(NULL);
 
 
 	Prod1.CarregaDados(NP, PlantasInstancia, NE, ConstrucoesInstancia, NV, Velocidade, TempoDeVidaConcreto);
@@ -256,12 +261,17 @@ void Heuristica::ExecutaProcedimentoHeuristico1(string NomeInstancia){
 
 	Solucao = Prod1.Executa( TipoOrdenacaoVeiculos, ImprimeProcedimentoConstrutivo, ImprimeSolucao, ImprimeArquivo, Arquivo );
 
+
 	if( ImprimeSolucao == 1){
 		cout << endl << endl << "########################################################################################################################################" << endl << endl;
 	}
 	if( ImprimeArquivo == 1){
 		fprintf( Arquivo,"\n########################################################################################################################################\n\n");
 	}
+
+
+
+
 
 	if( Solucao == 1 ){
 		if( ImprimeSolucao == 1){
@@ -291,6 +301,14 @@ void Heuristica::ExecutaProcedimentoHeuristico1(string NomeInstancia){
 	Solucoes.InsereSolucao(Prod1.NP, Prod1.PlantasInstancia, Prod1.NE, Prod1.ConstrucoesInstancia, Prod1.NV, Prod1.Velocidade, Prod1.TempoDeVidaConcreto);
 
 	Solucoes.CalculaMakespanSolucoes();
+
+	//Solucoes.Imprime(ImprimePlanta, ImprimeConstrucao, IntervalosRespeitadosConstrucaoes, 1 , 0, Arquivo);
+
+	//cout <<  endl << "  PC " ;
+		//cin >> ParaPrograma;
+
+
+
 
 	if(Solucoes.Solucoes[0].ConstrucoesInstancia.NivelDeInviabilidade == 0){
 		printf("         %.4f \t", Solucoes.Solucoes[0].Makespan);
@@ -348,7 +366,7 @@ void Heuristica::ExecutaProcedimentoHeuristico1(string NomeInstancia){
 			fprintf( Arquivo,"\n\n############################### Procedimento Viabilidade 1 #####################################\n");
 		}
 
-		Solucoes.Solucoes[0].ProcessoViabilizacao1( TipoOrdenacaoVeiculos , ImprimeViabilizacao);
+		Solucoes.Solucoes[0].ProcessoViabilizacao1( TipoOrdenacaoVeiculos , ImprimeViabilizacao, ImprimeSolucao, ImprimeArquivo, Arquivo);
 
 		if( ImprimeSolucao == 1){
 			cout << endl << endl << "##############################################################################################" << endl << endl;
@@ -356,6 +374,12 @@ void Heuristica::ExecutaProcedimentoHeuristico1(string NomeInstancia){
 		if( ImprimeArquivo == 1){
 			fprintf( Arquivo,"\n##############################################################################################\n\n");
 		}
+
+		//Solucoes.Imprime(ImprimePlanta, ImprimeConstrucao, IntervalosRespeitadosConstrucaoes, 1 , 0, Arquivo);
+
+		cout <<  endl << "   V1 = " ;
+		cin >> ParaPrograma;
+
 
 		Solucoes.CalculaMakespanSolucoes();
 		Solucoes.Imprime(ImprimePlanta, ImprimeConstrucao, IntervalosRespeitadosConstrucaoes, ImprimeSolucao, ImprimeArquivo, Arquivo);
@@ -384,6 +408,11 @@ void Heuristica::ExecutaProcedimentoHeuristico1(string NomeInstancia){
 			if( ImprimeArquivo == 1){
 				fprintf( Arquivo,"\n##############################################################################################\n\n");
 			}
+
+			Solucoes.Imprime(ImprimePlanta, ImprimeConstrucao, IntervalosRespeitadosConstrucaoes, 1 , 0, Arquivo);
+
+			cout << endl << "   V2 = " ;
+			cin >> ParaPrograma;
 
 			Solucoes.CalculaMakespanSolucoes();
 			Solucoes.Solucoes[0].Imprime(ImprimePlanta, ImprimeConstrucao, IntervalosRespeitadosConstrucaoes, ImprimeSolucao, ImprimeArquivo, Arquivo);
@@ -468,11 +497,11 @@ void Heuristica::ExecutaProcedimentoHeuristico1(string NomeInstancia){
 
 		Solucoes.CalculaMakespanSolucoes();
 		if( Solucoes.Solucoes[0].ConstrucoesInstancia.NivelDeInviabilidade == 0){
-			printf(" %.4f \n", Solucoes.Solucoes[0].Makespan);
+			printf(" %.4f ", Solucoes.Solucoes[0].Makespan);
 		}
 
 	}else{
-		printf(" ------ \t ------ \t ------ \n");
+		printf(" ------ \t ------ \t ------ ");
 
 		if( ImprimeSolucao == 1){
 			cout << endl << endl << "				Solução Inviavel " << endl << endl;
@@ -480,6 +509,17 @@ void Heuristica::ExecutaProcedimentoHeuristico1(string NomeInstancia){
 		if( ImprimeArquivo == 1){
 			fprintf( Arquivo,"\n\n				Solução Inviavel \n\n");
 		}
+	}
+
+	// coleta o horario final
+	FinalExecucao = time(NULL);
+
+	// calcula o tempo
+	TempoExecucao = difftime(FinalExecucao, InicioExecucao);
+
+	printf( " \t %.0f \n",  TempoExecucao);
+	if( ImprimeArquivo == 1){
+		fprintf( Arquivo," \n\n Tempo  %.0f \n\n",  TempoExecucao);
 	}
 
 	fclose (Arquivo);

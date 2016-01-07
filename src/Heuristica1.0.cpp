@@ -130,7 +130,7 @@ int main(int argc, char **argv) {
 
 		// escreve a hora da execucao e a parte inicial da tabela
 		printf("\n\n ----- Execução as %s ----- \n\n", buffer);
-		printf(" Nome_Instancia \t Situacao_Inicial \t Makespan \t Viabilidade1 \t Viabilidade2  \t BuscaLocal1 \t BuscaLocal2 \t BuscaLocal3 \n");
+		printf(" Nome_Instancia \t Situacao_Inicial \t Makespan \t Viabilidade1 \t Viabilidade2  \t BuscaLocal1 \t BuscaLocal2 \t BuscaLocal3 \t Tempo \n");
 
 		while( !ListaInstancias.empty()){
 			it = ListaInstancias.begin();

@@ -42,7 +42,8 @@ public:
 
 	int DeletaTarefasAposTempoPlantaPodeAtender(vector < double > &TempoPlantaPodeAtender, vector < DadosTarefa > &DadosTarefasMovidas,  int Imprime );		// deleta todas as tarefas que são atendidas após os horarios armazenados da TempoPlantaPodeAtender
 	void SinalizaTarefaAdicionadaInicialmente( int TarefaAdicionada, int IndiceConstrucaoNaoAtendida, int DemandaNaoAtendida);					// Sinalisa se a tarefa foi antendida colocando os valores 2 em sua situação remoção. Caso não, está demanda e suas posteriores na emsma construção recebem o valor -1 na situação demanda e 3 na situção remoção.
-	void ProcessoViabilizacao2(int TipoOrdenacao, int Imprime);
+	int Viabilidade2(int TipoOrdenacao, int Imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo);
+	void ProcessoViabilizacao2(int TipoOrdenacao, int Imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo);
 
 	void CalculaMakespan();
 
@@ -329,7 +330,7 @@ int Solucao::Viabilidade1(int TipoOrdenacao,int Imprime, int ImprimeSolucao, int
 					// deleta o armazenamento d etarefas adicionadas e deletadas, pois a solução que se encontrou é melhor uqe a solução anterior
 					DadosTarefasMovidas.clear();
 
-					if( ImprimeArquivo == 1){
+					if( ImprimeSolucao == 1){
 						printf(  "  -> Nivel de inviabilidade = %d com a inserção da demanda [%d-%d] \n", ConstrucoesInstancia.NivelDeInviabilidade, NovaTarefaAlocadaConstrucao, NovaTarefaAlocadaDemanda);
 					}
 					if( ImprimeArquivo == 1){
@@ -464,30 +465,32 @@ int Solucao::SelecionaConstrucao( int &ConstrucaoParaAtender, int &ConstrucaoPar
 // Encontra a construção que possui a menor distancia a uma planta dentre todas as construções com demandas não atendidas
 int  Solucao::ProcuraConstrucaoNaoAtendida(int &ConstrucaoNaoAtendida, int &DemandaNaoAtendida){
 
+	// variaveis que armazenam os valores temporarios da construção, da demanda  e da distancia minima da construção a uma planta
 	int ConstrucaoTemporario;
 	int DemandaTemporaria;
 	double DistanciaPlantaTemporaria;
 
-	// inicia valores das variaveis
+	// inicia valores das variaveis cosntrução e demanda
 	ConstrucaoTemporario = -13;
 	DemandaTemporaria = -13;
+	// inicia o valor da variavel com o maior valor para que qualquer valor de uma distancia de uma construção a uma planat sejáa ceito inicialmente
 	DistanciaPlantaTemporaria = DBL_MAX;
 
 	// percorre por todas as construções
-	for ( int i = 0; i < NE; i++){
-
-		if( ConstrucoesInstancia.ConstrucaoPodeSerSuprida[i] == 0){
+	for ( int c = 0; c < NE; c++){
+		// entra se a construção possa ser analisada ainda pelo procedimento
+		if( ConstrucoesInstancia.ConstrucaoPodeSerSuprida[c] == 0){
 			// percorre por todas as demandas iniciando da maior para a menor, isso tem o intuito de pegar a demanda não atendida logo após a ultima que foi atendida
-			for ( int d = ConstrucoesInstancia.Construcoes[i].NumeroDemandas - 1; d >= 0  ; d--){
+			for ( int d = ConstrucoesInstancia.Construcoes[c].NumeroDemandas - 1; d >= 0  ; d--){
 				// verifioca se a demanda corrente não foi atendida
-				if( ConstrucoesInstancia.Construcoes[i].SituacaoDemanda[d] == 0){
+				if( ConstrucoesInstancia.Construcoes[c].SituacaoDemanda[d] == 0){
 					// percorre todas as plantas para pegar a demanda não atendida que esteja mais perto de uma planta
 					for ( int p = 0; p < NP; p++){
 						// caso a distancia da planta a demanda corrente for menor que a distancia corrente, se entra no if
-						if( DistanciaPlantaTemporaria >= ConstrucoesInstancia.Construcoes[i].DistanciaPlantas[p].Distancia){
+						if( DistanciaPlantaTemporaria >= ConstrucoesInstancia.Construcoes[c].DistanciaPlantas[p].Distancia){
 							// atualiza as variaveis com a demanda corrente
-							DistanciaPlantaTemporaria = ConstrucoesInstancia.Construcoes[i].DistanciaPlantas[p].Distancia;
-							ConstrucaoTemporario = ConstrucoesInstancia.Construcoes[i].NumeroDaConstrucao;
+							DistanciaPlantaTemporaria = ConstrucoesInstancia.Construcoes[c].DistanciaPlantas[p].Distancia;
+							ConstrucaoTemporario = ConstrucoesInstancia.Construcoes[c].NumeroDaConstrucao;
 							DemandaTemporaria = d;
 						}
 					}
@@ -502,7 +505,7 @@ int  Solucao::ProcuraConstrucaoNaoAtendida(int &ConstrucaoNaoAtendida, int &Dema
 		cout << endl << endl << "      >>>>>>>>> Problema! Não encontrou demanda que deveria ter sido encontrada! -> Solucao::ProcuraConstrucaoNaoAtendida  " << endl << endl;
 		return 0;
 	}
-	// retorna a demanda que não é atendida e que esta mais perto de uma planat
+	// retorna a demanda que não é atendida e que esta mais perto de uma planta
 	ConstrucaoNaoAtendida = ConstrucaoTemporario;
 	DemandaNaoAtendida = DemandaTemporaria;
 	// retorna 1, foi encontrado a demanda
@@ -642,16 +645,7 @@ void Solucao::SinalizaTarefaAdicionadaInicialmente( int TarefaAdicionada, int In
 		}
 }
 
-
-void Solucao::ProcessoViabilizacao2(int TipoOrdenacao, int Imprime){
-	// ponteiro para o arquivo que se irá salvar os dados
-	PonteiroArquivo  Arquivo;
-	// variavel que controla se irá escrever os dados em um aruivo, é inicializada com 0
-	int ImprimeArquivo;
-	ImprimeArquivo = 0;
-
-	int ImprimeSolucao;
-	ImprimeSolucao = 1;
+int Solucao::Viabilidade2(int TipoOrdenacao, int Imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo){
 
 	// armazena o nivel de inviabilidade anterior
 	int InviabilidadeSolucaoAnterior;
@@ -697,14 +691,16 @@ void Solucao::ProcessoViabilizacao2(int TipoOrdenacao, int Imprime){
 
 	// Marca as construções que já foram completamente atenddidas com 1, as que não forma com 0
 	ConstrucoesInstancia.AlocaValoresConstrucaoPodeAtender();
+	// calcula o nivel de inviabilidade da solução
+	ConstrucoesInstancia.CalcularNivelDeInviabilidade();
+	// guarda o nivel de inviabilidade
+	InviabilidadeSolucaoAnterior = ConstrucoesInstancia.NivelDeInviabilidade;
+
+
 	// Verifica se pode atender uma construção ainda, se tem uma com demanda não atendida
-	while( ConstrucoesInstancia.VerificaConstrucaoPodeAtender() == 1){
-
-
-
-		// guarda o nivel de inviabilidade
-		InviabilidadeSolucaoAnterior = ConstrucoesInstancia.NivelDeInviabilidade;
+	while( ConstrucoesInstancia.VerificaConstrucaoPodeAtender() == 1 && ConstrucoesInstancia.NivelDeInviabilidade > 0){
 		// reinicia o estado de deslocamento e remoção de todas as demandas de todas as construções
+
 		ConstrucoesInstancia.ReiniciaTarefasRetiradas();
 		// retorna a demanda e a construção que serão analisados inicialmente
 		ProcuraConstrucaoNaoAtendida( ConstrucaoNaoAtendida, DemandaNaoAtendida);
@@ -716,19 +712,14 @@ void Solucao::ProcessoViabilizacao2(int TipoOrdenacao, int Imprime){
 		// retorna o incide da cosntrução que tem qeu ser analisada no momento
 		ConstrucoesInstancia.RetornaIndiceConstrucao(ConstrucaoNaoAtendida, IndiceConstrucaoNaoAtendida, " inicio -> Solucao::ProcessoViabilizacao2" );
 
+		cout << endl << endl << " ---- Demanda Nao Atendida = [" << ConstrucaoNaoAtendida << "-" << DemandaNaoAtendida << "] ---- "<< endl << endl;
 
 
 
 
 
 
-
-
-		//cout << endl << endl << " ---- Demanda Nao Atendida = [" << ConstrucaoNaoAtendida << "-" << DemandaNaoAtendida << "] ---- "<< endl << endl;
-
-
-
-
+	// ++++++++++  Aqui ++++++++//
 
 
 
@@ -871,6 +862,9 @@ void Solucao::ProcessoViabilizacao2(int TipoOrdenacao, int Imprime){
 				DadosTarefasMovidas.clear();
 				// atualiza a situação da construçãoq ue teve todas as suas demandas atendidas
 				ConstrucoesInstancia.AtualizaValoresConstrucaoPodeAtender();
+
+				return 1;
+
 			}else{
 				if( Imprime == 1){
 					cout << endl << endl << "    Não melhorou !!!!!!" << endl << endl;
@@ -891,6 +885,28 @@ void Solucao::ProcessoViabilizacao2(int TipoOrdenacao, int Imprime){
 			//cin >> PararPrograma;
 		}
 	}
+
+	return 0;
+
+}
+
+void Solucao::ProcessoViabilizacao2(int TipoOrdenacao, int Imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo){
+	// calcula o nível de iniviabilidade da solução
+	ConstrucoesInstancia.CalcularNivelDeInviabilidade();
+
+	// escreve o nivel de inviabilidade antes de entrar no processo de viabilização
+	if( ImprimeSolucao == 1){
+		printf( "   nivel de inviabilidade inicial = %d \n", ConstrucoesInstancia.NivelDeInviabilidade);
+	}
+	if( ImprimeArquivo == 1){
+		fprintf( Arquivo, "   nivel de inviabilidade inicial = %d \n", ConstrucoesInstancia.NivelDeInviabilidade);
+	}
+
+	// Executa o processo de viabilização e escreve na tela caso melhorou a solução
+	while( Viabilidade2(TipoOrdenacao,Imprime, ImprimeSolucao, ImprimeArquivo, Arquivo) == 1 && ConstrucoesInstancia.NivelDeInviabilidade > 0){
+
+	}
+
 }
 
 void Solucao::CalculaMakespan(){

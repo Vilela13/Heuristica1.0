@@ -409,7 +409,7 @@ void Heuristica::ExecutaProcedimentoHeuristico1(string NomeInstancia){
 				fprintf( Arquivo,"\n##############################################################################################\n\n");
 			}
 
-			Solucoes.Imprime(ImprimePlanta, ImprimeConstrucao, IntervalosRespeitadosConstrucaoes, 1 , 0, Arquivo);
+			//Solucoes.Imprime(ImprimePlanta, ImprimeConstrucao, IntervalosRespeitadosConstrucaoes, 1 , 0, Arquivo);
 
 			cout << endl << "   V2 = " ;
 			cin >> ParaPrograma;

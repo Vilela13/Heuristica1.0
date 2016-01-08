@@ -125,7 +125,9 @@ int Solucao::ProcessoParaAlocarTarefaNaoAtendida(int VerificaExistencia, int Con
 	// indice da construção
 	int c;
 
+	// variavel que representa a demanda analisada no momento
 	int demandas;
+	// variavel constrole para avaliar se consegue atender as demandas da construção. caso não se consiga atender a uma anterior, não se irá conseguir atender as posteriores a essa
 	int Ativa;
 
 
@@ -138,19 +140,22 @@ int Solucao::ProcessoParaAlocarTarefaNaoAtendida(int VerificaExistencia, int Con
 	for(  int contrucoes = 0; contrucoes < (int) ConstrucoesInstancia.Construcoes.size(); contrucoes++){
 		// não tenta aloca demandas da construçãoq ue teve uma demanda retirada anteriormente
 		if( contrucoes != c){
+			// inicializa com a primeira demanda da cosntrução
 			demandas = 0;
+			// sinaliza que ainda pode atender as demandas seguintes
 			Ativa = 0;
 			// percorre todas as demandas da construção corrente
 			while( demandas < ConstrucoesInstancia.Construcoes[contrucoes].NumeroDemandas && Ativa == 0){
-
 				// verifica se a demnada corrente ainda não foi alocada
 				if( ConstrucoesInstancia.Construcoes[contrucoes].SituacaoDemanda[demandas] == 0){
-					//cout << "   tenta alocar [" << ConstrucoesInstancia.Construcoes[contrucoes].NumeroDaConstrucao << "-" << demandas << "]  -> Solucao::ProcessoParaAlocarTarefa";
-
+					if( imprime == 1){
+						cout << "   tenta alocar [" << ConstrucoesInstancia.Construcoes[contrucoes].NumeroDaConstrucao << "-" << demandas << "]  -> Solucao::ProcessoParaAlocarTarefa";
+					}
 					//caso alocar a demanda
 					if( ConstrucoesInstancia.AdicionaTarefa(VerificaExistencia, ConstrucoesInstancia.Construcoes[contrucoes].NumeroDaConstrucao,demandas, DadosTarefasMovidas, SituacaoDemanda, SituacaoRetirada, RealizaProcessoDeAtrazarTarefas, TipoOrdenacao, PlantasInstancia, imprime, "Solucao::ProcessoParaAlocarTarefaNaoAtendida") == 1){
-						//cout << " => Alocou [" << ConstrucoesInstancia.Construcoes[contrucoes].NumeroDaConstrucao << "-" << demandas << "] -> Solucao::ProcessoParaAlocarTarefa" << endl;
-
+						if( imprime == 1){
+							cout << " => Alocou [" << ConstrucoesInstancia.Construcoes[contrucoes].NumeroDaConstrucao << "-" << demandas << "] -> Solucao::ProcessoParaAlocarTarefa" << endl;
+						}
 						// retorna a cosntruçãoq ue teve uma demanda alocada
 						NovaTarefaAlocadaConstrucao = ConstrucoesInstancia.Construcoes[contrucoes].NumeroDaConstrucao;
 						// retorna a demanda adicionada
@@ -158,10 +163,14 @@ int Solucao::ProcessoParaAlocarTarefaNaoAtendida(int VerificaExistencia, int Con
 						// sai da função e avisa que consegui alocar uma demanda
 						return 1;
 					}else{
+						// caso a demanda corrente que não tenha sido alocada ainda e não se conseguiu atende-lá pelo método, se atribui o valor 1 a variavel "Ativa" sinalizando que as proximas demandas da construção também não se conseguira atender. Isso é pelo fato de que a demanda anterior não foi atendida ainda, as proximas também não se conseguira atender. Isso faz fugir do loop do while da construção para analisar as demandas da cosntrução corrente
 						Ativa = 1;
-						//cout << " => Falhou! " << endl;
+						if( imprime == 1){
+							cout << " = (      Não consegue alocar [" << ConstrucoesInstancia.Construcoes[contrucoes].NumeroDaConstrucao << "-" << demandas << "] -> Solucao::ProcessoParaAlocarTarefa" << endl;
+						}
 					}
 				}else{
+					// passa para a proxima demanda a se analisar
 					demandas++;
 				}
 			}
@@ -173,16 +182,18 @@ int Solucao::ProcessoParaAlocarTarefaNaoAtendida(int VerificaExistencia, int Con
 
 // após adicionar uma demanda que não era alocada antes, se tenta readicionar as demandas retiradas na construção anterior
 void Solucao::ReadicionaTarefas(int VerificaExistencia, int construcao, vector < DadosTarefa > &DadosTarefasMovidas, int SituacaoDemanda,int RealizaProcessoDeAtrazarTarefas, int TipoOrdenacao, int imprime){
+	// indice da cosntrução passada
 	int c;
 
+	if( imprime == 1){
+		cout << " Tenta readicionar demandas a construção [" << construcao << "]" << endl << endl;
+	}
 	// verifica se existe a construção passada
 	if( ConstrucoesInstancia.RetornaIndiceConstrucao( construcao, c, " <<<<<<<<<<<<<<<<<<<<<<< Solucao::ReadicionaTarefas >>>>>>>>>>>>>>>>>>>>") == 1 ){
 		// percorre as demanda da cosntrução
 		for ( int demandas = 0; demandas < ConstrucoesInstancia.Construcoes[c].NumeroDemandas; demandas++){
 			// caso a demanda corrente não tenha sido atendida
 			if( ConstrucoesInstancia.Construcoes[c].SituacaoDemanda[demandas] == 0){
-				//cout << " entrei " << endl;
-
 				// readiciona a demanda corrente na construção
 				if( ConstrucoesInstancia.AdicionaTarefa(VerificaExistencia, ConstrucoesInstancia.Construcoes[c].NumeroDaConstrucao,demandas, DadosTarefasMovidas, SituacaoDemanda, 0, RealizaProcessoDeAtrazarTarefas, TipoOrdenacao, PlantasInstancia, imprime, "Solucao::ReadicionaTarefas") == 1 ){
 					if( imprime == 1){
@@ -203,36 +214,39 @@ void Solucao::ReadicionaTarefas(int VerificaExistencia, int construcao, vector <
 
 int Solucao::Viabilidade1(int TipoOrdenacao,int Imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo){
 
+	// Imprime os dados das tarefas armazenadas durante o processo
 	int ImprimeDadosTarefasArmazenados;
 	ImprimeDadosTarefasArmazenados = 0;
 
 
 	// armazena o nivel de inviabilidade anterior
 	int InviabilidadeSolucaoAnterior;
-// armazana os dados da tarefa a ser retirada
+	// armazana os dados da tarefa a ser retirada
 	int ConstrucaoAnalisandoRetirada;
 	int DemandaAnalisandoRetirada;
-// armazena os dados da tarefa a ser alocada
+
+	// armazena os dados da tarefa a ser alocada
 	int NovaTarefaAlocadaConstrucao;
 	int NovaTarefaAlocadaDemanda;
 
-// variaveis de controle
+	// variaveis de controle
 	bool ExisteTarefa;
 	bool TarefaDeletada;
 	bool TarefaAlocada;
 
-	int PararPrograma;
-
-// armazena as tarefas da solução que foram retiradas e adicionadas para permitir que se retorne ao estado inicial da solução depoois
+	// armazena as tarefas da solução que foram retiradas e adicionadas para permitir que se retorne ao estado inicial da solução depoois
 	vector < DadosTarefa > DadosTarefasMovidas;
 
-//  variavel que controla se deve realizar o processo de atraso de tarefas para tentar atrazar uma outra mais posterior que pode ser atendida caso se atraze as tarefas anteriores a ela
+	//  variavel que controla se deve realizar o processo de atraso de tarefas para tentar atrazar uma outra mais posterior que pode ser atendida caso se atraze as tarefas anteriores a ela
 	int RealizaProcessoDeAtrazarTarefas;
 	RealizaProcessoDeAtrazarTarefas = 1;
 
 	//se deve realizar a verificação da viabilidade da solução corrente
 	int VerificaViabilidade;
 	VerificaViabilidade = 0;
+
+	// variavel para parar o programa
+	int PararPrograma;
 
 	// faz que nenhuma tarefa tenha sido removida
 	ConstrucoesInstancia.ReiniciaTarefasRetiradas();
@@ -270,7 +284,6 @@ int Solucao::Viabilidade1(int TipoOrdenacao,int Imprime, int ImprimeSolucao, int
 			AlocaValoresIniciaisIndices( NovaTarefaAlocadaConstrucao, NovaTarefaAlocadaDemanda);
 			// tenta alocar a demanda que não era atendida antes
 			TarefaAlocada = ProcessoParaAlocarTarefaNaoAtendida(0, ConstrucaoAnalisandoRetirada, NovaTarefaAlocadaConstrucao , NovaTarefaAlocadaDemanda,  DadosTarefasMovidas, 1, 0, RealizaProcessoDeAtrazarTarefas, TipoOrdenacao, Imprime);
-
 			// calcula o nível de iniviabilidade da solução
 			ConstrucoesInstancia.CalcularNivelDeInviabilidade();
 			// caso conseguir alocar a demanda que não era atendida antes
@@ -640,7 +653,7 @@ void Solucao::ProcessoViabilizacao2(int TipoOrdenacao, int Imprime){
 	int ImprimeSolucao;
 	ImprimeSolucao = 1;
 
-			// armazena o nivel de inviabilidade anterior
+	// armazena o nivel de inviabilidade anterior
 	int InviabilidadeSolucaoAnterior;
 	// dados da demanda não atendida
 	int	ConstrucaoNaoAtendida;
@@ -673,7 +686,7 @@ void Solucao::ProcessoViabilizacao2(int TipoOrdenacao, int Imprime){
 // ( AINDA NÂO IMPLEMENTADA) variavel que controla se deve realizar o processo de atraso de tarefas para tentar atrazar uma outra mais posterior que pode ser atendida caso se atraze as tarefas anteriores a ela
 	int RealizaProcessoDeAtrazarTarefas;
 
-	RealizaProcessoDeAtrazarTarefas = 0;
+	RealizaProcessoDeAtrazarTarefas = 1;
 
 	if( Imprime == 1){
 		cout << endl << endl << "                        Situacao ao entra no Viabilidade2 " << endl << endl;
@@ -705,7 +718,19 @@ void Solucao::ProcessoViabilizacao2(int TipoOrdenacao, int Imprime){
 
 
 
-		cout << endl << endl << " ---- Demanda Nao Atendida = [" << ConstrucaoNaoAtendida << "-" << DemandaNaoAtendida << "] ---- "<< endl << endl;
+
+
+
+
+
+
+		//cout << endl << endl << " ---- Demanda Nao Atendida = [" << ConstrucaoNaoAtendida << "-" << DemandaNaoAtendida << "] ---- "<< endl << endl;
+
+
+
+
+
+
 
 
 
@@ -746,8 +771,23 @@ void Solucao::ProcessoViabilizacao2(int TipoOrdenacao, int Imprime){
 			// marca cosntrução como já analisada e que não se consegue alocar a demanda utilizando esse procedimento já no inicio após deletar todas as tarefas. Ou seja, não se consegue alocar essa tarefa usando as plantas que se tem.
 			ConstrucoesInstancia.ConstrucaoPodeSerSuprida[IndiceConstrucaoNaoAtendida] = 4;
 
-			cout << endl << endl << " -++ Demanda Nao Atendida = [" << ConstrucaoNaoAtendida << "-" << DemandaNaoAtendida << "] não da para atender "<< endl << endl;
-			ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia,0, 1,ImprimeArquivo,Arquivo);
+
+
+
+
+
+
+
+
+			//cout << endl << endl << " -++ Demanda Nao Atendida = [" << ConstrucaoNaoAtendida << "-" << DemandaNaoAtendida << "] não da para atender "<< endl << endl;
+			//ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia,0, 1,ImprimeArquivo,Arquivo);
+
+
+
+
+
+
+
 
 
 		}else{

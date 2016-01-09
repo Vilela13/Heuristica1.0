@@ -29,7 +29,7 @@ public:
 	void ConfereSeNaoEncontrouUmaPlanta( int  PlantaSelecionada);											// Verifica se não encontrou uma planta
 
 	void VerificaAlocacaoDemandaConstrucao(int IndiceConstrucaoVaiSerSuprida, int &Viabilidade, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo);			// Verifica se consegue atender as demandas da construção
-	int Executa(int TipoOrdenacao, int imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo);		// executa o procedimento de realizar o sequenciamento da produção e despache de concreto
+	int Executa( int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta, int imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo);		// executa o procedimento de realizar o sequenciamento da produção e despache de concreto
 
     ~Procedimento1();
 };
@@ -53,31 +53,24 @@ void Procedimento1::CarregaDados(int InstNP, ConjuntoPlantas InstPlantasInstanci
 	TempoDeVidaConcreto = InstTempoDeVidaConcreto;
 }
 
+
+
 // Seleciona uma construção baseada em um rank = Janela de tempo / numero de demandas
-int Procedimento1::SelecionaConstrucao( int &ConstrucaoVaiSerSuprida, int &IndiceConstrucaoVaiSerSuprida ){
-	int Ativo;
-	double RankInicial;
+int Procedimento1::SelecionaConstrucao(  int &ConstrucaoVaiSerSuprida, int &IndiceConstrucaoVaiSerSuprida ){
 
-	Ativo = 0;
-	RankInicial = DBL_MAX;
-
+	// percorre todas as cosntruções
 	for( int c = 0; c < NE; c++){
-		if ( RankInicial > ConstrucoesInstancia.Construcoes[c].RankTempoDemandas){
-			// Seleciona a construção que não possui todas as suas demandas já atendidas e que ainda não foi analisada
-			if(ConstrucoesInstancia.Construcoes[c].StatusAtendimento < ConstrucoesInstancia.Construcoes[c].NumeroDemandas &&  ConstrucoesInstancia.ConstrucoesAnalizadas[ConstrucoesInstancia.Construcoes[c].NumeroDaConstrucao] == 0){
-				ConstrucaoVaiSerSuprida = ConstrucoesInstancia.Construcoes[c].NumeroDaConstrucao;
-				IndiceConstrucaoVaiSerSuprida = c;
-				RankInicial = ConstrucoesInstancia.Construcoes[c].RankTempoDemandas;
-				Ativo = 1;
-			}
+		// Seleciona a construção que não possui todas as suas demandas já atendidas e que ainda não foi analisada
+		if(ConstrucoesInstancia.Construcoes[c].StatusAtendimento < ConstrucoesInstancia.Construcoes[c].NumeroDemandas &&  ConstrucoesInstancia.ConstrucoesAnalizadas[ConstrucoesInstancia.Construcoes[c].NumeroDaConstrucao] == 0){
+			// armazena os dados da cosntrução selecionada
+			ConstrucaoVaiSerSuprida = ConstrucoesInstancia.Construcoes[c].NumeroDaConstrucao;
+			IndiceConstrucaoVaiSerSuprida = c;
+			// retorna 1, encontrou uma construção
+			return 1;
 		}
 	}
-
-	if( Ativo == 1){
-		return 1;
-	}else{
-		return 0;
-	}
+	// retorna 0, não encontrou uma cosntrução
+	return 0;
 }
 
 // Verifica se não encontrou uma planta
@@ -112,13 +105,10 @@ void Procedimento1::VerificaAlocacaoDemandaConstrucao( int IndiceConstrucaoVaiSe
 }
 
 // executa o procedimento de construção da solução
-int Procedimento1::Executa( int TipoOrdenacao, int imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo){
-
-
+int Procedimento1::Executa(  int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta, int imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo){
 
 	int ConstrucaoVaiSerSuprida;
 	int IndiceConstrucaoVaiSerSuprida;
-
 
 	int Demanda;
 
@@ -135,13 +125,16 @@ int Procedimento1::Executa( int TipoOrdenacao, int imprime, int ImprimeSolucao, 
 	int RealizaProcessoDeAtrazarTarefas;
 	RealizaProcessoDeAtrazarTarefas = 1;
 
+	// ordena as cosntruções na ordem em que elas devem ser escolhidas com prioridade
+	ConstrucoesInstancia.OrdenaCosntrucoes( EscolhaConstrucao);
+
 	// faz com que nenhuma construção tenha sido avaliada para o atendimento de suas demandas
 	ConstrucoesInstancia.InicializaConstrucoesAnalizadas();
 	ConstrucoesInstancia.CalcularNivelDeInviabilidade();
 
 	for( int c = 0; c < ConstrucoesInstancia.NumeroConstrucoes; c++ ){
 		// Seleciona a construção caso ela já não tiver sido analisada
-		ConstrucaoSelecionada = SelecionaConstrucao( ConstrucaoVaiSerSuprida, IndiceConstrucaoVaiSerSuprida);
+		ConstrucaoSelecionada = SelecionaConstrucao(  ConstrucaoVaiSerSuprida, IndiceConstrucaoVaiSerSuprida);
 		if( ConstrucaoSelecionada == 1){
 			// marca a construção escolhida como já analisada
 			ConstrucoesInstancia.ConstrucoesAnalizadas[ConstrucaoVaiSerSuprida] =  1;
@@ -152,7 +145,7 @@ int Procedimento1::Executa( int TipoOrdenacao, int imprime, int ImprimeSolucao, 
 				Demanda = ConstrucoesInstancia.Construcoes[IndiceConstrucaoVaiSerSuprida].StatusAtendimento;
 				PermiteAtendimentoDemanda = 0;
 
-				PermiteAtendimentoDemanda = ConstrucoesInstancia.AdicionaTarefa( 0, ConstrucaoVaiSerSuprida, Demanda , DadosTarefasMovidasAuxiliar, 1, 0, RealizaProcessoDeAtrazarTarefas, TipoOrdenacao , PlantasInstancia, imprime, " -> Procedimento1::Executa ");
+				PermiteAtendimentoDemanda = ConstrucoesInstancia.AdicionaTarefa( 0, ConstrucaoVaiSerSuprida, Demanda , DadosTarefasMovidasAuxiliar, 1, 0, RealizaProcessoDeAtrazarTarefas, EscolhaVeiculo , PlantasInstancia, imprime, " -> Procedimento1::Executa ");
 
 				if ( imprime == 1){
 					ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia, 0, ImprimeSolucao,ImprimeArquivo,Arquivo);

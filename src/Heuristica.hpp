@@ -25,7 +25,7 @@ public:
 
 	Heuristica();
 	int  LeDados(string, int );						// le os dados da instancia
-	void ExecutaProcedimentoHeuristico1(string NomeInstancia);			// executa o procedimento heuristico
+	void ExecutaProcedimentoHeuristico1(string NomeInstancia, int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta);			// executa o procedimento heuristico
 
 	void LeNomeInstancia(int , string& );			// le o nome da instancia
 	void LeNumeroPlantasEntregasVeiculos(int);		// le o numero de plantas, veiculos e cosntruções
@@ -104,7 +104,7 @@ int Heuristica::LeDados(string Nome, int comentarios){
 }
 
 // executa o procedimento heuristico
-void Heuristica::ExecutaProcedimentoHeuristico1(string NomeInstancia){
+void Heuristica::ExecutaProcedimentoHeuristico1(string NomeInstancia, int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta){
 
 	// ponteiro para o arquivo que se irá salvar os dados
 	PonteiroArquivo  Arquivo;
@@ -119,9 +119,6 @@ void Heuristica::ExecutaProcedimentoHeuristico1(string NomeInstancia){
 	// variavel que controla se imprime na tela a solução e os procediemntos
 	int ImprimeSolucao;
 	ImprimeSolucao = 0;
-
-	int Imprime;
-	Imprime = 0;
 
 	time_t InicioExecucao, FinalExecucao;
 	double TempoExecucao;
@@ -157,10 +154,6 @@ void Heuristica::ExecutaProcedimentoHeuristico1(string NomeInstancia){
 	// variavel que armazena o estado da solução, inicializada com zero
 	int Solucao;
 	Solucao = 0;
-
-	// ordena na ordem do menor número de tarefas para o maior se colocar o valor 1, ordena na ordem do maior número de tarefas para o menor se colocar o valor 2
-	int TipoOrdenacaoVeiculos;
-	TipoOrdenacaoVeiculos = 1;
 
 	// classe que armazena todas as soluções do procediemnto
 	ConjuntoSolucoes Solucoes;
@@ -247,8 +240,7 @@ void Heuristica::ExecutaProcedimentoHeuristico1(string NomeInstancia){
 
 // Define a ordem de seleção da alocação inicial das atividades
 
-	//sort ( Prod1.ConstrucoesInstancia.Construcoes.begin(), Prod1.ConstrucoesInstancia.Construcoes.end(), DecideQualContrucaoTemMaiorRank );
-	sort ( Prod1.ConstrucoesInstancia.Construcoes.begin(), Prod1.ConstrucoesInstancia.Construcoes.end(), DecideQualContrucaoTemMenorInicioDepoisMaiorRank );
+
 
 	//Prod1.ConstrucoesInstancia.ImprimeContrucoes(Prod1.PlantasInstancia, VerificaViabilidade, ImprimeSolucao,ImprimeArquivo,Arquivo);
 
@@ -259,7 +251,7 @@ void Heuristica::ExecutaProcedimentoHeuristico1(string NomeInstancia){
 		fprintf( Arquivo,"\n\n############################### Procedimento Construcao Solucao por meio de Heuristica Construtiva #####################################\n");
 	}
 
-	Solucao = Prod1.Executa( TipoOrdenacaoVeiculos, ImprimeProcedimentoConstrutivo, ImprimeSolucao, ImprimeArquivo, Arquivo );
+	Solucao = Prod1.Executa( EscolhaVeiculo, EscolhaConstrucao, EscolhaPlanta, ImprimeProcedimentoConstrutivo, ImprimeSolucao, ImprimeArquivo, Arquivo );
 
 
 	if( ImprimeSolucao == 1){
@@ -366,7 +358,7 @@ void Heuristica::ExecutaProcedimentoHeuristico1(string NomeInstancia){
 			fprintf( Arquivo,"\n\n############################### Procedimento Viabilidade 1 #####################################\n");
 		}
 
-		Solucoes.Solucoes[0].ProcessoViabilizacao1( TipoOrdenacaoVeiculos , ImprimeViabilizacao, ImprimeSolucao, ImprimeArquivo, Arquivo);
+		Solucoes.Solucoes[0].ProcessoViabilizacao1( EscolhaVeiculo, EscolhaConstrucao, EscolhaPlanta, ImprimeViabilizacao, ImprimeSolucao, ImprimeArquivo, Arquivo);
 
 		if( ImprimeSolucao == 1){
 			cout << endl << endl << "##############################################################################################" << endl << endl;
@@ -409,7 +401,7 @@ void Heuristica::ExecutaProcedimentoHeuristico1(string NomeInstancia){
 				fprintf( Arquivo,"\n\n############################### Procedimento Viabilidade 2 #####################################\n");
 			}
 
-			Solucoes.Solucoes[0].ProcessoViabilizacao2( TipoOrdenacaoVeiculos, ImprimeViabilizacao, ImprimeSolucao, ImprimeArquivo, Arquivo);
+			Solucoes.Solucoes[0].ProcessoViabilizacao2( EscolhaVeiculo, ImprimeViabilizacao, ImprimeSolucao, ImprimeArquivo, Arquivo);
 
 			if( ImprimeSolucao == 1){
 				cout << endl << endl << "##############################################################################################" << endl << endl;

@@ -22,15 +22,13 @@ int main(int argc, char **argv) {
 		string Saida;
 		char *cstr;
 
-		int EscreveDadosLidosNaTela;
-
 		list<string>::iterator it;
 
 		ofstream ArquivoExcelResposta;
 
 		string Instancias;
 
-
+		int EscreveDadosLidosNaTela;
 
 		EscreveDadosLidosNaTela = 0;
 
@@ -123,6 +121,18 @@ int main(int argc, char **argv) {
 		 char buffer[26];
 		 struct tm* tm_info;
 
+		 // tipo de escolha de veiculo, construção e planta
+		 int EscolhaVeiculo;
+		 int EscolhaConstrucao;
+		 int EscolhaPlanta;
+
+		 // ordena na ordem do menor número de tarefas para o maior se colocar o valor 1, ordena na ordem do maior número de tarefas para o menor se colocar o valor 2
+		 EscolhaVeiculo = 1;
+		 // modo de escolha da construção, 1 escolhe a construção por meio do RankTempoDemandas, 2 escolhe a construção com mais demandas,
+		 EscolhaConstrucao = 3;
+
+		 EscolhaPlanta = 1;
+
 		 // coleta a data e a hora
 		time(&timer);
 		tm_info = localtime(&timer);
@@ -130,6 +140,58 @@ int main(int argc, char **argv) {
 
 		// escreve a hora da execucao e a parte inicial da tabela
 		printf("\n\n ----- Execução as %s ----- \n\n", buffer);
+
+		// escreve o tipo de execução
+
+		printf("\n ******************** Tipo Execução **************************** \n\n");
+
+		// escreve o tipo de escolha do veículo
+		switch (EscolhaVeiculo) {
+			case 1:
+				printf("  -> Veículo com menor número de tarefas antes  \n");
+				break;
+			case 2:
+				printf("  -> Veículo com maior número de tarefas antes  \n");
+				break;
+			default:
+				printf("\n\n Probelam ao selecionar a ordenação do veículo \n\n");
+				return 0;
+				break;
+		}
+
+		// escreve o tipo de escolha do cosntrução
+		switch (EscolhaVeiculo) {
+			case 1:
+				printf("  -> Construção com menor Rank (Janela de tempo / Deamanda )   \n");
+				break;
+			case 2:
+				printf("  -> Construção com menor Janela de tempo   \n");
+				break;
+			case 3:
+				printf("  -> Construção com menor Tempo inicio   \n");
+				break;
+			default:
+				printf("\n\n Probelam ao selecionar a ordenação da cosntrução \n\n");
+				return 0;
+				break;
+		}
+
+		// escreve o tipo de escolha do planta
+		switch (EscolhaVeiculo) {
+			case 1:
+				printf("  -> Planta com menor Mais Proxia \n");
+				break;
+			default:
+				printf("\n\n Probelam ao selecionar a ordenação da planta \n\n");
+				return 0;
+				break;
+		}
+
+		printf("\n ******************************************************************** \n\n\n");
+
+
+
+		// escreve cabeçario
 		printf(" Nome_Instancia \t Situacao_Inicial \t Makespan \t Viabilidade1 \t Viabilidade2  \t BuscaLocal1 \t BuscaLocal2 \t BuscaLocal3 \t Tempo \n");
 
 		while( !ListaInstancias.empty()){
@@ -144,7 +206,7 @@ int main(int argc, char **argv) {
 			if( Instancia->LeDados(Nome, EscreveDadosLidosNaTela) == 1){
 				//cout << " Leu Dados" << endl;
 
-				Instancia->ExecutaProcedimentoHeuristico1(Nome);
+				Instancia->ExecutaProcedimentoHeuristico1(Nome, EscolhaVeiculo, EscolhaConstrucao, EscolhaPlanta);
 
 			}
 			free(Instancia);

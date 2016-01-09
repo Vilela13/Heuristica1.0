@@ -1544,6 +1544,49 @@ Construcao::~Construcao(){
 	Makespan = -13;
 }
 
+
+// #################################################################
+// #################################################################
+// #################################################################
+// #################################################################
+// #################################################################
+
+// função que retorna se c1 tem menor rank que c2
+bool DecideQualContrucaoTemMenorRank (Construcao c1,Construcao c2) {
+	if( c1.RankTempoDemandas != c2.RankTempoDemandas){
+		return ( c1.RankTempoDemandas < c2.RankTempoDemandas );
+	}else{
+		if( c1.TempoMinimoDeFuncionamento != c2.TempoMinimoDeFuncionamento){
+			// retorna a cosntrução com o menor tempo inicio
+			return ( c1.TempoMinimoDeFuncionamento < c2.TempoMinimoDeFuncionamento );
+		}else{
+			return ( c1.TempoMaximoDeFuncionamento < c2.TempoMaximoDeFuncionamento );
+		}
+	}
+}
+
+// função que retorna se c1 tem menor janela de tempo de funcionamento que c2. Caso de empate nesse quesito, ela verifica se c1 mais demandas que c2
+bool DecideQualContrucaoTemMenorJanela (Construcao c1,Construcao c2) {
+	if( c1.TempoMaximoDeFuncionamento - c1.TempoMinimoDeFuncionamento != c2.TempoMaximoDeFuncionamento - c2.TempoMinimoDeFuncionamento ){
+		return ( c1.TempoMaximoDeFuncionamento - c1.TempoMinimoDeFuncionamento < c2.TempoMaximoDeFuncionamento - c2.TempoMinimoDeFuncionamento );
+	}else{
+		return ( c1.NumeroDemandas > c2.NumeroDemandas);
+	}
+}
+
+// função que retorna se c1 tem menor inicio de funcionamento que c2. Caso de empate nesse quesito, ela verifica se c1 tem menor fim de funcionamento que c2. Caso de empate, verifica se c1
+bool DecideQualContrucaoTemMenorInicio (Construcao c1,Construcao c2) {
+	if( c1.TempoMinimoDeFuncionamento != c2.TempoMinimoDeFuncionamento ){
+			return ( c1.TempoMinimoDeFuncionamento < c2.TempoMinimoDeFuncionamento );
+	}else{
+		if( c1.TempoMaximoDeFuncionamento != c2.TempoMaximoDeFuncionamento){
+			return ( c1.TempoMaximoDeFuncionamento < c2.TempoMaximoDeFuncionamento);
+		}else{
+			return ( c1.NumeroDemandas > c2.NumeroDemandas);
+		}
+	}
+}
+
 // #################################################################
 // #################################################################
 // #################################################################
@@ -1583,7 +1626,7 @@ public:
 // Funções com a SituaçãoRemover
 	void ReiniciaTarefasRetiradas();													// Reinicia o status de remoção de todas as demandas de todas as construções
 	void MarcaTarefaDeletadaNoVetor(int Construcao, int Demanda, int Situacao);			// maraca a situação remoção da demanda no vetor que sinaliza a situação da demanda
-	int ConstrucaoTemTarefaParaRemover(int& Construcao, int& Demanda, int Imprimir);	// Usado em ProcessoViabilizacao1. Verifica se possui uma construção que possui demandas que ainda não foram retiradas para se tentar a viabilização da solução. Caso possuir, retorna 1 a função e é retornado os dados da construção e da demanda por parametro.
+
 
 	void MarcaTarefaNaoRemovidaNoVetor(int Construcao, int Demanda, string frase);		// marca a tarefa, demand, não removida
 
@@ -1605,6 +1648,8 @@ public:
 	int AdicionaTarefaComVeiculoFixo( int VerificaExistencia, int Construcao, int Demanda , int Planta, int Carreta, vector < DadosTarefa > &DadosTarefasMovidas, int SituacaoDemanda, int SituacaoRemocao, int RealizaProcessoDeAtrazarTarefas, int TipoOrdenacao , ConjuntoPlantas &PlantasInstancia, int imprime, string frase);
 
 	int RetornaConstrucaoQuePodeSerAtendidaComMenorIndice( int &Construcao, int &IndiceConstrucao);		// retorna a construção que possui o menor inidice e que ainda pode ser atendida
+
+	void OrdenaCosntrucoes( int EscolhaConstrucao);
 
 	~ConjuntoConstrucoes();						// Destruidora da classe
 };
@@ -1966,59 +2011,6 @@ void ConjuntoConstrucoes::MarcaTarefaDeletadaNoVetor(int Construcao, int Demanda
 
 }
 
-// Usado em ProcessoViabilizacao1. Verifica se possui uma construção que possui demandas que ainda não foram retiradas para se tentar a viabilização da solução. Caso possuir, retorna 1 a função e é retornado os dados da construção e da demanda por parametro.
-int ConjuntoConstrucoes::ConstrucaoTemTarefaParaRemover(int& Construcao, int& Demanda, int Imprimir){
-
-	// variavel que indica se encontrou uma demanda para remover
-	int Ativo;
-	// valor do rank a se comparar para se ver se escolhe a demanda em questão ou não
-	double RankInicial;
-
-	// inicia os valores dessas variaveis
-	Construcao = -13;
-	Demanda = -13;
-
-	// inicia como se não tivesse encontrado uma demanda para remover
-	Ativo = 0;
-	// inicia o valor do rank como o valor maximo de double, para que todo valor encontrado sejá menor que este
-	RankInicial = DBL_MAX;
-
-	// percorre todas as construções
-	for( int c = 0; c < NumeroConstrucoes; c++){
-		// caso o rank da cosntrução corrente for menor que o rank atual entra no if, isso faz que a função pegue a construção com o menor rank
-		if ( RankInicial > Construcoes[c].RankTempoDemandas){
-			// percorre as demandas da construção em ordem decerscente
-			for( int d = (Construcoes[c].NumeroDemandas - 1); d >= 0 ; d--){
-				// so entra caso a demanda tenha sido atendida
-				if(Construcoes[c].SituacaoDemanda[d] == 1){
-					// so entrra caso ela não tenha sido removida anteriormente
-					if( Construcoes[c].SituacaoRemocao[d] == 0){
-						// aloc a construção corrente, a demanda e o rank da construção
-						Construcao = Construcoes[c].NumeroDaConstrucao;
-						Demanda = d;
-						RankInicial = Construcoes[c].RankTempoDemandas;
-						// marca que encontrou uma demanda
-						Ativo = 1;
-					}
-				}
-			}
-		}
-	}
-
-	if( Ativo == 1){
-		if( Imprimir == 1){
-			cout << endl << endl;
-			cout << " Selecionou construcao " << Construcao << "-" << Demanda << " com janela de tempo ";
-			cout <<  Construcoes[Construcao].TempoMinimoDeFuncionamento << "-" << Construcoes[Construcao].TempoMaximoDeFuncionamento;
-			cout << " -> ConstrucaoTarefaRemover" << endl ;
-		}
-		// encontrou uma demanda a remover
-		return 1;
-	}else{
-		// não encontrou uma demanda a remover
-		return 0;
-	}
-}
 
 // marca a tarefa, demand, não removida
 void ConjuntoConstrucoes::MarcaTarefaNaoRemovidaNoVetor(int Construcao, int Demanda, string frase){
@@ -2308,7 +2300,7 @@ void ConjuntoConstrucoes::EncontraPlantaMenorDistanciaConstrucao( int c, int& Nu
 }
 
 // função que tenta alocar uma demanda
-int ConjuntoConstrucoes::AdicionaTarefa( int VerificaExistencia, int Construcao, int Demanda , vector < DadosTarefa > &DadosTarefasMovidas, int SituacaoDemanda, int SituacaoRemocao, int RealizaProcessoDeAtrazarTarefas, int TipoOrdenacao , ConjuntoPlantas &PlantasInstancia, int imprime, string frase){
+int ConjuntoConstrucoes::AdicionaTarefa( int VerificaExistencia, int Construcao, int Demanda , vector < DadosTarefa > &DadosTarefasMovidas, int SituacaoDemanda, int SituacaoRemocao, int RealizaProcessoDeAtrazarTarefas, int EscolhaVeiculo , ConjuntoPlantas &PlantasInstancia, int imprime, string frase){
 
 	// ****************** Variaveis que precisão ser removidas, pois não tem utilidade na função ***************************//
 
@@ -2363,7 +2355,7 @@ int ConjuntoConstrucoes::AdicionaTarefa( int VerificaExistencia, int Construcao,
 				// encontra a planta mais perto d aconstrução
 				EncontraPlantaMenorDistanciaConstrucao(c,  p , PlantasInstancia, "   &&&&&&&&&&&&& Problema em fornecer valor de   p  em adiciona tarefa  ->ConjuntoConstrucoes::AdicionaTarefa &&&&&&&&&&&&& ");
 				// ordena as britadeiras
-				PlantasInstancia.Plantas[ p ].VeiculosDaPlanta.OrdenaCarretasPorNumeroDeTarefasRealizadas(TipoOrdenacao);
+				PlantasInstancia.Plantas[ p ].VeiculosDaPlanta.OrdenaCarretasPorNumeroDeTarefasRealizadas(EscolhaVeiculo);
 				// percorre todos os veículos da planta
 				for( int v = 0; v < PlantasInstancia.Plantas[ p ].NumeroVeiculos; v++){
 					// inicializa o tempo inicio que a planta corrente ira começar a analise se pode atender a demanda corrente, caso
@@ -2453,7 +2445,7 @@ int ConjuntoConstrucoes::AdicionaTarefa( int VerificaExistencia, int Construcao,
 					cout << endl << endl << "      Função que atraza demandas - horario que pode atender construção = " << PlantasInstancia.RetornaMenorHorarioQueConstrucaoPodeReceberDemanda() << endl << endl;
 				}
 				// função que realiza o atraso das tarefas para atender uma demanda anterior, caso cosnseguir alocar entra no if
-				if ( Construcoes[c].AtrazaDemandasParaAtenderMaster( Demanda, PlantasInstancia.RetornaMenorHorarioQueConstrucaoPodeReceberDemanda() - Construcoes[c].TempoMaximoEntreDescargas  + IntervaloDeTempo,DadosTarefasMovidasAuxiliar, SituacaoDemanda, SituacaoRemocao, PlantasInstancia, SituacaoAlocacao, TipoOrdenacao, imprime, frase) == 1 ){
+				if ( Construcoes[c].AtrazaDemandasParaAtenderMaster( Demanda, PlantasInstancia.RetornaMenorHorarioQueConstrucaoPodeReceberDemanda() - Construcoes[c].TempoMaximoEntreDescargas  + IntervaloDeTempo,DadosTarefasMovidasAuxiliar, SituacaoDemanda, SituacaoRemocao, PlantasInstancia, SituacaoAlocacao, EscolhaVeiculo, imprime, frase) == 1 ){
 					if( imprime == 1){
 						cout << endl << endl << "       ******* adicionei demanda [" << Construcoes[c].NumeroDaConstrucao << "-" << Demanda << "] com o processo de atraso " << endl << endl;
 						cout << "DadosTarefasMovidasAuxiliar" << endl;
@@ -2515,7 +2507,7 @@ int ConjuntoConstrucoes::AdicionaTarefa( int VerificaExistencia, int Construcao,
 }
 
 // função que tenta alocar uma demanda
-int ConjuntoConstrucoes::AdicionaTarefaComVeiculoFixo( int VerificaExistencia, int Construcao, int Demanda , int Planta, int Carreta, vector < DadosTarefa > &DadosTarefasMovidas, int SituacaoDemanda, int SituacaoRemocao, int RealizaProcessoDeAtrazarTarefas, int TipoOrdenacao , ConjuntoPlantas &PlantasInstancia, int imprime, string frase){
+int ConjuntoConstrucoes::AdicionaTarefaComVeiculoFixo( int VerificaExistencia, int Construcao, int Demanda , int Planta, int Carreta, vector < DadosTarefa > &DadosTarefasMovidas, int SituacaoDemanda, int SituacaoRemocao, int RealizaProcessoDeAtrazarTarefas, int EscolhaVeiculo , ConjuntoPlantas &PlantasInstancia, int imprime, string frase){
 
 	// ****************** Variaveis que precisão ser removidas, pois não tem utilidade na função ***************************//
 
@@ -2656,7 +2648,7 @@ int ConjuntoConstrucoes::AdicionaTarefaComVeiculoFixo( int VerificaExistencia, i
 				cout << endl << endl << "      Função que atraza demandas - horario que pode atender construção = " << HorarioQueConstrucaoPodeReceberDemanda << endl << endl;
 			}
 			// função que realiza o atraso das tarefas para atender uma demanda anterior, caso cosnseguir alocar entra no if
-			if ( Construcoes[c].AtrazaDemandasParaAtenderMasterComVeiculoFixo( Demanda, Planta, Carreta, HorarioQueConstrucaoPodeReceberDemanda - Construcoes[c].TempoMaximoEntreDescargas  + IntervaloDeTempo,DadosTarefasMovidasAuxiliar, SituacaoDemanda, SituacaoRemocao, PlantasInstancia, SituacaoAlocacao, TipoOrdenacao, imprime, frase) == 1 ){
+			if ( Construcoes[c].AtrazaDemandasParaAtenderMasterComVeiculoFixo( Demanda, Planta, Carreta, HorarioQueConstrucaoPodeReceberDemanda - Construcoes[c].TempoMaximoEntreDescargas  + IntervaloDeTempo,DadosTarefasMovidasAuxiliar, SituacaoDemanda, SituacaoRemocao, PlantasInstancia, SituacaoAlocacao, EscolhaVeiculo, imprime, frase) == 1 ){
 				if( imprime == 1){
 					cout << endl << endl << "       ******* adicionei demanda [" << Construcoes[c].NumeroDaConstrucao << "-" << Demanda << "] com o processo de atraso " << endl << endl;
 					cout << "DadosTarefasMovidasAuxiliar" << endl;
@@ -2751,6 +2743,62 @@ int ConjuntoConstrucoes::RetornaConstrucaoQuePodeSerAtendidaComMenorIndice( int 
 	}
 }
 
+
+void ConjuntoConstrucoes::OrdenaCosntrucoes( int EscolhaConstrucao){
+	// variavel para parar o programa
+	int Para;
+
+	// variavel para imprimir a ordenação
+	int Imprime;
+	// 0 se não for imprimir, 1 se for imprimir
+	Imprime = 0;
+
+	if( EscolhaConstrucao == 1){
+		// ordena baseado no menor rank
+		sort(Construcoes.begin(), Construcoes.end(), DecideQualContrucaoTemMenorRank);
+
+		if(Imprime == 1){
+			cout << "    construções ordenadas" << endl ;
+			for( int c = 0; c < NumeroConstrucoes; c++){
+				cout << " construcao [" << Construcoes[c].NumeroDaConstrucao << "] rank [" << Construcoes[c].RankTempoDemandas << "]  tempo minimo [" << Construcoes[c].TempoMinimoDeFuncionamento << "]tempo maximo [" << Construcoes[c].TempoMaximoDeFuncionamento << "]"<< endl;
+
+			}
+			cin >> Para;
+		}
+	}
+
+	if( EscolhaConstrucao == 2){
+		// ordena baseado na menor janela
+		sort(Construcoes.begin(), Construcoes.end(), DecideQualContrucaoTemMenorJanela);
+
+		if(Imprime == 1){
+			cout << "    construções ordenadas" << endl ;
+			for( int c = 0; c < NumeroConstrucoes; c++){
+				cout << " construcao [" << Construcoes[c].NumeroDaConstrucao << "]  janela de tempo [" << Construcoes[c].TempoMaximoDeFuncionamento - Construcoes[c].TempoMinimoDeFuncionamento << "]  demandas [" << Construcoes[c].NumeroDemandas << "] "<< endl;
+
+			}
+			cin >> Para;
+		}
+	}
+
+
+	if( EscolhaConstrucao == 3){
+		// ordena baseado no menor tempo inicio
+		sort(Construcoes.begin(), Construcoes.end(), DecideQualContrucaoTemMenorInicio);
+
+		if(Imprime == 1){
+			cout << "    construções ordenadas" << endl ;
+			for( int c = 0; c < NumeroConstrucoes; c++){
+				cout << " construcao [" << Construcoes[c].NumeroDaConstrucao << "]  tempo minimo [" << Construcoes[c].TempoMinimoDeFuncionamento << "]tempo maximo [" << Construcoes[c].TempoMaximoDeFuncionamento << "]  demandas [" << Construcoes[c].NumeroDemandas << "] "<< endl;
+
+			}
+			cin >> Para;
+		}
+	}
+
+
+}
+
 // Destruidora da classe
 ConjuntoConstrucoes::~ConjuntoConstrucoes(){
 	Construcoes.clear();
@@ -2761,18 +2809,6 @@ ConjuntoConstrucoes::~ConjuntoConstrucoes(){
 	NivelDeInviabilidade = -13;
 }
 
-// função que retorna se c1 tem menor rank que c2
-bool DecideQualContrucaoTemMaiorRank (Construcao c1,Construcao c2) {
-	return ( c1.RankTempoDemandas < c2.RankTempoDemandas );
-}
-
-// função que retorna se c1 tem menor tempo de funcionamento que c2. Caso de empate nesse quesito, ela verifica se c1 tem menor rank que c2
-bool DecideQualContrucaoTemMenorInicioDepoisMaiorRank (Construcao c1,Construcao c2) {
-	if( c1.TempoMinimoDeFuncionamento == c2.TempoMinimoDeFuncionamento ){
-			return ( c1.RankTempoDemandas < c2.RankTempoDemandas );
-	}
-	return ( c1.TempoMinimoDeFuncionamento < c2.TempoMinimoDeFuncionamento );
-}
 
 bool DecideQualMenorInicioTempoDescarregamento ( Descarregamento d1, Descarregamento d2){
 	return ( d1.HorarioInicioDescarregamento < d2.HorarioInicioDescarregamento );

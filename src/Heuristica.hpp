@@ -377,8 +377,8 @@ void Heuristica::ExecutaProcedimentoHeuristico1(string NomeInstancia){
 
 		//Solucoes.Imprime(ImprimePlanta, ImprimeConstrucao, IntervalosRespeitadosConstrucaoes, 1 , 0, Arquivo);
 
-		cout <<  endl << "   V1 = " ;
-		cin >> ParaPrograma;
+		//cout <<  endl << "   V1 = " ;
+		//cin >> ParaPrograma;
 
 
 		Solucoes.CalculaMakespanSolucoes();
@@ -391,6 +391,15 @@ void Heuristica::ExecutaProcedimentoHeuristico1(string NomeInstancia){
 		}
 
 		if( Solucoes.Solucoes[0].ConstrucoesInstancia.NivelDeInviabilidade != 0){
+
+
+
+
+			//Solucoes.Imprime(ImprimePlanta, ImprimeConstrucao, 0, 1 , 0, Arquivo);
+			//cin >> ParaPrograma;
+
+
+
 
 
 			if( ImprimeSolucao == 1){
@@ -411,11 +420,23 @@ void Heuristica::ExecutaProcedimentoHeuristico1(string NomeInstancia){
 
 			//Solucoes.Imprime(ImprimePlanta, ImprimeConstrucao, IntervalosRespeitadosConstrucaoes, 1 , 0, Arquivo);
 
-			cout << endl << "   V2 = " ;
-			cin >> ParaPrograma;
+
+
+
+
+			//cout << endl << "   V2 = " ;
+			//cin >> ParaPrograma;
+			//Solucoes.Imprime(ImprimePlanta, ImprimeConstrucao, IntervalosRespeitadosConstrucaoes, 1 , 0, Arquivo);
+			//cin >> ParaPrograma;
 
 			Solucoes.CalculaMakespanSolucoes();
 			Solucoes.Solucoes[0].Imprime(ImprimePlanta, ImprimeConstrucao, IntervalosRespeitadosConstrucaoes, ImprimeSolucao, ImprimeArquivo, Arquivo);
+
+
+
+
+
+
 
 
 			if( Solucoes.Solucoes[0].ConstrucoesInstancia.NivelDeInviabilidade == 0){

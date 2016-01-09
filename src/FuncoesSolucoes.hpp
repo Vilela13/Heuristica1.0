@@ -90,6 +90,8 @@ void IniciaVetorIntComZero(vector< int > &VetorInt){
 	}
 }
 
+
+
 // verifica se existe um valor no vector igual ao valor passado
 int VerificaSeTemUmValorVetorInt( int Valor, vector< int > VetorInt){
 	// percorre todo os elementos do  vector

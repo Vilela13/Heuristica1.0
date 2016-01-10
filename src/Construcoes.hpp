@@ -1626,8 +1626,6 @@ public:
 // Funções com a SituaçãoRemover
 	void ReiniciaTarefasRetiradas();													// Reinicia o status de remoção de todas as demandas de todas as construções
 	void MarcaTarefaDeletadaNoVetor(int Construcao, int Demanda, int Situacao);			// maraca a situação remoção da demanda no vetor que sinaliza a situação da demanda
-
-
 	void MarcaTarefaNaoRemovidaNoVetor(int Construcao, int Demanda, string frase);		// marca a tarefa, demand, não removida
 
 
@@ -1646,8 +1644,6 @@ public:
 	void EncontraPlantaMenorDistanciaConstrucao( int c, int& NumPlantaAnalisando, ConjuntoPlantas &PlantasInstancia, string frase);		// encontra a planta mais perto da construção que ainda não foi analisada
 	int AdicionaTarefa( int VerificaExistencia, int Construcao, int Demanda , vector < DadosTarefa > &DadosTarefasMovidas, int SituacaoDemanda, int SituacaoRemocao, int RealizaProcessoDeAtrazarTarefas, int TipoOrdenacao , ConjuntoPlantas &PlantasInstancia, int imprime, string frase);		// função que tenta alocar uma demanda
 	int AdicionaTarefaComVeiculoFixo( int VerificaExistencia, int Construcao, int Demanda , int Planta, int Carreta, vector < DadosTarefa > &DadosTarefasMovidas, int SituacaoDemanda, int SituacaoRemocao, int RealizaProcessoDeAtrazarTarefas, int TipoOrdenacao , ConjuntoPlantas &PlantasInstancia, int imprime, string frase);
-
-	int RetornaConstrucaoQuePodeSerAtendidaComMenorIndice( int &Construcao, int &IndiceConstrucao);		// retorna a construção que possui o menor inidice e que ainda pode ser atendida
 
 	void OrdenaCosntrucoes( int EscolhaConstrucao);
 
@@ -2010,7 +2006,6 @@ void ConjuntoConstrucoes::MarcaTarefaDeletadaNoVetor(int Construcao, int Demanda
 	}
 
 }
-
 
 // marca a tarefa, demand, não removida
 void ConjuntoConstrucoes::MarcaTarefaNaoRemovidaNoVetor(int Construcao, int Demanda, string frase){
@@ -2709,39 +2704,7 @@ int ConjuntoConstrucoes::AdicionaTarefaComVeiculoFixo( int VerificaExistencia, i
 
 }
 
-// retorna a construção que possui o menor inidice e que ainda pode ser atendida
-int ConjuntoConstrucoes::RetornaConstrucaoQuePodeSerAtendidaComMenorIndice( int &Construcao, int &IndiceConstrucao){
-	// variavel que informa se encontrou uma construção ou não
-	int Ativo;
-	// variavel que armazena o rank temporario para se realizar as comparações e se achar a construção com o menor rank
-	double RankInicial;
 
-	// inicia como se não tivesse achado uma construção
-	Ativo = 0;
-	// inicia o valor do rank de comparação com o maior valor possivel, para que qualquer construção achada inicialmente seja aceita
-	RankInicial = DBL_MAX;
-
-	for( int c = 0; c < (int) Construcoes.size(); c++){
-		if ( RankInicial > Construcoes[c].RankTempoDemandas){
-			// Seleciona a construção que não possui todas as suas demandas já atendidas e que ainda não foi analisada
-			if(Construcoes[c].StatusAtendimento < Construcoes[c].NumeroDemandas &&  ConstrucaoPodeSerSuprida[c] == 0){
-				// atuaiza os dados da construção com menor rank, seu número ou seu indice
-				Construcao = Construcoes[c].NumeroDaConstrucao;
-				IndiceConstrucao = c;
-				// se atualiza o rank de comparação com o rank da cosntrução corrente
-				RankInicial = Construcoes[c].RankTempoDemandas;
-				// se marca que se achou uma construção
-				Ativo = 1;
-			}
-		}
-	}
-
-	if( Ativo == 1){
-		return 1;
-	}else{
-		return 0;
-	}
-}
 
 
 void ConjuntoConstrucoes::OrdenaCosntrucoes( int EscolhaConstrucao){

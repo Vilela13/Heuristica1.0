@@ -52,9 +52,9 @@ public:
 
 	void CalculaMakespan();		// calcula o makespan geral da solução
 
-	void RealizarBuscaLocalCaminhao(int imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo);
-	void RealizarBuscaLocalConstrucao(int imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo);
-	void RealizarBuscaLocalPlanta(int imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo);
+	void RealizarBuscaLocalCaminhao(int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta, int imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo);
+	void RealizarBuscaLocalConstrucao(int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta, int imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo);
+	void RealizarBuscaLocalPlanta(int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta, int imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo);
 
 	~Solucao();
 };
@@ -970,7 +970,7 @@ void Solucao::CalculaMakespan(){
 	Makespan = PlantasInstancia.MakespanPLantas + ConstrucoesInstancia.MakespanConstrucoes;
 }
 
-void Solucao::RealizarBuscaLocalCaminhao(int imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo){
+void Solucao::RealizarBuscaLocalCaminhao(int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta,int imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo){
 	// calsse da busca local
 	BuscaLocal busca;
 
@@ -989,7 +989,7 @@ void Solucao::RealizarBuscaLocalCaminhao(int imprime, int ImprimeSolucao, int Im
 	busca.CarregaSolucao( NP, PlantasInstancia, NE,	ConstrucoesInstancia, NV, Velocidade, TempoDeVidaConcreto);
 
 	// equanto o procediemnto da busca local melhorar a solução que se tem, se continua no while
-	while ( busca.BuscaLocalTentaRealizarTarefasComOutosVeiculos(ImprimeProcedimento, ImprimeEstruturas) == 1){
+	while ( busca.BuscaLocalTentaRealizarTarefasComOutosVeiculos(EscolhaVeiculo, EscolhaConstrucao, EscolhaPlanta,ImprimeProcedimento, ImprimeEstruturas) == 1){
 		// carrega a nova solução que se obteve
 		CarregaSolucao(busca.NP, busca.PlantasInstancia, busca.NE, busca.ConstrucoesInstancia, busca.NV , busca.Velocidade , busca.TempoDeVidaConcreto);
 
@@ -1017,7 +1017,7 @@ void Solucao::RealizarBuscaLocalCaminhao(int imprime, int ImprimeSolucao, int Im
 	}
 }
 
-void Solucao::RealizarBuscaLocalConstrucao(int imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo){
+void Solucao::RealizarBuscaLocalConstrucao(int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta,int imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo){
 	// calsse da busca local
 	BuscaLocal busca;
 
@@ -1036,7 +1036,7 @@ void Solucao::RealizarBuscaLocalConstrucao(int imprime, int ImprimeSolucao, int 
 	busca.CarregaSolucao( NP, PlantasInstancia, NE,	ConstrucoesInstancia, NV, Velocidade, TempoDeVidaConcreto);
 
 	// equanto o procediemnto da busca local melhorar a solução que se tem, se continua no while
-	while ( busca.BuscaLocalMudaOrdemAtendiemntoConstrucoes(ImprimeProcedimento, ImprimeEstruturas) == 1){
+	while ( busca.BuscaLocalMudaOrdemAtendiemntoConstrucoes(EscolhaVeiculo, EscolhaConstrucao, EscolhaPlanta,ImprimeProcedimento, ImprimeEstruturas) == 1){
 		// carrega a nova solução que se obteve
 		CarregaSolucao(busca.NP, busca.PlantasInstancia, busca.NE, busca.ConstrucoesInstancia, busca.NV , busca.Velocidade , busca.TempoDeVidaConcreto);
 
@@ -1065,7 +1065,7 @@ void Solucao::RealizarBuscaLocalConstrucao(int imprime, int ImprimeSolucao, int 
 }
 
 
-void Solucao::RealizarBuscaLocalPlanta(int imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo){
+void Solucao::RealizarBuscaLocalPlanta(int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta,int imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo){
 	// calsse da busca local
 	BuscaLocal busca;
 
@@ -1084,7 +1084,7 @@ void Solucao::RealizarBuscaLocalPlanta(int imprime, int ImprimeSolucao, int Impr
 	busca.CarregaSolucao( NP, PlantasInstancia, NE,	ConstrucoesInstancia, NV, Velocidade, TempoDeVidaConcreto);
 
 	// equanto o procediemnto da busca local melhorar a solução que se tem, se continua no while
-	while ( busca.BuscaLocalTrocaPlantaAtendimento(ImprimeProcedimento, ImprimeEstruturas) == 1){
+	while ( busca.BuscaLocalTrocaPlantaAtendimento(EscolhaVeiculo, EscolhaConstrucao, EscolhaPlanta,ImprimeProcedimento, ImprimeEstruturas) == 1){
 		// carrega a nova solução que se obteve
 		CarregaSolucao(busca.NP, busca.PlantasInstancia, busca.NE, busca.ConstrucoesInstancia, busca.NV , busca.Velocidade , busca.TempoDeVidaConcreto);
 

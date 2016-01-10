@@ -450,7 +450,7 @@ void Heuristica::ExecutaProcedimentoHeuristico1(string NomeInstancia, int Escolh
 			fprintf( Arquivo,"\n\n############################### Busca Local 1 (caminhão) #####################################\n");
 		}
 
-		Solucoes.Solucoes[0].RealizarBuscaLocalCaminhao(ImprimeBusca, ImprimeSolucao, ImprimeArquivo, Arquivo);
+		Solucoes.Solucoes[0].RealizarBuscaLocalCaminhao(EscolhaVeiculo, EscolhaConstrucao, EscolhaPlanta, ImprimeBusca, ImprimeSolucao, ImprimeArquivo, Arquivo);
 
 		if( ImprimeSolucao == 1){
 			cout << endl << endl << "##############################################################################################" << endl << endl;
@@ -474,7 +474,7 @@ void Heuristica::ExecutaProcedimentoHeuristico1(string NomeInstancia, int Escolh
 		}
 
 
-		Solucoes.Solucoes[0].RealizarBuscaLocalConstrucao(ImprimeBusca, ImprimeSolucao, ImprimeArquivo, Arquivo);
+		Solucoes.Solucoes[0].RealizarBuscaLocalConstrucao(EscolhaVeiculo, EscolhaConstrucao, EscolhaPlanta,ImprimeBusca, ImprimeSolucao, ImprimeArquivo, Arquivo);
 
 		if( ImprimeSolucao == 1){
 			cout << endl << endl << "##############################################################################################" << endl << endl;
@@ -497,7 +497,7 @@ void Heuristica::ExecutaProcedimentoHeuristico1(string NomeInstancia, int Escolh
 			fprintf( Arquivo,"\n\n############################### Busca Local 3 (planta) #######################################\n");
 		}
 
-		Solucoes.Solucoes[0].RealizarBuscaLocalPlanta(ImprimeBusca, ImprimeSolucao, ImprimeArquivo, Arquivo);
+		Solucoes.Solucoes[0].RealizarBuscaLocalPlanta(EscolhaVeiculo, EscolhaConstrucao, EscolhaPlanta,ImprimeBusca, ImprimeSolucao, ImprimeArquivo, Arquivo);
 
 		if( ImprimeSolucao == 1){
 			cout << endl << endl << "##############################################################################################" << endl << endl;

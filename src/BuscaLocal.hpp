@@ -29,14 +29,15 @@ public:
 
 	void CarregaSolucao(int np, ConjuntoPlantas Plantas, int ne, ConjuntoConstrucoes Construcoes, int nv, double v,double TDVC);		// Carrega os dados da instancia e a solução até o momento
 	int SelecionaConstrucao( int &ConstrucaoEscolhida, int &IndiceConstrucaoEscolhida);					// seleciona a construção ainda não avaliada que tera suas demandas atendidas avaliadas pela busca local
+	int RetornaConstrucaoQuePodeSerAtendida( int &Construcao, int &IndiceConstrucao);		// retorna a construção que possui o menor inidice e que ainda pode ser atendida
 
-	int AdicionaTarefa( int VerificaExistencia, int Construcao, int Demanda , vector < DadosTarefa > &DadosTarefasMovidas, int SituacaoDemanda, int SituacaoRemocao, int RealizaProcessoDeAtrazarTarefas, int TipoOrdenacao , int imprime, string frase);		// função que tenta alocar uma demanda
+
 	double CalculaMakespanSolucao();				// calcula o makespan
 
 
-	int BuscaLocalTentaRealizarTarefasComOutosVeiculos(int Imprime, int ImprimeEstruturas);			// busca local que se verifica se a demanda pode ser melhor atendida caso se realize o seu atendimento com outro caminhão/veículo
-	int BuscaLocalMudaOrdemAtendiemntoConstrucoes(int Imprime, int ImprimeEstruturas);
-	int BuscaLocalTrocaPlantaAtendimento(int Imprime, int ImprimeEstruturas);
+	int BuscaLocalTentaRealizarTarefasComOutosVeiculos(int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta,int Imprime, int ImprimeEstruturas);			// busca local que se verifica se a demanda pode ser melhor atendida caso se realize o seu atendimento com outro caminhão/veículo
+	int BuscaLocalMudaOrdemAtendiemntoConstrucoes(int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta,int Imprime, int ImprimeEstruturas);
+	int BuscaLocalTrocaPlantaAtendimento(int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta,int Imprime, int ImprimeEstruturas);
 
 	~BuscaLocal();
 };
@@ -65,35 +66,41 @@ void BuscaLocal::CarregaSolucao(int np, ConjuntoPlantas Plantas, int ne, Conjunt
 
 // seleciona a construção ainda não avaliada que tera suas demandas atendidas avaliadas pela busca local
 int BuscaLocal::SelecionaConstrucao( int &ConstrucaoEscolhida, int &IndiceConstrucaoEscolhida ){
-	double RankInicial;
-	int Ativo;
-
-	// inicia variaveis
-	Ativo = 0;
-	RankInicial = DBL_MAX;
 
 	// passa por todas as construções
 	for( int c = 0; c < NE; c++){
-		// seleciona a que tem um rank maior que a selecionada no momento
-		if ( RankInicial > ConstrucoesInstancia.Construcoes[c].RankTempoDemandas){
-			// verifica se a construção ainda pode ser analisada
-			if( ConstrucoesInstancia.ConstrucoesAnalizadas[c] == 0){
-				// armazena os dados da cosntrução corrente
-				ConstrucaoEscolhida = ConstrucoesInstancia.Construcoes[c].NumeroDaConstrucao;
-				IndiceConstrucaoEscolhida = c;
-				RankInicial = ConstrucoesInstancia.Construcoes[c].RankTempoDemandas;
-				// marca que encontrou uma construção
-				Ativo = 1;
-			}
+		// verifica se a construção ainda pode ser analisada
+		if( ConstrucoesInstancia.ConstrucoesAnalizadas[c] == 0){
+			// armazena os dados da cosntrução corrente
+			ConstrucaoEscolhida = ConstrucoesInstancia.Construcoes[c].NumeroDaConstrucao;
+			IndiceConstrucaoEscolhida = c;
+			// retorna 1 caso encontrou uma construção
+			return 1;
 		}
 	}
-	if( Ativo == 1){
-		// retorna 1 caso encontrou uma construção
-		return 1;
-	}else{
-		// retorna 0 caso não encontrou uma construção
-		return 0;
+
+	// retorna 0 caso não encontrou uma construção
+	return 0;
+
+
+}
+
+// retorna a construção que possui o menor inidice e que ainda pode ser atendida
+int BuscaLocal::RetornaConstrucaoQuePodeSerAtendida( int &Construcao, int &IndiceConstrucao){
+
+	// passa por todas as cosntruções
+	for( int c = 0; c < (int)  NE; c++){
+		// Seleciona a construção que não possui todas as suas demandas já atendidas e que ainda não foi analisada
+		if(ConstrucoesInstancia.Construcoes[c].StatusAtendimento < ConstrucoesInstancia.Construcoes[c].NumeroDemandas &&  ConstrucoesInstancia.ConstrucaoPodeSerSuprida[c] == 0){
+			// atuaiza os dados da construção com menor rank, seu número ou seu indice
+			Construcao = ConstrucoesInstancia.Construcoes[c].NumeroDaConstrucao;
+			IndiceConstrucao = c;
+			// retorn 1 sinalizando que encontrou uma construção
+			return 1;
+		}
 	}
+	// retorna 0 sinalizando que não encontrou uma cosntrução
+	return 0;
 
 }
 
@@ -112,7 +119,7 @@ double BuscaLocal::CalculaMakespanSolucao(){
 
 
 // busca local que se verifica se a demanda pode ser melhor atendida caso se realize o seu atendimento com outro caminhão/veículo
-int BuscaLocal::BuscaLocalTentaRealizarTarefasComOutosVeiculos(int Imprime, int ImprimeEstruturas){
+int BuscaLocal::BuscaLocalTentaRealizarTarefasComOutosVeiculos(int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta,int Imprime, int ImprimeEstruturas){
 
 	// ponteiro para o arquivo que se irá salvar os dados
 	PonteiroArquivo  Arquivo;
@@ -138,12 +145,20 @@ int BuscaLocal::BuscaLocalTentaRealizarTarefasComOutosVeiculos(int Imprime, int 
 	// verifica se atendeu a demanda que será reatendida ou não
 	int Recolocar;
 
+	// realiza o processo de atrazar as demandas quando for inserir uma nova demanda em uma construção
+	int RealizaProcessoDeAtrazarTarefas;
+	RealizaProcessoDeAtrazarTarefas = 1;
+
+
 	// variavel para se parar o programa
 	int ParaPrograma;
 
 	// imprime os dados dos processos de adicionar as tarefas caso for 1, 0 caso vontrario
 	int ImprimeDadosAdicionaTarefa;
 	ImprimeDadosAdicionaTarefa = 0;
+
+	// ordena as cosntruções na ordem em que elas devem ser escolhidas com prioridade
+	ConstrucoesInstancia.OrdenaCosntrucoes( EscolhaConstrucao);
 
 	// faz com que nenhuma construção tenha sido analizada
 	ConstrucoesInstancia.InicializaConstrucoesAnalizadas();
@@ -206,7 +221,7 @@ int BuscaLocal::BuscaLocalTentaRealizarTarefasComOutosVeiculos(int Imprime, int 
 					// limpa o conteudo do vetor que guarda os dados das terefas qeu serão movidas durante o processo de adição das tarefas
 					DadosTarefasMovidasReadicaoDeDemandas.clear();
 					// tenta adicionar a demanda corrente que foi retirada com o veiculo e com a planta correntes
-					if( ConstrucoesInstancia.AdicionaTarefaComVeiculoFixo( 0 , ConstrucoesInstancia.Construcoes[IndiceConstrucaoEscolhida].NumeroDaConstrucao, DemandaRetirar , PlantasInstancia.Plantas[p].NumeroDaPlanta, PlantasInstancia.Plantas[p].VeiculosDaPlanta.Carretas[v].NumeroDaCarreta, DadosTarefasMovidasReadicaoDeDemandas, 1, 0, 1, 1 , PlantasInstancia, ImprimeDadosAdicionaTarefa,"  <<<<< BuscaLocal::BuscaLocalRetiraTarefasUmaConstrucao >>> ") == 1){
+					if( ConstrucoesInstancia.AdicionaTarefaComVeiculoFixo( 0 , ConstrucoesInstancia.Construcoes[IndiceConstrucaoEscolhida].NumeroDaConstrucao, DemandaRetirar , PlantasInstancia.Plantas[p].NumeroDaPlanta, PlantasInstancia.Plantas[p].VeiculosDaPlanta.Carretas[v].NumeroDaCarreta, DadosTarefasMovidasReadicaoDeDemandas, 1, 0, RealizaProcessoDeAtrazarTarefas, EscolhaVeiculo , PlantasInstancia, ImprimeDadosAdicionaTarefa,"  <<<<< BuscaLocal::BuscaLocalRetiraTarefasUmaConstrucao >>> ") == 1){
 
 						if( Imprime == 1){
 							cout << endl << endl << " >+< Adicionou [" << ConstrucaoEscolhida << "-" << DemandaRetirar << "]" << endl;
@@ -228,7 +243,7 @@ int BuscaLocal::BuscaLocalTentaRealizarTarefasComOutosVeiculos(int Imprime, int 
 						// enquanto se consegue recolocar demandas e se tem demandas para se recolocar se continua no while
 						while( Recolocar == 1 && DemandaRecolocar <   ConstrucoesInstancia.Construcoes[IndiceConstrucaoEscolhida].NumeroDemandas){
 							// se tenta recolocar a demanda corrente
-							Recolocar = ConstrucoesInstancia.AdicionaTarefa( 0 , ConstrucoesInstancia.Construcoes[IndiceConstrucaoEscolhida].NumeroDaConstrucao, DemandaRecolocar , DadosTarefasMovidasReadicaoDeDemandas, 1, 0, 1, 1 , PlantasInstancia, ImprimeDadosAdicionaTarefa,"  <<<<< BuscaLocal::BuscaLocalRetiraTarefasUmaConstrucao >>> ");
+							Recolocar = ConstrucoesInstancia.AdicionaTarefa( 0 , ConstrucoesInstancia.Construcoes[IndiceConstrucaoEscolhida].NumeroDaConstrucao, DemandaRecolocar , DadosTarefasMovidasReadicaoDeDemandas, 1, 0, RealizaProcessoDeAtrazarTarefas, EscolhaVeiculo , PlantasInstancia, ImprimeDadosAdicionaTarefa,"  <<<<< BuscaLocal::BuscaLocalRetiraTarefasUmaConstrucao >>> ");
 
 							if( Imprime == 1){
 								cout << endl << endl << " >+< Recoloca [" << ConstrucaoEscolhida << "-" << DemandaRecolocar << "] -> " << Recolocar << endl << endl;
@@ -311,7 +326,7 @@ int BuscaLocal::BuscaLocalTentaRealizarTarefasComOutosVeiculos(int Imprime, int 
 }
 
 // busca local que se verifica caso a ordem de decisão de atendiemnto das demandas de duas construções forem invertidas se irá obter uma melhor solução para o problema
-int BuscaLocal::BuscaLocalMudaOrdemAtendiemntoConstrucoes(int Imprime, int ImprimeEstruturas){
+int BuscaLocal::BuscaLocalMudaOrdemAtendiemntoConstrucoes(int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta,int Imprime, int ImprimeEstruturas){
 
 	// ponteiro para o arquivo que se irá salvar os dados
 	PonteiroArquivo  Arquivo;
@@ -336,10 +351,16 @@ int BuscaLocal::BuscaLocalMudaOrdemAtendiemntoConstrucoes(int Imprime, int Impri
 
 	// variavel que controla se ira imprimir o procedimento de locação de tarefas
 	int ImprimeDadosAdicionaTarefa;
-
 	ImprimeDadosAdicionaTarefa = 0;
 
+	// realiza o processo de atrazar as demandas quando for inserir uma nova demanda em uma construção
+	int RealizaProcessoDeAtrazarTarefas;
+	RealizaProcessoDeAtrazarTarefas = 1;
+
 	int ParaPrograma;
+
+	// ordena as cosntruções na ordem em que elas devem ser escolhidas com prioridade
+	ConstrucoesInstancia.OrdenaCosntrucoes( EscolhaConstrucao);
 
 	// verifica se possui mais de uma construção, caso só setiver uma não faz sentido realizar o procedimento da busca local de troca de ordem de atendiemnto das construções
 	if ( (int) ConstrucoesInstancia.Construcoes.size() > 1){
@@ -394,7 +415,7 @@ int BuscaLocal::BuscaLocalMudaOrdemAtendiemntoConstrucoes(int Imprime, int Impri
 						// enquanto se consegue recolocar demandas e se tem demandas para se recolocar se continua no while
 						while( Recolocar == 1 && DemandaRecolocar <   ConstrucoesInstancia.Construcoes[c2].NumeroDemandas){
 							// se tenta recolocar a demanda corrente
-							Recolocar = ConstrucoesInstancia.AdicionaTarefa( 0 , ConstrucoesInstancia.Construcoes[c2].NumeroDaConstrucao, DemandaRecolocar , DadosTarefasMovidasEtapa2, 1, 0, 1, 1 , PlantasInstancia, ImprimeDadosAdicionaTarefa,"  <<<<< BuscaLocal::BuscaLocalRetiraTarefasUmaConstrucao >>> ");
+							Recolocar = ConstrucoesInstancia.AdicionaTarefa( 0 , ConstrucoesInstancia.Construcoes[c2].NumeroDaConstrucao, DemandaRecolocar , DadosTarefasMovidasEtapa2, 1, 0, RealizaProcessoDeAtrazarTarefas, EscolhaVeiculo , PlantasInstancia, ImprimeDadosAdicionaTarefa,"  <<<<< BuscaLocal::BuscaLocalRetiraTarefasUmaConstrucao >>> ");
 
 							if( Imprime == 1){
 								cout << endl << endl << "			>+< Recoloca [" << ConstrucoesInstancia.Construcoes[c2].NumeroDaConstrucao << "-" << DemandaRecolocar << "] -> " << Recolocar << endl << endl;
@@ -418,7 +439,7 @@ int BuscaLocal::BuscaLocalMudaOrdemAtendiemntoConstrucoes(int Imprime, int Impri
 						// enquanto se consegue recolocar demandas e se tem demandas para se recolocar se continua no while
 						while( Recolocar == 1 && DemandaRecolocar <   ConstrucoesInstancia.Construcoes[c1].NumeroDemandas){
 							// se tenta recolocar a demanda corrente
-							Recolocar = ConstrucoesInstancia.AdicionaTarefa( 0 , ConstrucoesInstancia.Construcoes[c1].NumeroDaConstrucao, DemandaRecolocar , DadosTarefasMovidasEtapa2, 1, 0, 1, 1 , PlantasInstancia, ImprimeDadosAdicionaTarefa,"  <<<<< BuscaLocal::BuscaLocalRetiraTarefasUmaConstrucao >>> ");
+							Recolocar = ConstrucoesInstancia.AdicionaTarefa( 0 , ConstrucoesInstancia.Construcoes[c1].NumeroDaConstrucao, DemandaRecolocar , DadosTarefasMovidasEtapa2, 1, 0, RealizaProcessoDeAtrazarTarefas, EscolhaVeiculo , PlantasInstancia, ImprimeDadosAdicionaTarefa,"  <<<<< BuscaLocal::BuscaLocalRetiraTarefasUmaConstrucao >>> ");
 
 							if( Imprime == 1){
 								cout << endl << endl << "				>+++< Recoloca [" << ConstrucoesInstancia.Construcoes[c1].NumeroDaConstrucao << "-" << DemandaRecolocar << "] -> " << Recolocar << endl << endl;
@@ -479,7 +500,7 @@ int BuscaLocal::BuscaLocalMudaOrdemAtendiemntoConstrucoes(int Imprime, int Impri
 }
 
 
-int BuscaLocal::BuscaLocalTrocaPlantaAtendimento(int Imprime, int ImprimeEstruturas){
+int BuscaLocal::BuscaLocalTrocaPlantaAtendimento(int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta, int Imprime, int ImprimeEstruturas){
 
 	// ponteiro para o arquivo que se irá salvar os dados
 	PonteiroArquivo  Arquivo;
@@ -529,12 +550,18 @@ int BuscaLocal::BuscaLocalTrocaPlantaAtendimento(int Imprime, int ImprimeEstrutu
 	// demanda que será reinserida na etapa dois mas que não possui um veículo do qual ela tem que ser atendida obrigatoriamente
 	int  DemandaNaoAtendidaSemPlantaFixa;
 
+	// realiza o processo de atrazar as demandas quando for inserir uma nova demanda em uma construção
+	int RealizaProcessoDeAtrazarTarefas;
+	RealizaProcessoDeAtrazarTarefas = 1;
+
 	int ParaPrograma;
 
 	// imprime os dados dos processos de adicionar as tarefas caso for 1, 0 caso vontrario
 	int ImprimeDadosAdicionaTarefa;
-
 	ImprimeDadosAdicionaTarefa = 0;
+
+	// ordena as cosntruções na ordem em que elas devem ser escolhidas com prioridade
+	ConstrucoesInstancia.OrdenaCosntrucoes( EscolhaConstrucao);
 
 	// armazena o makespan da solução corrente
 	MakespanAnterior = CalculaMakespanSolucao();
@@ -621,7 +648,7 @@ int BuscaLocal::BuscaLocalTrocaPlantaAtendimento(int Imprime, int ImprimeEstrutu
 // reacrescenta a primeira demanda tirada com uma certa planta que não é a que ela foi atendida na solução inicial
 
 								// tenta alocar a demanda corrente com um certo veiculo, caso se consiga alocar a demanda se entra no if
-								if( ConstrucoesInstancia.AdicionaTarefaComVeiculoFixo( 0 , ConstrucoesInstancia.Construcoes[c1].NumeroDaConstrucao, DemandaNaoAtendida , PlantasInstancia.Plantas[p2].NumeroDaPlanta, PlantasInstancia.Plantas[p2].VeiculosDaPlanta.Carretas[v].NumeroDaCarreta, DadosTarefasMovidasEtapa2, 1, 0, 1, 1 , PlantasInstancia, ImprimeDadosAdicionaTarefa,"  <<<<< BuscaLocal::BuscaLocalTrocaPlantaAtendimento >>> ") == 1){
+								if( ConstrucoesInstancia.AdicionaTarefaComVeiculoFixo( 0 , ConstrucoesInstancia.Construcoes[c1].NumeroDaConstrucao, DemandaNaoAtendida , PlantasInstancia.Plantas[p2].NumeroDaPlanta, PlantasInstancia.Plantas[p2].VeiculosDaPlanta.Carretas[v].NumeroDaCarreta, DadosTarefasMovidasEtapa2, 1, 0, RealizaProcessoDeAtrazarTarefas, EscolhaVeiculo , PlantasInstancia, ImprimeDadosAdicionaTarefa,"  <<<<< BuscaLocal::BuscaLocalTrocaPlantaAtendimento >>> ") == 1){
 									if( Imprime == 1){
 										cout  << endl << "				>+ v +< Readicionou Construcao [" <<ConstrucoesInstancia.Construcoes[c1].NumeroDaConstrucao << "-" << DemandaNaoAtendida << "] com veiculo [" << PlantasInstancia.Plantas[p2].NumeroDaPlanta << "-" << v << "]" << endl ;
 										cin >> ParaPrograma;
@@ -635,7 +662,7 @@ int BuscaLocal::BuscaLocalTrocaPlantaAtendimento(int Imprime, int ImprimeEstrutu
 									// caso se tenha uma construção que ainda possa ter uma demanda atendida e se tenha conseguido atender a ultima demanda analisada, se entra no while. Este processo é realizado até que todas as demnadas tenham sido atendidas ou não se consiga se recolocar alguma demanda que foi desalocada.
 									while( VerificaTodosValoresVetorInt( 1, ConstrucoesInstancia.ConstrucaoPodeSerSuprida) == 0 && ReadicionouDemanda == 1){
 										// se armazena os dados da construção mais proeminente a se ter uma demanda reinserida no momento
-										if( ConstrucoesInstancia.RetornaConstrucaoQuePodeSerAtendidaComMenorIndice( ConstrucaoAtender, IndiceConstrucaoAtender) == 0){
+										if( RetornaConstrucaoQuePodeSerAtendida(  ConstrucaoAtender, IndiceConstrucaoAtender) == 0){
 											cout << endl << endl << " <<<<<<<<<<<<  Problema em encontrar construção  >>>>>>>>>>>>> " << endl << endl;
 										}
 										// se armazena a primeira demanda na cosntrução corrente que terá suas demandas reinseridas
@@ -646,7 +673,7 @@ int BuscaLocal::BuscaLocalTrocaPlantaAtendimento(int Imprime, int ImprimeEstrutu
 										// enquanto todas as demandas da construção corrente não tiverem sido atendidas ou se não consiga atender uma dessas demandas, se continua no while
 										while( DemandaNaoAtendidaSemPlantaFixa < ConstrucoesInstancia.Construcoes[IndiceConstrucaoAtender].NumeroDemandas && ReadicionouDemanda == 1){
 											// tenta readicionar a demanda corrente que foi retirada na etapa 1, sendo que não precisa ser utilizando um veículo especifico
-											ReadicionouDemanda = ConstrucoesInstancia.AdicionaTarefa( 0 , ConstrucoesInstancia.Construcoes[IndiceConstrucaoAtender].NumeroDaConstrucao,   DemandaNaoAtendidaSemPlantaFixa , DadosTarefasMovidasEtapa2, 1, 0, 1, 1 , PlantasInstancia, ImprimeDadosAdicionaTarefa,"  <<<<< BuscaLocal::BuscaLocalTrocaPlantaAtendimento >>> ");
+											ReadicionouDemanda = ConstrucoesInstancia.AdicionaTarefa( 0 , ConstrucoesInstancia.Construcoes[IndiceConstrucaoAtender].NumeroDaConstrucao,   DemandaNaoAtendidaSemPlantaFixa , DadosTarefasMovidasEtapa2, 1, 0, RealizaProcessoDeAtrazarTarefas, EscolhaVeiculo , PlantasInstancia, ImprimeDadosAdicionaTarefa,"  <<<<< BuscaLocal::BuscaLocalTrocaPlantaAtendimento >>> ");
 
 											if( Imprime == 1 && ReadicionouDemanda == 1){
 												cout  << endl << "					>+< Readicionou Construcao [" << ConstrucoesInstancia.Construcoes[IndiceConstrucaoAtender].NumeroDaConstrucao << "-" <<  DemandaNaoAtendidaSemPlantaFixa << "] "<< endl ;
@@ -690,7 +717,7 @@ int BuscaLocal::BuscaLocalTrocaPlantaAtendimento(int Imprime, int ImprimeEstrutu
 						}
 					}
 					// readiciono a demanda que se estava se querendo colocar com um veiculo fixo utilizando o processo normal de se adicionar uma tarefa. *********** -> IMPORTANTE: apesar de se registrar a alocação dessa demanda na estrutura das tarefas movidas na etapa 2, ela não será considerada no processo de retorno para a solução antes da etapa 2 que será realizada em seguida. Pois a estrutura DadosTarefasMovidasEtapa2 é zerada ao se reiniciar a etapa 2. com isso essa demanda será considerada no procediemnto seguinte da etapa 2 como sendo parte da solução inicial fornecida pela etapa 1
-					ReadicionouDemandaProcessoEtapa1 = ConstrucoesInstancia.AdicionaTarefa( 0 , ConstrucoesInstancia.Construcoes[c1].NumeroDaConstrucao,   DemandaNaoAtendida , DadosTarefasMovidasEmUmaConstrucaoEtapa1, 1, 0, 1, 1 , PlantasInstancia, ImprimeDadosAdicionaTarefa,"  <<<<< BuscaLocal::BuscaLocalTrocaPlantaAtendimento >>> ");
+					ReadicionouDemandaProcessoEtapa1 = ConstrucoesInstancia.AdicionaTarefa( 0 , ConstrucoesInstancia.Construcoes[c1].NumeroDaConstrucao,   DemandaNaoAtendida , DadosTarefasMovidasEmUmaConstrucaoEtapa1, 1, 0, RealizaProcessoDeAtrazarTarefas, EscolhaVeiculo , PlantasInstancia, ImprimeDadosAdicionaTarefa,"  <<<<< BuscaLocal::BuscaLocalTrocaPlantaAtendimento >>> ");
 
 					if( Imprime == 1){
 						cout << endl << endl << "     ReadicionouDemandaProcessoEtapa1 [" << ReadicionouDemandaProcessoEtapa1 << "] a demanda [ " << ConstrucoesInstancia.Construcoes[c1].NumeroDaConstrucao << "-" << DemandaNaoAtendida << "]" << endl << endl;

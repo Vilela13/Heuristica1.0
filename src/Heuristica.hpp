@@ -401,7 +401,7 @@ void Heuristica::ExecutaProcedimentoHeuristico1(string NomeInstancia, int Escolh
 				fprintf( Arquivo,"\n\n############################### Procedimento Viabilidade 2 #####################################\n");
 			}
 
-			Solucoes.Solucoes[0].ProcessoViabilizacao2( EscolhaVeiculo, ImprimeViabilizacao, ImprimeSolucao, ImprimeArquivo, Arquivo);
+			Solucoes.Solucoes[0].ProcessoViabilizacao2( EscolhaVeiculo, EscolhaConstrucao, EscolhaPlanta, ImprimeViabilizacao, ImprimeSolucao, ImprimeArquivo, Arquivo);
 
 			if( ImprimeSolucao == 1){
 				cout << endl << endl << "##############################################################################################" << endl << endl;

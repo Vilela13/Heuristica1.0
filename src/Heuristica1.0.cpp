@@ -129,7 +129,7 @@ int main(int argc, char **argv) {
 		 // ordena na ordem do menor número de tarefas para o maior se colocar o valor 1, ordena na ordem do maior número de tarefas para o menor se colocar o valor 2
 		 EscolhaVeiculo = 1;
 		 // modo de escolha da construção, 1 escolhe a construção por meio do RankTempoDemandas, 2 escolhe a construção com mais demandas,
-		 EscolhaConstrucao = 3;
+		 EscolhaConstrucao = 1;
 		 // modo de escolha da planta, 1 é a planta mais proxima, 1 é a planta com menos tarefas, 3 é a planta com mais tarefas
 		 EscolhaPlanta = 1;
 
@@ -153,6 +153,9 @@ int main(int argc, char **argv) {
 			case 2:
 				printf("  -> Veículo com maior número de tarefas antes  \n");
 				break;
+			case 3:
+				printf("  -> Veículo em ordem de sua numeração  \n");
+				break;
 			default:
 				printf("\n\n Probelam ao selecionar a ordenação do veículo \n\n");
 				return 0;
@@ -160,7 +163,7 @@ int main(int argc, char **argv) {
 		}
 
 		// escreve o tipo de escolha do cosntrução
-		switch (EscolhaVeiculo) {
+		switch (EscolhaConstrucao) {
 			case 1:
 				printf("  -> Construção com menor Rank (Janela de tempo / Deamanda )   \n");
 				break;
@@ -177,7 +180,7 @@ int main(int argc, char **argv) {
 		}
 
 		// escreve o tipo de escolha do planta
-		switch (EscolhaVeiculo) {
+		switch (EscolhaPlanta) {
 			case 1:
 				printf("  -> Planta mais proxima da cosntrução \n");
 				break;

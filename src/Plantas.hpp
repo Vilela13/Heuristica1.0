@@ -370,6 +370,11 @@ bool DecideQualPlantaMaisTarefa(Planta p1,Planta p2) {
 	}
 }
 
+// Gerador Aleatorico Planta
+int GeradorAleatoricoPlanta (int i) {
+	return rand()%i;
+}
+
 // #################################################################
 // #################################################################
 // #################################################################
@@ -830,7 +835,7 @@ void ConjuntoPlantas::OrdenaPlantas( int EscolhaPlanta){
 		sort(Plantas.begin(), Plantas.end(), DecideQualPlantaMenosTarefa);
 
 		if(Imprime == 1){
-			cout << "    construções ordenadas" << endl ;
+			cout << "    Planta ordenadas" << endl ;
 			for( int p = 0; p < (int) Plantas.size(); p++){
 				cout << " planta [" << Plantas[p].NumeroDaPlanta << "]" << endl;
 
@@ -844,7 +849,7 @@ void ConjuntoPlantas::OrdenaPlantas( int EscolhaPlanta){
 		sort(Plantas.begin(), Plantas.end(), DecideQualPlantaMaisTarefa);
 
 		if(Imprime == 1){
-			cout << "    construções ordenadas" << endl ;
+			cout << "    Planta ordenadas" << endl ;
 			for( int p = 0; p < (int) Plantas.size(); p++){
 				cout << " planta [" << Plantas[p].NumeroDaPlanta << "]" << endl;
 
@@ -853,6 +858,18 @@ void ConjuntoPlantas::OrdenaPlantas( int EscolhaPlanta){
 		}
 	}
 
+	if( EscolhaPlanta == 4){
+		random_shuffle (Plantas.begin(), Plantas.end(),  GeradorAleatoricoPlanta);
+
+		if(Imprime == 1){
+			cout << "    Planta ordenadas" << endl ;
+			for( int p = 0; p < (int) Plantas.size(); p++){
+				cout << " planta [" << Plantas[p].NumeroDaPlanta << "]" << endl;
+
+			}
+			cin >> Para;
+		}
+	}
 
 
 }

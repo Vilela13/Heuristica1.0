@@ -290,7 +290,6 @@ int Construcao::VerificaDisponibilidade( double InicioPossivelAlocacao, double F
 // Aloca uma demanda na cosntrução apartir de dados
 int Construcao::AlocaAtividade(double HoraInicio, double HoraFinal, int Carreta, int NumPlanta,  int Situacao, int StatusRemocao, ConjuntoPlantas& Plantas){
 
-
 // Verifica se é possivel colocar uma tarefa nesta construção
 	if( StatusAtendimento == NumeroDemandas){
 		cout << endl << endl << "  <<<<<<<<<<<<<  Erro! construcao [" << NumeroDaConstrucao << "] ->Construcao::AlocaAtividade >>>>>>>>>> " << endl << endl;
@@ -1192,6 +1191,18 @@ void Construcao::EncontraPlanta(  int& NumPlantaAnalisando, int EscolhaPlanta, C
 		}
 	}
 
+	if( EscolhaPlanta == 4){
+		Plantas.OrdenaPlantas( EscolhaPlanta);
+		// percorre todas as plantas
+		for( int p = 0; p < (int) Plantas.Plantas.size(); p++){
+			if( Plantas.PlantasAnalizadas[p] == 0){
+				// passa o numero da planta escolhida
+				NumPlantaAnalisando = p;
+				return;
+			}
+		}
+	}
+
 		cout << endl << endl << endl << "  ************* Probelma em encontrar planta *************" << endl << endl << endl;
 
 }
@@ -1225,7 +1236,7 @@ int Construcao::AlocaAtividadeComHorarioFinalAtendimento( int NumDemanda, double
 			// encontra a planta mais proxma da cosntrução e que ainda não foi atendida
 			EncontraPlanta( NumPlantaAnalisando, EscolhaPlanta, Plantas, "   &&&&&&&&&&&&& Problema em fornecer valor de  NumPlantaAnalisando em adiciona tarefa  ->Construcao::AlocaAtividadeComHorarioFinalAtendimento( &&&&&&&&&&&&& ");
 			// ordena as carretas da planta de acordo com as tarefas realizadas
-			Plantas.Plantas[NumPlantaAnalisando].VeiculosDaPlanta.OrdenaCarretasPorNumeroDeTarefasRealizadas(EscolhaVeiculo);
+			Plantas.Plantas[NumPlantaAnalisando].VeiculosDaPlanta.OrdenaCarretas(EscolhaVeiculo);
 			// percorre por todos os veiculos da planta
 			for( int v = 0; v < Plantas.Plantas[NumPlantaAnalisando].NumeroVeiculos; v++){
 				// atualiza o horario inicial que a planta pode atender a demanda
@@ -1617,6 +1628,11 @@ bool DecideQualContrucaoTemMenorInicio (Construcao c1,Construcao c2) {
 			return ( c1.NumeroDemandas > c2.NumeroDemandas);
 		}
 	}
+}
+
+// Gerador Aleatorico Construcao
+int GeradorAleatoricoConstrucao (int i) {
+	return rand()%i;
 }
 
 // #################################################################
@@ -2352,6 +2368,18 @@ void ConjuntoConstrucoes::EncontraPlanta( int c, int& NumPlantaAnalisando,int Es
 		}
 	}
 
+	if( EscolhaPlanta == 4){
+		PlantasInstancia.OrdenaPlantas( EscolhaPlanta);
+		// percorre todas as plantas
+		for( int p = 0; p < (int) PlantasInstancia.Plantas.size(); p++){
+			if( PlantasInstancia.PlantasAnalizadas[p] == 0){
+				// passa o numero da planta escolhida
+				NumPlantaAnalisando = p;
+				return;
+			}
+		}
+	}
+
 	cout << endl << endl << endl << "  ************* Probelma em encontrar planta *************" << endl << endl << endl;
 
 }
@@ -2412,7 +2440,7 @@ int ConjuntoConstrucoes::AdicionaTarefa( int VerificaExistencia, int Construcao,
 				// encontra a planta mais perto d aconstrução
 				EncontraPlanta(c,  p , EscolhaPlanta, PlantasInstancia, "   &&&&&&&&&&&&& Problema em fornecer valor de   p  em adiciona tarefa  ->ConjuntoConstrucoes::AdicionaTarefa &&&&&&&&&&&&& ");
 				// ordena as britadeiras
-				PlantasInstancia.Plantas[ p ].VeiculosDaPlanta.OrdenaCarretasPorNumeroDeTarefasRealizadas(EscolhaVeiculo);
+				PlantasInstancia.Plantas[ p ].VeiculosDaPlanta.OrdenaCarretas(EscolhaVeiculo);
 				// percorre todos os veículos da planta
 				for( int v = 0; v < PlantasInstancia.Plantas[ p ].NumeroVeiculos; v++){
 					// inicializa o tempo inicio que a planta corrente ira começar a analise se pode atender a demanda corrente, caso
@@ -2820,6 +2848,21 @@ void ConjuntoConstrucoes::OrdenaCosntrucoes( int EscolhaConstrucao){
 			cin >> Para;
 		}
 	}
+
+	if( EscolhaConstrucao == 4){
+		// Desordena o vetor de construções
+		random_shuffle ( Construcoes.begin(), Construcoes.end(),GeradorAleatoricoConstrucao);
+
+		if(Imprime == 1){
+			cout << "    construções ordenadas" << endl ;
+			for( int c = 0; c < NumeroConstrucoes; c++){
+				cout << " construcao [" << Construcoes[c].NumeroDaConstrucao << "]  tempo minimo [" << Construcoes[c].TempoMinimoDeFuncionamento << "]tempo maximo [" << Construcoes[c].TempoMaximoDeFuncionamento << "]  demandas [" << Construcoes[c].NumeroDemandas << "] "<< endl;
+
+			}
+			cin >> Para;
+		}
+	}
+
 
 
 }

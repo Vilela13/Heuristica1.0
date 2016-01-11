@@ -32,6 +32,9 @@
 
 #include <dirent.h> 	// Manipulação de arquivos em C (meu caso, ver se arquivo existe)
 
+#include <algorithm>	// Coptem a função Sort() e random_shuffle
+
+
 //#include <random>		// Biblioteca para gerar numeros segundo probabilidades
 
 /* Outra maneira de criar arquivos

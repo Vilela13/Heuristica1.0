@@ -255,6 +255,12 @@ Carreta::~Carreta(){						// Destruidora
 
 }
 
+// #################################################################
+// #################################################################
+// #################################################################
+// #################################################################
+// #################################################################
+
 // decide qaul carreta tem menos tarefas realizadas
 bool DecideQualCarretaTemMenosTarefasRealizadas ( Carreta c1, Carreta c2 ){
 	return ( c1.NumeroDeDemandasAntendidas < c2.NumeroDeDemandasAntendidas );
@@ -270,6 +276,11 @@ bool DecideCarretaAnterior ( Carreta c1, Carreta c2 ){
 	return ( c1.NumeroDaCarreta < c2.NumeroDaCarreta );
 }
 
+// Gerador Aleatorico Veiculo
+int GeradorAleatoricoVeiculo (int i) {
+	return rand()%i;
+}
+
 // #################################################################
 // #################################################################
 // #################################################################
@@ -283,7 +294,7 @@ public:
 	vector< Carreta > Carretas;
 
 	void IniciaConjuntoCarretas(int NumeroCaminhoes, int NumeroDaPlanta);				// inicia os dados e as estruturas dos veículos
-	void OrdenaCarretasPorNumeroDeTarefasRealizadas(int TipoOrdenacao);					// ordena na ordem do menor número de tarefas para o maior se colocar o valor 1, ordena na ordem do maior número de tarefas para o menor se colocar o valor 2
+	void OrdenaCarretas(int EscolhaVeiculo);					// ordena na ordem do menor número de tarefas para o maior se colocar o valor 1, ordena na ordem do maior número de tarefas para o menor se colocar o valor 2
 	int DeletaTarefa(  int NumeroCaminhao, double HoraInicio, double HoraFinal, int NumContrucao, int NumDemanda);		// deleta tarefa realizada por um veiculo
 
 	int AlocaInidiceVeiculo( int NumCarretaUtilizada, int &v);		// aloca o inidice do veiculo crrespondente ao numero do caminhão
@@ -318,12 +329,18 @@ void ConjuntoCarretas::IniciaConjuntoCarretas(int NumeroCaminhoes, int NumeroDaP
 }
 
 // ordena na ordem do menor número de tarefas para o maior se colocar o valor 1, ordena na ordem do maior número de tarefas para o menor se colocar o valor 2
-void ConjuntoCarretas::OrdenaCarretasPorNumeroDeTarefasRealizadas(int TipoOrdenacao){
-	if( TipoOrdenacao == 1){
+void ConjuntoCarretas::OrdenaCarretas(int EscolhaVeiculo){
+	if( EscolhaVeiculo == 1){
 		sort (Carretas.begin(), Carretas.end(), DecideQualCarretaTemMenosTarefasRealizadas);
 	}
-	if( TipoOrdenacao == 2){
+	if( EscolhaVeiculo == 2){
 			sort (Carretas.begin(), Carretas.end(),DecideQualCarretaTemMaisTarefasRealizadas);
+	}
+	if( EscolhaVeiculo == 3){
+			sort (Carretas.begin(), Carretas.end(),DecideCarretaAnterior);
+	}
+	if( EscolhaVeiculo == 4){
+		random_shuffle (Carretas.begin(), Carretas.end(),GeradorAleatoricoVeiculo);
 	}
 }
 

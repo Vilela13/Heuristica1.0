@@ -162,6 +162,13 @@ void Heuristica::ExecutaProcedimentoHeuristico1(string NomeInstancia, int Escolh
 	int VerificaViabilidade;
 	VerificaViabilidade = 1;
 
+	double semente;
+	semente = 13;
+
+	srand( semente );
+
+
+
 	// fornece o caminnho onde será criado o arquivo
 	Caminho =  "./Exec/";
 	// acrescenta o nome do arquivo ao caminho

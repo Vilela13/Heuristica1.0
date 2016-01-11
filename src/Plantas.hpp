@@ -336,6 +336,46 @@ Planta::~Planta(){
 // #################################################################
 // #################################################################
 
+// função que retorna se p1 tem menos tarefas que que p2
+bool DecideQualPlantaMenosTarefa(Planta p1,Planta p2) {
+	if( (int) p1.Carregamentos.size() != (int) p2.Carregamentos.size() ){
+		return ( (int) p1.Carregamentos.size() < (int) p2.Carregamentos.size() );
+	}else{
+		if( p1.TempoMaximoDeFuncionamento - p1.TempoMinimoDeFuncionamento !=  p2.TempoMaximoDeFuncionamento - p2.TempoMinimoDeFuncionamento){
+			return ( p1.TempoMaximoDeFuncionamento - p1.TempoMinimoDeFuncionamento >  p2.TempoMaximoDeFuncionamento - p2.TempoMinimoDeFuncionamento);
+		}else{
+			if ( p1.TempoMinimoDeFuncionamento !=  p1.TempoMinimoDeFuncionamento ){
+				return ( p1.TempoMinimoDeFuncionamento <  p1.TempoMinimoDeFuncionamento );
+			}else{
+				return ( p1.NumeroVeiculos > p2.NumeroVeiculos);
+			}
+		}
+	}
+}
+
+// função que retorna se p1 tem mais tarefas que que p2
+bool DecideQualPlantaMaisTarefa(Planta p1,Planta p2) {
+	if( (int) p1.Carregamentos.size() != (int) p2.Carregamentos.size() ){
+		return ( (int) p1.Carregamentos.size() > (int) p2.Carregamentos.size() );
+	}else{
+		if( p1.TempoMaximoDeFuncionamento - p1.TempoMinimoDeFuncionamento !=  p2.TempoMaximoDeFuncionamento - p2.TempoMinimoDeFuncionamento){
+			return ( p1.TempoMaximoDeFuncionamento - p1.TempoMinimoDeFuncionamento >  p2.TempoMaximoDeFuncionamento - p2.TempoMinimoDeFuncionamento);
+		}else{
+			if ( p1.TempoMinimoDeFuncionamento !=  p1.TempoMinimoDeFuncionamento ){
+				return ( p1.TempoMinimoDeFuncionamento <  p1.TempoMinimoDeFuncionamento );
+			}else{
+				return ( p1.NumeroVeiculos > p2.NumeroVeiculos);
+			}
+		}
+	}
+}
+
+// #################################################################
+// #################################################################
+// #################################################################
+// #################################################################
+// #################################################################
+
 class ConjuntoPlantas{
 
 public:
@@ -369,6 +409,8 @@ public:
 	int RetornaDadosDemandaAtendida( int Construcao, int Demanda, double &HorarioInicio, double &HorarioFinal, int &planta, int &Carreta, double &HorarioInicioCarreta, double &HorarioFinalCarreta);				// Retorna os dados do carregaemnto de uma certa demanda passada na função
 	int VerificaIntegridadeDeCarregamentosDasPlantas(int imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo);					// verifica a integridade dos carregamentos realizados pelas plantas
 	int VerificaIntegridadeDeDeslocaemntosDosVeiculosDasPlantas(int imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo);		// verifica a integridade dos deslocamentos realizados pelos veiculos das plantas
+
+	void OrdenaPlantas( int EscolhaPlanta);
 
 	~ConjuntoPlantas();		// destruidora
 };
@@ -772,6 +814,47 @@ int ConjuntoPlantas::VerificaIntegridadeDeDeslocaemntosDosVeiculosDasPlantas(int
 	}
 	// retorna se existe algum deslocamento que não esta integro ao retorna 0, ou 1 caso contrario
 	return integro;
+}
+
+void ConjuntoPlantas::OrdenaPlantas( int EscolhaPlanta){
+	// variavel para parar o programa
+	int Para;
+
+	// variavel para imprimir a ordenação
+	int Imprime;
+	// 0 se não for imprimir, 1 se for imprimir
+	Imprime = 0;
+
+	if( EscolhaPlanta == 2){
+		// ordena baseado no menor rank
+		sort(Plantas.begin(), Plantas.end(), DecideQualPlantaMenosTarefa);
+
+		if(Imprime == 1){
+			cout << "    construções ordenadas" << endl ;
+			for( int p = 0; p < (int) Plantas.size(); p++){
+				cout << " planta [" << Plantas[p].NumeroDaPlanta << "]" << endl;
+
+			}
+			cin >> Para;
+		}
+	}
+
+	if( EscolhaPlanta == 3){
+		// ordena baseado no menor rank
+		sort(Plantas.begin(), Plantas.end(), DecideQualPlantaMaisTarefa);
+
+		if(Imprime == 1){
+			cout << "    construções ordenadas" << endl ;
+			for( int p = 0; p < (int) Plantas.size(); p++){
+				cout << " planta [" << Plantas[p].NumeroDaPlanta << "]" << endl;
+
+			}
+			cin >> Para;
+		}
+	}
+
+
+
 }
 
 // destruidora

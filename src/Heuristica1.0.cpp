@@ -130,7 +130,7 @@ int main(int argc, char **argv) {
 		 EscolhaVeiculo = 1;
 		 // modo de escolha da construção, 1 escolhe a construção por meio do RankTempoDemandas, 2 escolhe a construção com mais demandas,
 		 EscolhaConstrucao = 3;
-
+		 // modo de escolha da planta, 1 é a planta mais proxima, 1 é a planta com menos tarefas, 3 é a planta com mais tarefas
 		 EscolhaPlanta = 1;
 
 		 // coleta a data e a hora
@@ -179,7 +179,13 @@ int main(int argc, char **argv) {
 		// escreve o tipo de escolha do planta
 		switch (EscolhaVeiculo) {
 			case 1:
-				printf("  -> Planta com menor Mais Proxia \n");
+				printf("  -> Planta mais proxima da cosntrução \n");
+				break;
+			case 2:
+				printf("  -> Planta com menor número de tarefas \n");
+				break;
+			case 3:
+				printf("  -> Planta com maior número de tarefas \n");
 				break;
 			default:
 				printf("\n\n Probelam ao selecionar a ordenação da planta \n\n");

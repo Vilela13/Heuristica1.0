@@ -145,7 +145,7 @@ int Procedimento1::Executa(  int EscolhaVeiculo, int EscolhaConstrucao, int Esco
 				Demanda = ConstrucoesInstancia.Construcoes[IndiceConstrucaoVaiSerSuprida].StatusAtendimento;
 				PermiteAtendimentoDemanda = 0;
 
-				PermiteAtendimentoDemanda = ConstrucoesInstancia.AdicionaTarefa( 0, ConstrucaoVaiSerSuprida, Demanda , DadosTarefasMovidasAuxiliar, 1, 0, RealizaProcessoDeAtrazarTarefas, EscolhaVeiculo , PlantasInstancia, imprime, " -> Procedimento1::Executa ");
+				PermiteAtendimentoDemanda = ConstrucoesInstancia.AdicionaTarefa( 0, ConstrucaoVaiSerSuprida, Demanda , DadosTarefasMovidasAuxiliar, 1, 0, RealizaProcessoDeAtrazarTarefas, EscolhaVeiculo , EscolhaPlanta, PlantasInstancia, imprime, " -> Procedimento1::Executa ");
 
 				if ( imprime == 1){
 					ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia, 0, ImprimeSolucao,ImprimeArquivo,Arquivo);

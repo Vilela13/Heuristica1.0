@@ -573,7 +573,6 @@ int BuscaLocal::BuscaLocalTrocaPlantaAtendimento(int EscolhaVeiculo, int Escolha
 		for( int p1 = 0; p1 < (int) PlantasInstancia.Plantas.size(); p1++){
 			// limpa o conteudo do vetor que guarda os dados da tarefas movidas durante a etapa 1
 			DadosTarefasMovidasEtapa1.clear();
-			// percorre todas as construções
 			if( Imprime == 1){
 				cout << endl << endl << "	Inicio Etapa 1 -> Planta [" << PlantasInstancia.Plantas[p1].NumeroDaPlanta << "]" << endl << endl;
 				cin >> ParaPrograma;

@@ -121,6 +121,50 @@ double BuscaLocal::CalculaMakespanSolucao(){
 // busca local que se verifica se a demanda pode ser melhor atendida caso se realize o seu atendimento com outro caminhão/veículo
 int BuscaLocal::BuscaLocalTentaRealizarTarefasComOutosVeiculos(int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta,int Imprime, int ImprimeEstruturas){
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	CalculaMakespanSolucao();
+
+	int ativa;
+	ativa = 0;
+
+	if( 115.879267 < Makespan && Makespan < 115.879269){
+		printf( "\n\n         Entrei busaca Makespan [%f] \n\n", Makespan);
+		ativa = 1;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	// ponteiro para o arquivo que se irá salvar os dados
 	PonteiroArquivo  Arquivo;
 	// variavel que controla se irá escrever os dados em um aruivo, é inicializada com 0
@@ -220,8 +264,10 @@ int BuscaLocal::BuscaLocalTentaRealizarTarefasComOutosVeiculos(int EscolhaVeicul
 					}
 					// limpa o conteudo do vetor que guarda os dados das terefas qeu serão movidas durante o processo de adição das tarefas
 					DadosTarefasMovidasReadicaoDeDemandas.clear();
+
 					// tenta adicionar a demanda corrente que foi retirada com o veiculo e com a planta correntes
 					if( ConstrucoesInstancia.AdicionaTarefaComVeiculoFixo( 0 , ConstrucoesInstancia.Construcoes[IndiceConstrucaoEscolhida].NumeroDaConstrucao, DemandaRetirar , PlantasInstancia.Plantas[p].NumeroDaPlanta, PlantasInstancia.Plantas[p].VeiculosDaPlanta.Carretas[v].NumeroDaCarreta, DadosTarefasMovidasReadicaoDeDemandas, 1, 0, RealizaProcessoDeAtrazarTarefas,  EscolhaVeiculo, EscolhaPlanta, PlantasInstancia, ImprimeDadosAdicionaTarefa,"  <<<<< BuscaLocal::BuscaLocalRetiraTarefasUmaConstrucao >>> ") == 1){
+
 
 						if( Imprime == 1){
 							cout << endl << endl << " >+< Adicionou [" << ConstrucaoEscolhida << "-" << DemandaRetirar << "]" << endl;
@@ -242,8 +288,27 @@ int BuscaLocal::BuscaLocalTentaRealizarTarefasComOutosVeiculos(int EscolhaVeicul
 						Recolocar = 1;
 						// enquanto se consegue recolocar demandas e se tem demandas para se recolocar se continua no while
 						while( Recolocar == 1 && DemandaRecolocar <   ConstrucoesInstancia.Construcoes[IndiceConstrucaoEscolhida].NumeroDemandas){
+
+
+
+
+
+
+
+
+							if( ativa == 1 && ConstrucoesInstancia.Construcoes[IndiceConstrucaoEscolhida].NumeroDaConstrucao == 6 && DemandaRecolocar == 3 ){
+								ImprimeDadosAdicionaTarefa = 1;
+							}
+
 							// se tenta recolocar a demanda corrente
 							Recolocar = ConstrucoesInstancia.AdicionaTarefa( 0 , ConstrucoesInstancia.Construcoes[IndiceConstrucaoEscolhida].NumeroDaConstrucao, DemandaRecolocar , DadosTarefasMovidasReadicaoDeDemandas, 1, 0, RealizaProcessoDeAtrazarTarefas, EscolhaVeiculo , EscolhaPlanta, PlantasInstancia, ImprimeDadosAdicionaTarefa,"  <<<<< BuscaLocal::BuscaLocalRetiraTarefasUmaConstrucao >>> ");
+
+
+							if( ativa == 1 && ConstrucoesInstancia.Construcoes[IndiceConstrucaoEscolhida].NumeroDaConstrucao == 6 && DemandaRecolocar == 3 ){
+								ImprimeDadosAdicionaTarefa = 0;
+							}
+
+
 
 							if( Imprime == 1){
 								cout << endl << endl << " >+< Recoloca [" << ConstrucaoEscolhida << "-" << DemandaRecolocar << "] -> " << Recolocar << endl << endl;
@@ -293,6 +358,9 @@ int BuscaLocal::BuscaLocalTentaRealizarTarefasComOutosVeiculos(int EscolhaVeicul
 
 						}
 					}
+
+
+
 				}
 			}
 			// se retorna a solução inicial

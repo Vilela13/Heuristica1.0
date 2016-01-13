@@ -430,7 +430,7 @@ void ConjuntoPlantas::InicializaPlantasAnalizadas(){
 	// inicia estrutura de plantas
 	PlantasAnalizadas.resize(Plantas.size());
 	// percorre todas as plantas
-	for( unsigned  int p = 0; p < Plantas.size(); p++){
+	for( int p = 0; p < (int) Plantas.size(); p++){
 		// faz a planta corrente não ter sido analizada
 		PlantasAnalizadas[p] = 0;
 	}
@@ -439,7 +439,7 @@ void ConjuntoPlantas::InicializaPlantasAnalizadas(){
 // Verifica se já analisou todas as plantas
 int ConjuntoPlantas::AnalizouTodasPLanats(){
 	// percorre todas as plantas
-	for ( unsigned  int p = 0; p < Plantas.size(); p++){
+	for ( int p = 0; p < (int) Plantas.size(); p++){
 		// verifica se a planta corrente não foi analizada
 		if( PlantasAnalizadas[p] == 0){
 			// retorna 0, pois ainda tem planta a analizar

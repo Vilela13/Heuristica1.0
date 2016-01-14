@@ -310,7 +310,7 @@ void Heuristica::ExecutaProcedimentoHeuristico1(string NomeInstancia, int Escolh
 
 
 	if(Solucoes.Solucoes[0].ConstrucoesInstancia.NivelDeInviabilidade == 0){
-		printf("         %.4f \t", Solucoes.Solucoes[0].Makespan);
+		printf("         %f \t", Solucoes.Solucoes[0].Makespan);
 	}else{
 		printf("        ------ \t");
 	}
@@ -384,7 +384,7 @@ void Heuristica::ExecutaProcedimentoHeuristico1(string NomeInstancia, int Escolh
 		Solucoes.Imprime(ImprimePlanta, ImprimeConstrucao, IntervalosRespeitadosConstrucaoes, ImprimeSolucao, ImprimeArquivo, Arquivo);
 
 		if( Solucoes.Solucoes[0].ConstrucoesInstancia.NivelDeInviabilidade == 0){
-			printf(" %.4f \t   ------ \t", Solucoes.Solucoes[0].Makespan);
+			printf(" %f \t   ------ \t", Solucoes.Solucoes[0].Makespan);
 		}else{
 			printf(" ------ \t");
 		}
@@ -439,7 +439,7 @@ void Heuristica::ExecutaProcedimentoHeuristico1(string NomeInstancia, int Escolh
 
 
 			if( Solucoes.Solucoes[0].ConstrucoesInstancia.NivelDeInviabilidade == 0){
-				printf(" %.4f \t", Solucoes.Solucoes[0].Makespan);
+				printf(" %f \t", Solucoes.Solucoes[0].Makespan);
 			}else{
 				printf(" ------ \t");
 			}
@@ -470,7 +470,7 @@ void Heuristica::ExecutaProcedimentoHeuristico1(string NomeInstancia, int Escolh
 
 		Solucoes.CalculaMakespanSolucoes();
 		if( Solucoes.Solucoes[0].ConstrucoesInstancia.NivelDeInviabilidade == 0){
-			printf(" %.4f \t", Solucoes.Solucoes[0].Makespan);
+			printf(" %f \t", Solucoes.Solucoes[0].Makespan);
 		}
 
 		if( ImprimeSolucao == 1){
@@ -494,7 +494,7 @@ void Heuristica::ExecutaProcedimentoHeuristico1(string NomeInstancia, int Escolh
 
 		Solucoes.CalculaMakespanSolucoes();
 		if( Solucoes.Solucoes[0].ConstrucoesInstancia.NivelDeInviabilidade == 0){
-			printf(" %.4f \t", Solucoes.Solucoes[0].Makespan);
+			printf(" %f \t", Solucoes.Solucoes[0].Makespan);
 		}
 
 		if( ImprimeSolucao == 1){
@@ -517,7 +517,7 @@ void Heuristica::ExecutaProcedimentoHeuristico1(string NomeInstancia, int Escolh
 
 		Solucoes.CalculaMakespanSolucoes();
 		if( Solucoes.Solucoes[0].ConstrucoesInstancia.NivelDeInviabilidade == 0){
-			printf(" %.4f ", Solucoes.Solucoes[0].Makespan);
+			printf(" %f ", Solucoes.Solucoes[0].Makespan);
 		}
 
 	}else{

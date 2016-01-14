@@ -140,10 +140,8 @@ int BuscaLocal::BuscaLocalTentaRealizarTarefasComOutosVeiculos(int EscolhaVeicul
 	int ativa;
 	ativa = 0;
 
-	if( 115.879267 < Makespan && Makespan < 115.879269){
-		printf( "\n\n         Entrei busaca Makespan [%f] \n\n", Makespan);
-		ativa = 1;
-	}
+
+
 
 
 

@@ -1037,7 +1037,7 @@ int Construcao::AtrazaDemandasParaAtenderMaster( int NumDemanda, double HoraFimA
 		if( SituacaoAlocacao == 1){
 
 			if( imprime == 1){
-				cout << endl << endl << " Tenta adicionar a demanda  [" << NumeroDaConstrucao << "-" << NumDemanda << "] com horario final (" << HoraFimAtendimento << ")" << endl << endl;
+				cout << endl << endl << " while -> Tenta adicionar a demanda  [" << NumeroDaConstrucao << "-" << NumDemanda << "] com horario final (" << HoraFimAtendimento << ")" << endl << endl;
 			}
 
 			// verifica se pode atender a demanda corrente
@@ -1137,7 +1137,7 @@ void Construcao::AtrazaDemandasParaAtenderRecursao( int NumDemanda, double HoraF
 		cout << "DadosTarefasMovidasAuxiliar" << endl;
 		ImprimeVetorDadosTarefa( DadosTarefasMovidasAuxiliar);
 
-		cout << endl << endl << "        ->->->->->->->-> Atraza Demandas Para Atender  Demanda [" << NumeroDaConstrucao << "-" << NumDemanda << "] - A demanda [" << NumeroDaConstrucao << "-" << NumDemanda -1 << "] tem que terminar de ser atendida as " << HoraFimAtendimento << endl << endl;
+		cout << endl << endl << "        ->->->->->->->-> Atraza Demandas Para Atender  Demanda [" << NumeroDaConstrucao << "-" << NumDemanda << "] - Deleta a demanda [" << NumeroDaConstrucao << "-" << NumDemanda -1 << "] tem que terminar de ser atendida as " << HoraFimAtendimento << endl << endl;
 	}
 	// armazena a situação demanda e remoção antes de deletar a demanda
 	SituacaoDemandaAux = SituacaoDemanda[NumDemanda-1];
@@ -1175,7 +1175,16 @@ void Construcao::AtrazaDemandasParaAtenderRecursao( int NumDemanda, double HoraF
 	// só entra para ver se vai no loop caso a demanda corrente no novo loop ( NumDemanda-1) for maior que 0, pois só se for maior que zero ela tera uma tarefa anterior para ser deslocada no procedimento AlocaAtendimentoComHorarioInicio
 			if( NumDemanda - 1 > 0){
 				// só entra no loop caso se puder atender a tarefa ( NumDemanda-1) caso se atrazar o atendiment de demandas anteriores
+				if( imprime == 1){
+					cout << endl << endl << "             While Entra recursão da demanda [" << NumDemanda - 1 << "]" << endl << endl;
+				}
+
 				while( SituacaoAlocacao == -2  ){
+
+
+
+
+
 					// chama a função recursivamente para tentar atrazar a demanda que vem antes da demanda corrente. Isto é para possibilitar colocar a demanda corrente respeitando o tempo para atender a demanda após a demanda corrente
 					AtrazaDemandasParaAtenderRecursao( NumDemanda - 1, HoraFimAtendimento,  DadosTarefasMovidasAuxiliar,Plantas, SituacaoAlocacao,  EscolhaVeiculo,  EscolhaPlanta, imprime, frase);
 
@@ -1192,6 +1201,13 @@ void Construcao::AtrazaDemandasParaAtenderRecursao( int NumDemanda, double HoraF
 						HoraFimAtendimento = NovaHoraFimAtendimento;
 					}
 				}
+
+
+				if( imprime == 1){
+					cout << endl << endl << "             While sai recursão da demanda [" << NumDemanda - 1 << "] SituacaoAlocacao [" << SituacaoAlocacao << "]" << endl << endl;
+				}
+
+
 			}
 
 
@@ -1649,10 +1665,16 @@ int Construcao::AtrazaDemandasParaAtenderMasterComVeiculoFixo( int NumDemanda, i
 
 		// tenta atrazar as demandas anteriores para possibilitar o atendimento da demand corrente
 		AtrazaDemandasParaAtenderRecursao( NumDemanda, HoraFimAtendimento,  DadosTarefasMovidasAuxiliar,  Plantas, SituacaoAlocacao,EscolhaVeiculo, EscolhaPlanta,imprime, frase);
-		// verifica se pode atender a demanda corrente
-		SituacaoAlocacao = AlocaAtividadeComHorarioFinalAtendimentoComVeiculoFixo( NumDemanda, NumPlanta, NumCarreta, HoraFimAtendimento, NovaHoraFimAtendimento, DadosTarefasMovidasAuxiliar, SituacaoDemanda, StatusRemocao, Plantas, EscolhaVeiculo,  EscolhaPlanta,frase);
-		// se atualiza a hora que se tem que atender a tarefa anterior a tarefa corrente que se quer alocar
-		HoraFimAtendimento = NovaHoraFimAtendimento;
+
+		if( SituacaoAlocacao == 1){
+
+
+			// verifica se pode atender a demanda corrente
+			SituacaoAlocacao = AlocaAtividadeComHorarioFinalAtendimentoComVeiculoFixo( NumDemanda, NumPlanta, NumCarreta, HoraFimAtendimento, NovaHoraFimAtendimento, DadosTarefasMovidasAuxiliar, SituacaoDemanda, StatusRemocao, Plantas, EscolhaVeiculo,  EscolhaPlanta,frase);
+			// se atualiza a hora que se tem que atender a tarefa anterior a tarefa corrente que se quer alocar
+			HoraFimAtendimento = NovaHoraFimAtendimento;
+
+		}
 	}
 
 	if( imprime == 1){
@@ -2660,6 +2682,12 @@ int ConjuntoConstrucoes::AdicionaTarefa( int VerificaExistencia, int Construcao,
 				if( imprime == 1){
 					cout << endl << endl << "      Função que atraza demandas - horario que pode atender construção = << " << PlantasInstancia.RetornaMenorHorarioQueConstrucaoPodeReceberDemanda() << ">> " << endl << endl;
 				}
+
+
+
+
+
+
 				// função que realiza o atraso das tarefas para atender uma demanda anterior, caso cosnseguir alocar entra no if
 				if ( Construcoes[c].AtrazaDemandasParaAtenderMaster( Demanda, PlantasInstancia.RetornaMenorHorarioQueConstrucaoPodeReceberDemanda() - Construcoes[c].TempoMaximoEntreDescargas  + IntervaloDeTempo,DadosTarefasMovidasAuxiliar, SituacaoDemanda, SituacaoRemocao, PlantasInstancia, SituacaoAlocacao, EscolhaVeiculo, EscolhaPlanta, imprime, frase) == 1 ){
 

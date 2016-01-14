@@ -296,16 +296,22 @@ int BuscaLocal::BuscaLocalTentaRealizarTarefasComOutosVeiculos(int EscolhaVeicul
 
 
 
-							if( ativa == 1 && ConstrucoesInstancia.Construcoes[IndiceConstrucaoEscolhida].NumeroDaConstrucao == 6 && DemandaRecolocar == 3 ){
+							if( ativa == 1 && ConstrucoesInstancia.Construcoes[IndiceConstrucaoEscolhida].NumeroDaConstrucao == 6 && DemandaRecolocar == 3 && PlantasInstancia.Plantas[p].NumeroDaPlanta == 0 && PlantasInstancia.Plantas[p].VeiculosDaPlanta.Carretas[v].NumeroDaCarreta == 6){
 								ImprimeDadosAdicionaTarefa = 1;
+
+								cout << endl << endl << endl << endl << "                (((((((((((<<<<<<<<< Começa AdicionaTarefa >>>>>>>>>>>>>>>)))))))))))))))) " << endl << endl << endl << endl;
+
 							}
 
 							// se tenta recolocar a demanda corrente
 							Recolocar = ConstrucoesInstancia.AdicionaTarefa( 0 , ConstrucoesInstancia.Construcoes[IndiceConstrucaoEscolhida].NumeroDaConstrucao, DemandaRecolocar , DadosTarefasMovidasReadicaoDeDemandas, 1, 0, RealizaProcessoDeAtrazarTarefas, EscolhaVeiculo , EscolhaPlanta, PlantasInstancia, ImprimeDadosAdicionaTarefa,"  <<<<< BuscaLocal::BuscaLocalRetiraTarefasUmaConstrucao >>> ");
 
 
-							if( ativa == 1 && ConstrucoesInstancia.Construcoes[IndiceConstrucaoEscolhida].NumeroDaConstrucao == 6 && DemandaRecolocar == 3 ){
+							if( ativa == 1 && ConstrucoesInstancia.Construcoes[IndiceConstrucaoEscolhida].NumeroDaConstrucao == 6 && DemandaRecolocar == 3 && PlantasInstancia.Plantas[p].NumeroDaPlanta == 0 && PlantasInstancia.Plantas[p].VeiculosDaPlanta.Carretas[v].NumeroDaCarreta == 6){
 								ImprimeDadosAdicionaTarefa = 0;
+
+								cout << endl << endl << endl << endl << "                (((((((((((<<<<<<<<< Termina AdicionaTarefa >>>>>>>>>>>>>>>)))))))))))))))) " << endl << endl << endl << endl;
+
 							}
 
 

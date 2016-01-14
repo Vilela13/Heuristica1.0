@@ -94,7 +94,7 @@ int Planta::VerificaDisponibilidade( double InicioPossivelAlocacao, double Final
 	}
 
 	// verifica se não viola outros acrregamentos que são realizados pela planta
-	for( unsigned int c = 0; c < Carregamentos.size(); c++){
+	for(  int c = 0; c < (int) Carregamentos.size(); c++){
 		// carregamento a alocar está dentro de outro carregamento
 		if( InicioPossivelAlocacao <= Carregamentos[c].HorarioInicioCarregamento){
 			if ( FinalPossivelAlocacao >= Carregamentos[c].HorarioFinalCarregamento){
@@ -172,9 +172,9 @@ void Planta::CalculaMakespan(){
 		Makespan = TempoMinimoDeFuncionamento;
 	}
 	// percorre por todos os caminhões das plantas
-	for( unsigned int v = 0; v < VeiculosDaPlanta.Carretas.size(); v++){
+	for( int v = 0; v < (int) VeiculosDaPlanta.Carretas.size(); v++){
 		// percorre por todos os delocamentos do caminhão corrente
-		for( unsigned int d = 0; d < VeiculosDaPlanta.Carretas[v].Deslocamentos.size(); d++){
+		for( int d = 0; d < (int) VeiculosDaPlanta.Carretas[v].Deslocamentos.size(); d++){
 			// se o tempo de retorno do deslocamento for maior que o mekespan da planta no momento, entra no if
 			if( Makespan < VeiculosDaPlanta.Carretas[v].Deslocamentos[d].HorarioFinalDeslocamento){
 				// atualiza o makespan da planta com o horario final do deslocamento corrente
@@ -209,7 +209,7 @@ void Planta::Imprime(int OrdenaPlantas, int OrdenaCarretas, int ImprimeSolucao, 
 			fprintf( Arquivo, "   Carregamentos \n");
 		}
 		// percorrer todos os carregamentos
-		for( unsigned int c = 0; c < Carregamentos.size(); c++){
+		for( int c = 0; c < (int) Carregamentos.size(); c++){
 			if( ImprimeSolucao == 1){
 				// imprimir o carregamento
 				printf ("    * Caminhao [%d - %d] para suprir construcao [%d - %d] das ( %.4f as %.4f)\n", NumeroDaPlanta, Carregamentos[c].NumCarretaUtilizada, Carregamentos[c].NumeroConstrucao, Carregamentos[c].NumeroDemandaSuprida, Carregamentos[c].HorarioInicioCarregamento, Carregamentos[c].HorarioFinalCarregamento);
@@ -245,7 +245,7 @@ void Planta::ImprimeDistancias(){
 	cout << " +++ Distancias ++++ " << endl;
 	cout << "Numero de conatricoes " << DistanciaConstrucoes.size() << endl;
 	// percorre por todas as construções
-	for ( unsigned int c = 0; c < DistanciaConstrucoes.size(); c++){
+	for ( int c = 0; c < (int) DistanciaConstrucoes.size(); c++){
 		// imprime a distancia da planta a construção corrente
 		printf("   Contrucao %d = %.4f", c, DistanciaConstrucoes[c]);
 	}
@@ -468,7 +468,7 @@ int ConjuntoPlantas::DeletaTarefa( int NumPlanta, double HoraInicio, double Hora
 	RetirouDeslocamento = 0;
 
 	// percorre todas as plantas
-	for( unsigned int p = 0; p < Plantas.size(); p++){
+	for( int p = 0; p < (int) Plantas.size(); p++){
 		// caso a planta passada for a mesma que a planta corrente
 		if( Plantas[p].NumeroDaPlanta == NumPlanta){
 			// retira tarefa da planta
@@ -502,7 +502,7 @@ int ConjuntoPlantas::DeletaTarefa( int NumPlanta, double HoraInicio, double Hora
 void ConjuntoPlantas::CalculaMakespanPlantas(){
 	MakespanPLantas = 0;
 	// percorre todas as plantas
-	for( unsigned int p = 0; p < Plantas.size(); p++){
+	for(  int p = 0; p < (int) Plantas.size(); p++){
 		// calcula o makespan da planta corrente
 		Plantas[p].CalculaMakespan();
 		// soma o makespan da planta corrente ao makespan total de todas as plantas
@@ -513,7 +513,7 @@ void ConjuntoPlantas::CalculaMakespanPlantas(){
 // Aloca o inice da planta que corresponde a planat que se passa como parametro
 int ConjuntoPlantas::AlocaInidiceFabrica(int Planta, int &IndicePlanta){
 	// percorre todas as plantas
-	for ( unsigned int i  = 0; i < Plantas.size(); i ++){
+	for ( int i  = 0; i < (int) Plantas.size(); i ++){
 		// caso a planta crrente for a procuraada
 		if( Plantas[i].NumeroDaPlanta == Planta){
 			// aloca o indice da planta corrente
@@ -547,7 +547,7 @@ int ConjuntoPlantas::CorrigeReferenciaCarregamentoDeslocamentoMaisUm( int NumPla
 	int ModificouCarregamento;
 	ModificouCarregamento = 0;
 
-	for( unsigned int c = 0; c < Plantas[p].Carregamentos.size() ; c++){
+	for( int c = 0; c < (int) Plantas[p].Carregamentos.size() ; c++){
 		if( Plantas[p].Carregamentos[c].verifica( NumCarretaUtilizada, construcao, NumeroDemandaSuprida, HorarioInicioPlanta, HorarioFimPlanta) == 1 && ModificouCarregamento == 0){
 			Plantas[p].Carregamentos[c].NumeroDemandaSuprida = Plantas[p].Carregamentos[c].NumeroDemandaSuprida + 1;
 			ModificouCarregamento = 1;
@@ -571,7 +571,7 @@ int ConjuntoPlantas::CorrigeReferenciaCarregamentoDeslocamentoMaisUm( int NumPla
 	int ModificouDeslocamento;
 	ModificouDeslocamento = 0;
 
-	for( unsigned int d = 0; d < Plantas[p].VeiculosDaPlanta.Carretas[v].Deslocamentos.size() ; d++){
+	for(  int d = 0; d < (int) Plantas[p].VeiculosDaPlanta.Carretas[v].Deslocamentos.size() ; d++){
 		if( Plantas[p].VeiculosDaPlanta.Carretas[v].Deslocamentos[d].verifica( construcao, NumeroDemandaSuprida, HorarioInicioVeiculo, HorarioFimVeiculo) == 1 && ModificouDeslocamento == 0){
 			Plantas[p].VeiculosDaPlanta.Carretas[v].Deslocamentos[d].NumeroDemandaSuprida = Plantas[p].VeiculosDaPlanta.Carretas[v].Deslocamentos[d].NumeroDemandaSuprida + 1;
 			ModificouDeslocamento = 1;
@@ -613,7 +613,7 @@ int ConjuntoPlantas::CorrigeReferenciaCarregamentoDeslocamentoMenosUm(int NumPla
 	int ModificouCarregamento;
 	ModificouCarregamento = 0;
 
-	for( unsigned int c = 0; c < Plantas[p].Carregamentos.size() ; c++){
+	for( int c = 0; c < (int) Plantas[p].Carregamentos.size() ; c++){
 		if( Plantas[p].Carregamentos[c].verifica(NumCarreta, Construcao, Demanda, HorarioInicioPlanta, HorarioFimPlanta) == 1 && ModificouCarregamento == 0){
 			Plantas[p].Carregamentos[c].NumeroDemandaSuprida = Plantas[p].Carregamentos[c].NumeroDemandaSuprida - 1;
 			ModificouCarregamento = 1;
@@ -637,7 +637,7 @@ int ConjuntoPlantas::CorrigeReferenciaCarregamentoDeslocamentoMenosUm(int NumPla
 	int ModificouDeslocamento;
 	ModificouDeslocamento = 0;
 
-	for( unsigned int d = 0; d < Plantas[p].VeiculosDaPlanta.Carretas[v].Deslocamentos.size() ; d++){
+	for( int d = 0; d < (int) Plantas[p].VeiculosDaPlanta.Carretas[v].Deslocamentos.size() ; d++){
 		if( Plantas[p].VeiculosDaPlanta.Carretas[v].Deslocamentos[d].verifica( Construcao, Demanda, HorarioInicioVeiculo, HorarioFimVeiculo) == 1 && ModificouDeslocamento == 0){
 			Plantas[p].VeiculosDaPlanta.Carretas[v].Deslocamentos[d].NumeroDemandaSuprida = Plantas[p].VeiculosDaPlanta.Carretas[v].Deslocamentos[d].NumeroDemandaSuprida - 1;
 			ModificouDeslocamento = 1;
@@ -667,7 +667,7 @@ void ConjuntoPlantas::Imprime(int OrdenaPlantas,int OrdenaCarrtas , int ImprimeS
 		fprintf( Arquivo, "\n\n  [[[[[[  Imprime plantas  ]]]]]]\n");
 	}
 	// percorre todas as plantas
-	for( unsigned int p = 0; p < Plantas.size(); p++){
+	for( int p = 0; p < (int) Plantas.size(); p++){
 		// imprime a planta corrente
 		Plantas[p].Imprime(OrdenaPlantas, OrdenaCarrtas, ImprimeSolucao, ImprimeArquivo, Arquivo);
 	}
@@ -683,7 +683,7 @@ void ConjuntoPlantas::Imprime(int OrdenaPlantas,int OrdenaCarrtas , int ImprimeS
 // verifica se uma das plantas em questão pode atender a demanda em questão caso de atrazar o atendimento das outras demandas da construção que se quer atender
 int ConjuntoPlantas::VerificaPlantasAnalizadasPodemAtenderSeAtrazar(){
 	// percorre todas as plantas
-	for ( unsigned  int p = 0; p < Plantas.size(); p++){
+	for ( int p = 0; p < (int) Plantas.size(); p++){
 		// verifica se a planta corrente pode atender a demanda em questão caso se atrazar o atendiemnto das demandas posteriores a demanda em questão
 		if( PlantasAnalizadas[p] == -2){
 			// retorna 1 caso isso for possivel
@@ -701,7 +701,7 @@ void ConjuntoPlantas::InicializaVetorHorarioQuePlantaPodeAtender(){
 	HorarioQuePlantaPodeAtender.resize(Plantas.size());
 	HorarioQueConstrucaoPodeReceberDemanda.resize(Plantas.size());
 	// faz para toda planta
-	for( unsigned int p = 0; p < HorarioQuePlantaPodeAtender.size(); p++){
+	for(  int p = 0; p < (int) HorarioQuePlantaPodeAtender.size(); p++){
 		// inicia com o valor maximo de double o horario que a planta pode atender e a construção pode ser atendida
 		HorarioQuePlantaPodeAtender[p] = DBL_MAX;
 		HorarioQueConstrucaoPodeReceberDemanda[p] = DBL_MAX;
@@ -714,7 +714,7 @@ double ConjuntoPlantas::RetornaMenorHorarioQueConstrucaoPodeReceberDemanda(){
 	HoraAux = DBL_MAX;
 
 	// faz para toda planta
-	for( int p = 0; p < (int) HorarioQuePlantaPodeAtender.size(); p++){
+	for( int p = 0; p < (int) Plantas.size(); p++){
 		// caso o horario que a cosntrução pode receber a demanda corrente for maior que o que a planta pode atender a demanda, entra no if
 		if( HorarioQueConstrucaoPodeReceberDemanda[p] < HoraAux){
 			// atualiza o menor horario que a cosntrução pode receber a demanda
@@ -728,9 +728,9 @@ double ConjuntoPlantas::RetornaMenorHorarioQueConstrucaoPodeReceberDemanda(){
 // Retorna os dados do carregaemnto de uma certa demanda passada na função
 int ConjuntoPlantas::RetornaDadosDemandaAtendida(int Construcao, int Demanda, double &HorarioInicio, double &HorarioFinal, int &planta, int &Carreta, double &HorarioInicioCarreta, double &HorarioFinalCarreta){
 	// percorre todas as plantas
-	for( unsigned int p = 0; p < Plantas.size(); p++){
+	for( int p = 0; p < (int) Plantas.size(); p++){
 		// percorre todos os carregamentotos da planta
-		for( unsigned int c = 0; c < Plantas[p].Carregamentos.size(); c++){
+		for(  int c = 0; c < (int) Plantas[p].Carregamentos.size(); c++){
 			// casso o carregamento corrente atender a demanda da construução passada na função, entra
 			if( Plantas[p].Carregamentos[c].NumeroConstrucao == Construcao && Plantas[p].Carregamentos[c].NumeroDemandaSuprida == Demanda){
 				// armazena os valores do carregamento

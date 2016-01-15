@@ -23,9 +23,12 @@ public:
 
 // verifica se o deslocamento é o mesmo que o que os dados passados representão
 int Deslocamento::verifica(int construcao,int Demanda, double HorarioInicioVeiculo,double HorarioFimVeiculo){
+	// verifica se o conteudo passado é o memso que a que tem no deslocamento
 	if( construcao == NumeroConstrucao && Demanda == NumeroDemandaSuprida && HorarioInicioVeiculo == HorarioInicioDeslocamento && HorarioFimVeiculo == HorarioFinalDeslocamento){
+		// retonra 1 se for o memso
 		return 1;
 	}
+	// retonra 0 se não for o memso
 	return 0;
 }
 
@@ -112,6 +115,7 @@ void Carreta::AlocaAtividade(double HoraInicio, double HoraFinal, int NumContruc
 
 	Deslocamento DeslocamentoAux;
 
+	// carrega os dados do deslocamento
 	DeslocamentoAux.HorarioInicioDeslocamento = HoraInicio;
 	DeslocamentoAux.HorarioFinalDeslocamento = HoraFinal;
 	DeslocamentoAux.NumeroConstrucao = NumContrucao;
@@ -252,7 +256,8 @@ int Carreta::VerificaIntegridadeDeDeslocamentos(int Imprime, int ImprimeSolucao,
 }
 
 Carreta::~Carreta(){						// Destruidora
-
+	TempoParaDescarregarNaConstrucao.clear();
+	Deslocamentos.clear();
 }
 
 // #################################################################
@@ -330,15 +335,19 @@ void ConjuntoCarretas::IniciaConjuntoCarretas(int NumeroCaminhoes, int NumeroDaP
 
 // ordena na ordem do menor número de tarefas para o maior se colocar o valor 1, ordena na ordem do maior número de tarefas para o menor se colocar o valor 2
 void ConjuntoCarretas::OrdenaCarretas(int EscolhaVeiculo){
+	// escolhe a carreta com menos deslocamentos inicialmente
 	if( EscolhaVeiculo == 1){
 		sort (Carretas.begin(), Carretas.end(), DecideQualCarretaTemMenosTarefasRealizadas);
 	}
+	// escolhe a carreta com mais deslocamentos inicialmente
 	if( EscolhaVeiculo == 2){
-			sort (Carretas.begin(), Carretas.end(),DecideQualCarretaTemMaisTarefasRealizadas);
+		sort (Carretas.begin(), Carretas.end(),DecideQualCarretaTemMaisTarefasRealizadas);
 	}
+	// escolhe a carreta com menor identificador inicialmente
 	if( EscolhaVeiculo == 3){
-			sort (Carretas.begin(), Carretas.end(),DecideCarretaAnterior);
+		sort (Carretas.begin(), Carretas.end(),DecideCarretaAnterior);
 	}
+	// escolhe a carreta aleatoriamentee
 	if( EscolhaVeiculo == 4){
 		random_shuffle (Carretas.begin(), Carretas.end(),GeradorAleatoricoVeiculo);
 	}
@@ -347,6 +356,7 @@ void ConjuntoCarretas::OrdenaCarretas(int EscolhaVeiculo){
 // deleta tarefa realizada por um veiculo
 int ConjuntoCarretas::DeletaTarefa( int NumeroCaminhao, double HoraInicio, double HoraFinal, int NumContrucao, int NumDemanda){
 	int Retirou;
+	// inicia a tarefa como se não tivesse sido deletada
 	Retirou = 0;
 
 	// percorre por todas as carretas
@@ -373,11 +383,11 @@ int ConjuntoCarretas::DeletaTarefa( int NumeroCaminhao, double HoraInicio, doubl
 // aloca o inidice do veiculo crrespondente ao numero do caminhão
 int ConjuntoCarretas::AlocaInidiceVeiculo( int NumCarretaUtilizada, int &v){
 	// percorre todos os caminhões
-	for(  int i = 0; i < (int) Carretas.size(); i++){
+	for(  int c = 0; c < (int) Carretas.size(); c++){
 		// caso encontrar o caminhão procurado
-		if ( Carretas[i].NumeroDaCarreta == NumCarretaUtilizada ){
+		if ( Carretas[c].NumeroDaCarreta == NumCarretaUtilizada ){
 			// aloca o inice do caminhão
-			v = i;
+			v = c;
 			// retorna 1 caso achar o caminhão
 			return 1;
 		}
@@ -431,7 +441,7 @@ int ConjuntoCarretas::RetornaDadosDeslocamento(int Construcao, int Demanda, doub
 // verifica a integridade entre os Deslocamentos da Carreta
 int ConjuntoCarretas::VerificaIntegridadeDeDeslocamentosDasCarretas(int Imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo){
 	int integro;
-
+	// inicia com integro
 	integro = 1;
 
 	// percorre todas as carretas
@@ -445,6 +455,7 @@ int ConjuntoCarretas::VerificaIntegridadeDeDeslocamentosDasCarretas(int Imprime,
 			}
 
 		}
+		// verifica a integridade dos descarregamentos da carreta corrente
 		if( Carretas[c].VerificaIntegridadeDeDeslocamentos(Imprime, ImprimeSolucao, ImprimeArquivo, Arquivo) == 0){
 			integro = 0;
 		}
@@ -455,9 +466,8 @@ int ConjuntoCarretas::VerificaIntegridadeDeDeslocamentosDasCarretas(int Imprime,
 }
 
 
-
 ConjuntoCarretas::~ConjuntoCarretas(){
-
+	Carretas.clear();
 }
 
 

@@ -777,8 +777,6 @@ int Solucao::Viabilidade2(int EscolhaVeiculo, int EscolhaConstrucao, int Escolha
 
 	while( ConstrucoesInstancia.VerificaConstrucaoPodeAtender() == 1 && ConstrucoesInstancia.NivelDeInviabilidade > 0){
 
-
-
 		// retorna a demanda e a construção que serão analisados inicialmente
 		ProcuraConstrucaoNaoAtendida( ConstrucaoNaoAtendida, DemandaNaoAtendidaFim);
 
@@ -790,9 +788,6 @@ int Solucao::Viabilidade2(int EscolhaVeiculo, int EscolhaConstrucao, int Escolha
 		TempoPlantaPodeAtender.resize(NP);
 		// retorna o incide da cosntrução que tem qeu ser analisada no momento
 		ConstrucoesInstancia.RetornaIndiceConstrucao(ConstrucaoNaoAtendida, IndiceConstrucaoNaoAtendida, " inicio -> Solucao::ProcessoViabilizacao2" );
-
-
-
 
 		//cout << endl << endl << " ---- Demanda Nao Atendida = [" << ConstrucaoNaoAtendida << "-" << DemandaNaoAtendidaFim << "] ---- "<< endl << endl;
 
@@ -814,6 +809,22 @@ int Solucao::Viabilidade2(int EscolhaVeiculo, int EscolhaConstrucao, int Escolha
 			//cout << endl << endl << "      -))))))))))) tarefas deletadas " << endl;
 			//ImprimeVetorDadosTarefa(DadosTarefasMovidasTentandoAlocar);
 
+
+
+
+			// ****************************************
+
+			//tentar adicionar a aterafa com todas as possiveis plantas e caminhões, caso não der tenta fazer o processo recursivo
+
+			// ****************************************
+
+
+
+
+
+
+
+
 	// tenta adiciona a tarefa que não era alocada antes
 			for( int d1 = DemandaNaoAtendidaInicio; d1 <= DemandaNaoAtendidaFim; d1++){
 				// tenta adicionar a demanda não atendida anteriormente. Caso consegui retorna 1, caso contrario retorna 0.
@@ -822,9 +833,6 @@ int Solucao::Viabilidade2(int EscolhaVeiculo, int EscolhaConstrucao, int Escolha
 				//cout << endl << endl << " 				+ (" << TarefaAdicionada << ") Adiciona  [" << ConstrucaoNaoAtendida << "-" << d1 << "] "<< endl << endl;
 
 			}
-
-
-
 
 			// Verifa se conseguiu alocar a demanda não alocada antes.
 			if( TarefaAdicionada == 0){
@@ -899,20 +907,9 @@ int Solucao::Viabilidade2(int EscolhaVeiculo, int EscolhaConstrucao, int Escolha
 						// marca a construção como sendo que não se consegue atender suas demandas
 						ConstrucoesInstancia.ConstrucoesAnalizadas[IndiceConstrucaoParaAtender] = -1;
 					}
-
-
-
 					// se passa para a proxima construção que se pode atender
 					PossuiConstrucaoParaAnalisar = SelecionaConstrucao( ConstrucaoParaAtender, IndiceConstrucaoParaAtender, ConstrucoesInstancia.ConstrucoesAnalizadas);
-
-
 				}
-
-
-
-
-
-
 
 				//cout << endl;
 

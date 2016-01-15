@@ -93,7 +93,7 @@ DadosTarefa::~DadosTarefa(){
 // retira um elemento dos dados das tarefas apartir de dados
 int RetiraElementoVetorDadosTarefa(vector < DadosTarefa > &Vetor,int NumConstucao, int NumPlanta, int NumCarreta, double HoraInicioPlanta, double HoraSaiPlanta, double HoraInicioConstrucao, double HoraSaiConstrucao, double HoraRetornaPlanta, char status){
 	// percorre todas as tarefas
-	for( unsigned int i = 0; i < Vetor.size(); i++){
+	for( int i = 0; i < (int) Vetor.size(); i++){
 		// verifica se os dasdos passados combinam om os dados de uma das tarefas armazenadas
 		if( Vetor[i].DadosDasTarefas[0] == NumConstucao && Vetor[i].DadosDasTarefas[1] == NumPlanta && Vetor[i].DadosDasTarefas[2] == NumCarreta){
 			// verifica se os horarios passados combinam om os horarios de uma das tarefas armazenadas
@@ -115,7 +115,7 @@ int RetiraElementoVetorDadosTarefa(vector < DadosTarefa > &Vetor,int NumConstuca
 // retira um elemento dos dados das tarefas apartir de estrutura
 int RetiraElementoVetorDadosTarefaApartirEstrutura(vector < DadosTarefa > &Vetor, DadosTarefa Dado){
 	// percorre todas as tarefas
-	for( unsigned int i = 0; i < Vetor.size(); i++){
+	for( int i = 0; i < (int) Vetor.size(); i++){
 		// verifica se os dasdos da estrutura passada combinam om os dados de uma das tarefas armazenadas
 		if( Vetor[i].DadosDasTarefas[0] == Dado.DadosDasTarefas[0] && Vetor[i].DadosDasTarefas[1] == Dado.DadosDasTarefas[1] && Vetor[i].DadosDasTarefas[2] == Dado.DadosDasTarefas[2]){
 			// verifica se os horarios  da estrutura passados combinam om os horarios de uma das tarefas armazenadas
@@ -137,7 +137,7 @@ int RetiraElementoVetorDadosTarefaApartirEstrutura(vector < DadosTarefa > &Vetor
 // verifica se a tarefa passada está presente na estrutura que armazena as tarefas
 int VerificaElementoVetorDadosTarefa(vector < DadosTarefa > Vetor,int NumConstucao,  int NumPlanta, int NumCarreta, double HoraInicioPlanta, double HoraSaiPlanta, double HoraInicioConstrucao, double HoraSaiConstrucao, double HoraRetornaPlanta, char status){
 	// percorre todas as tarefas
-	for( unsigned int i = 0; i < Vetor.size(); i++){
+	for( int i = 0; i < (int) Vetor.size(); i++){
 		// verifica se os dasdos passados combinam om os dados de uma das tarefas armazenadas
 		if( Vetor[i].DadosDasTarefas[0] == NumConstucao  && Vetor[i].DadosDasTarefas[1] == NumPlanta && Vetor[i].DadosDasTarefas[2] == NumCarreta){
 			// verifica se os horarios passados combinam om os horarios de uma das tarefas armazenadas
@@ -157,7 +157,7 @@ int VerificaElementoVetorDadosTarefa(vector < DadosTarefa > Vetor,int NumConstuc
 // verifica se a tarefa passada pela estrutura de dados está presente na estrutura que armazena as tarefas
 int VerificaElementoVetorDadosTarefaApartirEstrutura(vector < DadosTarefa >  Vetor,DadosTarefa Dado){
 	// percorre todas as tarefas
-	for( unsigned int i = 0; i < Vetor.size(); i++){
+	for( int i = 0; i < (int) Vetor.size(); i++){
 		// verifica se os dasdos passados combinam om os dados de uma das tarefas armazenadas
 		if( Vetor[i].DadosDasTarefas[0] == Dado.DadosDasTarefas[0] && Vetor[i].DadosDasTarefas[1] == Dado.DadosDasTarefas[1] && Vetor[i].DadosDasTarefas[2] == Dado.DadosDasTarefas[2]){
 			// verifica se os horarios passados combinam om os horarios de uma das tarefas armazenadas
@@ -240,7 +240,7 @@ int AdicionaElementoVetorDadosTarefaApartirEstrutura(int VerificaExistencia, vec
 int MergeDadosTarefa( vector < DadosTarefa > &VetorBase, vector < DadosTarefa > VetorFonte){
 
 	// percorre todos os elementos do VetorFonte
-	for( unsigned int i = 0; i < VetorFonte.size(); i++){
+	for( int i = 0; i < (int) VetorFonte.size(); i++){
 		// adiciona o elemento corrente do VetorFonte ao VetorBase
 		if( AdicionaElementoVetorDadosTarefaApartirEstrutura(0, VetorBase, VetorFonte[i]) == 0){
 			cout << endl << endl << " <<<<<<<<<<<<< Problema em adicionar elemeto no VetorBase - elemento " << endl;
@@ -257,7 +257,7 @@ int MergeDadosTarefa( vector < DadosTarefa > &VetorBase, vector < DadosTarefa > 
 // imprime as tarefas
 void ImprimeVetorDadosTarefa( vector < DadosTarefa > Vetor){
 	// percorre todas as tarefas
-	for( unsigned int i = 0; i < Vetor.size(); i++){
+	for( int i = 0; i < (int) Vetor.size(); i++){
 		cout << "[" << i << "] ";
 		// imprime a tarefa corrente
 		Vetor[i].Imprimir();

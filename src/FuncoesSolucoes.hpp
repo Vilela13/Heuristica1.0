@@ -52,7 +52,7 @@ int VerificaInidices2( int p, int v){
 void ImprimeVetorInt( vector< int > VetorInt){
 	cout << " Conteudo Vetor "<< endl;
 	// percorre os elementos do vector
-	for(unsigned int i = 0; i < VetorInt.size(); i++){
+	for( int i = 0; i < (int) VetorInt.size(); i++){
 		cout << " [" << i << "] " << VetorInt[i] << " ";
 	}
 	cout << endl;
@@ -84,7 +84,7 @@ void ImprimeDadosRetiradoAdicionadoVetorConstrucaoAnalisada( int ImprimeDadosTar
 // inicia o vector de int com todos os seus valores como 0
 void IniciaVetorIntComZero(vector< int > &VetorInt){
 	// percorre todo os elementos do  vector
-	for(unsigned int i = 0; i < VetorInt.size(); i++){
+	for( int i = 0; i < (int) VetorInt.size(); i++){
 		 // aloca o valor 0 ao elemento do vector corrente
 		VetorInt[i] = 0;
 	}
@@ -95,7 +95,7 @@ void IniciaVetorIntComZero(vector< int > &VetorInt){
 // verifica se existe um valor no vector igual ao valor passado
 int VerificaSeTemUmValorVetorInt( int Valor, vector< int > VetorInt){
 	// percorre todo os elementos do  vector
-	for(unsigned int i = 0; i < VetorInt.size(); i++){
+	for( int i = 0; i < (int) VetorInt.size(); i++){
 		// verifica se o elemento do vector é igual ao valor passado
 		if( VetorInt[i] == Valor){
 			// retorna 1 caso se tenha um valor igual ao valor passado
@@ -109,7 +109,7 @@ int VerificaSeTemUmValorVetorInt( int Valor, vector< int > VetorInt){
 // verifica se todos os valores do vector são iguais ao valor passado
 int VerificaTodosValoresVetorInt( int Valor, vector< int > VetorInt){
 	// percorre todo os elementos do  vector
-	for(unsigned int i = 0; i < VetorInt.size(); i++){
+	for( int i = 0; i < (int) VetorInt.size(); i++){
 		// verifica se o elemento do vector não é igual ao valor passado
 		if( VetorInt[i] != Valor){
 			// retorna 0 caso se tenha um valor diferente ao valor passado
@@ -124,7 +124,7 @@ int VerificaTodosValoresVetorInt( int Valor, vector< int > VetorInt){
 void ImprimeVetorDouble( vector< double > VetorDouble){
 	cout << " Conteudo Vetor "<< endl;
 	// percorre todo os elementos do  vector
-	for(unsigned int i = 0; i < VetorDouble.size(); i++){
+	for( int i = 0; i < (int) VetorDouble.size(); i++){
 		cout << " [" << i << "] " << VetorDouble[i] << " ";
 	}
 	cout << endl;

@@ -252,13 +252,14 @@ int Construcao::VerificaDisponibilidade( double InicioPossivelAlocacao, double F
 
 		// Entra no meio de duas tarefas alocadas e que respeita o intervalo entre descarregamentos
 		if ( PossuiTarefaAnterior == 1 && PossuiTarefaPosterior == 1){
-			cout << endl << endl << " No meio das tarefas ->Construcao::VerificaDisponibilidade  " << endl << endl << endl;
+			//cout << endl << endl << " No meio das tarefas ->Construcao::VerificaDisponibilidade  " << endl << endl << endl;
 			// retorna 2 se tem descarregamento após e antes dele
 			return 2;
 		}
 
 		// Entra antes de todas as tarefas alocadas e que respeita o intervalo entre descarregamentos
 		if ( PossuiTarefaAnterior == 0 && PossuiTarefaPosterior == 1){
+			//cout << endl << endl << " Antes das tarefas ->Construcao::VerificaDisponibilidade  " << endl << endl << endl;
 			// retorna 3 se só tem descarregamento depois dele
 			return 3;
 		}
@@ -913,7 +914,7 @@ void Construcao::CalculaMakespan(){
 	//cout << endl << endl << "  Contrucao " << NumeroDaConstrucao << endl;
 
 	// passa por todos os descarregamentos da construção
-	for( unsigned int d = 0; d < Descarregamentos.size(); d++){
+	for( int d = 0; d < (int) Descarregamentos.size(); d++){
 		// caso o tempo final do descarregamento for maior que o Makespan atual entra no if
 		if(  Descarregamentos[d].HorarioFinalDescarregamento  > Makespan){
 			// Atualiza o Makespan com o horario do descarregamento corrente
@@ -944,7 +945,7 @@ void Construcao::ImprimeContrucao(int ImprimeSolucao, int ImprimeArquivo, Pontei
 		fprintf( Arquivo, "# Contrucao %d com %d demandas, janela de tempo (%.4f - %.4f), com rank = %.4f \n",NumeroDaConstrucao, NumeroDemandas, TempoMinimoDeFuncionamento, TempoMaximoDeFuncionamento, RankTempoDemandas);
 	}
 	if( StatusAtendimento != 0){
-		for( unsigned int d = 0; d < Descarregamentos.size(); d++){
+		for( int d = 0; d < (int) Descarregamentos.size(); d++){
 			if( ImprimeSolucao == 1){
 				printf( "     * Carreta [%d-%d] atende demanda %d-%d de ( %.4f as %.4f )\n", Descarregamentos[d].NumPlantaFornecedor, Descarregamentos[d].NumCarretaUtilizada, NumeroDaConstrucao, d, Descarregamentos[d].HorarioInicioDescarregamento, Descarregamentos[d].HorarioFinalDescarregamento);
 			}
@@ -1142,9 +1143,17 @@ void Construcao::AtrazaDemandasParaAtenderRecursao( int NumDemanda, double HoraF
 	// armazena a situação demanda e remoção antes de deletar a demanda
 	SituacaoDemandaAux = SituacaoDemanda[NumDemanda-1];
 	SituacaoRemocaoAux = SituacaoRemocao[NumDemanda-1];
+
+	// confere se tem mais demanda que se deveria ter
+	if( StatusAtendimento > NumDemanda){
+		cout << endl << endl << "            >>>>>>>>>>>>>> Problema! tem mais descarregamentos do que deveria! StatusAtendimento [" << StatusAtendimento << "] NumDemanda [" << NumDemanda << "] -> Construcao::AtrazaDemandasParaAtenderRecursao( " << endl << endl;
+		ImprimeContrucao(1,0,Arquivo);
+		cout << endl << endl;
+		cin >> ParaPrograma;
+	}
+
 	//Deleta a demanda anterior (NumDemanda-1) a demanda que não se consegue alocar
 	DeletouDemanda = DeletaAtividadeLocomovendoAsOutrasTarefasSalvandoDados(0, Descarregamentos[NumDemanda-1].HorarioInicioDescarregamento, Descarregamentos[NumDemanda-1].HorarioFinalDescarregamento, NumDemanda - 1, Descarregamentos[NumDemanda-1].NumPlantaFornecedor  , Descarregamentos[NumDemanda-1].NumCarretaUtilizada , Plantas, DadosTarefasMovidasAuxiliar);
-
 
 	if( DeletouDemanda == 1){
 
@@ -1180,19 +1189,8 @@ void Construcao::AtrazaDemandasParaAtenderRecursao( int NumDemanda, double HoraF
 				}
 
 				while( SituacaoAlocacao == -2  ){
-
-
-
-
-
 					// chama a função recursivamente para tentar atrazar a demanda que vem antes da demanda corrente. Isto é para possibilitar colocar a demanda corrente respeitando o tempo para atender a demanda após a demanda corrente
 					AtrazaDemandasParaAtenderRecursao( NumDemanda - 1, HoraFimAtendimento,  DadosTarefasMovidasAuxiliar,Plantas, SituacaoAlocacao,  EscolhaVeiculo,  EscolhaPlanta, imprime, frase);
-
-
-
-
-
-
 					// caso conseguiu alocar a demanda antes da demanda corrente na função recursiva acima, entra no if
 					if( SituacaoAlocacao == 1){
 						// tenta alocar a demanda corrente
@@ -1202,15 +1200,11 @@ void Construcao::AtrazaDemandasParaAtenderRecursao( int NumDemanda, double HoraF
 					}
 				}
 
-
 				if( imprime == 1){
 					cout << endl << endl << "             While sai recursão da demanda [" << NumDemanda - 1 << "] SituacaoAlocacao [" << SituacaoAlocacao << "]" << endl << endl;
 				}
 
-
 			}
-
-
 
 			if( imprime == 1){
 				ImprimeContrucao(ImprimeSolucao,ImprimeArquivo,Arquivo);
@@ -1218,7 +1212,6 @@ void Construcao::AtrazaDemandasParaAtenderRecursao( int NumDemanda, double HoraF
 				cout << "DadosTarefasMovidasAuxiliar" << endl;
 				ImprimeVetorDadosTarefa( DadosTarefasMovidasAuxiliar);
 				cout << endl << endl << "  ++++++++++++++++ Sai Sub Recursão dentro [" << NumeroDaConstrucao << "-" << NumDemanda - 1 << "] SituacaoAlocacao (" << SituacaoAlocacao << ") ++++++++++++++++ " << endl << endl;
-
 				cin >> ParaPrograma;
 			}
 		}
@@ -1852,7 +1845,7 @@ void ConjuntoConstrucoes::InicializaConstrucoesAnalizadas(){
 	// inicia o vetor de construções analisadas
 	ConstrucoesAnalizadas.resize(Construcoes.size());
 	// percorre por todas as construções
-	for( unsigned int c = 0; c < Construcoes.size(); c++){
+	for( int c = 0; c < (int) Construcoes.size(); c++){
 		// inicia como não analisada, ou com o status 0
 		ConstrucoesAnalizadas[c] = 0;
 	}
@@ -1863,7 +1856,7 @@ void ConjuntoConstrucoes::CalcularNivelDeInviabilidade(){
 	// zera o nivel de inviabilidade
 	NivelDeInviabilidade = 0;
 	// percorre todas as contruçãoes
-	for( unsigned int c = 0; c < Construcoes.size(); c++){
+	for( int c = 0; c < (int) Construcoes.size(); c++){
 		// atualiza com o nivel de inviabilidade da construção corrente
 		NivelDeInviabilidade = NivelDeInviabilidade + Construcoes[c].NumeroDemandas - Construcoes[c].StatusAtendimento;
 	}
@@ -1884,7 +1877,7 @@ void ConjuntoConstrucoes::CalculaMakespansConstrucoes(){
 	// inicia o makespan das cosntruções como zero
 	MakespanConstrucoes = 0;
 	// percorre por todas as construções
-	for( unsigned int c = 0; c < Construcoes.size(); c++){
+	for( int c = 0; c < (int) Construcoes.size(); c++){
 		// calcula o makespan da construção corrente
 		Construcoes[c].CalculaMakespan();
 		// acrescenta o makespan da cosntruyução corrente ao  makespan de todas as cosntruções
@@ -2170,7 +2163,7 @@ int ConjuntoConstrucoes::VerificacaoConsistenciaTarefas(ConjuntoPlantas& Plantas
 // Reinicia o status de remoção de todas as demandas de todas as construções
 void ConjuntoConstrucoes::ReiniciaTarefasRetiradas(){
 	// percorre todas as cosntruções
-	for( unsigned int c = 0; c < Construcoes.size(); c++){
+	for( int c = 0; c < (int) Construcoes.size(); c++){
 		// percorre todas as demandas da cosntrução corrente
 		for( int d = 0; d < Construcoes[c].NumeroDemandas; d++){
 			// coloca o status da demanda corrente como não removida
@@ -2586,6 +2579,7 @@ int ConjuntoConstrucoes::AdicionaTarefa( int VerificaExistencia, int Construcao,
 		if ( Construcoes[c].NumeroDemandas > Construcoes[c].StatusAtendimento){
 			// faz com que nenhuma planta tenha sido analisada até o momento
 			PlantasInstancia.InicializaPlantasAnalizadas();
+
 			// só entra no loop enquanto se tem uma planta para analisar
 			while( PlantasInstancia.AnalizouTodasPLanats() == 0){
 				// encontra a planta mais perto d aconstrução
@@ -2617,12 +2611,22 @@ int ConjuntoConstrucoes::AdicionaTarefa( int VerificaExistencia, int Construcao,
 						DisponibilidadeConstrucao = Construcoes[c].VerificaDisponibilidade( HorarioChegaContrucao, HorarioSaiConstrucao );
 						DisponibilidadeCarreta = PlantasInstancia.Plantas[ p ].VeiculosDaPlanta.Carretas[v].VerificaDisponibilidade( HorarioInicioPlanta, HorarioRetornaPlanta );
 
+
+
+						if( Construcao == 3 && Demanda == 2 && DisponibilidadeConstrucao == 2){
+							cout << endl << "  Meio das tarefas " << endl << endl;
+						}
+
+
+
 						// caso se puder realizar a terefa se entra nos If
 						if( DisponibilidadePlanta == 1){
 							if( DisponibilidadeCarreta == 1){
 								if( DisponibilidadeConstrucao == 1 || DisponibilidadeConstrucao == 2 || DisponibilidadeConstrucao == 3){
+
 									// se consegue atender a demanda com essa planta, carreta e nessa construção
 									Construcoes[c].AlocaAtividadeSalvandoDados(VerificaExistencia, HorarioChegaContrucao, HorarioSaiConstrucao, PlantasInstancia.Plantas[ p ].VeiculosDaPlanta.Carretas[v].NumeroDaCarreta, PlantasInstancia.Plantas[ p ].NumeroDaPlanta, SituacaoDemanda, SituacaoRemocao, PlantasInstancia, DadosTarefasMovidas);
+
 									// se dieminui o nível de iniviabilidade da solução
 									NivelDeInviabilidade = NivelDeInviabilidade - 1;
 									// retorna 1 indicando que se foi possivel alocar a demanda corrente
@@ -2683,17 +2687,8 @@ int ConjuntoConstrucoes::AdicionaTarefa( int VerificaExistencia, int Construcao,
 					cout << endl << endl << "      Função que atraza demandas - horario que pode atender construção = << " << PlantasInstancia.RetornaMenorHorarioQueConstrucaoPodeReceberDemanda() << ">> " << endl << endl;
 				}
 
-
-
-
-
-
 				// função que realiza o atraso das tarefas para atender uma demanda anterior, caso cosnseguir alocar entra no if
 				if ( Construcoes[c].AtrazaDemandasParaAtenderMaster( Demanda, PlantasInstancia.RetornaMenorHorarioQueConstrucaoPodeReceberDemanda() - Construcoes[c].TempoMaximoEntreDescargas  + IntervaloDeTempo,DadosTarefasMovidasAuxiliar, SituacaoDemanda, SituacaoRemocao, PlantasInstancia, SituacaoAlocacao, EscolhaVeiculo, EscolhaPlanta, imprime, frase) == 1 ){
-
-
-
-
 					if( imprime == 1){
 						cout << endl << endl << "       ******* adicionei demanda [" << Construcoes[c].NumeroDaConstrucao << "-" << Demanda << "] com o processo de atraso " << endl << endl;
 						cout << "DadosTarefasMovidasAuxiliar" << endl;

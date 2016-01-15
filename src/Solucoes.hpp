@@ -649,6 +649,8 @@ int Solucao::DeletaTarefasAposTempoPlantaPodeAtender(vector < double > &TempoPla
 	double DistanciaAux;
 	int Ativa;
 
+	int construcao;
+
 	// inicializa variaveis
 	Ativa = 0;
 
@@ -679,8 +681,10 @@ int Solucao::DeletaTarefasAposTempoPlantaPodeAtender(vector < double > &TempoPla
 					cout << "	-> Planta = " << PlantaAux << "   Demanda = [" << ConstrucoesInstancia.Construcoes[c].NumeroDaConstrucao << "-" << d << "] indice construção (" << c << ")" << endl;
 					ConstrucoesInstancia.Construcoes[c].Descarregamentos[d].Imprime();
 				}
+				// pega a construção corrente
+				construcao = ConstrucoesInstancia.Construcoes[c].NumeroDaConstrucao;
 				// deleta a demanda corrente
-				TarefaDeletada = ConstrucoesInstancia.Construcoes[c].DeletaAtividadeLocomovendoAsOutrasTarefasSalvandoDados( 0                    , ConstrucoesInstancia.Construcoes[c].Descarregamentos[d].HorarioInicioDescarregamento, ConstrucoesInstancia.Construcoes[c].Descarregamentos[d].HorarioFinalDescarregamento, d,           ConstrucoesInstancia.Construcoes[c].Descarregamentos[d].NumPlantaFornecedor, ConstrucoesInstancia.Construcoes[c].Descarregamentos[d].NumCarretaUtilizada,                 PlantasInstancia,                        DadosTarefasMovidas);
+				TarefaDeletada =  DeletaAlocacaoTarefasPosterioresMesmaConstrucao(0, construcao, d,  DadosTarefasMovidas);
 				// aumenta o nivel de inviabilidade, pois deletou uma demanda atendida
 				ConstrucoesInstancia.NivelDeInviabilidade++;
 				//cout << endl << endl << "   Galo 2" << endl << endl;
@@ -769,7 +773,12 @@ int Solucao::Viabilidade2(int EscolhaVeiculo, int EscolhaConstrucao, int Escolha
 	// guarda o nivel de inviabilidade
 	InviabilidadeSolucaoAnterior = ConstrucoesInstancia.NivelDeInviabilidade;
 	// Verifica se pode atender uma construção ainda, se tem uma com demanda não atendida
+
+
 	while( ConstrucoesInstancia.VerificaConstrucaoPodeAtender() == 1 && ConstrucoesInstancia.NivelDeInviabilidade > 0){
+
+
+
 		// retorna a demanda e a construção que serão analisados inicialmente
 		ProcuraConstrucaoNaoAtendida( ConstrucaoNaoAtendida, DemandaNaoAtendidaFim);
 
@@ -781,6 +790,9 @@ int Solucao::Viabilidade2(int EscolhaVeiculo, int EscolhaConstrucao, int Escolha
 		TempoPlantaPodeAtender.resize(NP);
 		// retorna o incide da cosntrução que tem qeu ser analisada no momento
 		ConstrucoesInstancia.RetornaIndiceConstrucao(ConstrucaoNaoAtendida, IndiceConstrucaoNaoAtendida, " inicio -> Solucao::ProcessoViabilizacao2" );
+
+
+
 
 		//cout << endl << endl << " ---- Demanda Nao Atendida = [" << ConstrucaoNaoAtendida << "-" << DemandaNaoAtendidaFim << "] ---- "<< endl << endl;
 
@@ -810,6 +822,10 @@ int Solucao::Viabilidade2(int EscolhaVeiculo, int EscolhaConstrucao, int Escolha
 				//cout << endl << endl << " 				+ (" << TarefaAdicionada << ") Adiciona  [" << ConstrucaoNaoAtendida << "-" << d1 << "] "<< endl << endl;
 
 			}
+
+
+
+
 			// Verifa se conseguiu alocar a demanda não alocada antes.
 			if( TarefaAdicionada == 0){
 				// se retorna a situação inical antes de se deletar as demandas da
@@ -828,6 +844,7 @@ int Solucao::Viabilidade2(int EscolhaVeiculo, int EscolhaConstrucao, int Escolha
 				}
 			// caso se conseguiu colocar todas as demandas na construção corrente que se queria ( a demanda DemandaNaoAtendidaInicio até a DemandaNaoAtendidaFim)
 			}else{
+
 				// marca todas as construções como possiveis a alocar demandas, todas com 0 em ConstrucoesAnalisadas ( IMPORTANTE!!!!!!!!! Construções analizadas é diferente que ConstrucaoPodeSerSuprida. Elas desempenham funçẽos diferentes apesar de parecerem iguais)
 				ConstrucoesInstancia.InicializaConstrucoesAnalizadas();
 				// marca as construções com todas suas demandas atendidas com 2, e a construção que tinha uma demanda sem atender e que agora foi atendida com 3
@@ -839,6 +856,15 @@ int Solucao::Viabilidade2(int EscolhaVeiculo, int EscolhaConstrucao, int Escolha
 
 				//cout << endl << "  Readiciona as ";
 
+
+
+
+
+
+
+
+
+
 				// caso se tenha uma construção que ainda se pode alocar demandas
 				while( PossuiConstrucaoParaAnalisar == 1){
 
@@ -846,13 +872,16 @@ int Solucao::Viabilidade2(int EscolhaVeiculo, int EscolhaConstrucao, int Escolha
 
 					// coloca a demanda que se tem que alocar no momento
 					d2 = ConstrucoesInstancia.Construcoes[IndiceConstrucaoParaAtender].StatusAtendimento;
+
 			// tenta adicionar a demanda corrente
 					// faz que ainda é possivel se adicionar uma demanda na cosntrução corrente
 					TarefaAdicionada = 1;
 					// enquanto for possivel adicionar uma demanda na construção corrente e que a cosntrução ainda não tenha todas as suas demandas supridas, se mantem no loop
 					while( d2 < ConstrucoesInstancia.Construcoes[IndiceConstrucaoParaAtender].NumeroDemandas && TarefaAdicionada == 1){
+
 						// tenta adicionar a demanda corrente (d2) a cosntrução
 						TarefaAdicionada = ConstrucoesInstancia.AdicionaTarefa( 0, ConstrucaoParaAtender, d2, DadosTarefasMovidasTentandoAlocar, 1, 0, RealizaProcessoDeAtrazarTarefas, EscolhaVeiculo, EscolhaPlanta, PlantasInstancia, Imprime , " Readicionando -> Solucao::ProcessoViabilizacao2 ");
+
 						// passa para a proxima demnada que se pode adicionar na construção
 						d2++;
 					}
@@ -870,9 +899,20 @@ int Solucao::Viabilidade2(int EscolhaVeiculo, int EscolhaConstrucao, int Escolha
 						// marca a construção como sendo que não se consegue atender suas demandas
 						ConstrucoesInstancia.ConstrucoesAnalizadas[IndiceConstrucaoParaAtender] = -1;
 					}
+
+
+
 					// se passa para a proxima construção que se pode atender
 					PossuiConstrucaoParaAnalisar = SelecionaConstrucao( ConstrucaoParaAtender, IndiceConstrucaoParaAtender, ConstrucoesInstancia.ConstrucoesAnalizadas);
+
+
 				}
+
+
+
+
+
+
 
 				//cout << endl;
 
@@ -926,7 +966,11 @@ int Solucao::Viabilidade2(int EscolhaVeiculo, int EscolhaConstrucao, int Escolha
 					}
 				}
 			}
+
+
+
 		}
+
 
 		//cout << endl << endl << "           >>>>>>>>>> sai da construção [" <<  ConstrucaoNaoAtendida << "] " << endl << endl;
 		//cin >> PararPrograma;
@@ -1149,7 +1193,7 @@ void ConjuntoSolucoes::InsereSolucao(int np, ConjuntoPlantas Plantas, int ne, Co
 // calcula o makespan das soluções
 void ConjuntoSolucoes::CalculaMakespanSolucoes(){
 	// percorre por todas as soluções
-	for( unsigned  int s = 0; s <  Solucoes.size(); s++){
+	for( int s = 0; s <  (int) Solucoes.size(); s++){
 		// calcula o makespan da solução corrente de suas construções
 		Solucoes[s].ConstrucoesInstancia.CalculaMakespansConstrucoes();
 		// calcula o makespan da solução corrente de suas plantas
@@ -1162,7 +1206,7 @@ void ConjuntoSolucoes::CalculaMakespanSolucoes(){
 // imprime as soluções
 void ConjuntoSolucoes::Imprime(bool ImprimePlanta, bool ImprimeConstrucao, bool VerificaViabilidade, int ImprimeSolucao ,int ImprimeArquivo, PonteiroArquivo  &Arquivo){
 	// percorre por todas as soluções
-	for( unsigned  int s = 0; s <  Solucoes.size(); s++){
+	for( int s = 0; s <  (int) Solucoes.size(); s++){
 		if( ImprimeSolucao == 1){
 			// imprime a solução corrente
 			cout << endl << endl << "   Solucao " << s << endl << endl;

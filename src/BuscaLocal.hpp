@@ -122,47 +122,6 @@ double BuscaLocal::CalculaMakespanSolucao(){
 int BuscaLocal::BuscaLocalTentaRealizarTarefasComOutosVeiculos(int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta,int Imprime, int ImprimeEstruturas){
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-	CalculaMakespanSolucao();
-
-	int ativa;
-	ativa = 0;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	// ponteiro para o arquivo que se irá salvar os dados
 	PonteiroArquivo  Arquivo;
 	// variavel que controla se irá escrever os dados em um aruivo, é inicializada com 0
@@ -287,32 +246,8 @@ int BuscaLocal::BuscaLocalTentaRealizarTarefasComOutosVeiculos(int EscolhaVeicul
 						// enquanto se consegue recolocar demandas e se tem demandas para se recolocar se continua no while
 						while( Recolocar == 1 && DemandaRecolocar <   ConstrucoesInstancia.Construcoes[IndiceConstrucaoEscolhida].NumeroDemandas){
 
-
-
-
-
-
-
-
-							if( ativa == 1 && ConstrucoesInstancia.Construcoes[IndiceConstrucaoEscolhida].NumeroDaConstrucao == 6 && DemandaRecolocar == 3 && PlantasInstancia.Plantas[p].NumeroDaPlanta == 0 && PlantasInstancia.Plantas[p].VeiculosDaPlanta.Carretas[v].NumeroDaCarreta == 6){
-								ImprimeDadosAdicionaTarefa = 1;
-
-								cout << endl << endl << endl << endl << "                (((((((((((<<<<<<<<< Começa AdicionaTarefa >>>>>>>>>>>>>>>)))))))))))))))) " << endl << endl << endl << endl;
-
-							}
-
 							// se tenta recolocar a demanda corrente
 							Recolocar = ConstrucoesInstancia.AdicionaTarefa( 0 , ConstrucoesInstancia.Construcoes[IndiceConstrucaoEscolhida].NumeroDaConstrucao, DemandaRecolocar , DadosTarefasMovidasReadicaoDeDemandas, 1, 0, RealizaProcessoDeAtrazarTarefas, EscolhaVeiculo , EscolhaPlanta, PlantasInstancia, ImprimeDadosAdicionaTarefa,"  <<<<< BuscaLocal::BuscaLocalRetiraTarefasUmaConstrucao >>> ");
-
-
-							if( ativa == 1 && ConstrucoesInstancia.Construcoes[IndiceConstrucaoEscolhida].NumeroDaConstrucao == 6 && DemandaRecolocar == 3 && PlantasInstancia.Plantas[p].NumeroDaPlanta == 0 && PlantasInstancia.Plantas[p].VeiculosDaPlanta.Carretas[v].NumeroDaCarreta == 6){
-								ImprimeDadosAdicionaTarefa = 0;
-
-								cout << endl << endl << endl << endl << "                (((((((((((<<<<<<<<< Termina AdicionaTarefa >>>>>>>>>>>>>>>)))))))))))))))) " << endl << endl << endl << endl;
-
-							}
-
-
 
 							if( Imprime == 1){
 								cout << endl << endl << " >+< Recoloca [" << ConstrucaoEscolhida << "-" << DemandaRecolocar << "] -> " << Recolocar << endl << endl;

@@ -534,6 +534,7 @@ int ConjuntoPlantas::CorrigeReferenciaCarregamentoDeslocamentoMaisUm( int NumPla
 	int p;
 	if( AlocaInidiceFabrica(NumPlantaFornecedor,p) == 0){
 		cout << endl << endl << " <<<<<<<< probelam com indice planta [" << NumPlantaFornecedor << "] => " << p << " -> ConjuntoPlantas::CorrigeReferenciaCarregamentoDeslocamentoMaisUm  >>>>>>>>>>>>> " << endl << endl ;
+		return 0;
 	}
 
 // Encontra os tempos relativos da tarefa na planta
@@ -558,6 +559,7 @@ int ConjuntoPlantas::CorrigeReferenciaCarregamentoDeslocamentoMaisUm( int NumPla
 	int v;
 	if( Plantas[p].VeiculosDaPlanta.AlocaInidiceVeiculo( NumCarretaUtilizada, v) == 0 ){
 		cout << endl << endl << " <<<<<<<< probelam com indice veiculo [" << NumCarretaUtilizada << "] => " << v << " ->CorrigeReferenciaCarregamentoDeslocamentoMaisUm  >>>>>>>>>>>>> " << endl << endl ;
+		return 0;
 	}
 
 // Encontra os tempos relativos da tarefa no caminhão (veículo)

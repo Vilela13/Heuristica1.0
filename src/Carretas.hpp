@@ -72,7 +72,7 @@ Carreta::Carreta(){
 // verifica a disponibilidade do veículo para atender a demanda
 int Carreta::VerificaDisponibilidade(double InicioPossivelAlocacao, double FinalPossivelAlocacao){
 	// percorre todos os delocamentos
-	for( unsigned int d = 0; d < Deslocamentos.size(); d ++){
+	for( int d = 0; d < (int) Deslocamentos.size(); d ++){
 		// verifica se o deslocamento que se quer colocar possui dentro de se um deslocamento já alocado
 		if( InicioPossivelAlocacao <= Deslocamentos[d].HorarioInicioDeslocamento){
 			if ( FinalPossivelAlocacao >= Deslocamentos[d].HorarioFinalDeslocamento){
@@ -180,7 +180,7 @@ void Carreta::Imprime(int Ordena, int ImprimeSolucao, int ImprimeArquivo, Pontei
 // verifica a integridade entre os Deslocamentos da Carreta
 int Carreta::VerificaIntegridadeDeDeslocamentos(int Imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo){
 	// percorre todos os Deslocamentos
-	for( unsigned int d1 = 0; d1 < Deslocamentos.size(); d1++){
+	for( int d1 = 0; d1 < (int) Deslocamentos.size(); d1++){
 		// verifica se o Deslocamento não possui tempo negativo
 		if( Deslocamentos[d1].HorarioInicioDeslocamento > Deslocamentos[d1].HorarioFinalDeslocamento ){
 			if( ImprimeSolucao == 1){
@@ -192,7 +192,7 @@ int Carreta::VerificaIntegridadeDeDeslocamentos(int Imprime, int ImprimeSolucao,
 			return 0;
 		}
 		// percorre todos os Deslocamentos
-		for( unsigned int d2 = 0; d2 < Deslocamentos.size(); d2++){
+		for( int d2 = 0; d2 < (int) Deslocamentos.size(); d2++){
 			// o Deslocamento não pode ser o memso que o analisado no primeiro loop
 			if( Deslocamentos[d1].HorarioInicioDeslocamento != Deslocamentos[d2].HorarioInicioDeslocamento && Deslocamentos[d1].HorarioFinalDeslocamento != Deslocamentos[d2].HorarioFinalDeslocamento){
 				// verifica se o Deslocamento está contido dentro de outro Deslocamento
@@ -350,7 +350,7 @@ int ConjuntoCarretas::DeletaTarefa( int NumeroCaminhao, double HoraInicio, doubl
 	Retirou = 0;
 
 	// percorre por todas as carretas
-	for( unsigned int c = 0; c < Carretas.size(); c++){
+	for( int c = 0; c < (int) Carretas.size(); c++){
 		// verifica se a carreta corrente tem o mesmo numero que o numero da carreta passada na função
 		if( Carretas[c].NumeroDaCarreta == NumeroCaminhao){
 			// deleta a tarefa na carreta
@@ -373,7 +373,7 @@ int ConjuntoCarretas::DeletaTarefa( int NumeroCaminhao, double HoraInicio, doubl
 // aloca o inidice do veiculo crrespondente ao numero do caminhão
 int ConjuntoCarretas::AlocaInidiceVeiculo( int NumCarretaUtilizada, int &v){
 	// percorre todos os caminhões
-	for( unsigned int i = 0; i < Carretas.size(); i++){
+	for(  int i = 0; i < (int) Carretas.size(); i++){
 		// caso encontrar o caminhão procurado
 		if ( Carretas[i].NumeroDaCarreta == NumCarretaUtilizada ){
 			// aloca o inice do caminhão
@@ -401,7 +401,7 @@ void ConjuntoCarretas::Imprime(int Ordena, int ImprimeSolucao, int ImprimeArquiv
 	}
 
 	// percorre todas as carretas
-	for( unsigned int c = 0; c < Carretas.size(); c++){
+	for(  int c = 0; c < (int) Carretas.size(); c++){
 		// imprime os dados da carreta
 		Carretas[c].Imprime(Ordena, ImprimeSolucao, ImprimeArquivo, Arquivo);
 	}
@@ -410,9 +410,9 @@ void ConjuntoCarretas::Imprime(int Ordena, int ImprimeSolucao, int ImprimeArquiv
 // retorna dados de deslocamento da deamnda de uma construção passados
 int ConjuntoCarretas::RetornaDadosDeslocamento(int Construcao, int Demanda, double &HorarioInicio, double &HorarioFinal){
 	// percorre todas as carretas
-	for( unsigned int c = 0; c < Carretas.size(); c++){
+	for(  int c = 0; c < (int) Carretas.size(); c++){
 		// percorre todos os deslocamentos
-		for( unsigned int d = 0; d < Carretas[c].Deslocamentos.size(); d++){
+		for(  int d = 0; d < (int) Carretas[c].Deslocamentos.size(); d++){
 			// verifica se o deslocamento atual atende a demanda passada na função
 			if( Carretas[c].Deslocamentos[d].NumeroConstrucao == Construcao && Carretas[c].Deslocamentos[d].NumeroDemandaSuprida == Demanda ){
 				// armazena os valores
@@ -435,7 +435,7 @@ int ConjuntoCarretas::VerificaIntegridadeDeDeslocamentosDasCarretas(int Imprime,
 	integro = 1;
 
 	// percorre todas as carretas
-	for( unsigned int c = 0; c < Carretas.size(); c++){
+	for(  int c = 0; c < (int) Carretas.size(); c++){
 		if( Imprime == 1){
 			if ( ImprimeSolucao == 1){
 				cout << "     Carreta [" << Carretas[c].NumeroDaCarreta << "] ";

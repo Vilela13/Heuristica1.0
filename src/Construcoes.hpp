@@ -125,17 +125,17 @@ public:
 
 	void ImprimeContrucao(int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo);		// Imprime os dados da construções
 
-	int AtrazaDemandasParaAtenderMaster( int NumDemanda, double HoraInicioAtendiemnto, vector < DadosTarefa > &DadosTarefasMovidasAuxiliar,int SituacaoDemanda, int StatusRemocao, ConjuntoPlantas& Plantas, int &SituacaoAlocacao, int EscolhaVeiculo, int EscolhaPlanta, int imprime, string frase);		// função de atrazar as demandas para atender a ultima demanda, está é a função que recebe a demanda não alocada ainda
+	int AtrasaDemandasParaAtenderMaster( int NumDemanda, double HoraInicioAtendiemnto, vector < DadosTarefa > &DadosTarefasMovidasAuxiliar,int SituacaoDemanda, int StatusRemocao, ConjuntoPlantas& Plantas, int &SituacaoAlocacao, int EscolhaVeiculo, int EscolhaPlanta, int imprime, string frase);		// função de atrazar as demandas para atender a ultima demanda, está é a função que recebe a demanda não alocada ainda
 
 	int RecolocaTarefaDeletada( vector < DadosTarefa > &DadosTarefasMovidasAuxiliar, ConjuntoPlantas& Plantas, int imprime);
-	void AtrazaDemandasParaAtenderRecursao( int NumDemanda, double HoraInicioAtendiemnto, vector < DadosTarefa > &DadosTarefasMovidasAuxiliar,ConjuntoPlantas& Plantas, int &SituacaoAlocacao, int EscolhaVeiculo, int EscolhaPlanta,int imprime, string frase);			// função de atrazar as demandas para atender a ultima demanda, está é a função que recebe as demandas que serão atrasadas para que a demanda não atendida possa ser atendida
+	void AtrasaDemandasParaAtenderRecursao( int NumDemanda, double HoraInicioAtendiemnto, vector < DadosTarefa > &DadosTarefasMovidasAuxiliar,ConjuntoPlantas& Plantas, int &SituacaoAlocacao, int EscolhaVeiculo, int EscolhaPlanta,int imprime, string frase);			// função de atrazar as demandas para atender a ultima demanda, está é a função que recebe as demandas que serão atrasadas para que a demanda não atendida possa ser atendida
 	void EncontraPlanta(  int& NumPlantaAnalisando, int EscolhaPlanta, ConjuntoPlantas& Plantas, string frase);					// encontra a planta mais perto da construção e que não tenha sido analisada antes
 	int AlocaAtividadeComHorarioFinalAtendimento( int NumDemanda, double HoraFimAtendimento, double &NovaHoraFimAtendimento, vector < DadosTarefa > &DadosTarefasMovidasAuxiliar,int SituacaoDemanda, int StatusRemocao,ConjuntoPlantas& Plantas, int EscolhaVeiculo,  int EscolhaPlanta, int imprime, string frase);			// aloca atividade sabedno que ela tem que começar em um certo hoario, este horaio é determinado pelo horaio que ela tem que terminar.
 
 	int VerificaIntegridadeDeDescrregamentos(int imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo);			// verifica a integridade entre os descarregamentos da construção
 
 	int AlocaAtividadeComHorarioFinalAtendimentoComVeiculoFixo( int NumDemanda, int NumPlanta, int NumCarreta, double HoraFimAtendimento, double &NovaHoraFimAtendimento, vector < DadosTarefa > &DadosTarefasMovidasAuxiliar, int SituacaoDemanda, int StatusRemocao, ConjuntoPlantas& Plantas, int EscolhaVeiculo, int EscolhaPlanta, string frase);		// aloca atividade sabedno que ela tem que começar em um certo hoario, este horaio é determinado pelo horaio que ela tem que terminar. Nesse caso se tem que realizar o atendimeto com o veículo passado na função
-	int AtrazaDemandasParaAtenderMasterComVeiculoFixo( int NumDemanda, int NumPlanta, int NumCarreta, double HoraFimAtendimento, vector < DadosTarefa > &DadosTarefasMovidasAuxiliar,int SituacaoDemanda, int StatusRemocao,ConjuntoPlantas& Plantas, int &SituacaoAlocacao, int EscolhaVeiculo, int EscolhaPlanta,int imprime, string frase);
+	int AtrasaDemandasParaAtenderMasterComVeiculoFixo( int NumDemanda, int NumPlanta, int NumCarreta, double HoraFimAtendimento, vector < DadosTarefa > &DadosTarefasMovidasAuxiliar,int SituacaoDemanda, int StatusRemocao,ConjuntoPlantas& Plantas, int &SituacaoAlocacao, int EscolhaVeiculo, int EscolhaPlanta,int imprime, string frase);
 
 	int DemandaNaoatendida( int &DemandaNaoAtendida);			// retorna a demanda não atendida na construção por parametro, retorna 1 se tive demanda não atendida e zero se a construção já tiver sido completamente atendida
 
@@ -995,7 +995,7 @@ void Construcao::ImprimeContrucao(int ImprimeSolucao, int ImprimeArquivo, Pontei
 }
 
 // função de atrazar as demandas para atender a ultima demanda, está é a função que recebe a demanda não alocada ainda
-int Construcao::AtrazaDemandasParaAtenderMaster( int NumDemanda, double HoraFimAtendimento, vector < DadosTarefa > &DadosTarefasMovidasAuxiliar,int SituacaoDemanda, int StatusRemocao,ConjuntoPlantas& Plantas, int &SituacaoAlocacao, int EscolhaVeiculo, int EscolhaPlanta, int imprime, string frase){
+int Construcao::AtrasaDemandasParaAtenderMaster( int NumDemanda, double HoraFimAtendimento, vector < DadosTarefa > &DadosTarefasMovidasAuxiliar,int SituacaoDemanda, int StatusRemocao,ConjuntoPlantas& Plantas, int &SituacaoAlocacao, int EscolhaVeiculo, int EscolhaPlanta, int imprime, string frase){
 
 	// ****************** Variaveis que precisão ser removidas, pois não tem utilidade na função ***************************//
 
@@ -1033,7 +1033,7 @@ int Construcao::AtrazaDemandasParaAtenderMaster( int NumDemanda, double HoraFimA
 		}
 
 		// tenta atrazar as demandas anteriores para possibilitar o atendimento da demand corrente
-		AtrazaDemandasParaAtenderRecursao( NumDemanda, HoraFimAtendimento,  DadosTarefasMovidasAuxiliar,  Plantas, SituacaoAlocacao, EscolhaVeiculo,  EscolhaPlanta,imprime, frase);
+		AtrasaDemandasParaAtenderRecursao( NumDemanda, HoraFimAtendimento,  DadosTarefasMovidasAuxiliar,  Plantas, SituacaoAlocacao, EscolhaVeiculo,  EscolhaPlanta,imprime, frase);
 
 		if( SituacaoAlocacao == 1){
 
@@ -1104,7 +1104,7 @@ int Construcao::RecolocaTarefaDeletada( vector < DadosTarefa > &DadosTarefasMovi
 }
 
 // função de atrazar as demandas para atender a ultima demanda, está é a função que recebe as demandas que serão atrasadas para que a demanda não atendida possa ser atendida
-void Construcao::AtrazaDemandasParaAtenderRecursao( int NumDemanda, double HoraFimAtendimento, vector < DadosTarefa > &DadosTarefasMovidasAuxiliar,ConjuntoPlantas& Plantas, int &SituacaoAlocacao, int EscolhaVeiculo, int EscolhaPlanta, int imprime, string frase){
+void Construcao::AtrasaDemandasParaAtenderRecursao( int NumDemanda, double HoraFimAtendimento, vector < DadosTarefa > &DadosTarefasMovidasAuxiliar,ConjuntoPlantas& Plantas, int &SituacaoAlocacao, int EscolhaVeiculo, int EscolhaPlanta, int imprime, string frase){
 
 	// ****************** Variaveis que precisão ser removidas, pois não tem utilidade na função *************************** //
 
@@ -1138,7 +1138,7 @@ void Construcao::AtrazaDemandasParaAtenderRecursao( int NumDemanda, double HoraF
 		cout << "DadosTarefasMovidasAuxiliar" << endl;
 		ImprimeVetorDadosTarefa( DadosTarefasMovidasAuxiliar);
 
-		cout << endl << endl << "        ->->->->->->->-> Atraza Demandas Para Atender  Demanda [" << NumeroDaConstrucao << "-" << NumDemanda << "] - Deleta a demanda [" << NumeroDaConstrucao << "-" << NumDemanda -1 << "] tem que terminar de ser atendida as " << HoraFimAtendimento << endl << endl;
+		cout << endl << endl << "        ->->->->->->->-> Atrasa Demandas Para Atender  Demanda [" << NumeroDaConstrucao << "-" << NumDemanda << "] - Deleta a demanda [" << NumeroDaConstrucao << "-" << NumDemanda -1 << "] tem que terminar de ser atendida as " << HoraFimAtendimento << endl << endl;
 	}
 	// armazena a situação demanda e remoção antes de deletar a demanda
 	SituacaoDemandaAux = SituacaoDemanda[NumDemanda-1];
@@ -1146,7 +1146,7 @@ void Construcao::AtrazaDemandasParaAtenderRecursao( int NumDemanda, double HoraF
 
 	// confere se tem mais demanda que se deveria ter
 	if( StatusAtendimento > NumDemanda){
-		cout << endl << endl << "            >>>>>>>>>>>>>> Problema! tem mais descarregamentos do que deveria! StatusAtendimento [" << StatusAtendimento << "] NumDemanda [" << NumDemanda << "] -> Construcao::AtrazaDemandasParaAtenderRecursao( " << endl << endl;
+		cout << endl << endl << "            >>>>>>>>>>>>>> Problema! tem mais descarregamentos do que deveria! StatusAtendimento [" << StatusAtendimento << "] NumDemanda [" << NumDemanda << "] -> Construcao::AtrasaDemandasParaAtenderRecursao( " << endl << endl;
 		ImprimeContrucao(1,0,Arquivo);
 		cout << endl << endl;
 		cin >> ParaPrograma;
@@ -1190,7 +1190,7 @@ void Construcao::AtrazaDemandasParaAtenderRecursao( int NumDemanda, double HoraF
 
 				while( SituacaoAlocacao == -2  ){
 					// chama a função recursivamente para tentar atrazar a demanda que vem antes da demanda corrente. Isto é para possibilitar colocar a demanda corrente respeitando o tempo para atender a demanda após a demanda corrente
-					AtrazaDemandasParaAtenderRecursao( NumDemanda - 1, HoraFimAtendimento,  DadosTarefasMovidasAuxiliar,Plantas, SituacaoAlocacao,  EscolhaVeiculo,  EscolhaPlanta, imprime, frase);
+					AtrasaDemandasParaAtenderRecursao( NumDemanda - 1, HoraFimAtendimento,  DadosTarefasMovidasAuxiliar,Plantas, SituacaoAlocacao,  EscolhaVeiculo,  EscolhaPlanta, imprime, frase);
 					// caso conseguiu alocar a demanda antes da demanda corrente na função recursiva acima, entra no if
 					if( SituacaoAlocacao == 1){
 						// tenta alocar a demanda corrente
@@ -1407,7 +1407,7 @@ int Construcao::AlocaAtividadeComHorarioFinalAtendimento( int NumDemanda, double
 		}
 
 		if( imprime == 1){
-			cout << endl << endl <<  " SituacaoPlantaAtenderCasoAtrazar" << endl;
+			cout << endl << endl <<  " SituacaoPlantaAtenderCasoAtrasar" << endl;
 			ImprimeVetorInt(  Plantas.PlantasAnalizadas );
 			cout <<   " HorarioQuePlantaPodeAtender" << endl;
 			ImprimeVetorDouble(  Plantas.HorarioQuePlantaPodeAtender);
@@ -1417,7 +1417,7 @@ int Construcao::AlocaAtividadeComHorarioFinalAtendimento( int NumDemanda, double
 		}
 
 		// caso se dê para atender caso atrazar os otros atendiemntos se enra na função
-		if( Plantas.VerificaPlantasAnalizadasPodemAtenderSeAtrazar() == 1){
+		if( Plantas.VerificaPlantasAnalizadasPodemAtenderSeAtrasar() == 1){
 			// se fornece o horario que a demanda anterior a está tem que terminar pelo menos
 			NovaHoraFimAtendimento = Plantas.RetornaMenorHorarioQueConstrucaoPodeReceberDemanda() - TempoMaximoEntreDescargas + IntervaloDeTempo;
 			// retorna -2 para indicar que se pode atender a demada caso se atrasa-la
@@ -1622,7 +1622,7 @@ int Construcao::AlocaAtividadeComHorarioFinalAtendimentoComVeiculoFixo( int NumD
 
 
 // função de atrazar as demandas para atender a ultima demanda, está é a função que recebe a demanda não alocada ainda
-int Construcao::AtrazaDemandasParaAtenderMasterComVeiculoFixo( int NumDemanda, int NumPlanta, int NumCarreta, double HoraFimAtendimento, vector < DadosTarefa > &DadosTarefasMovidasAuxiliar,int SituacaoDemanda, int StatusRemocao,ConjuntoPlantas& Plantas, int &SituacaoAlocacao, int EscolhaVeiculo, int EscolhaPlanta,int imprime, string frase){
+int Construcao::AtrasaDemandasParaAtenderMasterComVeiculoFixo( int NumDemanda, int NumPlanta, int NumCarreta, double HoraFimAtendimento, vector < DadosTarefa > &DadosTarefasMovidasAuxiliar,int SituacaoDemanda, int StatusRemocao,ConjuntoPlantas& Plantas, int &SituacaoAlocacao, int EscolhaVeiculo, int EscolhaPlanta,int imprime, string frase){
 
 
 	// ****************** Variaveis que precisão ser removidas, pois não tem utilidade na função ***************************//
@@ -1643,7 +1643,7 @@ int Construcao::AtrazaDemandasParaAtenderMasterComVeiculoFixo( int NumDemanda, i
 	double NovaHoraFimAtendimento;
 
 	if( imprime == 1){
-		cout << endl << endl << "     ====================== Entra Master [" << NumeroDaConstrucao << "-" << NumDemanda << "] -> Construcao::AtrazaDemandasParaAtenderMasterComVeiculoFixo ====================== "  << endl << endl;
+		cout << endl << endl << "     ====================== Entra Master [" << NumeroDaConstrucao << "-" << NumDemanda << "] -> Construcao::AtrasaDemandasParaAtenderMasterComVeiculoFixo ====================== "  << endl << endl;
 
 		ImprimeContrucao(ImprimeSolucao,ImprimeArquivo,Arquivo);
 		cout << "DadosTarefasMovidasAuxiliar" << endl;
@@ -1657,7 +1657,7 @@ int Construcao::AtrazaDemandasParaAtenderMasterComVeiculoFixo( int NumDemanda, i
 	while(SituacaoAlocacao == -2 ){
 
 		// tenta atrazar as demandas anteriores para possibilitar o atendimento da demand corrente
-		AtrazaDemandasParaAtenderRecursao( NumDemanda, HoraFimAtendimento,  DadosTarefasMovidasAuxiliar,  Plantas, SituacaoAlocacao,EscolhaVeiculo, EscolhaPlanta,imprime, frase);
+		AtrasaDemandasParaAtenderRecursao( NumDemanda, HoraFimAtendimento,  DadosTarefasMovidasAuxiliar,  Plantas, SituacaoAlocacao,EscolhaVeiculo, EscolhaPlanta,imprime, frase);
 
 		if( SituacaoAlocacao == 1){
 
@@ -1674,7 +1674,7 @@ int Construcao::AtrazaDemandasParaAtenderMasterComVeiculoFixo( int NumDemanda, i
 		ImprimeContrucao( ImprimeSolucao,ImprimeArquivo,Arquivo);
 		cout << "DadosTarefasMovidasAuxiliar" << endl;
 		ImprimeVetorDadosTarefa( DadosTarefasMovidasAuxiliar);
-		cout << endl << endl << "     ====================== Sai Master [" << NumeroDaConstrucao << "-" << NumDemanda << "] -> Construcao::AtrazaDemandasParaAtenderMasterComVeiculoFixo ====================== "  << endl << endl;
+		cout << endl << endl << "     ====================== Sai Master [" << NumeroDaConstrucao << "-" << NumDemanda << "] -> Construcao::AtrasaDemandasParaAtenderMasterComVeiculoFixo ====================== "  << endl << endl;
 	}
 
 	if( SituacaoAlocacao == 1){
@@ -1826,8 +1826,8 @@ public:
 	int ReadicionaDeletaTarefasApartirDeDados( vector < DadosTarefa > DadosTarefasMovidas, ConjuntoPlantas &PlantasInstancia);
 
 	void EncontraPlanta( int c, int& NumPlantaAnalisando, int EscolhaPlanta, ConjuntoPlantas &PlantasInstancia, string frase);		// encontra a planta mais perto da construção que ainda não foi analisada
-	int AdicionaTarefa( int VerificaExistencia, int Construcao, int Demanda , vector < DadosTarefa > &DadosTarefasMovidas, int SituacaoDemanda, int SituacaoRemocao, int RealizaProcessoDeAtrazarTarefas, int EscolhaVeiculo ,int EscolhaPlanta, ConjuntoPlantas &PlantasInstancia, int imprime, string frase);		// função que tenta alocar uma demanda
-	int AdicionaTarefaComVeiculoFixo( int VerificaExistencia, int Construcao, int Demanda , int Planta, int Carreta, vector < DadosTarefa > &DadosTarefasMovidas, int SituacaoDemanda, int SituacaoRemocao, int RealizaProcessoDeAtrazarTarefas, int EscolhaVeiculo, int EscolhaPlanta, ConjuntoPlantas &PlantasInstancia, int imprime, string frase);
+	int AdicionaTarefa( int VerificaExistencia, int Construcao, int Demanda , vector < DadosTarefa > &DadosTarefasMovidas, int SituacaoDemanda, int SituacaoRemocao, int RealizaProcessoDeAtrasarTarefas, int EscolhaVeiculo ,int EscolhaPlanta, ConjuntoPlantas &PlantasInstancia, int imprime, string frase);		// função que tenta alocar uma demanda
+	int AdicionaTarefaComVeiculoFixo( int VerificaExistencia, int Construcao, int Demanda , int Planta, int Carreta, vector < DadosTarefa > &DadosTarefasMovidas, int SituacaoDemanda, int SituacaoRemocao, int RealizaProcessoDeAtrasarTarefas, int EscolhaVeiculo, int EscolhaPlanta, ConjuntoPlantas &PlantasInstancia, int imprime, string frase);
 
 	void OrdenaCosntrucoes( int EscolhaConstrucao);
 
@@ -2529,7 +2529,7 @@ void ConjuntoConstrucoes::EncontraPlanta( int c, int& NumPlantaAnalisando,int Es
 
 // função que tenta alocar uma demanda
 
-int ConjuntoConstrucoes::AdicionaTarefa( int VerificaExistencia, int Construcao, int Demanda , vector < DadosTarefa > &DadosTarefasMovidas, int SituacaoDemanda, int SituacaoRemocao, int RealizaProcessoDeAtrazarTarefas, int EscolhaVeiculo , int EscolhaPlanta, ConjuntoPlantas &PlantasInstancia, int imprime, string frase){
+int ConjuntoConstrucoes::AdicionaTarefa( int VerificaExistencia, int Construcao, int Demanda , vector < DadosTarefa > &DadosTarefasMovidas, int SituacaoDemanda, int SituacaoRemocao, int RealizaProcessoDeAtrasarTarefas, int EscolhaVeiculo , int EscolhaPlanta, ConjuntoPlantas &PlantasInstancia, int imprime, string frase){
 
 	// ****************** Variaveis que precisão ser removidas, pois não tem utilidade na função ***************************//
 
@@ -2665,7 +2665,7 @@ int ConjuntoConstrucoes::AdicionaTarefa( int VerificaExistencia, int Construcao,
 				}
 			}
 			if( imprime == 1){
-				cout << endl << endl <<  " SituacaoPlantaAtenderCasoAtrazar" << endl;
+				cout << endl << endl <<  " SituacaoPlantaAtenderCasoAtrasar" << endl;
 				ImprimeVetorInt( PlantasInstancia.PlantasAnalizadas );
 				cout <<   " HorarioQuePlantaPodeAtender" << endl;
 				ImprimeVetorDouble( PlantasInstancia.HorarioQuePlantaPodeAtender);
@@ -2675,7 +2675,7 @@ int ConjuntoConstrucoes::AdicionaTarefa( int VerificaExistencia, int Construcao,
 			}
 
 			// caso não se tenha conseguido atender a demanda corrente, se verifica se tem alguma planta que pode atender a demanda caso se mude o horario de atendiemnto das outras demandas posteriores a está. Caso se possa, se entra no if e tenta mudar o horario das demandas anteriores para se tentar atender a demanda corrente
-			if( PlantasInstancia.VerificaPlantasAnalizadasPodemAtenderSeAtrazar() == 1){
+			if( PlantasInstancia.VerificaPlantasAnalizadasPodemAtenderSeAtrasar() == 1){
 
 				if( imprime == 1){
 						cout << "   &&&&&&&&&&&&& Nao consigo atender contrucao [" << Construcoes[c].NumeroDaConstrucao << "-" << Demanda << "]   sem atrazar as outra demandas -> ConjuntoConstrucoes::AdicionaTarefa &&&&&&&&&&&&& " << endl;
@@ -2688,7 +2688,7 @@ int ConjuntoConstrucoes::AdicionaTarefa( int VerificaExistencia, int Construcao,
 				}
 
 				// função que realiza o atraso das tarefas para atender uma demanda anterior, caso cosnseguir alocar entra no if
-				if ( Construcoes[c].AtrazaDemandasParaAtenderMaster( Demanda, PlantasInstancia.RetornaMenorHorarioQueConstrucaoPodeReceberDemanda() - Construcoes[c].TempoMaximoEntreDescargas  + IntervaloDeTempo,DadosTarefasMovidasAuxiliar, SituacaoDemanda, SituacaoRemocao, PlantasInstancia, SituacaoAlocacao, EscolhaVeiculo, EscolhaPlanta, imprime, frase) == 1 ){
+				if ( Construcoes[c].AtrasaDemandasParaAtenderMaster( Demanda, PlantasInstancia.RetornaMenorHorarioQueConstrucaoPodeReceberDemanda() - Construcoes[c].TempoMaximoEntreDescargas  + IntervaloDeTempo,DadosTarefasMovidasAuxiliar, SituacaoDemanda, SituacaoRemocao, PlantasInstancia, SituacaoAlocacao, EscolhaVeiculo, EscolhaPlanta, imprime, frase) == 1 ){
 					if( imprime == 1){
 						cout << endl << endl << "       ******* adicionei demanda [" << Construcoes[c].NumeroDaConstrucao << "-" << Demanda << "] com o processo de atraso " << endl << endl;
 						cout << "DadosTarefasMovidasAuxiliar" << endl;
@@ -2751,7 +2751,7 @@ int ConjuntoConstrucoes::AdicionaTarefa( int VerificaExistencia, int Construcao,
 
 // função que tenta alocar uma demanda
 
-int ConjuntoConstrucoes::AdicionaTarefaComVeiculoFixo( int VerificaExistencia, int Construcao, int Demanda , int Planta, int Carreta, vector < DadosTarefa > &DadosTarefasMovidas, int SituacaoDemanda, int SituacaoRemocao, int RealizaProcessoDeAtrazarTarefas, int EscolhaVeiculo, int EscolhaPlanta, ConjuntoPlantas &PlantasInstancia, int imprime, string frase){
+int ConjuntoConstrucoes::AdicionaTarefaComVeiculoFixo( int VerificaExistencia, int Construcao, int Demanda , int Planta, int Carreta, vector < DadosTarefa > &DadosTarefasMovidas, int SituacaoDemanda, int SituacaoRemocao, int RealizaProcessoDeAtrasarTarefas, int EscolhaVeiculo, int EscolhaPlanta, ConjuntoPlantas &PlantasInstancia, int imprime, string frase){
 
 	// ****************** Variaveis que precisão ser removidas, pois não tem utilidade na função ***************************//
 
@@ -2876,7 +2876,7 @@ int ConjuntoConstrucoes::AdicionaTarefaComVeiculoFixo( int VerificaExistencia, i
 		}
 
 		if( imprime == 1){
-			cout << endl << endl <<  " SituacaoPlantaAtenderCasoAtrazar [" << SituacaoPlanta << "]" << endl;
+			cout << endl << endl <<  " SituacaoPlantaAtenderCasoAtrasar [" << SituacaoPlanta << "]" << endl;
 			cout <<   " HorarioQuePlantaPodeAtender [" << HorarioQuePlantaPodeAtender << "]" << endl;
 			cout <<   " HorarioQueConstrucaoPodeReceberDemanda [" << HorarioQueConstrucaoPodeReceberDemanda << "]" <<endl;
 			cin >> ParaPrograma;
@@ -2894,7 +2894,7 @@ int ConjuntoConstrucoes::AdicionaTarefaComVeiculoFixo( int VerificaExistencia, i
 				cout << endl << endl << "      Função que atraza demandas - horario que pode atender construção = " << HorarioQueConstrucaoPodeReceberDemanda << endl << endl;
 			}
 			// função que realiza o atraso das tarefas para atender uma demanda anterior, caso cosnseguir alocar entra no if
-			if ( Construcoes[c].AtrazaDemandasParaAtenderMasterComVeiculoFixo( Demanda, Planta, Carreta, HorarioQueConstrucaoPodeReceberDemanda - Construcoes[c].TempoMaximoEntreDescargas  + IntervaloDeTempo,DadosTarefasMovidasAuxiliar, SituacaoDemanda, SituacaoRemocao, PlantasInstancia, SituacaoAlocacao,  EscolhaVeiculo,  EscolhaPlanta, imprime, frase) == 1 ){
+			if ( Construcoes[c].AtrasaDemandasParaAtenderMasterComVeiculoFixo( Demanda, Planta, Carreta, HorarioQueConstrucaoPodeReceberDemanda - Construcoes[c].TempoMaximoEntreDescargas  + IntervaloDeTempo,DadosTarefasMovidasAuxiliar, SituacaoDemanda, SituacaoRemocao, PlantasInstancia, SituacaoAlocacao,  EscolhaVeiculo,  EscolhaPlanta, imprime, frase) == 1 ){
 				if( imprime == 1){
 					cout << endl << endl << "       ******* adicionei demanda [" << Construcoes[c].NumeroDaConstrucao << "-" << Demanda << "] com o processo de atraso " << endl << endl;
 					cout << "DadosTarefasMovidasAuxiliar" << endl;

@@ -407,7 +407,7 @@ public:
 	int CorrigeReferenciaCarregamentoDeslocamentoMenosUm(int NumPlanta, int NumCarreta,int Construcao, int Demanda, double HorarioInicioDescarregamento, double HorarioFinalDescarregamento);					// corrige as referencias da tarefa aumentando o numerod a demanda que é suprida em menos um
 	void Imprime(int OrdenaPlantas,int OrdenaCarrtas,int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo);		// Imprime os dados das plantas
 
-	int VerificaPlantasAnalizadasPodemAtenderSeAtrazar();			// verifica se uma das plantas em questão pode atender a demanda em questão caso de atrazar o atendimento das outras demandas da construção que se quer atender
+	int VerificaPlantasAnalizadasPodemAtenderSeAtrasar();			// verifica se uma das plantas em questão pode atender a demanda em questão caso de atrazar o atendimento das outras demandas da construção que se quer atender
 	void InicializaVetorHorarioQuePlantaPodeAtender();				// inicializa os horarios que as plantas podem atender certa demanda e a cosntrução pode ser atendida, caso das outras demandas anteriores a esta forem atrazadas, com o valor DBL_MAX
 	double RetornaMenorHorarioQueConstrucaoPodeReceberDemanda();	// retorna o menor horario que a construção pode recerber a demanda que não é atendida no momento
 
@@ -683,7 +683,7 @@ void ConjuntoPlantas::Imprime(int OrdenaPlantas,int OrdenaCarrtas , int ImprimeS
 }
 
 // verifica se uma das plantas em questão pode atender a demanda em questão caso de atrazar o atendimento das outras demandas da construção que se quer atender
-int ConjuntoPlantas::VerificaPlantasAnalizadasPodemAtenderSeAtrazar(){
+int ConjuntoPlantas::VerificaPlantasAnalizadasPodemAtenderSeAtrasar(){
 	// percorre todas as plantas
 	for ( int p = 0; p < (int) Plantas.size(); p++){
 		// verifica se a planta corrente pode atender a demanda em questão caso se atrazar o atendiemnto das demandas posteriores a demanda em questão

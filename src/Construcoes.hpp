@@ -1182,7 +1182,7 @@ void Construcao::AtrasaDemandasParaAtenderRecursao( int NumDemanda, double HoraF
 	// Atualiza o horario de inicio que a nova demanda anterior temq eu ter
 			HoraFimAtendimento = NovaHoraFimAtendimento;
 	// só entra para ver se vai no loop caso a demanda corrente no novo loop ( NumDemanda-1) for maior que 0, pois só se for maior que zero ela tera uma tarefa anterior para ser deslocada no procedimento AlocaAtendimentoComHorarioInicio
-			if( NumDemanda - 1 > 0){
+			//if( NumDemanda - 1 > 0){
 				// só entra no loop caso se puder atender a tarefa ( NumDemanda-1) caso se atrazar o atendiment de demandas anteriores
 				if( imprime == 1){
 					cout << endl << endl << "             While Entra recursão da demanda [" << NumDemanda - 1 << "]" << endl << endl;
@@ -1204,7 +1204,7 @@ void Construcao::AtrasaDemandasParaAtenderRecursao( int NumDemanda, double HoraF
 					cout << endl << endl << "             While sai recursão da demanda [" << NumDemanda - 1 << "] SituacaoAlocacao [" << SituacaoAlocacao << "]" << endl << endl;
 				}
 
-			}
+			//}
 
 			if( imprime == 1){
 				ImprimeContrucao(ImprimeSolucao,ImprimeArquivo,Arquivo);
@@ -1318,11 +1318,6 @@ int Construcao::AlocaAtividadeComHorarioFinalAtendimento( int NumDemanda, double
 
 	if( imprime == 1){
 		cout << endl << endl<< "      -++++ Aloca a demanda [" << NumeroDaConstrucao << "-" << NumDemanda << "] com final as (" << HoraFimAtendimento << ") no maximo de (" << TempoMaximoDeFuncionamento << ")" << endl;
-		if( NumeroDaConstrucao == 6 && NumDemanda == 1){
-			//Plantas.Imprime(1,1,1,0,Arquivo);
-			//ImprimeContrucao(1,0,Arquivo);
-
-		}
 	}
 
 	//int ParaPrograma;
@@ -1336,9 +1331,6 @@ int Construcao::AlocaAtividadeComHorarioFinalAtendimento( int NumDemanda, double
 			// encontra a planta mais proxma da cosntrução e que ainda não foi atendida
 			EncontraPlanta( IndPlantaAnalisando, EscolhaPlanta, Plantas, "   &&&&&&&&&&&&& Problema em fornecer valor de  NumPlantaAnalisando em adiciona tarefa  ->Construcao::AlocaAtividadeComHorarioFinalAtendimento( &&&&&&&&&&&&& ");
 
-
-
-
 			// ordena as carretas da planta de acordo com as tarefas realizadas
 			Plantas.Plantas[IndPlantaAnalisando].VeiculosDaPlanta.OrdenaCarretas(EscolhaVeiculo);
 			// percorre por todos os veiculos da planta
@@ -1347,9 +1339,6 @@ int Construcao::AlocaAtividadeComHorarioFinalAtendimento( int NumDemanda, double
 				// atualiza o horario inicial que a planta pode atender a demanda
 				HorarioInicioPlanta = HoraFimAtendimento - Plantas.Plantas[IndPlantaAnalisando].VeiculosDaPlanta.Carretas[v].TempoParaDescarregarNaConstrucao[NumeroDaConstrucao][NumDemanda] -  Plantas.Plantas[IndPlantaAnalisando].DistanciaConstrucoes[NumeroDaConstrucao] -  Plantas.Plantas[IndPlantaAnalisando].TempoPlanta;
 				HorarioChegaContrucao = HoraFimAtendimento - Plantas.Plantas[IndPlantaAnalisando].VeiculosDaPlanta.Carretas[v].TempoParaDescarregarNaConstrucao[NumeroDaConstrucao][NumDemanda];
-
-
-
 
 				// realizar até o horario inicio da planta ou da construção não ultrapassar o limite de atendidmento da planta ou da construção respectivamente
 				while( HorarioInicioPlanta <= Plantas.Plantas[IndPlantaAnalisando].TempoMaximoDeFuncionamento &&  HorarioChegaContrucao <= TempoMaximoDeFuncionamento){
@@ -1365,11 +1354,7 @@ int Construcao::AlocaAtividadeComHorarioFinalAtendimento( int NumDemanda, double
 					// caso se puder realizar a terefa se entra nos If
 
 					if( DisponibilidadePlanta == 1){
-
 						if( DisponibilidadeCarreta == 1){
-
-
-
 							if( DisponibilidadeConstrucao == 1 || DisponibilidadeConstrucao == 2 || DisponibilidadeConstrucao == 3){
 								// se consegue atender a demanda com essa planta, carreta e nessa construção
 								AlocaAtividadeSalvandoDados(0,HorarioChegaContrucao, HorarioSaiConstrucao, Plantas.Plantas[IndPlantaAnalisando].VeiculosDaPlanta.Carretas[v].NumeroDaCarreta, Plantas.Plantas[IndPlantaAnalisando].NumeroDaPlanta, SituacaoDemanda, StatusRemocao, Plantas, DadosTarefasMovidasAuxiliar);
@@ -1394,7 +1379,6 @@ int Construcao::AlocaAtividadeComHorarioFinalAtendimento( int NumDemanda, double
 									HorarioInicioPlanta = Plantas.Plantas[IndPlantaAnalisando].TempoMaximoDeFuncionamento + IntervaloDeTempo;
 								}
 							}
-
 						}
 					}
 					// acrescenta o horario inicio que ira começar o carregamento na planta

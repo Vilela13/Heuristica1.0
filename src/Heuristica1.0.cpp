@@ -148,10 +148,10 @@ int main(int argc, char **argv) {
 		// escreve o tipo de escolha do veículo
 		switch (EscolhaVeiculo) {
 			case 1:
-				printf("  -> Veículo com menor número de tarefas antes  \n");
+				printf("  -> Veículo com menor número de tarefas  \n");
 				break;
 			case 2:
-				printf("  -> Veículo com maior número de tarefas antes  \n");
+				printf("  -> Veículo com maior número de tarefas  \n");
 				break;
 			case 3:
 				printf("  -> Veículo em ordem de sua numeração  \n");

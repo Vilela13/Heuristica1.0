@@ -127,7 +127,7 @@ public:
 
 	int AtrasaDemandasParaAtenderMaster( int NumDemanda, double HoraInicioAtendiemnto, vector < DadosTarefa > &DadosTarefasMovidasAuxiliar,int SituacaoDemanda, int StatusRemocao, ConjuntoPlantas& Plantas, int &SituacaoAlocacao, int EscolhaVeiculo, int EscolhaPlanta, int imprime, string frase);		// função de atrazar as demandas para atender a ultima demanda, está é a função que recebe a demanda não alocada ainda
 
-	int RecolocaTarefaDeletada( vector < DadosTarefa > &DadosTarefasMovidasAuxiliar, ConjuntoPlantas& Plantas, int imprime);
+	void RecolocaTarefaDeletada( vector < DadosTarefa > &DadosTarefasMovidasAuxiliar, ConjuntoPlantas& Plantas, int imprime);
 	void AtrasaDemandasParaAtenderRecursao( int NumDemanda, double HoraInicioAtendiemnto, vector < DadosTarefa > &DadosTarefasMovidasAuxiliar,ConjuntoPlantas& Plantas, int &SituacaoAlocacao, int EscolhaVeiculo, int EscolhaPlanta,int imprime, string frase);			// função de atrazar as demandas para atender a ultima demanda, está é a função que recebe as demandas que serão atrasadas para que a demanda não atendida possa ser atendida
 	void EncontraPlanta(  int& NumPlantaAnalisando, int EscolhaPlanta, ConjuntoPlantas& Plantas, string frase);					// encontra a planta mais perto da construção e que não tenha sido analisada antes
 	int AlocaAtividadeComHorarioFinalAtendimento( int NumDemanda, double HoraFimAtendimento, double &NovaHoraFimAtendimento, vector < DadosTarefa > &DadosTarefasMovidasAuxiliar,int SituacaoDemanda, int StatusRemocao,ConjuntoPlantas& Plantas, int EscolhaVeiculo,  int EscolhaPlanta, int imprime, string frase);			// aloca atividade sabedno que ela tem que começar em um certo hoario, este horaio é determinado pelo horaio que ela tem que terminar.
@@ -1064,7 +1064,7 @@ int Construcao::AtrasaDemandasParaAtenderMaster( int NumDemanda, double HoraFimA
 	}
 }
 
-int Construcao::RecolocaTarefaDeletada( vector < DadosTarefa > &DadosTarefasMovidasAuxiliar,ConjuntoPlantas& Plantas, int imprime){
+void Construcao::RecolocaTarefaDeletada( vector < DadosTarefa > &DadosTarefasMovidasAuxiliar,ConjuntoPlantas& Plantas, int imprime){
 	int Posicao;
 	//PonteiroArquivo  Arquivo;
 
@@ -1309,7 +1309,7 @@ int Construcao::AlocaAtividadeComHorarioFinalAtendimento( int NumDemanda, double
 	// numero da planta que é analisada no momento
 	int IndPlantaAnalisando;
 
-	int ParaPrograma;
+	//int ParaPrograma;
 
 	PonteiroArquivo  Arquivo;
 
@@ -1901,10 +1901,10 @@ void ConjuntoConstrucoes::ImprimeContrucoes(ConjuntoPlantas& Plantas, int Verifi
 		Construcoes[c].ImprimeContrucao( ImprimeSolucao,ImprimeArquivo, Arquivo);
 	}
 	if( ImprimeSolucao == 1){
-		printf( " Nivel de Inviabilidade = %d  \n \n Makespan Geral das Construcoes = %.4f\n", NivelDeInviabilidade, MakespanConstrucoes);
+		printf( " Nivel de Inviabilidade = %d  \n \n Makespan Geral das Construcoes = %f\n", NivelDeInviabilidade, MakespanConstrucoes);
 	}
 	if( ImprimeArquivo == 1){
-		fprintf( Arquivo, " Nivel de Inviabilidade = %d  \n \n Makespan Geral das Construcoes = %.4f\n", NivelDeInviabilidade, MakespanConstrucoes);
+		fprintf( Arquivo, " Nivel de Inviabilidade = %d  \n \n Makespan Geral das Construcoes = %f\n", NivelDeInviabilidade, MakespanConstrucoes);
 	}
 	// imprime a verificação de viabilidade caso for pedida na função
 	if( VerificaViabilidade == 1){

@@ -308,6 +308,7 @@ public:
 	int RetornaDadosDeslocamento(int Construcao, int Demanda, double &HorarioInicio, double &HorarioFinal);			// retorna dados de deslocamento da deamnda de uma construção passados
 	int VerificaIntegridadeDeDeslocamentosDasCarretas(int Imprime,int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo);													// verifica a integridade entre os Deslocamentos da Carreta
 
+	void ArmazenaVetorIntComOrdem( vector < int > &VetorOrdem);
 
 	~ConjuntoCarretas();
 };
@@ -465,6 +466,15 @@ int ConjuntoCarretas::VerificaIntegridadeDeDeslocamentosDasCarretas(int Imprime,
 	return integro;
 }
 
+void ConjuntoCarretas::ArmazenaVetorIntComOrdem( vector < int > &VetorOrdem){
+	// faz o vetor de int ter o memso tamanho que o número de carretas
+	VetorOrdem.resize( (int) Carretas.size() );
+	// percorre todas as carretas
+	for( int v = 0; v < (int) Carretas.size(); v++){
+		// armazena o numero da carretas na posição em que a carretas está
+		VetorOrdem[v] = Carretas[v].NumeroDaCarreta;
+	}
+}
 
 ConjuntoCarretas::~ConjuntoCarretas(){
 	Carretas.clear();

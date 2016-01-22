@@ -140,6 +140,12 @@ int BuscaLocal::BuscaLocalTentaRealizarTarefasComOutosVeiculos(int EscolhaVeicul
 	vector < DadosTarefa > DadosTarefasMovidasVeiculoFixo;
 	vector < DadosTarefa > DadosTarefasMovidasReadicaoDeDemandas;
 
+	// vetores que armazenam as ordens das plantas e dos veiculos
+	vector < int > VetorOrdemPlanta;
+	vector < int > VetorOrdemVeiculo;
+	// inidice da planta da planta em questão no VetorOrdemPlanta
+	int IndicePlanta;
+
 	// makespan da solução anterior que se tinha
 	double MakespanAnterior;
 
@@ -209,21 +215,35 @@ int BuscaLocal::BuscaLocalTentaRealizarTarefasComOutosVeiculos(int EscolhaVeicul
 				cin >> ParaPrograma;
 			}
 
+			// ordena as plantas com o tipo de ordenação escolhida
+			PlantasInstancia.OrdenaPlantas( EscolhaPlanta);
+			// armazena a ordem escolhida das plantas
+			PlantasInstancia.ArmazenaVetorIntComOrdem( VetorOrdemPlanta);
+
 			// percorre por todas as plantas
 			for ( int p = 0; p < (int) PlantasInstancia.Plantas.size(); p++){
+
+				// aloca indice da planta
+				PlantasInstancia.AlocaInidiceFabrica( VetorOrdemPlanta[p], IndicePlanta);
+
+				// ordena os veículos com o tipo de ordenação escolhida
+				PlantasInstancia.Plantas[IndicePlanta].VeiculosDaPlanta.OrdenaCarretas(EscolhaVeiculo);
+				// armazena a ordem escolhida dos veículos
+				PlantasInstancia.Plantas[IndicePlanta].VeiculosDaPlanta.ArmazenaVetorIntComOrdem( VetorOrdemVeiculo);
+
 				// percorre por todos os veículos da planta
-				for( int v = 0; v < (int) PlantasInstancia.Plantas[p].VeiculosDaPlanta.Carretas.size(); v++){
+				for( int v = 0; v < (int) PlantasInstancia.Plantas[IndicePlanta].VeiculosDaPlanta.Carretas.size(); v++){
 
 // tenta atender a demanda retirada anteriormente com um outro veiculo do que o que era realizado na solução inicial
 
 					if( Imprime == 1){
-						cout << endl << endl << "            +++ Tenta planta e veiculo [" << p << "-" << v << "]  ++++ " << endl << endl;
+						cout << endl << endl << "            +++ Tenta planta e veiculo [" << VetorOrdemPlanta[p] << "-" << VetorOrdemVeiculo[v] << "]  ++++ " << endl << endl;
 					}
 					// limpa o conteudo do vetor que guarda os dados das terefas qeu serão movidas durante o processo de adição das tarefas
 					DadosTarefasMovidasReadicaoDeDemandas.clear();
 
 					// tenta adicionar a demanda corrente que foi retirada com o veiculo e com a planta correntes
-					if( ConstrucoesInstancia.AdicionaTarefaComVeiculoFixo( 0 , ConstrucoesInstancia.Construcoes[IndiceConstrucaoEscolhida].NumeroDaConstrucao, DemandaRetirar , p, v, DadosTarefasMovidasReadicaoDeDemandas, 1, 0, RealizaProcessoDeAtrazarTarefas,  EscolhaVeiculo, EscolhaPlanta, PlantasInstancia, ImprimeDadosAdicionaTarefa,"  <<<<< BuscaLocal::BuscaLocalRetiraTarefasUmaConstrucao >>> ") == 1){
+					if( ConstrucoesInstancia.AdicionaTarefaComVeiculoFixo( 0 , ConstrucoesInstancia.Construcoes[IndiceConstrucaoEscolhida].NumeroDaConstrucao, DemandaRetirar , VetorOrdemPlanta[p], VetorOrdemVeiculo[v], DadosTarefasMovidasReadicaoDeDemandas, 1, 0, RealizaProcessoDeAtrazarTarefas,  EscolhaVeiculo, EscolhaPlanta, PlantasInstancia, ImprimeDadosAdicionaTarefa,"  <<<<< BuscaLocal::BuscaLocalRetiraTarefasUmaConstrucao >>> ") == 1){
 
 
 						if( Imprime == 1){
@@ -280,6 +300,8 @@ int BuscaLocal::BuscaLocalTentaRealizarTarefasComOutosVeiculos(int EscolhaVeicul
 							// se limpa os vetores que armazenavam os dados de tarefas movidas durante o processo
 							DadosTarefasMovidasVeiculoFixo.clear();
 							DadosTarefasMovidasReadicaoDeDemandas.clear();
+							VetorOrdemPlanta.clear();
+							VetorOrdemVeiculo.clear();
 							// se retorna 1, sinalizando que se melhorou a solução que se tinha
 							return 1;
 						}else{
@@ -328,6 +350,8 @@ int BuscaLocal::BuscaLocalTentaRealizarTarefasComOutosVeiculos(int EscolhaVeicul
 	// se limpa os vetores que armazenavam os dados de tarefas movidas durante o processo
 	DadosTarefasMovidasVeiculoFixo.clear();
 	DadosTarefasMovidasReadicaoDeDemandas.clear();
+	VetorOrdemPlanta.clear();
+	VetorOrdemVeiculo.clear();
 	// retona 0 mostrando que não se conseguiu melhorar a solução que se tinha
 	return 0;
 }
@@ -561,6 +585,13 @@ int BuscaLocal::BuscaLocalTrocaPlantaAtendimento(int EscolhaVeiculo, int Escolha
 	int RealizaProcessoDeAtrazarTarefas;
 	RealizaProcessoDeAtrazarTarefas = 1;
 
+	// vetores que armazenam as ordens das plantas e dos veiculos
+	vector < int > VetorOrdemPlanta1;
+	vector < int > VetorOrdemPlanta2;
+	vector < int > VetorOrdemVeiculo;
+	// inidice da planta da planta em questão no VetorOrdemPlanta
+	int IndicePlanta2;
+
 	int ParaPrograma;
 
 	// imprime os dados dos processos de adicionar as tarefas caso for 1, 0 caso vontrario
@@ -576,12 +607,17 @@ int BuscaLocal::BuscaLocalTrocaPlantaAtendimento(int EscolhaVeiculo, int Escolha
 	// verifica se a instancia tem mais de uma planta
 	if( (int) PlantasInstancia.Plantas.size() > 1){
 
+		// ordena as plantas com o tipo de ordenação escolhida
+		PlantasInstancia.OrdenaPlantas( EscolhaPlanta);
+		// armazena a ordem escolhida das plantas
+		PlantasInstancia.ArmazenaVetorIntComOrdem( VetorOrdemPlanta1);
+
 		// percorre todas as plantas
 		for( int p1 = 0; p1 < (int) PlantasInstancia.Plantas.size(); p1++){
 			// limpa o conteudo do vetor que guarda os dados da tarefas movidas durante a etapa 1
 			DadosTarefasMovidasEtapa1.clear();
 			if( Imprime == 1){
-				cout << endl << endl << "	Inicio Etapa 1 -> Planta [" << PlantasInstancia.Plantas[p1].NumeroDaPlanta << "]" << endl << endl;
+				cout << endl << endl << "	Inicio Etapa 1 -> Planta [" <<  VetorOrdemPlanta1[p1]  << "]" << endl << endl;
 				cin >> ParaPrograma;
 			}
 
@@ -600,7 +636,7 @@ int BuscaLocal::BuscaLocalTrocaPlantaAtendimento(int EscolhaVeiculo, int Escolha
 						cout << endl << endl << "   <<<<<<<<<< Problema em encontrar a tarefa da construção [" << ConstrucoesInstancia.Construcoes[c1].NumeroDaConstrucao << "-" << DemandaAnalise << "]" << endl << endl;
 					}
 					// verifica se a deamnda corrente é atendida pela planta em questão
-					if( NumPlanta == PlantasInstancia.Plantas[p1].NumeroDaPlanta ){
+					if( NumPlanta ==  VetorOrdemPlanta1[p1]  ){
 						// deleta a tarefa que é atendida pela planta em questão e as demandas posteriores a sestá na construção
 						DeletouDemanda = ConstrucoesInstancia.Construcoes[c1].DeletaTarefas( 0, DemandaAnalise, DadosTarefasMovidasEtapa1, PlantasInstancia);
 
@@ -616,7 +652,7 @@ int BuscaLocal::BuscaLocalTrocaPlantaAtendimento(int EscolhaVeiculo, int Escolha
 			// calcula o nivel de inviabilidade da solução
 			ConstrucoesInstancia.CalcularNivelDeInviabilidade();
 			if( Imprime == 1){
-				cout << endl << endl << "		Deletou tarefas realizadas pela planta [" << p1 << "] " << endl << endl;
+				cout << endl << endl << "		Deletou tarefas realizadas pela planta [" << VetorOrdemPlanta1[p1] << "] " << endl << endl;
 				PlantasInstancia.Imprime(1,1, ImprimeSolucao, ImprimeArquivo, Arquivo);
 				ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia , 0, ImprimeSolucao,ImprimeArquivo,Arquivo);
 				cin >> ParaPrograma;
@@ -627,7 +663,7 @@ int BuscaLocal::BuscaLocalTrocaPlantaAtendimento(int EscolhaVeiculo, int Escolha
 				DadosTarefasMovidasEmUmaConstrucaoEtapa1.clear();
 
 				if( Imprime == 1){
-					cout << endl << endl << "		Inicio Etapa 2 -> Construcao [" <<ConstrucoesInstancia.Construcoes[c1].NumeroDaConstrucao << "]" << endl ;
+					cout << endl << endl << "		Inicio Etapa 2 -> Construcao [" << ConstrucoesInstancia.Construcoes[c1].NumeroDaConstrucao << "]" << endl ;
 					cin >> ParaPrograma;
 				}
 
@@ -638,25 +674,38 @@ int BuscaLocal::BuscaLocalTrocaPlantaAtendimento(int EscolhaVeiculo, int Escolha
 				while( ConstrucoesInstancia.Construcoes[c1].DemandaNaoatendida( DemandaNaoAtendida) == 1 && ReadicionouDemandaProcessoEtapa1 == 1){
 
 					if( Imprime == 1){
-						cout << endl << endl << "			Analise demanda [" <<ConstrucoesInstancia.Construcoes[c1].NumeroDaConstrucao << "-" << DemandaNaoAtendida << "]" << endl ;
+						cout << endl << endl << "			Analise demanda [" << ConstrucoesInstancia.Construcoes[c1].NumeroDaConstrucao << "-" << DemandaNaoAtendida << "]" << endl ;
 						cin >> ParaPrograma;
 					}
+
+					// ordena as plantas com o tipo de ordenação escolhida
+					PlantasInstancia.OrdenaPlantas( EscolhaPlanta );
+					// armazena a ordem escolhida das plantas
+					PlantasInstancia.ArmazenaVetorIntComOrdem( VetorOrdemPlanta2 );
 
 					// percorre todas as plantas
 					for( int p2 = 0; p2 < (int) PlantasInstancia.Plantas.size(); p2++){
 						// só não é avaliado a planta que é a mesma planta da etapa 1
-						if( p1 != p2){
+						if( VetorOrdemPlanta1[p1] != VetorOrdemPlanta2[p2]){
+							// aloca o indice da planta2
+							PlantasInstancia.AlocaInidiceFabrica( VetorOrdemPlanta2[p2], IndicePlanta2);
+
+							// ordena os veículos com o tipo de ordenação escolhida
+							PlantasInstancia.Plantas[IndicePlanta2].VeiculosDaPlanta.OrdenaCarretas(EscolhaVeiculo);
+							// armazena a ordem escolhida dos veículos
+							PlantasInstancia.Plantas[IndicePlanta2].VeiculosDaPlanta.ArmazenaVetorIntComOrdem( VetorOrdemVeiculo);
+
 							// percorre todos dos veículos da planta corrente
-							for( int v = 0; v < (int) PlantasInstancia.Plantas[p2].VeiculosDaPlanta.Carretas.size(); v++){
+							for( int v = 0; v < (int) PlantasInstancia.Plantas[ IndicePlanta2 ].VeiculosDaPlanta.Carretas.size(); v++){
 								// limpa o conteudo do vetor que guarda os dados da tarefas movidas durante a etapa 2
 								DadosTarefasMovidasEtapa2.clear();
 
 // reacrescenta a primeira demanda tirada com uma certa planta que não é a que ela foi atendida na solução inicial
 
 								// tenta alocar a demanda corrente com um certo veiculo, caso se consiga alocar a demanda se entra no if
-								if( ConstrucoesInstancia.AdicionaTarefaComVeiculoFixo( 0 , ConstrucoesInstancia.Construcoes[c1].NumeroDaConstrucao, DemandaNaoAtendida , p2, v, DadosTarefasMovidasEtapa2, 1, 0, RealizaProcessoDeAtrazarTarefas, EscolhaVeiculo, EscolhaPlanta, PlantasInstancia, ImprimeDadosAdicionaTarefa,"  <<<<< BuscaLocal::BuscaLocalTrocaPlantaAtendimento >>> ") == 1){
+								if( ConstrucoesInstancia.AdicionaTarefaComVeiculoFixo( 0 , ConstrucoesInstancia.Construcoes[c1].NumeroDaConstrucao, DemandaNaoAtendida , VetorOrdemPlanta2[p2], VetorOrdemVeiculo[v], DadosTarefasMovidasEtapa2, 1, 0, RealizaProcessoDeAtrazarTarefas, EscolhaVeiculo, EscolhaPlanta, PlantasInstancia, ImprimeDadosAdicionaTarefa,"  <<<<< BuscaLocal::BuscaLocalTrocaPlantaAtendimento >>> ") == 1){
 									if( Imprime == 1){
-										cout  << endl << "				>+ v +< Readicionou Construcao [" <<ConstrucoesInstancia.Construcoes[c1].NumeroDaConstrucao << "-" << DemandaNaoAtendida << "] com veiculo [" << p2 << "-" << v << "]" << endl ;
+										cout  << endl << "				>+ v +< Readicionou Construcao [" <<ConstrucoesInstancia.Construcoes[c1].NumeroDaConstrucao << "-" << DemandaNaoAtendida << "] com veiculo [" << VetorOrdemPlanta2[p2] << "-" << VetorOrdemVeiculo[v] << "]" << endl ;
 										cin >> ParaPrograma;
 									}
 									// calcula o nivel de inviabilidade da solução
@@ -704,12 +753,15 @@ int BuscaLocal::BuscaLocalTrocaPlantaAtendimento(int EscolhaVeiculo, int Escolha
 										DadosTarefasMovidasEtapa1.clear();
 										DadosTarefasMovidasEmUmaConstrucaoEtapa1.clear();
 										DadosTarefasMovidasEtapa2.clear();
+										VetorOrdemPlanta1.clear();
+										VetorOrdemPlanta2.clear();
+										VetorOrdemVeiculo.clear();
 										// retorna 1 que corresponde que melhorou a solução
 										return 1;
 									}
 								}else{
 									if( Imprime == 1){
-										cout << endl << "               			Não consegui alocar demanda [" << ConstrucoesInstancia.Construcoes[c1].NumeroDaConstrucao << "-" << DemandaNaoAtendida << "] com o veículo [" << p2 << "-" << v << "] " << endl;
+										cout << endl << "               			Não consegui alocar demanda [" << ConstrucoesInstancia.Construcoes[c1].NumeroDaConstrucao << "-" << DemandaNaoAtendida << "] com o veículo [" <<  VetorOrdemPlanta2[p2] << "-" << VetorOrdemVeiculo[v] << "] " << endl;
 									}
 
 								}
@@ -732,7 +784,7 @@ int BuscaLocal::BuscaLocalTrocaPlantaAtendimento(int EscolhaVeiculo, int Escolha
 				}
 
 				if( Imprime == 1){
-					cout << endl << endl << "		Fim Etapa 2 -> Construcao [" <<ConstrucoesInstancia.Construcoes[c1].NumeroDaConstrucao << "]" << endl ;
+					cout << endl << endl << "		Fim Etapa 2 -> Construcao [" << ConstrucoesInstancia.Construcoes[c1].NumeroDaConstrucao << "]" << endl ;
 					cin >> ParaPrograma;
 				}
 // após se tentar realizar o processo de se atender as demandas de uma cosntrução com uma planta que sejá diferente que a que ela é atendida na construção inicial e não se conseguiu melhorar o makespan da solução, se deleta as demandas que foram reinseridas no processo da Etapa 2 e não foram contabilizadas nos movimentos de retorno da solução antes de se realizar a etapa 2. Estas foram guardadas em DadosTarefasMovidasEmUmaConstrucaoEtapa1
@@ -746,7 +798,7 @@ int BuscaLocal::BuscaLocalTrocaPlantaAtendimento(int EscolhaVeiculo, int Escolha
 			// se retorna a solução até o ponto onde se deletou as demandas da construção corrente
 			ConstrucoesInstancia.ReadicionaDeletaTarefasApartirDeDados(  DadosTarefasMovidasEtapa1, PlantasInstancia );
 			if( Imprime == 1){
-				cout << endl << endl << "	Fim da Etapa 1 -> Planta [" << PlantasInstancia.Plantas[p1].NumeroDaPlanta << "]" << endl << endl;
+				cout << endl << endl << "	Fim da Etapa 1 -> Planta [" <<  VetorOrdemPlanta1[p1]  << "]" << endl << endl;
 				PlantasInstancia.Imprime(1,1,ImprimeSolucao, ImprimeArquivo, Arquivo);
 				ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia , 0, ImprimeSolucao,ImprimeArquivo,Arquivo);
 				cin >> ParaPrograma;
@@ -761,6 +813,9 @@ int BuscaLocal::BuscaLocalTrocaPlantaAtendimento(int EscolhaVeiculo, int Escolha
 	DadosTarefasMovidasEtapa1.clear();
 	DadosTarefasMovidasEmUmaConstrucaoEtapa1.clear();
 	DadosTarefasMovidasEtapa2.clear();
+	VetorOrdemPlanta1.clear();
+	VetorOrdemPlanta2.clear();
+	VetorOrdemVeiculo.clear();
 	// retona 0 mostrando que não se conseguiu melhorar a solução que se tinha
 	return 0;
 }

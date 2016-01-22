@@ -416,6 +416,7 @@ public:
 	int VerificaIntegridadeDeDeslocaemntosDosVeiculosDasPlantas(int imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo);		// verifica a integridade dos deslocamentos realizados pelos veiculos das plantas
 
 	void OrdenaPlantas( int EscolhaPlanta);
+	void ArmazenaVetorIntComOrdem( vector < int > &VetorOrdem);
 
 	~ConjuntoPlantas();		// destruidora
 };
@@ -876,6 +877,15 @@ void ConjuntoPlantas::OrdenaPlantas( int EscolhaPlanta){
 
 }
 
+void ConjuntoPlantas::ArmazenaVetorIntComOrdem( vector < int > &VetorOrdem){
+	// faz o vetor de int ter o memso tamanho que o número de plantas
+	VetorOrdem.resize( (int) Plantas.size() );
+	// percorre todas as planats
+	for( int p = 0; p < (int) Plantas.size(); p++){
+		// armazena o numero da planta na posição em que a planta está
+		VetorOrdem[p] = Plantas[p].NumeroDaPlanta;
+	}
+}
 // destruidora
 ConjuntoPlantas::~ConjuntoPlantas(){
 

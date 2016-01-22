@@ -280,6 +280,12 @@ int Solucao::Viabilidade1(int EscolhaVeiculo, int EscolhaConstrucao, int Escolha
 	int VerificaViabilidade;
 	VerificaViabilidade = 0;
 
+	// vetores que armazenam as ordens das plantas e dos veiculos
+	vector < int > VetorOrdemPlanta;
+	vector < int > VetorOrdemVeiculo;
+	// inidice da planta da planta em questão no VetorOrdemPlanta
+	int IndicePlanta;
+
 	// variavel para parar o programa
 	int PararPrograma;
 
@@ -323,43 +329,37 @@ int Solucao::Viabilidade1(int EscolhaVeiculo, int EscolhaConstrucao, int Escolha
 			// Aloca valores aos inidices da construção e da demanda que não era atendida antes  equa passara a ser atendia
 			AlocaValoresIniciaisIndices( NovaTarefaAlocadaConstrucao, NovaTarefaAlocadaDemanda);
 
+			// ordena as plantas com o tipo de ordenação escolhida
 			PlantasInstancia.OrdenaPlantas( EscolhaPlanta);
+			// armazena a ordem escolhida das plantas
+			PlantasInstancia.ArmazenaVetorIntComOrdem( VetorOrdemPlanta);
 
+			// percorre por todas as plantas
 			for( int p = 0; p < (int) PlantasInstancia.Plantas.size(); p++ ){
 
+				if( Imprime == 1){
+					cout << " Planta " << VetorOrdemPlanta[p] << endl << endl;
+				}
 
-				cout << endl << endl;
+				// aloca indice da planta
+				PlantasInstancia.AlocaInidiceFabrica( VetorOrdemPlanta[p], IndicePlanta);
+				// ordena os veículos com o tipo de ordenação escolhida
+				PlantasInstancia.Plantas[IndicePlanta].VeiculosDaPlanta.OrdenaCarretas(EscolhaVeiculo);
+				// armazena a ordem escolhida dos veículos
+				PlantasInstancia.Plantas[IndicePlanta].VeiculosDaPlanta.ArmazenaVetorIntComOrdem( VetorOrdemVeiculo);
 
-				PlantasInstancia.Plantas[p].VeiculosDaPlanta.OrdenaCarretas(EscolhaVeiculo);
+				// percorre por todos os veículo
+				for( int v = 0; v < (int) PlantasInstancia.Plantas[IndicePlanta].VeiculosDaPlanta.Carretas.size(); v++){
 
-				for( int v = 0; v < (int) PlantasInstancia.Plantas[p].VeiculosDaPlanta.Carretas.size(); v++){
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-					cout << PlantasInstancia.Plantas[p].VeiculosDaPlanta.Carretas[v].NumeroDaCarreta << endl;
-
+					if( Imprime == 1){
+						cout << " veiculo [" << VetorOrdemPlanta[p] << "-" << VetorOrdemVeiculo[v] << "]" << endl;
+					}
+					// limpa o conteudo das tarefas movidas na analise de uma planta e veiculo fixo
 					DadosTarefasMovidasPlantaVeiculo.clear();
 
 					// tenta alocar a demanda que não era atendida antes
-					TarefaAlocada = ProcessoParaAlocarTarefaNaoAtendidaComPlantaVeiculo(0, ConstrucaoAnalisandoRetirada, PlantasInstancia.Plantas[p].NumeroDaPlanta, PlantasInstancia.Plantas[p].VeiculosDaPlanta.Carretas[v].NumeroDaCarreta, NovaTarefaAlocadaConstrucao , NovaTarefaAlocadaDemanda,  DadosTarefasMovidasPlantaVeiculo, 1, 0, RealizaProcessoDeAtrazarTarefas, EscolhaVeiculo, EscolhaPlanta, Imprime);
+					TarefaAlocada = ProcessoParaAlocarTarefaNaoAtendidaComPlantaVeiculo(0, ConstrucaoAnalisandoRetirada, VetorOrdemPlanta[p], VetorOrdemVeiculo[v], NovaTarefaAlocadaConstrucao , NovaTarefaAlocadaDemanda,  DadosTarefasMovidasPlantaVeiculo, 1, 0, RealizaProcessoDeAtrazarTarefas, EscolhaVeiculo, EscolhaPlanta, Imprime);
 					// calcula o nível de iniviabilidade da solução
-
-
 					ConstrucoesInstancia.CalcularNivelDeInviabilidade();
 					// caso conseguir alocar a demanda que não era atendida antes
 					if( TarefaAlocada == 1){
@@ -427,7 +427,7 @@ int Solucao::Viabilidade1(int EscolhaVeiculo, int EscolhaConstrucao, int Escolha
 
 								cin >> PararPrograma;
 							}
-							// retorna a solução a  consição inicial
+							// retorna a solução a  consição inicial após deletar as demandas
 							if( ConstrucoesInstancia.ReadicionaDeletaTarefasApartirDeDados(  DadosTarefasMovidasPlantaVeiculo, PlantasInstancia ) == 0){
 								cout << endl << endl << "   problema em adicionar e deletar tarefas para se retornar a solução inicial ->  Solucao::ProcessoViabilizacao1" << endl << endl;
 							}
@@ -453,7 +453,7 @@ int Solucao::Viabilidade1(int EscolhaVeiculo, int EscolhaConstrucao, int Escolha
 
 				cin >> PararPrograma;
 			}
-			// retorna a solução a  consição inicial
+			// retorna a solução a  condição inicial
 			if( ConstrucoesInstancia.ReadicionaDeletaTarefasApartirDeDados(  DadosTarefasMovidas, PlantasInstancia ) == 0){
 				cout << endl << endl << "   problema em adicionar e deletar tarefas para se retornar a solução inicial ->  Solucao::ProcessoViabilizacao1" << endl << endl;
 			}

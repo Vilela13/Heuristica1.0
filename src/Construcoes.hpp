@@ -1853,6 +1853,18 @@ void ConjuntoConstrucoes::IniciaConjuntoConstrucoes(int Numero){
 	// aloca o numero de construções
 	NumeroConstrucoes = Numero;
 
+	// inicia o vetor de construções analisadas como 0
+	ConstrucoesAnalizadas.resize(Numero);
+	for( int i = 0; i < Numero; i++){
+		ConstrucoesAnalizadas[i] = 0;
+	}
+
+	// inicia o vetor de construções pode ser suprida como 0
+	ConstrucaoPodeSerSuprida.resize(Numero);
+	for( int i = 0; i < Numero; i++){
+		ConstrucaoPodeSerSuprida[i] = 0;
+	}
+
 }
 
 
@@ -2951,6 +2963,23 @@ void ConjuntoConstrucoes::OrdenaCosntrucoes( int EscolhaConstrucao){
 	// 0 se não for imprimir, 1 se for imprimir
 	Imprime = 0;
 
+	// estrutura de armazenamento dos dados das plantas
+	vector < vector < int > > EstruturaMemoria;
+
+	// inicialização das estruturas de memoria
+	EstruturaMemoria.resize(3);
+	EstruturaMemoria[0].resize( (int) Construcoes.size() );
+	EstruturaMemoria[1].resize( (int) Construcoes.size() );
+	EstruturaMemoria[2].resize( (int) Construcoes.size() );
+
+	// armazenamento dos dados das construções
+	for( int c = 0; c < (int) Construcoes.size(); c++){
+		EstruturaMemoria[0][c] = Construcoes[c].NumeroDaConstrucao;
+		EstruturaMemoria[1][c] = ConstrucoesAnalizadas[c];
+		EstruturaMemoria[2][c] = ConstrucaoPodeSerSuprida[c];
+
+	}
+
 	if( EscolhaConstrucao == 1){
 		// ordena baseado no menor rank
 		sort(Construcoes.begin(), Construcoes.end(), DecideQualContrucaoTemMenorRank);
@@ -3005,6 +3034,16 @@ void ConjuntoConstrucoes::OrdenaCosntrucoes( int EscolhaConstrucao){
 
 			}
 			cin >> Para;
+		}
+	}
+
+	// recoloca os dados das construções nas contruções respectivas apos a ordenação
+	for( int c1 = 0; c1 < (int) Construcoes.size(); c1++){
+		for( int c2 = 0; c2 < (int) Construcoes.size(); c2++){
+			if( Construcoes[c1].NumeroDaConstrucao == EstruturaMemoria[0][c2]){
+				ConstrucoesAnalizadas[c1] = EstruturaMemoria[1][c2];
+				ConstrucaoPodeSerSuprida[c1] = EstruturaMemoria[2][c2];
+			}
 		}
 	}
 

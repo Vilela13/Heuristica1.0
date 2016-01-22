@@ -455,6 +455,16 @@ int ConjuntoPlantas::AnalizouTodasPLanats(){
 void ConjuntoPlantas::IniciaConjuntoPlantas(int Numero){
 	// inicia estrutura de plantas
 	Plantas.resize(Numero);
+	PlantasAnalizadas.resize(Numero);
+	HorarioQuePlantaPodeAtender.resize(Numero);
+	HorarioQueConstrucaoPodeReceberDemanda.resize(Numero);
+
+	// inicia os valores das estruturas da planta, as plantas analisadas como 0 e os horarios como o maximo double
+	for( int i = 0; i < Numero; i++){
+		PlantasAnalizadas[i] = 0;
+		HorarioQuePlantaPodeAtender[i] = DBL_MAX;
+		HorarioQueConstrucaoPodeReceberDemanda[i] = DBL_MAX;
+	}
 
 }
 
@@ -833,6 +843,31 @@ void ConjuntoPlantas::OrdenaPlantas( int EscolhaPlanta){
 	// 0 se não for imprimir, 1 se for imprimir
 	Imprime = 0;
 
+
+	// estrutura de armazenamento dos dados das plantas
+	vector < vector < int > > EstruturaMemoriaInt;
+	vector < vector < double > > EstruturaMemoriaDouble;
+
+	// armazenamento dos dados das plantas
+	EstruturaMemoriaInt.resize(2);
+	EstruturaMemoriaInt[0].resize( (int) Plantas.size() );
+	EstruturaMemoriaInt[1].resize( (int) Plantas.size() );
+	EstruturaMemoriaDouble.resize(2);
+	EstruturaMemoriaDouble[0].resize( (int) Plantas.size() );
+	EstruturaMemoriaDouble[1].resize( (int) Plantas.size() );
+
+
+// armazena os dados das planats antes da ordenação
+	for( int p = 0; p < (int) Plantas.size(); p++){
+		EstruturaMemoriaInt[0][p] = Plantas[p].NumeroDaPlanta;
+		EstruturaMemoriaInt[1][p] = PlantasAnalizadas[p];
+		EstruturaMemoriaDouble[0][p] = HorarioQuePlantaPodeAtender[p];
+		EstruturaMemoriaDouble[1][p] = HorarioQueConstrucaoPodeReceberDemanda[p];
+	}
+
+
+
+
 	if( EscolhaPlanta == 2){
 		// ordena baseado no menor rank
 		sort(Plantas.begin(), Plantas.end(), DecideQualPlantaMenosTarefa);
@@ -874,6 +909,16 @@ void ConjuntoPlantas::OrdenaPlantas( int EscolhaPlanta){
 		}
 	}
 
+// recoloca os dados das planats nas plantas respectivas apos a ordenação
+	for( int p1 = 0; p1 < (int) Plantas.size(); p1++){
+		for( int p2 = 0; p2 < (int) Plantas.size(); p2++){
+			if( Plantas[p1].NumeroDaPlanta == EstruturaMemoriaInt[0][p2]){
+				PlantasAnalizadas[p1] = EstruturaMemoriaInt[1][p2];
+				HorarioQuePlantaPodeAtender[p1] = EstruturaMemoriaDouble[0][p2];
+				HorarioQueConstrucaoPodeReceberDemanda[p1] = EstruturaMemoriaDouble[1][p2];
+			}
+		}
+	}
 
 }
 

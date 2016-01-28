@@ -1043,8 +1043,11 @@ int Construcao::AtrasaDemandasParaAtenderMaster( int NumDemanda, double HoraFimA
 
 			// verifica se pode atender a demanda corrente
 			SituacaoAlocacao = AlocaAtividadeComHorarioFinalAtendimento( NumDemanda, HoraFimAtendimento, NovaHoraFimAtendimento, DadosTarefasMovidasAuxiliar, SituacaoDemanda, StatusRemocao, Plantas,EscolhaVeiculo,EscolhaPlanta,imprime, frase);
-			// se atualiza a hora que se tem que atender a tarefa anterior a tarefa corrente que se quer alocar
-			HoraFimAtendimento = NovaHoraFimAtendimento;
+			// caso ainda de para atender a demanda se atrasar as demandas anteriores entra no if
+			if(SituacaoAlocacao == -2 ){
+				// se atualiza a hora que se tem que atender a tarefa anterior a tarefa corrente que se quer alocar
+				HoraFimAtendimento = NovaHoraFimAtendimento;
+			}
 		}
 	}
 
@@ -1195,8 +1198,11 @@ void Construcao::AtrasaDemandasParaAtenderRecursao( int NumDemanda, double HoraF
 					if( SituacaoAlocacao == 1){
 						// tenta alocar a demanda corrente
 						SituacaoAlocacao = AlocaAtividadeComHorarioFinalAtendimento( NumDemanda, HoraFimAtendimento, NovaHoraFimAtendimento, DadosTarefasMovidasAuxiliar, SituacaoDemandaAux,SituacaoRemocaoAux, Plantas,  EscolhaVeiculo, EscolhaPlanta, imprime, frase);
-						// armazena a hora que se tem que atender a demanda anterior para ser possivel atender a demanda corrente
-						HoraFimAtendimento = NovaHoraFimAtendimento;
+						// caso ainda de para atender a demanda se atrasar as demandas anteriores entra no if
+						if(SituacaoAlocacao == -2 ){
+							// armazena a hora que se tem que atender a demanda anterior para ser possivel atender a demanda corrente
+							HoraFimAtendimento = NovaHoraFimAtendimento;
+						}
 					}
 				}
 
@@ -1645,11 +1651,13 @@ int Construcao::AtrasaDemandasParaAtenderMasterComVeiculoFixo( int NumDemanda, i
 
 		if( SituacaoAlocacao == 1){
 
-
 			// verifica se pode atender a demanda corrente
 			SituacaoAlocacao = AlocaAtividadeComHorarioFinalAtendimentoComVeiculoFixo( NumDemanda, NumPlanta, NumCarreta, HoraFimAtendimento, NovaHoraFimAtendimento, DadosTarefasMovidasAuxiliar, SituacaoDemanda, StatusRemocao, Plantas, EscolhaVeiculo,  EscolhaPlanta,frase);
-			// se atualiza a hora que se tem que atender a tarefa anterior a tarefa corrente que se quer alocar
-			HoraFimAtendimento = NovaHoraFimAtendimento;
+			// caso ainda de para atender a demanda se atrasar as demandas anteriores entra no if
+			if(SituacaoAlocacao == -2 ){
+				// se atualiza a hora que se tem que atender a tarefa anterior a tarefa corrente que se quer alocar
+				HoraFimAtendimento = NovaHoraFimAtendimento;
+			}
 
 		}
 	}

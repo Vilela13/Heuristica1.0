@@ -570,6 +570,9 @@ int BuscaLocal::BuscaLocalTrocaPlantaAtendimento(int EscolhaVeiculo, int Escolha
 	// demanda não atendida na etapa 2 que se tentara reatender
 	int DemandaNaoAtendida;
 
+	// demandas após a demanda não atendida na mesma construção na etapa 2
+	int DemandaAposDemandaNaoAtendida;
+
 	// variavel que controla se a demanda foi reinserida
 	int ReadicionouDemanda;
 
@@ -712,6 +715,37 @@ int BuscaLocal::BuscaLocalTrocaPlantaAtendimento(int EscolhaVeiculo, int Escolha
 									ConstrucoesInstancia.CalcularNivelDeInviabilidade();
 									// marac a variavel como se conseguiu alicar a demanda
 									ReadicionouDemanda = 1;
+
+
+
+
+
+
+
+
+
+
+									// caso as demandas da construção em questão não tiverem tido todas as suas demandas atendidas se entra no IF
+									if( ConstrucoesInstancia.Construcoes[c1].StatusAtendimento < ConstrucoesInstancia.Construcoes[c1].NumeroDemandas){
+										// se tenta atender todas as demandas da construção até se chegar na ultima dela ou até não se conseguir atender uma demanda
+										while( ConstrucoesInstancia.Construcoes[c1].StatusAtendimento < ConstrucoesInstancia.Construcoes[c1].NumeroDemandas && ReadicionouDemanda == 1){
+											// atualiza a dmeanda que se tentara atender
+											DemandaAposDemandaNaoAtendida = ConstrucoesInstancia.Construcoes[c1].StatusAtendimento;
+											// se tenta atender a demanda
+											ReadicionouDemanda = ConstrucoesInstancia.AdicionaTarefa( 0 , ConstrucoesInstancia.Construcoes[c1].NumeroDaConstrucao,   DemandaAposDemandaNaoAtendida , DadosTarefasMovidasEtapa2, 1, 0, RealizaProcessoDeAtrazarTarefas, EscolhaVeiculo , EscolhaPlanta, PlantasInstancia, ImprimeDadosAdicionaTarefa,"  <<<<< BuscaLocal::BuscaLocalTrocaPlantaAtendimento >>> ");
+										}
+									}
+
+
+
+
+
+
+
+
+
+
+
 									// marca as construções que possuem demandas que ainda não foram atendidas como candidadtas a serem avaliadas para o atenidmento de suas demandas
 									ConstrucoesInstancia.AlocaValoresConstrucaoPodeAtender();
 									// caso se tenha uma construção que ainda possa ter uma demanda atendida e se tenha conseguido atender a ultima demanda analisada, se entra no while. Este processo é realizado até que todas as demnadas tenham sido atendidas ou não se consiga se recolocar alguma demanda que foi desalocada.

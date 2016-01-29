@@ -1779,6 +1779,8 @@ public:
 
 	vector < int > ConstrucaoPodeSerSuprida;
 
+	vector < int > ConstrucoesComDemandasNaoAtendidas;
+
 	double MakespanConstrucoes;
 	int NivelDeInviabilidade;
 
@@ -1821,7 +1823,10 @@ public:
 	int AdicionaTarefa( int VerificaExistencia, int Construcao, int Demanda , vector < DadosTarefa > &DadosTarefasMovidas, int SituacaoDemanda, int SituacaoRemocao, int RealizaProcessoDeAtrasarTarefas, int EscolhaVeiculo ,int EscolhaPlanta, ConjuntoPlantas &PlantasInstancia, int imprime, string frase);		// função que tenta alocar uma demanda
 	int AdicionaTarefaComVeiculoFixo( int VerificaExistencia, int Construcao, int Demanda , int Planta, int Carreta, vector < DadosTarefa > &DadosTarefasMovidas, int SituacaoDemanda, int SituacaoRemocao, int RealizaProcessoDeAtrasarTarefas, int EscolhaVeiculo, int EscolhaPlanta, ConjuntoPlantas &PlantasInstancia, int imprime, string frase);
 
-	void OrdenaCosntrucoes( int EscolhaConstrucao);
+	void OrdenaCosntrucoes( int EscolhaConstrucao);			// realiza o ordenamento das construções
+
+	void InicializaConstrucoesComDemandasNaoAtendidas( int Construcao, int Imprime);				// marca as construções com demandas não atendidas que pode ser atendidas
+	int ExisteConstrucaoComDemandaNaoAtendida( int &Construcao, int &Demanda, int Imprime);			// escolhe a construção que possui demandas não atendidas e que será atendida
 
 	~ConjuntoConstrucoes();						// Destruidora da classe
 };
@@ -1871,6 +1876,12 @@ void ConjuntoConstrucoes::IniciaConjuntoConstrucoes(int Numero){
 	ConstrucaoPodeSerSuprida.resize(Numero);
 	for( int i = 0; i < Numero; i++){
 		ConstrucaoPodeSerSuprida[i] = 0;
+	}
+
+	// inicia o vetor de construções com demandas não atendidas como 0
+	ConstrucoesComDemandasNaoAtendidas.resize(Numero);
+	for( int i = 0; i < Numero; i++){
+		ConstrucoesComDemandasNaoAtendidas[i] = 0;
 	}
 
 }
@@ -2960,8 +2971,7 @@ int ConjuntoConstrucoes::AdicionaTarefaComVeiculoFixo( int VerificaExistencia, i
 }
 
 
-
-
+// realiza o ordenamento das construções
 void ConjuntoConstrucoes::OrdenaCosntrucoes( int EscolhaConstrucao){
 	// variavel para parar o programa
 	int Para;
@@ -2975,16 +2985,18 @@ void ConjuntoConstrucoes::OrdenaCosntrucoes( int EscolhaConstrucao){
 	vector < vector < int > > EstruturaMemoria;
 
 	// inicialização das estruturas de memoria
-	EstruturaMemoria.resize(3);
+	EstruturaMemoria.resize(4);
 	EstruturaMemoria[0].resize( (int) Construcoes.size() );
 	EstruturaMemoria[1].resize( (int) Construcoes.size() );
 	EstruturaMemoria[2].resize( (int) Construcoes.size() );
+	EstruturaMemoria[3].resize( (int) Construcoes.size() );
 
 	// armazenamento dos dados das construções
 	for( int c = 0; c < (int) Construcoes.size(); c++){
 		EstruturaMemoria[0][c] = Construcoes[c].NumeroDaConstrucao;
 		EstruturaMemoria[1][c] = ConstrucoesAnalizadas[c];
 		EstruturaMemoria[2][c] = ConstrucaoPodeSerSuprida[c];
+		EstruturaMemoria[3][c] = ConstrucoesComDemandasNaoAtendidas[c];
 
 	}
 
@@ -3051,6 +3063,7 @@ void ConjuntoConstrucoes::OrdenaCosntrucoes( int EscolhaConstrucao){
 			if( Construcoes[c1].NumeroDaConstrucao == EstruturaMemoria[0][c2]){
 				ConstrucoesAnalizadas[c1] = EstruturaMemoria[1][c2];
 				ConstrucaoPodeSerSuprida[c1] = EstruturaMemoria[2][c2];
+				ConstrucoesComDemandasNaoAtendidas[c1] = EstruturaMemoria[3][c2];
 			}
 		}
 	}
@@ -3059,12 +3072,81 @@ void ConjuntoConstrucoes::OrdenaCosntrucoes( int EscolhaConstrucao){
 
 }
 
+// marca as construções com demandas não atendidas que pode ser atendidas
+void ConjuntoConstrucoes::InicializaConstrucoesComDemandasNaoAtendidas( int Construcao, int Imprime){
+
+	int ParaPrograma;
+
+	// variavel qiue guarda o indice da cosntrução passada
+	int IndConstrucaoExcolhida;
+	// caso se encontrar a construção passada na função, entrar no if
+	if( RetornaIndiceConstrucao(Construcao, IndConstrucaoExcolhida, "ConjuntoConstrucoes::ExisteConstrucoesComDemandasNaoAtendidas")== 1 ){
+		// marca a cosntrução passada com o valor 5
+		ConstrucoesComDemandasNaoAtendidas[IndConstrucaoExcolhida] = 5;
+		// faz para todas as construções
+		for( int c = 0; c < (int) Construcoes.size(); c++){
+			// não realiza isso para a cosntrução passada
+			if( c != IndConstrucaoExcolhida){
+				// caso a construção não tenha sido completamente atendida entra no if
+				if( Construcoes[c].StatusAtendimento < Construcoes[c].NumeroDemandas){
+					// marca a construção não completamente atendida com 0
+					ConstrucoesComDemandasNaoAtendidas[c] = 0;
+				}else{
+					// marc a cosntrução atendida compleatmente com 3
+					ConstrucoesComDemandasNaoAtendidas[c] = 3;
+				}
+			}
+
+		}
+		// imprime o conteudo do vetor de controle das plantas
+		if( Imprime == 1){
+			cout << endl << endl << "      Vetor de cosntrucoes com demandas não atendidas" << endl ;
+			ImprimeVetorInt( ConstrucoesComDemandasNaoAtendidas);
+			cin >> ParaPrograma;
+		}
+
+	}
+
+}
+
+// escolhe a construção que possui demandas não atendidas e que será atendida
+int ConjuntoConstrucoes::ExisteConstrucaoComDemandaNaoAtendida( int &Construcao, int &Demanda, int Imprime){
+
+	// variavel constrole para avaliar se consegue atender as demandas da construção. caso não se consiga atender a uma anterior, não se irá conseguir atender as posteriores a essa
+	int Ativa;
+
+	// percorre todas as construções
+	for(  int c = 0; c < (int) Construcoes.size(); c++){
+		// não tenta aloca demandas da construçãoq ue teve uma demanda retirada anteriormente
+		if( ConstrucoesComDemandasNaoAtendidas[c] == 0){
+			if( Construcoes[c].StatusAtendimento < Construcoes[c].NumeroDemandas){
+				// retorna a cosntrução e a demanda que deve ser alocada
+				Construcao = Construcoes[c].NumeroDaConstrucao;
+				Demanda = Construcoes[c].StatusAtendimento;
+				// imprime a cosntrução escolhida
+				if( Imprime == 1){
+					cout << endl << endl << "     >>> Conatrução-demanda[" << Construcao << "-" << Demanda << "] não atendeida que se tentara atender " << endl << endl;
+				}
+				// atualiza a situação da contrução como analisada
+				ConstrucoesComDemandasNaoAtendidas[c] = 1;
+				// retorna 1 sinalizando que se tem construçãoa  ser analisada
+				return 1;
+			}else{
+				cout << endl << endl << "   Problema em acahar uma construção não atendida" << endl << endl;
+			}
+		}
+	}
+	// não conseguir alocar a demanda da função, retorna 0
+	return 0;
+}
+
 // Destruidora da classe
 ConjuntoConstrucoes::~ConjuntoConstrucoes(){
 	Construcoes.clear();
 	NumeroConstrucoes = -13;
 	ConstrucoesAnalizadas.clear();
-	ConstrucaoPodeSerSuprida.clear();;
+	ConstrucaoPodeSerSuprida.clear();
+	ConstrucoesComDemandasNaoAtendidas.clear();
 	MakespanConstrucoes = -13;
 	NivelDeInviabilidade = -13;
 }

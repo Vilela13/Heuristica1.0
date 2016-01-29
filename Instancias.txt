@@ -1,5 +1,3 @@
-TestaHeuP1-1.txt
-TestaHeuP1-2.txt
 TestaHeuV1-1.txt
 TestaHeuV1-2.txt
 TestaHeuV1-3.txt

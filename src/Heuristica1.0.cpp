@@ -126,12 +126,18 @@ int main(int argc, char **argv) {
 		 int EscolhaConstrucao;
 		 int EscolhaPlanta;
 
+		 // variavel que sinaliza se realizará o processo recursivo para se tentar atender a demanda se atrasando as demandas anteriores
+		 int RealizaProcessoDeAtrazarTarefas;
+
 		 // ordena na ordem do menor número de tarefas para o maior se colocar o valor 1, ordena na ordem do maior número de tarefas para o menor se colocar o valor 2
 		 EscolhaVeiculo = 1;
 		 // modo de escolha da construção, 1 escolhe a construção por meio do RankTempoDemandas, 2 escolhe a construção com mais demandas,
 		 EscolhaConstrucao = 1;
 		 // modo de escolha da planta, 1 é a planta mais proxima, 1 é a planta com menos tarefas, 3 é a planta com mais tarefas
 		 EscolhaPlanta = 1;
+
+		 // 1 se realizará o processo recursivo para se tentar atender a demanda se atrasando as demandas anteriores, 0 caso contrário
+		 RealizaProcessoDeAtrazarTarefas = 0;
 
 		 // coleta a data e a hora
 		time(&timer);
@@ -196,6 +202,12 @@ int main(int argc, char **argv) {
 				break;
 		}
 
+		if( RealizaProcessoDeAtrazarTarefas == 1){
+			printf("\n    -> Realzia processo recursivo para se atender uma demanda atrasando as demandas anteriores \n\n");
+		}else{
+			printf("\n    -> NÃO realzia processo recursivo para se atender uma demanda atrasando as demandas anteriores \n\n");
+		}
+
 		printf("\n ******************************************************************** \n\n\n");
 
 
@@ -215,7 +227,7 @@ int main(int argc, char **argv) {
 			if( Instancia->LeDados(Nome, EscreveDadosLidosNaTela) == 1){
 				//cout << " Leu Dados" << endl;
 
-				Instancia->ExecutaProcedimentoHeuristico1(Nome, EscolhaVeiculo, EscolhaConstrucao, EscolhaPlanta);
+				Instancia->ExecutaProcedimentoHeuristico1(Nome, EscolhaVeiculo, EscolhaConstrucao, EscolhaPlanta, RealizaProcessoDeAtrazarTarefas);
 
 			}
 			free(Instancia);

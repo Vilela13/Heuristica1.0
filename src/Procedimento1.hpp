@@ -29,7 +29,7 @@ public:
 	void ConfereSeNaoEncontrouUmaPlanta( int  PlantaSelecionada);											// Verifica se não encontrou uma planta
 
 	void VerificaAlocacaoDemandaConstrucao(int IndiceConstrucaoVaiSerSuprida, int &Viabilidade, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo);			// Verifica se consegue atender as demandas da construção
-	int Executa( int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta, int imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo);		// executa o procedimento de realizar o sequenciamento da produção e despache de concreto
+	int Executa( int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta, int imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo, int RealizaProcessoDeAtrazarTarefas);		// executa o procedimento de realizar o sequenciamento da produção e despache de concreto
 
     ~Procedimento1();
 };
@@ -105,7 +105,7 @@ void Procedimento1::VerificaAlocacaoDemandaConstrucao( int IndiceConstrucaoVaiSe
 }
 
 // executa o procedimento de construção da solução
-int Procedimento1::Executa(  int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta, int imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo){
+int Procedimento1::Executa(  int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta,  int imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo, int RealizaProcessoDeAtrazarTarefas){
 
 	int ConstrucaoVaiSerSuprida;
 	int IndiceConstrucaoVaiSerSuprida;
@@ -122,8 +122,7 @@ int Procedimento1::Executa(  int EscolhaVeiculo, int EscolhaConstrucao, int Esco
 	Viabilidade = 1;
 	vector < DadosTarefa > DadosTarefasMovidasAuxiliar;  // contem a movimentação das tarefas no procedimento
 
-	int RealizaProcessoDeAtrazarTarefas;
-	RealizaProcessoDeAtrazarTarefas = 1;
+
 
 	// ordena as cosntruções na ordem em que elas devem ser escolhidas com prioridade
 	ConstrucoesInstancia.OrdenaCosntrucoes( EscolhaConstrucao);

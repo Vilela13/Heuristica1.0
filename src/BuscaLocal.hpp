@@ -35,9 +35,9 @@ public:
 	double CalculaMakespanSolucao();				// calcula o makespan
 
 
-	int BuscaLocalTentaRealizarTarefasComOutosVeiculos(int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta,int Imprime, int ImprimeEstruturas);			// busca local que se verifica se a demanda pode ser melhor atendida caso se realize o seu atendimento com outro caminhão/veículo
-	int BuscaLocalMudaOrdemAtendiemntoConstrucoes(int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta,int Imprime, int ImprimeEstruturas);
-	int BuscaLocalTrocaPlantaAtendimento(int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta,int Imprime, int ImprimeEstruturas);
+	int BuscaLocalTentaRealizarTarefasComOutosVeiculos(int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta,int Imprime, int ImprimeEstruturas, int RealizaProcessoDeAtrazarTarefas);			// busca local que se verifica se a demanda pode ser melhor atendida caso se realize o seu atendimento com outro caminhão/veículo
+	int BuscaLocalMudaOrdemAtendiemntoConstrucoes(int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta,int Imprime, int ImprimeEstruturas, int RealizaProcessoDeAtrazarTarefas);
+	int BuscaLocalTrocaPlantaAtendimento(int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta,int Imprime, int ImprimeEstruturas, int RealizaProcessoDeAtrazarTarefas);
 
 	~BuscaLocal();
 };
@@ -119,7 +119,7 @@ double BuscaLocal::CalculaMakespanSolucao(){
 
 
 // busca local que se verifica se a demanda pode ser melhor atendida caso se realize o seu atendimento com outro caminhão/veículo
-int BuscaLocal::BuscaLocalTentaRealizarTarefasComOutosVeiculos(int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta,int Imprime, int ImprimeEstruturas){
+int BuscaLocal::BuscaLocalTentaRealizarTarefasComOutosVeiculos(int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta,int Imprime, int ImprimeEstruturas, int RealizaProcessoDeAtrazarTarefas){
 
 
 	// ponteiro para o arquivo que se irá salvar os dados
@@ -151,11 +151,6 @@ int BuscaLocal::BuscaLocalTentaRealizarTarefasComOutosVeiculos(int EscolhaVeicul
 
 	// verifica se atendeu a demanda que será reatendida ou não
 	int Recolocar;
-
-	// realiza o processo de atrazar as demandas quando for inserir uma nova demanda em uma construção
-	int RealizaProcessoDeAtrazarTarefas;
-	RealizaProcessoDeAtrazarTarefas = 1;
-
 
 	// variavel para se parar o programa
 	int ParaPrograma;
@@ -357,7 +352,7 @@ int BuscaLocal::BuscaLocalTentaRealizarTarefasComOutosVeiculos(int EscolhaVeicul
 }
 
 // busca local que se verifica caso a ordem de decisão de atendiemnto das demandas de duas construções forem invertidas se irá obter uma melhor solução para o problema
-int BuscaLocal::BuscaLocalMudaOrdemAtendiemntoConstrucoes(int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta,int Imprime, int ImprimeEstruturas){
+int BuscaLocal::BuscaLocalMudaOrdemAtendiemntoConstrucoes(int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta,int Imprime, int ImprimeEstruturas, int RealizaProcessoDeAtrazarTarefas){
 
 	// ponteiro para o arquivo que se irá salvar os dados
 	PonteiroArquivo  Arquivo;
@@ -383,10 +378,6 @@ int BuscaLocal::BuscaLocalMudaOrdemAtendiemntoConstrucoes(int EscolhaVeiculo, in
 	// variavel que controla se ira imprimir o procedimento de locação de tarefas
 	int ImprimeDadosAdicionaTarefa;
 	ImprimeDadosAdicionaTarefa = 0;
-
-	// realiza o processo de atrazar as demandas quando for inserir uma nova demanda em uma construção
-	int RealizaProcessoDeAtrazarTarefas;
-	RealizaProcessoDeAtrazarTarefas = 1;
 
 	int ParaPrograma;
 
@@ -531,7 +522,7 @@ int BuscaLocal::BuscaLocalMudaOrdemAtendiemntoConstrucoes(int EscolhaVeiculo, in
 }
 
 
-int BuscaLocal::BuscaLocalTrocaPlantaAtendimento(int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta, int Imprime, int ImprimeEstruturas){
+int BuscaLocal::BuscaLocalTrocaPlantaAtendimento(int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta, int Imprime, int ImprimeEstruturas, int RealizaProcessoDeAtrazarTarefas){
 
 	// ponteiro para o arquivo que se irá salvar os dados
 	PonteiroArquivo  Arquivo;
@@ -584,9 +575,6 @@ int BuscaLocal::BuscaLocalTrocaPlantaAtendimento(int EscolhaVeiculo, int Escolha
 	// demanda que será reinserida na etapa dois mas que não possui um veículo do qual ela tem que ser atendida obrigatoriamente
 	int  DemandaNaoAtendidaSemPlantaFixa;
 
-	// realiza o processo de atrazar as demandas quando for inserir uma nova demanda em uma construção
-	int RealizaProcessoDeAtrazarTarefas;
-	RealizaProcessoDeAtrazarTarefas = 1;
 
 	// vetores que armazenam as ordens das plantas e dos veiculos
 	vector < int > VetorOrdemPlanta1;

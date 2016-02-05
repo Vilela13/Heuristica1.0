@@ -767,13 +767,6 @@ int Solucao::Viabilidade2(int EscolhaVeiculo, int EscolhaConstrucao, int Escolha
 		// retorna a demanda e a construção que serão analisados inicialmente
 		ProcuraConstrucaoNaoAtendida( ConstrucaoNaoAtendida, DemandaNaoAtendidaFim);
 
-
-
-		//cout << endl << endl << " Construção e demanda não atendida [" << ConstrucaoNaoAtendida << "-" << DemandaNaoAtendidaFim << "]" << endl << endl;
-		//cin >> PararPrograma;
-
-
-
 		// faz a primeira demanda analisada na construção como sendo a mesma da ultima analisada
 		DemandaNaoAtendidaInicio = DemandaNaoAtendidaFim;
 		// inicia o tamanho do vetor de tempo do inicio das plantas com 0
@@ -787,10 +780,6 @@ int Solucao::Viabilidade2(int EscolhaVeiculo, int EscolhaConstrucao, int Escolha
 		// enquanto for possivel analisar a construção se continua no loop
 
 		while( PermiteAnalisarCosntrucao == 1){
-
-			//cout << " DemandaNaoAtendidaInicio = " << DemandaNaoAtendidaInicio << " DemandaNaoAtendidaFim = " << DemandaNaoAtendidaFim << endl << endl;
-			//cin >> PararPrograma;
-
 
 // deleta tarefas que são atendidas depois desta tarefa não alocada
 			// se limpa o vetor com as tarefas movidas durante o processo de se tentar atender a ultima demanda (DemandaNaoAtendidaFim)

@@ -658,7 +658,6 @@ int BuscaLocal::BuscaLocalTrocaPlantaAtendimento(int EscolhaVeiculo, int Escolha
 					cin >> ParaPrograma;
 				}
 
-
 				ReadicionouDemandaProcessoEtapa1 = 1;
 
 				// enquanto a cosntrução corrente tiver uma demanda que foi deltada no processo anterior se continua no while
@@ -704,15 +703,6 @@ int BuscaLocal::BuscaLocalTrocaPlantaAtendimento(int EscolhaVeiculo, int Escolha
 									// marac a variavel como se conseguiu alicar a demanda
 									ReadicionouDemanda = 1;
 
-
-
-
-
-
-
-
-
-
 									// caso as demandas da construção em questão não tiverem tido todas as suas demandas atendidas se entra no IF
 									if( ConstrucoesInstancia.Construcoes[c1].StatusAtendimento < ConstrucoesInstancia.Construcoes[c1].NumeroDemandas){
 										// se tenta atender todas as demandas da construção até se chegar na ultima dela ou até não se conseguir atender uma demanda
@@ -723,16 +713,6 @@ int BuscaLocal::BuscaLocalTrocaPlantaAtendimento(int EscolhaVeiculo, int Escolha
 											ReadicionouDemanda = ConstrucoesInstancia.AdicionaTarefa( 0 , ConstrucoesInstancia.Construcoes[c1].NumeroDaConstrucao,   DemandaAposDemandaNaoAtendida , DadosTarefasMovidasEtapa2, 1, 0, RealizaProcessoDeAtrazarTarefas, EscolhaVeiculo , EscolhaPlanta, PlantasInstancia, ImprimeDadosAdicionaTarefa,"  <<<<< BuscaLocal::BuscaLocalTrocaPlantaAtendimento >>> ");
 										}
 									}
-
-
-
-
-
-
-
-
-
-
 
 									// marca as construções que possuem demandas que ainda não foram atendidas como candidadtas a serem avaliadas para o atenidmento de suas demandas
 									ConstrucoesInstancia.AlocaValoresConstrucaoPodeAtender();

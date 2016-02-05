@@ -164,8 +164,8 @@ int BuscaLocal::BuscaLocalTentaRealizarTarefasComOutosVeiculos(int EscolhaVeicul
 	int ImprimeDadosAdicionaTarefa;
 	ImprimeDadosAdicionaTarefa = 0;
 
-	// ordena as cosntruções na ordem em que elas devem ser escolhidas com prioridade
-	ConstrucoesInstancia.OrdenaCosntrucoes( EscolhaConstrucao);
+	// ordena as cosntruções na ordem em que elas devem ser escolhidas com prioridade (foi tirada para se manter a ordem realizado na heuristica constrututiva)
+	//ConstrucoesInstancia.OrdenaCosntrucoes( EscolhaConstrucao);
 
 	// faz com que nenhuma construção tenha sido analizada
 	ConstrucoesInstancia.InicializaConstrucoesAnalizadas();
@@ -390,8 +390,8 @@ int BuscaLocal::BuscaLocalMudaOrdemAtendiemntoConstrucoes(int EscolhaVeiculo, in
 
 	int ParaPrograma;
 
-	// ordena as cosntruções na ordem em que elas devem ser escolhidas com prioridade
-	ConstrucoesInstancia.OrdenaCosntrucoes( EscolhaConstrucao);
+	// ordena as cosntruções na ordem em que elas devem ser escolhidas com prioridade (foi tirada para se manter a ordem realizado na heuristica constrututiva)
+	//ConstrucoesInstancia.OrdenaCosntrucoes( EscolhaConstrucao);
 
 	// verifica se possui mais de uma construção, caso só setiver uma não faz sentido realizar o procedimento da busca local de troca de ordem de atendiemnto das construções
 	if ( (int) ConstrucoesInstancia.Construcoes.size() > 1){
@@ -601,8 +601,8 @@ int BuscaLocal::BuscaLocalTrocaPlantaAtendimento(int EscolhaVeiculo, int Escolha
 	int ImprimeDadosAdicionaTarefa;
 	ImprimeDadosAdicionaTarefa = 0;
 
-	// ordena as cosntruções na ordem em que elas devem ser escolhidas com prioridade
-	ConstrucoesInstancia.OrdenaCosntrucoes( EscolhaConstrucao);
+	// ordena as cosntruções na ordem em que elas devem ser escolhidas com prioridade (foi tirada para se manter a ordem realizado na heuristica constrututiva)
+	//ConstrucoesInstancia.OrdenaCosntrucoes( EscolhaConstrucao);
 
 	// armazena o makespan da solução corrente
 	MakespanAnterior = CalculaMakespanSolucao();

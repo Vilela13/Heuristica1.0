@@ -238,8 +238,8 @@ int Solucao::Viabilidade1(int EscolhaVeiculo, int EscolhaConstrucao, int Escolha
 
 
 
-	// ordena cosntruções
-	ConstrucoesInstancia.OrdenaCosntrucoes( EscolhaConstrucao);
+	// ordena cosntruções  (foi tirada para se manter a ordem realizado na heuristica constrututiva)
+	// ConstrucoesInstancia.OrdenaCosntrucoes( EscolhaConstrucao);
 
 	// faz que nenhuma tarefa tenha sido removida
 	ConstrucoesInstancia.ReiniciaTarefasRetiradas();
@@ -751,8 +751,8 @@ int Solucao::Viabilidade2(int EscolhaVeiculo, int EscolhaConstrucao, int Escolha
 	int RealizaProcessoDeAtrazarTarefas;
 	RealizaProcessoDeAtrazarTarefas = 1;
 
-	// ordena as cosntruções na ordem em que elas devem ser escolhidas com prioridade
-	ConstrucoesInstancia.OrdenaCosntrucoes( EscolhaConstrucao);
+	// ordena as cosntruções na ordem em que elas devem ser escolhidas com prioridade  (foi tirada para se manter a ordem realizado na heuristica constrututiva)
+	//ConstrucoesInstancia.OrdenaCosntrucoes( EscolhaConstrucao);
 
 	if( Imprime == 1){
 		cout << endl << endl << "                        Situacao ao entra no Viabilidade2 " << endl << endl;

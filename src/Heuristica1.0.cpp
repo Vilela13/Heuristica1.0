@@ -14,7 +14,42 @@ using namespace std;
 int main(int argc, char **argv) {
 
 
-	//if( argc == 2){
+	if( argc > 5){
+
+		// tipo de escolha de veiculo, construção e planta
+		int EscolhaVeiculo;
+		int EscolhaConstrucao;
+		int EscolhaPlanta;
+
+		// variavel que sinaliza se realizará o processo recursivo para se tentar atender a demanda se atrasando as demandas anteriores
+		int RealizaProcessoDeAtrazarTarefas;
+
+
+		string Recursao;
+		Recursao = argv[2];
+
+		if( Recursao != "ComRec" && Recursao != "SemRec"){
+			cout << endl << endl << endl <<  argv[2] << "   Problema a se definir se o programa irá atrasar as tarefas anteriores para atender uma demanda ou não " << endl << endl << endl;
+			return 0;
+		}else{
+			if( Recursao == "SemRec"){
+				// 1 se realizará o processo recursivo para se tentar atender a demanda se atrasando as demandas anteriores, 0 caso contrário
+				 RealizaProcessoDeAtrazarTarefas = 0;
+			}
+			if( Recursao == "ComRec"){
+				// 1 se realizará o processo recursivo para se tentar atender a demanda se atrasando as demandas anteriores, 0 caso contrário
+				 RealizaProcessoDeAtrazarTarefas = 1;
+			}
+		}
+
+		string TipoProcedimento;
+		TipoProcedimento = argv[3];
+
+		if( TipoProcedimento != "vns" && TipoProcedimento != "grasp"){
+			cout << endl << endl << endl <<  argv[2] << "   Problema em se identificar o tipo de procediemnto a se realizar " << endl << endl << endl;
+			return 0;
+		}
+
 
 		list<string> ListaInstancias;
 		string Nome;
@@ -36,7 +71,7 @@ int main(int argc, char **argv) {
 
 		ifstream ArquivoInstanciaSolomon( "ArquivosSolomon.txt" );
 		if(!ArquivoInstanciaSolomon){
-			cout << " Arquivo nao Existe! \n FUDEU MUITO! \n";
+			cout << " Arquivo ArquivosSolomon.txt não Existe! \n FUDEU MUITO! \n";
 		}else{
 
 			ArquivoInstanciaSolomon >> Nome;
@@ -87,8 +122,8 @@ int main(int argc, char **argv) {
 
 		// -------------------------- Resolve as instancais atraevez dos procediemntos implementados ----------------------- //
 
-		//Instancias = argv[1];
-		Instancias = "Instancias.txt";
+		Instancias = argv[1];
+		//Instancias = "Instancias.txt";
 
 		ifstream ArquivoInstancia;
 
@@ -121,129 +156,130 @@ int main(int argc, char **argv) {
 		 char buffer[26];
 		 struct tm* tm_info;
 
-		 // tipo de escolha de veiculo, construção e planta
-		 int EscolhaVeiculo;
-		 int EscolhaConstrucao;
-		 int EscolhaPlanta;
+		 if( TipoProcedimento == "vns" ){
 
-		 // variavel que sinaliza se realizará o processo recursivo para se tentar atender a demanda se atrasando as demandas anteriores
-		 int RealizaProcessoDeAtrazarTarefas;
+			 if( argc != 7){
+				 cout << endl << endl << endl << "    Probelma na entrada de parametros para se executar o vns" << endl << endl << endl;
+				 return 0;
+			 }
 
-		 // ordena na ordem do menor número de tarefas para o maior se colocar o valor 1, ordena na ordem do maior número de tarefas para o menor se colocar o valor 2
-		 EscolhaVeiculo = 1;
-		 // modo de escolha da construção, 1 escolhe a construção por meio do RankTempoDemandas, 2 escolhe a construção com mais demandas,
-		 EscolhaConstrucao = 1;
-		 // modo de escolha da planta, 1 é a planta mais proxima, 1 é a planta com menos tarefas, 3 é a planta com mais tarefas
-		 EscolhaPlanta = 1;
-
-		 // 1 se realizará o processo recursivo para se tentar atender a demanda se atrasando as demandas anteriores, 0 caso contrário
-		 RealizaProcessoDeAtrazarTarefas = 0;
-
-		 // coleta a data e a hora
-		time(&timer);
-		tm_info = localtime(&timer);
-		strftime(buffer, 26, " * %H:%M:%S de %d:%m:%Y", tm_info);
-
-		// escreve a hora da execucao e a parte inicial da tabela
-		printf("\n\n ----- Execução as %s ----- \n\n", buffer);
-
-		// escreve o tipo de execução
-
-		printf("\n ******************** Tipo Execução **************************** \n\n");
-
-		// escreve o tipo de escolha do veículo
-		switch (EscolhaVeiculo) {
-			case 1:
-				printf("  -> Veículo com menor número de tarefas  \n");
-				break;
-			case 2:
-				printf("  -> Veículo com maior número de tarefas  \n");
-				break;
-			case 3:
-				printf("  -> Veículo em ordem de sua numeração  \n");
-				break;
-			default:
-				printf("\n\n Probelam ao selecionar a ordenação do veículo \n\n");
-				return 0;
-				break;
-		}
-
-		// escreve o tipo de escolha do cosntrução
-		switch (EscolhaConstrucao) {
-			case 1:
-				printf("  -> Construção com menor Rank (Janela de tempo / Deamanda )   \n");
-				break;
-			case 2:
-				printf("  -> Construção com menor Janela de tempo   \n");
-				break;
-			case 3:
-				printf("  -> Construção com menor Tempo inicio   \n");
-				break;
-			default:
-				printf("\n\n Probelam ao selecionar a ordenação da cosntrução \n\n");
-				return 0;
-				break;
-		}
-
-		// escreve o tipo de escolha do planta
-		switch (EscolhaPlanta) {
-			case 1:
-				printf("  -> Planta mais proxima da cosntrução \n");
-				break;
-			case 2:
-				printf("  -> Planta com menor número de tarefas \n");
-				break;
-			case 3:
-				printf("  -> Planta com maior número de tarefas \n");
-				break;
-			default:
-				printf("\n\n Probelam ao selecionar a ordenação da planta \n\n");
-				return 0;
-				break;
-		}
-
-		if( RealizaProcessoDeAtrazarTarefas == 1){
-			printf("\n    -> Realzia processo recursivo para se atender uma demanda atrasando as demandas anteriores \n\n");
-		}else{
-			printf("\n    -> NÃO realzia processo recursivo para se atender uma demanda atrasando as demandas anteriores \n\n");
-		}
-
-		printf("\n ******************************************************************** \n\n\n");
+			 // ordena na ordem do menor número de tarefas para o maior se colocar o valor 1, ordena na ordem do maior número de tarefas para o menor se colocar o valor 2
+			 EscolhaVeiculo = atoi( argv[4]);			// função atoi tranforma char em inteiro ( biblioteca stdlib.h)
+			 // modo de escolha da construção, 1 escolhe a construção por meio do RankTempoDemandas, 2 escolhe a construção com mais demandas,
+			 EscolhaConstrucao = atoi( argv[5]);		// função atoi tranforma char em inteiro ( biblioteca stdlib.h)
+			 // modo de escolha da planta, 1 é a planta mais proxima, 1 é a planta com menos tarefas, 3 é a planta com mais tarefas
+			 EscolhaPlanta = atoi( argv[6]);			// função atoi tranforma char em inteiro ( biblioteca stdlib.h)
 
 
 
-		// escreve cabeçario
-		printf(" Nome_Instancia \t Situacao_Inicial \t Makespan \t Viabilidade1 \t Viabilidade2  \t BuscaLocal1 \t BuscaLocal2 \t BuscaLocal3 \t Tempo \n");
+			 // coleta a data e a hora
+			time(&timer);
+			tm_info = localtime(&timer);
+			strftime(buffer, 26, " * %H:%M:%S de %d:%m:%Y", tm_info);
 
-		while( !ListaInstancias.empty()){
-			it = ListaInstancias.begin();
-			Nome = *it;
-			ListaInstancias.pop_front();
+			// escreve a hora da execucao e a parte inicial da tabela
+			printf("\n\n ----- Execução as %s ----- \n\n", buffer);
 
-			//cout << " Modelo => " << Nome << endl << endl;
+			// escreve o tipo de execução
 
-			Instancia = new Heuristica;
+			printf("\n ******************** Tipo Execução **************************** \n\n");
 
-			if( Instancia->LeDados(Nome, EscreveDadosLidosNaTela) == 1){
-				//cout << " Leu Dados" << endl;
-
-				Instancia->ExecutaProcedimentoHeuristico1(Nome, EscolhaVeiculo, EscolhaConstrucao, EscolhaPlanta, RealizaProcessoDeAtrazarTarefas);
-
+			// escreve o tipo de escolha do veículo
+			switch (EscolhaVeiculo) {
+				case 1:
+					printf("  -> Veículo com menor número de tarefas  \n");
+					break;
+				case 2:
+					printf("  -> Veículo com maior número de tarefas  \n");
+					break;
+				case 3:
+					printf("  -> Veículo em ordem de sua numeração  \n");
+					break;
+				default:
+					printf("\n\n Probelam ao selecionar a ordenação do veículo \n\n");
+					return 0;
+					break;
 			}
-			free(Instancia);
-		}
 
-		ArquivoExcelResposta.close();
+			// escreve o tipo de escolha do cosntrução
+			switch (EscolhaConstrucao) {
+				case 1:
+					printf("  -> Construção com menor Rank (Janela de tempo / Deamanda )   \n");
+					break;
+				case 2:
+					printf("  -> Construção com menor Janela de tempo   \n");
+					break;
+				case 3:
+					printf("  -> Construção com menor Tempo inicio   \n");
+					break;
+				default:
+					printf("\n\n Probelam ao selecionar a ordenação da cosntrução \n\n");
+					return 0;
+					break;
+			}
 
-		cout << "\n \n Galo Doido! \n \n";
-		return 1;
+			// escreve o tipo de escolha do planta
+			switch (EscolhaPlanta) {
+				case 1:
+					printf("  -> Planta mais proxima da cosntrução \n");
+					break;
+				case 2:
+					printf("  -> Planta com menor número de tarefas \n");
+					break;
+				case 3:
+					printf("  -> Planta com maior número de tarefas \n");
+					break;
+				default:
+					printf("\n\n Probelam ao selecionar a ordenação da planta \n\n");
+					return 0;
+					break;
+			}
+
+			if( RealizaProcessoDeAtrazarTarefas == 1){
+				printf("\n    -> Realzia processo recursivo para se atender uma demanda atrasando as demandas anteriores \n\n");
+			}else{
+				printf("\n    -> NÃO realzia processo recursivo para se atender uma demanda atrasando as demandas anteriores \n\n");
+			}
+
+			printf("\n ******************************************************************** \n\n\n");
 
 
-/*
+
+			// escreve cabeçario
+			printf(" Nome_Instancia  \t Construtiva \t Viabilidade1 \t Viabilidade2  \t BuscaLocal1 \t BuscaLocal2 \t BuscaLocal3 \t Tempo (segundos) \n");
+
+			while( !ListaInstancias.empty()){
+				it = ListaInstancias.begin();
+				Nome = *it;
+				ListaInstancias.pop_front();
+
+				//cout << " Modelo => " << Nome << endl << endl;
+
+				Instancia = new Heuristica;
+
+				if( Instancia->LeDados(Nome, EscreveDadosLidosNaTela) == 1){
+					//cout << " Leu Dados" << endl;
+
+					Instancia->ExecutaVNS(Nome, EscolhaVeiculo, EscolhaConstrucao, EscolhaPlanta, RealizaProcessoDeAtrazarTarefas);
+
+
+
+				}
+				free(Instancia);
+			}
+
+			ArquivoExcelResposta.close();
+
+			cout << "\n \n Galo Doido! \n \n";
+			return 1;
+		 }
+
+
+
 	}else{
 		cout << "\n \n Passagem de parametros errada \n \n";
 		return 0;
 	}
-	*/
+
 
 }

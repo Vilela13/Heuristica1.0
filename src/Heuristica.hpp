@@ -25,7 +25,7 @@ public:
 
 	Heuristica();
 	int  LeDados(string, int );						// le os dados da instancia
-	void ExecutaProcedimentoHeuristico1(string NomeInstancia, int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta,  int RealizaProcessoDeAtrazarTarefas);			// executa o procedimento heuristico
+	void ExecutaVNS(string NomeInstancia, int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta,  int RealizaProcessoDeAtrazarTarefas);			// executa o procedimento heuristico
 
 	void LeNomeInstancia(int , string& );			// le o nome da instancia
 	void LeNumeroPlantasEntregasVeiculos(int);		// le o numero de plantas, veiculos e cosntruções
@@ -104,7 +104,7 @@ int Heuristica::LeDados(string Nome, int comentarios){
 }
 
 // executa o procedimento heuristico
-void Heuristica::ExecutaProcedimentoHeuristico1(string NomeInstancia, int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta, int RealizaProcessoDeAtrazarTarefas){
+void Heuristica::ExecutaVNS(string NomeInstancia, int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta, int RealizaProcessoDeAtrazarTarefas){
 
 	// ponteiro para o arquivo que se irá salvar os dados
 	PonteiroArquivo  Arquivo;
@@ -276,18 +276,10 @@ void Heuristica::ExecutaProcedimentoHeuristico1(string NomeInstancia, int Escolh
 		if( ImprimeSolucao == 1){
 			cout << endl << endl;
 		}
-		cout << " \t VIAVEL ";
-		if( ImprimeSolucao == 1){
-			cout << endl << endl;
-		}
 		if( ImprimeArquivo == 1){
 			fprintf( Arquivo,"\n\n  Solucao inicial viavel!    \n\n");
 		}
 	}else{
-		if( ImprimeSolucao == 1){
-			cout << endl << endl;
-		}
-		cout << " \t INVIAVEL ";
 		if( ImprimeSolucao == 1){
 			cout << endl << endl;
 		}

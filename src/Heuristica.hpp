@@ -27,6 +27,8 @@ public:
 	int  LeDados(string, int );						// le os dados da instancia
 	void ExecutaVNS(string NomeInstancia, int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta,  int RealizaProcessoDeAtrazarTarefas);			// executa o procedimento heuristico
 
+	void ExecutaGrasp(string NomeInstancia, int NumeroIteracoes, int EscolhaVeiculo,  int EscolhaPlanta,  int RealizaProcessoDeAtrazarTarefas);
+
 	void LeNomeInstancia(int , string& );			// le o nome da instancia
 	void LeNumeroPlantasEntregasVeiculos(int);		// le o numero de plantas, veiculos e cosntruções
 	void LeVelocidade(int);							// le a velocidade
@@ -535,6 +537,10 @@ void Heuristica::ExecutaVNS(string NomeInstancia, int EscolhaVeiculo, int Escolh
 	}
 
 	fclose (Arquivo);
+
+}
+
+void Heuristica::ExecutaGrasp(string NomeInstancia, int NumeroIteracoes, int EscolhaVeiculo,  int EscolhaPlanta,  int RealizaProcessoDeAtrazarTarefas){
 
 }
 

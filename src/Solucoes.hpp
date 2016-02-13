@@ -15,46 +15,46 @@ class Solucao{
 public:
 
 // estruturas que armazenam os dados da instancia
-	int NP;
-	ConjuntoPlantas PlantasInstancia;
-	int NE;
+	int		NP;
+	ConjuntoPlantas		PlantasInstancia;
+	int		NE;
 	ConjuntoConstrucoes ConstrucoesInstancia;
-	int NV;
-	double Velocidade;
-	double TempoDeVidaConcreto;
+	int		NV;
+	double	Velocidade;
+	double	TempoDeVidaConcreto;
 
-	double Makespan;
+	double	Makespan;
 
 	Solucao();
 
-	void CarregaSolucao(int np, ConjuntoPlantas Plantas, int ne, ConjuntoConstrucoes Construcoes, int nv, double v,double TDVC);		// Carrega os dados da instancia e a solução até o momento
-	void Imprime(bool ImprimePlanta, bool ImprimeConstrucao, bool VerificaViabilidade, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo);									// imprime os dados da solução
-	int DeletaAlocacaoTarefasPosterioresMesmaConstrucao(int VerificaExistencia, int Construcao, int Demanda, vector < DadosTarefa >& DadosTarefasMovidas);					// deleta demandas atendidas na construção após certa demanda que é passada com parametro
+	void	CarregaSolucao(int np, ConjuntoPlantas Plantas, int ne, ConjuntoConstrucoes Construcoes, int nv, double v,double TDVC);		// Carrega os dados da instancia e a solução até o momento
+	void	Imprime(bool ImprimePlanta, bool ImprimeConstrucao, bool VerificaViabilidade, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo);									// imprime os dados da solução
+	int		DeletaAlocacaoTarefasPosterioresMesmaConstrucao(int VerificaExistencia, int Construcao, int Demanda, vector < DadosTarefa >& DadosTarefasMovidas);					// deleta demandas atendidas na construção após certa demanda que é passada com parametro
 
 
-	void ReadicionaTarefas(int VerificaExistencia, int construcao, vector < DadosTarefa > &DadosTarefasMovidas, int SituacaoDemanda,int RealizaProcessoDeAtrazarTarefas, int EscolhaVeiculo,int EscolhaPlanta, int imprime);						// após adicionar uma demanda que não era alocada antes, se tenta readicionar as demandas retiradas na construção anterior
-	int ConstrucaoTemTarefaParaRemover(int& Construcao, int& Demanda, int Imprimir);	// Usado em ProcessoViabilizacao1. Verifica se possui uma construção que possui demandas que ainda não foram retiradas para se tentar a viabilização da solução. Caso possuir, retorna 1 a função e é retornado os dados da construção e da demanda por parametro.
+	void	ReadicionaTarefas(int VerificaExistencia, int construcao, vector < DadosTarefa > &DadosTarefasMovidas, int SituacaoDemanda,int RealizaProcessoDeAtrazarTarefas, int EscolhaVeiculo,int EscolhaPlanta, int imprime);						// após adicionar uma demanda que não era alocada antes, se tenta readicionar as demandas retiradas na construção anterior
+	int		ConstrucaoTemTarefaParaRemover(int& Construcao, int& Demanda, int Imprimir);	// Usado em ProcessoViabilizacao1. Verifica se possui uma construção que possui demandas que ainda não foram retiradas para se tentar a viabilização da solução. Caso possuir, retorna 1 a função e é retornado os dados da construção e da demanda por parametro.
 
-	int Viabilidade1(int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta,int Imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo, int RealizaProcessoDeAtrazarTarefas);
-	void ProcessoViabilizacao1(int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta,int Imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo, int RealizaProcessoDeAtrazarTarefas);
+	int		Viabilidade1(int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta,int Imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo, int RealizaProcessoDeAtrazarTarefas);
+	void	ProcessoViabilizacao1(int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta,int Imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo, int RealizaProcessoDeAtrazarTarefas);
 
 
-	int DeletaUltimaDemandaConstrucaoEmAnalise( int ConstrucaoNaoAtendida, int IndiceConstrucaoNaoAtendida, int DemandaNaoAtendidaInicio, vector < DadosTarefa > &DadosTarefasDemandasAnteriores);		// deleta a demanda passada na função e as demandas seguintes a está na construção, mas só armazena na estrutura a demanda passada na função
+	int		DeletaUltimaDemandaConstrucaoEmAnalise( int ConstrucaoNaoAtendida, int IndiceConstrucaoNaoAtendida, int DemandaNaoAtendidaInicio, vector < DadosTarefa > &DadosTarefasDemandasAnteriores);		// deleta a demanda passada na função e as demandas seguintes a está na construção, mas só armazena na estrutura a demanda passada na função
 
-	int SelecionaConstrucao(int &ConstrucaoParaAtender, int &ConstrucaoParaAtenderIndice, vector < int > ConstrucoesAnalizadas);	// seleciona a construção a ser analisada no momento
-	int  ProcuraConstrucaoNaoAtendida(int &ConstrucaoNaoAtendida, int &DemandaNaoAtendida);																	// Encontra a construção que possui a menor distancia a uma planta dentre todas as construções com demandas não atendidas
-	void AlocaTempoPlantaPodeAtenderDemanda(int IndiceConstrucaoNaoAtendida, vector < double > &TempoPlantaConsegueAtender, int Imprime);					// Aloca o tempo inicial que se pode sair uma carreta da planta para suprir a construção passada
+	int		SelecionaConstrucao(int &ConstrucaoParaAtender, int &ConstrucaoParaAtenderIndice, vector < int > ConstrucoesAnalizadas);	// seleciona a construção a ser analisada no momento
+	int		ProcuraConstrucaoNaoAtendida(int &ConstrucaoNaoAtendida, int &DemandaNaoAtendida);																	// Encontra a construção que possui a menor distancia a uma planta dentre todas as construções com demandas não atendidas
+	void	AlocaTempoPlantaPodeAtenderDemanda(int IndiceConstrucaoNaoAtendida, vector < double > &TempoPlantaConsegueAtender, int Imprime);					// Aloca o tempo inicial que se pode sair uma carreta da planta para suprir a construção passada
 
-	int DeletaTarefasAposTempoPlantaPodeAtender(vector < double > &TempoPlantaPodeAtender, vector < DadosTarefa > &DadosTarefasMovidas,  int Imprime );		// deleta todas as tarefas que são atendidas após os horarios armazenados da TempoPlantaPodeAtender
+	int		DeletaTarefasAposTempoPlantaPodeAtender(vector < double > &TempoPlantaPodeAtender, vector < DadosTarefa > &DadosTarefasMovidas,  int Imprime );		// deleta todas as tarefas que são atendidas após os horarios armazenados da TempoPlantaPodeAtender
 
-	int Viabilidade2(int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta, int Imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo, int RealizaProcessoDeAtrazarTarefas);
-	void ProcessoViabilizacao2(int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta, int Imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo, int RealizaProcessoDeAtrazarTarefas);
+	int		Viabilidade2(int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta, int Imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo, int RealizaProcessoDeAtrazarTarefas);
+	void	ProcessoViabilizacao2(int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta, int Imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo, int RealizaProcessoDeAtrazarTarefas);
 
-	void CalculaMakespan();		// calcula o makespan geral da solução
+	void	CalculaMakespan();		// calcula o makespan geral da solução
 
-	void RealizarBuscaLocalCaminhao(int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta, int imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo, int RealizaProcessoDeAtrazarTarefas);
-	void RealizarBuscaLocalConstrucao(int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta, int imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo, int RealizaProcessoDeAtrazarTarefas);
-	void RealizarBuscaLocalPlanta(int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta, int imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo, int RealizaProcessoDeAtrazarTarefas);
+	void 	RealizarBuscaLocalCaminhao(int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta, int imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo, int RealizaProcessoDeAtrazarTarefas);
+	void 	RealizarBuscaLocalConstrucao(int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta, int imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo, int RealizaProcessoDeAtrazarTarefas);
+	void 	RealizarBuscaLocalPlanta(int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta, int imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo, int RealizaProcessoDeAtrazarTarefas);
 
 	~Solucao();
 };
@@ -71,7 +71,7 @@ Solucao::Solucao(){
 
 
 // Carrega os dados da instancia e a solução até o momento
-void Solucao::CarregaSolucao(int np, ConjuntoPlantas Plantas, int ne, ConjuntoConstrucoes Construcoes, int nv, double v,double TDVC){
+void	Solucao::CarregaSolucao(int np, ConjuntoPlantas Plantas, int ne, ConjuntoConstrucoes Construcoes, int nv, double v,double TDVC){
 	NP = np;
 	PlantasInstancia = Plantas;
 	NE = ne;
@@ -82,7 +82,7 @@ void Solucao::CarregaSolucao(int np, ConjuntoPlantas Plantas, int ne, ConjuntoCo
 }
 
 // imprime os dados da solução
-void Solucao::Imprime(bool ImprimePlanta, bool ImprimeConstrucao, bool VerificaViabilidade ,  int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo){
+void 	Solucao::Imprime(bool ImprimePlanta, bool ImprimeConstrucao, bool VerificaViabilidade ,  int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo){
 
 
 	// Imprime os dados das plantas
@@ -104,7 +104,7 @@ void Solucao::Imprime(bool ImprimePlanta, bool ImprimeConstrucao, bool VerificaV
 }
 
 // deleta demandas atendidas na construção após certa demanda que é passada com parametro
-int Solucao::DeletaAlocacaoTarefasPosterioresMesmaConstrucao(int VerificaExistencia, int Construcao, int Demanda, vector < DadosTarefa >& DadosTarefasMovidas){
+int		Solucao::DeletaAlocacaoTarefasPosterioresMesmaConstrucao(int VerificaExistencia, int Construcao, int Demanda, vector < DadosTarefa >& DadosTarefasMovidas){
 	int c;
 
 	// verifica se a construção passada existe
@@ -129,7 +129,7 @@ int Solucao::DeletaAlocacaoTarefasPosterioresMesmaConstrucao(int VerificaExisten
 
 
 // após adicionar uma demanda que não era alocada antes, se tenta readicionar as demandas retiradas na construção anterior
-void Solucao::ReadicionaTarefas(int VerificaExistencia, int construcao, vector < DadosTarefa > &DadosTarefasMovidas, int SituacaoDemanda,int RealizaProcessoDeAtrazarTarefas, int EscolhaVeiculo,int EscolhaPlanta, int imprime){
+void	Solucao::ReadicionaTarefas(int VerificaExistencia, int construcao, vector < DadosTarefa > &DadosTarefasMovidas, int SituacaoDemanda,int RealizaProcessoDeAtrazarTarefas, int EscolhaVeiculo,int EscolhaPlanta, int imprime){
 	// indice da cosntrução passada
 	int c;
 
@@ -161,7 +161,7 @@ void Solucao::ReadicionaTarefas(int VerificaExistencia, int construcao, vector <
 }
 
 // Usado em ProcessoViabilizacao1. Verifica se possui uma construção que possui demandas que ainda não foram retiradas para se tentar a viabilização da solução. Caso possuir, retorna 1 a função e é retornado os dados da construção e da demanda por parametro.
-int Solucao::ConstrucaoTemTarefaParaRemover(int& Construcao, int& Demanda, int Imprimir){
+int		Solucao::ConstrucaoTemTarefaParaRemover(int& Construcao, int& Demanda, int Imprimir){
 
 	// inicia os valores dessas variaveis
 	Construcao = -13;
@@ -188,7 +188,7 @@ int Solucao::ConstrucaoTemTarefaParaRemover(int& Construcao, int& Demanda, int I
 }
 
 
-int Solucao::Viabilidade1(int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta,int Imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo, int RealizaProcessoDeAtrazarTarefas){
+int		Solucao::Viabilidade1(int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta,int Imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo, int RealizaProcessoDeAtrazarTarefas){
 
 	// Imprime os dados das tarefas armazenadas durante o processo
 	int ImprimeDadosTarefasArmazenados;
@@ -430,7 +430,7 @@ int Solucao::Viabilidade1(int EscolhaVeiculo, int EscolhaConstrucao, int Escolha
 	return 0;
 }
 
-void Solucao::ProcessoViabilizacao1(int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta,int Imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo, int RealizaProcessoDeAtrazarTarefas){
+void	Solucao::ProcessoViabilizacao1(int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta,int Imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo, int RealizaProcessoDeAtrazarTarefas){
 
 	// calcula o nível de iniviabilidade da solução
 	ConstrucoesInstancia.CalcularNivelDeInviabilidade();
@@ -453,7 +453,7 @@ void Solucao::ProcessoViabilizacao1(int EscolhaVeiculo, int EscolhaConstrucao, i
 
 
 // deleta a demanda passada na função e as demandas seguintes a está na construção, mas só armazena na estrutura a demanda passada na função
-int Solucao::DeletaUltimaDemandaConstrucaoEmAnalise( int ConstrucaoNaoAtendida, int IndiceConstrucaoNaoAtendida, int DemandaNaoAtendidaInicio, vector < DadosTarefa > &DadosTarefasDemandasAnteriores){
+int		Solucao::DeletaUltimaDemandaConstrucaoEmAnalise( int ConstrucaoNaoAtendida, int IndiceConstrucaoNaoAtendida, int DemandaNaoAtendidaInicio, vector < DadosTarefa > &DadosTarefasDemandasAnteriores){
 	// variaveis que armazena os dados da tarefa deletada e que será armazenada
 	int PlantaEmAnalise;
 	int CaminhaoEmAnalise;
@@ -513,7 +513,7 @@ int Solucao::DeletaUltimaDemandaConstrucaoEmAnalise( int ConstrucaoNaoAtendida, 
 }
 
 // seleciona a construção a ser analisada no momento
-int Solucao::SelecionaConstrucao( int &ConstrucaoParaAtender, int &ConstrucaoParaAtenderIndice, vector < int > ConstrucoesAnalizadas){
+int		Solucao::SelecionaConstrucao( int &ConstrucaoParaAtender, int &ConstrucaoParaAtenderIndice, vector < int > ConstrucoesAnalizadas){
 
 	// passa por todas as construções
 	for( int c = 0; c < NE; c++){
@@ -535,7 +535,7 @@ int Solucao::SelecionaConstrucao( int &ConstrucaoParaAtender, int &ConstrucaoPar
 }
 
 // Encontra a construção que possui a menor distancia a uma planta dentre todas as construções com demandas não atendidas
-int  Solucao::ProcuraConstrucaoNaoAtendida(int &ConstrucaoNaoAtendida, int &DemandaNaoAtendida){
+int		Solucao::ProcuraConstrucaoNaoAtendida(int &ConstrucaoNaoAtendida, int &DemandaNaoAtendida){
 
 	// variaveis que armazenam os valores temporarios da construção, da demanda  e da distancia minima da construção a uma planta
 	int ConstrucaoTemporario;
@@ -585,7 +585,7 @@ int  Solucao::ProcuraConstrucaoNaoAtendida(int &ConstrucaoNaoAtendida, int &Dema
 }
 
 // Aloca o tempo que se pode começar a carregar uma carreta da planta para suprir a construção passada
-void Solucao::AlocaTempoPlantaPodeAtenderDemanda(int IndiceConstrucaoNaoAtendida, vector < double > &TempoPlantaConsegueAtender, int Imprime){
+void	Solucao::AlocaTempoPlantaPodeAtenderDemanda(int IndiceConstrucaoNaoAtendida, vector < double > &TempoPlantaConsegueAtender, int Imprime){
 
 	// percorre todas as plantas
 	for( int p = 0; p < NP; p++){
@@ -629,7 +629,7 @@ void Solucao::AlocaTempoPlantaPodeAtenderDemanda(int IndiceConstrucaoNaoAtendida
 
 
 // deleta todas as tarefas que são atendidas após os horarios armazenados da TempoPlantaPodeAtender
-int Solucao::DeletaTarefasAposTempoPlantaPodeAtender(vector < double > &TempoPlantaPodeAtender, vector < DadosTarefa > &DadosTarefasMovidas,  int Imprime){
+int		Solucao::DeletaTarefasAposTempoPlantaPodeAtender(vector < double > &TempoPlantaPodeAtender, vector < DadosTarefa > &DadosTarefasMovidas,  int Imprime){
 
 	int TarefaDeletada;
 	int PlantaAux;
@@ -701,7 +701,7 @@ int Solucao::DeletaTarefasAposTempoPlantaPodeAtender(vector < double > &TempoPla
 
 
 
-int Solucao::Viabilidade2(int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta, int Imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo, int RealizaProcessoDeAtrazarTarefas){
+int		Solucao::Viabilidade2(int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta, int Imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo, int RealizaProcessoDeAtrazarTarefas){
 
 	// armazena o nivel de inviabilidade anterior
 	int InviabilidadeSolucaoAnterior;
@@ -962,7 +962,7 @@ int Solucao::Viabilidade2(int EscolhaVeiculo, int EscolhaConstrucao, int Escolha
 	return 0;
 }
 
-void Solucao::ProcessoViabilizacao2(int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta, int Imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo, int RealizaProcessoDeAtrazarTarefas){
+void	Solucao::ProcessoViabilizacao2(int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta, int Imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo, int RealizaProcessoDeAtrazarTarefas){
 	//int PararPrograma;
 
 	// calcula o nível de iniviabilidade da solução
@@ -984,12 +984,15 @@ void Solucao::ProcessoViabilizacao2(int EscolhaVeiculo, int EscolhaConstrucao, i
 }
 
 // calcula o makespan geral da solução
-void Solucao::CalculaMakespan(){
+void	Solucao::CalculaMakespan(){
+	// calcula makespan das cosntruções e das plantas
+	PlantasInstancia.CalculaMakespanPlantas();
+	ConstrucoesInstancia.CalculaMakespansConstrucoes();
 	 // caculo o makespan geral da solução
 	Makespan = PlantasInstancia.MakespanPLantas + ConstrucoesInstancia.MakespanConstrucoes;
 }
 
-void Solucao::RealizarBuscaLocalCaminhao(int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta,int imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo, int RealizaProcessoDeAtrazarTarefas){
+void	Solucao::RealizarBuscaLocalCaminhao(int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta,int imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo, int RealizaProcessoDeAtrazarTarefas){
 	// calsse da busca local
 	BuscaLocal busca;
 
@@ -1036,7 +1039,7 @@ void Solucao::RealizarBuscaLocalCaminhao(int EscolhaVeiculo, int EscolhaConstruc
 	}
 }
 
-void Solucao::RealizarBuscaLocalConstrucao(int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta,int imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo, int RealizaProcessoDeAtrazarTarefas){
+void	Solucao::RealizarBuscaLocalConstrucao(int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta,int imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo, int RealizaProcessoDeAtrazarTarefas){
 	// calsse da busca local
 	BuscaLocal busca;
 
@@ -1084,7 +1087,7 @@ void Solucao::RealizarBuscaLocalConstrucao(int EscolhaVeiculo, int EscolhaConstr
 }
 
 
-void Solucao::RealizarBuscaLocalPlanta(int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta,int imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo, int RealizaProcessoDeAtrazarTarefas){
+void	Solucao::RealizarBuscaLocalPlanta(int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta,int imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo, int RealizaProcessoDeAtrazarTarefas){
 	// calsse da busca local
 	BuscaLocal busca;
 
@@ -1145,9 +1148,9 @@ class ConjuntoSolucoes{
 public:
 	vector < Solucao > Solucoes;
 	ConjuntoSolucoes();			// classe construtoora
-	void InsereSolucao(int np, ConjuntoPlantas Plantas, int ne, ConjuntoConstrucoes Construcoes, int nv, double v,double TDVC);			// carrega uma solução ao vetor das soluções
-	void CalculaMakespanSolucoes();		// calcula o makespan das soluções
-	void Imprime(bool ImprimePlanta, bool ImprimeConstrucao, bool VerificaViabilidade, int ImprimeSolucao , int ImprimeArquivo, PonteiroArquivo  &Arquivo);		// imprime as soluções
+	void	InsereSolucao(int np, ConjuntoPlantas Plantas, int ne, ConjuntoConstrucoes Construcoes, int nv, double v,double TDVC);			// carrega uma solução ao vetor das soluções
+	void	CalculaMakespanSolucoes();		// calcula o makespan das soluções
+	void	Imprime(bool ImprimePlanta, bool ImprimeConstrucao, bool VerificaViabilidade, int ImprimeSolucao , int ImprimeArquivo, PonteiroArquivo  &Arquivo);		// imprime as soluções
 	~ConjuntoSolucoes();
 
 };
@@ -1157,7 +1160,7 @@ ConjuntoSolucoes::ConjuntoSolucoes(){
 }
 
 // carrega uma solução ao vetor das soluções
-void ConjuntoSolucoes::InsereSolucao(int np, ConjuntoPlantas Plantas, int ne, ConjuntoConstrucoes Construcoes, int nv, double v,double TDVC){
+void	ConjuntoSolucoes::InsereSolucao(int np, ConjuntoPlantas Plantas, int ne, ConjuntoConstrucoes Construcoes, int nv, double v,double TDVC){
 	Solucao S1;
 	// carrega dasos da solução
 	S1.CarregaSolucao( np, Plantas, ne, Construcoes, nv, v, TDVC);
@@ -1166,7 +1169,7 @@ void ConjuntoSolucoes::InsereSolucao(int np, ConjuntoPlantas Plantas, int ne, Co
 }
 
 // calcula o makespan das soluções
-void ConjuntoSolucoes::CalculaMakespanSolucoes(){
+void	ConjuntoSolucoes::CalculaMakespanSolucoes(){
 	// percorre por todas as soluções
 	for( int s = 0; s <  (int) Solucoes.size(); s++){
 		// calcula o makespan da solução corrente de suas construções
@@ -1179,7 +1182,7 @@ void ConjuntoSolucoes::CalculaMakespanSolucoes(){
 }
 
 // imprime as soluções
-void ConjuntoSolucoes::Imprime(bool ImprimePlanta, bool ImprimeConstrucao, bool VerificaViabilidade, int ImprimeSolucao ,int ImprimeArquivo, PonteiroArquivo  &Arquivo){
+void	ConjuntoSolucoes::Imprime(bool ImprimePlanta, bool ImprimeConstrucao, bool VerificaViabilidade, int ImprimeSolucao ,int ImprimeArquivo, PonteiroArquivo  &Arquivo){
 	// percorre por todas as soluções
 	for( int s = 0; s <  (int) Solucoes.size(); s++){
 		if( ImprimeSolucao == 1){

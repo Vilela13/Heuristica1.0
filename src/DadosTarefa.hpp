@@ -17,27 +17,27 @@ public:
 	DadosTarefa();
 	vector < int >  DadosDasTarefas; 		     // 0 -> NumConstrução ,  1 -> NumPlanta ,     2 -> NumCarreta,           3 -> situação alocação,  4 -> status retirada
 	vector < double > HorariosDasTarefas;		// 0 -> HoraChegaPlanta , 1 -> HoraSaiPlanta , 2 -> HoraChegaConstrução , 3 -> HoraSaiConstrução , 4 -> HoraRetornaPlanta
-	char Status;	// será "r" se foi removido e "a" se foi adicionado
-	void IniciaConteudo();			// construtora vazia da classe
-	void InserirConteudo(int NumConstucao, int NumPlanta, int NumCarreta, int Situacao, int SituacaoRetirada, double HoraInicioPlanta, double HoraSaiPlanta, double HoraInicioConstrucao, double HoraSaiConstrucao, double HoraRetornaPlanta, char status);			// Insere dados em estrutura
-	void Imprimir();				// Imprime dados da estrutura
+	char 	Status;	// será "r" se foi removido e "a" se foi adicionado
+	void 	IniciaConteudo();			// construtora vazia da classe
+	void 	InserirConteudo(int NumConstucao, int NumPlanta, int NumCarreta, int Situacao, int SituacaoRetirada, double HoraInicioPlanta, double HoraSaiPlanta, double HoraInicioConstrucao, double HoraSaiConstrucao, double HoraRetornaPlanta, char status);			// Insere dados em estrutura
+	void 	Imprimir();				// Imprime dados da estrutura
 	~DadosTarefa();
 };
 
 
-int RetiraElementoVetorDadosTarefa(vector < DadosTarefa > &Vetor,int NumConstucao, int NumPlanta, int NumCarreta, double HoraInicioPlanta, double HoraSaiPlanta, double HoraInicioConstrucao, double HoraSaiConstrucao, double HoraRetornaPlanta, char status );			// retira um elemento dos dados das tarefas
-int RetiraElementoVetorDadosTarefaApartirEstrutura(vector < DadosTarefa > &Vetor, DadosTarefa Dado );			// retira um elemento dos dados das tarefas apartir de estrutura
+int 	RetiraElementoVetorDadosTarefa(vector < DadosTarefa > &Vetor,int NumConstucao, int NumPlanta, int NumCarreta, double HoraInicioPlanta, double HoraSaiPlanta, double HoraInicioConstrucao, double HoraSaiConstrucao, double HoraRetornaPlanta, char status );			// retira um elemento dos dados das tarefas
+int 	RetiraElementoVetorDadosTarefaApartirEstrutura(vector < DadosTarefa > &Vetor, DadosTarefa Dado );			// retira um elemento dos dados das tarefas apartir de estrutura
 
-int VerificaElementoVetorDadosTarefa(vector < DadosTarefa > Vetor,int NumConstucao,  int NumPlanta, int NumCarreta, double HoraInicioPlanta, double HoraSaiPlanta, double HoraInicioConstrucao, double HoraSaiConstrucao, double HoraRetornaPlanta);						// verifica se a tarefa passada pela estrutura de dados está presente na estrutura que armazena as tarefas
-int VerificaElementoVetorDadosTarefaApartirEstrutura(vector < DadosTarefa >  Vetor,DadosTarefa Dado);			// verifica se a tarefa passada pela estrutura de dados está presente na estrutura que armazena as tarefas
+int 	VerificaElementoVetorDadosTarefa(vector < DadosTarefa > Vetor,int NumConstucao,  int NumPlanta, int NumCarreta, double HoraInicioPlanta, double HoraSaiPlanta, double HoraInicioConstrucao, double HoraSaiConstrucao, double HoraRetornaPlanta);						// verifica se a tarefa passada pela estrutura de dados está presente na estrutura que armazena as tarefas
+int 	VerificaElementoVetorDadosTarefaApartirEstrutura(vector < DadosTarefa >  Vetor,DadosTarefa Dado);			// verifica se a tarefa passada pela estrutura de dados está presente na estrutura que armazena as tarefas
 
-int AdicionaElementoVetorDadosTarefa(int VerificaExistencia, vector < DadosTarefa > &Vetor, int NumConstucao, int NumPlanta, int NumCarreta, int Situacao, int SituacaoRetirada, double HoraInicioPlanta, double HoraSaiPlanta, double HoraInicioConstrucao, double HoraSaiConstrucao, double HoraRetornaPlanta, char status);		// adiciona uma tarefa apartir de dados
-int AdicionaElementoVetorDadosTarefaApartirEstrutura(int VerificaExistencia, vector < DadosTarefa > &Vetor, DadosTarefa Dado);			// adiciona uma tarefa apartir de estrutura de dados
+int 	AdicionaElementoVetorDadosTarefa(int VerificaExistencia, vector < DadosTarefa > &Vetor, int NumConstucao, int NumPlanta, int NumCarreta, int Situacao, int SituacaoRetirada, double HoraInicioPlanta, double HoraSaiPlanta, double HoraInicioConstrucao, double HoraSaiConstrucao, double HoraRetornaPlanta, char status);		// adiciona uma tarefa apartir de dados
+int 	AdicionaElementoVetorDadosTarefaApartirEstrutura(int VerificaExistencia, vector < DadosTarefa > &Vetor, DadosTarefa Dado);			// adiciona uma tarefa apartir de estrutura de dados
 
-int MergeDadosTarefa( vector < DadosTarefa > &VetorBase, vector < DadosTarefa > VetorFonte);			// Adicionaos elementos de VetorFonte ao Vetor Base
+int 	MergeDadosTarefa( vector < DadosTarefa > &VetorBase, vector < DadosTarefa > VetorFonte);			// Adicionaos elementos de VetorFonte ao Vetor Base
 
-void ImprimeVetorDadosTarefa( vector < DadosTarefa > Vetor);		// imprime as tarefas
-bool DecideQualTarefaVemAntes ( DadosTarefa d1, DadosTarefa d2 );
+void 	ImprimeVetorDadosTarefa( vector < DadosTarefa > Vetor);		// imprime as tarefas
+bool 	DecideQualTarefaVemAntes ( DadosTarefa d1, DadosTarefa d2 );
 
 
 
@@ -47,13 +47,13 @@ DadosTarefa::DadosTarefa(){
 }
 
 // inicia o conteudo das esruturas vector DadosDasTarefas e HorariosDasTarefas
-void DadosTarefa::IniciaConteudo(){
+void 	DadosTarefa::IniciaConteudo(){
 	DadosDasTarefas.resize(5);
 	HorariosDasTarefas.resize(5);
 }
 
 // Insere dados em estrutura
-void DadosTarefa::InserirConteudo(int NumConstucao, int NumPlanta, int NumCarreta, int Situacao, int SituacaoRetirada, double HoraInicioPlanta, double HoraSaiPlanta, double HoraInicioConstrucao, double HoraSaiConstrucao, double HoraRetornaPlanta, char status){
+void 	DadosTarefa::InserirConteudo(int NumConstucao, int NumPlanta, int NumCarreta, int Situacao, int SituacaoRetirada, double HoraInicioPlanta, double HoraSaiPlanta, double HoraInicioConstrucao, double HoraSaiConstrucao, double HoraRetornaPlanta, char status){
 	// inicia os tipos vector
 	IniciaConteudo();
 
@@ -76,7 +76,7 @@ void DadosTarefa::InserirConteudo(int NumConstucao, int NumPlanta, int NumCarret
 }
 
 // Imprime dados da estrutura
-void DadosTarefa::Imprimir(){
+void 	DadosTarefa::Imprimir(){
 	printf (" < %c >  ", Status);
 	printf (" Planta [%d]",DadosDasTarefas[1] );
 	printf (" tempo (%.4f-%.4f)", HorariosDasTarefas[0], HorariosDasTarefas[1]);
@@ -91,7 +91,7 @@ DadosTarefa::~DadosTarefa(){
 }
 
 // retira um elemento dos dados das tarefas apartir de dados
-int RetiraElementoVetorDadosTarefa(vector < DadosTarefa > &Vetor,int NumConstucao, int NumPlanta, int NumCarreta, double HoraInicioPlanta, double HoraSaiPlanta, double HoraInicioConstrucao, double HoraSaiConstrucao, double HoraRetornaPlanta, char status){
+int 	RetiraElementoVetorDadosTarefa(vector < DadosTarefa > &Vetor,int NumConstucao, int NumPlanta, int NumCarreta, double HoraInicioPlanta, double HoraSaiPlanta, double HoraInicioConstrucao, double HoraSaiConstrucao, double HoraRetornaPlanta, char status){
 	// percorre todas as tarefas
 	for( int i = 0; i < (int) Vetor.size(); i++){
 		// verifica se os dasdos passados combinam om os dados de uma das tarefas armazenadas
@@ -113,7 +113,7 @@ int RetiraElementoVetorDadosTarefa(vector < DadosTarefa > &Vetor,int NumConstuca
 }
 
 // retira um elemento dos dados das tarefas apartir de estrutura
-int RetiraElementoVetorDadosTarefaApartirEstrutura(vector < DadosTarefa > &Vetor, DadosTarefa Dado){
+int 	RetiraElementoVetorDadosTarefaApartirEstrutura(vector < DadosTarefa > &Vetor, DadosTarefa Dado){
 	// percorre todas as tarefas
 	for( int i = 0; i < (int) Vetor.size(); i++){
 		// verifica se os dasdos da estrutura passada combinam om os dados de uma das tarefas armazenadas
@@ -135,7 +135,7 @@ int RetiraElementoVetorDadosTarefaApartirEstrutura(vector < DadosTarefa > &Vetor
 }
 
 // verifica se a tarefa passada está presente na estrutura que armazena as tarefas
-int VerificaElementoVetorDadosTarefa(vector < DadosTarefa > Vetor,int NumConstucao,  int NumPlanta, int NumCarreta, double HoraInicioPlanta, double HoraSaiPlanta, double HoraInicioConstrucao, double HoraSaiConstrucao, double HoraRetornaPlanta, char status){
+int 	VerificaElementoVetorDadosTarefa(vector < DadosTarefa > Vetor,int NumConstucao,  int NumPlanta, int NumCarreta, double HoraInicioPlanta, double HoraSaiPlanta, double HoraInicioConstrucao, double HoraSaiConstrucao, double HoraRetornaPlanta, char status){
 	// percorre todas as tarefas
 	for( int i = 0; i < (int) Vetor.size(); i++){
 		// verifica se os dasdos passados combinam om os dados de uma das tarefas armazenadas
@@ -155,7 +155,7 @@ int VerificaElementoVetorDadosTarefa(vector < DadosTarefa > Vetor,int NumConstuc
 }
 
 // verifica se a tarefa passada pela estrutura de dados está presente na estrutura que armazena as tarefas
-int VerificaElementoVetorDadosTarefaApartirEstrutura(vector < DadosTarefa >  Vetor,DadosTarefa Dado){
+int 	VerificaElementoVetorDadosTarefaApartirEstrutura(vector < DadosTarefa >  Vetor,DadosTarefa Dado){
 	// percorre todas as tarefas
 	for( int i = 0; i < (int) Vetor.size(); i++){
 		// verifica se os dasdos passados combinam om os dados de uma das tarefas armazenadas
@@ -175,8 +175,8 @@ int VerificaElementoVetorDadosTarefaApartirEstrutura(vector < DadosTarefa >  Vet
 }
 
 // adiciona uma tarefa apartir de dados
-int AdicionaElementoVetorDadosTarefa(int VerificaExistencia, vector < DadosTarefa > &Vetor, int NumConstucao, int NumPlanta, int NumCarreta, int Situacao, int SituacaoRetirada, double HoraInicioPlanta, double HoraSaiPlanta, double HoraInicioConstrucao, double HoraSaiConstrucao, double HoraRetornaPlanta,char status){
-	int ParaFuncao;
+int 	AdicionaElementoVetorDadosTarefa(int VerificaExistencia, vector < DadosTarefa > &Vetor, int NumConstucao, int NumPlanta, int NumCarreta, int Situacao, int SituacaoRetirada, double HoraInicioPlanta, double HoraSaiPlanta, double HoraInicioConstrucao, double HoraSaiConstrucao, double HoraRetornaPlanta,char status){
+	int 	ParaFuncao;
 
 	// caso tenha que verificar se a tarefa existe antes de adicionala
 	if( VerificaExistencia == 1){
@@ -209,8 +209,8 @@ int AdicionaElementoVetorDadosTarefa(int VerificaExistencia, vector < DadosTaref
 }
 
 // adiciona uma tarefa apartir de estrutura de dados
-int AdicionaElementoVetorDadosTarefaApartirEstrutura(int VerificaExistencia, vector < DadosTarefa > &Vetor, DadosTarefa Dado){
-	int ParaFuncao;
+int 	AdicionaElementoVetorDadosTarefaApartirEstrutura(int VerificaExistencia, vector < DadosTarefa > &Vetor, DadosTarefa Dado){
+	int 	ParaFuncao;
 
 	// caso tenha que verificar se a tarefa existe antes de adicionala
 	if( VerificaExistencia == 1){
@@ -237,7 +237,7 @@ int AdicionaElementoVetorDadosTarefaApartirEstrutura(int VerificaExistencia, vec
 }
 
 // Adicionaos elementos de VetorFonte ao Vetor Base
-int MergeDadosTarefa( vector < DadosTarefa > &VetorBase, vector < DadosTarefa > VetorFonte){
+int 	MergeDadosTarefa( vector < DadosTarefa > &VetorBase, vector < DadosTarefa > VetorFonte){
 
 	// percorre todos os elementos do VetorFonte
 	for( int i = 0; i < (int) VetorFonte.size(); i++){
@@ -255,7 +255,7 @@ int MergeDadosTarefa( vector < DadosTarefa > &VetorBase, vector < DadosTarefa > 
 }
 
 // imprime as tarefas
-void ImprimeVetorDadosTarefa( vector < DadosTarefa > Vetor){
+void 	ImprimeVetorDadosTarefa( vector < DadosTarefa > Vetor){
 	// percorre todas as tarefas
 	for( int i = 0; i < (int) Vetor.size(); i++){
 		cout << "[" << i << "] ";
@@ -264,7 +264,7 @@ void ImprimeVetorDadosTarefa( vector < DadosTarefa > Vetor){
 	}
 }
 
-bool DecideQualTarefaVemAntes ( DadosTarefa d1, DadosTarefa d2 ){
+bool 	DecideQualTarefaVemAntes ( DadosTarefa d1, DadosTarefa d2 ){
 	return ( d1.HorariosDasTarefas[2] < d2.HorariosDasTarefas[2] );
 }
 

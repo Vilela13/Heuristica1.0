@@ -11,27 +11,27 @@
 #include "Bibliotecas.hpp"
 
 
-void AlocaValoresIniciaisIndices(int& c, int& d);		// inicia os valores de c e d com -13
-int VerificaInidices( int c, int d);					// verifica se os indices c e d não possuem o valor -13
-int VerificaInidices2( int p, int v);					// verifica se os indices p e v não possuem o valor -13
+void 	AlocaValoresIniciaisIndices(int& c, int& d);		// inicia os valores de c e d com -13
+int 	VerificaInidices( int c, int d);					// verifica se os indices c e d não possuem o valor -13
+int 	VerificaInidices2( int p, int v);					// verifica se os indices p e v não possuem o valor -13
 
-void ImprimeVetorInt( vector< int > VetorInt );			// imprime o vector de int
-void ImprimeDadosRetiradoAdicionadoVetorConstrucaoAnalisada( int ImprimeDadosTarefasMovidas, vector < DadosTarefa > DadosTarefasMovidas,  int ImprimeVetorCosntrucoes, vector < int > ConstrucaosAnalizadas, int ParaPrograma);		// imprime as tarefas movidas e as cosntruçĩoes caso forem para serem impressos
-void IniciaVetorIntComZero(vector< int > &VetorInt);	// inicia o vector de int com todos os seus valores como 0
+void 	ImprimeVetorInt( vector< int > VetorInt );			// imprime o vector de int
+void 	ImprimeDadosRetiradoAdicionadoVetorConstrucaoAnalisada( int ImprimeDadosTarefasMovidas, vector < DadosTarefa > DadosTarefasMovidas,  int ImprimeVetorCosntrucoes, vector < int > ConstrucaosAnalizadas, int ParaPrograma);		// imprime as tarefas movidas e as cosntruçĩoes caso forem para serem impressos
+void 	IniciaVetorIntComZero(vector< int > &VetorInt);	// inicia o vector de int com todos os seus valores como 0
 
-int VerificaSeTemUmValorVetorInt( int Valor, vector< int > VetorInt);			// verifica se existe um valor no vector igual ao valor passado
-int VerificaTodosValoresVetorInt( int Valor, vector< int > VetorInt);			// verifica se todos os valores do vector são iguais ao valor passado
-void ImprimeVetorDouble( vector< double > VetorDouble); 						// imprime os valores do vector de elementos double
+int 	VerificaSeTemUmValorVetorInt( int Valor, vector< int > VetorInt);			// verifica se existe um valor no vector igual ao valor passado
+int 	VerificaTodosValoresVetorInt( int Valor, vector< int > VetorInt);			// verifica se todos os valores do vector são iguais ao valor passado
+void 	ImprimeVetorDouble( vector< double > VetorDouble); 						// imprime os valores do vector de elementos double
 
 
 // inicia os valores de c e d com -13
-void AlocaValoresIniciaisIndices( int& c, int& d){
+void 	AlocaValoresIniciaisIndices( int& c, int& d){
 	c = -13;
 	d = -13;
 }
 
 // verifica se os indices c e d não possuem o valor -13
-int VerificaInidices( int c, int d){
+int 	VerificaInidices( int c, int d){
 	if( c == -13 || d == -13 ){
 			cout  << endl << endl << endl << "   &&&&&&&&&&&&& Nao encontrei a demanda ou construcao &&&&&&&&&&&&& " << endl << endl << endl;
 			return -1;
@@ -40,7 +40,7 @@ int VerificaInidices( int c, int d){
 }
 
 // verifica se os indices p e v não possuem o valor -13
-int VerificaInidices2( int p, int v){
+int 	VerificaInidices2( int p, int v){
 	if( p == -13 || v == -13 ){
 			cout  << endl << endl << endl << "   &&&&&&&&&&&&& Nao encontrei a planta ou caminhao &&&&&&&&&&&&& " << endl << endl << endl;
 			return -1;
@@ -49,7 +49,7 @@ int VerificaInidices2( int p, int v){
 }
 
 // imprime o vector de int
-void ImprimeVetorInt( vector< int > VetorInt){
+void 	ImprimeVetorInt( vector< int > VetorInt){
 	cout << " Conteudo Vetor "<< endl;
 	// percorre os elementos do vector
 	for( int i = 0; i < (int) VetorInt.size(); i++){
@@ -59,8 +59,8 @@ void ImprimeVetorInt( vector< int > VetorInt){
 }
 
 // imprime as tarefas movidas e as cosntruçĩoes caso forem para serem impressos
-void ImprimeDadosRetiradoAdicionadoVetorConstrucaoAnalisada( int ImprimeDadosTarefasMovidas, vector < DadosTarefa > DadosTarefasMovidas,  int ImprimeVetorCosntrucoes, vector < int > ConstrucaosAnalizadas, int ParaPrograma){
-	int numero;
+void 	ImprimeDadosRetiradoAdicionadoVetorConstrucaoAnalisada( int ImprimeDadosTarefasMovidas, vector < DadosTarefa > DadosTarefasMovidas,  int ImprimeVetorCosntrucoes, vector < int > ConstrucaosAnalizadas, int ParaPrograma){
+	int 	numero;
 
 	// caso tiver que imprimir os DadosTarefasMovidas entra no if
 	if ( ImprimeDadosTarefasMovidas == 1){
@@ -82,7 +82,7 @@ void ImprimeDadosRetiradoAdicionadoVetorConstrucaoAnalisada( int ImprimeDadosTar
 }
 
 // inicia o vector de int com todos os seus valores como 0
-void IniciaVetorIntComZero(vector< int > &VetorInt){
+void 	IniciaVetorIntComZero(vector< int > &VetorInt){
 	// percorre todo os elementos do  vector
 	for( int i = 0; i < (int) VetorInt.size(); i++){
 		 // aloca o valor 0 ao elemento do vector corrente
@@ -93,7 +93,7 @@ void IniciaVetorIntComZero(vector< int > &VetorInt){
 
 
 // verifica se existe um valor no vector igual ao valor passado
-int VerificaSeTemUmValorVetorInt( int Valor, vector< int > VetorInt){
+int 	VerificaSeTemUmValorVetorInt( int Valor, vector< int > VetorInt){
 	// percorre todo os elementos do  vector
 	for( int i = 0; i < (int) VetorInt.size(); i++){
 		// verifica se o elemento do vector é igual ao valor passado
@@ -107,7 +107,7 @@ int VerificaSeTemUmValorVetorInt( int Valor, vector< int > VetorInt){
 }
 
 // verifica se todos os valores do vector são iguais ao valor passado
-int VerificaTodosValoresVetorInt( int Valor, vector< int > VetorInt){
+int 	VerificaTodosValoresVetorInt( int Valor, vector< int > VetorInt){
 	// percorre todo os elementos do  vector
 	for( int i = 0; i < (int) VetorInt.size(); i++){
 		// verifica se o elemento do vector não é igual ao valor passado
@@ -121,7 +121,7 @@ int VerificaTodosValoresVetorInt( int Valor, vector< int > VetorInt){
 }
 
 // imprime os valores do vector de elementos double
-void ImprimeVetorDouble( vector< double > VetorDouble){
+void 	ImprimeVetorDouble( vector< double > VetorDouble){
 	cout << " Conteudo Vetor "<< endl;
 	// percorre todo os elementos do  vector
 	for( int i = 0; i < (int) VetorDouble.size(); i++){

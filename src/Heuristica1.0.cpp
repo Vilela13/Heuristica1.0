@@ -17,15 +17,15 @@ int main(int argc, char **argv) {
 	if( argc > 5){
 
 		// tipo de escolha de veiculo, construção e planta
-		int EscolhaVeiculo;
-		int EscolhaConstrucao;
-		int EscolhaPlanta;
+		int 	EscolhaVeiculo;
+		int 	EscolhaConstrucao;
+		int 	EscolhaPlanta;
 
 		// variavel que armazena o numero de iterações que serão realizadas no GRASP
-		int NumeroIteracoes;
+		int 	NumeroIteracoes;
 
 		// variavel que sinaliza se realizará o processo recursivo para se tentar atender a demanda se atrasando as demandas anteriores
-		int RealizaProcessoDeAtrazarTarefas;
+		int 	RealizaProcessoDeAtrazarTarefas;
 
 
 		string Recursao;
@@ -45,7 +45,7 @@ int main(int argc, char **argv) {
 			}
 		}
 
-		string TipoProcedimento;
+		string 	TipoProcedimento;
 		TipoProcedimento = argv[3];
 
 		if( TipoProcedimento != "vns" && TipoProcedimento != "grasp"){
@@ -55,18 +55,18 @@ int main(int argc, char **argv) {
 
 
 		list<string> ListaInstancias;
-		string Nome;
+		string 	Nome;
 
-		string Saida;
+		string 	Saida;
 		char *cstr;
 
 		list<string>::iterator it;
 
 		ofstream ArquivoExcelResposta;
 
-		string Instancias;
+		string 	Instancias;
 
-		int EscreveDadosLidosNaTela;
+		int 	EscreveDadosLidosNaTela;
 
 		EscreveDadosLidosNaTela = 0;
 
@@ -156,7 +156,7 @@ int main(int argc, char **argv) {
 
 		// Exscrever a dadta
 		 time_t timer;
-		 char buffer[26];
+		 char 	buffer[26];
 		 struct tm* tm_info;
 
 		 if( TipoProcedimento == "vns" ){
@@ -265,8 +265,6 @@ int main(int argc, char **argv) {
 
 					Instancia->ExecutaVNS(Nome, EscolhaVeiculo, EscolhaConstrucao, EscolhaPlanta, RealizaProcessoDeAtrazarTarefas);
 
-
-
 				}
 				free(Instancia);
 			}
@@ -279,7 +277,7 @@ int main(int argc, char **argv) {
 
 		 if( TipoProcedimento == "grasp" ){
 
-			 if( argc != 7){
+			 if( argc != 8){
 				 cout << endl << endl << endl << "    Probelma na entrada de parametros para se executar o grasp" << endl << endl << endl;
 				 return 0;
 			 }
@@ -289,8 +287,10 @@ int main(int argc, char **argv) {
 			 NumeroIteracoes = atoi( argv[4]);		// função atoi tranforma char em inteiro ( biblioteca stdlib.h)
 			 // ordena na ordem do menor número de tarefas para o maior se colocar o valor 1, ordena na ordem do maior número de tarefas para o menor se colocar o valor 2
 			 EscolhaVeiculo = atoi( argv[5]);		// função atoi tranforma char em inteiro ( biblioteca stdlib.h)
+			 // modo de escolha da construção, 1 escolhe a construção por meio do RankTempoDemandas, 2 escolhe a construção com mais demandas,
+			EscolhaConstrucao = atoi( argv[6]);		// função atoi tranforma char em inteiro ( biblioteca stdlib.h)
 			 // modo de escolha da planta, 1 é a planta mais proxima, 1 é a planta com menos tarefas, 3 é a planta com mais tarefas
-			 EscolhaPlanta = atoi( argv[6]);			// função atoi tranforma char em inteiro ( biblioteca stdlib.h)
+			 EscolhaPlanta = atoi( argv[7]);			// função atoi tranforma char em inteiro ( biblioteca stdlib.h)
 
 
 
@@ -326,6 +326,26 @@ int main(int argc, char **argv) {
 					break;
 				default:
 					printf("\n\n Probelam ao selecionar a ordenação do veículo \n\n");
+					return 0;
+					break;
+			}
+
+			// escreve o tipo de escolha do cosntrução
+			switch (EscolhaConstrucao) {
+				case 0:
+					printf("  -> Mantem ordenação aleatória  realizada no processo construtivo  \n");
+					break;
+				case 1:
+					printf("  -> Construção com menor Rank (Janela de tempo / Deamanda )   \n");
+					break;
+				case 2:
+					printf("  -> Construção com menor Janela de tempo   \n");
+					break;
+				case 3:
+					printf("  -> Construção com menor Tempo inicio   \n");
+					break;
+				default:
+					printf("\n\n Probelam ao selecionar a ordenação da cosntrução \n\n");
 					return 0;
 					break;
 			}
@@ -372,9 +392,7 @@ int main(int argc, char **argv) {
 				if( Instancia->LeDados(Nome, EscreveDadosLidosNaTela) == 1){
 					//cout << " Leu Dados" << endl;
 
-					Instancia->ExecutaGrasp(Nome, NumeroIteracoes, EscolhaVeiculo,  EscolhaPlanta, RealizaProcessoDeAtrazarTarefas);
-
-
+					Instancia->ExecutaGrasp(Nome, NumeroIteracoes, EscolhaVeiculo,  EscolhaConstrucao,  EscolhaPlanta, RealizaProcessoDeAtrazarTarefas);
 
 				}
 				free(Instancia);

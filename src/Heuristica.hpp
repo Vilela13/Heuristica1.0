@@ -15,37 +15,37 @@ class Heuristica{
 public:
 
 	ifstream arq;
-	int NP;
+	int		NP;
 	ConjuntoPlantas PlantasInstancia;
-	int NE;
+	int		NE;
 	ConjuntoConstrucoes ConstrucoesInstancia;
-	int NV;
-	double Velocidade;
-	double TempoDeVidaConcreto;
+	int		NV;
+	double	Velocidade;
+	double	TempoDeVidaConcreto;
 
 	Heuristica();
-	int  LeDados(string, int );						// le os dados da instancia
-	void ExecutaVNS(string NomeInstancia, int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta,  int RealizaProcessoDeAtrazarTarefas);			// executa o procedimento heuristico
+	int		LeDados(string, int );						// le os dados da instancia
+	void	ExecutaVNS(string NomeInstancia, int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta,  int RealizaProcessoDeAtrazarTarefas);			// executa o procedimento heuristico
 
-	void ExecutaGrasp(string NomeInstancia, int NumeroIteracoes, int EscolhaVeiculo,  int EscolhaPlanta,  int RealizaProcessoDeAtrazarTarefas);
+	void	ExecutaGrasp(string NomeInstancia, int NumeroIteracoes,  int EscolhaVeiculo, int EscolhaConstrucao,  int EscolhaPlanta,  int RealizaProcessoDeAtrazarTarefas);
 
-	void LeNomeInstancia(int , string& );			// le o nome da instancia
-	void LeNumeroPlantasEntregasVeiculos(int);		// le o numero de plantas, veiculos e cosntruções
-	void LeVelocidade(int);							// le a velocidade
+	void	LeNomeInstancia(int , string& );			// le o nome da instancia
+	void	LeNumeroPlantasEntregasVeiculos(int);		// le o numero de plantas, veiculos e cosntruções
+	void	LeVelocidade(int);							// le a velocidade
 
-	void LeTempoDeVidaConcreto(int);				// Le o tempo de vida do concreto
-	void LeVeiculosPorPlanta(int);					// le o numero de veículos por planta
-	void LeNumeroDemandas(int);						// le o numero de demandas por construção
+	void	LeTempoDeVidaConcreto(int);				// Le o tempo de vida do concreto
+	void	LeVeiculosPorPlanta(int);					// le o numero de veículos por planta
+	void	LeNumeroDemandas(int);						// le o numero de demandas por construção
 
-	void LeDistancias(int);							// le as distancias das plantas para as construções
-	void LeTempoConstrucao(int);					// le os tempos que cada caminhão leva para atender cada demanda em cada cosntrução
-	void LeTempoPlanta(int);						// le o tempo que acda planta leva para carregar um caminhão de concreto
+	void	LeDistancias(int);							// le as distancias das plantas para as construções
+	void	LeTempoConstrucao(int);					// le os tempos que cada caminhão leva para atender cada demanda em cada cosntrução
+	void	LeTempoPlanta(int);						// le o tempo que acda planta leva para carregar um caminhão de concreto
 
-	void LeTempoMaximoEntreDescargas(int);			// le o tempo maximo permitido entre o atendimento de duas demandas seguidas em cada construção
-	void LeTempoMaximoMinimoConstrucoes(int);		// le o tempo minimo e maximo que um caminhão pode começar a descarregar em uma cosntrução
-	void LeTempoMaximoMinimoPlantas(int);			// le o tempo minimo e máximo que um caminhão pode começar a carregar em uma planta
+	void	LeTempoMaximoEntreDescargas(int);			// le o tempo maximo permitido entre o atendimento de duas demandas seguidas em cada construção
+	void	LeTempoMaximoMinimoConstrucoes(int);		// le o tempo minimo e maximo que um caminhão pode começar a descarregar em uma cosntrução
+	void	LeTempoMaximoMinimoPlantas(int);			// le o tempo minimo e máximo que um caminhão pode começar a carregar em uma planta
 
-	void CalculoRankTempoDemanda(int);				// calcula o rank baseado na janela de tempo e no numero de demandas para cada cosntrução
+	void	CalculoRankTempoDemanda(int);				// calcula o rank baseado na janela de tempo e no numero de demandas para cada cosntrução
     ~Heuristica();
 
 };
@@ -60,7 +60,7 @@ Heuristica::Heuristica(){
 }
 
 // le os dados da instancia
-int Heuristica::LeDados(string Nome, int comentarios){
+int		Heuristica::LeDados(string Nome, int comentarios){
 
 	string Instancia;
 	string CaminhoArquivo1;
@@ -106,7 +106,7 @@ int Heuristica::LeDados(string Nome, int comentarios){
 }
 
 // executa o procedimento heuristico
-void Heuristica::ExecutaVNS(string NomeInstancia, int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta, int RealizaProcessoDeAtrazarTarefas){
+void	Heuristica::ExecutaVNS(string NomeInstancia, int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta, int RealizaProcessoDeAtrazarTarefas){
 
 	// ponteiro para o arquivo que se irá salvar os dados
 	PonteiroArquivo  Arquivo;
@@ -154,8 +154,8 @@ void Heuristica::ExecutaVNS(string NomeInstancia, int EscolhaVeiculo, int Escolh
 	Procedimento1 Prod1;
 
 	// variavel que armazena o estado da solução, inicializada com zero
-	int Solucao;
-	Solucao = 0;
+	int EstadoSolucao;
+	EstadoSolucao = 0;
 
 	// classe que armazena todas as soluções do procediemnto
 	ConjuntoSolucoes Solucoes;
@@ -167,7 +167,7 @@ void Heuristica::ExecutaVNS(string NomeInstancia, int EscolhaVeiculo, int Escolh
 	double semente;
 	semente = 13;
 
-	srand( semente );
+	//srand( semente );
 
 
 
@@ -260,7 +260,7 @@ void Heuristica::ExecutaVNS(string NomeInstancia, int EscolhaVeiculo, int Escolh
 		fprintf( Arquivo,"\n\n############################### Procedimento Construcao Solucao por meio de Heuristica Construtiva #####################################\n");
 	}
 
-	Solucao = Prod1.Executa( EscolhaVeiculo, EscolhaConstrucao, EscolhaPlanta, ImprimeProcedimentoConstrutivo, ImprimeSolucao, ImprimeArquivo, Arquivo, RealizaProcessoDeAtrazarTarefas);
+	EstadoSolucao = Prod1.Executa( EscolhaVeiculo, EscolhaConstrucao, EscolhaPlanta, ImprimeProcedimentoConstrutivo, ImprimeSolucao, ImprimeArquivo, Arquivo, RealizaProcessoDeAtrazarTarefas);
 
 
 	if( ImprimeSolucao == 1){
@@ -274,7 +274,7 @@ void Heuristica::ExecutaVNS(string NomeInstancia, int EscolhaVeiculo, int Escolh
 
 
 
-	if( Solucao == 1 ){
+	if( EstadoSolucao == 1 ){
 		if( ImprimeSolucao == 1){
 			cout << endl << endl;
 		}
@@ -540,13 +540,239 @@ void Heuristica::ExecutaVNS(string NomeInstancia, int EscolhaVeiculo, int Escolh
 
 }
 
-void Heuristica::ExecutaGrasp(string NomeInstancia, int NumeroIteracoes, int EscolhaVeiculo,  int EscolhaPlanta,  int RealizaProcessoDeAtrazarTarefas){
+void	Heuristica::ExecutaGrasp(string NomeInstancia, int NumeroIteracoes, int EscolhaVeiculo, int EscolhaConstrucao,  int EscolhaPlanta,  int RealizaProcessoDeAtrazarTarefas){
+
+	// ponteiro para o arquivo que se irá salvar os dados
+	PonteiroArquivo  Arquivo;
+
+	// caminho para o arquivo que se irá salvar os dados
+	string Caminho;
+
+	// variavel que controla se irá escrever os dados em um aruivo, é inicializada com 0
+	int ImprimeArquivo;
+	ImprimeArquivo = 1;
+
+	// variavel que controla se imprime na tela a solução e os procediemntos
+	int ImprimeSolucao;
+	ImprimeSolucao = 0;
+
+	time_t InicioExecucao, FinalExecucao;
+	double TempoExecucao;
+
+	bool ImprimePlanta;
+	bool ImprimeConstrucao;
+	bool IntervalosRespeitadosConstrucaoes;
+
+	ImprimePlanta = 1;
+	ImprimeConstrucao = 1;
+	IntervalosRespeitadosConstrucaoes = 1;
+
+	int ImprimeProcedimentoConstrutivo;
+	ImprimeProcedimentoConstrutivo = 0;
+
+	int ImprimeViabilizacao;
+	ImprimeViabilizacao = 0;
+
+	int ImprimeBusca;
+	ImprimeBusca = 1;
+
+	// Exscrever a dadta
+	 time_t timer;
+	 char buffer[26];
+	 struct tm* tm_info;
+
+	// variavel que faz o progrma parar
+	int ParaPrograma;
+
+	// classe do procediemnto construtivo
+	Procedimento1 *Prod1;
+
+	// variaveis que sinalizam o meio de ordenação no procediemnto construtivo
+	int 	EscolhaVeiculoProcediemnto 		= 4;	// ordenação aleatoria
+	int 	EscolhaConstrucaoProcediemnto	= 4;	// ordenação aleatoria
+	int 	EscolhaPlantaProcediemnto		= 4;	// ordenação aleatoria
+
+	// classe que armazena solução corrente
+	Solucao *SolucaoCorrente;
+
+	// classe que armazena solução final
+	Solucao SolucaoFinal;
+
+	// variavel que informa se irá realizar a verificação da viabilidade ou não, inicializa com 1 que é que vai ter a verificação da viabilidade
+	int VerificaViabilidade;
+	VerificaViabilidade = 1;
+
+	double semente;
+	semente = 13;
+
+	//srand( semente );
+
+
+
+	// fornece o caminnho onde será criado o arquivo
+	Caminho =  "./Exec/";
+	// acrescenta o nome do arquivo ao caminho
+	Caminho +=  NomeInstancia;
+
+	//cria a pasta Exec para salvar os dados da execução
+	if(!opendir ("Exec")){
+		if( ImprimeSolucao == 1){
+			cout <<  "\n Nao tem diretorio \"Exec\"!!            FUDEU MUITO!! \n" << endl;
+		}
+
+		if(system("mkdir Exec;") == 0){
+			if( ImprimeSolucao == 1){
+				cout << " Criou pasta Exec" << endl;
+			}
+		}else{
+			cout << " Problema ao criar pasta Exec" << endl;
+		}
+
+		/* Outra maneira de criar arquivos
+		SituacaoDiretorio = mkdir("./myfolder", S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+		*/
+
+		if(!opendir ("Exec")){
+			cout << "\n Nao tem diretorio \"Exec\"!!             FUDEU MUITO!! \n" << endl;
+		}else{
+			if( ImprimeSolucao == 1){
+				cout << " Tem diretorio \"Exec\" !!  " << endl;
+			}
+		}
+	}else{
+		if( ImprimeSolucao == 1){
+			cout << " Tem diretorio \"Exec\" !!  " << endl;
+		}
+	}
+
+	// escreve o endereço do arquivo
+	//cout << endl << endl << endl << Caminho << "   -  " <<  Caminho.c_str() <<  endl << endl << endl;
+
+	cout << NomeInstancia << '\t';
+
+	// abre o arquivo
+	Arquivo = fopen (Caminho.c_str(), "a");
+
+	// verifica se abriu o arquivo
+	if(!Arquivo ){
+		// caso não escreve está mensagem
+		cout <<  endl << endl <<  endl << endl <<  "  Fudeu muito " <<  endl << endl <<  endl << endl;
+		cin >> ParaPrograma;
+	}else{
+		// caso sim se marca que se irá escrever no arquivo os dados da execução
+		ImprimeArquivo = 1;
+	}
+
+	// coleta a data e a hora
+	time(&timer);
+	tm_info = localtime(&timer);
+	strftime(buffer, 26, " * %H:%M:%S de %d:%m:%Y", tm_info);
+
+	if( ImprimeArquivo == 1){
+		fprintf(Arquivo,"\n\n ----- Execução as %s ----- \n\n", buffer);
+		// escreve o nome da instancia no arquivo de saida
+		fprintf( Arquivo," %s \n ",  NomeInstancia.c_str());
+	}
+	if( ImprimeSolucao == 1){
+		printf("\n\n ----- Execução as %s ----- \n\n", buffer);
+	}
+
+	fprintf(Arquivo,"  Construtiva \t Viabilidade1 \t Viabilidade2  \t BuscaLocal1 \t BuscaLocal2 \t BuscaLocal3  \n");
+
+	// coleta o horario inicial
+	InicioExecucao = time(NULL);
+
+	for( int iteracoes = 0; iteracoes < NumeroIteracoes; iteracoes++){
+
+		Prod1 = new Procedimento1;
+
+		Prod1->CarregaDados(NP, PlantasInstancia, NE, ConstrucoesInstancia, NV, Velocidade, TempoDeVidaConcreto);
+
+		Prod1->Executa( EscolhaVeiculoProcediemnto, EscolhaConstrucaoProcediemnto, EscolhaPlantaProcediemnto, ImprimeProcedimentoConstrutivo, ImprimeSolucao, ImprimeArquivo, Arquivo, RealizaProcessoDeAtrazarTarefas);
+
+		SolucaoCorrente = new Solucao;
+
+		SolucaoCorrente->CarregaSolucao(NP, PlantasInstancia, NE, ConstrucoesInstancia, NV, Velocidade, TempoDeVidaConcreto);
+
+		free(Prod1);
+
+		SolucaoCorrente->CalculaMakespan();
+
+		if(SolucaoCorrente->ConstrucoesInstancia.NivelDeInviabilidade == 0){
+			fprintf(Arquivo,"         %f \t", SolucaoCorrente->Makespan);
+		}else{
+			fprintf(Arquivo,"        ------ \t");
+		}
+
+		// ordena as construções
+		SolucaoCorrente->ConstrucoesInstancia.OrdenaCosntrucoes(EscolhaConstrucao);
+
+		if( SolucaoCorrente->ConstrucoesInstancia.NivelDeInviabilidade != 0){
+			SolucaoCorrente->ProcessoViabilizacao1( EscolhaVeiculo, EscolhaConstrucao, EscolhaPlanta, ImprimeViabilizacao, ImprimeSolucao, 0, Arquivo, RealizaProcessoDeAtrazarTarefas);
+			if( SolucaoCorrente->ConstrucoesInstancia.NivelDeInviabilidade != 0){
+				SolucaoCorrente->ProcessoViabilizacao2( EscolhaVeiculo, EscolhaConstrucao, EscolhaPlanta, ImprimeViabilizacao, ImprimeSolucao, 0, Arquivo, RealizaProcessoDeAtrazarTarefas);
+				if( SolucaoCorrente->ConstrucoesInstancia.NivelDeInviabilidade == 0){
+					SolucaoCorrente->CalculaMakespan();
+					fprintf(Arquivo," ------ \t %f \t", SolucaoCorrente->Makespan);
+				}else{
+					fprintf(Arquivo," ------ \t ------ \t");
+				}
+			}else{
+				SolucaoCorrente->CalculaMakespan();
+				fprintf(Arquivo,"  %f \t ------ \t", SolucaoCorrente->Makespan);
+			}
+		}else{
+			fprintf(Arquivo," ------ \t ------ \t");
+		}
+
+		if( SolucaoCorrente->ConstrucoesInstancia.NivelDeInviabilidade == 0){
+			SolucaoCorrente->RealizarBuscaLocalCaminhao(EscolhaVeiculo, EscolhaConstrucao, EscolhaPlanta, ImprimeBusca, ImprimeSolucao, 0, Arquivo, RealizaProcessoDeAtrazarTarefas);
+			SolucaoCorrente->CalculaMakespan();
+			fprintf(Arquivo,"         %f \t", SolucaoCorrente->Makespan);
+			SolucaoCorrente->RealizarBuscaLocalConstrucao(EscolhaVeiculo, EscolhaConstrucao, EscolhaPlanta,ImprimeBusca, ImprimeSolucao, 0, Arquivo, RealizaProcessoDeAtrazarTarefas);
+			SolucaoCorrente->CalculaMakespan();
+			fprintf(Arquivo,"         %f \t", SolucaoCorrente->Makespan);
+			SolucaoCorrente->RealizarBuscaLocalPlanta(EscolhaVeiculo, EscolhaConstrucao, EscolhaPlanta,ImprimeBusca, ImprimeSolucao, 0, Arquivo, RealizaProcessoDeAtrazarTarefas);
+			SolucaoCorrente->CalculaMakespan();
+			fprintf(Arquivo,"         %f \n", SolucaoCorrente->Makespan);
+		}else{
+			fprintf(Arquivo," ------ \t ------ \t ------ \n");
+		}
+
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	// coleta o horario final
+	FinalExecucao = time(NULL);
+
+	// calcula o tempo
+	TempoExecucao = difftime(FinalExecucao, InicioExecucao);
+
+	printf( " \t %.0f \n",  TempoExecucao);
+	if( ImprimeArquivo == 1){
+		fprintf( Arquivo," \n\n Tempo  %.0f \n\n",  TempoExecucao);
+	}
+
+	fclose (Arquivo);
 
 }
 
 
 // le o nome da instancia
-void Heuristica::LeNomeInstancia(int comentarios, string& Instancia){
+void	Heuristica::LeNomeInstancia(int comentarios, string& Instancia){
 	// le o nome da instancia
 	arq >> Instancia;
 	if( comentarios == 1){
@@ -555,7 +781,7 @@ void Heuristica::LeNomeInstancia(int comentarios, string& Instancia){
 }
 
 // le o numero de plantas, veiculos e cosntruções
-void Heuristica::LeNumeroPlantasEntregasVeiculos(int comentarios){
+void	Heuristica::LeNumeroPlantasEntregasVeiculos(int comentarios){
 	// le numero de plantas
 	arq >> NP;
 	// inicia os dados que guada os dados das plantas
@@ -581,7 +807,7 @@ void Heuristica::LeNumeroPlantasEntregasVeiculos(int comentarios){
 }
 
 // le a velocidade
-void Heuristica::LeVelocidade(int comentarios){
+void	Heuristica::LeVelocidade(int comentarios){
 	// le a velocidade dos caminhões
 	arq >> Velocidade;
 	if( comentarios == 1){
@@ -591,7 +817,7 @@ void Heuristica::LeVelocidade(int comentarios){
 
 
 // Le o tempo de vida do concreto
-void Heuristica::LeTempoDeVidaConcreto(int comentarios){
+void	Heuristica::LeTempoDeVidaConcreto(int comentarios){
 	// le o tempo de vida do concreto
 	arq >> TempoDeVidaConcreto;
 	if( comentarios == 1){
@@ -600,7 +826,7 @@ void Heuristica::LeTempoDeVidaConcreto(int comentarios){
 }
 
 // le o numero de veículos por planta
-void Heuristica::LeVeiculosPorPlanta(int comentarios){
+void	Heuristica::LeVeiculosPorPlanta(int comentarios){
 	int aux;
 	// percorre todas as planats
 	for (int i = 0; i < NP ; i++){
@@ -628,7 +854,7 @@ void Heuristica::LeVeiculosPorPlanta(int comentarios){
 }
 
 // le o numero de demandas por construção
-void Heuristica::LeNumeroDemandas(int comentarios){
+void	Heuristica::LeNumeroDemandas(int comentarios){
 	int aux;
 	// percorre por todas as construções
 	for (int i = 0; i < NE ; i++){
@@ -668,7 +894,7 @@ void Heuristica::LeNumeroDemandas(int comentarios){
 
 
 // le as distancias das plantas para as construções
-void Heuristica::LeDistancias(int comentarios){
+void	Heuristica::LeDistancias(int comentarios){
 	// Le a distancia das plantas para as construções
 	if( comentarios == 1){
 		cout << "     Distancia Planta para Construcoes"<< endl;
@@ -717,7 +943,7 @@ void Heuristica::LeDistancias(int comentarios){
 }
 
 // le os tempos que cada caminhão leva para atender cada demanda em cada cosntrução
-void Heuristica::LeTempoConstrucao(int comentarios){
+void	Heuristica::LeTempoConstrucao(int comentarios){
 	int aux;
 
 	if( comentarios == 1){
@@ -762,7 +988,7 @@ void Heuristica::LeTempoConstrucao(int comentarios){
 }
 
 // le o tempo que acda planta leva para carregar um caminhão de concreto
-void Heuristica::LeTempoPlanta(int comentarios){
+void	Heuristica::LeTempoPlanta(int comentarios){
 	// percorre todas as plantas
 	for (int p = 0; p < NP ; p++){
 		// le e armazena o tempo que a planta leva para carregar um caminhão de concreto
@@ -775,7 +1001,7 @@ void Heuristica::LeTempoPlanta(int comentarios){
 
 
 // le o tempo maximo permitido entre o atendimento de duas demandas seguidas em cada construção
-void Heuristica::LeTempoMaximoEntreDescargas(int comentarios){
+void	Heuristica::LeTempoMaximoEntreDescargas(int comentarios){
 	if( comentarios == 1){
 		cout << "     Tempo maximo entre descargas " << endl;
 	}
@@ -790,7 +1016,7 @@ void Heuristica::LeTempoMaximoEntreDescargas(int comentarios){
 }
 
 // le o tempo minimo e maximo que um caminhão pode começar a descarregar em uma cosntrução
-void Heuristica::LeTempoMaximoMinimoConstrucoes(int comentarios){
+void	Heuristica::LeTempoMaximoMinimoConstrucoes(int comentarios){
 	// percorre todas as construções
 	for ( int c = 0; c < NE; c++){
 		// le e armazena o tempo minimo que se pode receber um caminhão na construção
@@ -810,7 +1036,7 @@ void Heuristica::LeTempoMaximoMinimoConstrucoes(int comentarios){
 }
 
 // le o tempo minimo e máximo que um caminhão pode começar a carregar em uma planta
-void Heuristica::LeTempoMaximoMinimoPlantas(int comentarios){
+void	Heuristica::LeTempoMaximoMinimoPlantas(int comentarios){
 	// percorre todas as plantas
 	for ( int p = 0; p < NP; p++){
 		// le e armazena o tempo minimo que se pode começar a carregar um caminhão na planta corrente
@@ -831,7 +1057,7 @@ void Heuristica::LeTempoMaximoMinimoPlantas(int comentarios){
 
 
 // calcula o rank baseado na janela de tempo e no numero de demandas para cada cosntrução
-void Heuristica::CalculoRankTempoDemanda(int comentarios){
+void	Heuristica::CalculoRankTempoDemanda(int comentarios){
 	// percorre todas as construções
 	for ( int c = 0; c < NE; c++){
 		if( comentarios == 1){

@@ -15,29 +15,29 @@ class BuscaLocal{
 public:
 
 // estruturas que armazenam os dados da instancia
-	int NP;
+	int		NP;
 	ConjuntoPlantas PlantasInstancia;
-	int NE;
+	int		NE;
 	ConjuntoConstrucoes ConstrucoesInstancia;
-	int NV;
-	double Velocidade;
-	double TempoDeVidaConcreto;
+	int		NV;
+	double	Velocidade;
+	double	TempoDeVidaConcreto;
 
-	double Makespan;
+	double	Makespan;
 
 	BuscaLocal();	// construtora da classe
 
-	void CarregaSolucao(int np, ConjuntoPlantas Plantas, int ne, ConjuntoConstrucoes Construcoes, int nv, double v,double TDVC);		// Carrega os dados da instancia e a solução até o momento
-	int SelecionaConstrucao( int &ConstrucaoEscolhida, int &IndiceConstrucaoEscolhida);					// seleciona a construção ainda não avaliada que tera suas demandas atendidas avaliadas pela busca local
-	int RetornaConstrucaoQuePodeSerAtendida( int &Construcao, int &IndiceConstrucao);		// retorna a construção que possui o menor inidice e que ainda pode ser atendida
+	void	CarregaSolucao(int np, ConjuntoPlantas Plantas, int ne, ConjuntoConstrucoes Construcoes, int nv, double v,double TDVC);		// Carrega os dados da instancia e a solução até o momento
+	int		SelecionaConstrucao( int &ConstrucaoEscolhida, int &IndiceConstrucaoEscolhida);					// seleciona a construção ainda não avaliada que tera suas demandas atendidas avaliadas pela busca local
+	int		RetornaConstrucaoQuePodeSerAtendida( int &Construcao, int &IndiceConstrucao);		// retorna a construção que possui o menor inidice e que ainda pode ser atendida
 
 
-	double CalculaMakespanSolucao();				// calcula o makespan
+	double	CalculaMakespanSolucao();				// calcula o makespan
 
 
-	int BuscaLocalTentaRealizarTarefasComOutosVeiculos(int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta,int Imprime, int ImprimeEstruturas, int RealizaProcessoDeAtrazarTarefas);			// busca local que se verifica se a demanda pode ser melhor atendida caso se realize o seu atendimento com outro caminhão/veículo
-	int BuscaLocalMudaOrdemAtendiemntoConstrucoes(int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta,int Imprime, int ImprimeEstruturas, int RealizaProcessoDeAtrazarTarefas);
-	int BuscaLocalTrocaPlantaAtendimento(int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta,int Imprime, int ImprimeEstruturas, int RealizaProcessoDeAtrazarTarefas);
+	int		BuscaLocalTentaRealizarTarefasComOutosVeiculos(int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta,int Imprime, int ImprimeEstruturas, int RealizaProcessoDeAtrazarTarefas);			// busca local que se verifica se a demanda pode ser melhor atendida caso se realize o seu atendimento com outro caminhão/veículo
+	int		BuscaLocalMudaOrdemAtendiemntoConstrucoes(int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta,int Imprime, int ImprimeEstruturas, int RealizaProcessoDeAtrazarTarefas);
+	int		BuscaLocalTrocaPlantaAtendimento(int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta,int Imprime, int ImprimeEstruturas, int RealizaProcessoDeAtrazarTarefas);
 
 	~BuscaLocal();
 };

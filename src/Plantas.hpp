@@ -12,17 +12,17 @@
 
 class Carregamento{
 public:
-	double HorarioInicioCarregamento;
-	double HorarioFinalCarregamento;
-	int NumeroConstrucao;
-	int NumeroDemandaSuprida;
-	int NumCarretaUtilizada;
+	double 	HorarioInicioCarregamento;
+	double 	HorarioFinalCarregamento;
+	int 	NumeroConstrucao;
+	int 	NumeroDemandaSuprida;
+	int 	NumCarretaUtilizada;
 
-	int verifica(int NumCarreta, int construcao, int Demanda, double HorarioInicioPlanta, double HorarioFimPlanta);					// Verifica se estes dados representão o carregamento em questão
+	int 	verifica(int NumCarreta, int construcao, int Demanda, double HorarioInicioPlanta, double HorarioFimPlanta);					// Verifica se estes dados representão o carregamento em questão
 };
 
 // Verifica se estes dados representão o carregamento em questão
-int Carregamento::verifica( int NumCarreta, int construcao, int Demanda, double HorarioInicioPlanta, double HorarioFimPlanta){
+int 	Carregamento::verifica( int NumCarreta, int construcao, int Demanda, double HorarioInicioPlanta, double HorarioFimPlanta){
 	// verifica se dados passados são os mesmos constidos na estrutura carregamento
 	if( NumCarreta == NumCarretaUtilizada &&  construcao == NumeroConstrucao && Demanda == NumeroDemandaSuprida && HorarioInicioPlanta == HorarioInicioCarregamento && HorarioFimPlanta == HorarioFinalCarregamento){
 		// são os mesmos e retorna 1
@@ -32,7 +32,7 @@ int Carregamento::verifica( int NumCarreta, int construcao, int Demanda, double 
 	return 0;
 }
 
-bool DecideQualMenorInicioTempoCarregamento ( Carregamento c1, Carregamento c2 ){
+bool 	DecideQualMenorInicioTempoCarregamento ( Carregamento c1, Carregamento c2 ){
 	return ( c1.HorarioInicioCarregamento < c2.HorarioInicioCarregamento );
 }
 
@@ -45,29 +45,29 @@ bool DecideQualMenorInicioTempoCarregamento ( Carregamento c1, Carregamento c2 )
 class Planta{
 
 public:
-	int NumeroDaPlanta;
-	int NumeroVeiculos;
+	int 	NumeroDaPlanta;
+	int 	NumeroVeiculos;
 	ConjuntoCarretas VeiculosDaPlanta;
 	vector < double > DistanciaConstrucoes;
-	double TempoPlanta;
-	double TempoMinimoDeFuncionamento;
-	double TempoMaximoDeFuncionamento;
+	double 	TempoPlanta;
+	double 	TempoMinimoDeFuncionamento;
+	double 	TempoMaximoDeFuncionamento;
 
 	vector < Carregamento > Carregamentos;
 
-	double Makespan;
+	double 	Makespan;
 
 	Planta();			// conmstrutora
 
-	int VerificaDisponibilidade( double InicioPossivelAlocacao, double FinalPossivelAlocacao);					// Verifica a possibilidade de alocação da demanda
-	void AlocaAtividade(double HoraInicio, double HoraFinal, int NumConstrucao, int NumDemanda, int Carreta);	// Aloca tarefa na planta
-	int DeletaAtividade(double HoraInicio, double HoraFinal, int NumConstrucao, int NumDemanda, int Carreta);	// Deleta tarefa na planta
+	int 	VerificaDisponibilidade( double InicioPossivelAlocacao, double FinalPossivelAlocacao);					// Verifica a possibilidade de alocação da demanda
+	void 	AlocaAtividade(double HoraInicio, double HoraFinal, int NumConstrucao, int NumDemanda, int Carreta);	// Aloca tarefa na planta
+	int 	DeletaAtividade(double HoraInicio, double HoraFinal, int NumConstrucao, int NumDemanda, int Carreta);	// Deleta tarefa na planta
 
-	void CalculaMakespan();										// calcula o Makes pan da Planta
-	void Imprime(int OrdenaPlantas, int OrdenaCarretas, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo);		// Imprime dados da planta
-	void ImprimeDistancias();									// Imprime as distancias da planta as construções
+	void 	CalculaMakespan();										// calcula o Makes pan da Planta
+	void 	Imprime(int OrdenaPlantas, int OrdenaCarretas, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo);		// Imprime dados da planta
+	void 	ImprimeDistancias();									// Imprime as distancias da planta as construções
 
-	int VerificaIntegridadeDeCarregamentos(int imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo); 					// verifica a integridade entre os Carregamentos da planta
+	int 	VerificaIntegridadeDeCarregamentos(int imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo); 					// verifica a integridade entre os Carregamentos da planta
 
 	~Planta();			// destruidora
 
@@ -84,7 +84,7 @@ Planta::Planta(){
 	Makespan = -13;
 }
 // Verifica a possibilidade de alocação da demanda
-int Planta::VerificaDisponibilidade( double InicioPossivelAlocacao, double FinalPossivelAlocacao){
+int 	Planta::VerificaDisponibilidade( double InicioPossivelAlocacao, double FinalPossivelAlocacao){
 	//verifica se respeita os intervalos de atendimento da planta
 	if( InicioPossivelAlocacao < TempoMinimoDeFuncionamento){
 		return 0;
@@ -125,7 +125,7 @@ int Planta::VerificaDisponibilidade( double InicioPossivelAlocacao, double Final
 }
 
 // Aloca tarefa na planta
-void Planta::AlocaAtividade(double HoraInicio, double HoraFinal, int NumConstrucao, int NumDemanda, int Carreta){
+void 	Planta::AlocaAtividade(double HoraInicio, double HoraFinal, int NumConstrucao, int NumDemanda, int Carreta){
 	Carregamento CarregamentoAux;
 
 	// aloca os dados do carregamento
@@ -141,7 +141,7 @@ void Planta::AlocaAtividade(double HoraInicio, double HoraFinal, int NumConstruc
 }
 
 // Deleta tarefa na planta
-int Planta::DeletaAtividade(double HoraInicio, double HoraFinal, int NumConstrucao, int NumDemanda, int Carreta){
+int 	Planta::DeletaAtividade(double HoraInicio, double HoraFinal, int NumConstrucao, int NumDemanda, int Carreta){
 	// percorre por todos os carregamentos
 	for( vector < Carregamento >::iterator it = Carregamentos.begin(); it != Carregamentos.end(); it++){
 		//verifica se o horario inicio e final passados correspondem com o do carregamento corrente
@@ -164,7 +164,7 @@ int Planta::DeletaAtividade(double HoraInicio, double HoraFinal, int NumConstruc
 }
 
 // calcula o MakesPan da Planta
-void Planta::CalculaMakespan(){
+void 	Planta::CalculaMakespan(){
 	Makespan = 0;
 
 	// inicia o makespan da planta com o menor tempo que a planta pode iniciar um carregamento
@@ -185,7 +185,7 @@ void Planta::CalculaMakespan(){
 }
 
 // Imprime dados da planta
-void Planta::Imprime(int OrdenaPlantas, int OrdenaCarretas, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo){
+void 	Planta::Imprime(int OrdenaPlantas, int OrdenaCarretas, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo){
 	if( ImprimeSolucao == 1){
 		printf ("\n# Planta %d com %d veiculos, funciona de (%.4f - %.4f)\n", NumeroDaPlanta,NumeroVeiculos,TempoMinimoDeFuncionamento, TempoMaximoDeFuncionamento);
 	}
@@ -241,7 +241,7 @@ void Planta::Imprime(int OrdenaPlantas, int OrdenaCarretas, int ImprimeSolucao, 
 }
 
 // Imprime as distancias da planta as construções
-void Planta::ImprimeDistancias(){
+void 	Planta::ImprimeDistancias(){
 	cout << " +++ Distancias ++++ " << endl;
 	cout << "Numero de conatricoes " << DistanciaConstrucoes.size() << endl;
 	// percorre por todas as construções
@@ -252,7 +252,7 @@ void Planta::ImprimeDistancias(){
 }
 
 // verifica a integridade entre os Carregamentos da planta
-int Planta::VerificaIntegridadeDeCarregamentos(int imprime,int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo){
+int 	Planta::VerificaIntegridadeDeCarregamentos(int imprime,int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo){
 	// percorre todos os carregamentos
 	for( int c1 = 0; c1 < (int) Carregamentos.size(); c1++){
 		// verifica se o carregamento não possui tempo negativo
@@ -337,7 +337,7 @@ Planta::~Planta(){
 // #################################################################
 
 // função que retorna se p1 tem menos tarefas que que p2
-bool DecideQualPlantaMenosTarefa(Planta p1,Planta p2) {
+bool 	DecideQualPlantaMenosTarefa(Planta p1,Planta p2) {
 	if( (int) p1.Carregamentos.size() != (int) p2.Carregamentos.size() ){
 		return ( (int) p1.Carregamentos.size() < (int) p2.Carregamentos.size() );
 	}else{
@@ -354,7 +354,7 @@ bool DecideQualPlantaMenosTarefa(Planta p1,Planta p2) {
 }
 
 // função que retorna se p1 tem mais tarefas que que p2
-bool DecideQualPlantaMaisTarefa(Planta p1,Planta p2) {
+bool 	DecideQualPlantaMaisTarefa(Planta p1,Planta p2) {
 	if( (int) p1.Carregamentos.size() != (int) p2.Carregamentos.size() ){
 		return ( (int) p1.Carregamentos.size() > (int) p2.Carregamentos.size() );
 	}else{
@@ -371,7 +371,7 @@ bool DecideQualPlantaMaisTarefa(Planta p1,Planta p2) {
 }
 
 // Gerador Aleatorico Planta
-int GeradorAleatoricoPlanta (int i) {
+int 	GeradorAleatoricoPlanta (int i) {
 	return rand()%i;
 }
 
@@ -385,38 +385,38 @@ class ConjuntoPlantas{
 
 public:
 
-	vector< Planta > Plantas;
-	vector < int > PlantasAnalizadas;
+	vector< Planta > 	Plantas;
+	vector < int > 		PlantasAnalizadas;
 
-	vector < double > HorarioQuePlantaPodeAtender; 		// Vetor que guarda o primeiro horario que a planta pode passar a atender essa demanda caso as demandas porteriores forem atrazadas
-	vector < double > HorarioQueConstrucaoPodeReceberDemanda;
+	vector < double > 	HorarioQuePlantaPodeAtender; 		// Vetor que guarda o primeiro horario que a planta pode passar a atender essa demanda caso as demandas porteriores forem atrazadas
+	vector < double > 	HorarioQueConstrucaoPodeReceberDemanda;
 
-	double MakespanPLantas;
+	double 	MakespanPLantas;
 
 	ConjuntoPlantas();			// Cosntrutora da classe
 
-	void InicializaPlantasAnalizadas();			// Faz que nenhuma planta tenha sido analisada pelos algoritmos
-	int AnalizouTodasPLanats();					// Verifica se já analisou todas as plantas
-	void IniciaConjuntoPlantas(int Numero);		// Inicia o vetor de plantas da classe com o número de palnats que se quer
+	void 	InicializaPlantasAnalizadas();			// Faz que nenhuma planta tenha sido analisada pelos algoritmos
+	int 	AnalizouTodasPLanats();					// Verifica se já analisou todas as plantas
+	void 	IniciaConjuntoPlantas(int Numero);		// Inicia o vetor de plantas da classe com o número de palnats que se quer
 
-	int DeletaTarefa( int NumPlanta, double HoraInicio, double HoraFinal, int NumConstrucao, int NumDemanda, int Carreta, double HoraInicioCarreta, double HoraFinalCarreta);			// deleta tarefa tanto na planta e no veiculo que executa a tarefa
-	void CalculaMakespanPlantas();			// Calcula o Makespan de todas as Plantas
-	int AlocaInidiceFabrica( int Planta, int &IndicePlanta);			// Aloca o inice da planta que corresponde a planat que se passa como parametro
+	int 	DeletaTarefa( int NumPlanta, double HoraInicio, double HoraFinal, int NumConstrucao, int NumDemanda, int Carreta, double HoraInicioCarreta, double HoraFinalCarreta);			// deleta tarefa tanto na planta e no veiculo que executa a tarefa
+	void 	CalculaMakespanPlantas();			// Calcula o Makespan de todas as Plantas
+	int 	AlocaInidiceFabrica( int Planta, int &IndicePlanta);			// Aloca o inice da planta que corresponde a planat que se passa como parametro
 
-	int CorrigeReferenciaCarregamentoDeslocamentoMaisUm(int NumPlantaFornecedor,int NumCarretaUtilizada,int construcao, int NumeroDemandaSuprida, double HorarioInicioDescarregamento,  double HorarioFinalDescarregamento);		// corrige as referencias da tarefa aumentando o numerod a demanda que é suprida em mais um
-	int CorrigeReferenciaCarregamentoDeslocamentoMenosUm(int NumPlanta, int NumCarreta,int Construcao, int Demanda, double HorarioInicioDescarregamento, double HorarioFinalDescarregamento);					// corrige as referencias da tarefa aumentando o numerod a demanda que é suprida em menos um
-	void Imprime(int OrdenaPlantas,int OrdenaCarrtas,int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo);		// Imprime os dados das plantas
+	int 	CorrigeReferenciaCarregamentoDeslocamentoMaisUm(int NumPlantaFornecedor,int NumCarretaUtilizada,int construcao, int NumeroDemandaSuprida, double HorarioInicioDescarregamento,  double HorarioFinalDescarregamento);		// corrige as referencias da tarefa aumentando o numerod a demanda que é suprida em mais um
+	int 	CorrigeReferenciaCarregamentoDeslocamentoMenosUm(int NumPlanta, int NumCarreta,int Construcao, int Demanda, double HorarioInicioDescarregamento, double HorarioFinalDescarregamento);					// corrige as referencias da tarefa aumentando o numerod a demanda que é suprida em menos um
+	void 	Imprime(int OrdenaPlantas,int OrdenaCarrtas,int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo);		// Imprime os dados das plantas
 
-	int VerificaPlantasAnalizadasPodemAtenderSeAtrasar();			// verifica se uma das plantas em questão pode atender a demanda em questão caso de atrazar o atendimento das outras demandas da construção que se quer atender
-	void InicializaVetorHorarioQuePlantaPodeAtender();				// inicializa os horarios que as plantas podem atender certa demanda e a cosntrução pode ser atendida, caso das outras demandas anteriores a esta forem atrazadas, com o valor DBL_MAX
-	double RetornaMenorHorarioQueConstrucaoPodeReceberDemanda();	// retorna o menor horario que a construção pode recerber a demanda que não é atendida no momento
+	int 	VerificaPlantasAnalizadasPodemAtenderSeAtrasar();			// verifica se uma das plantas em questão pode atender a demanda em questão caso de atrazar o atendimento das outras demandas da construção que se quer atender
+	void 	InicializaVetorHorarioQuePlantaPodeAtender();				// inicializa os horarios que as plantas podem atender certa demanda e a cosntrução pode ser atendida, caso das outras demandas anteriores a esta forem atrazadas, com o valor DBL_MAX
+	double 	RetornaMenorHorarioQueConstrucaoPodeReceberDemanda();	// retorna o menor horario que a construção pode recerber a demanda que não é atendida no momento
 
-	int RetornaDadosDemandaAtendida( int Construcao, int Demanda, double &HorarioInicio, double &HorarioFinal, int &planta, int &Carreta, double &HorarioInicioCarreta, double &HorarioFinalCarreta);				// Retorna os dados do carregaemnto de uma certa demanda passada na função
-	int VerificaIntegridadeDeCarregamentosDasPlantas(int imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo);					// verifica a integridade dos carregamentos realizados pelas plantas
-	int VerificaIntegridadeDeDeslocaemntosDosVeiculosDasPlantas(int imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo);		// verifica a integridade dos deslocamentos realizados pelos veiculos das plantas
+	int 	RetornaDadosDemandaAtendida( int Construcao, int Demanda, double &HorarioInicio, double &HorarioFinal, int &planta, int &Carreta, double &HorarioInicioCarreta, double &HorarioFinalCarreta);				// Retorna os dados do carregaemnto de uma certa demanda passada na função
+	int 	VerificaIntegridadeDeCarregamentosDasPlantas(int imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo);					// verifica a integridade dos carregamentos realizados pelas plantas
+	int 	VerificaIntegridadeDeDeslocaemntosDosVeiculosDasPlantas(int imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo);		// verifica a integridade dos deslocamentos realizados pelos veiculos das plantas
 
-	void OrdenaPlantas( int EscolhaPlanta);
-	void ArmazenaVetorIntComOrdem( vector < int > &VetorOrdem);
+	void 	OrdenaPlantas( int EscolhaPlanta);
+	void 	ArmazenaVetorIntComOrdem( vector < int > &VetorOrdem);
 
 	~ConjuntoPlantas();		// destruidora
 };
@@ -427,7 +427,7 @@ ConjuntoPlantas::ConjuntoPlantas(){
 }
 
 // Faz que nenhuma planta tenha sido analisada pelos algoritmos
-void ConjuntoPlantas::InicializaPlantasAnalizadas(){
+void 	ConjuntoPlantas::InicializaPlantasAnalizadas(){
 	// inicia estrutura de plantas
 	PlantasAnalizadas.resize(Plantas.size());
 	// percorre todas as plantas
@@ -438,7 +438,7 @@ void ConjuntoPlantas::InicializaPlantasAnalizadas(){
 }
 
 // Verifica se já analisou todas as plantas
-int ConjuntoPlantas::AnalizouTodasPLanats(){
+int 	ConjuntoPlantas::AnalizouTodasPLanats(){
 	// percorre todas as plantas
 	for ( int p = 0; p < (int) Plantas.size(); p++){
 		// verifica se a planta corrente não foi analizada
@@ -452,7 +452,7 @@ int ConjuntoPlantas::AnalizouTodasPLanats(){
 }
 
 // Inicia o vetor de plantas da classe com o número de palnats que se quer
-void ConjuntoPlantas::IniciaConjuntoPlantas(int Numero){
+void 	ConjuntoPlantas::IniciaConjuntoPlantas(int Numero){
 	// inicia estrutura de plantas
 	Plantas.resize(Numero);
 	PlantasAnalizadas.resize(Numero);
@@ -470,12 +470,12 @@ void ConjuntoPlantas::IniciaConjuntoPlantas(int Numero){
 
 
 // deleta tarefa tanto na planta e no veiculo que executa a tarefa
-int ConjuntoPlantas::DeletaTarefa( int NumPlanta, double HoraInicio, double HoraFinal, int NumConstrucao, int NumDemanda, int Carreta, double HoraInicioCarreta, double HoraFinalCarreta){
+int 	ConjuntoPlantas::DeletaTarefa( int NumPlanta, double HoraInicio, double HoraFinal, int NumConstrucao, int NumDemanda, int Carreta, double HoraInicioCarreta, double HoraFinalCarreta){
 	// variaveis de controle
-	int RetirouCarregamento;
+	int 	RetirouCarregamento;
 	RetirouCarregamento = 0;
 
-	int RetirouDeslocamento;
+	int 	RetirouDeslocamento;
 	RetirouDeslocamento = 0;
 
 	// percorre todas as plantas
@@ -510,7 +510,7 @@ int ConjuntoPlantas::DeletaTarefa( int NumPlanta, double HoraInicio, double Hora
 }
 
 // Calcula o Makespan de todas as Plantas
-void ConjuntoPlantas::CalculaMakespanPlantas(){
+void 	ConjuntoPlantas::CalculaMakespanPlantas(){
 	MakespanPLantas = 0;
 	// percorre todas as plantas
 	for(  int p = 0; p < (int) Plantas.size(); p++){
@@ -522,7 +522,7 @@ void ConjuntoPlantas::CalculaMakespanPlantas(){
 }
 
 // Aloca o inice da planta que corresponde a planat que se passa como parametro
-int ConjuntoPlantas::AlocaInidiceFabrica(int Planta, int &IndicePlanta){
+int 	ConjuntoPlantas::AlocaInidiceFabrica(int Planta, int &IndicePlanta){
 	// percorre todas as plantas
 	for ( int i  = 0; i < (int) Plantas.size(); i ++){
 		// caso a planta crrente for a procuraada
@@ -540,23 +540,23 @@ int ConjuntoPlantas::AlocaInidiceFabrica(int Planta, int &IndicePlanta){
 
 
 // corrige as referencias da tarefa aumentando o numerod a demanda que é suprida em mais um
-int ConjuntoPlantas::CorrigeReferenciaCarregamentoDeslocamentoMaisUm( int NumPlantaFornecedor,int NumCarretaUtilizada,int construcao, int NumeroDemandaSuprida, double HorarioInicioDescarregamento,  double HorarioFinalDescarregamento ){
+int 	ConjuntoPlantas::CorrigeReferenciaCarregamentoDeslocamentoMaisUm( int NumPlantaFornecedor,int NumCarretaUtilizada,int construcao, int NumeroDemandaSuprida, double HorarioInicioDescarregamento,  double HorarioFinalDescarregamento ){
 // Emcontra o indice da planta
-	int p;
+	int 	p;
 	if( AlocaInidiceFabrica(NumPlantaFornecedor,p) == 0){
 		cout << endl << endl << " <<<<<<<< probelam com indice planta [" << NumPlantaFornecedor << "] => " << p << " -> ConjuntoPlantas::CorrigeReferenciaCarregamentoDeslocamentoMaisUm  >>>>>>>>>>>>> " << endl << endl ;
 		return 0;
 	}
 
 // Encontra os tempos relativos da tarefa na planta
-	double HorarioInicioPlanta;
-	double HorarioFimPlanta;
+	double 	HorarioInicioPlanta;
+	double 	HorarioFimPlanta;
 
 	HorarioInicioPlanta = HorarioInicioDescarregamento - Plantas[p].DistanciaConstrucoes[construcao] -  Plantas[p].TempoPlanta;
 	HorarioFimPlanta = HorarioInicioPlanta + Plantas[p].TempoPlanta;
 
 // Modifica o número da demanda suprida pela planta em questão em mais um
-	int ModificouCarregamento;
+	int 	ModificouCarregamento;
 	ModificouCarregamento = 0;
 
 	for( int c = 0; c < (int) Plantas[p].Carregamentos.size() ; c++){
@@ -567,21 +567,21 @@ int ConjuntoPlantas::CorrigeReferenciaCarregamentoDeslocamentoMaisUm( int NumPla
 	}
 
 // Emcontra o indice do veículo
-	int v;
+	int 	v;
 	if( Plantas[p].VeiculosDaPlanta.AlocaInidiceVeiculo( NumCarretaUtilizada, v) == 0 ){
 		cout << endl << endl << " <<<<<<<< probelam com indice veiculo [" << NumCarretaUtilizada << "] => " << v << " ->CorrigeReferenciaCarregamentoDeslocamentoMaisUm  >>>>>>>>>>>>> " << endl << endl ;
 		return 0;
 	}
 
 // Encontra os tempos relativos da tarefa no caminhão (veículo)
-	double HorarioInicioVeiculo;
-	double HorarioFimVeiculo;
+	double 	HorarioInicioVeiculo;
+	double 	HorarioFimVeiculo;
 
 	HorarioInicioVeiculo = HorarioInicioPlanta;
 	HorarioFimVeiculo = HorarioFinalDescarregamento + Plantas[p].DistanciaConstrucoes[construcao];
 
 // Modifica o número da demanda suprida pelo caminhão (veículo) em questão em mais um
-	int ModificouDeslocamento;
+	int 	ModificouDeslocamento;
 	ModificouDeslocamento = 0;
 
 	for(  int d = 0; d < (int) Plantas[p].VeiculosDaPlanta.Carretas[v].Deslocamentos.size() ; d++){
@@ -607,17 +607,17 @@ int ConjuntoPlantas::CorrigeReferenciaCarregamentoDeslocamentoMaisUm( int NumPla
 }
 
 // corrige as referencias da tarefa aumentando o numerod a demanda que é suprida em menos um
-int ConjuntoPlantas::CorrigeReferenciaCarregamentoDeslocamentoMenosUm(int NumPlanta, int NumCarreta,int Construcao, int Demanda, double HorarioInicioDescarregamento, double HorarioFinalDescarregamento){
+int 	ConjuntoPlantas::CorrigeReferenciaCarregamentoDeslocamentoMenosUm(int NumPlanta, int NumCarreta,int Construcao, int Demanda, double HorarioInicioDescarregamento, double HorarioFinalDescarregamento){
 
 // Emcontra o indice da planta
-	int p;
+	int		p;
 	if( AlocaInidiceFabrica(NumPlanta,p) == 0){
 		cout << endl << endl << " <<<<<<<< problema com indice planta [" << NumPlanta << "] => " << p << " ->ConjuntoPlantas::CorrigeReferenciaCarregamentoDeslocamentoMenosUm  >>>>>>>>>>>>> " << endl << endl ;
 	}
 
 // Encontra os tempos relativos da tarefa na planta
-	double HorarioInicioPlanta;
-	double HorarioFimPlanta;
+	double 	HorarioInicioPlanta;
+	double 	HorarioFimPlanta;
 
 	HorarioInicioPlanta = HorarioInicioDescarregamento - Plantas[p].DistanciaConstrucoes[Construcao] -  Plantas[p].TempoPlanta;
 	HorarioFimPlanta = HorarioInicioPlanta +  Plantas[p].TempoPlanta;
@@ -672,7 +672,7 @@ int ConjuntoPlantas::CorrigeReferenciaCarregamentoDeslocamentoMenosUm(int NumPla
 }
 
 // Imprime os dados das plantas
-void ConjuntoPlantas::Imprime(int OrdenaPlantas,int OrdenaCarrtas , int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo){
+void 	ConjuntoPlantas::Imprime(int OrdenaPlantas,int OrdenaCarrtas , int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo){
 	if( ImprimeSolucao == 1){
 		cout << endl << endl << " [[[[[[  Imprime plantas  ]]]]]]" << endl;
 	}
@@ -694,7 +694,7 @@ void ConjuntoPlantas::Imprime(int OrdenaPlantas,int OrdenaCarrtas , int ImprimeS
 }
 
 // verifica se uma das plantas em questão pode atender a demanda em questão caso de atrazar o atendimento das outras demandas da construção que se quer atender
-int ConjuntoPlantas::VerificaPlantasAnalizadasPodemAtenderSeAtrasar(){
+int 	ConjuntoPlantas::VerificaPlantasAnalizadasPodemAtenderSeAtrasar(){
 	// percorre todas as plantas
 	for ( int p = 0; p < (int) Plantas.size(); p++){
 		// verifica se a planta corrente pode atender a demanda em questão caso se atrazar o atendiemnto das demandas posteriores a demanda em questão
@@ -709,21 +709,21 @@ int ConjuntoPlantas::VerificaPlantasAnalizadasPodemAtenderSeAtrasar(){
 }
 
 // inicializa os horarios que as plantas podem atender certa demanda e a cosntrução pode ser atendida, caso das outras demandas anteriores a esta forem atrazadas, com o valor DBL_MAX
-void ConjuntoPlantas::InicializaVetorHorarioQuePlantaPodeAtender(){
+void 	ConjuntoPlantas::InicializaVetorHorarioQuePlantaPodeAtender(){
 	// inicia os vetores com o numero de plantas
 	HorarioQuePlantaPodeAtender.resize(Plantas.size());
 	HorarioQueConstrucaoPodeReceberDemanda.resize(Plantas.size());
 	// faz para toda planta
 	for(  int p = 0; p < (int) HorarioQuePlantaPodeAtender.size(); p++){
 		// inicia com o valor maximo de double o horario que a planta pode atender e a construção pode ser atendida
-		HorarioQuePlantaPodeAtender[p] = DBL_MAX;
-		HorarioQueConstrucaoPodeReceberDemanda[p] = DBL_MAX;
+		HorarioQuePlantaPodeAtender[p] 				= DBL_MAX;
+		HorarioQueConstrucaoPodeReceberDemanda[p]	= DBL_MAX;
 	}
 }
 
 // retorna o menor horario que a construção pode recerber a demanda que não é atendida no momento
-double ConjuntoPlantas::RetornaMenorHorarioQueConstrucaoPodeReceberDemanda(){
-	double HoraAux;
+double 	ConjuntoPlantas::RetornaMenorHorarioQueConstrucaoPodeReceberDemanda(){
+	double 	HoraAux;
 	HoraAux = DBL_MAX;
 
 	// faz para toda planta
@@ -739,7 +739,7 @@ double ConjuntoPlantas::RetornaMenorHorarioQueConstrucaoPodeReceberDemanda(){
 }
 
 // Retorna os dados do carregaemnto de uma certa demanda passada na função
-int ConjuntoPlantas::RetornaDadosDemandaAtendida(int Construcao, int Demanda, double &HorarioInicio, double &HorarioFinal, int &planta, int &Carreta, double &HorarioInicioCarreta, double &HorarioFinalCarreta){
+int 	ConjuntoPlantas::RetornaDadosDemandaAtendida(int Construcao, int Demanda, double &HorarioInicio, double &HorarioFinal, int &planta, int &Carreta, double &HorarioInicioCarreta, double &HorarioFinalCarreta){
 	// percorre todas as plantas
 	for( int p = 0; p < (int) Plantas.size(); p++){
 		// percorre todos os carregamentotos da planta
@@ -767,8 +767,8 @@ int ConjuntoPlantas::RetornaDadosDemandaAtendida(int Construcao, int Demanda, do
 }
 
 // verifica a integridade dos carregamentos realizados pelas plantas
-int ConjuntoPlantas::VerificaIntegridadeDeCarregamentosDasPlantas(int imprime,int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo){
-	int integro;
+int 	ConjuntoPlantas::VerificaIntegridadeDeCarregamentosDasPlantas(int imprime,int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo){
+	int 	integro;
 	// inicia com integro o estado dos carregamentos
 	integro = 1;
 
@@ -801,8 +801,8 @@ int ConjuntoPlantas::VerificaIntegridadeDeCarregamentosDasPlantas(int imprime,in
 }
 
 // verifica a integridade dos deslocamentos realizados pelos veiculos das plantas
-int ConjuntoPlantas::VerificaIntegridadeDeDeslocaemntosDosVeiculosDasPlantas(int imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo){
-	int integro;
+int 	ConjuntoPlantas::VerificaIntegridadeDeDeslocaemntosDosVeiculosDasPlantas(int imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo){
+	int 	integro;
 	// inicia como integro o estado dos deslocamentos
 	integro = 1;
 
@@ -834,19 +834,19 @@ int ConjuntoPlantas::VerificaIntegridadeDeDeslocaemntosDosVeiculosDasPlantas(int
 	return integro;
 }
 
-void ConjuntoPlantas::OrdenaPlantas( int EscolhaPlanta){
+void 	ConjuntoPlantas::OrdenaPlantas( int EscolhaPlanta){
 	// variavel para parar o programa
-	int Para;
+	int 	Para;
 
 	// variavel para imprimir a ordenação
-	int Imprime;
+	int 	Imprime;
 	// 0 se não for imprimir, 1 se for imprimir
 	Imprime = 0;
 
 
 	// estrutura de armazenamento dos dados das plantas
-	vector < vector < int > > EstruturaMemoriaInt;
-	vector < vector < double > > EstruturaMemoriaDouble;
+	vector < vector < int > > 		EstruturaMemoriaInt;
+	vector < vector < double > > 	EstruturaMemoriaDouble;
 
 	// armazenamento dos dados das plantas
 	EstruturaMemoriaInt.resize(2);
@@ -864,9 +864,6 @@ void ConjuntoPlantas::OrdenaPlantas( int EscolhaPlanta){
 		EstruturaMemoriaDouble[0][p] = HorarioQuePlantaPodeAtender[p];
 		EstruturaMemoriaDouble[1][p] = HorarioQueConstrucaoPodeReceberDemanda[p];
 	}
-
-
-
 
 	if( EscolhaPlanta == 2){
 		// ordena baseado no menor rank
@@ -922,7 +919,7 @@ void ConjuntoPlantas::OrdenaPlantas( int EscolhaPlanta){
 
 }
 
-void ConjuntoPlantas::ArmazenaVetorIntComOrdem( vector < int > &VetorOrdem){
+void 	ConjuntoPlantas::ArmazenaVetorIntComOrdem( vector < int > &VetorOrdem){
 	// faz o vetor de int ter o memso tamanho que o número de plantas
 	VetorOrdem.resize( (int) Plantas.size() );
 	// percorre todas as planats

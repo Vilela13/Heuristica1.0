@@ -18,48 +18,48 @@ public:
     DadosSolomon();
 
 // Variaveis de leitura do arquivo
-	string NomeInstancia;
-	string Auxiliar;
-	int NumeroVeiculos;
-	int Capacidade;
+	string 	NomeInstancia;
+	string 	Auxiliar;
+	int 	NumeroVeiculos;
+	int 	Capacidade;
 
-	int NumeroNosDadosSolomon;
+	int 	NumeroNosDadosSolomon;
 
 	vector< int > NumeroDoNo;
 	vector< vector< int > > Coordenadas;
 	vector< int > Demanda;
 	vector< vector< int > > JanelaDeTempo;
 	vector< int > TempoDeServico;
-	int x;
-	int y;
-	int AuxiliarInt;
+	int 	x;
+	int 	y;
+	int 	AuxiliarInt;
 
 // Variaveis de escrita dos arquivos de saida
 
-	int NumeroPlantas;
+	int 	NumeroPlantas;
 	vector < int > NoPlanta;
-	int NumeroClientes;
+	int 	NumeroClientes;
 	vector < int > NoCliente;
-	int NumeroCaminhoes;
-	int Velocidade;
+	int 	NumeroCaminhoes;
+	int 	Velocidade;
 
 // Declara variaveis
 
-	char *b;
-	char *aux1;
+	char 	*b;
+	char 	*aux1;
 
 
 
-	int CaminhaoAux;
+	int 	CaminhaoAux;
 
 	vector < int > CaminhoesPlanta;
 	vector < int > NumeroCarretas;		// guarda o numero de clientes
 
-	double TempoDeDescarga;
-	double TemproEntreEntregas;
-	double TempoPlanta;
-	double TempoDeVidaConcreto;
-	double TempoEntreEntregas;
+	double 	TempoDeDescarga;
+	double 	TemproEntreEntregas;
+	double 	TempoPlanta;
+	double 	TempoDeVidaConcreto;
+	double 	TempoEntreEntregas;
 
 	vector < double > HoraInicioPlanta;
 	vector < double > HoraFinalPlanta;
@@ -122,11 +122,11 @@ DadosSolomon::DadosSolomon(){
 
 }
 
-void DadosSolomon::CarregarNumeroNosCoordenadas( string Nome){
+void 	DadosSolomon::CarregarNumeroNosCoordenadas( string Nome){
 
-	int EscreveDadosLidos = 0;
+	int 	EscreveDadosLidos = 0;
 
-	char *cstr;
+	char 	*cstr;
 	cstr = new char[Nome.length() + 1];
 	strcpy(cstr, Nome.c_str());
 
@@ -229,7 +229,7 @@ void DadosSolomon::CarregarNumeroNosCoordenadas( string Nome){
 
 }
 
-void DadosSolomon::EscreverDadosLidosInstanciaSolomon(){
+void 	DadosSolomon::EscreverDadosLidosInstanciaSolomon(){
 	cout << endl << endl;
 
 	cout << "Nome: " << NomeInstancia << endl;
@@ -246,7 +246,7 @@ void DadosSolomon::EscreverDadosLidosInstanciaSolomon(){
 
 }
 
-void DadosSolomon::EscreverComandosR(string Nome, char TipoArquivoSaida){
+void 	DadosSolomon::EscreverComandosR(string Nome, char TipoArquivoSaida){
 
 	//int LimiteplotarX;
 	//int LimiteplotarY;
@@ -254,9 +254,9 @@ void DadosSolomon::EscreverComandosR(string Nome, char TipoArquivoSaida){
 	//LimiteplotarX = 45;
 	//LimiteplotarY = 90;
 
-	double PosicaoTextoX;
-	double PosicaoTextoY;
-	int TamanhoLetraLegenda;
+	double 	PosicaoTextoX;
+	double 	PosicaoTextoY;
+	int 	TamanhoLetraLegenda;
 
 	PosicaoTextoX = 0.5;
 	PosicaoTextoY = 2;
@@ -417,7 +417,7 @@ void DadosSolomon::EscreverComandosR(string Nome, char TipoArquivoSaida){
 
 }
 
-void DadosSolomon::EscreverComandosExcel(string Nome){
+void 	DadosSolomon::EscreverComandosExcel(string Nome){
 
 	/*
 	char *b;
@@ -442,7 +442,7 @@ void DadosSolomon::EscreverComandosExcel(string Nome){
 
 	*/
 
-	string TipoComando;
+	string 	TipoComando;
 	TipoComando = "./ComE/CmdE-";
 	TipoComando += Nome;
 
@@ -476,9 +476,9 @@ void DadosSolomon::EscreverComandosExcel(string Nome){
 
 	//cout << " galo => " << b << endl << endl;
 
-	char *cstr;
-		cstr = new char[TipoComando.length() + 1];
-		strcpy(cstr, TipoComando.c_str());
+	char 	*cstr;
+	cstr = new char[TipoComando.length() + 1];
+	strcpy(cstr, TipoComando.c_str());
 
 	ComandosExcel.open(cstr);
 
@@ -497,7 +497,7 @@ void DadosSolomon::EscreverComandosExcel(string Nome){
 
 }
 
-void DadosSolomon::CriaPastaInstS(){
+void 	DadosSolomon::CriaPastaInstS(){
 	if(!opendir ("InstS")){
 		cout <<  "\n\n Nao tem diretorio \"InstS\" !!        FUDEU MUITO!! \n" << endl;
 
@@ -522,7 +522,7 @@ void DadosSolomon::CriaPastaInstS(){
 	}
 }
 
-void DadosSolomon::CriaPastaDat(){
+void 	DadosSolomon::CriaPastaDat(){
 	if(!opendir ("Dat")){
 		cout <<  "\n\n Nao tem diretorio \"Dat\" !!        FUDEU MUITO!! \n" << endl;
 
@@ -547,26 +547,26 @@ void DadosSolomon::CriaPastaDat(){
 	}
 }
 
-void DadosSolomon::CriarInstanciaSolomon(string Nome){
+void 	DadosSolomon::CriarInstanciaSolomon(string Nome){
 
 
-	string CaminhoArquivo1;
-	string CaminhoArquivo2;
-	string NomeAux;
-	string Versao;
-	string Dados;
-	string TXT;
-	int NumeroVERSAO;
+	string 	CaminhoArquivo1;
+	string 	CaminhoArquivo2;
+	string 	NomeAux;
+	string 	Versao;
+	string 	Dados;
+	string 	TXT;
+	int 	NumeroVERSAO;
 
-	char *cstr;
+	char 	*cstr;
 
 	NumeroVERSAO = 49;
 	//NumeroVERSAO = 50;
 	//NumeroVERSAO = 51;
 
-	TempoDeDescarga = 0.1666667; // equivaelente a 10 minutos
+	TempoDeDescarga 	= 0.1666667; // equivaelente a 10 minutos
 	TemproEntreEntregas = 0.1666667; // equivaelente a 10 minutos
-	TempoPlanta = 0.083333333; // equivalente a 5 minutos(4 min = 0.066667 ; 3min = 0.05 e 2min = 0.0333333)
+	TempoPlanta 		= 0.083333333; // equivalente a 5 minutos(4 min = 0.066667 ; 3min = 0.05 e 2min = 0.0333333)
 	TempoDeVidaConcreto = 1.5;
 
 	//binomial_distribution<int> distribution(5,0.5); 		// gera numeros segundo a distribuição binomial
@@ -612,12 +612,12 @@ void DadosSolomon::CriarInstanciaSolomon(string Nome){
                 }
             }
         }
-		Versao += NumeroVERSAO;
+		Versao 	+= NumeroVERSAO;
 		NomeAux = Nome;
 
 		NomeAux.resize(NomeAux.size()-4);
 		NomeAux += Versao;
-		TXT = ".txt";
+		TXT 	= ".txt";
 		NomeAux += TXT;
 
 		cout << "      Nome da Instancia Solomon = " << NomeAux << endl << endl;
@@ -629,9 +629,9 @@ void DadosSolomon::CriarInstanciaSolomon(string Nome){
 
 	//cout <<  "  Nome = " << Nome << endl;
 
-	//CaminhoArquivo1 = "./";
-	CaminhoArquivo1 = "./InstS/";
-	CaminhoArquivo1 += NomeAux;
+	//CaminhoArquivo1 	= "./";
+	CaminhoArquivo1 	= "./InstS/";
+	CaminhoArquivo1 	+= NomeAux;
 
 
 
@@ -640,7 +640,6 @@ void DadosSolomon::CriarInstanciaSolomon(string Nome){
 // Cria arquivo para guardar os dados da instancia criada
 
 	if( NomeInstancia[0] == 'R' || NomeInstancia[0] == 'C' || NomeInstancia[0] == 'r'){
-
 
 		cstr = new char[CaminhoArquivo1.length() + 1];
 		strcpy(cstr, CaminhoArquivo1.c_str());

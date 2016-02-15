@@ -355,7 +355,7 @@ void	ConjuntoCarretas::OrdenaCarretas(int EscolhaVeiculo){
 
 // deleta tarefa realizada por um veiculo
 int		ConjuntoCarretas::DeletaTarefa( int NumeroCaminhao, double HoraInicio, double HoraFinal, int NumContrucao, int NumDemanda){
-	int Retirou;
+	int 	Retirou;
 	// inicia a tarefa como se não tivesse sido deletada
 	Retirou = 0;
 
@@ -440,7 +440,7 @@ int		ConjuntoCarretas::RetornaDadosDeslocamento(int Construcao, int Demanda, dou
 
 // verifica a integridade entre os Deslocamentos da Carreta
 int		ConjuntoCarretas::VerificaIntegridadeDeDeslocamentosDasCarretas(int Imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo){
-	int integro;
+	int 	integro;
 	// inicia com integro
 	integro = 1;
 

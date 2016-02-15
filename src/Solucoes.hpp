@@ -751,14 +751,14 @@ int		Solucao::Viabilidade2(int EscolhaVeiculo, int EscolhaConstrucao, int Escolh
 // Encontra demanda ainda não atendida
 
 	// Marca as construções que já foram completamente atenddidas com 1, as que não forma com 0
-	ConstrucoesInstancia.AlocaValoresConstrucaoPodeAtender();
+	ConstrucoesInstancia.AlocaValoresConstrucaoPodeSerSuprida();
 	// calcula o nivel de inviabilidade da solução
 	ConstrucoesInstancia.CalcularNivelDeInviabilidade();
 	// guarda o nivel de inviabilidade
 	InviabilidadeSolucaoAnterior = ConstrucoesInstancia.NivelDeInviabilidade;
 
 	// Verifica se pode atender uma construção ainda, se tem uma com demanda não atendida
-	while( ConstrucoesInstancia.VerificaConstrucaoPodeAtender() == 1 && ConstrucoesInstancia.NivelDeInviabilidade > 0){
+	while( ConstrucoesInstancia.VerificaConstrucaoPodeSerSuprida() == 1 && ConstrucoesInstancia.NivelDeInviabilidade > 0){
 		// retorna a demanda e a construção que serão analisados inicialmente
 		ProcuraConstrucaoNaoAtendida( ConstrucaoNaoAtendida, DemandaNaoAtendidaFim);
 

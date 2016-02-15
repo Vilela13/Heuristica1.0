@@ -57,10 +57,7 @@ public:
 
 	double 	Makespan;
 
-
-
 	int		PlantasAnalizadas;
-
 	double	HorarioQuePlantaPodeAtender; 		// guarda o primeiro horario que a planta pode passar a atender essa demanda caso as demandas porteriores forem atrazadas
 	double 	HorarioQueConstrucaoPodeReceberDemanda;
 

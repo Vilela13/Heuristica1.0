@@ -31,9 +31,7 @@ public:
 	int		SelecionaConstrucao( int &ConstrucaoEscolhida, int &IndiceConstrucaoEscolhida);					// seleciona a construção ainda não avaliada que tera suas demandas atendidas avaliadas pela busca local
 	int		RetornaConstrucaoQuePodeSerAtendida( int &Construcao, int &IndiceConstrucao);		// retorna a construção que possui o menor inidice e que ainda pode ser atendida
 
-
 	double	CalculaMakespanSolucao();				// calcula o makespan
-
 
 	int		BuscaLocalTentaRealizarTarefasComOutosVeiculos(int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta,int Imprime, int ImprimeEstruturas, int RealizaProcessoDeAtrazarTarefas);			// busca local que se verifica se a demanda pode ser melhor atendida caso se realize o seu atendimento com outro caminhão/veículo
 	int		BuscaLocalMudaOrdemAtendiemntoConstrucoes(int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta,int Imprime, int ImprimeEstruturas, int RealizaProcessoDeAtrazarTarefas);
@@ -54,18 +52,18 @@ BuscaLocal::BuscaLocal(){
 
 
 // Carrega os dados da instancia e a solução até o momento
-void BuscaLocal::CarregaSolucao(int np, ConjuntoPlantas Plantas, int ne, ConjuntoConstrucoes Construcoes, int nv, double v,double TDVC){
+void 	BuscaLocal::CarregaSolucao(int np, ConjuntoPlantas Plantas, int ne, ConjuntoConstrucoes Construcoes, int nv, double v,double TDVC){
 	NP = np;
-	PlantasInstancia = Plantas;
+	PlantasInstancia		= Plantas;
 	NE = ne;
-	ConstrucoesInstancia = Construcoes;
+	ConstrucoesInstancia 	= Construcoes;
 	NV = nv;
-	Velocidade = v;
-	TempoDeVidaConcreto = TDVC;
+	Velocidade	= v;
+	TempoDeVidaConcreto 	= TDVC;
 }
 
 // seleciona a construção ainda não avaliada que tera suas demandas atendidas avaliadas pela busca local
-int BuscaLocal::SelecionaConstrucao( int &ConstrucaoEscolhida, int &IndiceConstrucaoEscolhida ){
+int 	BuscaLocal::SelecionaConstrucao( int &ConstrucaoEscolhida, int &IndiceConstrucaoEscolhida ){
 
 	// passa por todas as construções
 	for( int c = 0; c < NE; c++){
@@ -82,14 +80,13 @@ int BuscaLocal::SelecionaConstrucao( int &ConstrucaoEscolhida, int &IndiceConstr
 	// retorna 0 caso não encontrou uma construção
 	return 0;
 
-
 }
 
 // retorna a construção que possui o menor inidice e que ainda pode ser atendida
-int BuscaLocal::RetornaConstrucaoQuePodeSerAtendida( int &Construcao, int &IndiceConstrucao){
+int 	BuscaLocal::RetornaConstrucaoQuePodeSerAtendida( int &Construcao, int &IndiceConstrucao){
 
 	// passa por todas as cosntruções
-	for( int c = 0; c < (int)  NE; c++){
+	for( int c = 0; c < NE; c++){
 		// Seleciona a construção que não possui todas as suas demandas já atendidas e que ainda não foi analisada
 		if(ConstrucoesInstancia.Construcoes[c].StatusAtendimento < ConstrucoesInstancia.Construcoes[c].NumeroDemandas &&  ConstrucoesInstancia.Construcoes[c].ConstrucaoPodeSerSuprida == 0){
 			// atuaiza os dados da construção com menor rank, seu número ou seu indice
@@ -105,7 +102,7 @@ int BuscaLocal::RetornaConstrucaoQuePodeSerAtendida( int &Construcao, int &Indic
 }
 
 // calcula o makespan
-double BuscaLocal::CalculaMakespanSolucao(){
+double 	BuscaLocal::CalculaMakespanSolucao(){
 	// calcula o makespan da solução corrente de suas construções
 	ConstrucoesInstancia.CalculaMakespansConstrucoes();
 	// calcula o makespan da solução corrente de suas plantas
@@ -119,22 +116,23 @@ double BuscaLocal::CalculaMakespanSolucao(){
 
 
 // busca local que se verifica se a demanda pode ser melhor atendida caso se realize o seu atendimento com outro caminhão/veículo
-int BuscaLocal::BuscaLocalTentaRealizarTarefasComOutosVeiculos(int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta,int Imprime, int ImprimeEstruturas, int RealizaProcessoDeAtrazarTarefas){
+int 	BuscaLocal::BuscaLocalTentaRealizarTarefasComOutosVeiculos(int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta,int Imprime, int ImprimeEstruturas, int RealizaProcessoDeAtrazarTarefas){
 
 
 	// ponteiro para o arquivo que se irá salvar os dados
 	PonteiroArquivo  Arquivo;
 	// variavel que controla se irá escrever os dados em um aruivo, é inicializada com 0
-	int ImprimeArquivo;
+	int 	ImprimeArquivo;
 	ImprimeArquivo = 0;
 
-	int ImprimeSolucao;
+	// IMprime solução na tela enquanto ela é cosntruida
+	int 	ImprimeSolucao;
 	ImprimeSolucao = 0;
 
 	// daods da cosntrução e da demanda
-	int ConstrucaoEscolhida;
-	int IndiceConstrucaoEscolhida;
-	int DemandaRecolocar;
+	int 	ConstrucaoEscolhida;
+	int 	IndiceConstrucaoEscolhida;
+	int 	DemandaRecolocar;
 
 	// dados das tarefas movidas duarante o procedimento que serão utilizadas ara retornar ao estado anterior da solução caso se piore a solução que se tinha
 	vector < DadosTarefa > DadosTarefasMovidasVeiculoFixo;
@@ -144,23 +142,23 @@ int BuscaLocal::BuscaLocalTentaRealizarTarefasComOutosVeiculos(int EscolhaVeicul
 	vector < int > VetorOrdemPlanta;
 	vector < int > VetorOrdemVeiculo;
 	// inidice da planta da planta em questão no VetorOrdemPlanta
-	int IndicePlanta;
+	int 	IndicePlanta;
 
 	// makespan da solução anterior que se tinha
-	double MakespanAnterior;
+	double 	MakespanAnterior;
 
 	// verifica se atendeu a demanda que será reatendida ou não
-	int Recolocar;
+	int 	Recolocar;
 
 	// variavel para se parar o programa
-	int ParaPrograma;
+	int 	ParaPrograma;
 
 	// imprime os dados dos processos de adicionar as tarefas caso for 1, 0 caso vontrario
-	int ImprimeDadosAdicionaTarefa;
+	int 	ImprimeDadosAdicionaTarefa;
 	ImprimeDadosAdicionaTarefa = 0;
 
-	// ordena as cosntruções na ordem em que elas devem ser escolhidas com prioridade (foi tirada para se manter a ordem realizado na heuristica constrututiva)
-	//ConstrucoesInstancia.OrdenaCosntrucoes( EscolhaConstrucao);
+	// ordena as cosntruções na ordem em que elas devem ser escolhidas com prioridade
+	ConstrucoesInstancia.OrdenaCosntrucoes( EscolhaConstrucao);
 
 	// faz com que nenhuma construção tenha sido analizada
 	ConstrucoesInstancia.InicializaConstrucoesAnalizadas();
@@ -220,7 +218,6 @@ int BuscaLocal::BuscaLocalTentaRealizarTarefasComOutosVeiculos(int EscolhaVeicul
 
 				// aloca indice da planta
 				PlantasInstancia.AlocaInidiceFabrica( VetorOrdemPlanta[p], IndicePlanta);
-
 				// ordena os veículos com o tipo de ordenação escolhida
 				PlantasInstancia.Plantas[IndicePlanta].VeiculosDaPlanta.OrdenaCarretas(EscolhaVeiculo);
 				// armazena a ordem escolhida dos veículos
@@ -260,7 +257,6 @@ int BuscaLocal::BuscaLocalTentaRealizarTarefasComOutosVeiculos(int EscolhaVeicul
 						Recolocar = 1;
 						// enquanto se consegue recolocar demandas e se tem demandas para se recolocar se continua no while
 						while( Recolocar == 1 && DemandaRecolocar <   ConstrucoesInstancia.Construcoes[IndiceConstrucaoEscolhida].NumeroDemandas){
-
 							// se tenta recolocar a demanda corrente
 							Recolocar = ConstrucoesInstancia.AdicionaTarefa( 0 , ConstrucoesInstancia.Construcoes[IndiceConstrucaoEscolhida].NumeroDaConstrucao, DemandaRecolocar , DadosTarefasMovidasReadicaoDeDemandas, 1, 0, RealizaProcessoDeAtrazarTarefas, EscolhaVeiculo , EscolhaPlanta, PlantasInstancia, ImprimeDadosAdicionaTarefa,"  <<<<< BuscaLocal::BuscaLocalRetiraTarefasUmaConstrucao >>> ");
 
@@ -314,9 +310,6 @@ int BuscaLocal::BuscaLocalTentaRealizarTarefasComOutosVeiculos(int EscolhaVeicul
 
 						}
 					}
-
-
-
 				}
 			}
 			// se retorna a solução inicial
@@ -352,37 +345,38 @@ int BuscaLocal::BuscaLocalTentaRealizarTarefasComOutosVeiculos(int EscolhaVeicul
 }
 
 // busca local que se verifica caso a ordem de decisão de atendiemnto das demandas de duas construções forem invertidas se irá obter uma melhor solução para o problema
-int BuscaLocal::BuscaLocalMudaOrdemAtendiemntoConstrucoes(int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta,int Imprime, int ImprimeEstruturas, int RealizaProcessoDeAtrazarTarefas){
+int 	BuscaLocal::BuscaLocalMudaOrdemAtendiemntoConstrucoes(int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta,int Imprime, int ImprimeEstruturas, int RealizaProcessoDeAtrazarTarefas){
 
 	// ponteiro para o arquivo que se irá salvar os dados
 	PonteiroArquivo  Arquivo;
 	// variavel que controla se irá escrever os dados em um aruivo, é inicializada com 0
-	int ImprimeArquivo;
+	int 	ImprimeArquivo;
 	ImprimeArquivo = 0;
 
-	int ImprimeSolucao;
+	// Imprime solução na tela enquanto ela é cosntruida
+	int 	ImprimeSolucao;
 	ImprimeSolucao = 1;
 
 	// verifica se atendeu a demanda que será reatendida ou não
-	int Recolocar;
+	int 	Recolocar;
 	// indice da demanda a ser recolocada
-	int DemandaRecolocar;
+	int 	DemandaRecolocar;
 
 	// dados das tarefas movidas duarante o procedimento que serão utilizadas ara retornar ao estado anterior da solução caso se piore a solução que se tinha
 	vector < DadosTarefa > DadosTarefasMovidasEtapa1;
 	vector < DadosTarefa > DadosTarefasMovidasEtapa2;
 
 	// makespan da solução anterior que se tinha
-	double MakespanAnterior;
+	double 	MakespanAnterior;
 
 	// variavel que controla se ira imprimir o procedimento de locação de tarefas
-	int ImprimeDadosAdicionaTarefa;
+	int 	ImprimeDadosAdicionaTarefa;
 	ImprimeDadosAdicionaTarefa = 0;
 
-	int ParaPrograma;
+	int 	ParaPrograma;
 
-	// ordena as cosntruções na ordem em que elas devem ser escolhidas com prioridade (foi tirada para se manter a ordem realizado na heuristica constrututiva)
-	//ConstrucoesInstancia.OrdenaCosntrucoes( EscolhaConstrucao);
+	// ordena as cosntruções na ordem em que elas devem ser escolhidas com prioridade
+	ConstrucoesInstancia.OrdenaCosntrucoes( EscolhaConstrucao);
 
 	// verifica se possui mais de uma construção, caso só setiver uma não faz sentido realizar o procedimento da busca local de troca de ordem de atendiemnto das construções
 	if ( (int) ConstrucoesInstancia.Construcoes.size() > 1){
@@ -522,35 +516,35 @@ int BuscaLocal::BuscaLocalMudaOrdemAtendiemntoConstrucoes(int EscolhaVeiculo, in
 }
 
 
-int BuscaLocal::BuscaLocalTrocaPlantaAtendimento(int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta, int Imprime, int ImprimeEstruturas, int RealizaProcessoDeAtrazarTarefas){
+int 	BuscaLocal::BuscaLocalTrocaPlantaAtendimento(int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta, int Imprime, int ImprimeEstruturas, int RealizaProcessoDeAtrazarTarefas){
 
 	// ponteiro para o arquivo que se irá salvar os dados
 	PonteiroArquivo  Arquivo;
 	// variavel que controla se irá escrever os dados em um aruivo, é inicializada com 0
-	int ImprimeArquivo;
+	int 	ImprimeArquivo;
 	ImprimeArquivo = 0;
-
-	int ImprimeSolucao;
+	// Imprime solução na tela enquanto ela é cosntruida
+	int 	ImprimeSolucao;
 	ImprimeSolucao = 1;
 
 	// makespan da solução anterior que se tinha
-	double MakespanAnterior;
+	double 	MakespanAnterior;
 
 	// variaveis que guardam a demanda deletada na etapa um e o status do procedimento de se deletar tal demanda
-	int DemandaAnalise;
-	int DeletouDemanda;
+	int 	DemandaAnalise;
+	int 	DeletouDemanda;
 
 	// variaveis que armazenam a planta e a carreta da tarefa analisada para ser deletada caso for atendida pela planta em questão
-	int NumPlanta;
-	int NumCarreta;
+	int 	NumPlanta;
+	int 	NumCarreta;
 
 	// variaveis que armazenam os horarios da tarefa analisada para ser deletada caso for atendida pela planta em questão
-	double HorarioInicioDescarregamento;
-	double HorarioFinalDescarregamento;
-	double HorarioInicioCarregamento;
-	double HorarioFinalCarregamento;
-	double HorarioInicioDeslocamento;
-	double HorarioFinalDeslocamento;
+	double 	HorarioInicioDescarregamento;
+	double 	HorarioFinalDescarregamento;
+	double 	HorarioInicioCarregamento;
+	double 	HorarioFinalCarregamento;
+	double 	HorarioInicioDeslocamento;
+	double 	HorarioFinalDeslocamento;
 
 	// dados das tarefas movidas duarante o procedimento que serão utilizadas ara retornar ao estado anterior da solução caso se piore a solução que se tinha
 	vector < DadosTarefa > DadosTarefasMovidasEtapa1;
@@ -559,21 +553,20 @@ int BuscaLocal::BuscaLocalTrocaPlantaAtendimento(int EscolhaVeiculo, int Escolha
 	vector < DadosTarefa > DadosTarefasMovidasEmUmaConstrucaoEtapa1;
 
 	// demanda não atendida na etapa 2 que se tentara reatender
-	int DemandaNaoAtendida;
+	int 	DemandaNaoAtendida;
 
 	// demandas após a demanda não atendida na mesma construção na etapa 2
-	int DemandaAposDemandaNaoAtendida;
+	int 	DemandaAposDemandaNaoAtendida;
 
 	// variavel que controla se a demanda foi reinserida
-	int ReadicionouDemanda;
-
-	int ReadicionouDemandaProcessoEtapa1;
+	int 	ReadicionouDemanda;
+	int 	ReadicionouDemandaProcessoEtapa1;
 
 	// dados da cosntrução que terá suas demandas reinseridas na etapa 2
-	int ConstrucaoAtender;
-	int IndiceConstrucaoAtender;
+	int 	ConstrucaoAtender;
+	int 	IndiceConstrucaoAtender;
 	// demanda que será reinserida na etapa dois mas que não possui um veículo do qual ela tem que ser atendida obrigatoriamente
-	int  DemandaNaoAtendidaSemPlantaFixa;
+	int  	DemandaNaoAtendidaSemPlantaFixa;
 
 
 	// vetores que armazenam as ordens das plantas e dos veiculos
@@ -581,16 +574,17 @@ int BuscaLocal::BuscaLocalTrocaPlantaAtendimento(int EscolhaVeiculo, int Escolha
 	vector < int > VetorOrdemPlanta2;
 	vector < int > VetorOrdemVeiculo;
 	// inidice da planta da planta em questão no VetorOrdemPlanta
-	int IndicePlanta2;
+	int 	IndicePlanta2;
 
-	int ParaPrograma;
+	// variavel para se parar o programa
+	int 	ParaPrograma;
 
 	// imprime os dados dos processos de adicionar as tarefas caso for 1, 0 caso vontrario
 	int ImprimeDadosAdicionaTarefa;
 	ImprimeDadosAdicionaTarefa = 0;
 
-	// ordena as cosntruções na ordem em que elas devem ser escolhidas com prioridade (foi tirada para se manter a ordem realizado na heuristica constrututiva)
-	//ConstrucoesInstancia.OrdenaCosntrucoes( EscolhaConstrucao);
+	// ordena as cosntruções na ordem em que elas devem ser escolhidas com prioridade
+	ConstrucoesInstancia.OrdenaCosntrucoes( EscolhaConstrucao);
 
 	// armazena o makespan da solução corrente
 	MakespanAnterior = CalculaMakespanSolucao();
@@ -715,7 +709,7 @@ int BuscaLocal::BuscaLocalTrocaPlantaAtendimento(int EscolhaVeiculo, int Escolha
 									}
 
 									// marca as construções que possuem demandas que ainda não foram atendidas como candidadtas a serem avaliadas para o atenidmento de suas demandas
-									ConstrucoesInstancia.AlocaValoresConstrucaoPodeAtender();
+									ConstrucoesInstancia.AlocaValoresConstrucaoPodeSerSuprida();
 									// caso se tenha uma construção que ainda possa ter uma demanda atendida e se tenha conseguido atender a ultima demanda analisada, se entra no while. Este processo é realizado até que todas as demnadas tenham sido atendidas ou não se consiga se recolocar alguma demanda que foi desalocada.
 									while( ConstrucoesInstancia.VerificaSeTodasConstrucaoPodeSerSupridaForamAnalisadas() == 0 && ReadicionouDemanda == 1){
 										// se armazena os dados da construção mais proeminente a se ter uma demanda reinserida no momento

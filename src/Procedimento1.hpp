@@ -61,7 +61,7 @@ int 	Procedimento1::SelecionaConstrucao(  int &ConstrucaoVaiSerSuprida, int &Ind
 	// percorre todas as cosntruções
 	for( int c = 0; c < NE; c++){
 		// Seleciona a construção que não possui todas as suas demandas já atendidas e que ainda não foi analisada
-		if(ConstrucoesInstancia.Construcoes[c].StatusAtendimento < ConstrucoesInstancia.Construcoes[c].NumeroDemandas &&  ConstrucoesInstancia.ConstrucoesAnalizadas[ConstrucoesInstancia.Construcoes[c].NumeroDaConstrucao] == 0){
+		if(ConstrucoesInstancia.Construcoes[c].StatusAtendimento < ConstrucoesInstancia.Construcoes[c].NumeroDemandas &&  ConstrucoesInstancia.Construcoes[c].ConstrucaoAnalizada == 0){
 			// armazena os dados da cosntrução selecionada
 			ConstrucaoVaiSerSuprida = ConstrucoesInstancia.Construcoes[c].NumeroDaConstrucao;
 			IndiceConstrucaoVaiSerSuprida = c;
@@ -91,12 +91,12 @@ void 	Procedimento1::VerificaAlocacaoDemandaConstrucao( int IndiceConstrucaoVaiS
 		if( ImprimeSolucao == 1){
 			cout << endl;
 			cout << " ##############################################################" << endl;
-			cout << "           Não consigo alocar demandas da contrucao " << ConstrucoesInstancia.Construcoes[IndiceConstrucaoVaiSerSuprida].NumeroDaConstrucao << endl;
+			cout << "           Não consigo alocar demandas da contrucao " << ConstrucoesInstancia.Construcoes[IndiceConstrucaoVaiSerSuprida].NumeroDaConstrucao <<  endl;
 			cout << " ##############################################################" << endl;
 		}
 		if( ImprimeArquivo == 1){
 			fprintf( Arquivo,"\n ##############################################################\n");
-			fprintf( Arquivo,"           Não consigo alocar demandas da contrucao %d \n",ConstrucoesInstancia.Construcoes[IndiceConstrucaoVaiSerSuprida].NumeroDaConstrucao);
+			fprintf( Arquivo,"           Não consigo alocar demandas da contrucao %d   \n",ConstrucoesInstancia.Construcoes[IndiceConstrucaoVaiSerSuprida].NumeroDaConstrucao);
 			fprintf( Arquivo," ##############################################################\n");
 		}
 
@@ -136,7 +136,7 @@ int 	Procedimento1::Executa(  int EscolhaVeiculo, int EscolhaConstrucao, int Esc
 		ConstrucaoSelecionada = SelecionaConstrucao(  ConstrucaoVaiSerSuprida, IndiceConstrucaoVaiSerSuprida);
 		if( ConstrucaoSelecionada == 1){
 			// marca a construção escolhida como já analisada
-			ConstrucoesInstancia.ConstrucoesAnalizadas[ConstrucaoVaiSerSuprida] =  1;
+			ConstrucoesInstancia.Construcoes[ConstrucaoVaiSerSuprida].ConstrucaoAnalizada =  1;
 
 			// Entrar no loop enqaunto tiver demandas a serem atendidas e planatas que ainda puderem atender a demanda
 			do{
@@ -147,7 +147,7 @@ int 	Procedimento1::Executa(  int EscolhaVeiculo, int EscolhaConstrucao, int Esc
 				PermiteAtendimentoDemanda = ConstrucoesInstancia.AdicionaTarefa( 0, ConstrucaoVaiSerSuprida, Demanda , DadosTarefasMovidasAuxiliar, 1, 0, RealizaProcessoDeAtrazarTarefas, EscolhaVeiculo , EscolhaPlanta, PlantasInstancia, imprime, " -> Procedimento1::Executa ");
 
 				if ( imprime == 1){
-					ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia, 0, ImprimeSolucao,ImprimeArquivo,Arquivo);
+					//ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia, 0, ImprimeSolucao,ImprimeArquivo,Arquivo);
 					if( PermiteAtendimentoDemanda == 0){
 						if( ImprimeSolucao == 1){
 							cout << endl << endl << "  Não consegue colocar mais demandas da construção [" << ConstrucoesInstancia.Construcoes[IndiceConstrucaoVaiSerSuprida].NumeroDaConstrucao << "]" << endl << endl;
@@ -160,7 +160,7 @@ int 	Procedimento1::Executa(  int EscolhaVeiculo, int EscolhaConstrucao, int Esc
 
 			}while( ConstrucoesInstancia.Construcoes[IndiceConstrucaoVaiSerSuprida].StatusAtendimento < ConstrucoesInstancia.Construcoes[IndiceConstrucaoVaiSerSuprida].NumeroDemandas && PermiteAtendimentoDemanda != 0);
 			// verifica se todas as demandas da construção corrente foi atendida
-			VerificaAlocacaoDemandaConstrucao(IndiceConstrucaoVaiSerSuprida, Viabilidade, ImprimeSolucao,ImprimeArquivo,Arquivo);
+			VerificaAlocacaoDemandaConstrucao(IndiceConstrucaoVaiSerSuprida, Viabilidade, ImprimeSolucao, ImprimeArquivo, Arquivo);
 		}else{
 			if( ImprimeSolucao == 1){
 				cout << endl << endl << " &&&&&&&&&&&&&& Nao conseguiu selecionar uma construcao &&&&&&&&&&&&&& " << endl << endl;

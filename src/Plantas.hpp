@@ -57,6 +57,16 @@ public:
 
 	double 	Makespan;
 
+
+
+	int		PlantasAnalizadas;
+
+	double	HorarioQuePlantaPodeAtender; 		// guarda o primeiro horario que a planta pode passar a atender essa demanda caso as demandas porteriores forem atrazadas
+	double 	HorarioQueConstrucaoPodeReceberDemanda;
+
+
+
+
 	Planta();			// conmstrutora
 
 	int 	VerificaDisponibilidade( double InicioPossivelAlocacao, double FinalPossivelAlocacao);					// Verifica a possibilidade de alocação da demanda
@@ -75,13 +85,16 @@ public:
 
 // conmstrutora
 Planta::Planta(){
-	NumeroDaPlanta = -13;
-	NumeroVeiculos = -13;
-	TempoPlanta = -13;
+	NumeroDaPlanta 	= -13;
+	NumeroVeiculos 	= -13;
+	TempoPlanta 	= -13;
 	TempoMinimoDeFuncionamento = -13;
 	TempoMaximoDeFuncionamento = -13;
 	Carregamentos.clear();
-	Makespan = -13;
+	Makespan 		= -13;
+	PlantasAnalizadas 			= -13;
+	HorarioQuePlantaPodeAtender = -13;
+	HorarioQueConstrucaoPodeReceberDemanda = -13;
 }
 // Verifica a possibilidade de alocação da demanda
 int 	Planta::VerificaDisponibilidade( double InicioPossivelAlocacao, double FinalPossivelAlocacao){
@@ -386,10 +399,6 @@ class ConjuntoPlantas{
 public:
 
 	vector< Planta > 	Plantas;
-	vector < int > 		PlantasAnalizadas;
-
-	vector < double > 	HorarioQuePlantaPodeAtender; 		// Vetor que guarda o primeiro horario que a planta pode passar a atender essa demanda caso as demandas porteriores forem atrazadas
-	vector < double > 	HorarioQueConstrucaoPodeReceberDemanda;
 
 	double 	MakespanPLantas;
 
@@ -405,7 +414,7 @@ public:
 
 	int 	CorrigeReferenciaCarregamentoDeslocamentoMaisUm(int NumPlantaFornecedor,int NumCarretaUtilizada,int construcao, int NumeroDemandaSuprida, double HorarioInicioDescarregamento,  double HorarioFinalDescarregamento);		// corrige as referencias da tarefa aumentando o numerod a demanda que é suprida em mais um
 	int 	CorrigeReferenciaCarregamentoDeslocamentoMenosUm(int NumPlanta, int NumCarreta,int Construcao, int Demanda, double HorarioInicioDescarregamento, double HorarioFinalDescarregamento);					// corrige as referencias da tarefa aumentando o numerod a demanda que é suprida em menos um
-	void 	Imprime(int OrdenaPlantas,int OrdenaCarrtas,int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo);		// Imprime os dados das plantas
+
 
 	int 	VerificaPlantasAnalizadasPodemAtenderSeAtrasar();			// verifica se uma das plantas em questão pode atender a demanda em questão caso de atrazar o atendimento das outras demandas da construção que se quer atender
 	void 	InicializaVetorHorarioQuePlantaPodeAtender();				// inicializa os horarios que as plantas podem atender certa demanda e a cosntrução pode ser atendida, caso das outras demandas anteriores a esta forem atrazadas, com o valor DBL_MAX
@@ -418,6 +427,9 @@ public:
 	void 	OrdenaPlantas( int EscolhaPlanta);
 	void 	ArmazenaVetorIntComOrdem( vector < int > &VetorOrdem);
 
+	void 	Imprime(int OrdenaPlantas,int OrdenaCarrtas,int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo);		// Imprime os dados das plantas
+	void 	ImprimeHorariosPlantasPodemAtender();
+
 	~ConjuntoPlantas();		// destruidora
 };
 
@@ -428,12 +440,11 @@ ConjuntoPlantas::ConjuntoPlantas(){
 
 // Faz que nenhuma planta tenha sido analisada pelos algoritmos
 void 	ConjuntoPlantas::InicializaPlantasAnalizadas(){
-	// inicia estrutura de plantas
-	PlantasAnalizadas.resize(Plantas.size());
+
 	// percorre todas as plantas
 	for( int p = 0; p < (int) Plantas.size(); p++){
 		// faz a planta corrente não ter sido analizada
-		PlantasAnalizadas[p] = 0;
+		Plantas[p].PlantasAnalizadas = 0;
 	}
 }
 
@@ -442,7 +453,7 @@ int 	ConjuntoPlantas::AnalizouTodasPLanats(){
 	// percorre todas as plantas
 	for ( int p = 0; p < (int) Plantas.size(); p++){
 		// verifica se a planta corrente não foi analizada
-		if( PlantasAnalizadas[p] == 0){
+		if( Plantas[p].PlantasAnalizadas == 0){
 			// retorna 0, pois ainda tem planta a analizar
 			return 0;
 		}
@@ -455,15 +466,13 @@ int 	ConjuntoPlantas::AnalizouTodasPLanats(){
 void 	ConjuntoPlantas::IniciaConjuntoPlantas(int Numero){
 	// inicia estrutura de plantas
 	Plantas.resize(Numero);
-	PlantasAnalizadas.resize(Numero);
-	HorarioQuePlantaPodeAtender.resize(Numero);
-	HorarioQueConstrucaoPodeReceberDemanda.resize(Numero);
+
 
 	// inicia os valores das estruturas da planta, as plantas analisadas como 0 e os horarios como o maximo double
-	for( int i = 0; i < Numero; i++){
-		PlantasAnalizadas[i] = 0;
-		HorarioQuePlantaPodeAtender[i] = DBL_MAX;
-		HorarioQueConstrucaoPodeReceberDemanda[i] = DBL_MAX;
+	for( int p = 0; p < Numero; p++){
+		Plantas[p].PlantasAnalizadas = 0;
+		Plantas[p].HorarioQuePlantaPodeAtender = DBL_MAX;
+		Plantas[p].HorarioQueConstrucaoPodeReceberDemanda = DBL_MAX;
 	}
 
 }
@@ -671,34 +680,13 @@ int 	ConjuntoPlantas::CorrigeReferenciaCarregamentoDeslocamentoMenosUm(int NumPl
 	}
 }
 
-// Imprime os dados das plantas
-void 	ConjuntoPlantas::Imprime(int OrdenaPlantas,int OrdenaCarrtas , int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo){
-	if( ImprimeSolucao == 1){
-		cout << endl << endl << " [[[[[[  Imprime plantas  ]]]]]]" << endl;
-	}
-	if( ImprimeArquivo == 1){
-		fprintf( Arquivo, "\n\n  [[[[[[  Imprime plantas  ]]]]]]\n");
-	}
-	// percorre todas as plantas
-	for( int p = 0; p < (int) Plantas.size(); p++){
-		// imprime a planta corrente
-		Plantas[p].Imprime(OrdenaPlantas, OrdenaCarrtas, ImprimeSolucao, ImprimeArquivo, Arquivo);
-	}
-	if( ImprimeSolucao == 1){
-		// escreve o makespan das plantas
-		printf ("\n  Makespan Geral das Plantas = %.4f\n", MakespanPLantas);
-	}
-	if( ImprimeArquivo == 1){
-		fprintf( Arquivo, "\n  Makespan Geral das Plantas = %.4f\n", MakespanPLantas);
-	}
-}
 
 // verifica se uma das plantas em questão pode atender a demanda em questão caso de atrazar o atendimento das outras demandas da construção que se quer atender
 int 	ConjuntoPlantas::VerificaPlantasAnalizadasPodemAtenderSeAtrasar(){
 	// percorre todas as plantas
 	for ( int p = 0; p < (int) Plantas.size(); p++){
 		// verifica se a planta corrente pode atender a demanda em questão caso se atrazar o atendiemnto das demandas posteriores a demanda em questão
-		if( PlantasAnalizadas[p] == -2){
+		if( Plantas[p].PlantasAnalizadas == -2){
 			// retorna 1 caso isso for possivel
 			return 1;
 		}
@@ -710,14 +698,12 @@ int 	ConjuntoPlantas::VerificaPlantasAnalizadasPodemAtenderSeAtrasar(){
 
 // inicializa os horarios que as plantas podem atender certa demanda e a cosntrução pode ser atendida, caso das outras demandas anteriores a esta forem atrazadas, com o valor DBL_MAX
 void 	ConjuntoPlantas::InicializaVetorHorarioQuePlantaPodeAtender(){
-	// inicia os vetores com o numero de plantas
-	HorarioQuePlantaPodeAtender.resize(Plantas.size());
-	HorarioQueConstrucaoPodeReceberDemanda.resize(Plantas.size());
+
 	// faz para toda planta
-	for(  int p = 0; p < (int) HorarioQuePlantaPodeAtender.size(); p++){
+	for(  int p = 0; p < (int) Plantas.size(); p++){
 		// inicia com o valor maximo de double o horario que a planta pode atender e a construção pode ser atendida
-		HorarioQuePlantaPodeAtender[p] 				= DBL_MAX;
-		HorarioQueConstrucaoPodeReceberDemanda[p]	= DBL_MAX;
+		Plantas[p].HorarioQuePlantaPodeAtender 				= DBL_MAX;
+		Plantas[p].HorarioQueConstrucaoPodeReceberDemanda	= DBL_MAX;
 	}
 }
 
@@ -729,9 +715,9 @@ double 	ConjuntoPlantas::RetornaMenorHorarioQueConstrucaoPodeReceberDemanda(){
 	// faz para toda planta
 	for( int p = 0; p < (int) Plantas.size(); p++){
 		// caso o horario que a cosntrução pode receber a demanda corrente for maior que o que a planta pode atender a demanda, entra no if
-		if( HorarioQueConstrucaoPodeReceberDemanda[p] < HoraAux){
+		if( Plantas[p].HorarioQueConstrucaoPodeReceberDemanda < HoraAux){
 			// atualiza o menor horario que a cosntrução pode receber a demanda
-			HoraAux = HorarioQueConstrucaoPodeReceberDemanda[p];
+			HoraAux = Plantas[p].HorarioQueConstrucaoPodeReceberDemanda;
 		}
 	}
 	// retorna o menor horario que a demanda pode ser atendida
@@ -844,26 +830,7 @@ void 	ConjuntoPlantas::OrdenaPlantas( int EscolhaPlanta){
 	Imprime = 0;
 
 
-	// estrutura de armazenamento dos dados das plantas
-	vector < vector < int > > 		EstruturaMemoriaInt;
-	vector < vector < double > > 	EstruturaMemoriaDouble;
 
-	// armazenamento dos dados das plantas
-	EstruturaMemoriaInt.resize(2);
-	EstruturaMemoriaInt[0].resize( (int) Plantas.size() );
-	EstruturaMemoriaInt[1].resize( (int) Plantas.size() );
-	EstruturaMemoriaDouble.resize(2);
-	EstruturaMemoriaDouble[0].resize( (int) Plantas.size() );
-	EstruturaMemoriaDouble[1].resize( (int) Plantas.size() );
-
-
-// armazena os dados das planats antes da ordenação
-	for( int p = 0; p < (int) Plantas.size(); p++){
-		EstruturaMemoriaInt[0][p] = Plantas[p].NumeroDaPlanta;
-		EstruturaMemoriaInt[1][p] = PlantasAnalizadas[p];
-		EstruturaMemoriaDouble[0][p] = HorarioQuePlantaPodeAtender[p];
-		EstruturaMemoriaDouble[1][p] = HorarioQueConstrucaoPodeReceberDemanda[p];
-	}
 
 	if( EscolhaPlanta == 2){
 		// ordena baseado no menor rank
@@ -906,16 +873,7 @@ void 	ConjuntoPlantas::OrdenaPlantas( int EscolhaPlanta){
 		}
 	}
 
-// recoloca os dados das planats nas plantas respectivas apos a ordenação
-	for( int p1 = 0; p1 < (int) Plantas.size(); p1++){
-		for( int p2 = 0; p2 < (int) Plantas.size(); p2++){
-			if( Plantas[p1].NumeroDaPlanta == EstruturaMemoriaInt[0][p2]){
-				PlantasAnalizadas[p1] = EstruturaMemoriaInt[1][p2];
-				HorarioQuePlantaPodeAtender[p1] = EstruturaMemoriaDouble[0][p2];
-				HorarioQueConstrucaoPodeReceberDemanda[p1] = EstruturaMemoriaDouble[1][p2];
-			}
-		}
-	}
+
 
 }
 
@@ -928,6 +886,54 @@ void 	ConjuntoPlantas::ArmazenaVetorIntComOrdem( vector < int > &VetorOrdem){
 		VetorOrdem[p] = Plantas[p].NumeroDaPlanta;
 	}
 }
+
+// Imprime os dados das plantas
+void 	ConjuntoPlantas::Imprime(int OrdenaPlantas,int OrdenaCarrtas , int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo){
+	if( ImprimeSolucao == 1){
+		cout << endl << endl << " [[[[[[  Imprime plantas  ]]]]]]" << endl;
+	}
+	if( ImprimeArquivo == 1){
+		fprintf( Arquivo, "\n\n  [[[[[[  Imprime plantas  ]]]]]]\n");
+	}
+	// percorre todas as plantas
+	for( int p = 0; p < (int) Plantas.size(); p++){
+		// imprime a planta corrente
+		Plantas[p].Imprime(OrdenaPlantas, OrdenaCarrtas, ImprimeSolucao, ImprimeArquivo, Arquivo);
+	}
+	if( ImprimeSolucao == 1){
+		// escreve o makespan das plantas
+		printf ("\n  Makespan Geral das Plantas = %.4f\n", MakespanPLantas);
+	}
+	if( ImprimeArquivo == 1){
+		fprintf( Arquivo, "\n  Makespan Geral das Plantas = %.4f\n", MakespanPLantas);
+	}
+}
+
+
+void 	ConjuntoPlantas::ImprimeHorariosPlantasPodemAtender(){
+
+	cout << endl << endl <<  " SituacaoPlantaAtenderCasoAtrasar" << endl;
+	// passa por todas as plantas
+	for( int p = 0; p < (int) Plantas.size(); p++){
+		cout << p << " [" << Plantas[p].PlantasAnalizadas << "] ";
+	}
+	cout << endl;
+
+	cout <<   " HorarioQuePlantaPodeAtender" << endl;
+	// passa por todas as plantas
+	for( int p = 0; p < (int) Plantas.size(); p++){
+		cout << p << " [" << Plantas[p].HorarioQuePlantaPodeAtender << "] ";
+	}
+	cout << endl;
+
+	cout <<   " HorarioQueConstrucaoPodeReceberDemanda" << endl;
+	// passa por todas as plantas
+	for( int p = 0; p < (int) Plantas.size(); p++){
+		cout << p << " [" << Plantas[p].HorarioQueConstrucaoPodeReceberDemanda << "] ";
+	}
+	cout << endl;
+}
+
 // destruidora
 ConjuntoPlantas::~ConjuntoPlantas(){
 

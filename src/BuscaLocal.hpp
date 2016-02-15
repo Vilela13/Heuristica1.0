@@ -70,7 +70,7 @@ int BuscaLocal::SelecionaConstrucao( int &ConstrucaoEscolhida, int &IndiceConstr
 	// passa por todas as construções
 	for( int c = 0; c < NE; c++){
 		// verifica se a construção ainda pode ser analisada
-		if( ConstrucoesInstancia.ConstrucoesAnalizadas[c] == 0){
+		if( ConstrucoesInstancia.Construcoes[c].ConstrucaoAnalizada == 0){
 			// armazena os dados da cosntrução corrente
 			ConstrucaoEscolhida = ConstrucoesInstancia.Construcoes[c].NumeroDaConstrucao;
 			IndiceConstrucaoEscolhida = c;
@@ -91,7 +91,7 @@ int BuscaLocal::RetornaConstrucaoQuePodeSerAtendida( int &Construcao, int &Indic
 	// passa por todas as cosntruções
 	for( int c = 0; c < (int)  NE; c++){
 		// Seleciona a construção que não possui todas as suas demandas já atendidas e que ainda não foi analisada
-		if(ConstrucoesInstancia.Construcoes[c].StatusAtendimento < ConstrucoesInstancia.Construcoes[c].NumeroDemandas &&  ConstrucoesInstancia.ConstrucaoPodeSerSuprida[c] == 0){
+		if(ConstrucoesInstancia.Construcoes[c].StatusAtendimento < ConstrucoesInstancia.Construcoes[c].NumeroDemandas &&  ConstrucoesInstancia.Construcoes[c].ConstrucaoPodeSerSuprida == 0){
 			// atuaiza os dados da construção com menor rank, seu número ou seu indice
 			Construcao = ConstrucoesInstancia.Construcoes[c].NumeroDaConstrucao;
 			IndiceConstrucao = c;
@@ -178,7 +178,7 @@ int BuscaLocal::BuscaLocalTentaRealizarTarefasComOutosVeiculos(int EscolhaVeicul
 	MakespanAnterior = CalculaMakespanSolucao();
 
 	// enquanto tiver uma construção que ainda possa ser analisada se continua no while
-	while( VerificaSeTemUmValorVetorInt( 0, ConstrucoesInstancia.ConstrucoesAnalizadas ) == 1){
+	while( ConstrucoesInstancia.VerificaTemConstrucaoParaAnalisar() == 1){
 
 // retira tarefa realizad pela solução inicial
 
@@ -333,7 +333,7 @@ int BuscaLocal::BuscaLocalTentaRealizarTarefasComOutosVeiculos(int EscolhaVeicul
 
 		}
 		// marca a solução corrente como já analisada
-		ConstrucoesInstancia.ConstrucoesAnalizadas[IndiceConstrucaoEscolhida] = 1;
+		ConstrucoesInstancia.Construcoes[IndiceConstrucaoEscolhida].ConstrucaoAnalizada = 1;
 	}
 
 
@@ -717,7 +717,7 @@ int BuscaLocal::BuscaLocalTrocaPlantaAtendimento(int EscolhaVeiculo, int Escolha
 									// marca as construções que possuem demandas que ainda não foram atendidas como candidadtas a serem avaliadas para o atenidmento de suas demandas
 									ConstrucoesInstancia.AlocaValoresConstrucaoPodeAtender();
 									// caso se tenha uma construção que ainda possa ter uma demanda atendida e se tenha conseguido atender a ultima demanda analisada, se entra no while. Este processo é realizado até que todas as demnadas tenham sido atendidas ou não se consiga se recolocar alguma demanda que foi desalocada.
-									while( VerificaTodosValoresVetorInt( 1, ConstrucoesInstancia.ConstrucaoPodeSerSuprida) == 0 && ReadicionouDemanda == 1){
+									while( ConstrucoesInstancia.VerificaSeTodasConstrucaoPodeSerSupridaForamAnalisadas() == 0 && ReadicionouDemanda == 1){
 										// se armazena os dados da construção mais proeminente a se ter uma demanda reinserida no momento
 										if( RetornaConstrucaoQuePodeSerAtendida(  ConstrucaoAtender, IndiceConstrucaoAtender) == 0){
 											cout << endl << endl << " <<<<<<<<<<<<  Problema em encontrar construção  >>>>>>>>>>>>> " << endl << endl;

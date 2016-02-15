@@ -220,9 +220,6 @@ void	Heuristica::ExecutaVNS(string NomeInstancia, int EscolhaVeiculo, int Escolh
 		// caso não escreve está mensagem
 		cout <<  endl << endl <<  endl << endl <<  "  Fudeu muito " <<  endl << endl <<  endl << endl;
 		cin >> ParaPrograma;
-	}else{
-		// caso sim se marca que se irá escrever no arquivo os dados da execução
-		ImprimeArquivo = 1;
 	}
 
 	// coleta a data e a hora
@@ -574,7 +571,7 @@ void	Heuristica::ExecutaGrasp(string NomeInstancia, int NumeroIteracoes, int Esc
 	ImprimeViabilizacao = 0;
 
 	int ImprimeBusca;
-	ImprimeBusca = 1;
+	ImprimeBusca = 0;
 
 	// Exscrever a dadta
 	 time_t timer;
@@ -658,9 +655,6 @@ void	Heuristica::ExecutaGrasp(string NomeInstancia, int NumeroIteracoes, int Esc
 		// caso não escreve está mensagem
 		cout <<  endl << endl <<  endl << endl <<  "  Fudeu muito " <<  endl << endl <<  endl << endl;
 		cin >> ParaPrograma;
-	}else{
-		// caso sim se marca que se irá escrever no arquivo os dados da execução
-		ImprimeArquivo = 1;
 	}
 
 	// coleta a data e a hora
@@ -692,7 +686,7 @@ void	Heuristica::ExecutaGrasp(string NomeInstancia, int NumeroIteracoes, int Esc
 
 		SolucaoCorrente = new Solucao;
 
-		SolucaoCorrente->CarregaSolucao(NP, PlantasInstancia, NE, ConstrucoesInstancia, NV, Velocidade, TempoDeVidaConcreto);
+		SolucaoCorrente->CarregaSolucao(Prod1->NP, Prod1->PlantasInstancia, Prod1->NE, Prod1->ConstrucoesInstancia, Prod1->NV, Prod1->Velocidade, Prod1->TempoDeVidaConcreto);
 
 		free(Prod1);
 
@@ -708,9 +702,9 @@ void	Heuristica::ExecutaGrasp(string NomeInstancia, int NumeroIteracoes, int Esc
 		SolucaoCorrente->ConstrucoesInstancia.OrdenaCosntrucoes(EscolhaConstrucao);
 
 		if( SolucaoCorrente->ConstrucoesInstancia.NivelDeInviabilidade != 0){
-			SolucaoCorrente->ProcessoViabilizacao1( EscolhaVeiculo, EscolhaConstrucao, EscolhaPlanta, ImprimeViabilizacao, ImprimeSolucao, 0, Arquivo, RealizaProcessoDeAtrazarTarefas);
+			SolucaoCorrente->ProcessoViabilizacao1( EscolhaVeiculo, EscolhaConstrucao, EscolhaPlanta, ImprimeViabilizacao, ImprimeSolucao, ImprimeArquivo, Arquivo, RealizaProcessoDeAtrazarTarefas);
 			if( SolucaoCorrente->ConstrucoesInstancia.NivelDeInviabilidade != 0){
-				SolucaoCorrente->ProcessoViabilizacao2( EscolhaVeiculo, EscolhaConstrucao, EscolhaPlanta, ImprimeViabilizacao, ImprimeSolucao, 0, Arquivo, RealizaProcessoDeAtrazarTarefas);
+				SolucaoCorrente->ProcessoViabilizacao2( EscolhaVeiculo, EscolhaConstrucao, EscolhaPlanta, ImprimeViabilizacao, ImprimeSolucao, ImprimeArquivo, Arquivo, RealizaProcessoDeAtrazarTarefas);
 				if( SolucaoCorrente->ConstrucoesInstancia.NivelDeInviabilidade == 0){
 					SolucaoCorrente->CalculaMakespan();
 					fprintf(Arquivo," ------ \t %f \t", SolucaoCorrente->Makespan);
@@ -726,13 +720,13 @@ void	Heuristica::ExecutaGrasp(string NomeInstancia, int NumeroIteracoes, int Esc
 		}
 
 		if( SolucaoCorrente->ConstrucoesInstancia.NivelDeInviabilidade == 0){
-			SolucaoCorrente->RealizarBuscaLocalCaminhao(EscolhaVeiculo, EscolhaConstrucao, EscolhaPlanta, ImprimeBusca, ImprimeSolucao, 0, Arquivo, RealizaProcessoDeAtrazarTarefas);
+			SolucaoCorrente->RealizarBuscaLocalCaminhao(EscolhaVeiculo, EscolhaConstrucao, EscolhaPlanta, ImprimeBusca, ImprimeSolucao, ImprimeArquivo, Arquivo, RealizaProcessoDeAtrazarTarefas);
 			SolucaoCorrente->CalculaMakespan();
 			fprintf(Arquivo,"         %f \t", SolucaoCorrente->Makespan);
-			SolucaoCorrente->RealizarBuscaLocalConstrucao(EscolhaVeiculo, EscolhaConstrucao, EscolhaPlanta,ImprimeBusca, ImprimeSolucao, 0, Arquivo, RealizaProcessoDeAtrazarTarefas);
+			SolucaoCorrente->RealizarBuscaLocalConstrucao(EscolhaVeiculo, EscolhaConstrucao, EscolhaPlanta,ImprimeBusca, ImprimeSolucao, ImprimeArquivo, Arquivo, RealizaProcessoDeAtrazarTarefas);
 			SolucaoCorrente->CalculaMakespan();
 			fprintf(Arquivo,"         %f \t", SolucaoCorrente->Makespan);
-			SolucaoCorrente->RealizarBuscaLocalPlanta(EscolhaVeiculo, EscolhaConstrucao, EscolhaPlanta,ImprimeBusca, ImprimeSolucao, 0, Arquivo, RealizaProcessoDeAtrazarTarefas);
+			SolucaoCorrente->RealizarBuscaLocalPlanta(EscolhaVeiculo, EscolhaConstrucao, EscolhaPlanta,ImprimeBusca, ImprimeSolucao, ImprimeArquivo, Arquivo, RealizaProcessoDeAtrazarTarefas);
 			SolucaoCorrente->CalculaMakespan();
 			fprintf(Arquivo,"         %f \n", SolucaoCorrente->Makespan);
 		}else{

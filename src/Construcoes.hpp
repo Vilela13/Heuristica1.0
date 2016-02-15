@@ -106,6 +106,10 @@ public:
 	vector < Descarregamento > Descarregamentos;
 	double	Makespan;
 
+	int ConstrucaoAnalizada;
+	int ConstrucaoPodeSerSuprida;
+	int ConstrucaoComDemandasNaoAtendidas;
+
 	Construcao();
 	void	CalculaRankTempoDemandas(int comentarios);					// Calcula o rank que decide qual construção será atendida inicialmente
 	int		VerificaDisponibilidade( double InicioPossivelAlocacao, double FinalPossivelAlocacao);				// Verifica se da para colocar a demanda na construção, ela sinaliza se caso atrazar as demandas sejá possivel alocar a demanda.
@@ -155,6 +159,9 @@ Construcao::Construcao(){
 	StatusAtendimento 	= 0;
 	Descarregamentos.clear();
 	Makespan = -13;
+	ConstrucaoAnalizada = -13;
+	ConstrucaoPodeSerSuprida = -13;
+	ConstrucaoComDemandasNaoAtendidas = -13;
 }
 
 // Calcula o rank que decide qual construção será atendida inicialmente
@@ -1241,7 +1248,7 @@ void	Construcao::EncontraPlanta(  int& NumPlantaAnalisando, int EscolhaPlanta, C
 		for( int p = 0; p < (int) Plantas.Plantas.size(); p++){
 			if( DistanciaConstrucaoPlanta > DistanciaPlantas[p].Distancia){
 				// planta que ainda não foi analisada
-				if( Plantas.PlantasAnalizadas[p] == 0){
+				if( Plantas.Plantas[p].PlantasAnalizadas == 0){
 					// passa o numero da planta escolhida
 					NumPlantaAnalisando = p;
 					// atualiza a distancia da planta mais proxima a construção
@@ -1261,7 +1268,7 @@ void	Construcao::EncontraPlanta(  int& NumPlantaAnalisando, int EscolhaPlanta, C
 		Plantas.OrdenaPlantas( EscolhaPlanta);
 		// percorre todas as plantas
 		for( int p = 0; p < (int) Plantas.Plantas.size(); p++){
-			if( Plantas.PlantasAnalizadas[p] == 0){
+			if( Plantas.Plantas[p].PlantasAnalizadas == 0){
 				// passa o numero da planta escolhida
 				NumPlantaAnalisando = p;
 				return;
@@ -1273,7 +1280,7 @@ void	Construcao::EncontraPlanta(  int& NumPlantaAnalisando, int EscolhaPlanta, C
 		Plantas.OrdenaPlantas( EscolhaPlanta);
 		// percorre todas as plantas
 		for( int p = 0; p < (int) Plantas.Plantas.size(); p++){
-			if( Plantas.PlantasAnalizadas[p] == 0){
+			if( Plantas.Plantas[p].PlantasAnalizadas == 0){
 				// passa o numero da planta escolhida
 				NumPlantaAnalisando = p;
 				return;
@@ -1285,7 +1292,7 @@ void	Construcao::EncontraPlanta(  int& NumPlantaAnalisando, int EscolhaPlanta, C
 		Plantas.OrdenaPlantas( EscolhaPlanta);
 		// percorre todas as plantas
 		for( int p = 0; p < (int) Plantas.Plantas.size(); p++){
-			if( Plantas.PlantasAnalizadas[p] == 0){
+			if( Plantas.Plantas[p].PlantasAnalizadas == 0){
 				// passa o numero da planta escolhida
 				NumPlantaAnalisando = p;
 				return;
@@ -1372,13 +1379,13 @@ int		Construcao::AlocaAtividadeComHorarioFinalAtendimento( int NumDemanda, doubl
 									//cout <<  "                     Caso atrazar da para alocar, demanda em analise [" << NumeroDaConstrucao << "-" << NumDemanda << "] no horario " << HorarioChegaContrucao << endl;
 
 									// caso a planta ainda não foi analisada, entra no if
-									if( Plantas.HorarioQueConstrucaoPodeReceberDemanda[IndPlantaAnalisando] > HorarioChegaContrucao){
+									if( Plantas.Plantas[IndPlantaAnalisando].HorarioQueConstrucaoPodeReceberDemanda > HorarioChegaContrucao){
 										// atualiza a hora de inicio que a planta pode atender a demanda e a construção pode ser atendida
-										Plantas.HorarioQuePlantaPodeAtender[IndPlantaAnalisando] = HorarioInicioPlanta;
-										Plantas.HorarioQueConstrucaoPodeReceberDemanda[IndPlantaAnalisando] = HorarioChegaContrucao;
+										Plantas.Plantas[IndPlantaAnalisando].HorarioQuePlantaPodeAtender = HorarioInicioPlanta;
+										Plantas.Plantas[IndPlantaAnalisando].HorarioQueConstrucaoPodeReceberDemanda = HorarioChegaContrucao;
 									}
 									// marca no vetor de estado da planta para o atendiemnto  que a planta corrente pode atender a demanda caso se atrase as demandas atendidas anteriormente a demanda corrente na construção
-									Plantas.PlantasAnalizadas[IndPlantaAnalisando] = -2;
+									Plantas.Plantas[IndPlantaAnalisando].PlantasAnalizadas = -2;
 									// se coloca o limite de tempo que a planta pode atender a demanda na variavel para se sair do loop
 									HorarioInicioPlanta = Plantas.Plantas[IndPlantaAnalisando].TempoMaximoDeFuncionamento + IntervaloDeTempo;
 								}
@@ -1389,19 +1396,13 @@ int		Construcao::AlocaAtividadeComHorarioFinalAtendimento( int NumDemanda, doubl
 					HorarioInicioPlanta = HorarioInicioPlanta + IntervaloDeTempo;
 				}
 			}
-			if (Plantas.PlantasAnalizadas[IndPlantaAnalisando] != -2){
-				Plantas.PlantasAnalizadas[IndPlantaAnalisando] = 1;
+			if (Plantas.Plantas[IndPlantaAnalisando].PlantasAnalizadas != -2){
+				Plantas.Plantas[IndPlantaAnalisando].PlantasAnalizadas = 1;
 			}
 		}
 
 		if( imprime == 1){
-			cout << endl << endl <<  " SituacaoPlantaAtenderCasoAtrasar" << endl;
-			ImprimeVetorInt(  Plantas.PlantasAnalizadas );
-			cout <<   " HorarioQuePlantaPodeAtender" << endl;
-			ImprimeVetorDouble(  Plantas.HorarioQuePlantaPodeAtender);
-			cout <<   " HorarioQueConstrucaoPodeReceberDemanda" << endl;
-			ImprimeVetorDouble(  Plantas.HorarioQueConstrucaoPodeReceberDemanda);
-			cout << endl;
+			Plantas.ImprimeHorariosPlantasPodemAtender();
 		}
 
 		// caso se dê para atender caso atrazar os otros atendiemntos se enra na função
@@ -1773,11 +1774,6 @@ public:
 
 	vector< Construcao > Construcoes;
 	int 	NumeroConstrucoes;
-	vector < int > ConstrucoesAnalizadas;
-
-	vector < int > ConstrucaoPodeSerSuprida;
-
-	vector < int > ConstrucoesComDemandasNaoAtendidas;
 
 	double	MakespanConstrucoes;
 	int 	NivelDeInviabilidade;
@@ -1791,7 +1787,6 @@ public:
 
 	void 	CalculaMakespansConstrucoes();											// Calcula o Makespan das Construções
 	int 	RetornaIndiceConstrucao(int Construcao, int& Indice, string frase);		// retorna o indice da construção passada
-	void 	ImprimeContrucoes(ConjuntoPlantas& Plantas, int VerificaViabilidade ,  int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo);	// Imprime as construções e em seguida o nivel de inviabilidade
 
 	int 	VerificacaoIntegridadeDeDescarregamentosConstrucoes(int imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo);		// faz a verificação dos descarregaemntos
 	int 	VerificaIndividualmenteDemandas(ConjuntoPlantas& Plantas, int imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo);	// verifica se as tarefas são integras
@@ -1809,8 +1804,11 @@ public:
 	void 	AlocaValoresConstrucaoPodeAtender();		// Marca se precisa analisar a construção. Aloca 1 se a construção já teve todas as demandas atendidas, 0 as que não
 	void 	AtualizaValoresConstrucaoPodeAtender();	// Atualiza com 1 se a construção já teve todas as demandas atendidas
 	int 	VerificaConstrucaoPodeAtender();			// Verifica se existe uma demanda que ainda pode ser analisada pelo algoritmo
+	int 	VerificaSeTodasConstrucaoPodeSerSupridaForamAnalisadas();
 
-	void 	AlocaValoresConstrucoesAnalizadas( int IndiceConstrucaoNaoAtendida );			// 		Coloca o status 2 para as construções que já foram atendidas, e coloca 3 no status da construção passada como parametro
+	void 	AlocaValoresConstrucoesAnalizadas( int IndiceConstrucaoNaoAtendida );		// 		Coloca o status 2 para as construções que já foram atendidas, e coloca 3 no status da construção passada como parametro
+	int 	VerificaTemConstrucaoParaAnalisar();
+
 	int 	RetornaDadosDemandaAtendida( int Construcao, int Demanda,  int &NumPlanta, int &NumCarreta, double &HorarioInicioDescarregamento, double &HorarioFinalDescarregamento, double &HorarioInicioCarregamento, double &HorarioFinalCarregamento, double &HorarioInicioDeslocamento, double &HorarioFinalDeslocamento, ConjuntoPlantas& Plantas);		// retorna dados de uma tarefa que atende uma demanda passada na função
 	int 	VerificaIntegridaDeDemandaAtendida( int Construcao, int Demanda, int NumPlanta, int NumCarreta, double HorarioInicioDescarregamento, double HorarioFinalDescarregamento, double HorarioInicioCarregamento, double HorarioFinalCarregamento, double HorarioInicioDeslocamento, double HorarioFinalDeslocamento, int imprime,  int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo);		// verifica a integridade da tarefa
 
@@ -1826,6 +1824,9 @@ public:
 	void 	InicializaConstrucoesComDemandasNaoAtendidas( int Construcao, int Imprime);				// marca as construções com demandas não atendidas que pode ser atendidas
 	int 	ExisteConstrucaoComDemandaNaoAtendida( int &Construcao, int &Demanda, int Imprime);			// escolhe a construção que possui demandas não atendidas e que será atendida
 
+	void 	ImprimeContrucoes(ConjuntoPlantas& Plantas, int VerificaViabilidade ,  int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo);	// Imprime as construções e em seguida o nivel de inviabilidade
+	void	ImprimeConstrucoesComDemandasNaoAtendidas();
+
 	~ConjuntoConstrucoes();						// Destruidora da classe
 };
 
@@ -1837,12 +1838,11 @@ ConjuntoConstrucoes::ConjuntoConstrucoes(){
 
 // Inicializa o status das cosntruções todos como 0
 void 	ConjuntoConstrucoes::InicializaConstrucoesAnalizadas(){
-	// inicia o vetor de construções analisadas
-	ConstrucoesAnalizadas.resize(Construcoes.size());
+
 	// percorre por todas as construções
 	for( int c = 0; c < (int) Construcoes.size(); c++){
 		// inicia como não analisada, ou com o status 0
-		ConstrucoesAnalizadas[c] = 0;
+		Construcoes[c].ConstrucaoAnalizada = 0;
 	}
 }
 
@@ -1864,22 +1864,18 @@ void 	ConjuntoConstrucoes::IniciaConjuntoConstrucoes(int Numero){
 	// aloca o numero de construções
 	NumeroConstrucoes = Numero;
 
-	// inicia o vetor de construções analisadas como 0
-	ConstrucoesAnalizadas.resize(Numero);
 	for( int i = 0; i < Numero; i++){
-		ConstrucoesAnalizadas[i] = 0;
+		Construcoes[i].ConstrucaoAnalizada = 0;
 	}
 
 	// inicia o vetor de construções pode ser suprida como 0
-	ConstrucaoPodeSerSuprida.resize(Numero);
 	for( int i = 0; i < Numero; i++){
-		ConstrucaoPodeSerSuprida[i] = 0;
+		Construcoes[i].ConstrucaoPodeSerSuprida = 0;
 	}
 
 	// inicia o vetor de construções com demandas não atendidas como 0
-	ConstrucoesComDemandasNaoAtendidas.resize(Numero);
 	for( int i = 0; i < Numero; i++){
-		ConstrucoesComDemandasNaoAtendidas[i] = 0;
+		Construcoes[i].ConstrucaoComDemandasNaoAtendidas = 0;
 	}
 
 }
@@ -1914,31 +1910,6 @@ int 	ConjuntoConstrucoes::RetornaIndiceConstrucao(int Construcao, int& Indice, s
 	cout << frase << endl << endl;
 	// retorna 0, não encontrou a construção que se quer
 	return 0;
-}
-
-// Imprime as construções e em seguida o nivel de inviabilidade
-void 	ConjuntoConstrucoes::ImprimeContrucoes(ConjuntoPlantas& Plantas, int VerificaViabilidade ,  int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo){
-	if( ImprimeSolucao == 1){
-		cout << endl << endl << " [[[[[[  Imprime construcoes  ]]]]]]" << endl;
-	}
-	if( ImprimeArquivo == 1){
-		fprintf( Arquivo, "\n\n [[[[[[  Imprime construcoes  ]]]]]] \n ");
-	}
-	// percorre todas as cosntruções
-	for(int c = 0; c < NumeroConstrucoes; c++){
-		// iomprime a construção corrente
-		Construcoes[c].ImprimeContrucao( ImprimeSolucao,ImprimeArquivo, Arquivo);
-	}
-	if( ImprimeSolucao == 1){
-		printf( " Nivel de Inviabilidade = %d  \n \n Makespan Geral das Construcoes = %f\n", NivelDeInviabilidade, MakespanConstrucoes);
-	}
-	if( ImprimeArquivo == 1){
-		fprintf( Arquivo, " Nivel de Inviabilidade = %d  \n \n Makespan Geral das Construcoes = %f\n", NivelDeInviabilidade, MakespanConstrucoes);
-	}
-	// imprime a verificação de viabilidade caso for pedida na função
-	if( VerificaViabilidade == 1){
-		VerificacaoConsistenciaTarefas(Plantas, 1, ImprimeSolucao,ImprimeArquivo, Arquivo);
-	}
 }
 
 
@@ -2227,17 +2198,16 @@ void 	ConjuntoConstrucoes::MarcaTarefaNaoRemovidaNoVetor(int Construcao, int Dem
 
 // Marca se precisa analisar a construção. Aloca 1 se a construção já teve todas as demandas atendidas, 0 as que não
 void 	ConjuntoConstrucoes::AlocaValoresConstrucaoPodeAtender(){
-	// inicia a estrutura de pode avaliar com o numero de construções
-	ConstrucaoPodeSerSuprida.resize(NumeroConstrucoes);
+
 	// percorre todas as construções
 	for( int c = 0; c < NumeroConstrucoes; c++){
 		// entra caso a cosntrução já tenha todas as suas demandas atendidas
 		if ( Construcoes[c].NumeroDemandas == Construcoes[c].StatusAtendimento){
 			// marca que não precisa avaliar a cosntrução corrente
-			ConstrucaoPodeSerSuprida[c] = 1;
+			Construcoes[c].ConstrucaoPodeSerSuprida = 1;
 		}else{
 			// marca que precisa avaliar a cosntrução corrente
-			ConstrucaoPodeSerSuprida[c] = 0;
+			Construcoes[c].ConstrucaoPodeSerSuprida = 0;
 		}
 	}
 
@@ -2251,7 +2221,7 @@ void 	ConjuntoConstrucoes::AtualizaValoresConstrucaoPodeAtender(){
 		// caso todas as demandas da construção tenha suas demandas já atendidas entra
 		if ( Construcoes[c].NumeroDemandas == Construcoes[c].StatusAtendimento){
 			// marca que não precisa analisar a construção corrente
-			ConstrucaoPodeSerSuprida[c] = 1;
+			Construcoes[c].ConstrucaoPodeSerSuprida = 1;
 		}
 	}
 
@@ -2263,7 +2233,7 @@ int 	ConjuntoConstrucoes::VerificaConstrucaoPodeAtender(){
 	// percorre todas as construções
 	for( int c = 0; c < NumeroConstrucoes; c++){
 		// caso a construção corrente ainda possa ser analisada
-		if( ConstrucaoPodeSerSuprida[c] == 0){
+		if( Construcoes[c].ConstrucaoPodeSerSuprida == 0){
 			// caso ela possa ser analisada retorna 1
 			return 1;
 		}
@@ -2273,6 +2243,19 @@ int 	ConjuntoConstrucoes::VerificaConstrucaoPodeAtender(){
 
 }
 
+int 	ConjuntoConstrucoes::VerificaSeTodasConstrucaoPodeSerSupridaForamAnalisadas(){
+	// percorre todas as construções
+	for( int c = 0; c < NumeroConstrucoes; c++){
+		// caso a construção corrente ainda possa ser analisada
+		if( Construcoes[c].ConstrucaoPodeSerSuprida != 1){
+			return 0;
+		}
+	}
+	return 1;
+
+}
+
+
 // 		Coloca o status 2 para as construções que já foram atendidas, e coloca 3 no status da construção passada como parametro
 
 void 	ConjuntoConstrucoes::AlocaValoresConstrucoesAnalizadas( int IndiceConstrucaoNaoAtendida){
@@ -2281,13 +2264,24 @@ void 	ConjuntoConstrucoes::AlocaValoresConstrucoesAnalizadas( int IndiceConstruc
 		// caso a cosntruçaõ já tenha tido todas as suas demandas atendidas
 		if( Construcoes[c].StatusAtendimento == Construcoes[c].NumeroDemandas ){
 			// coloca o valor 2
-			ConstrucoesAnalizadas[c] = 2;
+			Construcoes[c].ConstrucaoAnalizada = 2;
 		}
 	}
 	// coloca o valor 3 na construção que foi passada na função
-	ConstrucoesAnalizadas[IndiceConstrucaoNaoAtendida] = 3;
+	Construcoes[IndiceConstrucaoNaoAtendida].ConstrucaoAnalizada = 3;
 
 }
+
+int 	ConjuntoConstrucoes::VerificaTemConstrucaoParaAnalisar(){
+	// percorre todas as construções
+	for ( int c = 0; c < NumeroConstrucoes; c++){
+		if( Construcoes[c].ConstrucaoAnalizada == 0){
+			return 1;
+		}
+	}
+	return 0;
+}
+
 
 // retorna dados de uma tarefa que atende uma demanda passada na função
 
@@ -2484,7 +2478,7 @@ void 	ConjuntoConstrucoes::EncontraPlanta( int c, int& NumPlantaAnalisando,int E
 		for( int p = 0; p < (int) PlantasInstancia.Plantas.size(); p++){
 			if( DistanciaConstrucaoPlanta > Construcoes[c].DistanciaPlantas[p].Distancia){
 				// planta que ainda não foi analisada
-				if( PlantasInstancia.PlantasAnalizadas[p] == 0){
+				if( PlantasInstancia.Plantas[p].PlantasAnalizadas == 0){
 					// passa o numero da planta escolhida
 					NumPlantaAnalisando = p;
 					// atualiza a distancia da planta mais proxima a construção
@@ -2504,7 +2498,7 @@ void 	ConjuntoConstrucoes::EncontraPlanta( int c, int& NumPlantaAnalisando,int E
 		PlantasInstancia.OrdenaPlantas( EscolhaPlanta);
 		// percorre todas as plantas
 		for( int p = 0; p < (int) PlantasInstancia.Plantas.size(); p++){
-			if( PlantasInstancia.PlantasAnalizadas[p] == 0){
+			if( PlantasInstancia.Plantas[p].PlantasAnalizadas == 0){
 				// passa o numero da planta escolhida
 				NumPlantaAnalisando = p;
 				return;
@@ -2516,7 +2510,7 @@ void 	ConjuntoConstrucoes::EncontraPlanta( int c, int& NumPlantaAnalisando,int E
 		PlantasInstancia.OrdenaPlantas( EscolhaPlanta);
 		// percorre todas as plantas
 		for( int p = 0; p < (int) PlantasInstancia.Plantas.size(); p++){
-			if( PlantasInstancia.PlantasAnalizadas[p] == 0){
+			if( PlantasInstancia.Plantas[p].PlantasAnalizadas == 0){
 				// passa o numero da planta escolhida
 				NumPlantaAnalisando = p;
 				return;
@@ -2528,7 +2522,7 @@ void 	ConjuntoConstrucoes::EncontraPlanta( int c, int& NumPlantaAnalisando,int E
 		PlantasInstancia.OrdenaPlantas( EscolhaPlanta);
 		// percorre todas as plantas
 		for( int p = 0; p < (int) PlantasInstancia.Plantas.size(); p++){
-			if( PlantasInstancia.PlantasAnalizadas[p] == 0){
+			if( PlantasInstancia.Plantas[p].PlantasAnalizadas == 0){
 				// passa o numero da planta escolhida
 				NumPlantaAnalisando = p;
 				return;
@@ -2658,13 +2652,13 @@ int 	ConjuntoConstrucoes::AdicionaTarefa( int VerificaExistencia, int Construcao
 										if( DisponibilidadeConstrucao == -2){
 
 											// caso for  aprimeira vez que se verifique a valor -2 para a DisponibilidadeConstrução, se atualiza os hoarios iniciais tanto na planta e na construção que a planta corrente pode vir a atender a construção
-											if(  PlantasInstancia.HorarioQueConstrucaoPodeReceberDemanda[ p ] > HorarioChegaContrucao){
-												PlantasInstancia.HorarioQuePlantaPodeAtender[ p ] = HorarioInicioPlanta;
-												PlantasInstancia.HorarioQueConstrucaoPodeReceberDemanda[ p ] = HorarioChegaContrucao;
+											if(  PlantasInstancia.Plantas[ p ].HorarioQueConstrucaoPodeReceberDemanda > HorarioChegaContrucao){
+												PlantasInstancia.Plantas[ p ].HorarioQuePlantaPodeAtender = HorarioInicioPlanta;
+												PlantasInstancia.Plantas[ p ].HorarioQueConstrucaoPodeReceberDemanda = HorarioChegaContrucao;
 											}
 
 											// se atualiza a situação da planta corrente com -2 e coloca o tempo de inicio da planta como o tempo maximo de funcionamento da planta para se forçar sair do loop do while
-											PlantasInstancia.PlantasAnalizadas[ p ] = -2;
+											PlantasInstancia.Plantas[ p ].PlantasAnalizadas = -2;
 											// se coloca o limite de tempo que a planta pode atender a demanda na variavel para se sair do loop
 											HorarioInicioPlanta = PlantasInstancia.Plantas[ p ].TempoMaximoDeFuncionamento + IntervaloDeTempo;
 
@@ -2690,18 +2684,12 @@ int 	ConjuntoConstrucoes::AdicionaTarefa( int VerificaExistencia, int Construcao
 				}
 
 				// caso a planta não tenha sido assinalada com -2, que ela pode atender a demanda caso atraze as outras demandas anteriores, se marca a planta com 1 para sinalizar que ela não consegue atender a está demanda.
-				if (PlantasInstancia.PlantasAnalizadas[ p ] != -2){
-					PlantasInstancia.PlantasAnalizadas[ p ] = 1;
+				if (PlantasInstancia.Plantas[ p ].PlantasAnalizadas != -2){
+					PlantasInstancia.Plantas[ p ].PlantasAnalizadas = 1;
 				}
 			}
 			if( imprime == 1){
-				cout << endl << endl <<  " SituacaoPlantaAtenderCasoAtrasar" << endl;
-				ImprimeVetorInt( PlantasInstancia.PlantasAnalizadas );
-				cout <<   " HorarioQuePlantaPodeAtender" << endl;
-				ImprimeVetorDouble( PlantasInstancia.HorarioQuePlantaPodeAtender);
-				cout <<   " HorarioQueConstrucaoPodeReceberDemanda" << endl;
-				ImprimeVetorDouble( PlantasInstancia.HorarioQueConstrucaoPodeReceberDemanda);
-				cin >> ParaPrograma;
+				PlantasInstancia.ImprimeHorariosPlantasPodemAtender();
 			}
 
 			// Caso for atrasar demandas anteriores para se atender a demanda
@@ -3020,27 +3008,9 @@ void 	ConjuntoConstrucoes::OrdenaCosntrucoes( int EscolhaConstrucao){
 	// 0 se não for imprimir, 1 se for imprimir
 	Imprime = 0;
 
-	// estrutura de armazenamento dos dados das plantas
-	vector < vector < int > > EstruturaMemoria;
-
 	// mantem a ordenação das construções como esta se for 0
 	if( EscolhaConstrucao != 0 ){
 
-		// inicialização das estruturas de memoria
-		EstruturaMemoria.resize(4);
-		EstruturaMemoria[0].resize( (int) Construcoes.size() );
-		EstruturaMemoria[1].resize( (int) Construcoes.size() );
-		EstruturaMemoria[2].resize( (int) Construcoes.size() );
-		EstruturaMemoria[3].resize( (int) Construcoes.size() );
-
-		// armazenamento dos dados das construções
-		for( int c = 0; c < (int) Construcoes.size(); c++){
-			EstruturaMemoria[0][c] = Construcoes[c].NumeroDaConstrucao;
-			EstruturaMemoria[1][c] = ConstrucoesAnalizadas[c];
-			EstruturaMemoria[2][c] = ConstrucaoPodeSerSuprida[c];
-			EstruturaMemoria[3][c] = ConstrucoesComDemandasNaoAtendidas[c];
-
-		}
 
 		if( EscolhaConstrucao == 1){
 			// ordena baseado no menor rank
@@ -3098,17 +3068,6 @@ void 	ConjuntoConstrucoes::OrdenaCosntrucoes( int EscolhaConstrucao){
 				cin >> Para;
 			}
 		}
-
-		// recoloca os dados das construções nas contruções respectivas apos a ordenação
-		for( int c1 = 0; c1 < (int) Construcoes.size(); c1++){
-			for( int c2 = 0; c2 < (int) Construcoes.size(); c2++){
-				if( Construcoes[c1].NumeroDaConstrucao == EstruturaMemoria[0][c2]){
-					ConstrucoesAnalizadas[c1] = EstruturaMemoria[1][c2];
-					ConstrucaoPodeSerSuprida[c1] = EstruturaMemoria[2][c2];
-					ConstrucoesComDemandasNaoAtendidas[c1] = EstruturaMemoria[3][c2];
-				}
-			}
-		}
 	}
 
 
@@ -3125,7 +3084,7 @@ void 	ConjuntoConstrucoes::InicializaConstrucoesComDemandasNaoAtendidas( int Con
 	// caso se encontrar a construção passada na função, entrar no if
 	if( RetornaIndiceConstrucao(Construcao, IndConstrucaoExcolhida, "ConjuntoConstrucoes::ExisteConstrucoesComDemandasNaoAtendidas")== 1 ){
 		// marca a cosntrução passada com o valor 5
-		ConstrucoesComDemandasNaoAtendidas[IndConstrucaoExcolhida] = 5;
+		Construcoes[IndConstrucaoExcolhida].ConstrucaoComDemandasNaoAtendidas = 5;
 		// faz para todas as construções
 		for( int c = 0; c < (int) Construcoes.size(); c++){
 			// não realiza isso para a cosntrução passada
@@ -3133,10 +3092,10 @@ void 	ConjuntoConstrucoes::InicializaConstrucoesComDemandasNaoAtendidas( int Con
 				// caso a construção não tenha sido completamente atendida entra no if
 				if( Construcoes[c].StatusAtendimento < Construcoes[c].NumeroDemandas){
 					// marca a construção não completamente atendida com 0
-					ConstrucoesComDemandasNaoAtendidas[c] = 0;
+					Construcoes[c].ConstrucaoComDemandasNaoAtendidas = 0;
 				}else{
 					// marc a cosntrução atendida compleatmente com 3
-					ConstrucoesComDemandasNaoAtendidas[c] = 3;
+					Construcoes[c].ConstrucaoComDemandasNaoAtendidas = 3;
 				}
 			}
 
@@ -3144,7 +3103,7 @@ void 	ConjuntoConstrucoes::InicializaConstrucoesComDemandasNaoAtendidas( int Con
 		// imprime o conteudo do vetor de controle das plantas
 		if( Imprime == 1){
 			cout << endl << endl << "      Vetor de cosntrucoes com demandas não atendidas" << endl ;
-			ImprimeVetorInt( ConstrucoesComDemandasNaoAtendidas);
+			ImprimeConstrucoesComDemandasNaoAtendidas();
 			cin >> ParaPrograma;
 		}
 
@@ -3161,7 +3120,7 @@ int 	ConjuntoConstrucoes::ExisteConstrucaoComDemandaNaoAtendida( int &Construcao
 	// percorre todas as construções
 	for(  int c = 0; c < (int) Construcoes.size(); c++){
 		// não tenta aloca demandas da construçãoq ue teve uma demanda retirada anteriormente
-		if( ConstrucoesComDemandasNaoAtendidas[c] == 0){
+		if( Construcoes[c].ConstrucaoComDemandasNaoAtendidas == 0){
 			if( Construcoes[c].StatusAtendimento < Construcoes[c].NumeroDemandas){
 				// retorna a cosntrução e a demanda que deve ser alocada
 				Construcao = Construcoes[c].NumeroDaConstrucao;
@@ -3171,7 +3130,7 @@ int 	ConjuntoConstrucoes::ExisteConstrucaoComDemandaNaoAtendida( int &Construcao
 					cout << endl << endl << "     >>> Conatrução-demanda[" << Construcao << "-" << Demanda << "] não atendeida que se tentara atender " << endl << endl;
 				}
 				// atualiza a situação da contrução como analisada
-				ConstrucoesComDemandasNaoAtendidas[c] = 1;
+				Construcoes[c].ConstrucaoComDemandasNaoAtendidas = 1;
 				// retorna 1 sinalizando que se tem construçãoa  ser analisada
 				return 1;
 			}else{
@@ -3183,13 +3142,43 @@ int 	ConjuntoConstrucoes::ExisteConstrucaoComDemandaNaoAtendida( int &Construcao
 	return 0;
 }
 
+// Imprime as construções e em seguida o nivel de inviabilidade
+void 	ConjuntoConstrucoes::ImprimeContrucoes(ConjuntoPlantas& Plantas, int VerificaViabilidade ,  int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo){
+	if( ImprimeSolucao == 1){
+		cout << endl << endl << " [[[[[[  Imprime construcoes  ]]]]]]" << endl;
+	}
+	if( ImprimeArquivo == 1){
+		fprintf( Arquivo, "\n\n [[[[[[  Imprime construcoes  ]]]]]] \n ");
+	}
+	// percorre todas as cosntruções
+	for(int c = 0; c < NumeroConstrucoes; c++){
+		// iomprime a construção corrente
+		Construcoes[c].ImprimeContrucao( ImprimeSolucao,ImprimeArquivo, Arquivo);
+	}
+	if( ImprimeSolucao == 1){
+		printf( " Nivel de Inviabilidade = %d  \n \n Makespan Geral das Construcoes = %f\n", NivelDeInviabilidade, MakespanConstrucoes);
+	}
+	if( ImprimeArquivo == 1){
+		fprintf( Arquivo, " Nivel de Inviabilidade = %d  \n \n Makespan Geral das Construcoes = %f\n", NivelDeInviabilidade, MakespanConstrucoes);
+	}
+	// imprime a verificação de viabilidade caso for pedida na função
+	if( VerificaViabilidade == 1){
+		VerificacaoConsistenciaTarefas(Plantas, 1, ImprimeSolucao,ImprimeArquivo, Arquivo);
+	}
+}
+
+void		ConjuntoConstrucoes::ImprimeConstrucoesComDemandasNaoAtendidas(){
+	cout << " Construcoes Com Demandas Nao Atendidasfor " << endl;
+	for( int c = 0;  c < (int) Construcoes.size(); c++){
+		cout << c << " [" << Construcoes[c].ConstrucaoComDemandasNaoAtendidas << "] ";
+	}
+	cout << endl;
+}
+
 // Destruidora da classe
 ConjuntoConstrucoes::~ConjuntoConstrucoes(){
 	Construcoes.clear();
 	NumeroConstrucoes 	= -13;
-	ConstrucoesAnalizadas.clear();
-	ConstrucaoPodeSerSuprida.clear();
-	ConstrucoesComDemandasNaoAtendidas.clear();
 	MakespanConstrucoes = -13;
 	NivelDeInviabilidade = -13;
 }

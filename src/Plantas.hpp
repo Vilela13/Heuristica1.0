@@ -826,48 +826,27 @@ void 	ConjuntoPlantas::OrdenaPlantas( int EscolhaPlanta){
 	// 0 se não for imprimir, 1 se for imprimir
 	Imprime = 0;
 
-
-
-
 	if( EscolhaPlanta == 2){
 		// ordena baseado no menor rank
 		sort(Plantas.begin(), Plantas.end(), DecideQualPlantaMenosTarefa);
-
-		if(Imprime == 1){
-			cout << "    Planta ordenadas" << endl ;
-			for( int p = 0; p < (int) Plantas.size(); p++){
-				cout << " planta [" << Plantas[p].NumeroDaPlanta << "]" << endl;
-
-			}
-			cin >> Para;
-		}
 	}
 
 	if( EscolhaPlanta == 3){
 		// ordena baseado no menor rank
 		sort(Plantas.begin(), Plantas.end(), DecideQualPlantaMaisTarefa);
-
-		if(Imprime == 1){
-			cout << "    Planta ordenadas" << endl ;
-			for( int p = 0; p < (int) Plantas.size(); p++){
-				cout << " planta [" << Plantas[p].NumeroDaPlanta << "]" << endl;
-
-			}
-			cin >> Para;
-		}
 	}
 
 	if( EscolhaPlanta == 4){
 		random_shuffle (Plantas.begin(), Plantas.end(),  GeradorAleatoricoPlanta);
+	}
 
-		if(Imprime == 1){
-			cout << "    Planta ordenadas" << endl ;
-			for( int p = 0; p < (int) Plantas.size(); p++){
-				cout << " planta [" << Plantas[p].NumeroDaPlanta << "]" << endl;
+	if(Imprime == 1){
+		cout << "    Planta ordenadas" << endl ;
+		for( int p = 0; p < (int) Plantas.size(); p++){
+			cout << " planta [" << Plantas[p].NumeroDaPlanta << "]" << endl;
 
-			}
-			cin >> Para;
 		}
+		cin >> Para;
 	}
 
 

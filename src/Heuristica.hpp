@@ -303,7 +303,7 @@ void	Heuristica::ExecutaVNS(string NomeInstancia, int EscolhaVeiculo, int Escolh
 	if(Solucoes.Solucoes[0].ConstrucoesInstancia.NivelDeInviabilidade == 0){
 		printf("         %f \t", Solucoes.Solucoes[0].Makespan);
 	}else{
-		printf("        ------ \t");
+		printf("            ------ \t");
 	}
 
 
@@ -377,7 +377,7 @@ void	Heuristica::ExecutaVNS(string NomeInstancia, int EscolhaVeiculo, int Escolh
 		if( Solucoes.Solucoes[0].ConstrucoesInstancia.NivelDeInviabilidade == 0){
 			printf(" %f \t   ------ \t", Solucoes.Solucoes[0].Makespan);
 		}else{
-			printf(" ------ \t");
+			printf("     ------   \t");
 		}
 
 		if( Solucoes.Solucoes[0].ConstrucoesInstancia.NivelDeInviabilidade != 0){

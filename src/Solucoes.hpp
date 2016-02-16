@@ -531,11 +531,35 @@ int		Solucao::ProcuraConstrucaoNaoAtendida(int &ConstrucaoNaoAtendida, int &Dema
 	// variaveis que armazenam os valores temporarios da construção, da demanda  e da distancia minima da construção a uma planta
 	int ConstrucaoTemporario;
 	int DemandaTemporaria;
-	double DistanciaPlantaTemporaria;
+
 
 	// inicia valores das variaveis cosntrução e demanda
 	ConstrucaoTemporario = -13;
 	DemandaTemporaria = -13;
+
+	// percorre por todas as construções
+	for ( int c = 0; c < NE; c++){
+		// entra se a construção possa ser analisada ainda pelo procedimento
+		if( ConstrucoesInstancia.Construcoes[c].ConstrucaoPodeSerSuprida == 0){
+			// percorre por todas as demandas iniciando da maior para a menor, isso tem o intuito de pegar a demanda não atendida logo após a ultima que foi atendida
+			if( ConstrucoesInstancia.Construcoes[c].NumeroDemandas > ConstrucoesInstancia.Construcoes[c].StatusAtendimento ){
+				if( ConstrucoesInstancia.Construcoes[c].SituacaoDemanda[ ConstrucoesInstancia.Construcoes[c].StatusAtendimento] == 0){
+					DemandaNaoAtendida = ConstrucoesInstancia.Construcoes[c].StatusAtendimento;
+					ConstrucaoNaoAtendida = ConstrucoesInstancia.Construcoes[c].NumeroDaConstrucao;
+					return 1;
+				}
+			}
+		}
+	}
+	return 0;
+
+
+
+
+	// Encontra a construção que possui a menor distancia a uma planta dentre todas as construções com demandas não atendidas
+	/*
+
+	double DistanciaPlantaTemporaria;
 	// inicia o valor da variavel com o maior valor para que qualquer valor de uma distancia de uma construção a uma planat sejáa ceito inicialmente
 	DistanciaPlantaTemporaria = DBL_MAX;
 
@@ -573,6 +597,8 @@ int		Solucao::ProcuraConstrucaoNaoAtendida(int &ConstrucaoNaoAtendida, int &Dema
 	DemandaNaoAtendida = DemandaTemporaria;
 	// retorna 1, foi encontrado a demanda
 	return 1;
+
+	*/
 }
 
 // Aloca o tempo que se pode começar a carregar uma carreta da planta para suprir a construção passada
@@ -737,7 +763,7 @@ int		Solucao::Viabilidade2(int EscolhaVeiculo, int EscolhaConstrucao, int Escolh
 	int PararPrograma;
 
 	// ordena as cosntruções na ordem em que elas devem ser escolhidas com prioridade  (foi tirada para se manter a ordem realizado na heuristica constrututiva)
-	//ConstrucoesInstancia.OrdenaCosntrucoes( EscolhaConstrucao);
+	ConstrucoesInstancia.OrdenaCosntrucoes( EscolhaConstrucao);
 
 	if( Imprime == 1){
 		cout << endl << endl << "                        Situacao ao entra no Viabilidade2 " << endl << endl;
@@ -764,6 +790,7 @@ int		Solucao::Viabilidade2(int EscolhaVeiculo, int EscolhaConstrucao, int Escolh
 		TempoPlantaPodeAtender.resize(NP);
 		// retorna o incide da cosntrução que tem qeu ser analisada no momento
 		ConstrucoesInstancia.RetornaIndiceConstrucao(ConstrucaoNaoAtendida, IndiceConstrucaoNaoAtendida, " inicio -> Solucao::ProcessoViabilizacao2" );
+
 		// faz a variavel sinalisar que ainda é possivel analisar a construção corrente
 		PermiteAnalisarCosntrucao = 1;
 		// limpa o vetor que armazena as demandas deletadas na construção para tentar alocar a demanda corrente
@@ -775,6 +802,7 @@ int		Solucao::Viabilidade2(int EscolhaVeiculo, int EscolhaConstrucao, int Escolh
 // deleta tarefas que são atendidas depois desta tarefa não alocada
 			// se limpa o vetor com as tarefas movidas durante o processo de se tentar atender a ultima demanda (DemandaNaoAtendidaFim)
 			DadosTarefasMovidasTentandoAlocar1.clear();
+
 			// aloca no vetor TempoSaiPlanta os tempos que as plantas podem atender
 			AlocaTempoPlantaPodeAtenderDemanda(IndiceConstrucaoNaoAtendida,TempoPlantaPodeAtender, Imprime);
 			// deleta todas as tarefas que são atendidas após os horarios armazenados da TempoPlantaPodeAtender
@@ -865,8 +893,6 @@ int		Solucao::Viabilidade2(int EscolhaVeiculo, int EscolhaConstrucao, int Escolh
 								PossuiConstrucaoParaAnalisar = SelecionaConstrucao( ConstrucaoParaAtender, IndiceConstrucaoParaAtender);
 							}
 
-
-
 							// calcula o nivel de inviabilidade que ira mostrar se a soluçpão melhorou ou não
 							ConstrucoesInstancia.CalcularNivelDeInviabilidade();
 							// verifica se o nivel de inviabilidade foi melhorado com o procedimento
@@ -909,6 +935,7 @@ int		Solucao::Viabilidade2(int EscolhaVeiculo, int EscolhaConstrucao, int Escolh
 						}
 					}
 				}
+
 
 				if(ConstrucoesInstancia.ReadicionaDeletaTarefasApartirDeDados(  DadosTarefasMovidasTentandoAlocar1, PlantasInstancia ) == 0){
 					cout << endl << endl << "   problema em adicionar e deletar tarefas DadosTarefasDemandasAnteriores ->  Solucao::ProcessoViabilizacao2" << endl << endl;

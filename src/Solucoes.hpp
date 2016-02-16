@@ -210,8 +210,6 @@ int		Solucao::Viabilidade1(int EscolhaVeiculo, int EscolhaConstrucao, int Escolh
 	vector < DadosTarefa > DadosTarefasMovidas;
 	vector < DadosTarefa > DadosTarefasMovidasPlantaVeiculo;
 
-
-
 	//se deve realizar a verificação da viabilidade da solução corrente
 	int VerificaViabilidade;
 	VerificaViabilidade = 0;
@@ -230,10 +228,8 @@ int		Solucao::Viabilidade1(int EscolhaVeiculo, int EscolhaConstrucao, int Escolh
 	int ConstrucaoParaInserir;
 	int DemandaParaInserir;
 
-
-
 	// ordena cosntruções  (foi tirada para se manter a ordem realizado na heuristica constrututiva)
-	// ConstrucoesInstancia.OrdenaCosntrucoes( EscolhaConstrucao);
+	ConstrucoesInstancia.OrdenaCosntrucoes( EscolhaConstrucao);
 
 	// faz que nenhuma tarefa tenha sido removida
 	ConstrucoesInstancia.ReiniciaTarefasRetiradas();
@@ -745,7 +741,7 @@ int		Solucao::Viabilidade2(int EscolhaVeiculo, int EscolhaConstrucao, int Escolh
 
 	if( Imprime == 1){
 		cout << endl << endl << "                        Situacao ao entra no Viabilidade2 " << endl << endl;
-		ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia, 0, ImprimeSolucao,ImprimeArquivo,Arquivo);
+		ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia, VerificaViabilidade, ImprimeSolucao,ImprimeArquivo,Arquivo);
 	}
 
 // Encontra demanda ainda não atendida

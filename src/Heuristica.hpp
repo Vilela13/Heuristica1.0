@@ -547,7 +547,7 @@ void	Heuristica::ExecutaGrasp(string NomeInstancia, int NumeroIteracoes, int Esc
 
 	// variavel que controla se irá escrever os dados em um aruivo, é inicializada com 0
 	int ImprimeArquivo;
-	ImprimeArquivo = 1;
+	ImprimeArquivo = 0;
 
 	// variavel que controla se imprime na tela a solução e os procediemntos
 	int ImprimeSolucao;
@@ -602,8 +602,13 @@ void	Heuristica::ExecutaGrasp(string NomeInstancia, int NumeroIteracoes, int Esc
 	double semente;
 	semente = 13;
 
+
+
 	//srand( semente );
 
+	// marca se já possui uma solução
+	int Ativa;
+	Ativa = 0;
 
 
 	// fornece o caminnho onde será criado o arquivo
@@ -733,20 +738,29 @@ void	Heuristica::ExecutaGrasp(string NomeInstancia, int NumeroIteracoes, int Esc
 			fprintf(Arquivo," ------ \t ------ \t ------ \n");
 		}
 
+		if( Ativa == 0){
+			SolucaoFinal = *SolucaoCorrente;
+			 Ativa = 1;
+		}else{
+			if( SolucaoFinal.ConstrucoesInstancia.NivelDeInviabilidade == 0){
+				if( SolucaoCorrente->ConstrucoesInstancia.NivelDeInviabilidade == 0 && SolucaoFinal.Makespan > SolucaoCorrente->Makespan){
+					SolucaoFinal = *SolucaoCorrente;
+				}
+			}else{
+				if( SolucaoFinal.ConstrucoesInstancia.NivelDeInviabilidade > SolucaoCorrente->ConstrucoesInstancia.NivelDeInviabilidade){
+					SolucaoFinal = *SolucaoCorrente;
+				}
+			}
+
+		}
 	}
 
-
-
-
-
-
-
-
-
-
-
-
-
+	if( SolucaoFinal.ConstrucoesInstancia.NivelDeInviabilidade == 0){
+		printf( " \t %f \t %d ",  SolucaoFinal.Makespan, SolucaoFinal.ConstrucoesInstancia.NivelDeInviabilidade);
+	}else{
+		printf( " \t ------  \t %d ",  SolucaoFinal.ConstrucoesInstancia.NivelDeInviabilidade);
+	}
+	SolucaoFinal.Imprime(1,1,1,0,1,Arquivo);
 
 
 	// coleta o horario final

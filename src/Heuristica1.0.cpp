@@ -378,7 +378,7 @@ int main(int argc, char **argv) {
 
 
 			// escreve cabeçario
-			printf(" Nome_Instancia  \t Solução \t Tempo (segundos) \n");
+			printf(" Nome_Instancia  \t Solução \t Nivel_Viabilidade \t Tempo (segundos) \n");
 
 			while( !ListaInstancias.empty()){
 				it = ListaInstancias.begin();

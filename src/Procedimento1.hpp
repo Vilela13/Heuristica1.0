@@ -134,9 +134,12 @@ int 	Procedimento1::Executa(  int EscolhaVeiculo, int EscolhaConstrucao, int Esc
 	for( int c = 0; c < ConstrucoesInstancia.NumeroConstrucoes; c++ ){
 		// Seleciona a construção caso ela já não tiver sido analisada
 		ConstrucaoSelecionada = SelecionaConstrucao(  ConstrucaoVaiSerSuprida, IndiceConstrucaoVaiSerSuprida);
+
+		//cout << " ConstrucaoVaiSerSuprida [" << ConstrucaoVaiSerSuprida << "] IndiceConstrucaoVaiSerSuprida [" << IndiceConstrucaoVaiSerSuprida  << "] ConstrucaoSelecionada [" << ConstrucaoSelecionada << "] " << endl;
+
 		if( ConstrucaoSelecionada == 1){
 			// marca a construção escolhida como já analisada
-			ConstrucoesInstancia.Construcoes[ConstrucaoVaiSerSuprida].ConstrucaoAnalizada =  1;
+			ConstrucoesInstancia.Construcoes[IndiceConstrucaoVaiSerSuprida].ConstrucaoAnalizada =  1;
 
 			// Entrar no loop enqaunto tiver demandas a serem atendidas e planatas que ainda puderem atender a demanda
 			do{
@@ -172,6 +175,9 @@ int 	Procedimento1::Executa(  int EscolhaVeiculo, int EscolhaConstrucao, int Esc
 	}
 	// Calcula o nivel de viabilidade
 	ConstrucoesInstancia.CalcularNivelDeInviabilidade();
+
+	//ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia,0,1,0,Arquivo);
+
 	if( Viabilidade == 1){
 		return 1;
 	}else{

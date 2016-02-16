@@ -50,7 +50,8 @@ public:
 	int		Viabilidade2(int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta, int Imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo, int RealizaProcessoDeAtrazarTarefas);
 	void	ProcessoViabilizacao2(int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta, int Imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo, int RealizaProcessoDeAtrazarTarefas);
 
-	void	CalculaMakespan();		// calcula o makespan geral da solução
+	void	CalculaMakespan();				// calcula o makespan geral da solução
+	void	CalculaNiveisViabilidade();		// calcula o nivel de viabilidade da solução
 
 	void 	RealizarBuscaLocalCaminhao(int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta, int imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo, int RealizaProcessoDeAtrazarTarefas);
 	void 	RealizarBuscaLocalConstrucao(int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta, int imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo, int RealizaProcessoDeAtrazarTarefas);
@@ -194,17 +195,11 @@ int		Solucao::Viabilidade1(int EscolhaVeiculo, int EscolhaConstrucao, int Escolh
 	int ImprimeDadosTarefasArmazenados;
 	ImprimeDadosTarefasArmazenados = 0;
 
-
 	// armazena o nivel de inviabilidade anterior
 	int InviabilidadeSolucaoAnterior;
 	// armazana os dados da tarefa a ser retirada
 	int ConstrucaoAnalisandoRetirada;
 	int DemandaAnalisandoRetirada;
-
-	// variaveis de controle
-	bool ExisteTarefa;
-	bool TarefaDeletada;
-	bool TarefaAlocada;
 
 	// armazena as tarefas da solução que foram retiradas e adicionadas para permitir que se retorne ao estado inicial da solução depoois
 	vector < DadosTarefa > DadosTarefasMovidas;
@@ -220,13 +215,12 @@ int		Solucao::Viabilidade1(int EscolhaVeiculo, int EscolhaConstrucao, int Escolh
 	// inidice da planta da planta em questão no VetorOrdemPlanta
 	int IndicePlanta;
 
-	// variavel para parar o programa
-	int PararPrograma;
-
-
 	// dados da demanda que temq ue ser inserida na solução e que não era inserida anteriormente
 	int ConstrucaoParaInserir;
 	int DemandaParaInserir;
+
+	// variavel para parar o programa
+	int PararPrograma;
 
 	// ordena cosntruções  (foi tirada para se manter a ordem realizado na heuristica constrututiva)
 	ConstrucoesInstancia.OrdenaCosntrucoes( EscolhaConstrucao);
@@ -236,23 +230,16 @@ int		Solucao::Viabilidade1(int EscolhaVeiculo, int EscolhaConstrucao, int Escolh
 	// guarda o nivel de inviabilidade da solução anterior para ser utilizado posteriormente para ver se a solução melhorou
 	InviabilidadeSolucaoAnterior = ConstrucoesInstancia.NivelDeInviabilidade;
 
-	// Encontra primeira tarefa que pode ser retirada
-	ExisteTarefa = ConstrucaoTemTarefaParaRemover(ConstrucaoAnalisandoRetirada, DemandaAnalisandoRetirada, Imprime);
-
 	if( Imprime == 1){
 		cin >> PararPrograma;
 	}
 // enquanto existir uma tarefa que pode ser retirada
-	while( ExisteTarefa == 1 && ConstrucoesInstancia.NivelDeInviabilidade > 0){
+	while( ConstrucaoTemTarefaParaRemover(ConstrucaoAnalisandoRetirada, DemandaAnalisandoRetirada, Imprime) == 1 ){
 		if( Imprime == 1){
 			cout << endl << endl << "        Inicia procediemnto " << endl << endl;
 		}
 		// limpa o vetor de dados que foram removidos no processo
 		DadosTarefasMovidas.clear();
-// deleta demanda alocada e as demandas posteriores a esta nesta construção corrente
-		TarefaDeletada = DeletaAlocacaoTarefasPosterioresMesmaConstrucao(0, ConstrucaoAnalisandoRetirada, DemandaAnalisandoRetirada, DadosTarefasMovidas);	// Deleta tarefa
-		// calcula o nível de iniviabilidade da solução
-		ConstrucoesInstancia.CalcularNivelDeInviabilidade();
 		if( Imprime == 1){
 			cout << endl << endl << "  ========== Deleta tarefas apos a demanda [" << ConstrucaoAnalisandoRetirada << "-" << DemandaAnalisandoRetirada << "]" << endl << endl;
 			if( ImprimeDadosTarefasArmazenados == 1){
@@ -264,8 +251,7 @@ int		Solucao::Viabilidade1(int EscolhaVeiculo, int EscolhaConstrucao, int Escolh
 			cin >> PararPrograma;
 		}
 		// caso conseguiu deletar a demanda e suas posteriores entra no if
-		if ( TarefaDeletada == 1){
-
+		if ( DeletaAlocacaoTarefasPosterioresMesmaConstrucao(0, ConstrucaoAnalisandoRetirada, DemandaAnalisandoRetirada, DadosTarefasMovidas) == 1){
 			// marca as cosntruções que possuem demandas que podem ser atendidas, essa construção não pode ser a ConstrucaoAnalisandoRetirada que é marcada com 5 para não ser analisada
 			ConstrucoesInstancia.InicializaConstrucoesComDemandasNaoAtendidas( ConstrucaoAnalisandoRetirada, Imprime);
 			// enaquanto se puder analisar uma construção que se pode atender uma demanda se continua
@@ -292,12 +278,8 @@ int		Solucao::Viabilidade1(int EscolhaVeiculo, int EscolhaConstrucao, int Escolh
 						}
 						// limpa o conteudo das tarefas movidas na analise de uma planta e veiculo fixo
 						DadosTarefasMovidasPlantaVeiculo.clear();
-						// tenta alocar a demanda que não era atendida antes
-						TarefaAlocada = ConstrucoesInstancia.AdicionaTarefaComVeiculoFixo(0, ConstrucaoParaInserir,DemandaParaInserir, VetorOrdemPlanta[p], VetorOrdemVeiculo[v], DadosTarefasMovidasPlantaVeiculo, 1, 0, RealizaProcessoDeAtrazarTarefas, EscolhaVeiculo, EscolhaPlanta, PlantasInstancia, Imprime, "Solucao::Viabilidade1");
-						// calcula o nível de iniviabilidade da solução
-						ConstrucoesInstancia.CalcularNivelDeInviabilidade();
 						// caso conseguir alocar a demanda que não era atendida antes
-						if( TarefaAlocada == 1){
+						if( ConstrucoesInstancia.AdicionaTarefaComVeiculoFixo(0, ConstrucaoParaInserir,DemandaParaInserir, VetorOrdemPlanta[p], VetorOrdemVeiculo[v], DadosTarefasMovidasPlantaVeiculo, 1, 0, RealizaProcessoDeAtrazarTarefas, EscolhaVeiculo, EscolhaPlanta, PlantasInstancia, Imprime, "Solucao::Viabilidade1") == 1){
 							if( Imprime == 1){
 								cout << endl << endl << "         Aloca demanda não atendida anteriormente [ " << ConstrucaoParaInserir << "-" << DemandaParaInserir << "]" << endl << endl;
 								cout << endl << "  tenta alocar tarefa" << endl;
@@ -325,6 +307,7 @@ int		Solucao::Viabilidade1(int EscolhaVeiculo, int EscolhaConstrucao, int Escolh
 							}
 							// verifica se melhorou a solução
 							if( InviabilidadeSolucaoAnterior > ConstrucoesInstancia.NivelDeInviabilidade){
+
 								if( Imprime == 1){
 									cout << endl << "  								!!!!!!!!! Melhorou !!!!!!!!!!! "  << endl;
 									if( ImprimeDadosTarefasArmazenados == 1){
@@ -338,10 +321,6 @@ int		Solucao::Viabilidade1(int EscolhaVeiculo, int EscolhaConstrucao, int Escolh
 
 									cin >> PararPrograma;
 								}
-								// deleta o armazenamento d etarefas adicionadas e deletadas, pois a solução que se encontrou é melhor uqe a solução anterior
-								DadosTarefasMovidas.clear();
-								DadosTarefasMovidasPlantaVeiculo.clear();
-
 								if( ImprimeSolucao == 1){
 									printf(  "  -> Nivel de inviabilidade = %d com a inserção da demanda [%d-%d] \n", ConstrucoesInstancia.NivelDeInviabilidade, ConstrucaoParaInserir, DemandaParaInserir);
 								}
@@ -349,6 +328,9 @@ int		Solucao::Viabilidade1(int EscolhaVeiculo, int EscolhaConstrucao, int Escolh
 									fprintf( Arquivo, "  -> Nivel de inviabilidade = %d com a inserção da demanda [%d-%d] \n", ConstrucoesInstancia.NivelDeInviabilidade, ConstrucaoParaInserir, DemandaParaInserir);
 								}
 
+								// deleta o armazenamento d etarefas adicionadas e deletadas, pois a solução que se encontrou é melhor uqe a solução anterior
+								DadosTarefasMovidas.clear();
+								DadosTarefasMovidasPlantaVeiculo.clear();
 								return 1;
 							}else{
 								if( Imprime == 1){
@@ -366,8 +348,6 @@ int		Solucao::Viabilidade1(int EscolhaVeiculo, int EscolhaConstrucao, int Escolh
 								if( ConstrucoesInstancia.ReadicionaDeletaTarefasApartirDeDados(  DadosTarefasMovidasPlantaVeiculo, PlantasInstancia ) == 0){
 									cout << endl << endl << "   problema em adicionar e deletar tarefas para se retornar a solução inicial ->  Solucao::ProcessoViabilizacao1" << endl << endl;
 								}
-								// deleta o armazenamento de tarefas adicionadas e deletadas
-								DadosTarefasMovidasPlantaVeiculo.clear();
 							}
 						}
 					}
@@ -393,17 +373,10 @@ int		Solucao::Viabilidade1(int EscolhaVeiculo, int EscolhaConstrucao, int Escolh
 			if( ConstrucoesInstancia.ReadicionaDeletaTarefasApartirDeDados(  DadosTarefasMovidas, PlantasInstancia ) == 0){
 				cout << endl << endl << "   problema em adicionar e deletar tarefas para se retornar a solução inicial ->  Solucao::ProcessoViabilizacao1" << endl << endl;
 			}
-			// deleta o armazenamento d etarefas adicionadas e deletadas
-			DadosTarefasMovidas.clear();
 			// marca que a demanda corrente já foi retirada
 			ConstrucoesInstancia.MarcaTarefaDeletadaNoVetor(ConstrucaoAnalisandoRetirada, DemandaAnalisandoRetirada, 1);
 			if( Imprime == 1){
 				cout << endl << endl << "            Nao consegui adicionar nova tarefa - readiciona tarefas e marca terafa como removida" << endl << endl;
-
-				if( ImprimeDadosTarefasArmazenados == 1){
-					cout << "DadosTarefasMovidas" << endl;
-					ImprimeVetorDadosTarefa( DadosTarefasMovidas);
-				}
 
 				ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia, VerificaViabilidade, ImprimeSolucao,ImprimeArquivo,Arquivo);
 				//PlantasInstancia.Imprime(1,1);
@@ -414,17 +387,17 @@ int		Solucao::Viabilidade1(int EscolhaVeiculo, int EscolhaConstrucao, int Escolh
 		}else{
 			 cout << endl << endl << endl << "   #######################  Problema! => Tarefa não deletada -> Solucao::Viabilidade1  ######################## " << endl << endl << endl;
 		}
-
-		// Encontra proxima tarefa que pode ser retirada caso existir
-		ExisteTarefa = ConstrucaoTemTarefaParaRemover(ConstrucaoAnalisandoRetirada, DemandaAnalisandoRetirada, 0);
 	}
+	// deleta o armazenamento d etarefas adicionadas e deletadas, pois a solução que se encontrou é melhor uqe a solução anterior
+	DadosTarefasMovidas.clear();
+	DadosTarefasMovidasPlantaVeiculo.clear();
 	return 0;
 }
 
 void	Solucao::ProcessoViabilizacao1(int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta,int Imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo, int RealizaProcessoDeAtrazarTarefas){
 
 	// calcula o nível de iniviabilidade da solução
-	ConstrucoesInstancia.CalcularNivelDeInviabilidade();
+	CalculaNiveisViabilidade();
 
 	// escreve o nivel de inviabilidade antes de entrar no processo de viabilização
 	if( ImprimeSolucao == 1){
@@ -738,9 +711,7 @@ int		Solucao::Viabilidade2(int EscolhaVeiculo, int EscolhaConstrucao, int Escolh
 	vector < double > TempoPlantaPodeAtender;
 
 	// variaveis de controle
-	int DeletouAlgumaTarefa;
 	int TarefaAdicionada;
-	int PossuiConstrucaoParaAnalisar;
 
 	// armazena as tarefas da solução que foram retiradas e adicionadas para permitir que se retorne ao estado inicial da solução depoois
 	vector < DadosTarefa > DadosTarefasMovidasTentandoAlocar1;
@@ -748,9 +719,11 @@ int		Solucao::Viabilidade2(int EscolhaVeiculo, int EscolhaConstrucao, int Escolh
 	// armazena as tarefas deletadas na construção corrente para depois se retornar ao estado original da construção
 	vector < DadosTarefa > DadosTarefasDemandasAnteriores;
 
+	// vetores que armazena as plantas e dos veiculos antes de entrar em uma função de adição de tarefa
 	vector < int > VetorOrdemPlanta;
 	vector < int > VetorOrdemVeiculo;
 
+	// indice da planta a ser utilizada
 	int IndicePlanta;
 
 	// se deve realizar a verificação da viabilidade da solução corrente
@@ -765,6 +738,9 @@ int		Solucao::Viabilidade2(int EscolhaVeiculo, int EscolhaConstrucao, int Escolh
 	// ordena as cosntruções na ordem em que elas devem ser escolhidas com prioridade  (foi tirada para se manter a ordem realizado na heuristica constrututiva)
 	ConstrucoesInstancia.OrdenaCosntrucoes( EscolhaConstrucao);
 
+	// inicia o tamanho do vetor de tempo do inicio das plantas com 0
+	TempoPlantaPodeAtender.resize(NP);
+
 	if( Imprime == 1){
 		cout << endl << endl << "                        Situacao ao entra no Viabilidade2 " << endl << endl;
 		ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia, VerificaViabilidade, ImprimeSolucao,ImprimeArquivo,Arquivo);
@@ -772,77 +748,68 @@ int		Solucao::Viabilidade2(int EscolhaVeiculo, int EscolhaConstrucao, int Escolh
 
 // Encontra demanda ainda não atendida
 
-	// Marca as construções que já foram completamente atenddidas com 1, as que não forma com 0
-	ConstrucoesInstancia.AlocaValoresConstrucaoPodeSerSuprida();
 	// calcula o nivel de inviabilidade da solução
 	ConstrucoesInstancia.CalcularNivelDeInviabilidade();
 	// guarda o nivel de inviabilidade
 	InviabilidadeSolucaoAnterior = ConstrucoesInstancia.NivelDeInviabilidade;
 
+	// Marca as construções que já foram completamente atenddidas com 1, as que não forma com 0
+	ConstrucoesInstancia.AlocaValoresConstrucaoPodeSerSuprida();
+
 	// Verifica se pode atender uma construção ainda, se tem uma com demanda não atendida
-	while( ConstrucoesInstancia.VerificaConstrucaoPodeSerSuprida() == 1 && ConstrucoesInstancia.NivelDeInviabilidade > 0){
+	while( ConstrucoesInstancia.VerificaConstrucaoPodeSerSuprida() == 1 ){
 		// retorna a demanda e a construção que serão analisados inicialmente
 		ProcuraConstrucaoNaoAtendida( ConstrucaoNaoAtendida, DemandaNaoAtendidaFim);
-
-		// faz a primeira demanda analisada na construção como sendo a mesma da ultima analisada
-		DemandaNaoAtendidaInicio = DemandaNaoAtendidaFim;
-		// inicia o tamanho do vetor de tempo do inicio das plantas com 0
-		TempoPlantaPodeAtender.resize(NP);
 		// retorna o incide da cosntrução que tem qeu ser analisada no momento
 		ConstrucoesInstancia.RetornaIndiceConstrucao(ConstrucaoNaoAtendida, IndiceConstrucaoNaoAtendida, " inicio -> Solucao::ProcessoViabilizacao2" );
-
+		// faz a primeira demanda analisada na construção como sendo a mesma da ultima analisada
+		DemandaNaoAtendidaInicio = DemandaNaoAtendidaFim;
 		// faz a variavel sinalisar que ainda é possivel analisar a construção corrente
 		PermiteAnalisarCosntrucao = 1;
 		// limpa o vetor que armazena as demandas deletadas na construção para tentar alocar a demanda corrente
 		DadosTarefasDemandasAnteriores.clear();
 		// enquanto for possivel analisar a construção se continua no loop
-
 		while( PermiteAnalisarCosntrucao == 1){
 
 // deleta tarefas que são atendidas depois desta tarefa não alocada
+
 			// se limpa o vetor com as tarefas movidas durante o processo de se tentar atender a ultima demanda (DemandaNaoAtendidaFim)
 			DadosTarefasMovidasTentandoAlocar1.clear();
-
 			// aloca no vetor TempoSaiPlanta os tempos que as plantas podem atender
 			AlocaTempoPlantaPodeAtenderDemanda(IndiceConstrucaoNaoAtendida,TempoPlantaPodeAtender, Imprime);
 			// deleta todas as tarefas que são atendidas após os horarios armazenados da TempoPlantaPodeAtender
-			DeletouAlgumaTarefa = DeletaTarefasAposTempoPlantaPodeAtender(TempoPlantaPodeAtender, DadosTarefasMovidasTentandoAlocar1, Imprime);
-
+			DeletaTarefasAposTempoPlantaPodeAtender(TempoPlantaPodeAtender, DadosTarefasMovidasTentandoAlocar1, Imprime);
+			// caso não se tenha deletado nenhuma demanda anterior a demanda que se quer colocar na construção, se inicia essa variavel com 1 para entrar no procedimento
 			TarefaAdicionada = 1;
-
+			// caso se tenha demandas anteriores a demanda que se quer colocar, se tem que adicionar as demandas anteriores a esta que foram deletadas
 			if( DemandaNaoAtendidaInicio < DemandaNaoAtendidaFim){
-
 				// tenta adiciona a tarefa que não era alocada antes
 				for( int d1 = DemandaNaoAtendidaInicio; d1 <= DemandaNaoAtendidaFim - 1; d1++){
 					// tenta adicionar a demanda não atendida anteriormente. Caso consegui retorna 1, caso contrario retorna 0.
 					TarefaAdicionada = ConstrucoesInstancia.AdicionaTarefa(0, ConstrucaoNaoAtendida, d1, DadosTarefasMovidasTentandoAlocar1, 1, 0, RealizaProcessoDeAtrazarTarefas, EscolhaVeiculo, EscolhaPlanta, PlantasInstancia, Imprime, " adiciona tarefa não adicionada -> Solucao::ProcessoViabilizacao2 ");
 				}
-
 			}
-
+			// se entra no if caso se tenha adicionado as demandas anteriores a demanda que se quer colocar, caso elas existam
 			if( TarefaAdicionada == 1){
-
 				// ordena as plantas com o tipo de ordenação escolhida
 				PlantasInstancia.OrdenaPlantas( EscolhaPlanta);
 				// armazena a ordem escolhida das plantas
 				PlantasInstancia.ArmazenaVetorIntComOrdem( VetorOrdemPlanta);
-
+				// percorre todas as plantas
 				for ( int p = 0; p < (int) PlantasInstancia.Plantas.size(); p++){
-
 					// aloca indice da planta
 					PlantasInstancia.AlocaInidiceFabrica( VetorOrdemPlanta[p], IndicePlanta);
-
 					// ordena os veículos com o tipo de ordenação escolhida
 					PlantasInstancia.Plantas[IndicePlanta].VeiculosDaPlanta.OrdenaCarretas(EscolhaVeiculo);
 					// armazena a ordem escolhida dos veículos
 					PlantasInstancia.Plantas[IndicePlanta].VeiculosDaPlanta.ArmazenaVetorIntComOrdem( VetorOrdemVeiculo);
-
+					// percorre todos os veículos d aplanta corrente
 					for( int v = 0; v < (int) PlantasInstancia.Plantas[IndicePlanta].VeiculosDaPlanta.Carretas.size(); v++ ){
-
+						// limpa o vetor de tarefas atendidas ao se tentar atender a demanda não atendida com o veículo corrente
 						DadosTarefasMovidasTentandoAlocar2.clear();
-
+						// tenta atender a demnada não atendida com o veículo corrente
 						TarefaAdicionada = ConstrucoesInstancia.AdicionaTarefaComVeiculoFixo(0, ConstrucaoNaoAtendida, DemandaNaoAtendidaFim, VetorOrdemPlanta[p], VetorOrdemVeiculo[v], DadosTarefasMovidasTentandoAlocar2, 1, 0, RealizaProcessoDeAtrazarTarefas, EscolhaVeiculo, EscolhaPlanta, PlantasInstancia, Imprime, " adiciona tarefa não adicionada -> Solucao::ProcessoViabilizacao2 ");
-
+						// caso tenha conseguido atender a dmenada não atendida corrente se entra no if
 						if( TarefaAdicionada == 1){
 							// marca todas as construções como possiveis a alocar demandas, todas com 0 em ConstrucoesAnalisadas ( IMPORTANTE!!!!!!!!! Construções analizadas é diferente que ConstrucaoPodeSerSuprida. Elas desempenham funçẽos diferentes apesar de parecerem iguais)
 							ConstrucoesInstancia.InicializaConstrucoesAnalizadas();
@@ -852,26 +819,15 @@ int		Solucao::Viabilidade2(int EscolhaVeiculo, int EscolhaConstrucao, int Escolh
 							// Verifica se tem tarefa a se colocar
 
 							// escolhe a construção com o menor indice e que pode ser atendida ( todas as construções com 0 em CosntruçõesAnalisadas, estas são as que não tem suas demandas todas atendidas e que não sejá a que passou a ter uma demanda que não era atendida antes e agora é atendida)
-							PossuiConstrucaoParaAnalisar = SelecionaConstrucao( ConstrucaoParaAtender, IndiceConstrucaoParaAtender);
-
-						// caso se tenha uma construção que ainda se pode alocar demandas
-							// caso se tenha uma construção que ainda se pode alocar demandas
-							while( PossuiConstrucaoParaAnalisar == 1){
-								//cout << " const [" << ConstrucaoParaAtender << "] ";
-
+							while( SelecionaConstrucao( ConstrucaoParaAtender, IndiceConstrucaoParaAtender) == 1){
 								// coloca a demanda que se tem que alocar no momento
 								d2 = ConstrucoesInstancia.Construcoes[IndiceConstrucaoParaAtender].StatusAtendimento;
-
-								// tenta adicionar a demanda corrente
-
 								// faz que ainda é possivel se adicionar uma demanda na cosntrução corrente
 								TarefaAdicionada = 1;
 								// enquanto for possivel adicionar uma demanda na construção corrente e que a cosntrução ainda não tenha todas as suas demandas supridas, se mantem no loop
 								while( d2 < ConstrucoesInstancia.Construcoes[IndiceConstrucaoParaAtender].NumeroDemandas && TarefaAdicionada == 1){
-
 									// tenta adicionar a demanda corrente (d2) a cosntrução
 									TarefaAdicionada = ConstrucoesInstancia.AdicionaTarefa( 0, ConstrucaoParaAtender, d2, DadosTarefasMovidasTentandoAlocar2, 1, 0, RealizaProcessoDeAtrazarTarefas, EscolhaVeiculo, EscolhaPlanta, PlantasInstancia, Imprime , " Readicionando -> Solucao::ProcessoViabilizacao2 ");
-
 									// passa para a proxima demnada que se pode adicionar na construção
 									d2++;
 								}
@@ -889,10 +845,7 @@ int		Solucao::Viabilidade2(int EscolhaVeiculo, int EscolhaConstrucao, int Escolh
 									// marca a construção como sendo que não se consegue atender suas demandas
 									ConstrucoesInstancia.Construcoes[IndiceConstrucaoParaAtender].ConstrucaoAnalizada = -1;
 								}
-								// se passa para a proxima construção que se pode atender
-								PossuiConstrucaoParaAnalisar = SelecionaConstrucao( ConstrucaoParaAtender, IndiceConstrucaoParaAtender);
 							}
-
 							// calcula o nivel de inviabilidade que ira mostrar se a soluçpão melhorou ou não
 							ConstrucoesInstancia.CalcularNivelDeInviabilidade();
 							// verifica se o nivel de inviabilidade foi melhorado com o procedimento
@@ -924,19 +877,15 @@ int		Solucao::Viabilidade2(int EscolhaVeiculo, int EscolhaConstrucao, int Escolh
 								if( Imprime == 1){
 									cout << endl << endl << "    Não melhorou !!!!!!" << endl << endl;
 								}
-								//cout << endl << endl << "    Não melhorou !!!!!!" << endl << endl;
-
-								// retorna a solução a  consição inicial
+								// retorna a solução a  condição inicial
 								if(ConstrucoesInstancia.ReadicionaDeletaTarefasApartirDeDados(  DadosTarefasMovidasTentandoAlocar2, PlantasInstancia ) == 0){
 									cout << endl << endl << "   problema em adicionar e deletar tarefas DadosTarefasMovidasTentandoAlocar ->  Solucao::ProcessoViabilizacao2" << endl << endl;
 								}
-								DadosTarefasMovidasTentandoAlocar2.clear();
 							}
 						}
 					}
 				}
-
-
+				// se reinicia a configuração antes de deletar e adicionar demandas antes da demanda que se quer colocar
 				if(ConstrucoesInstancia.ReadicionaDeletaTarefasApartirDeDados(  DadosTarefasMovidasTentandoAlocar1, PlantasInstancia ) == 0){
 					cout << endl << endl << "   problema em adicionar e deletar tarefas DadosTarefasDemandasAnteriores ->  Solucao::ProcessoViabilizacao2" << endl << endl;
 				}
@@ -950,8 +899,8 @@ int		Solucao::Viabilidade2(int EscolhaVeiculo, int EscolhaConstrucao, int Escolh
 					// caso ainda de para analisar a construção, se deleta a demanda inicial da solução corrente, se guarda essa tarefa em uma estrutura de dados e trabalha com a solução sem a demanda inicial deletada
 					DeletaUltimaDemandaConstrucaoEmAnalise( ConstrucaoNaoAtendida, IndiceConstrucaoNaoAtendida, DemandaNaoAtendidaInicio, DadosTarefasDemandasAnteriores);
 				}
-
 			}else{
+				// se reinicia a configuração antes de deletar e adicionar demandas antes da demanda que se quer colocar
 				if(ConstrucoesInstancia.ReadicionaDeletaTarefasApartirDeDados(  DadosTarefasMovidasTentandoAlocar1, PlantasInstancia ) == 0){
 					cout << endl << endl << "   problema em adicionar e deletar tarefas DadosTarefasDemandasAnteriores ->  Solucao::ProcessoViabilizacao2" << endl << endl;
 				}
@@ -967,7 +916,7 @@ int		Solucao::Viabilidade2(int EscolhaVeiculo, int EscolhaConstrucao, int Escolh
 				}
 			}
 		}
-
+		// recoloca as demandas anteriores na construção corrente
 		if(ConstrucoesInstancia.ReadicionaDeletaTarefasApartirDeDados(  DadosTarefasDemandasAnteriores, PlantasInstancia ) == 0){
 			// probelam em readicionar as demandas
 			cout << endl << endl << "   problema em adicionar e deletar tarefas DadosTarefasDemandasAnteriores ->  Solucao::ProcessoViabilizacao2" << endl << endl;
@@ -977,6 +926,11 @@ int		Solucao::Viabilidade2(int EscolhaVeiculo, int EscolhaConstrucao, int Escolh
 	}
 
 	//ConstrucoesInstancia.ImprimeContrucoes(PlantasInstancia, 0,1,0,Arquivo);
+	DadosTarefasMovidasTentandoAlocar1.clear();
+	DadosTarefasMovidasTentandoAlocar2.clear();
+	DadosTarefasDemandasAnteriores.clear();
+	VetorOrdemPlanta.clear();
+	VetorOrdemVeiculo.clear();
 	return 0;
 }
 
@@ -984,7 +938,7 @@ void	Solucao::ProcessoViabilizacao2(int EscolhaVeiculo, int EscolhaConstrucao, i
 	//int PararPrograma;
 
 	// calcula o nível de iniviabilidade da solução
-	ConstrucoesInstancia.CalcularNivelDeInviabilidade();
+	CalculaNiveisViabilidade();
 	// escreve o nivel de inviabilidade antes de entrar no processo de viabilização
 	if( ImprimeSolucao == 1){
 		printf( "   nivel de inviabilidade inicial = %d \n", ConstrucoesInstancia.NivelDeInviabilidade);
@@ -1010,11 +964,15 @@ void	Solucao::CalculaMakespan(){
 	Makespan = PlantasInstancia.MakespanPLantas + ConstrucoesInstancia.MakespanConstrucoes;
 }
 
+void	Solucao::CalculaNiveisViabilidade(){
+	ConstrucoesInstancia.CalcularNivelDeInviabilidade();
+}
+
 void	Solucao::RealizarBuscaLocalCaminhao(int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta,int imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo, int RealizaProcessoDeAtrazarTarefas){
 	// calsse da busca local
 	BuscaLocal busca;
 
-	// variaveis d econtrole do processo, para contar o numero de iterações e para parar o programa
+	// variaveis de controle do processo, para contar o numero de iterações e para parar o programa
 	int NumeroDeVezes;
 	//int ParaPrograma;
 	int ImprimeEstruturas;
@@ -1168,6 +1126,7 @@ public:
 	ConjuntoSolucoes();			// classe construtoora
 	void	InsereSolucao(int np, ConjuntoPlantas Plantas, int ne, ConjuntoConstrucoes Construcoes, int nv, double v,double TDVC);			// carrega uma solução ao vetor das soluções
 	void	CalculaMakespanSolucoes();		// calcula o makespan das soluções
+	void	CalculaNiveisViabilidadeSolucoes();		// calcula o niveis de viabilidade das solução
 	void	Imprime(bool ImprimePlanta, bool ImprimeConstrucao, bool VerificaViabilidade, int ImprimeSolucao , int ImprimeArquivo, PonteiroArquivo  &Arquivo);		// imprime as soluções
 	~ConjuntoSolucoes();
 
@@ -1191,11 +1150,16 @@ void	ConjuntoSolucoes::CalculaMakespanSolucoes(){
 	// percorre por todas as soluções
 	for( int s = 0; s <  (int) Solucoes.size(); s++){
 		// calcula o makespan da solução corrente de suas construções
-		Solucoes[s].ConstrucoesInstancia.CalculaMakespansConstrucoes();
-		// calcula o makespan da solução corrente de suas plantas
-		Solucoes[s].PlantasInstancia.CalculaMakespanPlantas();
-		// calcula o makespan da solução
-		Solucoes[s].Makespan = Solucoes[s].ConstrucoesInstancia.MakespanConstrucoes + Solucoes[s].PlantasInstancia.MakespanPLantas;
+		Solucoes[s].CalculaMakespan();
+	}
+}
+
+// calcula o makespan das soluções
+void	ConjuntoSolucoes::CalculaNiveisViabilidadeSolucoes(){
+	// percorre por todas as soluções
+	for( int s = 0; s <  (int) Solucoes.size(); s++){
+		// calcula o nivel de viabilidade da solução
+		Solucoes[s].CalculaNiveisViabilidade();
 	}
 }
 

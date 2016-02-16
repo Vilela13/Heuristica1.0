@@ -299,7 +299,6 @@ void	Heuristica::ExecutaVNS(string NomeInstancia, int EscolhaVeiculo, int Escolh
 
 
 
-
 	if(Solucoes.Solucoes[0].ConstrucoesInstancia.NivelDeInviabilidade == 0){
 		printf("         %f \t", Solucoes.Solucoes[0].Makespan);
 	}else{
@@ -370,27 +369,18 @@ void	Heuristica::ExecutaVNS(string NomeInstancia, int EscolhaVeiculo, int Escolh
 		//cout <<  endl << "   V1 = " ;
 		//cin >> ParaPrograma;
 
-
+		Solucoes.CalculaNiveisViabilidadeSolucoes();
 		Solucoes.CalculaMakespanSolucoes();
 		Solucoes.Imprime(ImprimePlanta, ImprimeConstrucao, IntervalosRespeitadosConstrucaoes, ImprimeSolucao, ImprimeArquivo, Arquivo);
 
 		if( Solucoes.Solucoes[0].ConstrucoesInstancia.NivelDeInviabilidade == 0){
-			printf(" %f \t   ------ \t", Solucoes.Solucoes[0].Makespan);
+
+			printf(" %f \t ------ \t", Solucoes.Solucoes[0].Makespan);
 		}else{
 			printf("     ------   \t");
 		}
 
 		if( Solucoes.Solucoes[0].ConstrucoesInstancia.NivelDeInviabilidade != 0){
-
-
-
-
-			//Solucoes.Imprime(ImprimePlanta, ImprimeConstrucao, 0, 1 , 0, Arquivo);
-			//cin >> ParaPrograma;
-
-
-
-
 
 			if( ImprimeSolucao == 1){
 				cout << endl << endl << "############################### Procedimento Viabilidade 2 #####################################" << endl << endl;
@@ -410,24 +400,9 @@ void	Heuristica::ExecutaVNS(string NomeInstancia, int EscolhaVeiculo, int Escolh
 
 			//Solucoes.Imprime(ImprimePlanta, ImprimeConstrucao, IntervalosRespeitadosConstrucaoes, 1 , 0, Arquivo);
 
-
-
-
-
-			//cout << endl << "   V2 = " ;
-			//cin >> ParaPrograma;
-			//Solucoes.Imprime(ImprimePlanta, ImprimeConstrucao, IntervalosRespeitadosConstrucaoes, 1 , 0, Arquivo);
-			//cin >> ParaPrograma;
-
+			Solucoes.CalculaNiveisViabilidadeSolucoes();
 			Solucoes.CalculaMakespanSolucoes();
 			Solucoes.Solucoes[0].Imprime(ImprimePlanta, ImprimeConstrucao, IntervalosRespeitadosConstrucaoes, ImprimeSolucao, ImprimeArquivo, Arquivo);
-
-
-
-
-
-
-
 
 			if( Solucoes.Solucoes[0].ConstrucoesInstancia.NivelDeInviabilidade == 0){
 				printf(" %f \t", Solucoes.Solucoes[0].Makespan);
@@ -708,16 +683,18 @@ void	Heuristica::ExecutaGrasp(string NomeInstancia, int NumeroIteracoes, int Esc
 
 		if( SolucaoCorrente->ConstrucoesInstancia.NivelDeInviabilidade != 0){
 			SolucaoCorrente->ProcessoViabilizacao1( EscolhaVeiculo, EscolhaConstrucao, EscolhaPlanta, ImprimeViabilizacao, ImprimeSolucao, ImprimeArquivo, Arquivo, RealizaProcessoDeAtrazarTarefas);
+			SolucaoCorrente->CalculaMakespan();
+			SolucaoCorrente->CalculaNiveisViabilidade();
 			if( SolucaoCorrente->ConstrucoesInstancia.NivelDeInviabilidade != 0){
 				SolucaoCorrente->ProcessoViabilizacao2( EscolhaVeiculo, EscolhaConstrucao, EscolhaPlanta, ImprimeViabilizacao, ImprimeSolucao, ImprimeArquivo, Arquivo, RealizaProcessoDeAtrazarTarefas);
+				SolucaoCorrente->CalculaMakespan();
+				SolucaoCorrente->CalculaNiveisViabilidade();
 				if( SolucaoCorrente->ConstrucoesInstancia.NivelDeInviabilidade == 0){
-					SolucaoCorrente->CalculaMakespan();
 					fprintf(Arquivo," ------ \t %f \t", SolucaoCorrente->Makespan);
 				}else{
 					fprintf(Arquivo," ------ \t ------ \t");
 				}
 			}else{
-				SolucaoCorrente->CalculaMakespan();
 				fprintf(Arquivo,"  %f \t ------ \t", SolucaoCorrente->Makespan);
 			}
 		}else{

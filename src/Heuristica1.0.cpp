@@ -48,7 +48,7 @@ int main(int argc, char **argv) {
 		string 	TipoProcedimento;
 		TipoProcedimento = argv[3];
 
-		if( TipoProcedimento != "vns" && TipoProcedimento != "grasp"){
+		if( TipoProcedimento != "cons" && TipoProcedimento != "consCir" && TipoProcedimento != "grasp" && TipoProcedimento != "graspCir"){
 			cout << endl << endl << endl <<  argv[2] << "   Problema em se identificar o tipo de procediemnto a se realizar " << endl << endl << endl;
 			return 0;
 		}
@@ -159,12 +159,17 @@ int main(int argc, char **argv) {
 		 char 	buffer[26];
 		 struct tm* tm_info;
 
-		 if( TipoProcedimento == "vns" ){
+		 if( TipoProcedimento == "cons" || TipoProcedimento == "consCir"){
 
 			 if( argc != 7){
-				 cout << endl << endl << endl << "    Probelma na entrada de parametros para se executar o vns" << endl << endl << endl;
+				 if( TipoProcedimento == "cons"){
+					 cout << endl << endl << endl << "    Probelma na entrada de parametros para se executar o cons" << endl << endl << endl;
+				 }else{
+					 cout << endl << endl << endl << "    Probelma na entrada de parametros para se executar o cons Circular" << endl << endl << endl;
+				 }
 				 return 0;
 			 }
+
 
 			 // ordena na ordem do menor número de tarefas para o maior se colocar o valor 1, ordena na ordem do maior número de tarefas para o menor se colocar o valor 2
 			 EscolhaVeiculo = atoi( argv[4]);			// função atoi tranforma char em inteiro ( biblioteca stdlib.h)
@@ -180,8 +185,13 @@ int main(int argc, char **argv) {
 			tm_info = localtime(&timer);
 			strftime(buffer, 26, " * %H:%M:%S de %d:%m:%Y", tm_info);
 
-			// escreve a hora da execucao e a parte inicial da tabela
-			printf("\n\n ----- Execução as %s ----- \n\n", buffer);
+			if( TipoProcedimento == "cons" ){
+				// escreve a hora da execucao e a parte inicial da tabela
+				printf("\n\n ----- Execução CONS as %s ----- \n\n", buffer);
+			}else{
+				// escreve a hora da execucao e a parte inicial da tabela
+				printf("\n\n ----- Execução CONS Circular as %s ----- \n\n", buffer);
+			}
 
 			// escreve o tipo de execução
 
@@ -247,9 +257,12 @@ int main(int argc, char **argv) {
 			printf("\n ******************************************************************** \n\n\n");
 
 
-
-			// escreve cabeçario
-			printf(" Nome_Instancia  \t Construtiva \t Viabilidade1 \t Viabilidade2  \t BuscaLocal1 \t BuscaLocal2 \t BuscaLocal3 \t Tempo (segundos) \n");
+			if( TipoProcedimento == "cons" ){
+				// escreve cabeçario
+				printf(" Nome_Instancia  \t Construtiva \t Viabilidade1 \t Viabilidade2  \t BuscaLocal1 \t BuscaLocal2 \t BuscaLocal3 \t Tempo (segundos) \n");
+			}else{
+				printf(" Nome_Instancia  \t Construtiva \t Viabilidade1 \t Viabilidade2  \t BuscaLocal \t Tempo (segundos) \n");
+			}
 
 			while( !ListaInstancias.empty()){
 				it = ListaInstancias.begin();
@@ -263,7 +276,11 @@ int main(int argc, char **argv) {
 				if( Instancia->LeDados(Nome, EscreveDadosLidosNaTela) == 1){
 					//cout << " Leu Dados" << endl;
 
-					Instancia->ExecutaVNS(Nome, EscolhaVeiculo, EscolhaConstrucao, EscolhaPlanta, RealizaProcessoDeAtrazarTarefas);
+					if( TipoProcedimento == "cons" ){
+						Instancia->ExecutaCONS(Nome, EscolhaVeiculo, EscolhaConstrucao, EscolhaPlanta, RealizaProcessoDeAtrazarTarefas);
+					}else{
+						Instancia->ExecutaCONScir(Nome, EscolhaVeiculo, EscolhaConstrucao, EscolhaPlanta, RealizaProcessoDeAtrazarTarefas);
+					}
 
 				}
 				free(Instancia);
@@ -275,7 +292,7 @@ int main(int argc, char **argv) {
 			return 1;
 		 }
 
-		 if( TipoProcedimento == "grasp" ){
+		 if( TipoProcedimento == "grasp" || TipoProcedimento == "graspCir"){
 
 			 if( argc != 8){
 				 cout << endl << endl << endl << "    Probelma na entrada de parametros para se executar o grasp" << endl << endl << endl;
@@ -299,8 +316,14 @@ int main(int argc, char **argv) {
 			tm_info = localtime(&timer);
 			strftime(buffer, 26, " * %H:%M:%S de %d:%m:%Y", tm_info);
 
-			// escreve a hora da execucao e a parte inicial da tabela
-			printf("\n\n ----- Execução as %s ----- \n\n", buffer);
+			if( TipoProcedimento == "grasp"){
+				// escreve a hora da execucao e a parte inicial da tabela
+				printf("\n\n ----- Execução GRASP as %s ----- \n\n", buffer);
+			}else{
+				// escreve a hora da execucao e a parte inicial da tabela
+				printf("\n\n ----- Execução GRASP Circular as %s ----- \n\n", buffer);
+			}
+
 
 			// escreve o tipo de execução
 
@@ -392,7 +415,11 @@ int main(int argc, char **argv) {
 				if( Instancia->LeDados(Nome, EscreveDadosLidosNaTela) == 1){
 					//cout << " Leu Dados" << endl;
 
-					Instancia->ExecutaGrasp(Nome, NumeroIteracoes, EscolhaVeiculo,  EscolhaConstrucao,  EscolhaPlanta, RealizaProcessoDeAtrazarTarefas);
+					if( TipoProcedimento == "grasp"){
+						Instancia->ExecutaGrasp(Nome, NumeroIteracoes, EscolhaVeiculo,  EscolhaConstrucao,  EscolhaPlanta, RealizaProcessoDeAtrazarTarefas);
+					}else{
+						Instancia->ExecutaGraspCir(Nome, NumeroIteracoes, EscolhaVeiculo,  EscolhaConstrucao,  EscolhaPlanta, RealizaProcessoDeAtrazarTarefas);
+					}
 
 				}
 				free(Instancia);

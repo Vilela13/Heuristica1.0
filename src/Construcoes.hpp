@@ -1635,6 +1635,8 @@ int 	Construcao::DemandaNaoatendida( int &DemandaNaoAtendida){
 // Imprime os dados da construções
 void	Construcao::ImprimeContrucao(int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo){
 
+	// calcular o makespan da construção
+	CalculaMakespan();
 	// imprime descarregamentos
 	if( ImprimeSolucao == 1){
 		printf( "# Contrucao %d com %d demandas, janela de tempo (%.4f - %.4f), com rank = %.4f \n",NumeroDaConstrucao, NumeroDemandas, TempoMinimoDeFuncionamento, TempoMaximoDeFuncionamento, RankTempoDemandas);
@@ -3096,6 +3098,11 @@ int 	ConjuntoConstrucoes::ExisteConstrucaoComDemandaNaoAtendida( int &Construcao
 
 // Imprime as construções e em seguida o nivel de inviabilidade
 void 	ConjuntoConstrucoes::ImprimeContrucoes(ConjuntoPlantas& Plantas, int VerificaViabilidade ,  int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo){
+	// calcular o makespan das construções
+	CalculaMakespansConstrucoes();
+	// calcular o nivel de viabilidade das construções
+	CalcularNivelDeInviabilidade();
+
 	if( ImprimeSolucao == 1){
 		cout << endl << endl << " [[[[[[  Imprime construcoes  ]]]]]]" << endl;
 	}

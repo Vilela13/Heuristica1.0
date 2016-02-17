@@ -28,8 +28,8 @@ public:
 	void	ExecutaCONS(string NomeInstancia, int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta,  int RealizaProcessoDeAtrazarTarefas);			// executa o procedimento heuristico
 	void	ExecutaCONScir(string NomeInstancia, int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta, int RealizaProcessoDeAtrazarTarefas);
 
-	void	ExecutaGrasp(string NomeInstancia, int NumeroIteracoes,  int EscolhaVeiculo, int EscolhaConstrucao,  int EscolhaPlanta,  int RealizaProcessoDeAtrazarTarefas);
-	void	ExecutaGraspCir(string NomeInstancia, int NumeroIteracoes, int EscolhaVeiculo, int EscolhaConstrucao,  int EscolhaPlanta,  int RealizaProcessoDeAtrazarTarefas);
+	void	ExecutaGrasp(string NomeInstancia, long int NumeroIteracoes, long int TempoExecucaoMaximo, int EscolhaVeiculo, int EscolhaConstrucao,  int EscolhaPlanta,  int RealizaProcessoDeAtrazarTarefas);
+	void	ExecutaGraspCir(string NomeInstancia, long int NumeroIteracoes, long int TempoExecucaoMaximo, int EscolhaVeiculo, int EscolhaConstrucao,  int EscolhaPlanta,  int RealizaProcessoDeAtrazarTarefas);
 
 	void	LeNomeInstancia(int , string& );			// le o nome da instancia
 	void	LeNumeroPlantasEntregasVeiculos(int);		// le o numero de plantas, veiculos e cosntruções
@@ -924,9 +924,9 @@ void	Heuristica::ExecutaCONScir(string NomeInstancia, int EscolhaVeiculo, int Es
 	// calcula o tempo
 	TempoExecucao = difftime(FinalExecucao, InicioExecucao);
 
-	printf( "  %f \n",  TempoExecucao);
+	printf( "  %.0f \n",  TempoExecucao);
 	if( ImprimeArquivo == 1){
-		fprintf( Arquivo," \n\n Tempo  %f \n\n",  TempoExecucao);
+		fprintf( Arquivo," \n\n Tempo  %.0f \n\n",  TempoExecucao);
 	}
 
 	fclose (Arquivo);
@@ -937,7 +937,7 @@ void	Heuristica::ExecutaCONScir(string NomeInstancia, int EscolhaVeiculo, int Es
 
 
 
-void	Heuristica::ExecutaGrasp(string NomeInstancia, int NumeroIteracoes, int EscolhaVeiculo, int EscolhaConstrucao,  int EscolhaPlanta,  int RealizaProcessoDeAtrazarTarefas){
+void	Heuristica::ExecutaGrasp(string NomeInstancia, long int NumeroIteracoes, long int TempoExecucaoMaximo, int EscolhaVeiculo, int EscolhaConstrucao,  int EscolhaPlanta,  int RealizaProcessoDeAtrazarTarefas){
 
 	// ponteiro para o arquivo que se irá salvar os dados
 	PonteiroArquivo  Arquivo;
@@ -998,6 +998,8 @@ void	Heuristica::ExecutaGrasp(string NomeInstancia, int NumeroIteracoes, int Esc
 	// variavel que informa se irá realizar a verificação da viabilidade ou não, inicializa com 1 que é que vai ter a verificação da viabilidade
 	int VerificaViabilidade;
 	VerificaViabilidade = 1;
+
+	int iteracoes;
 
 	double semente;
 	semente = 13;
@@ -1080,8 +1082,11 @@ void	Heuristica::ExecutaGrasp(string NomeInstancia, int NumeroIteracoes, int Esc
 
 	// coleta o horario inicial
 	InicioExecucao = time(NULL);
+	FinalExecucao = time(NULL);
 
-	for( int iteracoes = 0; iteracoes < NumeroIteracoes; iteracoes++){
+	iteracoes = 0;
+
+	while( iteracoes < NumeroIteracoes && (int) difftime(FinalExecucao, InicioExecucao) < TempoExecucaoMaximo ){
 
 		Prod1 = new Procedimento1;
 
@@ -1155,6 +1160,8 @@ void	Heuristica::ExecutaGrasp(string NomeInstancia, int NumeroIteracoes, int Esc
 			}
 
 		}
+		FinalExecucao = time(NULL);
+		iteracoes++;
 	}
 
 	if( SolucaoFinal.ConstrucoesInstancia.NivelDeInviabilidade == 0){
@@ -1171,9 +1178,9 @@ void	Heuristica::ExecutaGrasp(string NomeInstancia, int NumeroIteracoes, int Esc
 	// calcula o tempo
 	TempoExecucao = difftime(FinalExecucao, InicioExecucao);
 
-	printf( " \t %f \n",  TempoExecucao);
+	printf( " \t %.0f \n",  TempoExecucao);
 	if( ImprimeArquivo == 1){
-		fprintf( Arquivo," \n\n Tempo  %f \n\n",  TempoExecucao);
+		fprintf( Arquivo," \n\n Tempo  %.0f \n\n",  TempoExecucao);
 	}
 
 	fclose (Arquivo);
@@ -1182,7 +1189,7 @@ void	Heuristica::ExecutaGrasp(string NomeInstancia, int NumeroIteracoes, int Esc
 
 
 
-void	Heuristica::ExecutaGraspCir(string NomeInstancia, int NumeroIteracoes, int EscolhaVeiculo, int EscolhaConstrucao,  int EscolhaPlanta,  int RealizaProcessoDeAtrazarTarefas){
+void	Heuristica::ExecutaGraspCir(string NomeInstancia, long int NumeroIteracoes,  long int TempoExecucaoMaximo, int EscolhaVeiculo, int EscolhaConstrucao,  int EscolhaPlanta,  int RealizaProcessoDeAtrazarTarefas){
 
 	// ponteiro para o arquivo que se irá salvar os dados
 	PonteiroArquivo  Arquivo;
@@ -1248,6 +1255,8 @@ void	Heuristica::ExecutaGraspCir(string NomeInstancia, int NumeroIteracoes, int 
 	int Buaca1;
 	double MakespanAux2;
 	int Buaca2;
+
+	int iteracoes;
 
 
 	double semente;
@@ -1331,8 +1340,11 @@ void	Heuristica::ExecutaGraspCir(string NomeInstancia, int NumeroIteracoes, int 
 
 	// coleta o horario inicial
 	InicioExecucao = time(NULL);
+	FinalExecucao = time(NULL);
 
-	for( int iteracoes = 0; iteracoes < NumeroIteracoes; iteracoes++){
+	iteracoes = 0;
+
+	while( iteracoes < NumeroIteracoes && (int) difftime(FinalExecucao, InicioExecucao) < TempoExecucaoMaximo ){
 
 		Prod1 = new Procedimento1;
 
@@ -1422,6 +1434,8 @@ void	Heuristica::ExecutaGraspCir(string NomeInstancia, int NumeroIteracoes, int 
 			}
 
 		}
+		FinalExecucao = time(NULL);
+		iteracoes++;
 	}
 
 	if( SolucaoFinal.ConstrucoesInstancia.NivelDeInviabilidade == 0){
@@ -1438,9 +1452,9 @@ void	Heuristica::ExecutaGraspCir(string NomeInstancia, int NumeroIteracoes, int 
 	// calcula o tempo
 	TempoExecucao = difftime(FinalExecucao, InicioExecucao);
 
-	printf( " \t %f \n",  TempoExecucao);
+	printf( " \t %.0f \n",  TempoExecucao);
 	if( ImprimeArquivo == 1){
-		fprintf( Arquivo," \n\n Tempo  %f \n\n",  TempoExecucao);
+		fprintf( Arquivo," \n\n Tempo  %.0f \n\n",  TempoExecucao);
 	}
 
 	fclose (Arquivo);

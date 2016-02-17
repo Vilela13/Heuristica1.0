@@ -22,7 +22,11 @@ int main(int argc, char **argv) {
 		int 	EscolhaPlanta;
 
 		// variavel que armazena o numero de iterações que serão realizadas no GRASP
-		int 	NumeroIteracoes;
+		string 	NumeroIteracoesString;
+		long int 	NumeroIteracoes;
+		// tempo maximo de execução em segundos
+		string 	TempoExecucaoMaximoString;
+		long int 	TempoExecucaoMaximo;
 
 		// variavel que sinaliza se realizará o processo recursivo para se tentar atender a demanda se atrasando as demandas anteriores
 		int 	RealizaProcessoDeAtrazarTarefas;
@@ -139,7 +143,7 @@ int main(int argc, char **argv) {
 
 		if ( ArquivoInstancia.is_open() ){
 			ArquivoInstancia >> Nome;
-			cout << " instancia lida = " << Nome << endl;
+			//cout << " instancia lida = " << Nome << endl;
 			while( Nome != "EOF"){
 				ListaInstancias.push_back(Nome);
 				ArquivoInstancia >> Nome;
@@ -294,20 +298,45 @@ int main(int argc, char **argv) {
 
 		 if( TipoProcedimento == "grasp" || TipoProcedimento == "graspCir"){
 
-			 if( argc != 8){
+			 if( argc != 9){
 				 cout << endl << endl << endl << "    Probelma na entrada de parametros para se executar o grasp" << endl << endl << endl;
 				 return 0;
 			 }
 
 
-			 // modo de escolha da construção, 1 escolhe a construção por meio do RankTempoDemandas, 2 escolhe a construção com mais demandas,
-			 NumeroIteracoes = atoi( argv[4]);		// função atoi tranforma char em inteiro ( biblioteca stdlib.h)
+			 // numero maximo de iterações
+			 NumeroIteracoesString = argv[4];
+			 if( NumeroIteracoesString == "-"){
+				 NumeroIteracoes = LONG_MAX;
+			 }else{
+				 if( atoi( argv[4]) > 0){
+					 NumeroIteracoes = atoi( argv[4]);		// função atoi tranforma char em inteiro ( biblioteca stdlib.h)
+				 }else{
+					 cout << endl << endl << " Numero de iterações negativo " << Nome << endl << endl;
+					 return 0;
+				 }
+			 }
+
+			 TempoExecucaoMaximoString = argv[5];
+			 if( TempoExecucaoMaximoString == "-"){
+				 TempoExecucaoMaximo = LONG_MAX;
+			 }else{
+				 if( atoi( argv[5]) > 0){
+					 TempoExecucaoMaximo = atoi( argv[5]);		// função atoi tranforma char em inteiro ( biblioteca stdlib.h)
+				 }else{
+					 cout << endl << endl << " Tempo de execução negativo " << Nome << endl << endl;
+					 return 0;
+				 }
+				 // tempo maximo de execução do problema
+				 TempoExecucaoMaximo = atoi( argv[5]);		// função atoi tranforma char em inteiro ( biblioteca stdlib.h)
+			 }
+
 			 // ordena na ordem do menor número de tarefas para o maior se colocar o valor 1, ordena na ordem do maior número de tarefas para o menor se colocar o valor 2
-			 EscolhaVeiculo = atoi( argv[5]);		// função atoi tranforma char em inteiro ( biblioteca stdlib.h)
+			 EscolhaVeiculo = atoi( argv[6]);		// função atoi tranforma char em inteiro ( biblioteca stdlib.h)
 			 // modo de escolha da construção, 1 escolhe a construção por meio do RankTempoDemandas, 2 escolhe a construção com mais demandas,
-			EscolhaConstrucao = atoi( argv[6]);		// função atoi tranforma char em inteiro ( biblioteca stdlib.h)
+			EscolhaConstrucao = atoi( argv[7]);		// função atoi tranforma char em inteiro ( biblioteca stdlib.h)
 			 // modo de escolha da planta, 1 é a planta mais proxima, 1 é a planta com menos tarefas, 3 é a planta com mais tarefas
-			 EscolhaPlanta = atoi( argv[7]);			// função atoi tranforma char em inteiro ( biblioteca stdlib.h)
+			 EscolhaPlanta = atoi( argv[8]);			// função atoi tranforma char em inteiro ( biblioteca stdlib.h)
 
 
 
@@ -330,12 +359,19 @@ int main(int argc, char **argv) {
 			printf("\n ******************** Tipo Execução **************************** \n\n");
 
 
-			if( NumeroIteracoes > 0){
-				printf("  -> %d número de iterações  \n", NumeroIteracoes);
+			if( NumeroIteracoesString == "-" ){
+				printf("  -> Número irrestrito de iterações  \n");
 			}else{
-				cout << endl << endl << endl << "      Problema com o número de iterações a se realizar " << endl << endl << endl;
-				return 0;
+				printf("  -> %d número de iterações  \n", NumeroIteracoes);
 			}
+
+			if( TempoExecucaoMaximoString == "-"){
+				printf("  -> Tempo de execução irrestrito  \n");
+			}else{
+				printf("  -> Tempo maximo para a execução : %d segundos  \n", TempoExecucaoMaximo );
+			}
+
+
 			// escreve o tipo de escolha do veículo
 			switch (EscolhaVeiculo) {
 				case 1:
@@ -416,9 +452,9 @@ int main(int argc, char **argv) {
 					//cout << " Leu Dados" << endl;
 
 					if( TipoProcedimento == "grasp"){
-						Instancia->ExecutaGrasp(Nome, NumeroIteracoes, EscolhaVeiculo,  EscolhaConstrucao,  EscolhaPlanta, RealizaProcessoDeAtrazarTarefas);
+						Instancia->ExecutaGrasp(Nome, NumeroIteracoes, TempoExecucaoMaximo, EscolhaVeiculo,  EscolhaConstrucao,  EscolhaPlanta, RealizaProcessoDeAtrazarTarefas);
 					}else{
-						Instancia->ExecutaGraspCir(Nome, NumeroIteracoes, EscolhaVeiculo,  EscolhaConstrucao,  EscolhaPlanta, RealizaProcessoDeAtrazarTarefas);
+						Instancia->ExecutaGraspCir(Nome, NumeroIteracoes, TempoExecucaoMaximo, EscolhaVeiculo,  EscolhaConstrucao,  EscolhaPlanta, RealizaProcessoDeAtrazarTarefas);
 					}
 
 				}

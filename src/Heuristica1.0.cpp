@@ -238,7 +238,7 @@ int main(int argc, char **argv) {
 			// escreve o tipo de escolha do planta
 			switch (EscolhaPlanta) {
 				case 1:
-					printf("  -> Planta mais proxima da cosntrução \n");
+					printf("  -> Planta mais proxima da construção \n");
 					break;
 				case 2:
 					printf("  -> Planta com menor número de tarefas \n");

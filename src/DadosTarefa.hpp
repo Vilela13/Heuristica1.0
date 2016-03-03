@@ -18,6 +18,9 @@ public:
 	vector < int >  DadosDasTarefas; 		     // 0 -> NumConstrução ,  1 -> NumPlanta ,     2 -> NumCarreta,           3 -> situação alocação,  4 -> status retirada
 	vector < double > HorariosDasTarefas;		// 0 -> HoraChegaPlanta , 1 -> HoraSaiPlanta , 2 -> HoraChegaConstrução , 3 -> HoraSaiConstrução , 4 -> HoraRetornaPlanta
 	char 	Status;	// será "r" se foi removido e "a" se foi adicionado
+
+	// Funções
+
 	void 	IniciaConteudo();			// construtora vazia da classe
 	void 	InserirConteudo(int NumConstucao, int NumPlanta, int NumCarreta, int Situacao, int SituacaoRetirada, double HoraInicioPlanta, double HoraSaiPlanta, double HoraInicioConstrucao, double HoraSaiConstrucao, double HoraRetornaPlanta, char status);			// Insere dados em estrutura
 	void 	Imprimir();				// Imprime dados da estrutura
@@ -88,6 +91,8 @@ void 	DadosTarefa::Imprimir(){
 }
 // destruidora vazia da classe
 DadosTarefa::~DadosTarefa(){
+	DadosDasTarefas.clear();
+	HorariosDasTarefas.clear();
 }
 
 // retira um elemento dos dados das tarefas apartir de dados

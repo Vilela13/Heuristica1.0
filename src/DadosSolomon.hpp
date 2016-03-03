@@ -169,14 +169,14 @@ void 	DadosSolomon::CarregarNumeroNosCoordenadas( string Nome){
 	NumeroDoNo.resize( NumeroNosDadosSolomon + 1 );
 
 	Coordenadas.resize( NumeroNosDadosSolomon + 1 );
-    for( int i = 0; i <= NumeroNosDadosSolomon + 1; i++){
+    for( int i = 0; i <= NumeroNosDadosSolomon; i++){
             Coordenadas[i].resize(2);
 
     }
     Demanda.resize( NumeroNosDadosSolomon + 1 );
 
     JanelaDeTempo.resize( NumeroNosDadosSolomon + 1 );
-    for( int i = 0; i <= NumeroNosDadosSolomon + 1; i++){
+    for( int i = 0; i <= NumeroNosDadosSolomon; i++){
     	JanelaDeTempo[i].resize(2);
 
 	}
@@ -1224,10 +1224,22 @@ void 	DadosSolomon::CriarInstanciaSolomon(string Nome){
 }
 
 DadosSolomon::~DadosSolomon(){
-    for( int i = 0; i <= NumeroNosDadosSolomon; i++){
-        Coordenadas[i].clear();
-    }
+
+    NomeInstancia.clear();
+    Auxiliar.clear();
+    NumeroDoNo.clear();
     Coordenadas.clear();
+    Demanda.clear();
+    JanelaDeTempo.clear();
+    TempoDeServico.clear();
+    NoPlanta.clear();
+    NoCliente.clear();
+    CaminhoesPlanta.clear();
+    NumeroCarretas.clear();		// guarda o numero de clientes
+    HoraInicioPlanta.clear();
+    HoraFinalPlanta.clear();
+    HoraInicioCliente.clear();
+    HoraFinalCliente.clear();
 }
 
 #endif /* DADOSSOLOMON_HPP_ */

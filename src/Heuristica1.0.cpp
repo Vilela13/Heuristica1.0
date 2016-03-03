@@ -124,7 +124,7 @@ int main(int argc, char **argv) {
 			InstanciaSolomon->EscreverComandosExcel( Nome );					// Não implementado ainda
 			cout << " sai 3 - escreve comandos excel" << endl;
 		}
-		free(InstanciaSolomon);
+		delete(InstanciaSolomon);
 
 
 		// -------------------------- Resolve as instancais atraevez dos procediemntos implementados ----------------------- //
@@ -287,7 +287,7 @@ int main(int argc, char **argv) {
 					}
 
 				}
-				free(Instancia);
+				delete(Instancia);
 			}
 
 			ArquivoExcelResposta.close();
@@ -362,13 +362,13 @@ int main(int argc, char **argv) {
 			if( NumeroIteracoesString == "-" ){
 				printf("  -> Número irrestrito de iterações  \n");
 			}else{
-				printf("  -> %d número de iterações  \n", NumeroIteracoes);
+				printf("  -> %ld número de iterações  \n", NumeroIteracoes);
 			}
 
 			if( TempoExecucaoMaximoString == "-"){
 				printf("  -> Tempo de execução irrestrito  \n");
 			}else{
-				printf("  -> Tempo maximo para a execução : %d segundos  \n", TempoExecucaoMaximo );
+				printf("  -> Tempo maximo para a execução : %ld segundos  \n", TempoExecucaoMaximo );
 			}
 
 
@@ -458,7 +458,7 @@ int main(int argc, char **argv) {
 					}
 
 				}
-				free(Instancia);
+				delete(Instancia);
 			}
 
 			ArquivoExcelResposta.close();

@@ -163,11 +163,11 @@ void	Heuristica::ExecutaCONS(string NomeInstancia, int EscolhaVeiculo, int Escol
 	ConjuntoSolucoes Solucoes;
 
 	// variavel que informa se irá realizar a verificação da viabilidade ou não, inicializa com 1 que é que vai ter a verificação da viabilidade
-	int VerificaViabilidade;
-	VerificaViabilidade = 1;
+	//int VerificaViabilidade;
+	//VerificaViabilidade = 1;
 
-	double semente;
-	semente = 13;
+	//double semente;
+	//semente = 13;
 
 	//srand( semente );
 
@@ -570,16 +570,16 @@ void	Heuristica::ExecutaCONScir(string NomeInstancia, int EscolhaVeiculo, int Es
 	ConjuntoSolucoes Solucoes;
 
 	// variavel que informa se irá realizar a verificação da viabilidade ou não, inicializa com 1 que é que vai ter a verificação da viabilidade
-	int VerificaViabilidade;
-	VerificaViabilidade = 1;
+	//int VerificaViabilidade;
+	//VerificaViabilidade = 1;
 
 	double MakespanAux1;
 	int Buaca1;
 	double MakespanAux2;
 	int Buaca2;
 
-	double semente;
-	semente = 13;
+	//double semente;
+	//semente = 13;
 
 	//srand( semente );
 
@@ -956,13 +956,13 @@ void	Heuristica::ExecutaGrasp(string NomeInstancia, long int NumeroIteracoes, lo
 	time_t InicioExecucao, FinalExecucao;
 	double TempoExecucao;
 
-	bool ImprimePlanta;
-	bool ImprimeConstrucao;
-	bool IntervalosRespeitadosConstrucaoes;
+	//bool ImprimePlanta;
+	//bool ImprimeConstrucao;
+	//bool IntervalosRespeitadosConstrucaoes;
 
-	ImprimePlanta = 1;
-	ImprimeConstrucao = 1;
-	IntervalosRespeitadosConstrucaoes = 1;
+	//ImprimePlanta = 1;
+	//ImprimeConstrucao = 1;
+	//IntervalosRespeitadosConstrucaoes = 1;
 
 	int ImprimeProcedimentoConstrutivo;
 	ImprimeProcedimentoConstrutivo = 0;
@@ -996,13 +996,13 @@ void	Heuristica::ExecutaGrasp(string NomeInstancia, long int NumeroIteracoes, lo
 	Solucao SolucaoFinal;
 
 	// variavel que informa se irá realizar a verificação da viabilidade ou não, inicializa com 1 que é que vai ter a verificação da viabilidade
-	int VerificaViabilidade;
-	VerificaViabilidade = 1;
+	//int VerificaViabilidade;
+	//VerificaViabilidade = 1;
 
 	int iteracoes;
 
-	double semente;
-	semente = 13;
+	//double semente;
+	//semente = 13;
 
 
 
@@ -1208,13 +1208,13 @@ void	Heuristica::ExecutaGraspCir(string NomeInstancia, long int NumeroIteracoes,
 	time_t InicioExecucao, FinalExecucao;
 	double TempoExecucao;
 
-	bool ImprimePlanta;
-	bool ImprimeConstrucao;
-	bool IntervalosRespeitadosConstrucaoes;
+	//bool ImprimePlanta;
+	//bool ImprimeConstrucao;
+	//bool IntervalosRespeitadosConstrucaoes;
 
-	ImprimePlanta = 1;
-	ImprimeConstrucao = 1;
-	IntervalosRespeitadosConstrucaoes = 1;
+	//ImprimePlanta = 1;
+	//ImprimeConstrucao = 1;
+	//IntervalosRespeitadosConstrucaoes = 1;
 
 	int ImprimeProcedimentoConstrutivo;
 	ImprimeProcedimentoConstrutivo = 0;
@@ -1248,8 +1248,8 @@ void	Heuristica::ExecutaGraspCir(string NomeInstancia, long int NumeroIteracoes,
 	Solucao SolucaoFinal;
 
 	// variavel que informa se irá realizar a verificação da viabilidade ou não, inicializa com 1 que é que vai ter a verificação da viabilidade
-	int VerificaViabilidade;
-	VerificaViabilidade = 1;
+	//int VerificaViabilidade;
+	//VerificaViabilidade = 1;
 
 	double MakespanAux1;
 	int Buaca1;
@@ -1259,8 +1259,8 @@ void	Heuristica::ExecutaGraspCir(string NomeInstancia, long int NumeroIteracoes,
 	int iteracoes;
 
 
-	double semente;
-	semente = 13;
+	//double semente;
+	//semente = 13;
 
 
 

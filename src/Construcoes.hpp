@@ -1257,7 +1257,7 @@ int		Construcao::AlocaAtividadeComHorarioFinalAtendimento( int NumDemanda, doubl
 
 	//int ParaPrograma;
 
-	PonteiroArquivo  Arquivo;
+	//PonteiroArquivo  Arquivo;
 
 	// inicia o vetor que armazena os horariso que as plantas podem atender a demanda
 	Plantas.InicializaVetorHorarioQuePlantaPodeAtender();

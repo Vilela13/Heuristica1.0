@@ -501,14 +501,7 @@ int		Solucao::SelecionaConstrucao( int &ConstrucaoParaAtender, int &ConstrucaoPa
 // Encontra a construção que possui a menor distancia a uma planta dentre todas as construções com demandas não atendidas
 int		Solucao::ProcuraConstrucaoNaoAtendida(int &ConstrucaoNaoAtendida, int &DemandaNaoAtendida){
 
-	// variaveis que armazenam os valores temporarios da construção, da demanda  e da distancia minima da construção a uma planta
-	int ConstrucaoTemporario;
-	int DemandaTemporaria;
 
-
-	// inicia valores das variaveis cosntrução e demanda
-	ConstrucaoTemporario = -13;
-	DemandaTemporaria = -13;
 
 	// percorre por todas as construções
 	for ( int c = 0; c < NE; c++){
@@ -531,6 +524,15 @@ int		Solucao::ProcuraConstrucaoNaoAtendida(int &ConstrucaoNaoAtendida, int &Dema
 
 	// Encontra a construção que possui a menor distancia a uma planta dentre todas as construções com demandas não atendidas
 	/*
+
+	// variaveis que armazenam os valores temporarios da construção, da demanda  e da distancia minima da construção a uma planta
+	int ConstrucaoTemporario;
+	int DemandaTemporaria;
+
+
+	// inicia valores das variaveis cosntrução e demanda
+	ConstrucaoTemporario = -13;
+	DemandaTemporaria = -13;
 
 	double DistanciaPlantaTemporaria;
 	// inicia o valor da variavel com o maior valor para que qualquer valor de uma distancia de uma construção a uma planat sejáa ceito inicialmente
@@ -733,7 +735,7 @@ int		Solucao::Viabilidade2(int EscolhaVeiculo, int EscolhaConstrucao, int Escolh
 	// variavel que informa se ainda é possivel analizar a cosntrução corrente
 	int PermiteAnalisarCosntrucao;
 
-	int PararPrograma;
+	//int PararPrograma;
 
 	// ordena as cosntruções na ordem em que elas devem ser escolhidas com prioridade  (foi tirada para se manter a ordem realizado na heuristica constrututiva)
 	ConstrucoesInstancia.OrdenaCosntrucoes( EscolhaConstrucao);
@@ -1188,7 +1190,7 @@ void	ConjuntoSolucoes::Imprime(bool ImprimePlanta, bool ImprimeConstrucao, bool 
 
 
 ConjuntoSolucoes::~ConjuntoSolucoes(){
-
+	Solucoes.clear();
 }
 
 

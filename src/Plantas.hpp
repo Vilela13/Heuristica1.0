@@ -62,7 +62,7 @@ public:
 	double 	HorarioQueConstrucaoPodeReceberDemanda;
 
 
-
+	// Funções
 
 	Planta();			// conmstrutora
 
@@ -337,7 +337,8 @@ int 	Planta::VerificaIntegridadeDeCarregamentos(int imprime,int ImprimeSolucao, 
 
 // destruidora
 Planta::~Planta(){
-
+	DistanciaConstrucoes.clear();
+	Carregamentos.clear();
 }
 
 // #################################################################
@@ -912,7 +913,7 @@ void 	ConjuntoPlantas::ImprimeHorariosPlantasPodemAtender(){
 
 // destruidora
 ConjuntoPlantas::~ConjuntoPlantas(){
-
+	Plantas.clear();
 }
 
 #endif /* PLANTAS_HPP_ */

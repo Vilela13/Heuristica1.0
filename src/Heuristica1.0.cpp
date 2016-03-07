@@ -52,7 +52,7 @@ int main(int argc, char **argv) {
 		string 	TipoProcedimento;
 		TipoProcedimento = argv[3];
 
-		if( TipoProcedimento != "cons" && TipoProcedimento != "consCir" && TipoProcedimento != "grasp" && TipoProcedimento != "graspCir"){
+		if( TipoProcedimento != "cons" && TipoProcedimento != "consCir" && TipoProcedimento != "grasp" && TipoProcedimento != "graspCir" && TipoProcedimento != "graspClass" && TipoProcedimento != "graspClassCir"){
 			cout << endl << endl << endl <<  argv[2] << "   Problema em se identificar o tipo de procediemnto a se realizar " << endl << endl << endl;
 			return 0;
 		}
@@ -455,6 +455,181 @@ int main(int argc, char **argv) {
 						Instancia->ExecutaGrasp(Nome, NumeroIteracoes, TempoExecucaoMaximo, EscolhaVeiculo,  EscolhaConstrucao,  EscolhaPlanta, RealizaProcessoDeAtrazarTarefas);
 					}else{
 						Instancia->ExecutaGraspCir(Nome, NumeroIteracoes, TempoExecucaoMaximo, EscolhaVeiculo,  EscolhaConstrucao,  EscolhaPlanta, RealizaProcessoDeAtrazarTarefas);
+					}
+
+				}
+				delete(Instancia);
+			}
+
+			ArquivoExcelResposta.close();
+
+			cout << "\n \n Galo Doido! \n \n";
+			return 1;
+		 }
+
+
+
+
+
+		 if( TipoProcedimento == "graspClass" || TipoProcedimento == "graspClassCir"){
+
+			 if( argc != 9){
+				 cout << endl << endl << endl << "    Probelma na entrada de parametros para se executar o grasp Classico" << endl << endl << endl;
+				 return 0;
+			 }
+
+
+			 // numero maximo de iterações
+			 NumeroIteracoesString = argv[4];
+			 if( NumeroIteracoesString == "-"){
+				 NumeroIteracoes = LONG_MAX;
+			 }else{
+				 if( atoi( argv[4]) > 0){
+					 NumeroIteracoes = atoi( argv[4]);		// função atoi tranforma char em inteiro ( biblioteca stdlib.h)
+				 }else{
+					 cout << endl << endl << " Numero de iterações negativo " << Nome << endl << endl;
+					 return 0;
+				 }
+			 }
+
+			 TempoExecucaoMaximoString = argv[5];
+			 if( TempoExecucaoMaximoString == "-"){
+				 TempoExecucaoMaximo = LONG_MAX;
+			 }else{
+				 if( atoi( argv[5]) > 0){
+					 TempoExecucaoMaximo = atoi( argv[5]);		// função atoi tranforma char em inteiro ( biblioteca stdlib.h)
+				 }else{
+					 cout << endl << endl << " Tempo de execução negativo " << Nome << endl << endl;
+					 return 0;
+				 }
+				 // tempo maximo de execução do problema
+				 TempoExecucaoMaximo = atoi( argv[5]);		// função atoi tranforma char em inteiro ( biblioteca stdlib.h)
+			 }
+
+			 // ordena na ordem do menor número de tarefas para o maior se colocar o valor 1, ordena na ordem do maior número de tarefas para o menor se colocar o valor 2
+			 EscolhaVeiculo = atoi( argv[6]);		// função atoi tranforma char em inteiro ( biblioteca stdlib.h)
+			 // modo de escolha da construção, 1 escolhe a construção por meio do RankTempoDemandas, 2 escolhe a construção com mais demandas,
+			EscolhaConstrucao = atoi( argv[7]);		// função atoi tranforma char em inteiro ( biblioteca stdlib.h)
+			 // modo de escolha da planta, 1 é a planta mais proxima, 1 é a planta com menos tarefas, 3 é a planta com mais tarefas
+			 EscolhaPlanta = atoi( argv[8]);			// função atoi tranforma char em inteiro ( biblioteca stdlib.h)
+
+
+
+			 // coleta a data e a hora
+			time(&timer);
+			tm_info = localtime(&timer);
+			strftime(buffer, 26, " * %H:%M:%S de %d:%m:%Y", tm_info);
+
+			if( TipoProcedimento == "grasp"){
+				// escreve a hora da execucao e a parte inicial da tabela
+				printf("\n\n ----- Execução GRASP Classico as %s ----- \n\n", buffer);
+			}else{
+				// escreve a hora da execucao e a parte inicial da tabela
+				printf("\n\n ----- Execução GRASP Classico Circular as %s ----- \n\n", buffer);
+			}
+
+
+			// escreve o tipo de execução
+
+			printf("\n ******************** Tipo Execução **************************** \n\n");
+
+
+			if( NumeroIteracoesString == "-" ){
+				printf("  -> Número irrestrito de iterações  \n");
+			}else{
+				printf("  -> %ld número de iterações  \n", NumeroIteracoes);
+			}
+
+			if( TempoExecucaoMaximoString == "-"){
+				printf("  -> Tempo de execução irrestrito  \n");
+			}else{
+				printf("  -> Tempo maximo para a execução : %ld segundos  \n", TempoExecucaoMaximo );
+			}
+
+
+			// escreve o tipo de escolha do veículo
+			switch (EscolhaVeiculo) {
+				case 1:
+					printf("  -> Veículo com menor número de tarefas  \n");
+					break;
+				case 2:
+					printf("  -> Veículo com maior número de tarefas  \n");
+					break;
+				case 3:
+					printf("  -> Veículo em ordem de sua numeração  \n");
+					break;
+				default:
+					printf("\n\n Probelam ao selecionar a ordenação do veículo \n\n");
+					return 0;
+					break;
+			}
+
+			// escreve o tipo de escolha do cosntrução
+			switch (EscolhaConstrucao) {
+				case 0:
+					printf("  -> Mantem ordenação aleatória  realizada no processo construtivo  \n");
+					break;
+				case 1:
+					printf("  -> Construção com menor Rank (Janela de tempo / Deamanda )   \n");
+					break;
+				case 2:
+					printf("  -> Construção com menor Janela de tempo   \n");
+					break;
+				case 3:
+					printf("  -> Construção com menor Tempo inicio   \n");
+					break;
+				default:
+					printf("\n\n Probelam ao selecionar a ordenação da cosntrução \n\n");
+					return 0;
+					break;
+			}
+
+			// escreve o tipo de escolha do planta
+			switch (EscolhaPlanta) {
+				case 1:
+					printf("  -> Planta mais proxima da cosntrução \n");
+					break;
+				case 2:
+					printf("  -> Planta com menor número de tarefas \n");
+					break;
+				case 3:
+					printf("  -> Planta com maior número de tarefas \n");
+					break;
+				default:
+					printf("\n\n Probelam ao selecionar a ordenação da planta \n\n");
+					return 0;
+					break;
+			}
+
+			if( RealizaProcessoDeAtrazarTarefas == 1){
+				printf("\n    -> Realzia processo recursivo para se atender uma demanda atrasando as demandas anteriores \n\n");
+			}else{
+				printf("\n    -> NÃO realzia processo recursivo para se atender uma demanda atrasando as demandas anteriores \n\n");
+			}
+
+			printf("\n ******************************************************************** \n\n\n");
+
+
+
+			// escreve cabeçario
+			printf(" Nome_Instancia  \t Solução \t Nivel_Viabilidade \t Tempo (segundos) \n");
+
+			while( !ListaInstancias.empty()){
+				it = ListaInstancias.begin();
+				Nome = *it;
+				ListaInstancias.pop_front();
+
+				//cout << " Modelo => " << Nome << endl << endl;
+
+				Instancia = new Heuristica;
+
+				if( Instancia->LeDados(Nome, EscreveDadosLidosNaTela) == 1){
+					//cout << " Leu Dados" << endl;
+
+					if( TipoProcedimento == "graspClass"){
+						Instancia->ExecutaGraspClass(Nome, NumeroIteracoes, TempoExecucaoMaximo, EscolhaVeiculo,  EscolhaConstrucao,  EscolhaPlanta, RealizaProcessoDeAtrazarTarefas);
+					}else{
+						Instancia->ExecutaGraspClassCir(Nome, NumeroIteracoes, TempoExecucaoMaximo, EscolhaVeiculo,  EscolhaConstrucao,  EscolhaPlanta, RealizaProcessoDeAtrazarTarefas);
 					}
 
 				}

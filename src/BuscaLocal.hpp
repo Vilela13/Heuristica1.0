@@ -769,8 +769,8 @@ int 	BuscaLocal::BuscaLocalTrocaPlantaAtendimento(int EscolhaVeiculo, int Escolh
 	}
 	// Limpa as estruturas que guarda os dados de demandas deletadas
 	DadosTarefasMovidasEtapa1.clear();
-	DadosTarefasMovidasEmUmaConstrucaoEtapa1.clear();
 	DadosTarefasMovidasEtapa2.clear();
+	DadosTarefasMovidasEmUmaConstrucaoEtapa1.clear();
 	VetorOrdemPlanta1.clear();
 	VetorOrdemPlanta2.clear();
 	VetorOrdemVeiculo.clear();

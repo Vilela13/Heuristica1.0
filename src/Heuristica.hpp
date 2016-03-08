@@ -103,6 +103,8 @@ int		Heuristica::LeDados(string Nome, int comentarios){
 
 		// fecha o arquivo da instancia aberto
 		arq.close();
+		Instancia.clear();
+		CaminhoArquivo1.clear();
 		// retorna 1 pois o procedimento foi realizado com suceso
 		return 1;
 	}else{
@@ -515,6 +517,7 @@ void	Heuristica::ExecutaCONS(string NomeInstancia, int EscolhaVeiculo, int Escol
 	}
 
 	fclose (Arquivo);
+	Caminho.clear();
 
 }
 
@@ -934,6 +937,7 @@ void	Heuristica::ExecutaCONScir(string NomeInstancia, int EscolhaVeiculo, int Es
 	}
 
 	fclose (Arquivo);
+	Caminho.clear();
 
 }
 
@@ -1102,7 +1106,7 @@ void	Heuristica::ExecutaGrasp(string NomeInstancia, long int NumeroIteracoes, lo
 
 		SolucaoCorrente->CarregaSolucao(Prod1->NP, Prod1->PlantasInstancia, Prod1->NE, Prod1->ConstrucoesInstancia, Prod1->NV, Prod1->Velocidade, Prod1->TempoDeVidaConcreto);
 
-		free(Prod1);
+		delete(Prod1);
 
 		SolucaoCorrente->CalculaMakespan();
 
@@ -1165,6 +1169,7 @@ void	Heuristica::ExecutaGrasp(string NomeInstancia, long int NumeroIteracoes, lo
 
 		}
 		FinalExecucao = time(NULL);
+		delete( SolucaoCorrente);
 		iteracoes++;
 	}
 
@@ -1188,6 +1193,7 @@ void	Heuristica::ExecutaGrasp(string NomeInstancia, long int NumeroIteracoes, lo
 	}
 
 	fclose (Arquivo);
+	Caminho.clear();
 
 }
 
@@ -1360,7 +1366,7 @@ void	Heuristica::ExecutaGraspCir(string NomeInstancia, long int NumeroIteracoes,
 
 		SolucaoCorrente->CarregaSolucao(Prod1->NP, Prod1->PlantasInstancia, Prod1->NE, Prod1->ConstrucoesInstancia, Prod1->NV, Prod1->Velocidade, Prod1->TempoDeVidaConcreto);
 
-		free(Prod1);
+		delete(Prod1);
 
 		SolucaoCorrente->CalculaMakespan();
 
@@ -1439,6 +1445,7 @@ void	Heuristica::ExecutaGraspCir(string NomeInstancia, long int NumeroIteracoes,
 
 		}
 		FinalExecucao = time(NULL);
+		delete( SolucaoCorrente);
 		iteracoes++;
 	}
 
@@ -1462,6 +1469,7 @@ void	Heuristica::ExecutaGraspCir(string NomeInstancia, long int NumeroIteracoes,
 	}
 
 	fclose (Arquivo);
+	Caminho.clear();
 
 }
 
@@ -1632,7 +1640,7 @@ void	Heuristica::ExecutaGraspClass(string NomeInstancia, long int NumeroIteracoe
 
 		SolucaoCorrente->CarregaSolucao(Prod1->NP, Prod1->PlantasInstancia, Prod1->NE, Prod1->ConstrucoesInstancia, Prod1->NV, Prod1->Velocidade, Prod1->TempoDeVidaConcreto);
 
-		free(Prod1);
+		delete(Prod1);
 
 		SolucaoCorrente->CalculaMakespan();
 
@@ -1681,6 +1689,7 @@ void	Heuristica::ExecutaGraspClass(string NomeInstancia, long int NumeroIteracoe
 
 		}
 		FinalExecucao = time(NULL);
+		delete( SolucaoCorrente);
 		iteracoes++;
 	}
 
@@ -1724,6 +1733,7 @@ void	Heuristica::ExecutaGraspClass(string NomeInstancia, long int NumeroIteracoe
 
 
 	fclose (Arquivo);
+	Caminho.clear();
 
 }
 
@@ -1830,9 +1840,8 @@ void	Heuristica::ExecutaGraspClassCir(string NomeInstancia, long int NumeroItera
 			cout << " Problema ao criar pasta Exec" << endl;
 		}
 
-		/* Outra maneira de criar arquivos
-		SituacaoDiretorio = mkdir("./myfolder", S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
-		*/
+		// Outra maneira de criar arquivos
+		//SituacaoDiretorio = mkdir("./myfolder", S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
 
 		if(!opendir ("Exec")){
 			cout << "\n Nao tem diretorio \"Exec\"!!             FUDEU MUITO!! \n" << endl;
@@ -1896,7 +1905,7 @@ void	Heuristica::ExecutaGraspClassCir(string NomeInstancia, long int NumeroItera
 
 		SolucaoCorrente->CarregaSolucao(Prod1->NP, Prod1->PlantasInstancia, Prod1->NE, Prod1->ConstrucoesInstancia, Prod1->NV, Prod1->Velocidade, Prod1->TempoDeVidaConcreto);
 
-		free(Prod1);
+		delete(Prod1);
 
 		SolucaoCorrente->CalculaMakespan();
 
@@ -1945,6 +1954,7 @@ void	Heuristica::ExecutaGraspClassCir(string NomeInstancia, long int NumeroItera
 
 		}
 		FinalExecucao = time(NULL);
+		delete( SolucaoCorrente);
 		iteracoes++;
 	}
 	// calcula o tempo
@@ -2001,6 +2011,7 @@ void	Heuristica::ExecutaGraspClassCir(string NomeInstancia, long int NumeroItera
 	fprintf( Arquivo," \n\n Tempo  %.0f \n\n",  TempoExecucao);
 
 	fclose (Arquivo);
+	Caminho.clear();
 
 }
 

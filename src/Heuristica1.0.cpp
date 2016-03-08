@@ -33,31 +33,7 @@ int main(int argc, char **argv) {
 
 
 		string Recursao;
-		Recursao = argv[2];
-
-		if( Recursao != "ComRec" && Recursao != "SemRec"){
-			cout << endl << endl << endl <<  argv[2] << "   Problema a se definir se o programa irá atrasar as tarefas anteriores para atender uma demanda ou não " << endl << endl << endl;
-			return 0;
-		}else{
-			if( Recursao == "SemRec"){
-				// 1 se realizará o processo recursivo para se tentar atender a demanda se atrasando as demandas anteriores, 0 caso contrário
-				 RealizaProcessoDeAtrazarTarefas = 0;
-			}
-			if( Recursao == "ComRec"){
-				// 1 se realizará o processo recursivo para se tentar atender a demanda se atrasando as demandas anteriores, 0 caso contrário
-				 RealizaProcessoDeAtrazarTarefas = 1;
-			}
-		}
-
 		string 	TipoProcedimento;
-		TipoProcedimento = argv[3];
-
-		if( TipoProcedimento != "cons" && TipoProcedimento != "consCir" && TipoProcedimento != "grasp" && TipoProcedimento != "graspCir" && TipoProcedimento != "graspClass" && TipoProcedimento != "graspClassCir"){
-			cout << endl << endl << endl <<  argv[2] << "   Problema em se identificar o tipo de procediemnto a se realizar " << endl << endl << endl;
-			return 0;
-		}
-
-
 		list<string> ListaInstancias;
 		string 	Nome;
 
@@ -74,9 +50,50 @@ int main(int argc, char **argv) {
 
 		EscreveDadosLidosNaTela = 0;
 
+		DadosSolomon *InstanciaSolomon;
+
+		ifstream ArquivoInstanciaSolomon;
+
+		ifstream ArquivoInstancia;
+
+		Heuristica *Instancia;
+
+		// Exscrever a dadta
+		 time_t timer;
+		 char 	buffer[26];
+		 struct tm* tm_info;
+
+
+
+		Recursao = argv[2];
+
+		if( Recursao != "ComRec" && Recursao != "SemRec"){
+			cout << endl << endl << endl <<  argv[2] << "   Problema a se definir se o programa irá atrasar as tarefas anteriores para atender uma demanda ou não " << endl << endl << endl;
+			return 0;
+		}else{
+			if( Recursao == "SemRec"){
+				// 1 se realizará o processo recursivo para se tentar atender a demanda se atrasando as demandas anteriores, 0 caso contrário
+				 RealizaProcessoDeAtrazarTarefas = 0;
+			}
+			if( Recursao == "ComRec"){
+				// 1 se realizará o processo recursivo para se tentar atender a demanda se atrasando as demandas anteriores, 0 caso contrário
+				 RealizaProcessoDeAtrazarTarefas = 1;
+			}
+		}
+
+		TipoProcedimento = argv[3];
+
+		if( TipoProcedimento != "cons" && TipoProcedimento != "consCir" && TipoProcedimento != "grasp" && TipoProcedimento != "graspCir" && TipoProcedimento != "graspClass" && TipoProcedimento != "graspClassCir"){
+			cout << endl << endl << endl <<  argv[2] << "   Problema em se identificar o tipo de procediemnto a se realizar " << endl << endl << endl;
+			return 0;
+		}
+
+
+
+
 	// -------------------------- Le arquivo com as instancias de Solomon e as guarda em uma lista ----------------------- //
 
-		ifstream ArquivoInstanciaSolomon( "ArquivosSolomon.txt" );
+		ArquivoInstanciaSolomon.open( "ArquivosSolomon.txt" );
 		if(!ArquivoInstanciaSolomon){
 			cout << " Arquivo ArquivosSolomon.txt não Existe! \n FUDEU MUITO! \n";
 		}else{
@@ -95,7 +112,7 @@ int main(int argc, char **argv) {
 
 	// -------------------------- Le nome dos arquivos Solomon, carrega os dados, cria arquivo do R, Excel e cria arquivo que pode ser lido pelo Modelo ----------------------- //
 
-		DadosSolomon *InstanciaSolomon = new DadosSolomon;
+		InstanciaSolomon = new DadosSolomon;
 
 		while( ListaInstancias.size() > 0){
 			it = ListaInstancias.begin();
@@ -132,7 +149,7 @@ int main(int argc, char **argv) {
 		Instancias = argv[1];
 		//Instancias = "Instancias.txt";
 
-		ifstream ArquivoInstancia;
+
 
 		cstr = new char[Instancias.length() + 1];
 		strcpy(cstr, Instancias.c_str());
@@ -156,12 +173,7 @@ int main(int argc, char **argv) {
 			return 0;
 		}
 
-		Heuristica *Instancia;
 
-		// Exscrever a dadta
-		 time_t timer;
-		 char 	buffer[26];
-		 struct tm* tm_info;
 
 		 if( TipoProcedimento == "cons" || TipoProcedimento == "consCir"){
 
@@ -290,7 +302,21 @@ int main(int argc, char **argv) {
 				delete(Instancia);
 			}
 
+
+			NumeroIteracoesString.clear();
+			TempoExecucaoMaximoString.clear();
+			Recursao.clear();
+			TipoProcedimento.clear();
+			ListaInstancias.clear();
+			Nome.clear();
+			Saida.clear();
+			Instancias.clear();
+
+			delete [] cstr;
+
+
 			ArquivoExcelResposta.close();
+			ListaInstancias.clear();
 
 			cout << "\n \n Galo Doido! \n \n";
 			return 1;
@@ -461,7 +487,20 @@ int main(int argc, char **argv) {
 				delete(Instancia);
 			}
 
+			NumeroIteracoesString.clear();
+			TempoExecucaoMaximoString.clear();
+			Recursao.clear();
+			TipoProcedimento.clear();
+			ListaInstancias.clear();
+			Nome.clear();
+			Saida.clear();
+			Instancias.clear();
+
+			delete [] cstr;
+
+
 			ArquivoExcelResposta.close();
+			ListaInstancias.clear();
 
 			cout << "\n \n Galo Doido! \n \n";
 			return 1;
@@ -636,6 +675,20 @@ int main(int argc, char **argv) {
 				delete(Instancia);
 			}
 
+			NumeroIteracoesString.clear();
+			TempoExecucaoMaximoString.clear();
+			Recursao.clear();
+			TipoProcedimento.clear();
+			ListaInstancias.clear();
+			Nome.clear();
+			Saida.clear();
+			Instancias.clear();
+
+			delete [] cstr;
+
+
+
+			ListaInstancias.clear();
 			ArquivoExcelResposta.close();
 
 			cout << "\n \n Galo Doido! \n \n";

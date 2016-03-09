@@ -1457,7 +1457,7 @@ int 	Construcao::AlocaAtividadeComHorarioFinalAtendimentoComVeiculoFixo( int Num
 	// situação se a planta pode atender a demanda caso atrasar (-2) ou ela não pode atender a demanda (0)
 	int 	SituacaoPlanta;
 	// hoaraior que a planta pode atender a demanda caso as demandas ateriores forem atrasadas, e o horario que a construção iria ser atendida
-	double 	HorarioQuePlantaPodeAtender;
+	//double 	HorarioQuePlantaPodeAtender;
 	double 	HorarioQueConstrucaoPodeReceberDemanda;
 
 	// inidices da planta e do veículo (caminhão)
@@ -1470,7 +1470,7 @@ int 	Construcao::AlocaAtividadeComHorarioFinalAtendimentoComVeiculoFixo( int Num
 
 	// inicializa a situação da planta e os horarios que a planta pode atender a demanda e a construção pode ser atendida
 	SituacaoPlanta = 0;
-	HorarioQuePlantaPodeAtender = DBL_MAX;
+	//HorarioQuePlantaPodeAtender = DBL_MAX;
 	HorarioQueConstrucaoPodeReceberDemanda = DBL_MAX;
 
 	//int ParaPrograma;
@@ -1508,7 +1508,7 @@ int 	Construcao::AlocaAtividadeComHorarioFinalAtendimentoComVeiculoFixo( int Num
 							// caso a planta ainda não foi analisada, entra no if
 							if( HorarioQueConstrucaoPodeReceberDemanda 	> HorarioChegaContrucao){
 								// atualiza a hora de inicio que a planta pode atender a demanda e a construção pode ser atendida
-								HorarioQuePlantaPodeAtender  			= HorarioInicioPlanta;
+								//HorarioQuePlantaPodeAtender  			= HorarioInicioPlanta;
 								HorarioQueConstrucaoPodeReceberDemanda 	= HorarioChegaContrucao;
 
 							}

@@ -267,8 +267,12 @@ void 	DadosSolomon::EscreverComandosR(string Nome, char TipoArquivoSaida){
 	TipoComando = "./ComR/CmdR-";
 	TipoComando += Nome;
 
+	DIR* dp1;
+	DIR* dp2;
 
-	if(!opendir ("ComR")){
+	dp1 = opendir ("ComR");
+
+	if(!dp1){
 		cout <<  "\n Nao tem diretorio \"ComR\"!!            FUDEU MUITO!! \n" << endl;
 
 		if(system("mkdir ComR;") == 0){
@@ -281,8 +285,9 @@ void 	DadosSolomon::EscreverComandosR(string Nome, char TipoArquivoSaida){
 
 		SituacaoDiretorio = mkdir("./myfolder", S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
 		*/
+		dp1 = opendir ("ComR");
 
-		if(!opendir ("ComR")){
+		if(!dp1){
 			cout << "\n Nao tem diretorio \"ComR\"!!             FUDEU MUITO!! \n" << endl;
 		}else{
 			cout << " Tem diretorio \"ComR\" !!  " << endl;
@@ -291,129 +296,154 @@ void 	DadosSolomon::EscreverComandosR(string Nome, char TipoArquivoSaida){
 		cout << " Tem diretorio \"ComR\" !!  " << endl;
 	}
 
+	closedir( dp1 );
+
 	char *cstr;
 	cstr = new char[TipoComando.length() + 1];
 	strcpy(cstr, TipoComando.c_str());
 
 
 
-		cout << endl <<  " Arquivo do comando R = " <<   TipoComando << endl << endl;
+	cout << endl <<  " Arquivo do comando R = " <<   TipoComando << endl << endl;
 
-		ComandosR.open(cstr);
+	ComandosR.open(cstr);
 
-		delete [] cstr;
+	delete [] cstr;
 
-		ComandosR << "require(ggplot2) "<< endl;
+	ComandosR << "require(ggplot2) "<< endl;
 
 
-		ComandosR << "Dados <- data.frame(nomes = c(" ;
-		ComandosR << "\"N" << "0" << "\"";
-		for( int c = 1; c <= NumeroClientes; c++){
-			ComandosR << "," << "\"C" <<  c << "(" <<  NumeroCarretas[c] << ")"<<  "\"";
+	ComandosR << "Dados <- data.frame(nomes = c(" ;
+	ComandosR << "\"N" << "0" << "\"";
+	for( int c = 1; c <= NumeroClientes; c++){
+		ComandosR << "," << "\"C" <<  c << "(" <<  NumeroCarretas[c] << ")"<<  "\"";
+	}
+	for( int p = 1; p <= NumeroPlantas; p++){
+		ComandosR << ","<< "\"P" <<  p <<  "\"";
+	}
+	ComandosR << ")" << endl;
+
+	//cout << " Aqui 1 " << endl;
+
+	ComandosR << ", x <- c(" ;
+	ComandosR << Coordenadas[0][0] ;
+	for( int c = 1; c <= NumeroClientes; c++){
+		ComandosR << ","<<  Coordenadas[	NoCliente[c] ][0] ;
+	}
+	for( int p = 1; p <= NumeroPlantas; p++){
+		ComandosR << ","<<  Coordenadas[ NoPlanta[p] ][0] ;
+	}
+	ComandosR << ")" << endl;
+
+	ComandosR << ", y <- c(" ;
+	ComandosR << Coordenadas[0][1] ;
+	for( int c = 1; c <= NumeroClientes; c++){
+		ComandosR << ","<<  Coordenadas[	NoCliente[c] ][1] ;
+	}
+	for( int p = 1; p <= NumeroPlantas; p++){
+		ComandosR << ","<<  Coordenadas[ NoPlanta[p] ][1] ;
+	}
+	ComandosR << ")" << endl;
+
+	ComandosR << ", tipo <- c(" ;
+	ComandosR << "3" ;
+	for( int c = 1; c <= NumeroClientes; c++){
+			ComandosR << ",6" ;
+	}
+	for( int p = 1; p <= NumeroPlantas; p++){
+			ComandosR << ",4" ;
+	}
+	ComandosR << ")" << endl;
+
+	ComandosR << ", tamanho <- c(" ;
+	ComandosR << "1" ;
+	for( int c = 1; c <= NumeroClientes; c++){
+			ComandosR << ",1" ;
+	}
+	for( int p = 1; p <= NumeroPlantas; p++){
+		ComandosR << ",2" ;
+	}
+	ComandosR << ")" << endl << ")"<< endl;
+
+
+
+
+
+	dp2 = opendir ("Imagens");
+
+	if(!dp2){
+		cout <<  "\n Nao tem diretorio Imagens!!          FUDEU MUITO!! \n" << endl;
+
+		if(system("mkdir Imagens;") == 0){
+			cout << " Criou pasta Imagens" << endl;
+		}else{
+			cout << " Problema ao criar pasta Imagens" << endl;
 		}
-		for( int p = 1; p <= NumeroPlantas; p++){
-			ComandosR << ","<< "\"P" <<  p <<  "\"";
+
+		/* Outra maneira de criar arquivos
+
+		SituacaoDiretorio = mkdir("./myfolder", S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+		*/
+		dp2 = opendir ("Imagens");
+
+		if(!dp2){
+			cout << "\n Nao tem diretorio \"Imagens\"!!             FUDEU MUITO!! \n" << endl;
+		}else{
+			cout << " Tem diretorio \"Imagens\" !!  " << endl;
 		}
-		ComandosR << ")" << endl;
+	}else{
+		cout << " Tem diretorio \"Imagens\" !!  " << endl;
+	}
 
-		//cout << " Aqui 1 " << endl;
-
-		ComandosR << ", x <- c(" ;
-		ComandosR << Coordenadas[0][0] ;
-		for( int c = 1; c <= NumeroClientes; c++){
-			ComandosR << ","<<  Coordenadas[	NoCliente[c] ][0] ;
-		}
-		for( int p = 1; p <= NumeroPlantas; p++){
-			ComandosR << ","<<  Coordenadas[ NoPlanta[p] ][0] ;
-		}
-		ComandosR << ")" << endl;
-
-		ComandosR << ", y <- c(" ;
-		ComandosR << Coordenadas[0][1] ;
-		for( int c = 1; c <= NumeroClientes; c++){
-			ComandosR << ","<<  Coordenadas[	NoCliente[c] ][1] ;
-		}
-		for( int p = 1; p <= NumeroPlantas; p++){
-			ComandosR << ","<<  Coordenadas[ NoPlanta[p] ][1] ;
-		}
-		ComandosR << ")" << endl;
-
-		ComandosR << ", tipo <- c(" ;
-		ComandosR << "3" ;
-		for( int c = 1; c <= NumeroClientes; c++){
-				ComandosR << ",6" ;
-		}
-		for( int p = 1; p <= NumeroPlantas; p++){
-				ComandosR << ",4" ;
-		}
-		ComandosR << ")" << endl;
-
-		ComandosR << ", tamanho <- c(" ;
-		ComandosR << "1" ;
-		for( int c = 1; c <= NumeroClientes; c++){
-				ComandosR << ",1" ;
-		}
-		for( int p = 1; p <= NumeroPlantas; p++){
-			ComandosR << ",2" ;
-		}
-		ComandosR << ")" << endl << ")"<< endl;
-
-
-		if(!opendir ("Imagens")){
-				cout <<  "\n Nao tem diretorio Imagens!!           FUDEU MUITO!! \n" << endl;
-
-				if( system("mkdir Imagens;") == 0){
-					cout << " Criou pasta Imagens " << endl;
-				}else{
-					cout << " Problema ao criar pasta Imagens " << endl;
-				}
-		}
-
-		//NomeArquivoComandoR = "./Imagens/";
-		NomeArquivoComandoR += Nome;
-
-		NomeArquivoComandoR.resize( NomeArquivoComandoR.size() - 4 );
+	closedir( dp2 );
 
 
 
-	// Cria Post Script
-		if (TipoArquivoSaida == '1'){
-			NomeArquivoComandoR += ".ps";
+	//NomeArquivoComandoR = "./Imagens/";
+	NomeArquivoComandoR += Nome;
 
-			ComandosR << "postscript('" << NomeArquivoComandoR << "')" << endl;
-        }
+	NomeArquivoComandoR.resize( NomeArquivoComandoR.size() - 4 );
 
-    // Criar PNG
-        if (TipoArquivoSaida == '2'){
 
-			NomeArquivoComandoR += ".png";
-			ComandosR << "png('" << NomeArquivoComandoR << "')" << endl;
-        }
 
-    // Criar Jpeg
-		if (TipoArquivoSaida == '3'){
+// Cria Post Script
+	if (TipoArquivoSaida == '1'){
+		NomeArquivoComandoR += ".ps";
 
-			NomeArquivoComandoR += ".jpg";
-			ComandosR << "jpeg('" << NomeArquivoComandoR << "')" << endl;
-        }
+		ComandosR << "postscript('" << NomeArquivoComandoR << "')" << endl;
+	}
 
-	 // Criar PDF
-		if (TipoArquivoSaida == '4'){
+// Criar PNG
+	if (TipoArquivoSaida == '2'){
 
-			NomeArquivoComandoR += ".pdf";
-			ComandosR << "pdf('" << NomeArquivoComandoR << "')" << endl;
-        }
+		NomeArquivoComandoR += ".png";
+		ComandosR << "png('" << NomeArquivoComandoR << "')" << endl;
+	}
 
-        ComandosR << "ggplot(Dados, aes(x,y)) + geom_point(aes(shape = factor(tipo),size =tamanho) ) + scale_size_continuous(range = c(3,4))";
-        ComandosR << "+ scale_shape(solid = FALSE)+  geom_text(aes(label=nomes),";
-        ComandosR << " hjust= " << PosicaoTextoX << ",vjust=" << PosicaoTextoY  ;
-        ComandosR << " ,size = " << TamanhoLetraLegenda << ")";
-        ComandosR << "+ xlim( min(x)- 10, max(x)+10 ) + ylim( min(y)-10,max(y)+10 )" << endl; //ComandosR << "+ xlim(0," << LimiteplotarX << ") + ylim(0," << LimiteplotarY << ")" << endl;
-		ComandosR << "dev.off() ;" << endl;
+// Criar Jpeg
+	if (TipoArquivoSaida == '3'){
 
-		ComandosR.close();
+		NomeArquivoComandoR += ".jpg";
+		ComandosR << "jpeg('" << NomeArquivoComandoR << "')" << endl;
+	}
 
-		//cout << " Aqui 3" << endl;
+ // Criar PDF
+	if (TipoArquivoSaida == '4'){
+
+		NomeArquivoComandoR += ".pdf";
+		ComandosR << "pdf('" << NomeArquivoComandoR << "')" << endl;
+	}
+
+	ComandosR << "ggplot(Dados, aes(x,y)) + geom_point(aes(shape = factor(tipo),size =tamanho) ) + scale_size_continuous(range = c(3,4))";
+	ComandosR << "+ scale_shape(solid = FALSE)+  geom_text(aes(label=nomes),";
+	ComandosR << " hjust= " << PosicaoTextoX << ",vjust=" << PosicaoTextoY  ;
+	ComandosR << " ,size = " << TamanhoLetraLegenda << ")";
+	ComandosR << "+ xlim( min(x)- 10, max(x)+10 ) + ylim( min(y)-10,max(y)+10 )" << endl; //ComandosR << "+ xlim(0," << LimiteplotarX << ") + ylim(0," << LimiteplotarY << ")" << endl;
+	ComandosR << "dev.off() ;" << endl;
+
+	ComandosR.close();
+
+	//cout << " Aqui 3" << endl;
 
 }
 
@@ -446,13 +476,14 @@ void 	DadosSolomon::EscreverComandosExcel(string Nome){
 	TipoComando = "./ComE/CmdE-";
 	TipoComando += Nome;
 
+	DIR* dp1;
 
+	dp1 = opendir ("ComE");
 
+	if(!dp1){
+		cout <<  "\n Nao tem diretorio \"ComE\"!!            FUDEU MUITO!! \n" << endl;
 
-	if(!opendir ("ComE")){
-		cout <<  "\n Nao tem diretorio \"ComE\"!!         FUDEU MUITO!! \n" << endl;
-
-		if(system("mkdir ComE;") == 0){
+		if(system("mkdir ComE") == 0){
 			cout << " Criou pasta ComE" << endl;
 		}else{
 			cout << " Problema ao criar pasta ComE" << endl;
@@ -462,15 +493,18 @@ void 	DadosSolomon::EscreverComandosExcel(string Nome){
 
 		SituacaoDiretorio = mkdir("./myfolder", S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
 		*/
+		dp1 = opendir ("ComE");
 
-		if(!opendir ("ComE")){
-			cout << "\n Nao tem diretorio \"ComE\"!!        FUDEU MUITO!! \n" << endl;
+		if(!dp1){
+			cout << "\n Nao tem diretorio \"ComE\"!!             FUDEU MUITO!! \n" << endl;
 		}else{
 			cout << " Tem diretorio \"ComE\" !!  " << endl;
 		}
 	}else{
 		cout << " Tem diretorio \"ComE\" !!  " << endl;
 	}
+
+	closedir( dp1 );
 
 
 
@@ -498,8 +532,12 @@ void 	DadosSolomon::EscreverComandosExcel(string Nome){
 }
 
 void 	DadosSolomon::CriaPastaInstS(){
-	if(!opendir ("InstS")){
-		cout <<  "\n\n Nao tem diretorio \"InstS\" !!        FUDEU MUITO!! \n" << endl;
+	DIR* dp1;
+
+	dp1 = opendir ("InstS");
+
+	if(!dp1){
+		cout <<  "\n Nao tem diretorio \"InstS\"!!            FUDEU MUITO!! \n" << endl;
 
 		if(system("mkdir InstS;") == 0){
 			cout << " Criou pasta InstS" << endl;
@@ -511,20 +549,27 @@ void 	DadosSolomon::CriaPastaInstS(){
 
 		SituacaoDiretorio = mkdir("./myfolder", S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
 		*/
+		dp1 = opendir ("InstS");
 
-		if(!opendir ("InstS")){
-			cout << "\n Nao tem diretorio  \"InstS\" !!        FUDEU MUITO!! \n" << endl;
+		if(!dp1){
+			cout << "\n Nao tem diretorio \"InstS\"!!             FUDEU MUITO!! \n" << endl;
 		}else{
 			cout << " Tem diretorio \"InstS\" !!  " << endl;
 		}
 	}else{
 		cout << " Tem diretorio \"InstS\" !!  " << endl;
 	}
+
+	closedir( dp1 );
 }
 
 void 	DadosSolomon::CriaPastaDat(){
-	if(!opendir ("Dat")){
-		cout <<  "\n\n Nao tem diretorio \"Dat\" !!        FUDEU MUITO!! \n" << endl;
+	DIR* dp1;
+
+	dp1 = opendir ("Dat");
+
+	if(!dp1){
+		cout <<  "\n Nao tem diretorio \"Dat\"!!            FUDEU MUITO!! \n" << endl;
 
 		if(system("mkdir Dat;") == 0){
 			cout << " Criou pasta Dat" << endl;
@@ -536,15 +581,20 @@ void 	DadosSolomon::CriaPastaDat(){
 
 		SituacaoDiretorio = mkdir("./myfolder", S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
 		*/
+		dp1 = opendir ("Dat");
 
-		if(!opendir ("Dat")){
-			cout << "\n Nao tem diretorio  \"Dat\" !!        FUDEU MUITO!! \n" << endl;
+		if(!dp1){
+			cout << "\n Nao tem diretorio \"Dat\"!!             FUDEU MUITO!! \n" << endl;
 		}else{
 			cout << " Tem diretorio \"Dat\" !!  " << endl;
 		}
 	}else{
 		cout << " Tem diretorio \"Dat\" !!  " << endl;
 	}
+
+	closedir( dp1 );
+
+
 }
 
 void 	DadosSolomon::CriarInstanciaSolomon(string Nome){
@@ -1228,8 +1278,14 @@ DadosSolomon::~DadosSolomon(){
     NomeInstancia.clear();
     Auxiliar.clear();
     NumeroDoNo.clear();
+    for( int i = 0; i < (int) Coordenadas.size(); i++){
+    	Coordenadas[i].clear();
+    }
     Coordenadas.clear();
     Demanda.clear();
+    for( int i = 0; i < (int) JanelaDeTempo.size(); i++){
+    	JanelaDeTempo[i].clear();
+    }
     JanelaDeTempo.clear();
     TempoDeServico.clear();
     NoPlanta.clear();

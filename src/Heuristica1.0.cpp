@@ -158,6 +158,8 @@ int main(int argc, char **argv) {
 
 		delete [] cstr;
 
+
+
 		if ( ArquivoInstancia.is_open() ){
 			ArquivoInstancia >> Nome;
 			//cout << " instancia lida = " << Nome << endl;
@@ -299,7 +301,12 @@ int main(int argc, char **argv) {
 					}
 
 				}
+
+
+
 				delete(Instancia);
+
+
 			}
 
 
@@ -312,11 +319,10 @@ int main(int argc, char **argv) {
 			Saida.clear();
 			Instancias.clear();
 
-			delete [] cstr;
-
 
 			ArquivoExcelResposta.close();
 			ListaInstancias.clear();
+
 
 			cout << "\n \n Galo Doido! \n \n";
 			return 1;
@@ -496,7 +502,7 @@ int main(int argc, char **argv) {
 			Saida.clear();
 			Instancias.clear();
 
-			delete [] cstr;
+
 
 
 			ArquivoExcelResposta.close();
@@ -684,7 +690,7 @@ int main(int argc, char **argv) {
 			Saida.clear();
 			Instancias.clear();
 
-			delete [] cstr;
+
 
 
 

@@ -184,8 +184,12 @@ void	Heuristica::ExecutaCONS(string NomeInstancia, int EscolhaVeiculo, int Escol
 	// acrescenta o nome do arquivo ao caminho
 	Caminho +=  NomeInstancia;
 
+	DIR* dp;
+
+	dp = opendir ("Exec");
+
 	//cria a pasta Exec para salvar os dados da execução
-	if(!opendir ("Exec")){
+	if(!dp){
 		if( ImprimeSolucao == 1){
 			cout <<  "\n Nao tem diretorio \"Exec\"!!            FUDEU MUITO!! \n" << endl;
 		}
@@ -201,8 +205,9 @@ void	Heuristica::ExecutaCONS(string NomeInstancia, int EscolhaVeiculo, int Escol
 		/* Outra maneira de criar arquivos
 		SituacaoDiretorio = mkdir("./myfolder", S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
 		*/
+		dp = opendir ("Exec");
 
-		if(!opendir ("Exec")){
+		if(!dp){
 			cout << "\n Nao tem diretorio \"Exec\"!!             FUDEU MUITO!! \n" << endl;
 		}else{
 			if( ImprimeSolucao == 1){
@@ -214,6 +219,7 @@ void	Heuristica::ExecutaCONS(string NomeInstancia, int EscolhaVeiculo, int Escol
 			cout << " Tem diretorio \"Exec\" !!  " << endl;
 		}
 	}
+	closedir( dp );
 
 	// escreve o endereço do arquivo
 	//cout << endl << endl << endl << Caminho << "   -  " <<  Caminho.c_str() <<  endl << endl << endl;
@@ -515,7 +521,6 @@ void	Heuristica::ExecutaCONS(string NomeInstancia, int EscolhaVeiculo, int Escol
 	if( ImprimeArquivo == 1){
 		fprintf( Arquivo," \n\n Tempo  %f \n\n",  TempoExecucao);
 	}
-
 	fclose (Arquivo);
 	Caminho.clear();
 
@@ -597,8 +602,12 @@ void	Heuristica::ExecutaCONScir(string NomeInstancia, int EscolhaVeiculo, int Es
 	// acrescenta o nome do arquivo ao caminho
 	Caminho +=  NomeInstancia;
 
+	DIR* dp;
+
+	dp = opendir ("Exec");
+
 	//cria a pasta Exec para salvar os dados da execução
-	if(!opendir ("Exec")){
+	if(!dp){
 		if( ImprimeSolucao == 1){
 			cout <<  "\n Nao tem diretorio \"Exec\"!!            FUDEU MUITO!! \n" << endl;
 		}
@@ -614,8 +623,9 @@ void	Heuristica::ExecutaCONScir(string NomeInstancia, int EscolhaVeiculo, int Es
 		/* Outra maneira de criar arquivos
 		SituacaoDiretorio = mkdir("./myfolder", S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
 		*/
+		dp = opendir ("Exec");
 
-		if(!opendir ("Exec")){
+		if(!dp){
 			cout << "\n Nao tem diretorio \"Exec\"!!             FUDEU MUITO!! \n" << endl;
 		}else{
 			if( ImprimeSolucao == 1){
@@ -627,6 +637,7 @@ void	Heuristica::ExecutaCONScir(string NomeInstancia, int EscolhaVeiculo, int Es
 			cout << " Tem diretorio \"Exec\" !!  " << endl;
 		}
 	}
+	closedir( dp );
 
 	// escreve o endereço do arquivo
 	//cout << endl << endl << endl << Caminho << "   -  " <<  Caminho.c_str() <<  endl << endl << endl;
@@ -1026,8 +1037,12 @@ void	Heuristica::ExecutaGrasp(string NomeInstancia, long int NumeroIteracoes, lo
 	// acrescenta o nome do arquivo ao caminho
 	Caminho +=  NomeInstancia;
 
+	DIR* dp;
+
+	dp = opendir ("Exec");
+
 	//cria a pasta Exec para salvar os dados da execução
-	if(!opendir ("Exec")){
+	if(!dp){
 		if( ImprimeSolucao == 1){
 			cout <<  "\n Nao tem diretorio \"Exec\"!!            FUDEU MUITO!! \n" << endl;
 		}
@@ -1043,8 +1058,9 @@ void	Heuristica::ExecutaGrasp(string NomeInstancia, long int NumeroIteracoes, lo
 		/* Outra maneira de criar arquivos
 		SituacaoDiretorio = mkdir("./myfolder", S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
 		*/
+		dp = opendir ("Exec");
 
-		if(!opendir ("Exec")){
+		if(!dp){
 			cout << "\n Nao tem diretorio \"Exec\"!!             FUDEU MUITO!! \n" << endl;
 		}else{
 			if( ImprimeSolucao == 1){
@@ -1056,6 +1072,7 @@ void	Heuristica::ExecutaGrasp(string NomeInstancia, long int NumeroIteracoes, lo
 			cout << " Tem diretorio \"Exec\" !!  " << endl;
 		}
 	}
+	closedir( dp );
 
 	// escreve o endereço do arquivo
 	//cout << endl << endl << endl << Caminho << "   -  " <<  Caminho.c_str() <<  endl << endl << endl;
@@ -1286,8 +1303,12 @@ void	Heuristica::ExecutaGraspCir(string NomeInstancia, long int NumeroIteracoes,
 	// acrescenta o nome do arquivo ao caminho
 	Caminho +=  NomeInstancia;
 
+	DIR* dp;
+
+	dp = opendir ("Exec");
+
 	//cria a pasta Exec para salvar os dados da execução
-	if(!opendir ("Exec")){
+	if(!dp){
 		if( ImprimeSolucao == 1){
 			cout <<  "\n Nao tem diretorio \"Exec\"!!            FUDEU MUITO!! \n" << endl;
 		}
@@ -1303,8 +1324,9 @@ void	Heuristica::ExecutaGraspCir(string NomeInstancia, long int NumeroIteracoes,
 		/* Outra maneira de criar arquivos
 		SituacaoDiretorio = mkdir("./myfolder", S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
 		*/
+		dp = opendir ("Exec");
 
-		if(!opendir ("Exec")){
+		if(!dp){
 			cout << "\n Nao tem diretorio \"Exec\"!!             FUDEU MUITO!! \n" << endl;
 		}else{
 			if( ImprimeSolucao == 1){
@@ -1316,6 +1338,7 @@ void	Heuristica::ExecutaGraspCir(string NomeInstancia, long int NumeroIteracoes,
 			cout << " Tem diretorio \"Exec\" !!  " << endl;
 		}
 	}
+	closedir( dp );
 
 	// escreve o endereço do arquivo
 	//cout << endl << endl << endl << Caminho << "   -  " <<  Caminho.c_str() <<  endl << endl << endl;
@@ -1560,8 +1583,12 @@ void	Heuristica::ExecutaGraspClass(string NomeInstancia, long int NumeroIteracoe
 	// acrescenta o nome do arquivo ao caminho
 	Caminho +=  NomeInstancia;
 
+	DIR* dp;
+
+	dp = opendir ("Exec");
+
 	//cria a pasta Exec para salvar os dados da execução
-	if(!opendir ("Exec")){
+	if(!dp){
 		if( ImprimeSolucao == 1){
 			cout <<  "\n Nao tem diretorio \"Exec\"!!            FUDEU MUITO!! \n" << endl;
 		}
@@ -1577,8 +1604,9 @@ void	Heuristica::ExecutaGraspClass(string NomeInstancia, long int NumeroIteracoe
 		/* Outra maneira de criar arquivos
 		SituacaoDiretorio = mkdir("./myfolder", S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
 		*/
+		dp = opendir ("Exec");
 
-		if(!opendir ("Exec")){
+		if(!dp){
 			cout << "\n Nao tem diretorio \"Exec\"!!             FUDEU MUITO!! \n" << endl;
 		}else{
 			if( ImprimeSolucao == 1){
@@ -1590,6 +1618,7 @@ void	Heuristica::ExecutaGraspClass(string NomeInstancia, long int NumeroIteracoe
 			cout << " Tem diretorio \"Exec\" !!  " << endl;
 		}
 	}
+	closedir( dp );
 
 	// escreve o endereço do arquivo
 	//cout << endl << endl << endl << Caminho << "   -  " <<  Caminho.c_str() <<  endl << endl << endl;
@@ -1826,8 +1855,12 @@ void	Heuristica::ExecutaGraspClassCir(string NomeInstancia, long int NumeroItera
 	// acrescenta o nome do arquivo ao caminho
 	Caminho +=  NomeInstancia;
 
+	DIR* dp;
+
+	dp = opendir ("Exec");
+
 	//cria a pasta Exec para salvar os dados da execução
-	if(!opendir ("Exec")){
+	if(!dp){
 		if( ImprimeSolucao == 1){
 			cout <<  "\n Nao tem diretorio \"Exec\"!!            FUDEU MUITO!! \n" << endl;
 		}
@@ -1840,10 +1873,12 @@ void	Heuristica::ExecutaGraspClassCir(string NomeInstancia, long int NumeroItera
 			cout << " Problema ao criar pasta Exec" << endl;
 		}
 
-		// Outra maneira de criar arquivos
-		//SituacaoDiretorio = mkdir("./myfolder", S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+		/* Outra maneira de criar arquivos
+		SituacaoDiretorio = mkdir("./myfolder", S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+		*/
+		dp = opendir ("Exec");
 
-		if(!opendir ("Exec")){
+		if(!dp){
 			cout << "\n Nao tem diretorio \"Exec\"!!             FUDEU MUITO!! \n" << endl;
 		}else{
 			if( ImprimeSolucao == 1){
@@ -1855,6 +1890,7 @@ void	Heuristica::ExecutaGraspClassCir(string NomeInstancia, long int NumeroItera
 			cout << " Tem diretorio \"Exec\" !!  " << endl;
 		}
 	}
+	closedir( dp );
 
 	// escreve o endereço do arquivo
 	//cout << endl << endl << endl << Caminho << "   -  " <<  Caminho.c_str() <<  endl << endl << endl;

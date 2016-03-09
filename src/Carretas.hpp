@@ -255,6 +255,9 @@ int		Carreta::VerificaIntegridadeDeDeslocamentos(int Imprime, int ImprimeSolucao
 }
 
 Carreta::~Carreta(){						// Destruidora
+	for( int i = 0; i < (int) TempoParaDescarregarNaConstrucao.size(); i++){
+		TempoParaDescarregarNaConstrucao[i].clear();
+	}
 	TempoParaDescarregarNaConstrucao.clear();
 	Deslocamentos.clear();
 }

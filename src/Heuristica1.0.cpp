@@ -137,9 +137,9 @@ int main(int argc, char **argv) {
 			// 1 => .ps	  2 =>.png   3 =>.jpeg    4 =>.pdf
 			cout << " sai 2 - escreve comandos R" << endl;
 
-			cout << " entrei 3 - escreve comandos excel" << endl;
-			InstanciaSolomon->EscreverComandosExcel( Nome );					// Não implementado ainda
-			cout << " sai 3 - escreve comandos excel" << endl;
+			//cout << " entrei 3 - escreve comandos excel" << endl;
+			//InstanciaSolomon->EscreverComandosExcel( Nome );					// Não implementado ainda
+			//cout << " sai 3 - escreve comandos excel" << endl;
 		}
 		delete(InstanciaSolomon);
 

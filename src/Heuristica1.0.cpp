@@ -125,7 +125,7 @@ int main(int argc, char **argv) {
 
 			cout << " entrei 0 - carrega dados" << endl;
 			InstanciaSolomon->CarregarNumeroNosCoordenadas( Nome );
-			//InstanciaSolomon->EscreverDadosLidosInstanciaSolomon();
+			InstanciaSolomon->EscreverDadosLidosInstanciaSolomon();
 			cout << " sai 0 - carrega dados" << endl;
 
 			cout << " entrei 1 - escreve Instancia Salomon" << endl;
@@ -143,7 +143,7 @@ int main(int argc, char **argv) {
 		}
 		delete(InstanciaSolomon);
 
-
+/*
 		// -------------------------- Resolve as instancais atraevez dos procediemntos implementados ----------------------- //
 
 		Instancias = argv[1];
@@ -700,7 +700,7 @@ int main(int argc, char **argv) {
 			cout << "\n \n Galo Doido! \n \n";
 			return 1;
 		 }
-
+*/
 
 
 	}else{

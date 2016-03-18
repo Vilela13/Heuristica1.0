@@ -1,105 +1,109 @@
 ./Dat/p-Cxxxx-V1.txt
  Gerador dos numeros aleatorios das demandas ( 49 ) 
 Dados das plantas 
-   NoPlanta = 4 Horario [ 7 - 18 ]
-   NoPlanta = 15 Horario [ 7 - 18 ]
-   NoPlanta = 22 Horario [ 7 - 18 ]
+   NoPlanta = 1 Horario [ 7 - 18 ]
+   NoPlanta = 2 Horario [ 7 - 18 ]
+   NoPlanta = 3 Horario [ 7 - 18 ]
 Dados dos Clientes 
-  NoCliente = 1 	Demanda em carretas ( 1 ) Horario [ 12 - 12.5 ]
-  NoCliente = 2 	Demanda em carretas ( 3 ) Horario [ 8 - 9.5 ]
-  NoCliente = 3 	Demanda em carretas ( 2 ) Horario [ 8.5 - 9.5 ]
-  NoCliente = 5 	Demanda em carretas ( 1 ) Horario [ 8 - 8.5 ]
-  NoCliente = 6 	Demanda em carretas ( 2 ) Horario [ 11.5 - 12.5 ]
-  NoCliente = 7 	Demanda em carretas ( 1 ) Horario [ 12 - 12.5 ]
-  NoCliente = 8 	Demanda em carretas ( 1 ) Horario [ 12 - 12.5 ]
-  NoCliente = 9 	Demanda em carretas ( 1 ) Horario [ 11 - 11.5 ]
-  NoCliente = 10 	Demanda em carretas ( 1 ) Horario [ 8.5 - 9 ]
-  NoCliente = 11 	Demanda em carretas ( 2 ) Horario [ 10 - 11 ]
-  NoCliente = 12 	Demanda em carretas ( 1 ) Horario [ 8.5 - 9 ]
-  NoCliente = 13 	Demanda em carretas ( 3 ) Horario [ 11.5 - 13 ]
-  NoCliente = 14 	Demanda em carretas ( 1 ) Horario [ 8 - 8.5 ]
-  NoCliente = 16 	Demanda em carretas ( 2 ) Horario [ 10.5 - 11.5 ]
-  NoCliente = 17 	Demanda em carretas ( 2 ) Horario [ 8.5 - 9.5 ]
-  NoCliente = 18 	Demanda em carretas ( 1 ) Horario [ 9.5 - 10 ]
-  NoCliente = 19 	Demanda em carretas ( 3 ) Horario [ 10.5 - 12 ]
-  NoCliente = 20 	Demanda em carretas ( 3 ) Horario [ 9 - 10.5 ]
+  NoCliente = 1 	Demanda em carretas ( 2 ) Horario [ 10.5 - 11.5 ]
+  NoCliente = 2 	Demanda em carretas ( 2 ) Horario [ 10 - 11 ]
+  NoCliente = 3 	Demanda em carretas ( 3 ) Horario [ 10.5 - 12 ]
+  NoCliente = 4 	Demanda em carretas ( 3 ) Horario [ 12 - 13.5 ]
+  NoCliente = 5 	Demanda em carretas ( 3 ) Horario [ 9.5 - 11 ]
+  NoCliente = 6 	Demanda em carretas ( 1 ) Horario [ 10 - 10.5 ]
+  NoCliente = 7 	Demanda em carretas ( 3 ) Horario [ 8 - 9.5 ]
+  NoCliente = 8 	Demanda em carretas ( 3 ) Horario [ 9 - 10.5 ]
+  NoCliente = 9 	Demanda em carretas ( 1 ) Horario [ 12.5 - 13 ]
+  NoCliente = 10 	Demanda em carretas ( 2 ) Horario [ 10.5 - 11.5 ]
+  NoCliente = 11 	Demanda em carretas ( 1 ) Horario [ 9 - 9.5 ]
+  NoCliente = 12 	Demanda em carretas ( 2 ) Horario [ 11 - 12 ]
+  NoCliente = 13 	Demanda em carretas ( 2 ) Horario [ 11 - 12 ]
+  NoCliente = 14 	Demanda em carretas ( 3 ) Horario [ 9 - 10.5 ]
+  NoCliente = 15 	Demanda em carretas ( 2 ) Horario [ 11 - 12 ]
+  NoCliente = 16 	Demanda em carretas ( 3 ) Horario [ 9 - 10.5 ]
+  NoCliente = 17 	Demanda em carretas ( 1 ) Horario [ 10.5 - 11 ]
+  NoCliente = 18 	Demanda em carretas ( 3 ) Horario [ 8.5 - 10 ]
+  NoCliente = 19 	Demanda em carretas ( 3 ) Horario [ 8 - 9.5 ]
+  NoCliente = 20 	Demanda em carretas ( 3 ) Horario [ 11 - 12.5 ]
   NoCliente = 21 	Demanda em carretas ( 1 ) Horario [ 10 - 10.5 ]
-  NoCliente = 23 	Demanda em carretas ( 3 ) Horario [ 10.5 - 12 ]
-  NoCliente = 24 	Demanda em carretas ( 2 ) Horario [ 8.5 - 9.5 ]
-  NoCliente = 25 	Demanda em carretas ( 1 ) Horario [ 12 - 12.5 ]
+  NoCliente = 22 	Demanda em carretas ( 3 ) Horario [ 11.5 - 13 ]
+  NoCliente = 23 	Demanda em carretas ( 1 ) Horario [ 11 - 11.5 ]
 
 
 Distancia das plantas para construcoes  em minutos
 
    Planta = 1
 Construcao   Tempo de Ida    Tempo de Ida e Volta
-1		6		17
-2		7.2111		19.4222
-3		4		13
-4		6		17
-5		4.47214		13.9443
-6		5.65685		16.3137
-7		8		21
-8		8.94427		22.8885
-9		14.5602		34.1204
-10		14.1421		33.2843
-11		48.0833		101.167
-12		42.3792		89.7585
-13		52.4976		109.995
-14		55.6058		116.212
-15		50		105
-16		55.7853		116.571
-17		59.0931		123.186
-18		43.2666		91.5332
-19		40		85
-20		38.2099		81.4199
-21		49.5177		104.035
-22		46.6905		98.3809
+1		20.3961		45.7922
+2		30.2655		65.531
+3		80.6226		166.245
+4		78.7147		162.429
+5		72.111		149.222
+6		76.1577		157.315
+7		78.1025		161.205
+8		37.3631		79.7262
+9		66.6033		138.207
+10		32.249		69.4981
+11		24.3311		53.6621
+12		26		57
+13		32		69
+14		38		81
+15		30.2655		65.531
+16		39.2938		83.5875
+17		36.2215		77.4431
+18		61.6117		128.223
+19		20		45
+20		41.2311		87.4621
+21		40.1995		85.399
+22		70.7107		146.421
+23		30		65
    Planta = 2
 Construcao   Tempo de Ida    Tempo de Ida e Volta
-1		55.4617		115.923
-2		53.8516		112.703
-3		52.1536		109.307
-4		53.2541		111.508
-5		45.6508		96.3017
-6		48.8262		102.652
-7		43.2666		91.5332
-8		41.1825		87.365
-9		41.0366		87.0731
-10		37.2022		79.4043
-11		14.1421		33.2843
-12		10.7703		26.5407
-13		10.7703		26.5407
-14		10		25
-15		10.7703		26.5407
-16		14.1421		33.2843
-17		10		25
-18		63.2456		131.491
-19		59.4643		123.929
-20		52.4976		109.995
-21		60.8276		126.655
-22		56.8859		118.772
+1		29.7321		64.4643
+2		14.1421		33.2843
+3		48.4149		101.83
+4		46.0435		97.0869
+5		41.0366		87.0731
+6		42.9418		90.8836
+7		48.8262		102.652
+8		20.3961		45.7922
+9		38.4708		81.9415
+10		14		33
+11		31.305		67.6099
+12		26.0768		57.1536
+13		10		25
+14		11.6619		28.3238
+15		34.4093		73.8186
+16		6		17
+17		7.2111		19.4222
+18		31.6228		68.2456
+19		33.5261		72.0522
+20		21.5407		48.0813
+21		10		25
+22		43.8634		92.7268
+23		37.7359		80.4718
    Planta = 3
 Construcao   Tempo de Ida    Tempo de Ida e Volta
-1		46.6905		98.3809
-2		49.5177		104.035
-3		39.598		84.196
-4		38.2099		81.4199
-5		41.6173		88.2346
-6		36.8782		78.7564
-7		37.7359		80.4718
-8		41.1825		87.365
-9		31.305		67.6099
-10		36.7696		78.5391
-11		66.2722		137.544
-12		47.5395		100.079
-13		67.082		139.164
-14		67.9117		140.823
-15		50.1597		105.319
-16		52.8394		110.679
-17		61.7414		128.483
-18		5.65685		16.3137
-19		4		13
-20		6		17
-21		7.2111		19.4222
-22		6		17
+1		40		85
+2		6		17
+3		55.6058		116.212
+4		52.4976		109.995
+5		50.1199		105.24
+6		48.0833		101.167
+7		59.0931		123.186
+8		6		17
+9		50		105
+10		4		13
+11		42.5206		90.0412
+12		38.2099		81.4199
+13		5.65685		16.3137
+14		4.47214		13.9443
+15		46.6905		98.3809
+16		14.1421		33.2843
+17		8		21
+18		42.3792		89.7585
+19		43.2666		91.5332
+20		7.2111		19.4222
+21		8.94427		22.8885
+22		55.7853		116.571
+23		49.5177		104.035

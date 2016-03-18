@@ -10,7 +10,12 @@
 
 #include "Bibliotecas.hpp"
 
-
+class CoordenadaNo{
+public:
+	int NumeroNo;
+	double CoordenadaX;
+	double CoordenadaY;
+};
 
 class DadosSolomon{
 
@@ -25,8 +30,9 @@ public:
 
 	int 	NumeroNosDadosSolomon;
 
-	vector< int > NumeroDoNo;
-	vector< vector< int > > Coordenadas;
+	vector< CoordenadaNo > NosCoord;
+
+
 	vector< int > Demanda;
 	vector< vector< int > > JanelaDeTempo;
 	vector< int > TempoDeServico;
@@ -37,9 +43,9 @@ public:
 // Variaveis de escrita dos arquivos de saida
 
 	int 	NumeroPlantas;
-	vector < int > NoPlanta;
+	vector < CoordenadaNo > NoPlanta;
 	int 	NumeroClientes;
-	vector < int > NoCliente;
+	vector < CoordenadaNo > NoCliente;
 	int 	NumeroCaminhoes;
 	int 	Velocidade;
 
@@ -67,6 +73,11 @@ public:
 	vector < double > HoraInicioCliente;
 	vector < double > HoraFinalCliente;
 
+	ifstream Instancia;
+	ofstream ComandosR;
+	ofstream ComandosExcel;
+	ofstream InstanciaSolomon;
+	ofstream DadosInstanciaSalomonCriada;
 
 // Funções
 
@@ -74,57 +85,52 @@ public:
 
 	void EscreverDadosLidosInstanciaSolomon();
 
-	ifstream Instancia;
-
-	void EscreverComandosR(string,char );
-
-	ofstream ComandosR;
-
-	void EscreverComandosExcel(string);
-
-	ofstream ComandosExcel;
-
 	void CriaPastaInstS();
 	void CriaPastaDat();
 
 	void CriarInstanciaSolomon(string);
 
-	ofstream InstanciaSolomon;
-	ofstream DadosInstanciaSalomonCriada;
+	void EscreverComandosR(string,char );
+/*
+	void EscreverComandosExcel(string);
+
+
+
+	*/
 
     ~DadosSolomon();
 
 };
 
 DadosSolomon::DadosSolomon(){
-	AuxiliarInt = -13;
-	Capacidade = -13;
-	NumeroNosDadosSolomon = -13;
-	NumeroVeiculos = -13;
-	x = -13;
-	y = -13;
-	AuxiliarInt = -13;
-	CaminhaoAux = -13;
+	AuxiliarInt = 0;
+	Capacidade = 0;
+	NumeroNosDadosSolomon = 0;
+	NumeroVeiculos = 0;
+	x = 0;
+	y = 0;
+	AuxiliarInt = 0;
+	CaminhaoAux = 0;
 
 	b = NULL;
 	aux1  = NULL;
 
-	NumeroPlantas = -13;
-	NumeroClientes = -13;
-	NumeroCaminhoes = -13;
-	Velocidade = -13;
+	NumeroPlantas = 0;
+	NumeroClientes = 0;
+	NumeroCaminhoes = 0;
+	Velocidade = 0;
 
-	TempoDeDescarga = -13;
-	TemproEntreEntregas = -13;
-	TempoPlanta = -13;
-	TempoDeVidaConcreto = -13;
-	TempoEntreEntregas = -13;
+	TempoDeDescarga = 0;
+	TemproEntreEntregas = 0;
+	TempoPlanta = 0;
+	TempoDeVidaConcreto = 0;
+	TempoEntreEntregas = 0;
 
 }
 
 void 	DadosSolomon::CarregarNumeroNosCoordenadas( string Nome){
 
-	int 	EscreveDadosLidos = 0;
+	int 	EscreveDadosLidos = 1;
 
 	Instancia.open(Nome.c_str());
 
@@ -160,19 +166,12 @@ void 	DadosSolomon::CarregarNumeroNosCoordenadas( string Nome){
 
 // Inicializa estrutura ds dados
 
-	NumeroDoNo.resize( NumeroNosDadosSolomon + 1 );
-
-	Coordenadas.resize( NumeroNosDadosSolomon + 1 );
-    for( int i = 0; i <= NumeroNosDadosSolomon; i++){
-            Coordenadas[i].resize(2);
-
-    }
+	NosCoord.resize( NumeroNosDadosSolomon + 1 );
     Demanda.resize( NumeroNosDadosSolomon + 1 );
 
     JanelaDeTempo.resize( NumeroNosDadosSolomon + 1 );
     for( int i = 0; i <= NumeroNosDadosSolomon; i++){
     	JanelaDeTempo[i].resize(2);
-
 	}
     TempoDeServico.resize( NumeroNosDadosSolomon + 1 );
 
@@ -188,13 +187,11 @@ void 	DadosSolomon::CarregarNumeroNosCoordenadas( string Nome){
     	cout << endl;
     }
 
-
-
     for( int i = 0; i <= NumeroNosDadosSolomon; i++){
-        Instancia >> NumeroDoNo[i];
+        Instancia >> NosCoord[i].NumeroNo;
 
-        Instancia >> Coordenadas[i][0];
-        Instancia >> Coordenadas[i][1];
+        Instancia >> NosCoord[i].CoordenadaX;
+        Instancia >> NosCoord[i].CoordenadaY;
 
         Instancia >>Demanda[i];
 
@@ -204,24 +201,19 @@ void 	DadosSolomon::CarregarNumeroNosCoordenadas( string Nome){
         Instancia >>TempoDeServico[i];
 
         if( EscreveDadosLidos == 1){
-            cout << NumeroDoNo[i] << "\t\t\t\t";
-            cout << Coordenadas[i][0] << "\t";
-            cout << Coordenadas[i][1] << "\t";
+            cout << NosCoord[i].NumeroNo << "\t\t\t\t";
+            cout << NosCoord[i].CoordenadaX << "\t";
+            cout << NosCoord[i].CoordenadaY << "\t";
             cout << Demanda[i] << "\t\t";
             cout << JanelaDeTempo[i][0] << "\t";
             cout << JanelaDeTempo[i][1] << "\t\t\t";
             cout << TempoDeServico[i] << "\t\t" << endl;
         }
-
-
     }
-
     //cout << endl << endl << " DadosSolomon " << endl << endl;
-
     Instancia.close();
-
-
 }
+
 
 void 	DadosSolomon::EscreverDadosLidosInstanciaSolomon(){
 	cout << endl << endl;
@@ -232,7 +224,7 @@ void 	DadosSolomon::EscreverDadosLidosInstanciaSolomon(){
 
 	cout << " Numero No \t Coordenada X \t Coordenada Y \t Demanda \t InicioJanela \t FimJanela \t TempoServico"<< endl;
     for( int i = 0; i<=NumeroNosDadosSolomon; i++){
-        cout << "\t " << NumeroDoNo[i] << "\t\t" << Coordenadas[i][0]  << "\t\t" << Coordenadas[i][1] << "\t\t" << Demanda[i] << "\t\t";
+        cout << "\t " << NosCoord[i].NumeroNo << "\t\t" << NosCoord[i].CoordenadaX  << "\t\t" << NosCoord[i].CoordenadaY << "\t\t" << Demanda[i] << "\t\t";
         cout << JanelaDeTempo[i][0]  << "\t\t" << JanelaDeTempo[i][1]  << "\t\t" << TempoDeServico[i] << endl;
     }
 
@@ -240,272 +232,7 @@ void 	DadosSolomon::EscreverDadosLidosInstanciaSolomon(){
 
 }
 
-void 	DadosSolomon::EscreverComandosR(string Nome, char TipoArquivoSaida){
 
-	//int LimiteplotarX;
-	//int LimiteplotarY;
-
-	//LimiteplotarX = 45;
-	//LimiteplotarY = 90;
-
-	double 	PosicaoTextoX;
-	double 	PosicaoTextoY;
-	int 	TamanhoLetraLegenda;
-
-	PosicaoTextoX = 0.5;
-	PosicaoTextoY = 2;
-	TamanhoLetraLegenda = 2;
-
-	string TipoComando;
-	string NomeArquivoComandoR;
-	TipoComando = "./ComR/CmdR-";
-	TipoComando += Nome;
-
-	DIR* dp1;
-	DIR* dp2;
-
-	dp1 = opendir ("ComR");
-
-	if(!dp1){
-		cout <<  "\n Nao tem diretorio \"ComR\"!!            FUDEU MUITO!! \n" << endl;
-
-		if(system("mkdir ComR;") == 0){
-			cout << " Criou pasta ComR" << endl;
-		}else{
-			cout << " Problema ao criar pasta ComR" << endl;
-		}
-
-		/* Outra maneira de criar arquivos
-
-		SituacaoDiretorio = mkdir("./myfolder", S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
-		*/
-		dp1 = opendir ("ComR");
-
-		if(!dp1){
-			cout << "\n Nao tem diretorio \"ComR\"!!             FUDEU MUITO!! \n" << endl;
-		}else{
-			cout << " Tem diretorio \"ComR\" !!  " << endl;
-		}
-	}else{
-		cout << " Tem diretorio \"ComR\" !!  " << endl;
-	}
-
-	closedir( dp1 );
-
-	cout << endl <<  " Arquivo do comando R = " <<   TipoComando << endl << endl;
-
-	ComandosR.open(TipoComando.c_str());
-
-	ComandosR << "require(ggplot2) "<< endl;
-
-
-	ComandosR << "Dados <- data.frame(nomes = c(" ;
-	ComandosR << "\"N" << "0" << "\"";
-	for( int c = 1; c <= NumeroClientes; c++){
-		ComandosR << "," << "\"C" <<  c << "(" <<  NumeroCarretas[c] << ")"<<  "\"";
-	}
-	for( int p = 1; p <= NumeroPlantas; p++){
-		ComandosR << ","<< "\"P" <<  p <<  "\"";
-	}
-	ComandosR << ")" << endl;
-
-	//cout << " Aqui 1 " << endl;
-
-	ComandosR << ", x <- c(" ;
-	ComandosR << Coordenadas[0][0] ;
-	for( int c = 1; c <= NumeroClientes; c++){
-		ComandosR << ","<<  Coordenadas[	NoCliente[c] ][0] ;
-	}
-	for( int p = 1; p <= NumeroPlantas; p++){
-		ComandosR << ","<<  Coordenadas[ NoPlanta[p] ][0] ;
-	}
-	ComandosR << ")" << endl;
-
-	ComandosR << ", y <- c(" ;
-	ComandosR << Coordenadas[0][1] ;
-	for( int c = 1; c <= NumeroClientes; c++){
-		ComandosR << ","<<  Coordenadas[	NoCliente[c] ][1] ;
-	}
-	for( int p = 1; p <= NumeroPlantas; p++){
-		ComandosR << ","<<  Coordenadas[ NoPlanta[p] ][1] ;
-	}
-	ComandosR << ")" << endl;
-
-	ComandosR << ", tipo <- c(" ;
-	ComandosR << "3" ;
-	for( int c = 1; c <= NumeroClientes; c++){
-			ComandosR << ",6" ;
-	}
-	for( int p = 1; p <= NumeroPlantas; p++){
-			ComandosR << ",4" ;
-	}
-	ComandosR << ")" << endl;
-
-	ComandosR << ", tamanho <- c(" ;
-	ComandosR << "1" ;
-	for( int c = 1; c <= NumeroClientes; c++){
-			ComandosR << ",1" ;
-	}
-	for( int p = 1; p <= NumeroPlantas; p++){
-		ComandosR << ",2" ;
-	}
-	ComandosR << ")" << endl << ")"<< endl;
-
-	dp2 = opendir ("Imagens");
-
-	if(!dp2){
-		cout <<  "\n Nao tem diretorio Imagens!!          FUDEU MUITO!! \n" << endl;
-
-		if(system("mkdir Imagens;") == 0){
-			cout << " Criou pasta Imagens" << endl;
-		}else{
-			cout << " Problema ao criar pasta Imagens" << endl;
-		}
-
-		/* Outra maneira de criar arquivos
-
-		SituacaoDiretorio = mkdir("./myfolder", S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
-		*/
-		dp2 = opendir ("Imagens");
-
-		if(!dp2){
-			cout << "\n Nao tem diretorio \"Imagens\"!!             FUDEU MUITO!! \n" << endl;
-		}else{
-			cout << " Tem diretorio \"Imagens\" !!  " << endl;
-		}
-	}else{
-		cout << " Tem diretorio \"Imagens\" !!  " << endl;
-	}
-
-	closedir( dp2 );
-
-
-
-	//NomeArquivoComandoR = "./Imagens/";
-	NomeArquivoComandoR += Nome;
-
-	NomeArquivoComandoR.resize( NomeArquivoComandoR.size() - 4 );
-
-
-
-// Cria Post Script
-	if (TipoArquivoSaida == '1'){
-		NomeArquivoComandoR += ".ps";
-
-		ComandosR << "postscript('" << NomeArquivoComandoR << "')" << endl;
-	}
-
-// Criar PNG
-	if (TipoArquivoSaida == '2'){
-
-		NomeArquivoComandoR += ".png";
-		ComandosR << "png('" << NomeArquivoComandoR << "')" << endl;
-	}
-
-// Criar Jpeg
-	if (TipoArquivoSaida == '3'){
-
-		NomeArquivoComandoR += ".jpg";
-		ComandosR << "jpeg('" << NomeArquivoComandoR << "')" << endl;
-	}
-
- // Criar PDF
-	if (TipoArquivoSaida == '4'){
-
-		NomeArquivoComandoR += ".pdf";
-		ComandosR << "pdf('" << NomeArquivoComandoR << "')" << endl;
-	}
-
-	ComandosR << "ggplot(Dados, aes(x,y)) + geom_point(aes(shape = factor(tipo),size =tamanho) ) + scale_size_continuous(range = c(3,4))";
-	ComandosR << "+ scale_shape(solid = FALSE)+  geom_text(aes(label=nomes),";
-	ComandosR << " hjust= " << PosicaoTextoX << ",vjust=" << PosicaoTextoY  ;
-	ComandosR << " ,size = " << TamanhoLetraLegenda << ")";
-	ComandosR << "+ xlim( min(x)- 10, max(x)+10 ) + ylim( min(y)-10,max(y)+10 )" << endl; //ComandosR << "+ xlim(0," << LimiteplotarX << ") + ylim(0," << LimiteplotarY << ")" << endl;
-	ComandosR << "dev.off() ;" << endl;
-
-	ComandosR.close();
-
-	//cout << " Aqui 3" << endl;
-
-}
-
-void 	DadosSolomon::EscreverComandosExcel(string Nome){
-
-	/*
-	char *b;
-	string TipoComando;
-	TipoComando = "CmdE-";
-
-	b = new char[TipoComando.size()+1];
-	b[TipoComando.size()]=0;
-	memcpy(b,TipoComando.c_str(),TipoComando.size());
-	strcat(b,a);
-
-	FILE *fp;
-	fp = fopen (b, "w");
-	if (fp == NULL) {
-		for( int i = 0; i <= NumeroNosDadosSolomon; i++){
-			printf ("N %d \t %f \t %f \n",i,Coordenadas[i][0],Coordenadas[i][1]);
-			fprintf (fp, "N %d \t %f \t %f \n",i,Coordenadas[i][0],Coordenadas[i][1]);
-		}
-	}
-	fclose (fp);
-
-
-	*/
-
-	string 	TipoComando;
-	TipoComando = "./ComE/CmdE-";
-	TipoComando += Nome;
-
-	DIR* dp1;
-
-	dp1 = opendir ("ComE");
-
-	if(!dp1){
-		cout <<  "\n Nao tem diretorio \"ComE\"!!            FUDEU MUITO!! \n" << endl;
-
-		if(system("mkdir ComE") == 0){
-			cout << " Criou pasta ComE" << endl;
-		}else{
-			cout << " Problema ao criar pasta ComE" << endl;
-		}
-
-		/* Outra maneira de criar arquivos
-
-		SituacaoDiretorio = mkdir("./myfolder", S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
-		*/
-		dp1 = opendir ("ComE");
-
-		if(!dp1){
-			cout << "\n Nao tem diretorio \"ComE\"!!             FUDEU MUITO!! \n" << endl;
-		}else{
-			cout << " Tem diretorio \"ComE\" !!  " << endl;
-		}
-	}else{
-		cout << " Tem diretorio \"ComE\" !!  " << endl;
-	}
-
-	closedir( dp1 );
-
-
-
-	//cout << " galo => " << b << endl << endl;
-
-	ComandosExcel.open(TipoComando.c_str());
-
-	//cout << " Doido " << endl << endl;
-
-
-
-    for( int i = 0; i <= NumeroNosDadosSolomon; i++){
-        ComandosExcel << "N" <<  i  << "\t" << Coordenadas[i][0] << "\t" << Coordenadas[i][1] << endl ;
-    }
-
-    ComandosExcel.close();
-
-
-}
 
 void 	DadosSolomon::CriaPastaInstS(){
 	DIR* dp1;
@@ -521,10 +248,9 @@ void 	DadosSolomon::CriaPastaInstS(){
 			cout << " Problema ao criar pasta InstS" << endl;
 		}
 
-		/* Outra maneira de criar arquivos
+		// Outra maneira de criar arquivos
+		//SituacaoDiretorio = mkdir("./myfolder", S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
 
-		SituacaoDiretorio = mkdir("./myfolder", S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
-		*/
 		dp1 = opendir ("InstS");
 
 		if(!dp1){
@@ -553,10 +279,9 @@ void 	DadosSolomon::CriaPastaDat(){
 			cout << " Problema ao criar pasta Dat" << endl;
 		}
 
-		/* Outra maneira de criar arquivos
+		// Outra maneira de criar arquivos
+		//SituacaoDiretorio = mkdir("./myfolder", S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
 
-		SituacaoDiretorio = mkdir("./myfolder", S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
-		*/
 		dp1 = opendir ("Dat");
 
 		if(!dp1){
@@ -570,8 +295,9 @@ void 	DadosSolomon::CriaPastaDat(){
 
 	closedir( dp1 );
 
-
 }
+
+
 
 void 	DadosSolomon::CriarInstanciaSolomon(string Nome){
 
@@ -599,6 +325,11 @@ void 	DadosSolomon::CriarInstanciaSolomon(string Nome){
 	double HorarioMinimoConstrucao;
 	double HorarioMaximoConstrucao;
 
+	int NoPlantaAux;
+	int NoConstrucaoAux;
+
+	int NumeroCaminhoesPorPlanta;
+
 	TempoCarreta = 0.5; 			// tempo que se tem na janela de atendiemnto para atender a uma demanda
 	NumeroMaxCarretas = 4;			// numero maximo de demandas em uma construção
 	InicioMinAtendimento = 0.5;		// valor minimo que duas janelas de atendiemto podem ter no minimo caso os horarios inicio d eatendiemnto iniciais forem difrentes
@@ -609,6 +340,9 @@ void 	DadosSolomon::CriarInstanciaSolomon(string Nome){
 	TemproEntreEntregas = 0.1666667; // equivaelente a 10 minutos
 	TempoPlanta 		= 0.083333333; // equivalente a 5 minutos(4 min = 0.066667 ; 3min = 0.05 e 2min = 0.0333333)
 	TempoDeVidaConcreto = 1.5;
+
+
+	NumeroCaminhoesPorPlanta = 10;
 
 	//binomial_distribution<int> distribution(5,0.5); 		// gera numeros segundo a distribuição binomial
 
@@ -674,7 +408,7 @@ void 	DadosSolomon::CriarInstanciaSolomon(string Nome){
 		DadosInstanciaSalomonCriada << CaminhoArquivo2 << endl;
 		InstanciaSolomon << NomeAux << endl;
 
-
+/*
 
 		if( NomeInstancia[0] == 'R' ){
 			//Inicializa Parametros
@@ -732,6 +466,9 @@ void 	DadosSolomon::CriarInstanciaSolomon(string Nome){
 
 
 		}
+
+		*/
+
 		if(NomeInstancia[0] == 'C' ){
 			//Inicializa Parametros
 
@@ -741,13 +478,27 @@ void 	DadosSolomon::CriarInstanciaSolomon(string Nome){
 			HoraInicioPlanta.resize(NumeroPlantas + 1);
 			HoraFinalPlanta.resize(NumeroPlantas + 1);
 
-			NoPlanta[1] = 4 ;/*15; 22;*/	HoraInicioPlanta[1] = 7; 	HoraFinalPlanta[1] = 18;
-			NoPlanta[2] = 15;	HoraInicioPlanta[2] = 7; 	HoraFinalPlanta[2] = 18;
-			NoPlanta[3] = 22;	HoraInicioPlanta[3] = 7; 	HoraFinalPlanta[3] = 18;
+			NoPlanta[1].NumeroNo = NosCoord[0].NumeroNo;
+			NoPlanta[1].CoordenadaX = NosCoord[0].CoordenadaX;
+			NoPlanta[1].CoordenadaY = NosCoord[0].CoordenadaY;
+			HoraInicioPlanta[1] = 7;
+			HoraFinalPlanta[1] = 18;
+			NosCoord.erase(NosCoord.begin());
+
+			for(int p = 2; p <= NumeroPlantas; p++){
+				cout << "    planta " << p << " tamanho = " << NosCoord.size() << endl;
+				NoPlantaAux = rand() % NosCoord.size() ;
+				NoPlanta[p].NumeroNo = NosCoord[NoPlantaAux].NumeroNo;
+				NoPlanta[p].CoordenadaX = NosCoord[NoPlantaAux].CoordenadaX;
+				NoPlanta[p].CoordenadaY = NosCoord[NoPlantaAux].CoordenadaY;
+				NosCoord.erase(NosCoord.begin() + NoPlantaAux);
+				HoraInicioPlanta[p] = 7;
+				HoraFinalPlanta[p] = 18;
 
 
+			}
 
-			NumeroClientes 	= 22;
+			NumeroClientes 	= 23;
 			NoCliente.resize(	NumeroClientes	+	1);
 			HoraInicioCliente.resize(	NumeroClientes	+	1);
 			HoraFinalCliente.resize( 	NumeroClientes	+	1);
@@ -756,14 +507,14 @@ void 	DadosSolomon::CriarInstanciaSolomon(string Nome){
 			cout << " +++++++++++ [ C ]  Plantas (" << NumeroPlantas << ")    Construcoes (" << NumeroClientes << ") ++++++++++++++++++" << endl;
 
 			// define o no que ira representar a construção, o númeor de carretas e o intervalo de atendiemnto
-			No = 1;
 			for( int i = 1; i <= NumeroClientes; i++){
-				for(int p = 1; p <= NumeroPlantas; p++){
-					if( NoPlanta[p] == No){
-						No++;
-					}
-				}
-				NoCliente[i] = No;		// fornece o no que representa a construção
+				cout << "    construção " << i << " tamanho = " << NosCoord.size() << endl;
+				NoConstrucaoAux = rand() % NosCoord.size();
+				NoCliente[i].NumeroNo = NosCoord[NoConstrucaoAux].NumeroNo;
+				NoCliente[i].CoordenadaX = NosCoord[NoConstrucaoAux].CoordenadaX;
+				NoCliente[i].CoordenadaY = NosCoord[NoConstrucaoAux].CoordenadaY;
+				NosCoord.erase(NosCoord.begin() + NoConstrucaoAux);
+
 				NumeroCarretas[i] = rand()%(NumeroMaxCarretas-1) + 1;	// fornece o numero de demandas da conrução
 				//
 				HoraInicioCliente[i] = HorarioMinimoConstrucao + (rand()%(int)((HorarioMinimoConstrucao-HorarioMaximoConstrucao)*(1/InicioMinAtendimento)))*InicioMinAtendimento;
@@ -772,19 +523,23 @@ void 	DadosSolomon::CriarInstanciaSolomon(string Nome){
 					HoraInicioCliente[i] = HorarioMinimoConstrucao + (rand()%(int)((HorarioMinimoConstrucao-HorarioMaximoConstrucao)*(1/InicioMinAtendimento)))*InicioMinAtendimento;
 					HoraFinalCliente[i] = HoraInicioCliente[i] + NumeroCarretas[i]*TempoCarreta;
 				}
-				No++;
 			}
 
-
-			NumeroCaminhoes = 30;
+			NumeroCaminhoes = 0;
+			for( int p = 0; p < NumeroPlantas; p++){
+				NumeroCaminhoes = NumeroCaminhoes + NumeroCaminhoesPorPlanta;
+			}
 
 			CaminhoesPlanta.resize(NumeroPlantas + 1);
-			CaminhoesPlanta[1] = 10;
-			CaminhoesPlanta[2] = 10;
-			CaminhoesPlanta[3] = 10;
+			for( int p = 1; p <= NumeroPlantas; p++){
+				CaminhoesPlanta[p] = NumeroCaminhoesPorPlanta;
+			}
 
 			Velocidade 		= 30;
+
 		}
+
+
 		InstanciaSolomon << NumeroPlantas 		<< endl; 	// NUmero de plantas que serão nos Nós N4 ,N15 e o N22
 		InstanciaSolomon << NumeroClientes 		<< endl;	// Numero de construções (clientes) , tirei o no N0 e dos 25 restantes eu tirei os 3 das plantas
 		InstanciaSolomon << NumeroCaminhoes 	<< endl;	// Coloquei 20 caminhões paracada planta (pode mudar depois.
@@ -820,7 +575,7 @@ void 	DadosSolomon::CriarInstanciaSolomon(string Nome){
 
 		for(int p =1; p <= NumeroPlantas; p++){
 			for(int i =1; i <= NumeroClientes; i++){
-				InstanciaSolomon << sqrt( pow( Coordenadas[ NoPlanta[p] ][0] - Coordenadas[	NoCliente[i] ][0],2) + pow( Coordenadas[ NoPlanta[p] ][1] - Coordenadas[ NoCliente[i] ][1],2) ) / Velocidade << " ";
+				InstanciaSolomon << sqrt( pow( NoPlanta[p].CoordenadaX - NoCliente[i].CoordenadaX,2) + pow( NoPlanta[p].CoordenadaY - NoCliente[i].CoordenadaY,2) ) / Velocidade << " ";
 			}
 			InstanciaSolomon << endl;
 		}
@@ -832,7 +587,7 @@ void 	DadosSolomon::CriarInstanciaSolomon(string Nome){
 		// Preenche as localizações entradas e plantas
 		for(int i =1; i <= NumeroClientes; i++){
 			for(int p =1; p <= NumeroPlantas; p++){
-				InstanciaSolomon << sqrt( pow( Coordenadas[ NoPlanta[p] ][0] - Coordenadas[ NoCliente[i] ][0],2) + pow( Coordenadas[  NoPlanta[p] ][1] - Coordenadas[ NoCliente[i] ][1],2) ) / Velocidade << " ";
+				InstanciaSolomon << sqrt( pow( NoPlanta[p].CoordenadaX - NoCliente[i].CoordenadaX ,2) + pow( NoPlanta[p].CoordenadaY - NoCliente[i].CoordenadaY ,2) ) / Velocidade << " ";
 			}
 			InstanciaSolomon << endl;
 		}
@@ -889,12 +644,12 @@ void 	DadosSolomon::CriarInstanciaSolomon(string Nome){
 		DadosInstanciaSalomonCriada << " Gerador dos numeros aleatorios das demandas ( " << NumeroVERSAO << " ) " << endl;
 		DadosInstanciaSalomonCriada << "Dados das plantas " << endl;
 		for (int p = 1; p <= NumeroPlantas; p++){
-			DadosInstanciaSalomonCriada <<  "   NoPlanta = " <<  NoPlanta[p];
+			DadosInstanciaSalomonCriada <<  "   NoPlanta = " <<  p;
 			DadosInstanciaSalomonCriada << " Horario [ "	<< HoraInicioPlanta[p] << " - "	<< HoraFinalPlanta[p] << " ]" << endl;
 		}
 		DadosInstanciaSalomonCriada << "Dados dos Clientes " << endl;
 		for( int c = 1; c <= NumeroClientes; c++){
-			DadosInstanciaSalomonCriada << "  NoCliente = " << NoCliente[c];
+			DadosInstanciaSalomonCriada << "  NoCliente = " << c;
 			DadosInstanciaSalomonCriada << " \tDemanda em carretas ( " << NumeroCarretas[c] << " ) ";
 			DadosInstanciaSalomonCriada << "Horario [ "	<< HoraInicioCliente[c] << " - " << HoraFinalCliente[c] << " ]" << endl;
 		}
@@ -904,10 +659,11 @@ void 	DadosSolomon::CriarInstanciaSolomon(string Nome){
 			DadosInstanciaSalomonCriada <<  "   Planta = " <<  p << endl;
 			DadosInstanciaSalomonCriada << "Construcao   Tempo de Ida    Tempo de Ida e Volta" << endl;
 			for( int c = 1; c <= NumeroClientes; c++){
-				DadosInstanciaSalomonCriada << c << "\t\t" << (sqrt( pow( Coordenadas[ NoPlanta[p] ][0] - Coordenadas[ NoCliente[c] ][0],2) + pow( Coordenadas[  NoPlanta[p] ][1] - Coordenadas[ NoCliente[c] ][1],2) ) / Velocidade)*60  << "\t\t";
-				DadosInstanciaSalomonCriada << (sqrt( pow( Coordenadas[ NoPlanta[p] ][0] - Coordenadas[ NoCliente[c] ][0],2) + pow( Coordenadas[  NoPlanta[p] ][1] - Coordenadas[ NoCliente[c] ][1],2) ) / Velocidade)*60 + TempoPlanta * 60 + (sqrt( pow( Coordenadas[ NoPlanta[p] ][0] - Coordenadas[ NoCliente[c] ][0],2) + pow( Coordenadas[  NoPlanta[p] ][1] - Coordenadas[ NoCliente[c] ][1],2) ) / Velocidade)*60 << endl;
+				DadosInstanciaSalomonCriada << c << "\t\t" << (sqrt( pow( NoPlanta[p].CoordenadaX - NoCliente[c].CoordenadaX ,2) + pow( NoPlanta[p].CoordenadaY - NoCliente[c].CoordenadaY,2) ) / Velocidade)*60  << "\t\t";
+				DadosInstanciaSalomonCriada << (sqrt( pow( NoPlanta[p].CoordenadaX - NoCliente[c].CoordenadaX ,2) + pow( NoPlanta[p].CoordenadaY - NoCliente[c].CoordenadaY,2) ) / Velocidade)*60 + TempoPlanta * 60 + (sqrt( pow( NoPlanta[p].CoordenadaX - NoCliente[c].CoordenadaX,2) + pow( NoPlanta[p].CoordenadaY - NoCliente[c].CoordenadaY,2) ) / Velocidade)*60 << endl;
 			}
 		}
+
 	}else{
 
 		InstanciaSolomon << " Nao se enquadra! " << endl;
@@ -917,19 +673,288 @@ void 	DadosSolomon::CriarInstanciaSolomon(string Nome){
 	InstanciaSolomon.close();
 }
 
+
+void 	DadosSolomon::EscreverComandosR(string Nome, char TipoArquivoSaida){
+
+	//int LimiteplotarX;
+	//int LimiteplotarY;
+
+	//LimiteplotarX = 45;
+	//LimiteplotarY = 90;
+
+	double 	PosicaoTextoX;
+	double 	PosicaoTextoY;
+	int 	TamanhoLetraLegenda;
+
+	PosicaoTextoX = 0.5;
+	PosicaoTextoY = 2;
+	TamanhoLetraLegenda = 2;
+
+	string TipoComando;
+	string NomeArquivoComandoR;
+	TipoComando = "./ComR/CmdR-";
+	TipoComando += Nome;
+
+	DIR* dp1;
+	DIR* dp2;
+
+	dp1 = opendir ("ComR");
+
+	if(!dp1){
+		cout <<  "\n Nao tem diretorio \"ComR\"!!            FUDEU MUITO!! \n" << endl;
+
+		if(system("mkdir ComR;") == 0){
+			cout << " Criou pasta ComR" << endl;
+		}else{
+			cout << " Problema ao criar pasta ComR" << endl;
+		}
+
+		// Outra maneira de criar arquivos
+		// SituacaoDiretorio = mkdir("./myfolder", S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+
+		dp1 = opendir ("ComR");
+
+		if(!dp1){
+			cout << "\n Nao tem diretorio \"ComR\"!!             FUDEU MUITO!! \n" << endl;
+		}else{
+			cout << " Tem diretorio \"ComR\" !!  " << endl;
+		}
+	}else{
+		cout << " Tem diretorio \"ComR\" !!  " << endl;
+	}
+
+	closedir( dp1 );
+
+	cout << endl <<  " Arquivo do comando R = " <<   TipoComando << endl << endl;
+
+	ComandosR.open(TipoComando.c_str());
+
+	ComandosR << "require(ggplot2) "<< endl;
+
+
+	ComandosR << "Dados <- data.frame(nomes = c(" ;
+	for( int c = 1; c <= NumeroClientes; c++){
+		if( c != 1){
+			ComandosR << ",";
+		}
+		ComandosR << "\"C" <<  c << "(" <<  NumeroCarretas[c] << ")"<<  "\"";
+	}
+	for( int p = 1; p <= NumeroPlantas; p++){
+		ComandosR << ","<< "\"P" <<  p <<  "\"";
+	}
+	ComandosR << ")" << endl;
+
+	//cout << " Aqui 1 " << endl;
+
+	ComandosR << ", x <- c(" ;
+	for( int c = 1; c <= NumeroClientes; c++){
+		if( c != 1) {
+			ComandosR << ",";
+		}
+		ComandosR <<  NoCliente[c].CoordenadaX ;
+	}
+	for( int p = 1; p <= NumeroPlantas; p++){
+		ComandosR << ","<<  NoPlanta[p].CoordenadaX;
+	}
+	ComandosR << ")" << endl;
+
+	ComandosR << ", y <- c(" ;
+	for( int c = 1; c <= NumeroClientes; c++){
+		if( c != 1) {
+			ComandosR << ",";
+		}
+		ComandosR <<  NoCliente[c].CoordenadaY ;
+	}
+	for( int p = 1; p <= NumeroPlantas; p++){
+		ComandosR << ","<<  NoPlanta[p].CoordenadaY ;
+	}
+	ComandosR << ")" << endl;
+
+	ComandosR << ", tipo <- c(" ;
+	for( int c = 1; c <= NumeroClientes; c++){
+		if(c != 1 ){
+			ComandosR << ",";
+		}
+		ComandosR << "3";
+	}
+	for( int p = 1; p <= NumeroPlantas; p++){
+			ComandosR << ",4" ;
+	}
+	ComandosR << ")" << endl;
+
+	ComandosR << ", tamanho <- c(" ;
+	for( int c = 1; c <= NumeroClientes; c++){
+		if(c != 1 ){
+			ComandosR << ",";
+		}
+			ComandosR << "1" ;
+	}
+	for( int p = 1; p <= NumeroPlantas; p++){
+		ComandosR << ",2" ;
+	}
+	ComandosR << ")" << endl << ")"<< endl;
+
+	dp2 = opendir ("Imagens");
+
+	if(!dp2){
+		cout <<  "\n Nao tem diretorio Imagens!!          FUDEU MUITO!! \n" << endl;
+
+		if(system("mkdir Imagens;") == 0){
+			cout << " Criou pasta Imagens" << endl;
+		}else{
+			cout << " Problema ao criar pasta Imagens" << endl;
+		}
+
+		// Outra maneira de criar arquivos
+		//SituacaoDiretorio = mkdir("./myfolder", S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+
+		dp2 = opendir ("Imagens");
+
+		if(!dp2){
+			cout << "\n Nao tem diretorio \"Imagens\"!!             FUDEU MUITO!! \n" << endl;
+		}else{
+			cout << " Tem diretorio \"Imagens\" !!  " << endl;
+		}
+	}else{
+		cout << " Tem diretorio \"Imagens\" !!  " << endl;
+	}
+
+	closedir( dp2 );
+
+
+
+	//NomeArquivoComandoR = "./Imagens/";
+	NomeArquivoComandoR += Nome;
+
+	NomeArquivoComandoR.resize( NomeArquivoComandoR.size() - 4 );
+
+
+
+// Cria Post Script
+	if (TipoArquivoSaida == '1'){
+		NomeArquivoComandoR += ".ps";
+
+		ComandosR << "postscript('" << NomeArquivoComandoR << "')" << endl;
+	}
+
+// Criar PNG
+	if (TipoArquivoSaida == '2'){
+
+		NomeArquivoComandoR += ".png";
+		ComandosR << "png('" << NomeArquivoComandoR << "')" << endl;
+	}
+
+// Criar Jpeg
+	if (TipoArquivoSaida == '3'){
+
+		NomeArquivoComandoR += ".jpg";
+		ComandosR << "jpeg('" << NomeArquivoComandoR << "')" << endl;
+	}
+
+ // Criar PDF
+	if (TipoArquivoSaida == '4'){
+
+		NomeArquivoComandoR += ".pdf";
+		ComandosR << "pdf('" << NomeArquivoComandoR << "')" << endl;
+	}
+
+	ComandosR << "ggplot(Dados, aes(x,y)) + geom_point(aes(shape = factor(tipo),size =tamanho) ) + scale_size_continuous(range = c(3,4))";
+	ComandosR << "+ scale_shape(solid = FALSE)+  geom_text(aes(label=nomes),";
+	ComandosR << " hjust= " << PosicaoTextoX << ",vjust=" << PosicaoTextoY  ;
+	ComandosR << " ,size = " << TamanhoLetraLegenda << ")";
+	ComandosR << "+ xlim( min(x)- 10, max(x)+10 ) + ylim( min(y)-10,max(y)+10 )" << endl; //ComandosR << "+ xlim(0," << LimiteplotarX << ") + ylim(0," << LimiteplotarY << ")" << endl;
+	ComandosR << "dev.off() ;" << endl;
+
+	ComandosR.close();
+
+	//cout << " Aqui 3" << endl;
+
+}
+/*
+void 	DadosSolomon::EscreverComandosExcel(string Nome){
+
+
+	//char *b;
+	//string TipoComando;
+	//TipoComando = "CmdE-";
+
+	//b = new char[TipoComando.size()+1];
+	//b[TipoComando.size()]=0;
+	//memcpy(b,TipoComando.c_str(),TipoComando.size());
+	//strcat(b,a);
+
+	//FILE *fp;
+	//fp = fopen (b, "w");
+	//if (fp == NULL) {
+		//for( int i = 0; i <= NumeroNosDadosSolomon; i++){
+			//printf ("N %d \t %f \t %f \n",i,Coordenadas[i][0],Coordenadas[i][1]);
+			//fprintf (fp, "N %d \t %f \t %f \n",i,Coordenadas[i][0],Coordenadas[i][1]);
+		//}
+	//}
+	//fclose (fp);
+
+
+	string 	TipoComando;
+	TipoComando = "./ComE/CmdE-";
+	TipoComando += Nome;
+
+	DIR* dp1;
+
+	dp1 = opendir ("ComE");
+
+	if(!dp1){
+		cout <<  "\n Nao tem diretorio \"ComE\"!!            FUDEU MUITO!! \n" << endl;
+
+		if(system("mkdir ComE") == 0){
+			cout << " Criou pasta ComE" << endl;
+		}else{
+			cout << " Problema ao criar pasta ComE" << endl;
+		}
+
+		// Outra maneira de criar arquivos
+		//SituacaoDiretorio = mkdir("./myfolder", S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+
+		dp1 = opendir ("ComE");
+
+		if(!dp1){
+			cout << "\n Nao tem diretorio \"ComE\"!!             FUDEU MUITO!! \n" << endl;
+		}else{
+			cout << " Tem diretorio \"ComE\" !!  " << endl;
+		}
+	}else{
+		cout << " Tem diretorio \"ComE\" !!  " << endl;
+	}
+
+	closedir( dp1 );
+
+
+
+	//cout << " galo => " << b << endl << endl;
+
+	ComandosExcel.open(TipoComando.c_str());
+
+	//cout << " Doido " << endl << endl;
+
+
+
+    for( int i = 0; i <= NumeroNosDadosSolomon; i++){
+        ComandosExcel << "N" <<  i  << "\t" << Coordenadas[i][0] << "\t" << Coordenadas[i][1] << endl ;
+    }
+
+    ComandosExcel.close();
+
+
+}
+
+
+*/
+
 DadosSolomon::~DadosSolomon(){
 
     NomeInstancia.clear();
     Auxiliar.clear();
-    NumeroDoNo.clear();
-    for( int i = 0; i < (int) Coordenadas.size(); i++){
-    	Coordenadas[i].clear();
-    }
-    Coordenadas.clear();
+    NosCoord.clear();
     Demanda.clear();
-    for( int i = 0; i < (int) JanelaDeTempo.size(); i++){
-    	JanelaDeTempo[i].clear();
-    }
     JanelaDeTempo.clear();
     TempoDeServico.clear();
     NoPlanta.clear();

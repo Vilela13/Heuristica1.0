@@ -125,7 +125,7 @@ int main(int argc, char **argv) {
 
 			cout << " entrei 0 - carrega dados" << endl;
 			InstanciaSolomon->CarregarNumeroNosCoordenadas( Nome );
-			InstanciaSolomon->EscreverDadosLidosInstanciaSolomon();
+			//InstanciaSolomon->EscreverDadosLidosInstanciaSolomon();
 			cout << " sai 0 - carrega dados" << endl;
 
 			cout << " entrei 1 - escreve Instancia Salomon" << endl;

@@ -5,105 +5,105 @@ Dados das plantas
    NoPlanta = 2 Horario [ 7 - 18 ]
    NoPlanta = 3 Horario [ 7 - 18 ]
 Dados dos Clientes 
-  NoCliente = 1 	Demanda em carretas ( 2 ) Horario [ 10.5 - 11.5 ]
-  NoCliente = 2 	Demanda em carretas ( 2 ) Horario [ 10 - 11 ]
-  NoCliente = 3 	Demanda em carretas ( 3 ) Horario [ 10.5 - 12 ]
-  NoCliente = 4 	Demanda em carretas ( 3 ) Horario [ 12 - 13.5 ]
-  NoCliente = 5 	Demanda em carretas ( 3 ) Horario [ 9.5 - 11 ]
-  NoCliente = 6 	Demanda em carretas ( 1 ) Horario [ 10 - 10.5 ]
-  NoCliente = 7 	Demanda em carretas ( 3 ) Horario [ 8 - 9.5 ]
-  NoCliente = 8 	Demanda em carretas ( 3 ) Horario [ 9 - 10.5 ]
-  NoCliente = 9 	Demanda em carretas ( 1 ) Horario [ 12.5 - 13 ]
-  NoCliente = 10 	Demanda em carretas ( 2 ) Horario [ 10.5 - 11.5 ]
-  NoCliente = 11 	Demanda em carretas ( 1 ) Horario [ 9 - 9.5 ]
-  NoCliente = 12 	Demanda em carretas ( 2 ) Horario [ 11 - 12 ]
-  NoCliente = 13 	Demanda em carretas ( 2 ) Horario [ 11 - 12 ]
-  NoCliente = 14 	Demanda em carretas ( 3 ) Horario [ 9 - 10.5 ]
-  NoCliente = 15 	Demanda em carretas ( 2 ) Horario [ 11 - 12 ]
-  NoCliente = 16 	Demanda em carretas ( 3 ) Horario [ 9 - 10.5 ]
-  NoCliente = 17 	Demanda em carretas ( 1 ) Horario [ 10.5 - 11 ]
-  NoCliente = 18 	Demanda em carretas ( 3 ) Horario [ 8.5 - 10 ]
-  NoCliente = 19 	Demanda em carretas ( 3 ) Horario [ 8 - 9.5 ]
+  NoCliente = 1 	Demanda em carretas ( 2 ) Horario [ 12 - 13 ]
+  NoCliente = 2 	Demanda em carretas ( 2 ) Horario [ 8.5 - 9.5 ]
+  NoCliente = 3 	Demanda em carretas ( 2 ) Horario [ 12 - 13 ]
+  NoCliente = 4 	Demanda em carretas ( 3 ) Horario [ 11 - 12.5 ]
+  NoCliente = 5 	Demanda em carretas ( 3 ) Horario [ 11 - 12.5 ]
+  NoCliente = 6 	Demanda em carretas ( 2 ) Horario [ 11 - 12 ]
+  NoCliente = 7 	Demanda em carretas ( 1 ) Horario [ 13 - 13.5 ]
+  NoCliente = 8 	Demanda em carretas ( 2 ) Horario [ 8.5 - 9.5 ]
+  NoCliente = 9 	Demanda em carretas ( 1 ) Horario [ 9 - 9.5 ]
+  NoCliente = 10 	Demanda em carretas ( 2 ) Horario [ 10 - 11 ]
+  NoCliente = 11 	Demanda em carretas ( 1 ) Horario [ 8.5 - 9 ]
+  NoCliente = 12 	Demanda em carretas ( 2 ) Horario [ 8.5 - 9.5 ]
+  NoCliente = 13 	Demanda em carretas ( 2 ) Horario [ 11.5 - 12.5 ]
+  NoCliente = 14 	Demanda em carretas ( 1 ) Horario [ 13 - 13.5 ]
+  NoCliente = 15 	Demanda em carretas ( 2 ) Horario [ 11.5 - 12.5 ]
+  NoCliente = 16 	Demanda em carretas ( 3 ) Horario [ 12 - 13.5 ]
+  NoCliente = 17 	Demanda em carretas ( 1 ) Horario [ 11 - 11.5 ]
+  NoCliente = 18 	Demanda em carretas ( 2 ) Horario [ 12 - 13 ]
+  NoCliente = 19 	Demanda em carretas ( 1 ) Horario [ 9 - 9.5 ]
   NoCliente = 20 	Demanda em carretas ( 3 ) Horario [ 11 - 12.5 ]
-  NoCliente = 21 	Demanda em carretas ( 1 ) Horario [ 10 - 10.5 ]
+  NoCliente = 21 	Demanda em carretas ( 3 ) Horario [ 9 - 10.5 ]
   NoCliente = 22 	Demanda em carretas ( 3 ) Horario [ 11.5 - 13 ]
-  NoCliente = 23 	Demanda em carretas ( 1 ) Horario [ 11 - 11.5 ]
+  NoCliente = 23 	Demanda em carretas ( 2 ) Horario [ 9.5 - 10.5 ]
 
 
 Distancia das plantas para construcoes  em minutos
 
    Planta = 1
 Construcao   Tempo de Ida    Tempo de Ida e Volta
-1		20.3961		45.7922
-2		30.2655		65.531
-3		80.6226		166.245
-4		78.7147		162.429
-5		72.111		149.222
-6		76.1577		157.315
-7		78.1025		161.205
-8		37.3631		79.7262
-9		66.6033		138.207
-10		32.249		69.4981
-11		24.3311		53.6621
-12		26		57
-13		32		69
-14		38		81
-15		30.2655		65.531
-16		39.2938		83.5875
-17		36.2215		77.4431
-18		61.6117		128.223
-19		20		45
-20		41.2311		87.4621
-21		40.1995		85.399
-22		70.7107		146.421
-23		30		65
+1		20		45
+2		32		69
+3		40.1995		85.399
+4		33.5261		72.0522
+5		70.7107		146.421
+6		30.2655		65.531
+7		78.7147		162.429
+8		72.111		149.222
+9		30.2655		65.531
+10		36.2215		77.4431
+11		39.2938		83.5875
+12		32.249		69.4981
+13		41.2311		87.4621
+14		20.3961		45.7922
+15		36.2215		77.4431
+16		61.6117		128.223
+17		78.1025		161.205
+18		30		65
+19		80.6226		166.245
+20		38		81
+21		24.3311		53.6621
+22		26		57
+23		37.3631		79.7262
    Planta = 2
 Construcao   Tempo de Ida    Tempo de Ida e Volta
-1		29.7321		64.4643
-2		14.1421		33.2843
-3		48.4149		101.83
-4		46.0435		97.0869
-5		41.0366		87.0731
-6		42.9418		90.8836
-7		48.8262		102.652
-8		20.3961		45.7922
-9		38.4708		81.9415
-10		14		33
-11		31.305		67.6099
-12		26.0768		57.1536
-13		10		25
-14		11.6619		28.3238
-15		34.4093		73.8186
-16		6		17
-17		7.2111		19.4222
-18		31.6228		68.2456
-19		33.5261		72.0522
-20		21.5407		48.0813
-21		10		25
-22		43.8634		92.7268
-23		37.7359		80.4718
+1		70.7107		146.421
+2		48.4149		101.83
+3		39.6989		84.3977
+4		42.9418		90.8836
+5		28.2843		61.5685
+6		66		137
+7		6		17
+8		14.1421		33.2843
+9		52.4976		109.995
+10		42.8019		90.6037
+11		37.7359		80.4718
+12		50.9902		106.98
+13		50		105
+14		66.7533		138.507
+15		48.0833		101.167
+16		20.8806		46.7612
+17		22.3607		49.7214
+18		70		145
+19		10		25
+20		43.8634		92.7268
+21		66.2722		137.544
+22		60.2993		125.599
+23		52.4976		109.995
    Planta = 3
 Construcao   Tempo de Ida    Tempo de Ida e Volta
-1		40		85
-2		6		17
-3		55.6058		116.212
-4		52.4976		109.995
-5		50.1199		105.24
+1		55.4617		115.923
+2		47.5395		100.079
+3		41.2311		87.4621
+4		38.4708		81.9415
+5		6		17
 6		48.0833		101.167
-7		59.0931		123.186
-8		6		17
-9		50		105
-10		4		13
-11		42.5206		90.0412
-12		38.2099		81.4199
-13		5.65685		16.3137
-14		4.47214		13.9443
-15		46.6905		98.3809
-16		14.1421		33.2843
-17		8		21
-18		42.3792		89.7585
-19		43.2666		91.5332
-20		7.2111		19.4222
-21		8.94427		22.8885
-22		55.7853		116.571
-23		49.5177		104.035
+7		21.5407		48.0813
+8		10.7703		26.5407
+9		52		109
+10		42.3792		89.7585
+11		36.0555		77.111
+12		51.264		107.528
+13		54.9181		114.836
+14		51.8845		108.769
+15		50		105
+16		8		21
+17		11.6619		28.3238
+18		51.923		108.846
+19		20.3961		45.7922
+20		45.607		96.214
+21		50.1597		105.319
+22		44.7214		94.4427
+23		55.7853		116.571

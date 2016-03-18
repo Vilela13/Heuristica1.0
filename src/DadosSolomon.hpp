@@ -47,7 +47,7 @@ public:
 	int 	NumeroClientes;
 	vector < CoordenadaNo > NoCliente;
 	int 	NumeroCaminhoes;
-	int 	Velocidade;
+	double 	Velocidade;
 
 // Declara variaveis
 
@@ -152,64 +152,67 @@ void 	DadosSolomon::CarregarNumeroNosCoordenadas( string Nome){
 
 	Instancia >> NumeroVeiculos;
 	if( EscreveDadosLidos == 1){
-		cout << NumeroVeiculos ;
+		cout << NumeroVeiculos << "\t\t\t";
 	}
-	NumeroNosDadosSolomon = NumeroVeiculos;
-	if( EscreveDadosLidos == 1){
-		cout << "    (" << NumeroNosDadosSolomon << ")   ";
-	}
+
+
+
 
 	Instancia >> Capacidade;
 	if( EscreveDadosLidos == 1){
 		cout << Capacidade << endl;
 	}
 
-// Inicializa estrutura ds dados
+	// Guarda os dados a serem lidos
 
-	NosCoord.resize( NumeroNosDadosSolomon + 1 );
-    Demanda.resize( NumeroNosDadosSolomon + 1 );
-
-    JanelaDeTempo.resize( NumeroNosDadosSolomon + 1 );
-    for( int i = 0; i <= NumeroNosDadosSolomon; i++){
-    	JanelaDeTempo[i].resize(2);
+	for( int i = 0; i<12; i++){
+		Instancia >>Auxiliar;
+		if( EscreveDadosLidos == 1){
+			cout << Auxiliar << "\t";
+		}
 	}
-    TempoDeServico.resize( NumeroNosDadosSolomon + 1 );
+	if( EscreveDadosLidos == 1){
+		cout << endl;
+	}
 
-// Guarda os dados a serem lidos
+	string name;
+	istringstream linha2Aux;
 
-    for( int i = 0; i<12; i++){
-        Instancia >>Auxiliar;
-        if( EscreveDadosLidos == 1){
-        	cout << Auxiliar << "\t";
-        }
-    }
-    if( EscreveDadosLidos == 1){
-    	cout << endl;
-    }
 
-    for( int i = 0; i <= NumeroNosDadosSolomon; i++){
-        Instancia >> NosCoord[i].NumeroNo;
+	NumeroNosDadosSolomon = 0;
 
-        Instancia >> NosCoord[i].CoordenadaX;
-        Instancia >> NosCoord[i].CoordenadaY;
+	while ( getline (Instancia,name) ){
+		if( name.size() > 5 ){
+			cout << "linha " << name ;
+			linha2Aux.str(name);
 
-        Instancia >>Demanda[i];
+			NosCoord.resize(NosCoord.size() + 1);
+			linha2Aux >> NosCoord[ NumeroNosDadosSolomon ].NumeroNo;
+			linha2Aux >> NosCoord[ NumeroNosDadosSolomon ].CoordenadaX;
+			linha2Aux >> NosCoord[ NumeroNosDadosSolomon ].CoordenadaY;
 
-        Instancia >> JanelaDeTempo[i][0];
-        Instancia >> JanelaDeTempo[i][1];
+			Demanda.resize( Demanda.size() + 1);
+			linha2Aux >>Demanda[ NumeroNosDadosSolomon ];
 
-        Instancia >>TempoDeServico[i];
+			JanelaDeTempo.resize( JanelaDeTempo.size() + 1);
+			JanelaDeTempo[JanelaDeTempo.size() - 1].resize(2);
 
-        if( EscreveDadosLidos == 1){
-            cout << NosCoord[i].NumeroNo << "\t\t\t\t";
-            cout << NosCoord[i].CoordenadaX << "\t";
-            cout << NosCoord[i].CoordenadaY << "\t";
-            cout << Demanda[i] << "\t\t";
-            cout << JanelaDeTempo[i][0] << "\t";
-            cout << JanelaDeTempo[i][1] << "\t\t\t";
-            cout << TempoDeServico[i] << "\t\t" << endl;
-        }
-    }
+			linha2Aux >> JanelaDeTempo[ NumeroNosDadosSolomon ][0];
+			linha2Aux >> JanelaDeTempo[ NumeroNosDadosSolomon ][1];
+
+			TempoDeServico.resize( TempoDeServico.size() + 1);
+			linha2Aux >>TempoDeServico[ NumeroNosDadosSolomon ];
+			NumeroNosDadosSolomon++;
+
+		}
+
+
+	}
+
+
+
+
+
     //cout << endl << endl << " DadosSolomon " << endl << endl;
     Instancia.close();
 }
@@ -220,15 +223,18 @@ void 	DadosSolomon::EscreverDadosLidosInstanciaSolomon(){
 
 	cout << "Nome: " << NomeInstancia << endl;
 	cout << "Numero de Veiculos: " << NumeroVeiculos<< endl;
-	cout << "Capacidade: " << Capacidade << endl << endl;
+	cout << "Capacidade: " << Capacidade << endl;
+	cout << "Numero de Nos: " << NumeroNosDadosSolomon << endl << endl;
 
 	cout << " Numero No \t Coordenada X \t Coordenada Y \t Demanda \t InicioJanela \t FimJanela \t TempoServico"<< endl;
-    for( int i = 0; i<=NumeroNosDadosSolomon; i++){
+    for( int i = 0; i < NumeroNosDadosSolomon; i++){
         cout << "\t " << NosCoord[i].NumeroNo << "\t\t" << NosCoord[i].CoordenadaX  << "\t\t" << NosCoord[i].CoordenadaY << "\t\t" << Demanda[i] << "\t\t";
         cout << JanelaDeTempo[i][0]  << "\t\t" << JanelaDeTempo[i][1]  << "\t\t" << TempoDeServico[i] << endl;
     }
 
     cout << endl << endl;
+
+
 
 }
 
@@ -318,7 +324,6 @@ void 	DadosSolomon::CriarInstanciaSolomon(string Nome){
 	//srand(NumeroVERSAO);		// O gerador é o numero da versão
 	srand(time(NULL));			// gera numeros aleatorios
 
-	int No;
 	double TempoCarreta;
 	int NumeroMaxCarretas;
 	double InicioMinAtendimento;
@@ -343,6 +348,46 @@ void 	DadosSolomon::CriarInstanciaSolomon(string Nome){
 
 
 	NumeroCaminhoesPorPlanta = 10;
+
+	double DistanciaMaxima;
+	double DistanciaAuxiliar;
+
+	CoordenadaNo No1;
+	CoordenadaNo No2;
+
+
+	DistanciaMaxima = 0;
+
+	for( int i = 0; i < NumeroNosDadosSolomon; i++){
+		 for( int j = 0; j < NumeroNosDadosSolomon; j++){
+			 if( i != j){
+				DistanciaAuxiliar = sqrt( pow( NosCoord[j].CoordenadaX - NosCoord[i].CoordenadaX ,2) + pow( NosCoord[j].CoordenadaY - NosCoord[i].CoordenadaY ,2) );
+				if( DistanciaMaxima < DistanciaAuxiliar ){
+					DistanciaMaxima = DistanciaAuxiliar;
+					No1 = NosCoord[i];
+					No2 = NosCoord[j];
+				}
+			 }
+		 }
+	}
+
+	cout << endl << endl << "      Maior distancia entre nos = " << DistanciaMaxima << endl;
+	cout << " No " << No1.NumeroNo << " [ " << No1.CoordenadaX << "," << No1.CoordenadaY << "] ao No "  << No2.NumeroNo << " [ " << No2.CoordenadaX << "," << No2.CoordenadaY << "]" << endl;
+	cout << "  tempo entre nos a 20 km/h = " <<  DistanciaMaxima/20 << endl;
+	cout << "  tempo entre nos a 30 km/h = " <<  DistanciaMaxima/30 << endl;
+	cout << "  tempo entre nos a 40 km/h = " <<  DistanciaMaxima/40 << endl;
+	cout << "  tempo entre nos a 50 km/h = " <<  DistanciaMaxima/50 << endl;
+
+	double VelocidadeAux;
+
+	VelocidadeAux = DistanciaMaxima/TempoDeVidaConcreto;
+
+	cout << " Velocidade minima para que os nos mais distantes entre se não possuam um tempo de deslocamento entre eles superior ao tempo de vida do concreto. " << endl;
+	cout << " Velocidade Minima = " << VelocidadeAux;
+	cout << endl<< endl<< endl;
+
+
+	Velocidade 		= 30;
 
 	//binomial_distribution<int> distribution(5,0.5); 		// gera numeros segundo a distribuição binomial
 
@@ -408,136 +453,77 @@ void 	DadosSolomon::CriarInstanciaSolomon(string Nome){
 		DadosInstanciaSalomonCriada << CaminhoArquivo2 << endl;
 		InstanciaSolomon << NomeAux << endl;
 
-/*
-
-		if( NomeInstancia[0] == 'R' ){
-			//Inicializa Parametros
 
 
 
-			NumeroPlantas 	= 3;
+		//Inicializa Parametros
 
-			NoPlanta.resize(NumeroPlantas + 1);
-			HoraInicioPlanta.resize(NumeroPlantas + 1);
-			HoraFinalPlanta.resize(NumeroPlantas + 1);
+		NumeroPlantas 	= 3;
 
-			NoPlanta[1] = 1;	HoraInicioPlanta[1] = 7; 	HoraFinalPlanta[1] = 18;
-			NoPlanta[2] = 5;	HoraInicioPlanta[2] = 7; 	HoraFinalPlanta[2] = 18;
-			NoPlanta[3] = 4;	HoraInicioPlanta[3] = 7; 	HoraFinalPlanta[3] = 18;
+		NoPlanta.resize(NumeroPlantas + 1);
+		HoraInicioPlanta.resize(NumeroPlantas + 1);
+		HoraFinalPlanta.resize(NumeroPlantas + 1);
 
+		NoPlanta[1].NumeroNo = NosCoord[0].NumeroNo;
+		NoPlanta[1].CoordenadaX = NosCoord[0].CoordenadaX;
+		NoPlanta[1].CoordenadaY = NosCoord[0].CoordenadaY;
+		HoraInicioPlanta[1] = 7;
+		HoraFinalPlanta[1] = 18;
+		NosCoord.erase(NosCoord.begin());
 
-
-			NumeroClientes 	= 22;
-			NoCliente.resize(	NumeroClientes	+	1);
-			HoraInicioCliente.resize(	NumeroClientes	+	1);
-			HoraFinalCliente.resize( 	NumeroClientes	+	1);
-			NumeroCarretas.resize( NumeroClientes + 1 ); // vetor que guarda o numero de carretas por cliente
-
-
-			// define o no que ira representar a construção, o númeor de carretas e o intervalo de atendiemnto
-			No = 1;
-			for( int i = 1; i <= NumeroClientes; i++){
-				for(int p = 1; p <= NumeroPlantas; p++){
-					if( NoPlanta[p] == No){
-						No++;
-					}
-				}
-				NoCliente[i] = No;		// fornece o no que representa a construção
-				NumeroCarretas[i] = rand()%(NumeroMaxCarretas-1) + 1;	// fornece o numero de demandas da conrução
-				//
-				HoraInicioCliente[i] = HorarioMinimoConstrucao + (rand()%(int)((HorarioMinimoConstrucao-HorarioMaximoConstrucao)*(1/InicioMinAtendimento)))*InicioMinAtendimento;
-				HoraFinalCliente[i] = HoraInicioCliente[i] + NumeroCarretas[i]*TempoCarreta;
-				while( HoraFinalCliente[i] + TempoDeDescarga > HorarioMaximoConstrucao ){
-					HoraInicioCliente[i] = HorarioMinimoConstrucao + (rand()%(int)((HorarioMinimoConstrucao-HorarioMaximoConstrucao)*(1/InicioMinAtendimento)))*InicioMinAtendimento;
-					HoraFinalCliente[i] = HoraInicioCliente[i] + NumeroCarretas[i]*TempoCarreta;
-				}
-				No++;
-			}
-
-
-			NumeroCaminhoes = 30;
-
-			CaminhoesPlanta.resize(NumeroPlantas + 1);
-			CaminhoesPlanta[1] = 10;
-			CaminhoesPlanta[2] = 10;
-			CaminhoesPlanta[3] = 10;
-
-			Velocidade 		= 30;
+		for(int p = 2; p <= NumeroPlantas; p++){
+			cout << "    planta " << p << " tamanho = " << NosCoord.size() << endl;
+			NoPlantaAux = rand() % NosCoord.size() ;
+			NoPlanta[p].NumeroNo = NosCoord[NoPlantaAux].NumeroNo;
+			NoPlanta[p].CoordenadaX = NosCoord[NoPlantaAux].CoordenadaX;
+			NoPlanta[p].CoordenadaY = NosCoord[NoPlantaAux].CoordenadaY;
+			NosCoord.erase(NosCoord.begin() + NoPlantaAux);
+			HoraInicioPlanta[p] = 7;
+			HoraFinalPlanta[p] = 18;
 
 
 		}
 
-		*/
+		NumeroClientes 	= 23;
+		NoCliente.resize(	NumeroClientes	+	1);
+		HoraInicioCliente.resize(	NumeroClientes	+	1);
+		HoraFinalCliente.resize( 	NumeroClientes	+	1);
+		NumeroCarretas.resize( NumeroClientes + 1 ); // vetor que guarda o numero de carretas por cliente
 
-		if(NomeInstancia[0] == 'C' ){
-			//Inicializa Parametros
+		cout << " +++++++++++ [ C ]  Plantas (" << NumeroPlantas << ")    Construcoes (" << NumeroClientes << ") ++++++++++++++++++" << endl;
 
-			NumeroPlantas 	= 3;
+		// define o no que ira representar a construção, o númeor de carretas e o intervalo de atendiemnto
+		for( int i = 1; i <= NumeroClientes; i++){
+			cout << "    construção " << i << " tamanho = " << NosCoord.size() << endl;
+			NoConstrucaoAux = rand() % NosCoord.size();
+			NoCliente[i].NumeroNo = NosCoord[NoConstrucaoAux].NumeroNo;
+			NoCliente[i].CoordenadaX = NosCoord[NoConstrucaoAux].CoordenadaX;
+			NoCliente[i].CoordenadaY = NosCoord[NoConstrucaoAux].CoordenadaY;
+			NosCoord.erase(NosCoord.begin() + NoConstrucaoAux);
 
-			NoPlanta.resize(NumeroPlantas + 1);
-			HoraInicioPlanta.resize(NumeroPlantas + 1);
-			HoraFinalPlanta.resize(NumeroPlantas + 1);
-
-			NoPlanta[1].NumeroNo = NosCoord[0].NumeroNo;
-			NoPlanta[1].CoordenadaX = NosCoord[0].CoordenadaX;
-			NoPlanta[1].CoordenadaY = NosCoord[0].CoordenadaY;
-			HoraInicioPlanta[1] = 7;
-			HoraFinalPlanta[1] = 18;
-			NosCoord.erase(NosCoord.begin());
-
-			for(int p = 2; p <= NumeroPlantas; p++){
-				cout << "    planta " << p << " tamanho = " << NosCoord.size() << endl;
-				NoPlantaAux = rand() % NosCoord.size() ;
-				NoPlanta[p].NumeroNo = NosCoord[NoPlantaAux].NumeroNo;
-				NoPlanta[p].CoordenadaX = NosCoord[NoPlantaAux].CoordenadaX;
-				NoPlanta[p].CoordenadaY = NosCoord[NoPlantaAux].CoordenadaY;
-				NosCoord.erase(NosCoord.begin() + NoPlantaAux);
-				HoraInicioPlanta[p] = 7;
-				HoraFinalPlanta[p] = 18;
-
-
-			}
-
-			NumeroClientes 	= 23;
-			NoCliente.resize(	NumeroClientes	+	1);
-			HoraInicioCliente.resize(	NumeroClientes	+	1);
-			HoraFinalCliente.resize( 	NumeroClientes	+	1);
-			NumeroCarretas.resize( NumeroClientes + 1 ); // vetor que guarda o numero de carretas por cliente
-
-			cout << " +++++++++++ [ C ]  Plantas (" << NumeroPlantas << ")    Construcoes (" << NumeroClientes << ") ++++++++++++++++++" << endl;
-
-			// define o no que ira representar a construção, o númeor de carretas e o intervalo de atendiemnto
-			for( int i = 1; i <= NumeroClientes; i++){
-				cout << "    construção " << i << " tamanho = " << NosCoord.size() << endl;
-				NoConstrucaoAux = rand() % NosCoord.size();
-				NoCliente[i].NumeroNo = NosCoord[NoConstrucaoAux].NumeroNo;
-				NoCliente[i].CoordenadaX = NosCoord[NoConstrucaoAux].CoordenadaX;
-				NoCliente[i].CoordenadaY = NosCoord[NoConstrucaoAux].CoordenadaY;
-				NosCoord.erase(NosCoord.begin() + NoConstrucaoAux);
-
-				NumeroCarretas[i] = rand()%(NumeroMaxCarretas-1) + 1;	// fornece o numero de demandas da conrução
-				//
+			NumeroCarretas[i] = rand()%(NumeroMaxCarretas-1) + 1;	// fornece o numero de demandas da conrução
+			//
+			HoraInicioCliente[i] = HorarioMinimoConstrucao + (rand()%(int)((HorarioMinimoConstrucao-HorarioMaximoConstrucao)*(1/InicioMinAtendimento)))*InicioMinAtendimento;
+			HoraFinalCliente[i] = HoraInicioCliente[i] + NumeroCarretas[i]*TempoCarreta;
+			while( HoraFinalCliente[i] + TempoDeDescarga > HorarioMaximoConstrucao ){
 				HoraInicioCliente[i] = HorarioMinimoConstrucao + (rand()%(int)((HorarioMinimoConstrucao-HorarioMaximoConstrucao)*(1/InicioMinAtendimento)))*InicioMinAtendimento;
 				HoraFinalCliente[i] = HoraInicioCliente[i] + NumeroCarretas[i]*TempoCarreta;
-				while( HoraFinalCliente[i] + TempoDeDescarga > HorarioMaximoConstrucao ){
-					HoraInicioCliente[i] = HorarioMinimoConstrucao + (rand()%(int)((HorarioMinimoConstrucao-HorarioMaximoConstrucao)*(1/InicioMinAtendimento)))*InicioMinAtendimento;
-					HoraFinalCliente[i] = HoraInicioCliente[i] + NumeroCarretas[i]*TempoCarreta;
-				}
 			}
-
-			NumeroCaminhoes = 0;
-			for( int p = 0; p < NumeroPlantas; p++){
-				NumeroCaminhoes = NumeroCaminhoes + NumeroCaminhoesPorPlanta;
-			}
-
-			CaminhoesPlanta.resize(NumeroPlantas + 1);
-			for( int p = 1; p <= NumeroPlantas; p++){
-				CaminhoesPlanta[p] = NumeroCaminhoesPorPlanta;
-			}
-
-			Velocidade 		= 30;
-
 		}
+
+		NumeroCaminhoes = 0;
+		for( int p = 0; p < NumeroPlantas; p++){
+			NumeroCaminhoes = NumeroCaminhoes + NumeroCaminhoesPorPlanta;
+		}
+
+		CaminhoesPlanta.resize(NumeroPlantas + 1);
+		for( int p = 1; p <= NumeroPlantas; p++){
+			CaminhoesPlanta[p] = NumeroCaminhoesPorPlanta;
+		}
+
+
+
+
 
 
 		InstanciaSolomon << NumeroPlantas 		<< endl; 	// NUmero de plantas que serão nos Nós N4 ,N15 e o N22
@@ -571,7 +557,7 @@ void 	DadosSolomon::CriarInstanciaSolomon(string Nome){
 			InstanciaSolomon << endl;
 		}
 
-		// Preenche as localizações das plantas e entradas
+		// Preenche as localizações entre  plantas e entradas
 
 		for(int p =1; p <= NumeroPlantas; p++){
 			for(int i =1; i <= NumeroClientes; i++){
@@ -584,7 +570,7 @@ void 	DadosSolomon::CriarInstanciaSolomon(string Nome){
 
 
 
-		// Preenche as localizações entradas e plantas
+		// Preenche as localizações entre entradas e plantas
 		for(int i =1; i <= NumeroClientes; i++){
 			for(int p =1; p <= NumeroPlantas; p++){
 				InstanciaSolomon << sqrt( pow( NoPlanta[p].CoordenadaX - NoCliente[i].CoordenadaX ,2) + pow( NoPlanta[p].CoordenadaY - NoCliente[i].CoordenadaY ,2) ) / Velocidade << " ";
@@ -672,6 +658,7 @@ void 	DadosSolomon::CriarInstanciaSolomon(string Nome){
 	DadosInstanciaSalomonCriada.close();
 	InstanciaSolomon.close();
 }
+
 
 
 void 	DadosSolomon::EscreverComandosR(string Nome, char TipoArquivoSaida){

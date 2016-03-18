@@ -5,105 +5,105 @@ Dados das plantas
    NoPlanta = 2 Horario [ 7 - 18 ]
    NoPlanta = 3 Horario [ 7 - 18 ]
 Dados dos Clientes 
-  NoCliente = 1 	Demanda em carretas ( 2 ) Horario [ 12 - 13 ]
-  NoCliente = 2 	Demanda em carretas ( 2 ) Horario [ 8.5 - 9.5 ]
-  NoCliente = 3 	Demanda em carretas ( 2 ) Horario [ 12 - 13 ]
-  NoCliente = 4 	Demanda em carretas ( 3 ) Horario [ 11 - 12.5 ]
-  NoCliente = 5 	Demanda em carretas ( 3 ) Horario [ 11 - 12.5 ]
-  NoCliente = 6 	Demanda em carretas ( 2 ) Horario [ 11 - 12 ]
-  NoCliente = 7 	Demanda em carretas ( 1 ) Horario [ 13 - 13.5 ]
-  NoCliente = 8 	Demanda em carretas ( 2 ) Horario [ 8.5 - 9.5 ]
-  NoCliente = 9 	Demanda em carretas ( 1 ) Horario [ 9 - 9.5 ]
-  NoCliente = 10 	Demanda em carretas ( 2 ) Horario [ 10 - 11 ]
-  NoCliente = 11 	Demanda em carretas ( 1 ) Horario [ 8.5 - 9 ]
-  NoCliente = 12 	Demanda em carretas ( 2 ) Horario [ 8.5 - 9.5 ]
-  NoCliente = 13 	Demanda em carretas ( 2 ) Horario [ 11.5 - 12.5 ]
-  NoCliente = 14 	Demanda em carretas ( 1 ) Horario [ 13 - 13.5 ]
-  NoCliente = 15 	Demanda em carretas ( 2 ) Horario [ 11.5 - 12.5 ]
-  NoCliente = 16 	Demanda em carretas ( 3 ) Horario [ 12 - 13.5 ]
-  NoCliente = 17 	Demanda em carretas ( 1 ) Horario [ 11 - 11.5 ]
-  NoCliente = 18 	Demanda em carretas ( 2 ) Horario [ 12 - 13 ]
-  NoCliente = 19 	Demanda em carretas ( 1 ) Horario [ 9 - 9.5 ]
-  NoCliente = 20 	Demanda em carretas ( 3 ) Horario [ 11 - 12.5 ]
-  NoCliente = 21 	Demanda em carretas ( 3 ) Horario [ 9 - 10.5 ]
-  NoCliente = 22 	Demanda em carretas ( 3 ) Horario [ 11.5 - 13 ]
-  NoCliente = 23 	Demanda em carretas ( 2 ) Horario [ 9.5 - 10.5 ]
+  NoCliente = 1 	Demanda em carretas ( 1 ) Horario [ 15.5 - 15.8333 ]
+  NoCliente = 2 	Demanda em carretas ( 2 ) Horario [ 10 - 10.8333 ]
+  NoCliente = 3 	Demanda em carretas ( 1 ) Horario [ 8 - 8.33333 ]
+  NoCliente = 4 	Demanda em carretas ( 2 ) Horario [ 14 - 14.8333 ]
+  NoCliente = 5 	Demanda em carretas ( 2 ) Horario [ 9.5 - 10.3333 ]
+  NoCliente = 6 	Demanda em carretas ( 2 ) Horario [ 16 - 16.8333 ]
+  NoCliente = 7 	Demanda em carretas ( 1 ) Horario [ 14.5 - 14.8333 ]
+  NoCliente = 8 	Demanda em carretas ( 3 ) Horario [ 9.5 - 10.8333 ]
+  NoCliente = 9 	Demanda em carretas ( 3 ) Horario [ 10.5 - 11.8333 ]
+  NoCliente = 10 	Demanda em carretas ( 3 ) Horario [ 14 - 15.3333 ]
+  NoCliente = 11 	Demanda em carretas ( 1 ) Horario [ 10.5 - 10.8333 ]
+  NoCliente = 12 	Demanda em carretas ( 1 ) Horario [ 16.5 - 16.8333 ]
+  NoCliente = 13 	Demanda em carretas ( 1 ) Horario [ 15 - 15.3333 ]
+  NoCliente = 14 	Demanda em carretas ( 1 ) Horario [ 14.5 - 14.8333 ]
+  NoCliente = 15 	Demanda em carretas ( 2 ) Horario [ 9.5 - 10.3333 ]
+  NoCliente = 16 	Demanda em carretas ( 2 ) Horario [ 14.5 - 15.3333 ]
+  NoCliente = 17 	Demanda em carretas ( 3 ) Horario [ 10.5 - 11.8333 ]
+  NoCliente = 18 	Demanda em carretas ( 3 ) Horario [ 10.5 - 11.8333 ]
+  NoCliente = 19 	Demanda em carretas ( 1 ) Horario [ 9 - 9.33333 ]
+  NoCliente = 20 	Demanda em carretas ( 1 ) Horario [ 13.5 - 13.8333 ]
+  NoCliente = 21 	Demanda em carretas ( 3 ) Horario [ 14 - 15.3333 ]
+  NoCliente = 22 	Demanda em carretas ( 1 ) Horario [ 8.5 - 8.83333 ]
+  NoCliente = 23 	Demanda em carretas ( 2 ) Horario [ 9.5 - 10.3333 ]
 
 
 Distancia das plantas para construcoes  em minutos
 
    Planta = 1
 Construcao   Tempo de Ida    Tempo de Ida e Volta
-1		20		45
-2		32		69
-3		40.1995		85.399
-4		33.5261		72.0522
-5		70.7107		146.421
-6		30.2655		65.531
-7		78.7147		162.429
-8		72.111		149.222
-9		30.2655		65.531
-10		36.2215		77.4431
-11		39.2938		83.5875
-12		32.249		69.4981
-13		41.2311		87.4621
-14		20.3961		45.7922
-15		36.2215		77.4431
-16		61.6117		128.223
-17		78.1025		161.205
-18		30		65
+1		24.3311		53.6621
+2		33.5261		72.0522
+3		39.2938		83.5875
+4		20		45
+5		40.1995		85.399
+6		36.2215		77.4431
+7		41.2311		87.4621
+8		32.249		69.4981
+9		66.6033		138.207
+10		61.6117		128.223
+11		20.3961		45.7922
+12		78.7147		162.429
+13		30.2655		65.531
+14		70.7107		146.421
+15		72.111		149.222
+16		38		81
+17		26		57
+18		32		69
 19		80.6226		166.245
-20		38		81
-21		24.3311		53.6621
-22		26		57
-23		37.3631		79.7262
+20		30.2655		65.531
+21		76.1577		157.315
+22		36.2215		77.4431
+23		78.1025		161.205
    Planta = 2
 Construcao   Tempo de Ida    Tempo de Ida e Volta
-1		70.7107		146.421
-2		48.4149		101.83
-3		39.6989		84.3977
-4		42.9418		90.8836
-5		28.2843		61.5685
-6		66		137
-7		6		17
-8		14.1421		33.2843
-9		52.4976		109.995
-10		42.8019		90.6037
-11		37.7359		80.4718
-12		50.9902		106.98
-13		50		105
-14		66.7533		138.507
-15		48.0833		101.167
-16		20.8806		46.7612
-17		22.3607		49.7214
-18		70		145
-19		10		25
-20		43.8634		92.7268
-21		66.2722		137.544
-22		60.2993		125.599
-23		52.4976		109.995
+1		7.2111		19.4222
+2		37.7359		80.4718
+3		42.9418		90.8836
+4		10		25
+5		47.7074		100.415
+6		44.4072		93.8144
+7		56.5685		118.137
+8		46.6905		98.3809
+9		51.923		108.846
+10		50.3587		105.717
+11		10.7703		26.5407
+12		70.2567		145.513
+13		45.3431		95.6863
+14		53.8516		112.703
+15		60.8276		126.655
+16		48.4149		101.83
+17		11.6619		28.3238
+18		43.8634		92.7268
+19		70.7107		146.421
+20		4		13
+21		70		145
+22		49.5177		104.035
+23		63.2456		131.491
    Planta = 3
 Construcao   Tempo de Ida    Tempo de Ida e Volta
-1		55.4617		115.923
-2		47.5395		100.079
-3		41.2311		87.4621
-4		38.4708		81.9415
-5		6		17
-6		48.0833		101.167
-7		21.5407		48.0813
-8		10.7703		26.5407
-9		52		109
-10		42.3792		89.7585
-11		36.0555		77.111
-12		51.264		107.528
-13		54.9181		114.836
-14		51.8845		108.769
-15		50		105
-16		8		21
-17		11.6619		28.3238
-18		51.923		108.846
-19		20.3961		45.7922
-20		45.607		96.214
-21		50.1597		105.319
-22		44.7214		94.4427
-23		55.7853		116.571
+1		46.6905		98.3809
+2		20.3961		45.7922
+3		20.0998		45.1995
+4		46.8615		98.723
+5		14.5602		34.1204
+6		14		33
+7		4		13
+8		7.2111		19.4222
+9		55.7853		116.571
+10		48.0833		101.167
+11		43.8634		92.7268
+12		57.2014		119.403
+13		8.48528		21.9706
+14		61.6117		128.223
+15		55.4617		115.923
+16		10.198		25.3961
+17		42.8019		90.6037
+18		10.7703		26.5407
+19		60.4649		125.93
+20		51.225		107.45
+21		52.4976		109.995
+22		6		17
+23		64.622		134.244

@@ -180,7 +180,9 @@ void 	DadosSolomon::CarregarNumeroNosCoordenadas( string Nome){
 
 	while ( getline (Instancia,name) ){
 		if( name.size() > 5 ){
-			cout << "linha " << name ;
+			if( EscreveDadosLidos == 1){
+				cout << "linha " << name ;
+			}
 			linha2Aux.str(name);
 
 			NosCoord.resize(NosCoord.size() + 1);
@@ -300,7 +302,11 @@ void 	DadosSolomon::CriaPastaDat(){
 
 }
 
+int SituacaoQuadrante( CoordenadaNo No){
+	if( No.CoordenadaX > 30 && No.CoordenadaY > 60){
 
+	}
+}
 
 void 	DadosSolomon::CriarInstanciaSolomon(string Nome){
 

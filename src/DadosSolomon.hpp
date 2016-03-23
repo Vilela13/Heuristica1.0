@@ -302,11 +302,7 @@ void 	DadosSolomon::CriaPastaDat(){
 
 }
 
-int SituacaoQuadrante( CoordenadaNo No){
-	if( No.CoordenadaX > 30 && No.CoordenadaY > 60){
 
-	}
-}
 
 void 	DadosSolomon::CriarInstanciaSolomon(string Nome){
 
@@ -319,13 +315,6 @@ void 	DadosSolomon::CriarInstanciaSolomon(string Nome){
 	string 	TXT;
 	int 	NumeroVERSAO;
 
-
-	NumeroVERSAO = 49;
-	//NumeroVERSAO = 50;
-	//NumeroVERSAO = 51;
-
-	//srand(NumeroVERSAO);		// O gerador é o numero da versão
-	srand(time(NULL));			// gera numeros aleatorios
 
 	double TempoCarreta;
 	int NumeroMaxCarretas;
@@ -349,16 +338,22 @@ void 	DadosSolomon::CriarInstanciaSolomon(string Nome){
 	double InicioAlmoco;
 	double FinalAlmoco;
 
-	TempoCarreta = 0.5; 			// tempo que se tem na janela de atendiemnto para atender a uma demanda
-	NumeroMaxCarretas = 4;			// numero maximo de demandas em uma construção
-	InicioMinAtendimento = 0.5;		// valor minimo que duas janelas de atendiemto podem ter no minimo caso os horarios inicio d eatendiemnto iniciais forem difrentes
-	HorarioMinimoConstrucao = 8;	// horario minimo que uma janela de tempo pode ter
-	HorarioMaximoConstrucao = 17;	// horario maximo que uma janela de tempo pode ter
+	stringstream ConverterIntEmString;
+
+	double MultiplicadorTempoDescarga;
+
+	MultiplicadorTempoDescarga = 3;
 
 	TempoDeDescarga 	= 0.1666667; // equivaelente a 10 minutos
 	TemproEntreEntregas = 0.1666667; // equivaelente a 10 minutos
 	TempoPlanta 		= 0.083333333; // equivalente a 5 minutos(4 min = 0.066667 ; 3min = 0.05 e 2min = 0.0333333)
 	TempoDeVidaConcreto = 1.5;
+
+	TempoCarreta = MultiplicadorTempoDescarga * TempoDeDescarga; 			// tempo que se tem na janela de atendiemnto para atender a uma demanda
+	NumeroMaxCarretas = 4;			// numero maximo de demandas em uma construção
+	InicioMinAtendimento = 0.5;		// valor minimo que duas janelas de atendiemto podem ter no minimo caso os horarios inicio de atendiemnto iniciais forem difrentes
+	HorarioMinimoConstrucao = 8;	// horario minimo que uma janela de tempo pode ter
+	HorarioMaximoConstrucao = 17;	// horario maximo que uma janela de tempo pode ter
 
 
 	NumeroCaminhoesPorPlanta = 10;
@@ -406,23 +401,37 @@ void 	DadosSolomon::CriarInstanciaSolomon(string Nome){
 
 	if( Nome.size() > 3){
 		if( NomeInstancia[0] == 'R' || NomeInstancia[0] == 'C'){
-			if(NomeInstancia[1] != 'C'){
-				if(NomeInstancia[1] == '1'){
-					Versao = "-V";
-				}else{
-					if(NomeInstancia[1] == '2'){
-						Versao = "-W";
-					}else{
-						cout << endl << endl <<  " Arquivo inconforme com as possiveis entradas" << endl << endl;
-					}
-				}
-			}
+			Versao = "-V";
+		}else{
+			cout << endl << endl <<  " Arquivo inconforme com as possiveis entradas" << endl << endl;
 		}
-		Versao 	+= NumeroVERSAO;
+
+		NumeroVERSAO = 1;
+		NumeroPlantas 	= 3;
+		NumeroClientes 	= 23;
+
+		srand(NumeroVERSAO);		// O gerador é o numero da versão
+		//srand(time(NULL));			// gera numeros aleatorios
+
 		NomeAux = Nome;
 
 		NomeAux.resize(NomeAux.size()-4);
-		NomeAux += Versao;
+		NomeAux += "-P";
+		ConverterIntEmString << NumeroPlantas;
+		NomeAux += ConverterIntEmString.str();
+		ConverterIntEmString.str("");
+		NomeAux += "C";
+		ConverterIntEmString << NumeroClientes;
+		NomeAux += ConverterIntEmString.str();
+		ConverterIntEmString.str("");
+		NomeAux += "-I";
+		ConverterIntEmString << MultiplicadorTempoDescarga ;
+		NomeAux += ConverterIntEmString.str();
+		ConverterIntEmString.str("");
+		NomeAux += "-V";
+		ConverterIntEmString << NumeroVERSAO;
+		NomeAux += ConverterIntEmString.str();
+		ConverterIntEmString.str("");
 		TXT 	= ".txt";
 		NomeAux += TXT;
 
@@ -463,8 +472,6 @@ void 	DadosSolomon::CriarInstanciaSolomon(string Nome){
 
 		//Inicializa Parametros
 
-		NumeroPlantas 	= 3;
-
 		NoPlanta.resize(NumeroPlantas + 1);
 		HoraInicioPlanta.resize(NumeroPlantas + 1);
 		HoraFinalPlanta.resize(NumeroPlantas + 1);
@@ -487,7 +494,6 @@ void 	DadosSolomon::CriarInstanciaSolomon(string Nome){
 			HoraFinalPlanta[p] = 18;
 		}
 
-		NumeroClientes 	= 23;
 		NoCliente.resize(	NumeroClientes	+	1);
 		HoraInicioCliente.resize(	NumeroClientes	+	1);
 		HoraFinalCliente.resize( 	NumeroClientes	+	1);
@@ -534,11 +540,6 @@ void 	DadosSolomon::CriarInstanciaSolomon(string Nome){
 		for( int p = 1; p <= NumeroPlantas; p++){
 			CaminhoesPlanta[p] = NumeroCaminhoesPorPlanta;
 		}
-
-
-
-
-
 
 		InstanciaSolomon << NumeroPlantas 		<< endl; 	// NUmero de plantas que serão nos Nós N4 ,N15 e o N22
 		InstanciaSolomon << NumeroClientes 		<< endl;	// Numero de construções (clientes) , tirei o no N0 e dos 25 restantes eu tirei os 3 das plantas

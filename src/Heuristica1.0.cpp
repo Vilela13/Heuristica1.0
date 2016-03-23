@@ -133,7 +133,7 @@ int main(int argc, char **argv) {
 			cout << " sai 1 - escreve Instancia Salomon" << endl;
 
 			cout << " entrei 2 - escreve comandos R" << endl;
-			InstanciaSolomon->EscreverComandosR( Nome ,'4');
+			//InstanciaSolomon->EscreverComandosR( Nome ,'4');
 			// 1 => .ps	  2 =>.png   3 =>.jpeg    4 =>.pdf
 			cout << " sai 2 - escreve comandos R" << endl;
 

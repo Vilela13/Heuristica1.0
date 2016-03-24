@@ -1,0 +1,44 @@
+./Dat/p-C101-P2C10-I2-V1.txt
+ Gerador dos numeros aleatorios das demandas ( 1 ) 
+Dados das plantas 
+   NoPlanta = 1 Horario [ 7 - 18 ]
+   NoPlanta = 2 Horario [ 7 - 18 ]
+Dados dos Clientes 
+  NoCliente = 1 	Demanda em carretas ( 3 ) Horario [ 8.5 - 9.33333 ]
+  NoCliente = 2 	Demanda em carretas ( 2 ) Horario [ 14 - 14.5 ]
+  NoCliente = 3 	Demanda em carretas ( 3 ) Horario [ 9 - 9.83333 ]
+  NoCliente = 4 	Demanda em carretas ( 4 ) Horario [ 15 - 16.1667 ]
+  NoCliente = 5 	Demanda em carretas ( 3 ) Horario [ 15 - 15.8333 ]
+  NoCliente = 6 	Demanda em carretas ( 3 ) Horario [ 9 - 9.83333 ]
+  NoCliente = 7 	Demanda em carretas ( 4 ) Horario [ 8.5 - 9.66667 ]
+  NoCliente = 8 	Demanda em carretas ( 3 ) Horario [ 15 - 15.8333 ]
+  NoCliente = 9 	Demanda em carretas ( 4 ) Horario [ 14.5 - 15.6667 ]
+  NoCliente = 10 	Demanda em carretas ( 5 ) Horario [ 8 - 9.5 ]
+
+
+Distancia das plantas para construcoes  em minutos
+
+   Planta = 1
+Construcao   Tempo de Ida    Tempo de Ida e Volta
+1		30		65
+2		37.3631		79.7262
+3		32.249		69.4981
+4		32		69
+5		39.2938		83.5875
+6		20.3961		45.7922
+7		78.7147		162.429
+8		26		57
+9		61.6117		128.223
+10		72.111		149.222
+   Planta = 2
+Construcao   Tempo de Ida    Tempo de Ida e Volta
+1		47.7074		100.415
+2		14.5602		34.1204
+3		11.3137		27.6274
+4		8.94427		22.8885
+5		6.32456		17.6491
+6		39.3954		83.7909
+7		43.8634		92.7268
+8		36.0555		77.111
+9		33.5261		72.0522
+10		41.1825		87.365

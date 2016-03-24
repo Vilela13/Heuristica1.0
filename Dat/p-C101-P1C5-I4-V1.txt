@@ -1,0 +1,21 @@
+./Dat/p-C101-P1C5-I4-V1.txt
+ Gerador dos numeros aleatorios das demandas ( 1 ) 
+Dados das plantas 
+   NoPlanta = 1 Horario [ 7 - 18 ]
+Dados dos Clientes 
+  NoCliente = 1 	Demanda em carretas ( 2 ) Horario [ 9.5 - 10.6667 ]
+  NoCliente = 2 	Demanda em carretas ( 1 ) Horario [ 14.5 - 15 ]
+  NoCliente = 3 	Demanda em carretas ( 2 ) Horario [ 11 - 12.1667 ]
+  NoCliente = 4 	Demanda em carretas ( 4 ) Horario [ 8.5 - 11 ]
+  NoCliente = 5 	Demanda em carretas ( 2 ) Horario [ 8 - 9.16667 ]
+
+
+Distancia das plantas para construcoes  em minutos
+
+   Planta = 1
+Construcao   Tempo de Ida    Tempo de Ida e Volta
+1		40.1995		85.399
+2		78.1025		161.205
+3		61.6117		128.223
+4		36.2215		77.4431
+5		20.3961		45.7922

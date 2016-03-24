@@ -79,16 +79,18 @@ public:
 	ofstream InstanciaSolomon;
 	ofstream DadosInstanciaSalomonCriada;
 
+	string 	NomeAux;
+
 // Funções
 
-	void CarregarNumeroNosCoordenadas( string);
+	void CarregarNumeroNosCoordenadas( string Nome);
 
 	void EscreverDadosLidosInstanciaSolomon();
 
 	void CriaPastaInstS();
 	void CriaPastaDat();
 
-	void CriarInstanciaSolomon(string);
+	void CriarInstanciaSolomon(string Nome); // , int NumeroVERSAO, int MultiplicadorTempoDescarga );
 
 	void EscreverComandosR(string,char );
 
@@ -151,8 +153,6 @@ void 	DadosSolomon::CarregarNumeroNosCoordenadas( string Nome){
 	if( EscreveDadosLidos == 1){
 		cout << NumeroVeiculos << "\t\t\t";
 	}
-
-
 
 
 	Instancia >> Capacidade;
@@ -304,16 +304,19 @@ void 	DadosSolomon::CriaPastaDat(){
 
 
 
-void 	DadosSolomon::CriarInstanciaSolomon(string Nome){
+void 	DadosSolomon::CriarInstanciaSolomon(string Nome ){ //, int NumeroVERSAO, int MultiplicadorTempoDescarga ){
 
 
 	string 	CaminhoArquivo1;
 	string 	CaminhoArquivo2;
-	string 	NomeAux;
+
 	string 	Versao;
 	string 	Dados;
 	string 	TXT;
-	int 	NumeroVERSAO;
+
+
+	double HorarioInicioPlanta;
+	double HorarioFinalPlanta;
 
 
 	double TempoCarreta;
@@ -341,16 +344,25 @@ void 	DadosSolomon::CriarInstanciaSolomon(string Nome){
 	stringstream ConverterIntEmString;
 
 	double MultiplicadorTempoDescarga;
+	int 	NumeroVERSAO;
 
-	MultiplicadorTempoDescarga = 3;
+	MultiplicadorTempoDescarga = 2;
+	NumeroVERSAO = 1;
+	NumeroPlantas 	= 1;
+	NumeroClientes 	= 5;
+
 
 	TempoDeDescarga 	= 0.1666667; // equivaelente a 10 minutos
 	TemproEntreEntregas = 0.1666667; // equivaelente a 10 minutos
 	TempoPlanta 		= 0.083333333; // equivalente a 5 minutos(4 min = 0.066667 ; 3min = 0.05 e 2min = 0.0333333)
 	TempoDeVidaConcreto = 1.5;
 
+	HorarioInicioPlanta = 7;
+	HorarioFinalPlanta = 18;
+
+
 	TempoCarreta = MultiplicadorTempoDescarga * TempoDeDescarga; 			// tempo que se tem na janela de atendiemnto para atender a uma demanda
-	NumeroMaxCarretas = 4;			// numero maximo de demandas em uma construção
+	NumeroMaxCarretas = 5;			// numero maximo de demandas em uma construção
 	InicioMinAtendimento = 0.5;		// valor minimo que duas janelas de atendiemto podem ter no minimo caso os horarios inicio de atendiemnto iniciais forem difrentes
 	HorarioMinimoConstrucao = 8;	// horario minimo que uma janela de tempo pode ter
 	HorarioMaximoConstrucao = 17;	// horario maximo que uma janela de tempo pode ter
@@ -363,17 +375,14 @@ void 	DadosSolomon::CriarInstanciaSolomon(string Nome){
 
 	DistanciaMaxima = 0;
 
-	for( int i = 0; i < NumeroNosDadosSolomon; i++){
-		 for( int j = 0; j < NumeroNosDadosSolomon; j++){
-			 if( i != j){
-				DistanciaAuxiliar = sqrt( pow( NosCoord[j].CoordenadaX - NosCoord[i].CoordenadaX ,2) + pow( NosCoord[j].CoordenadaY - NosCoord[i].CoordenadaY ,2) );
-				if( DistanciaMaxima < DistanciaAuxiliar ){
-					DistanciaMaxima = DistanciaAuxiliar;
-					No1 = NosCoord[i];
-					No2 = NosCoord[j];
-				}
-			 }
-		 }
+	for( int i = 1; i < NumeroNosDadosSolomon; i++){
+		//cout <<   "      no [" << i << "]" << endl;
+		DistanciaAuxiliar = sqrt( pow( NosCoord[0].CoordenadaX - NosCoord[i].CoordenadaX ,2) + pow( NosCoord[0].CoordenadaY - NosCoord[i].CoordenadaY ,2) );
+		if( DistanciaMaxima < DistanciaAuxiliar ){
+			DistanciaMaxima = DistanciaAuxiliar;
+			No1 = NosCoord[i];
+			No2 = NosCoord[0];
+		}
 	}
 
 	cout << endl << endl << "      Maior distancia entre nos = " << DistanciaMaxima << endl;
@@ -406,14 +415,13 @@ void 	DadosSolomon::CriarInstanciaSolomon(string Nome){
 			cout << endl << endl <<  " Arquivo inconforme com as possiveis entradas" << endl << endl;
 		}
 
-		NumeroVERSAO = 1;
-		NumeroPlantas 	= 3;
-		NumeroClientes 	= 23;
+
 
 		srand(NumeroVERSAO);		// O gerador é o numero da versão
 		//srand(time(NULL));			// gera numeros aleatorios
 
 		NomeAux = Nome;
+
 
 		NomeAux.resize(NomeAux.size()-4);
 		NomeAux += "-P";
@@ -479,8 +487,8 @@ void 	DadosSolomon::CriarInstanciaSolomon(string Nome){
 		NoPlanta[1].NumeroNo = NosCoord[0].NumeroNo;
 		NoPlanta[1].CoordenadaX = NosCoord[0].CoordenadaX;
 		NoPlanta[1].CoordenadaY = NosCoord[0].CoordenadaY;
-		HoraInicioPlanta[1] = 7;
-		HoraFinalPlanta[1] = 18;
+		HoraInicioPlanta[1] = HorarioInicioPlanta;
+		HoraFinalPlanta[1]  = HorarioFinalPlanta;
 		NosCoord.erase(NosCoord.begin());
 
 		for(int p = 2; p <= NumeroPlantas; p++){
@@ -490,8 +498,8 @@ void 	DadosSolomon::CriarInstanciaSolomon(string Nome){
 			NoPlanta[p].CoordenadaX = NosCoord[NoPlantaAux].CoordenadaX;
 			NoPlanta[p].CoordenadaY = NosCoord[NoPlantaAux].CoordenadaY;
 			NosCoord.erase(NosCoord.begin() + NoPlantaAux);
-			HoraInicioPlanta[p] = 7;
-			HoraFinalPlanta[p] = 18;
+			HoraInicioPlanta[p] = HorarioInicioPlanta;
+			HoraFinalPlanta[p]  = HorarioFinalPlanta;
 		}
 
 		NoCliente.resize(	NumeroClientes	+	1);
@@ -510,7 +518,7 @@ void 	DadosSolomon::CriarInstanciaSolomon(string Nome){
 			NoCliente[i].CoordenadaY = NosCoord[NoConstrucaoAux].CoordenadaY;
 			NosCoord.erase(NosCoord.begin() + NoConstrucaoAux);
 
-			NumeroCarretas[i] = rand()%(NumeroMaxCarretas-1) + 1;	// fornece o numero de demandas da conrução
+			NumeroCarretas[i] = rand()%(NumeroMaxCarretas) + 1;	// fornece o numero de demandas da conrução
 			//
 			if(rand()%2 == 1){
 				HoraInicioCliente[i] = HorarioMinimoConstrucao + (rand()%(int)((HorarioMinimoConstrucao-InicioAlmoco)*(1/InicioMinAtendimento)))*InicioMinAtendimento;
@@ -695,7 +703,8 @@ void 	DadosSolomon::EscreverComandosR(string Nome, char TipoArquivoSaida){
 	string TipoComando;
 	string NomeArquivoComandoR;
 	TipoComando = "./ComR/CmdR-";
-	TipoComando += Nome;
+	TipoComando += NomeAux;
+
 
 	DIR* dp1;
 	DIR* dp2;
@@ -826,7 +835,7 @@ void 	DadosSolomon::EscreverComandosR(string Nome, char TipoArquivoSaida){
 
 
 	//NomeArquivoComandoR = "./Imagens/";
-	NomeArquivoComandoR += Nome;
+	NomeArquivoComandoR += NomeAux;
 
 	NomeArquivoComandoR.resize( NomeArquivoComandoR.size() - 4 );
 

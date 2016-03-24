@@ -111,10 +111,15 @@ int main(int argc, char **argv) {
 		ArquivoInstanciaSolomon.close();
 
 	// -------------------------- Le nome dos arquivos Solomon, carrega os dados, cria arquivo do R, Excel e cria arquivo que pode ser lido pelo Modelo ----------------------- //
+//for( int v = 1; v <= 3; v++){
+	//for(int m =2; m <= 4; m++){
 
-		InstanciaSolomon = new DadosSolomon;
+
 
 		while( ListaInstancias.size() > 0){
+
+			InstanciaSolomon = new DadosSolomon;
+
 			it = ListaInstancias.begin();
 			Nome = *it;
 			ListaInstancias.pop_front();
@@ -129,21 +134,25 @@ int main(int argc, char **argv) {
 			cout << " sai 0 - carrega dados" << endl;
 
 			cout << " entrei 1 - escreve Instancia Salomon" << endl;
-			InstanciaSolomon->CriarInstanciaSolomon( Nome );
+			InstanciaSolomon->CriarInstanciaSolomon( Nome ); //, v,m );
 			cout << " sai 1 - escreve Instancia Salomon" << endl;
 
 			cout << " entrei 2 - escreve comandos R" << endl;
-			//InstanciaSolomon->EscreverComandosR( Nome ,'4');
+			InstanciaSolomon->EscreverComandosR( Nome ,'4');
 			// 1 => .ps	  2 =>.png   3 =>.jpeg    4 =>.pdf
 			cout << " sai 2 - escreve comandos R" << endl;
 
 			//cout << " entrei 3 - escreve comandos excel" << endl;
 			//InstanciaSolomon->EscreverComandosExcel( Nome );					// Não implementado ainda
 			//cout << " sai 3 - escreve comandos excel" << endl;
-		}
-		delete(InstanciaSolomon);
 
-/*
+			delete(InstanciaSolomon);
+
+		}
+
+	//}
+//}
+
 		// -------------------------- Resolve as instancais atraevez dos procediemntos implementados ----------------------- //
 
 		Instancias = argv[1];
@@ -700,7 +709,7 @@ int main(int argc, char **argv) {
 			cout << "\n \n Galo Doido! \n \n";
 			return 1;
 		 }
-*/
+
 
 
 	}else{

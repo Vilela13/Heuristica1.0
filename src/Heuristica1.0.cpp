@@ -63,8 +63,6 @@ int main(int argc, char **argv) {
 		 char 	buffer[26];
 		 struct tm* tm_info;
 
-
-
 		Recursao = argv[2];
 
 		if( Recursao != "ComRec" && Recursao != "SemRec"){
@@ -88,16 +86,12 @@ int main(int argc, char **argv) {
 			return 0;
 		}
 
-
-
-
 	// -------------------------- Le arquivo com as instancias de Solomon e as guarda em uma lista ----------------------- //
 
 		ArquivoInstanciaSolomon.open( "ArquivosSolomon.txt" );
 		if(!ArquivoInstanciaSolomon){
 			cout << " Arquivo ArquivosSolomon.txt não Existe! \n FUDEU MUITO! \n";
 		}else{
-
 			ArquivoInstanciaSolomon >> Nome;
 			cout << " \n   Armazena nome de instancias Solomon\n " << endl;
 			while( Nome != "EOF"){
@@ -113,8 +107,6 @@ int main(int argc, char **argv) {
 	// -------------------------- Le nome dos arquivos Solomon, carrega os dados, cria arquivo do R, Excel e cria arquivo que pode ser lido pelo Modelo ----------------------- //
 //for( int v = 1; v <= 3; v++){
 	//for(int m =2; m <= 4; m++){
-
-
 
 		while( ListaInstancias.size() > 0){
 
@@ -158,16 +150,12 @@ int main(int argc, char **argv) {
 		Instancias = argv[1];
 		//Instancias = "Instancias.txt";
 
-
-
 		cstr = new char[Instancias.length() + 1];
 		strcpy(cstr, Instancias.c_str());
 
 		ArquivoInstancia.open(cstr);
 
 		delete [] cstr;
-
-
 
 		if ( ArquivoInstancia.is_open() ){
 			ArquivoInstancia >> Nome;
@@ -177,35 +165,28 @@ int main(int argc, char **argv) {
 				ArquivoInstancia >> Nome;
 			}
 			ArquivoInstancia.close();
-
-
 		}else{
 			cout << "\n \n Arquivo inexistente! \n \n";
 			return 0;
 		}
 
+			if( TipoProcedimento == "cons" || TipoProcedimento == "consCir"){
 
-
-		 if( TipoProcedimento == "cons" || TipoProcedimento == "consCir"){
-
-			 if( argc != 7){
-				 if( TipoProcedimento == "cons"){
-					 cout << endl << endl << endl << "    Probelma na entrada de parametros para se executar o cons" << endl << endl << endl;
-				 }else{
-					 cout << endl << endl << endl << "    Probelma na entrada de parametros para se executar o cons Circular" << endl << endl << endl;
-				 }
-				 return 0;
-			 }
-
+			if( argc != 7){
+				if( TipoProcedimento == "cons"){
+					cout << endl << endl << endl << "    Probelma na entrada de parametros para se executar o cons" << endl << endl << endl;
+				}else{
+					cout << endl << endl << endl << "    Probelma na entrada de parametros para se executar o cons Circular" << endl << endl << endl;
+				}
+				return 0;
+			}
 
 			 // ordena na ordem do menor número de tarefas para o maior se colocar o valor 1, ordena na ordem do maior número de tarefas para o menor se colocar o valor 2
-			 EscolhaVeiculo = atoi( argv[4]);			// função atoi tranforma char em inteiro ( biblioteca stdlib.h)
+			EscolhaVeiculo = atoi( argv[4]);			// função atoi tranforma char em inteiro ( biblioteca stdlib.h)
 			 // modo de escolha da construção, 1 escolhe a construção por meio do RankTempoDemandas, 2 escolhe a construção com mais demandas,
-			 EscolhaConstrucao = atoi( argv[5]);		// função atoi tranforma char em inteiro ( biblioteca stdlib.h)
+			EscolhaConstrucao = atoi( argv[5]);		// função atoi tranforma char em inteiro ( biblioteca stdlib.h)
 			 // modo de escolha da planta, 1 é a planta mais proxima, 1 é a planta com menos tarefas, 3 é a planta com mais tarefas
-			 EscolhaPlanta = atoi( argv[6]);			// função atoi tranforma char em inteiro ( biblioteca stdlib.h)
-
-
+			EscolhaPlanta = atoi( argv[6]);			// função atoi tranforma char em inteiro ( biblioteca stdlib.h)
 
 			 // coleta a data e a hora
 			time(&timer);
@@ -308,16 +289,10 @@ int main(int argc, char **argv) {
 					}else{
 						Instancia->ExecutaCONScir(Nome, EscolhaVeiculo, EscolhaConstrucao, EscolhaPlanta, RealizaProcessoDeAtrazarTarefas);
 					}
-
 				}
 
-
-
 				delete(Instancia);
-
-
 			}
-
 
 			NumeroIteracoesString.clear();
 			TempoExecucaoMaximoString.clear();
@@ -328,10 +303,8 @@ int main(int argc, char **argv) {
 			Saida.clear();
 			Instancias.clear();
 
-
 			ArquivoExcelResposta.close();
 			ListaInstancias.clear();
-
 
 			cout << "\n \n Galo Doido! \n \n";
 			return 1;
@@ -343,7 +316,6 @@ int main(int argc, char **argv) {
 				 cout << endl << endl << endl << "    Probelma na entrada de parametros para se executar o grasp" << endl << endl << endl;
 				 return 0;
 			 }
-
 
 			 // numero maximo de iterações
 			 NumeroIteracoesString = argv[4];
@@ -357,7 +329,6 @@ int main(int argc, char **argv) {
 					 return 0;
 				 }
 			 }
-
 			 TempoExecucaoMaximoString = argv[5];
 			 if( TempoExecucaoMaximoString == "-"){
 				 TempoExecucaoMaximo = LONG_MAX;
@@ -373,13 +344,11 @@ int main(int argc, char **argv) {
 			 }
 
 			 // ordena na ordem do menor número de tarefas para o maior se colocar o valor 1, ordena na ordem do maior número de tarefas para o menor se colocar o valor 2
-			 EscolhaVeiculo = atoi( argv[6]);		// função atoi tranforma char em inteiro ( biblioteca stdlib.h)
+			EscolhaVeiculo = atoi( argv[6]);		// função atoi tranforma char em inteiro ( biblioteca stdlib.h)
 			 // modo de escolha da construção, 1 escolhe a construção por meio do RankTempoDemandas, 2 escolhe a construção com mais demandas,
 			EscolhaConstrucao = atoi( argv[7]);		// função atoi tranforma char em inteiro ( biblioteca stdlib.h)
 			 // modo de escolha da planta, 1 é a planta mais proxima, 1 é a planta com menos tarefas, 3 é a planta com mais tarefas
-			 EscolhaPlanta = atoi( argv[8]);			// função atoi tranforma char em inteiro ( biblioteca stdlib.h)
-
-
+			EscolhaPlanta = atoi( argv[8]);			// função atoi tranforma char em inteiro ( biblioteca stdlib.h)
 
 			 // coleta a data e a hora
 			time(&timer);
@@ -394,11 +363,9 @@ int main(int argc, char **argv) {
 				printf("\n\n ----- Execução GRASP Circular as %s ----- \n\n", buffer);
 			}
 
-
 			// escreve o tipo de execução
 
 			printf("\n ******************** Tipo Execução **************************** \n\n");
-
 
 			if( NumeroIteracoesString == "-" ){
 				printf("  -> Número irrestrito de iterações  \n");
@@ -411,7 +378,6 @@ int main(int argc, char **argv) {
 			}else{
 				printf("  -> Tempo maximo para a execução : %ld segundos  \n", TempoExecucaoMaximo );
 			}
-
 
 			// escreve o tipo de escolha do veículo
 			switch (EscolhaVeiculo) {
@@ -475,8 +441,6 @@ int main(int argc, char **argv) {
 
 			printf("\n ******************************************************************** \n\n\n");
 
-
-
 			// escreve cabeçario
 			printf(" Nome_Instancia  \t Solução \t Nivel_Viabilidade \t Tempo (segundos) \n");
 
@@ -491,6 +455,8 @@ int main(int argc, char **argv) {
 
 				if( Instancia->LeDados(Nome, EscreveDadosLidosNaTela) == 1){
 					//cout << " Leu Dados" << endl;
+
+					srand (time(NULL));
 
 					if( TipoProcedimento == "grasp"){
 						Instancia->ExecutaGrasp(Nome, NumeroIteracoes, TempoExecucaoMaximo, EscolhaVeiculo,  EscolhaConstrucao,  EscolhaPlanta, RealizaProcessoDeAtrazarTarefas);
@@ -510,9 +476,6 @@ int main(int argc, char **argv) {
 			Nome.clear();
 			Saida.clear();
 			Instancias.clear();
-
-
-
 
 			ArquivoExcelResposta.close();
 			ListaInstancias.clear();
@@ -679,7 +642,7 @@ int main(int argc, char **argv) {
 
 				if( Instancia->LeDados(Nome, EscreveDadosLidosNaTela) == 1){
 					//cout << " Leu Dados" << endl;
-
+					srand (time(NULL));
 					if( TipoProcedimento == "graspClass"){
 						Instancia->ExecutaGraspClass(Nome, NumeroIteracoes, TempoExecucaoMaximo, EscolhaVeiculo,  EscolhaConstrucao,  EscolhaPlanta, RealizaProcessoDeAtrazarTarefas);
 					}else{
@@ -698,10 +661,6 @@ int main(int argc, char **argv) {
 			Nome.clear();
 			Saida.clear();
 			Instancias.clear();
-
-
-
-
 
 			ListaInstancias.clear();
 			ArquivoExcelResposta.close();

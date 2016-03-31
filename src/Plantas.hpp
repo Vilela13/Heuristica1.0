@@ -838,6 +838,7 @@ void 	ConjuntoPlantas::OrdenaPlantas( int EscolhaPlanta){
 	}
 
 	if( EscolhaPlanta == 4){
+
 		random_shuffle (Plantas.begin(), Plantas.end(),  GeradorAleatoricoPlanta);
 	}
 

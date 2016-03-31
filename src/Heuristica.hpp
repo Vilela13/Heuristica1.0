@@ -172,12 +172,6 @@ void	Heuristica::ExecutaCONS(string NomeInstancia, int EscolhaVeiculo, int Escol
 	//int VerificaViabilidade;
 	//VerificaViabilidade = 1;
 
-	//double semente;
-	//semente = 13;
-
-	//srand( semente );
-
-
 
 	// fornece o caminnho onde será criado o arquivo
 	Caminho =  "./Exec/";
@@ -589,12 +583,6 @@ void	Heuristica::ExecutaCONScir(string NomeInstancia, int EscolhaVeiculo, int Es
 	int Buaca1;
 	double MakespanAux2;
 	int Buaca2;
-
-	//double semente;
-	//semente = 13;
-
-	//srand( semente );
-
 
 
 	// fornece o caminnho onde será criado o arquivo
@@ -1020,12 +1008,7 @@ void	Heuristica::ExecutaGrasp(string NomeInstancia, long int NumeroIteracoes, lo
 
 	int iteracoes;
 
-	//double semente;
-	//semente = 13;
 
-
-
-	//srand( semente );
 
 	// marca se já possui uma solução
 	int Ativa;
@@ -1284,14 +1267,6 @@ void	Heuristica::ExecutaGraspCir(string NomeInstancia, long int NumeroIteracoes,
 	int Buaca2;
 
 	int iteracoes;
-
-
-	//double semente;
-	//semente = 13;
-
-
-
-	//srand( semente );
 
 	// marca se já possui uma solução
 	int Ativa;
@@ -1566,13 +1541,6 @@ void	Heuristica::ExecutaGraspClass(string NomeInstancia, long int NumeroIteracoe
 
 	int iteracoes;
 
-	//double semente;
-	//semente = 13;
-
-
-
-	//srand( semente );
-
 	// marca se já possui uma solução
 	int Ativa;
 	Ativa = 0;
@@ -1838,12 +1806,6 @@ void	Heuristica::ExecutaGraspClassCir(string NomeInstancia, long int NumeroItera
 	int iteracoes;
 
 
-	//double semente;
-	//semente = 13;
-
-
-
-	//srand( semente );
 
 	// marca se já possui uma solução
 	int Ativa;

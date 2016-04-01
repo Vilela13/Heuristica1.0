@@ -107,10 +107,10 @@ int main(int argc, char **argv) {
 
 
 	// -------------------------- Le nome dos arquivos Solomon, carrega os dados, cria arquivo do R, Excel e cria arquivo que pode ser lido pelo Modelo ----------------------- //
-for( int v = 1; v <= 3; v++){
-	for(int m = 2; m <= 4; m++){
+//for( int v = 1; v <= 3; v++){
+	//for(int m = 2; m <= 4; m++){
 
-		//while( ListaInstancias.size() > 0){
+		while( ListaInstancias.size() > 0){
 
 			it = ListaInstancias.begin();
 			Nome = *it;
@@ -118,9 +118,9 @@ for( int v = 1; v <= 3; v++){
 			InstanciaSolomon = new DadosSolomon;
 
 
-			//			ListaInstancias.pop_front();
+			ListaInstancias.pop_front();
 
-			cout <<  " entra v = " << v << " m = " << m << endl;
+			//cout <<  " entra v = " << v << " m = " << m << endl;
 
 			cout << Nome << endl;
 			//cout <<  " ai 2" << endl;
@@ -132,7 +132,7 @@ for( int v = 1; v <= 3; v++){
 
 
 			//cout << " entrei 1 - escreve Instancia Salomon" << endl;
-			InstanciaSolomon->CriarInstanciaSolomon( Nome , v, m );
+			InstanciaSolomon->CriarInstanciaSolomon( Nome);// , v, m );
 			//cout << " sai 1 - escreve Instancia Salomon" << endl;
 
 			//cout << " entrei 2 - escreve comandos R" << endl;
@@ -146,11 +146,11 @@ for( int v = 1; v <= 3; v++){
 
 			delete(InstanciaSolomon);
 
-		//}
-	}
-}
+		}
+	//}
+//}
 
-ListaInstancias.clear();
+//ListaInstancias.clear();
 
 
 		// -------------------------- Resolve as instancais atraevez dos procediemntos implementados ----------------------- //

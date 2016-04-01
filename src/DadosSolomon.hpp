@@ -90,7 +90,7 @@ public:
 	void CriaPastaInstS();
 	void CriaPastaDat();
 
-	void CriarInstanciaSolomon(string Nome , int NumeroVERSAO, int MultiplicadorTempoDescarga );
+	void CriarInstanciaSolomon(string Nome); // , int NumeroVERSAO, int MultiplicadorTempoDescarga );
 
 	void EscreverComandosR(string,char );
 
@@ -304,7 +304,7 @@ void 	DadosSolomon::CriaPastaDat(){
 
 
 
-void 	DadosSolomon::CriarInstanciaSolomon(string Nome , int NumeroVERSAO, int MultiplicadorTempoDescarga ){
+void 	DadosSolomon::CriarInstanciaSolomon(string Nome ){ //, int NumeroVERSAO, int MultiplicadorTempoDescarga ){
 
 
 	string 	CaminhoArquivo1;
@@ -343,8 +343,8 @@ void 	DadosSolomon::CriarInstanciaSolomon(string Nome , int NumeroVERSAO, int Mu
 
 	stringstream ConverterIntEmString;
 
-	//double MultiplicadorTempoDescarga;
-	//int 	NumeroVERSAO;
+	double MultiplicadorTempoDescarga;
+	int 	NumeroVERSAO;
 
 	//double AuxiliarNumero;
 	//double Lixo;

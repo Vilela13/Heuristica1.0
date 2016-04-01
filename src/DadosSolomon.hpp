@@ -90,7 +90,7 @@ public:
 	void CriaPastaInstS();
 	void CriaPastaDat();
 
-	void CriarInstanciaSolomon(string Nome); // , int NumeroVERSAO, int MultiplicadorTempoDescarga );
+	void CriarInstanciaSolomon(string Nome , int NumeroVERSAO, int MultiplicadorTempoDescarga );
 
 	void EscreverComandosR(string,char );
 
@@ -129,7 +129,7 @@ DadosSolomon::DadosSolomon(){
 
 void 	DadosSolomon::CarregarNumeroNosCoordenadas( string Nome){
 
-	int 	EscreveDadosLidos = 1;
+	int 	EscreveDadosLidos = 0;
 
 	Instancia.open(Nome.c_str());
 
@@ -304,7 +304,7 @@ void 	DadosSolomon::CriaPastaDat(){
 
 
 
-void 	DadosSolomon::CriarInstanciaSolomon(string Nome ){ //, int NumeroVERSAO, int MultiplicadorTempoDescarga ){
+void 	DadosSolomon::CriarInstanciaSolomon(string Nome , int NumeroVERSAO, int MultiplicadorTempoDescarga ){
 
 
 	string 	CaminhoArquivo1;
@@ -343,13 +343,20 @@ void 	DadosSolomon::CriarInstanciaSolomon(string Nome ){ //, int NumeroVERSAO, i
 
 	stringstream ConverterIntEmString;
 
-	double MultiplicadorTempoDescarga;
-	int 	NumeroVERSAO;
+	//double MultiplicadorTempoDescarga;
+	//int 	NumeroVERSAO;
 
-	MultiplicadorTempoDescarga = 2;
-	NumeroVERSAO = 1;
-	NumeroPlantas 	= 1;
-	NumeroClientes 	= 5;
+	double AuxiliarNumero;
+	double Lixo;
+
+	int EscreveVelocidadeMinima;
+
+	EscreveVelocidadeMinima = 0;
+
+	//MultiplicadorTempoDescarga = 2;
+	//NumeroVERSAO = 1;
+	NumeroPlantas 	= 2;
+	NumeroClientes 	= 15;
 
 
 	TempoDeDescarga 	= 0.1666667; // equivaelente a 10 minutos
@@ -385,19 +392,20 @@ void 	DadosSolomon::CriarInstanciaSolomon(string Nome ){ //, int NumeroVERSAO, i
 		}
 	}
 
-	cout << endl << endl << "      Maior distancia entre nos = " << DistanciaMaxima << endl;
-	cout << " No " << No1.NumeroNo << " [ " << No1.CoordenadaX << "," << No1.CoordenadaY << "] ao No "  << No2.NumeroNo << " [ " << No2.CoordenadaX << "," << No2.CoordenadaY << "]" << endl;
-	cout << "  tempo entre nos a 20 km/h = " <<  DistanciaMaxima/20 << endl;
-	cout << "  tempo entre nos a 30 km/h = " <<  DistanciaMaxima/30 << endl;
-	cout << "  tempo entre nos a 40 km/h = " <<  DistanciaMaxima/40 << endl;
-	cout << "  tempo entre nos a 50 km/h = " <<  DistanciaMaxima/50 << endl;
+	if( EscreveVelocidadeMinima == 1){
+		cout << endl << endl << "      Maior distancia entre nos = " << DistanciaMaxima << endl;
+		cout << " No " << No1.NumeroNo << " [ " << No1.CoordenadaX << "," << No1.CoordenadaY << "] ao No "  << No2.NumeroNo << " [ " << No2.CoordenadaX << "," << No2.CoordenadaY << "]" << endl;
+		cout << "  tempo entre nos a 20 km/h = " <<  DistanciaMaxima/20 << endl;
+		cout << "  tempo entre nos a 30 km/h = " <<  DistanciaMaxima/30 << endl;
+		cout << "  tempo entre nos a 40 km/h = " <<  DistanciaMaxima/40 << endl;
+		cout << "  tempo entre nos a 50 km/h = " <<  DistanciaMaxima/50 << endl;
 
-	VelocidadeAux = DistanciaMaxima/TempoDeVidaConcreto;
+		VelocidadeAux = DistanciaMaxima/TempoDeVidaConcreto;
 
-	cout << " Velocidade minima para que os nos mais distantes entre se não possuam um tempo de deslocamento entre eles superior ao tempo de vida do concreto. " << endl;
-	cout << " Velocidade Minima = " << VelocidadeAux;
-	cout << endl<< endl<< endl;
-
+		cout << " Velocidade minima para que os nos mais distantes entre se não possuam um tempo de deslocamento entre eles superior ao tempo de vida do concreto. " << endl;
+		cout << " Velocidade Minima = " << VelocidadeAux;
+		cout << endl<< endl<< endl;
+	}
 
 	Velocidade 		= 30;
 
@@ -408,6 +416,9 @@ void 	DadosSolomon::CriarInstanciaSolomon(string Nome ){ //, int NumeroVERSAO, i
 
 // Cria o nome da instancia para o modelo
 
+
+	cout << endl << endl << " NomeInstancia = " << NomeInstancia << endl << endl;
+
 	if( Nome.size() > 3){
 		if( NomeInstancia[0] == 'R' || NomeInstancia[0] == 'C'){
 			Versao = "-V";
@@ -417,8 +428,16 @@ void 	DadosSolomon::CriarInstanciaSolomon(string Nome ){ //, int NumeroVERSAO, i
 
 
 
-		srand(NumeroVERSAO);		// O gerador é o numero da versão
-		//srand(time(NULL));			// gera numeros aleatorios
+		//srand(NumeroVERSAO);		// O gerador é o numero da versão
+		srand(NumeroVERSAO);			// gera numeros aleatorios
+
+		AuxiliarNumero = rand()%1000;
+
+		cout << endl << endl << " Numero de vezes no rand => " << AuxiliarNumero << endl << endl << endl;
+
+		for( int i = 0; i < AuxiliarNumero; i++){
+			Lixo = rand();
+		}
 
 		NomeAux = Nome;
 
@@ -505,9 +524,15 @@ void 	DadosSolomon::CriarInstanciaSolomon(string Nome ){ //, int NumeroVERSAO, i
 		NoCliente.resize(	NumeroClientes	+	1);
 		HoraInicioCliente.resize(	NumeroClientes	+	1);
 		HoraFinalCliente.resize( 	NumeroClientes	+	1);
+
+
+		cout << endl << endl << endl << " CriarInstanciaSolomon o NumeroClientes = " << NumeroClientes << endl << endl <<endl;
+
+
 		NumeroCarretas.resize( NumeroClientes + 1 ); // vetor que guarda o numero de carretas por cliente
 
 		cout << " +++++++++++ [ C ]  Plantas (" << NumeroPlantas << ")    Construcoes (" << NumeroClientes << ") ++++++++++++++++++" << endl;
+
 
 		// define o no que ira representar a construção, o númeor de carretas e o intervalo de atendiemnto
 		for( int i = 1; i <= NumeroClientes; i++){
@@ -736,6 +761,8 @@ void 	DadosSolomon::EscreverComandosR(string Nome, char TipoArquivoSaida){
 
 	closedir( dp1 );
 
+
+
 	cout << endl <<  " Arquivo do comando R = " <<   TipoComando << endl << endl;
 
 	ComandosR.open(TipoComando.c_str());
@@ -744,12 +771,17 @@ void 	DadosSolomon::EscreverComandosR(string Nome, char TipoArquivoSaida){
 
 
 	ComandosR << "Dados <- data.frame(nomes = c(" ;
+
+	cout << endl << endl << endl << " Comando r o NumeroClientes = " << NumeroClientes << endl << endl <<endl;
+
 	for( int c = 1; c <= NumeroClientes; c++){
 		if( c != 1){
 			ComandosR << ",";
 		}
 		ComandosR << "\"C" <<  c << "(" <<  NumeroCarretas[c] << ")"<<  "\"";
 	}
+
+
 	for( int p = 1; p <= NumeroPlantas; p++){
 		ComandosR << ","<< "\"P" <<  p <<  "\"";
 	}
@@ -877,6 +909,9 @@ void 	DadosSolomon::EscreverComandosR(string Nome, char TipoArquivoSaida){
 	ComandosR << "dev.off() ;" << endl;
 
 	ComandosR.close();
+
+	TipoComando.clear();
+	NomeArquivoComandoR.clear();
 
 	//cout << " Aqui 3" << endl;
 

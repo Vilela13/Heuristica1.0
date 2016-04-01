@@ -104,35 +104,39 @@ int main(int argc, char **argv) {
 
 		ArquivoInstanciaSolomon.close();
 
-	// -------------------------- Le nome dos arquivos Solomon, carrega os dados, cria arquivo do R, Excel e cria arquivo que pode ser lido pelo Modelo ----------------------- //
-//for( int v = 1; v <= 3; v++){
-	//for(int m =2; m <= 4; m++){
+		it = ListaInstancias.begin();
+		Nome = *it;
 
-		while( ListaInstancias.size() > 0){
+	// -------------------------- Le nome dos arquivos Solomon, carrega os dados, cria arquivo do R, Excel e cria arquivo que pode ser lido pelo Modelo ----------------------- //
+for( int v = 1; v <= 3; v++){
+	for(int m = 2; m <= 5; m++){
+
+		//while( ListaInstancias.size() > 0){
 
 			InstanciaSolomon = new DadosSolomon;
 
-			it = ListaInstancias.begin();
-			Nome = *it;
-			ListaInstancias.pop_front();
-			//cout <<  " ai 1" << endl;
+
+			//			ListaInstancias.pop_front();
+
+			cout <<  " entra v = " << v << " m = " << m << endl;
 
 			cout << Nome << endl;
 			//cout <<  " ai 2" << endl;
 
-			cout << " entrei 0 - carrega dados" << endl;
+			//cout << " entrei 0 - carrega dados" << endl;
 			InstanciaSolomon->CarregarNumeroNosCoordenadas( Nome );
 			//InstanciaSolomon->EscreverDadosLidosInstanciaSolomon();
-			cout << " sai 0 - carrega dados" << endl;
+			//cout << " sai 0 - carrega dados" << endl;
 
-			cout << " entrei 1 - escreve Instancia Salomon" << endl;
-			InstanciaSolomon->CriarInstanciaSolomon( Nome ); //, v,m );
-			cout << " sai 1 - escreve Instancia Salomon" << endl;
 
-			cout << " entrei 2 - escreve comandos R" << endl;
+			//cout << " entrei 1 - escreve Instancia Salomon" << endl;
+			InstanciaSolomon->CriarInstanciaSolomon( Nome , v, m );
+			//cout << " sai 1 - escreve Instancia Salomon" << endl;
+
+			//cout << " entrei 2 - escreve comandos R" << endl;
 			InstanciaSolomon->EscreverComandosR( Nome ,'4');
 			// 1 => .ps	  2 =>.png   3 =>.jpeg    4 =>.pdf
-			cout << " sai 2 - escreve comandos R" << endl;
+			//cout << " sai 2 - escreve comandos R" << endl;
 
 			//cout << " entrei 3 - escreve comandos excel" << endl;
 			//InstanciaSolomon->EscreverComandosExcel( Nome );					// Não implementado ainda
@@ -140,10 +144,12 @@ int main(int argc, char **argv) {
 
 			delete(InstanciaSolomon);
 
-		}
+		//}
+	}
+}
 
-	//}
-//}
+ListaInstancias.clear();
+
 
 		// -------------------------- Resolve as instancais atraevez dos procediemntos implementados ----------------------- //
 

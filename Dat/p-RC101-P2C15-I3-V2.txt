@@ -1,0 +1,59 @@
+./Dat/p-RC101-P2C15-I3-V2.txt
+ Gerador dos numeros aleatorios das demandas ( 2 ) 
+Dados das plantas 
+   NoPlanta = 1 Horario [ 7 - 18 ]
+   NoPlanta = 2 Horario [ 7 - 18 ]
+Dados dos Clientes 
+  NoCliente = 1 	Demanda em carretas ( 4 ) Horario [ 9.5 - 11.3333 ]
+  NoCliente = 2 	Demanda em carretas ( 5 ) Horario [ 9 - 11.3333 ]
+  NoCliente = 3 	Demanda em carretas ( 3 ) Horario [ 8 - 9.33333 ]
+  NoCliente = 4 	Demanda em carretas ( 5 ) Horario [ 8 - 10.3333 ]
+  NoCliente = 5 	Demanda em carretas ( 1 ) Horario [ 11 - 11.3333 ]
+  NoCliente = 6 	Demanda em carretas ( 5 ) Horario [ 9 - 11.3333 ]
+  NoCliente = 7 	Demanda em carretas ( 4 ) Horario [ 14.5 - 16.3333 ]
+  NoCliente = 8 	Demanda em carretas ( 3 ) Horario [ 14.5 - 15.8333 ]
+  NoCliente = 9 	Demanda em carretas ( 3 ) Horario [ 9.5 - 10.8333 ]
+  NoCliente = 10 	Demanda em carretas ( 1 ) Horario [ 9.5 - 9.83333 ]
+  NoCliente = 11 	Demanda em carretas ( 5 ) Horario [ 8 - 10.3333 ]
+  NoCliente = 12 	Demanda em carretas ( 2 ) Horario [ 8 - 8.83333 ]
+  NoCliente = 13 	Demanda em carretas ( 5 ) Horario [ 13.5 - 15.8333 ]
+  NoCliente = 14 	Demanda em carretas ( 3 ) Horario [ 13.5 - 14.8333 ]
+  NoCliente = 15 	Demanda em carretas ( 4 ) Horario [ 8 - 9.83333 ]
+
+
+Distancia das plantas para construcoes  em minutos
+
+   Planta = 1
+Construcao   Tempo de Ida    Tempo de Ida e Volta
+1		80.6226		166.245
+2		80.6226		166.245
+3		70.7107		146.421
+4		70.1142		145.228
+5		80.0999		165.2
+6		70		145
+7		63.2456		131.491
+8		78.7147		162.429
+9		78.5875		162.175
+10		90.0888		185.178
+11		72.111		149.222
+12		76.1577		157.315
+13		82.4621		169.924
+14		67.0522		139.104
+15		70.7107		146.421
+   Planta = 2
+Construcao   Tempo de Ida    Tempo de Ida e Volta
+1		10		25
+2		94.3398		193.68
+3		28.2843		61.5685
+4		142.394		289.788
+5		153.805		312.61
+6		143.178		291.356
+7		94.8683		194.737
+8		6		17
+9		101.074		207.148
+10		162.099		329.197
+11		14.1421		33.2843
+12		107.703		220.407
+13		102.956		210.913
+14		96.2081		197.416
+15		89.4427		183.885

@@ -1,0 +1,77 @@
+./Dat/p-C101-P3C15-I4-V3.txt
+ Gerador dos numeros aleatorios das demandas ( 3 ) 
+Dados das plantas 
+   NoPlanta = 1 Horario [ 7 - 18 ]
+   NoPlanta = 2 Horario [ 7 - 18 ]
+   NoPlanta = 3 Horario [ 7 - 18 ]
+Dados dos Clientes 
+  NoCliente = 1 	Demanda em carretas ( 5 ) Horario [ 8 - 11.1667 ]
+  NoCliente = 2 	Demanda em carretas ( 5 ) Horario [ 13.5 - 16.6667 ]
+  NoCliente = 3 	Demanda em carretas ( 2 ) Horario [ 9 - 10.1667 ]
+  NoCliente = 4 	Demanda em carretas ( 4 ) Horario [ 9.5 - 12 ]
+  NoCliente = 5 	Demanda em carretas ( 3 ) Horario [ 8 - 9.83333 ]
+  NoCliente = 6 	Demanda em carretas ( 3 ) Horario [ 8 - 9.83333 ]
+  NoCliente = 7 	Demanda em carretas ( 4 ) Horario [ 9 - 11.5 ]
+  NoCliente = 8 	Demanda em carretas ( 5 ) Horario [ 10 - 13.1667 ]
+  NoCliente = 9 	Demanda em carretas ( 5 ) Horario [ 8 - 11.1667 ]
+  NoCliente = 10 	Demanda em carretas ( 1 ) Horario [ 14.5 - 15 ]
+  NoCliente = 11 	Demanda em carretas ( 5 ) Horario [ 9.5 - 12.6667 ]
+  NoCliente = 12 	Demanda em carretas ( 2 ) Horario [ 15.5 - 16.6667 ]
+  NoCliente = 13 	Demanda em carretas ( 2 ) Horario [ 15.5 - 16.6667 ]
+  NoCliente = 14 	Demanda em carretas ( 1 ) Horario [ 16 - 16.5 ]
+  NoCliente = 15 	Demanda em carretas ( 2 ) Horario [ 9 - 10.1667 ]
+
+
+Distancia das plantas para construcoes  em minutos
+
+   Planta = 1
+Construcao   Tempo de Ida    Tempo de Ida e Volta
+1		30.2655		65.531
+2		78.1025		161.205
+3		80.6226		166.245
+4		30.2655		65.531
+5		70.7107		146.421
+6		32		69
+7		61.6117		128.223
+8		20		45
+9		20.3961		45.7922
+10		36.2215		77.4431
+11		40.1995		85.399
+12		38		81
+13		32.249		69.4981
+14		26		57
+15		41.2311		87.4621
+   Planta = 2
+Construcao   Tempo de Ida    Tempo de Ida e Volta
+1		4		13
+2		63.2456		131.491
+3		70.7107		146.421
+4		45.3431		95.6863
+5		53.8516		112.703
+6		43.8634		92.7268
+7		50.3587		105.717
+8		10		25
+9		10.7703		26.5407
+10		44.4072		93.8144
+11		47.7074		100.415
+12		48.4149		101.83
+13		46.6905		98.3809
+14		11.6619		28.3238
+15		56.5685		118.137
+   Planta = 3
+Construcao   Tempo de Ida    Tempo de Ida e Volta
+1		46.6905		98.3809
+2		59.0931		123.186
+3		55.6058		116.212
+4		6		17
+5		55.7853		116.571
+6		5.65685		16.3137
+7		42.3792		89.7585
+8		43.2666		91.5332
+9		40		85
+10		8		21
+11		8.94427		22.8885
+12		4.47214		13.9443
+13		4		13
+14		38.2099		81.4199
+15		7.2111		19.4222

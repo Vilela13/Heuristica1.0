@@ -1,0 +1,59 @@
+./Dat/p-RC101-P2C15-I2-V3.txt
+ Gerador dos numeros aleatorios das demandas ( 3 ) 
+Dados das plantas 
+   NoPlanta = 1 Horario [ 7 - 18 ]
+   NoPlanta = 2 Horario [ 7 - 18 ]
+Dados dos Clientes 
+  NoCliente = 1 	Demanda em carretas ( 1 ) Horario [ 15 - 15.1667 ]
+  NoCliente = 2 	Demanda em carretas ( 4 ) Horario [ 10.5 - 11.6667 ]
+  NoCliente = 3 	Demanda em carretas ( 2 ) Horario [ 13.5 - 14 ]
+  NoCliente = 4 	Demanda em carretas ( 1 ) Horario [ 8 - 8.16667 ]
+  NoCliente = 5 	Demanda em carretas ( 3 ) Horario [ 10.5 - 11.3333 ]
+  NoCliente = 6 	Demanda em carretas ( 2 ) Horario [ 11 - 11.5 ]
+  NoCliente = 7 	Demanda em carretas ( 2 ) Horario [ 16 - 16.5 ]
+  NoCliente = 8 	Demanda em carretas ( 1 ) Horario [ 9.5 - 9.66667 ]
+  NoCliente = 9 	Demanda em carretas ( 1 ) Horario [ 16.5 - 16.6667 ]
+  NoCliente = 10 	Demanda em carretas ( 5 ) Horario [ 10 - 11.5 ]
+  NoCliente = 11 	Demanda em carretas ( 5 ) Horario [ 15 - 16.5 ]
+  NoCliente = 12 	Demanda em carretas ( 4 ) Horario [ 14 - 15.1667 ]
+  NoCliente = 13 	Demanda em carretas ( 2 ) Horario [ 16 - 16.5 ]
+  NoCliente = 14 	Demanda em carretas ( 1 ) Horario [ 14.5 - 14.6667 ]
+  NoCliente = 15 	Demanda em carretas ( 2 ) Horario [ 10 - 10.5 ]
+
+
+Distancia das plantas para construcoes  em minutos
+
+   Planta = 1
+Construcao   Tempo de Ida    Tempo de Ida e Volta
+1		80.0999		165.2
+2		72.111		149.222
+3		70		145
+4		90.0888		185.178
+5		63.2456		131.491
+6		76.1577		157.315
+7		80.6226		166.245
+8		70.1142		145.228
+9		61.6117		128.223
+10		67.082		139.164
+11		70.1142		145.228
+12		66.6033		138.207
+13		67.0522		139.104
+14		90.5539		186.108
+15		76.1577		157.315
+   Planta = 2
+Construcao   Tempo de Ida    Tempo de Ida e Volta
+1		155.242		315.483
+2		10.7703		26.5407
+3		144.554		294.109
+4		163.169		331.337
+5		93.145		191.29
+6		6		17
+7		91.3017		187.603
+8		145.602		296.204
+9		20		45
+10		102.84		210.679
+11		143.611		292.221
+12		21.5407		48.0813
+13		94.255		193.51
+14		162.099		329.197
+15		105.622		216.244

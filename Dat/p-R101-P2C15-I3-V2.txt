@@ -1,0 +1,59 @@
+./Dat/p-R101-P2C15-I3-V2.txt
+ Gerador dos numeros aleatorios das demandas ( 2 ) 
+Dados das plantas 
+   NoPlanta = 1 Horario [ 7 - 18 ]
+   NoPlanta = 2 Horario [ 7 - 18 ]
+Dados dos Clientes 
+  NoCliente = 1 	Demanda em carretas ( 5 ) Horario [ 8.5 - 10.8333 ]
+  NoCliente = 2 	Demanda em carretas ( 1 ) Horario [ 16 - 16.3333 ]
+  NoCliente = 3 	Demanda em carretas ( 4 ) Horario [ 9 - 10.8333 ]
+  NoCliente = 4 	Demanda em carretas ( 5 ) Horario [ 10 - 12.3333 ]
+  NoCliente = 5 	Demanda em carretas ( 4 ) Horario [ 9.5 - 11.3333 ]
+  NoCliente = 6 	Demanda em carretas ( 2 ) Horario [ 13.5 - 14.3333 ]
+  NoCliente = 7 	Demanda em carretas ( 2 ) Horario [ 10 - 10.8333 ]
+  NoCliente = 8 	Demanda em carretas ( 1 ) Horario [ 10.5 - 10.8333 ]
+  NoCliente = 9 	Demanda em carretas ( 3 ) Horario [ 11 - 12.3333 ]
+  NoCliente = 10 	Demanda em carretas ( 1 ) Horario [ 14 - 14.3333 ]
+  NoCliente = 11 	Demanda em carretas ( 3 ) Horario [ 9 - 10.3333 ]
+  NoCliente = 12 	Demanda em carretas ( 5 ) Horario [ 13.5 - 15.8333 ]
+  NoCliente = 13 	Demanda em carretas ( 5 ) Horario [ 9 - 11.3333 ]
+  NoCliente = 14 	Demanda em carretas ( 3 ) Horario [ 15 - 16.3333 ]
+  NoCliente = 15 	Demanda em carretas ( 1 ) Horario [ 10 - 10.3333 ]
+
+
+Distancia das plantas para construcoes  em minutos
+
+   Planta = 1
+Construcao   Tempo de Ida    Tempo de Ida e Volta
+1		31.6228		68.2456
+2		50		105
+3		50.9902		106.98
+4		44.7214		94.4427
+5		64.0312		133.062
+6		60.8276		126.655
+7		53.8516		112.703
+8		63.2456		131.491
+9		67.082		139.164
+10		22.3607		49.7214
+11		64.0312		133.062
+12		30.4631		65.9262
+13		36.0555		77.111
+14		22.3607		49.7214
+15		58.3095		121.619
+   Planta = 2
+Construcao   Tempo de Ida    Tempo de Ida e Volta
+1		90.5539		186.108
+2		36.0555		77.111
+3		86.0233		177.047
+4		28.2843		61.5685
+5		111.803		228.607
+6		120.416		245.832
+7		64.0312		133.062
+8		72.111		149.222
+9		108.167		221.333
+10		80.6226		166.245
+11		111.803		228.607
+12		55.5698		116.14
+13		50		105
+14		72.8011		150.602
+15		114.018		233.035

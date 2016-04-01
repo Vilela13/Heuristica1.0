@@ -1,0 +1,77 @@
+./Dat/p-R101-P3C15-I4-V2.txt
+ Gerador dos numeros aleatorios das demandas ( 2 ) 
+Dados das plantas 
+   NoPlanta = 1 Horario [ 7 - 18 ]
+   NoPlanta = 2 Horario [ 7 - 18 ]
+   NoPlanta = 3 Horario [ 7 - 18 ]
+Dados dos Clientes 
+  NoCliente = 1 	Demanda em carretas ( 1 ) Horario [ 10 - 10.5 ]
+  NoCliente = 2 	Demanda em carretas ( 2 ) Horario [ 10.5 - 11.6667 ]
+  NoCliente = 3 	Demanda em carretas ( 1 ) Horario [ 8.5 - 9 ]
+  NoCliente = 4 	Demanda em carretas ( 1 ) Horario [ 10 - 10.5 ]
+  NoCliente = 5 	Demanda em carretas ( 4 ) Horario [ 8.5 - 11 ]
+  NoCliente = 6 	Demanda em carretas ( 3 ) Horario [ 9 - 10.8333 ]
+  NoCliente = 7 	Demanda em carretas ( 4 ) Horario [ 14 - 16.5 ]
+  NoCliente = 8 	Demanda em carretas ( 5 ) Horario [ 8.5 - 11.6667 ]
+  NoCliente = 9 	Demanda em carretas ( 4 ) Horario [ 11 - 13.5 ]
+  NoCliente = 10 	Demanda em carretas ( 2 ) Horario [ 10.5 - 11.6667 ]
+  NoCliente = 11 	Demanda em carretas ( 5 ) Horario [ 10 - 13.1667 ]
+  NoCliente = 12 	Demanda em carretas ( 1 ) Horario [ 14.5 - 15 ]
+  NoCliente = 13 	Demanda em carretas ( 5 ) Horario [ 8.5 - 11.6667 ]
+  NoCliente = 14 	Demanda em carretas ( 3 ) Horario [ 8.5 - 10.3333 ]
+  NoCliente = 15 	Demanda em carretas ( 4 ) Horario [ 9.5 - 12 ]
+
+
+Distancia das plantas para construcoes  em minutos
+
+   Planta = 1
+Construcao   Tempo de Ida    Tempo de Ida e Volta
+1		60		125
+2		53.8516		112.703
+3		50.9902		106.98
+4		41.2311		87.4621
+5		63.2456		131.491
+6		42.4264		89.8528
+7		31.6228		68.2456
+8		67.082		139.164
+9		52.4976		109.995
+10		67.082		139.164
+11		50		105
+12		60.8276		126.655
+13		30.4631		65.9262
+14		60.8276		126.655
+15		22.3607		49.7214
+   Planta = 2
+Construcao   Tempo de Ida    Tempo de Ida e Volta
+1		63.2456		131.491
+2		22.3607		49.7214
+3		120.83		246.661
+4		94.3398		193.68
+5		121.655		248.311
+6		114.018		233.035
+7		98.9949		202.99
+8		36.0555		77.111
+9		117.796		240.593
+10		138.924		282.849
+11		30		65
+12		50		105
+13		92.3472		189.694
+14		111.803		228.607
+15		78.1025		161.205
+   Planta = 3
+Construcao   Tempo de Ida    Tempo de Ida e Volta
+1		28.2843		61.5685
+2		72.8011		150.602
+3		58.3095		121.619
+4		85.44		175.88
+5		44.7214		94.4427
+6		70.7107		146.421
+7		70.7107		146.421
+8		53.8516		112.703
+9		90.0888		185.178
+10		80.6226		166.245
+11		50		105
+12		94.3398		193.68
+13		29.1204		63.2409
+14		104.403		213.806
+15		67.082		139.164

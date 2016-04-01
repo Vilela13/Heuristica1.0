@@ -104,14 +104,16 @@ int main(int argc, char **argv) {
 
 		ArquivoInstanciaSolomon.close();
 
-		it = ListaInstancias.begin();
-		Nome = *it;
+
 
 	// -------------------------- Le nome dos arquivos Solomon, carrega os dados, cria arquivo do R, Excel e cria arquivo que pode ser lido pelo Modelo ----------------------- //
 for( int v = 1; v <= 3; v++){
-	for(int m = 2; m <= 5; m++){
+	for(int m = 2; m <= 4; m++){
 
 		//while( ListaInstancias.size() > 0){
+
+			it = ListaInstancias.begin();
+			Nome = *it;
 
 			InstanciaSolomon = new DadosSolomon;
 
@@ -462,7 +464,7 @@ ListaInstancias.clear();
 				if( Instancia->LeDados(Nome, EscreveDadosLidosNaTela) == 1){
 					//cout << " Leu Dados" << endl;
 
-					srand (time(NULL));
+					srand( clock() + time(NULL));
 
 					if( TipoProcedimento == "grasp"){
 						Instancia->ExecutaGrasp(Nome, NumeroIteracoes, TempoExecucaoMaximo, EscolhaVeiculo,  EscolhaConstrucao,  EscolhaPlanta, RealizaProcessoDeAtrazarTarefas);
@@ -648,7 +650,9 @@ ListaInstancias.clear();
 
 				if( Instancia->LeDados(Nome, EscreveDadosLidosNaTela) == 1){
 					//cout << " Leu Dados" << endl;
-					srand (time(NULL));
+
+					srand(clock()+time(NULL));
+
 					if( TipoProcedimento == "graspClass"){
 						Instancia->ExecutaGraspClass(Nome, NumeroIteracoes, TempoExecucaoMaximo, EscolhaVeiculo,  EscolhaConstrucao,  EscolhaPlanta, RealizaProcessoDeAtrazarTarefas);
 					}else{

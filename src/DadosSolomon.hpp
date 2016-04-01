@@ -346,8 +346,8 @@ void 	DadosSolomon::CriarInstanciaSolomon(string Nome , int NumeroVERSAO, int Mu
 	//double MultiplicadorTempoDescarga;
 	//int 	NumeroVERSAO;
 
-	double AuxiliarNumero;
-	double Lixo;
+	//double AuxiliarNumero;
+	//double Lixo;
 
 	int EscreveVelocidadeMinima;
 
@@ -355,7 +355,7 @@ void 	DadosSolomon::CriarInstanciaSolomon(string Nome , int NumeroVERSAO, int Mu
 
 	//MultiplicadorTempoDescarga = 2;
 	//NumeroVERSAO = 1;
-	NumeroPlantas 	= 2;
+	NumeroPlantas 	= 3;
 	NumeroClientes 	= 15;
 
 
@@ -429,15 +429,17 @@ void 	DadosSolomon::CriarInstanciaSolomon(string Nome , int NumeroVERSAO, int Mu
 
 
 		//srand(NumeroVERSAO);		// O gerador é o numero da versão
-		srand(NumeroVERSAO);			// gera numeros aleatorios
+		srand(clock()+time(NULL));			// gera numeros aleatorios
 
-		AuxiliarNumero = rand()%1000;
+		//cout << "  rand =" << rand() << endl << endl;
 
-		cout << endl << endl << " Numero de vezes no rand => " << AuxiliarNumero << endl << endl << endl;
+		//AuxiliarNumero = rand()%10000;
 
-		for( int i = 0; i < AuxiliarNumero; i++){
-			Lixo = rand();
-		}
+		//cout << endl << endl << " Numero de vezes no rand => " << AuxiliarNumero << "  rand = " << rand() << endl << endl << endl;
+
+		//for( int i = 0; i < AuxiliarNumero; i++){
+			//Lixo = rand();
+		//}
 
 		NomeAux = Nome;
 
@@ -524,9 +526,6 @@ void 	DadosSolomon::CriarInstanciaSolomon(string Nome , int NumeroVERSAO, int Mu
 		NoCliente.resize(	NumeroClientes	+	1);
 		HoraInicioCliente.resize(	NumeroClientes	+	1);
 		HoraFinalCliente.resize( 	NumeroClientes	+	1);
-
-
-		cout << endl << endl << endl << " CriarInstanciaSolomon o NumeroClientes = " << NumeroClientes << endl << endl <<endl;
 
 
 		NumeroCarretas.resize( NumeroClientes + 1 ); // vetor que guarda o numero de carretas por cliente
@@ -771,8 +770,6 @@ void 	DadosSolomon::EscreverComandosR(string Nome, char TipoArquivoSaida){
 
 
 	ComandosR << "Dados <- data.frame(nomes = c(" ;
-
-	cout << endl << endl << endl << " Comando r o NumeroClientes = " << NumeroClientes << endl << endl <<endl;
 
 	for( int c = 1; c <= NumeroClientes; c++){
 		if( c != 1){

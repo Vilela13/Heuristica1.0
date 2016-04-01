@@ -4,56 +4,56 @@ Dados das plantas
    NoPlanta = 1 Horario [ 7 - 18 ]
    NoPlanta = 2 Horario [ 7 - 18 ]
 Dados dos Clientes 
-  NoCliente = 1 	Demanda em carretas ( 5 ) Horario [ 8.5 - 10.8333 ]
-  NoCliente = 2 	Demanda em carretas ( 2 ) Horario [ 8 - 8.83333 ]
-  NoCliente = 3 	Demanda em carretas ( 3 ) Horario [ 10 - 11.3333 ]
-  NoCliente = 4 	Demanda em carretas ( 4 ) Horario [ 14.5 - 16.3333 ]
-  NoCliente = 5 	Demanda em carretas ( 4 ) Horario [ 14 - 15.8333 ]
-  NoCliente = 6 	Demanda em carretas ( 4 ) Horario [ 8 - 9.83333 ]
-  NoCliente = 7 	Demanda em carretas ( 4 ) Horario [ 8 - 9.83333 ]
-  NoCliente = 8 	Demanda em carretas ( 5 ) Horario [ 9 - 11.3333 ]
-  NoCliente = 9 	Demanda em carretas ( 5 ) Horario [ 10 - 12.3333 ]
-  NoCliente = 10 	Demanda em carretas ( 5 ) Horario [ 9 - 11.3333 ]
-  NoCliente = 11 	Demanda em carretas ( 3 ) Horario [ 10 - 11.3333 ]
-  NoCliente = 12 	Demanda em carretas ( 1 ) Horario [ 15 - 15.3333 ]
-  NoCliente = 13 	Demanda em carretas ( 4 ) Horario [ 8.5 - 10.3333 ]
-  NoCliente = 14 	Demanda em carretas ( 1 ) Horario [ 13.5 - 13.8333 ]
-  NoCliente = 15 	Demanda em carretas ( 5 ) Horario [ 11 - 13.3333 ]
+  NoCliente = 1 	Demanda em carretas ( 2 ) Horario [ 10.5 - 11.3333 ]
+  NoCliente = 2 	Demanda em carretas ( 5 ) Horario [ 8.5 - 10.8333 ]
+  NoCliente = 3 	Demanda em carretas ( 5 ) Horario [ 10 - 12.3333 ]
+  NoCliente = 4 	Demanda em carretas ( 2 ) Horario [ 14.5 - 15.3333 ]
+  NoCliente = 5 	Demanda em carretas ( 1 ) Horario [ 8 - 8.33333 ]
+  NoCliente = 6 	Demanda em carretas ( 4 ) Horario [ 11 - 12.8333 ]
+  NoCliente = 7 	Demanda em carretas ( 2 ) Horario [ 8.5 - 9.33333 ]
+  NoCliente = 8 	Demanda em carretas ( 3 ) Horario [ 13.5 - 14.8333 ]
+  NoCliente = 9 	Demanda em carretas ( 5 ) Horario [ 8.5 - 10.8333 ]
+  NoCliente = 10 	Demanda em carretas ( 2 ) Horario [ 9.5 - 10.3333 ]
+  NoCliente = 11 	Demanda em carretas ( 1 ) Horario [ 9.5 - 9.83333 ]
+  NoCliente = 12 	Demanda em carretas ( 3 ) Horario [ 9.5 - 10.8333 ]
+  NoCliente = 13 	Demanda em carretas ( 1 ) Horario [ 9 - 9.33333 ]
+  NoCliente = 14 	Demanda em carretas ( 3 ) Horario [ 14.5 - 15.8333 ]
+  NoCliente = 15 	Demanda em carretas ( 3 ) Horario [ 14 - 15.3333 ]
 
 
 Distancia das plantas para construcoes  em minutos
 
    Planta = 1
 Construcao   Tempo de Ida    Tempo de Ida e Volta
-1		36.2215		77.4431
-2		78.7147		162.429
-3		33.5261		72.0522
-4		32		69
-5		66.6033		138.207
+1		26		57
+2		36.2215		77.4431
+3		39.2938		83.5875
+4		61.6117		128.223
+5		32.249		69.4981
 6		30		65
-7		20.3961		45.7922
-8		40.1995		85.399
-9		37.3631		79.7262
-10		36.2215		77.4431
-11		30.2655		65.531
-12		30.2655		65.531
-13		80.6226		166.245
-14		26		57
-15		41.2311		87.4621
+7		20		45
+8		36.2215		77.4431
+9		78.1025		161.205
+10		38		81
+11		33.5261		72.0522
+12		37.3631		79.7262
+13		78.7147		162.429
+14		41.2311		87.4621
+15		76.1577		157.315
    Planta = 2
 Construcao   Tempo de Ida    Tempo de Ida e Volta
-1		37.7359		80.4718
-2		67.082		139.164
-3		31.305		67.6099
-4		36.8782		78.7564
-5		50.1597		105.319
-6		7.2111		19.4222
-7		4		13
-8		41.1825		87.365
-9		46.6905		98.3809
-10		42.5206		90.0412
-11		6		17
-12		38.2099		81.4199
-13		67.9117		140.823
-14		6		17
-15		49.5177		104.035
+1		8.48528		21.9706
+2		46.6905		98.3809
+3		39.4462		83.8923
+4		46.3897		97.7793
+5		44.0454		93.0909
+6		4		13
+7		10.7703		26.5407
+8		41.2311		87.4621
+9		59.4643		123.929
+10		45.3431		95.6863
+11		34.4093		73.8186
+12		51.225		107.45
+13		66.2722		137.544
+14		53.8145		112.629
+15		66		137

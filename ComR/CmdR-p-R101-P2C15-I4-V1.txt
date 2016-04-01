@@ -1,0 +1,10 @@
+require(ggplot2) 
+Dados <- data.frame(nomes = c("C1(2)","C2(3)","C3(2)","C4(1)","C5(2)","C6(1)","C7(1)","C8(1)","C9(1)","C10(2)","C11(2)","C12(1)","C13(2)","C14(2)","C15(5)","P1","P2")
+, x <- c(45,30,15,25,20,20,10,30,55,55,45,55,5,55,35,35,30)
+, y <- c(10,60,30,30,40,65,43,5,45,20,20,5,30,60,17,35,25)
+, tipo <- c(3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4)
+, tamanho <- c(1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,2)
+)
+pdf('p-R101-P2C15-I4-V1.pdf')
+ggplot(Dados, aes(x,y)) + geom_point(aes(shape = factor(tipo),size =tamanho) ) + scale_size_continuous(range = c(3,4))+ scale_shape(solid = FALSE)+  geom_text(aes(label=nomes), hjust= 0.5,vjust=2 ,size = 2)+ xlim( min(x)- 10, max(x)+10 ) + ylim( min(y)-10,max(y)+10 )
+dev.off() ;

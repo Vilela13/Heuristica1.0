@@ -14,7 +14,7 @@ using namespace std;
 int main(int argc, char **argv) {
 
 
-	if( argc > 5){
+	if( argc > 6){
 
 		// tipo de escolha de veiculo, construção e planta
 		int 	EscolhaVeiculo;
@@ -58,15 +58,17 @@ int main(int argc, char **argv) {
 
 		Heuristica *Instancia;
 
+		string TipoDeEntrada;
+
 		// Exscrever a dadta
 		 time_t timer;
 		 char 	buffer[26];
 		 struct tm* tm_info;
 
-		Recursao = argv[2];
+		Recursao = argv[3];
 
 		if( Recursao != "ComRec" && Recursao != "SemRec"){
-			cout << endl << endl << endl <<  argv[2] << "   Problema a se definir se o programa irá atrasar as tarefas anteriores para atender uma demanda ou não " << endl << endl << endl;
+			cout << endl << endl << endl <<  argv[3] << "   Problema a se definir se o programa irá atrasar as tarefas anteriores para atender uma demanda ou não " << endl << endl << endl;
 			return 0;
 		}else{
 			if( Recursao == "SemRec"){
@@ -79,10 +81,10 @@ int main(int argc, char **argv) {
 			}
 		}
 
-		TipoProcedimento = argv[3];
+		TipoProcedimento = argv[4];
 
 		if( TipoProcedimento != "cons" && TipoProcedimento != "consCir" && TipoProcedimento != "grasp" && TipoProcedimento != "graspCir" && TipoProcedimento != "graspClass" && TipoProcedimento != "graspClassCir"){
-			cout << endl << endl << endl <<  argv[2] << "   Problema em se identificar o tipo de procediemnto a se realizar " << endl << endl << endl;
+			cout << endl << endl << endl <<  argv[4] << "   Problema em se identificar o tipo de procediemnto a se realizar " << endl << endl << endl;
 			return 0;
 		}
 
@@ -155,32 +157,42 @@ int main(int argc, char **argv) {
 
 		// -------------------------- Resolve as instancais atraevez dos procediemntos implementados ----------------------- //
 
-		Instancias = argv[1];
+		TipoDeEntrada = argv[1];
+		Instancias = argv[2];
 		//Instancias = "Instancias.txt";
 
-		cstr = new char[Instancias.length() + 1];
-		strcpy(cstr, Instancias.c_str());
-
-		ArquivoInstancia.open(cstr);
-
-		delete [] cstr;
-
-		if ( ArquivoInstancia.is_open() ){
-			ArquivoInstancia >> Nome;
-			//cout << " instancia lida = " << Nome << endl;
-			while( Nome != "EOF"){
-				ListaInstancias.push_back(Nome);
+		if( TipoDeEntrada.compare(0,3,"arq") == 0 ){
+			ArquivoInstancia.open(Instancias.c_str());
+			if ( ArquivoInstancia.is_open() ){
 				ArquivoInstancia >> Nome;
+				//cout << " instancia lida = " << Nome << endl;
+				while( Nome != "EOF"){
+					ListaInstancias.push_back(Nome);
+					ArquivoInstancia >> Nome;
+				}
+				ArquivoInstancia.close();
+			}else{
+				cout << "\n \n Arquivo inexistente! \n \n";
+				return 0;
 			}
-			ArquivoInstancia.close();
 		}else{
-			cout << "\n \n Arquivo inexistente! \n \n";
-			return 0;
+			if( TipoDeEntrada.compare(0,4,"inst") == 0 ){
+				ListaInstancias.push_back(Instancias);
+			}else{
+				cout << "(" << TipoDeEntrada << ")";
+				printf( " TipoDeEntrada  Problema na definição da entrada das instancias. \n\n\n");
+				ListaInstancias.clear();
+				Nome.clear();
+				Instancias.clear();
+				Saida.clear();
+				return 0;
+			}
 		}
 
-			if( TipoProcedimento == "cons" || TipoProcedimento == "consCir"){
 
-			if( argc != 7){
+		if( TipoProcedimento == "cons" || TipoProcedimento == "consCir"){
+
+			if( argc != 8){
 				if( TipoProcedimento == "cons"){
 					cout << endl << endl << endl << "    Probelma na entrada de parametros para se executar o cons" << endl << endl << endl;
 				}else{
@@ -190,11 +202,11 @@ int main(int argc, char **argv) {
 			}
 
 			 // ordena na ordem do menor número de tarefas para o maior se colocar o valor 1, ordena na ordem do maior número de tarefas para o menor se colocar o valor 2
-			EscolhaVeiculo = atoi( argv[4]);			// função atoi tranforma char em inteiro ( biblioteca stdlib.h)
+			EscolhaVeiculo = atoi( argv[5]);			// função atoi tranforma char em inteiro ( biblioteca stdlib.h)
 			 // modo de escolha da construção, 1 escolhe a construção por meio do RankTempoDemandas, 2 escolhe a construção com mais demandas,
-			EscolhaConstrucao = atoi( argv[5]);		// função atoi tranforma char em inteiro ( biblioteca stdlib.h)
+			EscolhaConstrucao = atoi( argv[6]);		// função atoi tranforma char em inteiro ( biblioteca stdlib.h)
 			 // modo de escolha da planta, 1 é a planta mais proxima, 1 é a planta com menos tarefas, 3 é a planta com mais tarefas
-			EscolhaPlanta = atoi( argv[6]);			// função atoi tranforma char em inteiro ( biblioteca stdlib.h)
+			EscolhaPlanta = atoi( argv[7]);			// função atoi tranforma char em inteiro ( biblioteca stdlib.h)
 
 			 // coleta a data e a hora
 			time(&timer);
@@ -320,43 +332,43 @@ int main(int argc, char **argv) {
 
 		 if( TipoProcedimento == "grasp" || TipoProcedimento == "graspCir"){
 
-			 if( argc != 9){
+			 if( argc != 10){
 				 cout << endl << endl << endl << "    Probelma na entrada de parametros para se executar o grasp" << endl << endl << endl;
 				 return 0;
 			 }
 
 			 // numero maximo de iterações
-			 NumeroIteracoesString = argv[4];
+			 NumeroIteracoesString = argv[5];
 			 if( NumeroIteracoesString == "-"){
 				 NumeroIteracoes = LONG_MAX;
 			 }else{
-				 if( atoi( argv[4]) > 0){
-					 NumeroIteracoes = atoi( argv[4]);		// função atoi tranforma char em inteiro ( biblioteca stdlib.h)
+				 if( atoi( argv[5]) > 0){
+					 NumeroIteracoes = atoi( argv[5]);		// função atoi tranforma char em inteiro ( biblioteca stdlib.h)
 				 }else{
 					 cout << endl << endl << " Numero de iterações negativo " << Nome << endl << endl;
 					 return 0;
 				 }
 			 }
-			 TempoExecucaoMaximoString = argv[5];
+			 TempoExecucaoMaximoString = argv[6];
 			 if( TempoExecucaoMaximoString == "-"){
 				 TempoExecucaoMaximo = LONG_MAX;
 			 }else{
-				 if( atoi( argv[5]) > 0){
-					 TempoExecucaoMaximo = atoi( argv[5]);		// função atoi tranforma char em inteiro ( biblioteca stdlib.h)
+				 if( atoi( argv[6]) > 0){
+					 TempoExecucaoMaximo = atoi( argv[6]);		// função atoi tranforma char em inteiro ( biblioteca stdlib.h)
 				 }else{
 					 cout << endl << endl << " Tempo de execução negativo " << Nome << endl << endl;
 					 return 0;
 				 }
 				 // tempo maximo de execução do problema
-				 TempoExecucaoMaximo = atoi( argv[5]);		// função atoi tranforma char em inteiro ( biblioteca stdlib.h)
+				 TempoExecucaoMaximo = atoi( argv[6]);		// função atoi tranforma char em inteiro ( biblioteca stdlib.h)
 			 }
 
 			 // ordena na ordem do menor número de tarefas para o maior se colocar o valor 1, ordena na ordem do maior número de tarefas para o menor se colocar o valor 2
-			EscolhaVeiculo = atoi( argv[6]);		// função atoi tranforma char em inteiro ( biblioteca stdlib.h)
+			EscolhaVeiculo = atoi( argv[7]);		// função atoi tranforma char em inteiro ( biblioteca stdlib.h)
 			 // modo de escolha da construção, 1 escolhe a construção por meio do RankTempoDemandas, 2 escolhe a construção com mais demandas,
-			EscolhaConstrucao = atoi( argv[7]);		// função atoi tranforma char em inteiro ( biblioteca stdlib.h)
+			EscolhaConstrucao = atoi( argv[8]);		// função atoi tranforma char em inteiro ( biblioteca stdlib.h)
 			 // modo de escolha da planta, 1 é a planta mais proxima, 1 é a planta com menos tarefas, 3 é a planta com mais tarefas
-			EscolhaPlanta = atoi( argv[8]);			// função atoi tranforma char em inteiro ( biblioteca stdlib.h)
+			EscolhaPlanta = atoi( argv[9]);			// função atoi tranforma char em inteiro ( biblioteca stdlib.h)
 
 			 // coleta a data e a hora
 			time(&timer);
@@ -498,45 +510,45 @@ int main(int argc, char **argv) {
 
 		 if( TipoProcedimento == "graspClass" || TipoProcedimento == "graspClassCir"){
 
-			 if( argc != 9){
+			 if( argc != 10){
 				 cout << endl << endl << endl << "    Probelma na entrada de parametros para se executar o grasp Classico" << endl << endl << endl;
 				 return 0;
 			 }
 
 
 			 // numero maximo de iterações
-			 NumeroIteracoesString = argv[4];
+			 NumeroIteracoesString = argv[5];
 			 if( NumeroIteracoesString == "-"){
 				 NumeroIteracoes = LONG_MAX;
 			 }else{
-				 if( atoi( argv[4]) > 0){
-					 NumeroIteracoes = atoi( argv[4]);		// função atoi tranforma char em inteiro ( biblioteca stdlib.h)
+				 if( atoi( argv[5]) > 0){
+					 NumeroIteracoes = atoi( argv[5]);		// função atoi tranforma char em inteiro ( biblioteca stdlib.h)
 				 }else{
 					 cout << endl << endl << " Numero de iterações negativo " << Nome << endl << endl;
 					 return 0;
 				 }
 			 }
 
-			 TempoExecucaoMaximoString = argv[5];
+			 TempoExecucaoMaximoString = argv[6];
 			 if( TempoExecucaoMaximoString == "-"){
 				 TempoExecucaoMaximo = LONG_MAX;
 			 }else{
-				 if( atoi( argv[5]) > 0){
-					 TempoExecucaoMaximo = atoi( argv[5]);		// função atoi tranforma char em inteiro ( biblioteca stdlib.h)
+				 if( atoi( argv[6]) > 0){
+					 TempoExecucaoMaximo = atoi( argv[6]);		// função atoi tranforma char em inteiro ( biblioteca stdlib.h)
 				 }else{
 					 cout << endl << endl << " Tempo de execução negativo " << Nome << endl << endl;
 					 return 0;
 				 }
 				 // tempo maximo de execução do problema
-				 TempoExecucaoMaximo = atoi( argv[5]);		// função atoi tranforma char em inteiro ( biblioteca stdlib.h)
+				 TempoExecucaoMaximo = atoi( argv[6]);		// função atoi tranforma char em inteiro ( biblioteca stdlib.h)
 			 }
 
 			 // ordena na ordem do menor número de tarefas para o maior se colocar o valor 1, ordena na ordem do maior número de tarefas para o menor se colocar o valor 2
-			 EscolhaVeiculo = atoi( argv[6]);		// função atoi tranforma char em inteiro ( biblioteca stdlib.h)
+			 EscolhaVeiculo = atoi( argv[7]);		// função atoi tranforma char em inteiro ( biblioteca stdlib.h)
 			 // modo de escolha da construção, 1 escolhe a construção por meio do RankTempoDemandas, 2 escolhe a construção com mais demandas,
-			EscolhaConstrucao = atoi( argv[7]);		// função atoi tranforma char em inteiro ( biblioteca stdlib.h)
+			EscolhaConstrucao = atoi( argv[8]);		// função atoi tranforma char em inteiro ( biblioteca stdlib.h)
 			 // modo de escolha da planta, 1 é a planta mais proxima, 1 é a planta com menos tarefas, 3 é a planta com mais tarefas
-			 EscolhaPlanta = atoi( argv[8]);			// função atoi tranforma char em inteiro ( biblioteca stdlib.h)
+			 EscolhaPlanta = atoi( argv[9]);			// função atoi tranforma char em inteiro ( biblioteca stdlib.h)
 
 
 

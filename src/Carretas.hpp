@@ -14,16 +14,15 @@ class Deslocamento{
 public:
 	double	HorarioInicioDeslocamento;
 	double	HorarioFinalDeslocamento;
-	int		NumeroConstrucao;
-	int		NumeroDemandaSuprida;
+	int		NumeroConstrucao;			// número do deslocamento que o descarregamento está contido
+	int		NumeroDemandaSuprida;		// número da demanda que o deslocamento supre
 
-	int		verifica(int construcao,int NumeroDemandaSuprida, double HorarioInicioVeiculo,double HorarioFimVeiculo);			// verifica se o deslocamento é o mesmo que o que os dados passados representão
-
+	int		verifica(int construcao,int NumeroDemandaSuprida, double HorarioInicioVeiculo, double HorarioFimVeiculo);			// verifica se o deslocamento é o mesmo que o que os dados passados representão
 };
 
 // verifica se o deslocamento é o mesmo que o que os dados passados representão
-int		Deslocamento::verifica(int construcao,int Demanda, double HorarioInicioVeiculo,double HorarioFimVeiculo){
-	// verifica se o conteudo passado é o memso que a que tem no deslocamento
+int		Deslocamento::verifica(int construcao, int Demanda, double HorarioInicioVeiculo, double HorarioFimVeiculo){
+	// verifica se o conteudo passado é o mesmo que a que tem no deslocamento
 	if( construcao == NumeroConstrucao && Demanda == NumeroDemandaSuprida && HorarioInicioVeiculo == HorarioInicioDeslocamento && HorarioFimVeiculo == HorarioFinalDeslocamento){
 		// retonra 1 se for o memso
 		return 1;
@@ -47,11 +46,11 @@ class Carreta{
 
 public:
 	Carreta();
-	int		NumeroDaCarreta;
-	int		NumeroDeDemandasAntendidas;
-	int		NumeroPlanta;
-	vector < vector < double > > TempoParaDescarregarNaConstrucao;
-	vector < Deslocamento > Deslocamentos;
+	int		NumeroDaCarreta;				// número que representa a carreta
+	int		NumeroDeDemandasAntendidas;		// número de demandas atendidas pela carreta/veículo/caminhão
+	int		NumeroPlanta;					// número da planta que possui a carreta
+	vector < vector < double > > TempoParaDescarregarNaConstrucao;		// tempo que se leva para descarregar na construções relacionada
+	vector < Deslocamento > Deslocamentos;								// ndeslocamentos que a carreta efetua
 
 	int		VerificaDisponibilidade(double InicioPossivelAlocacao, double FinalPossivelAlocacao);		// verifica a disponibilidade do veículo para atender a demanda
 	void	AlocaAtividade(double HoraInicio, double HoraFinal, int NumContrucao, int NumDemanda);		// Aloca veículo para atender a demanda
@@ -74,7 +73,7 @@ Carreta::Carreta(){
 // verifica a disponibilidade do veículo para atender a demanda
 int		Carreta::VerificaDisponibilidade(double InicioPossivelAlocacao, double FinalPossivelAlocacao){
 	// percorre todos os delocamentos
-	for( int d = 0; d < (int) Deslocamentos.size(); d ++){
+	for( int d = 0; d < (int) Deslocamentos.size(); d++){
 		// verifica se o deslocamento que se quer colocar possui dentro de se um deslocamento já alocado
 		if( InicioPossivelAlocacao <= Deslocamentos[d].HorarioInicioDeslocamento){
 			if ( FinalPossivelAlocacao >= Deslocamentos[d].HorarioFinalDeslocamento){
@@ -298,19 +297,19 @@ class ConjuntoCarretas{
 
 public:
 	ConjuntoCarretas();
-	vector< Carreta > Carretas;
+	vector< Carreta > Carretas;			// estrutura das carretas
 
-	void	IniciaConjuntoCarretas(int NumeroCaminhoes, int NumeroDaPlanta);				// inicia os dados e as estruturas dos veículos
-	void	OrdenaCarretas(int EscolhaVeiculo);					// ordena na ordem do menor número de tarefas para o maior se colocar o valor 1, ordena na ordem do maior número de tarefas para o menor se colocar o valor 2
+	void	IniciaConjuntoCarretas(int NumeroCaminhoes, int NumeroDaPlanta);												// inicia os dados e as estruturas dos veículos
+	void	OrdenaCarretas(int EscolhaVeiculo);																				// ordena na ordem do menor número de tarefas para o maior se colocar o valor 1, ordena na ordem do maior número de tarefas para o menor se colocar o valor 2
 	int		DeletaTarefa(  int NumeroCaminhao, double HoraInicio, double HoraFinal, int NumContrucao, int NumDemanda);		// deleta tarefa realizada por um veiculo
 
-	int		AlocaInidiceVeiculo( int NumCarretaUtilizada, int &v);		// aloca o inidice do veiculo crrespondente ao numero do caminhão
-	void	Imprime(int Ordena, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo);										// Imprime os dados dos veiculos
+	int		AlocaInidiceVeiculo( int NumCarretaUtilizada, int &v);										// aloca o inidice do veiculo crrespondente ao numero do caminhão
+	void	Imprime(int Ordena, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo);		// Imprime os dados dos veiculos
 
-	int		RetornaDadosDeslocamento(int Construcao, int Demanda, double &HorarioInicio, double &HorarioFinal);			// retorna dados de deslocamento da deamnda de uma construção passados
-	int		VerificaIntegridadeDeDeslocamentosDasCarretas(int Imprime,int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo);													// verifica a integridade entre os Deslocamentos da Carreta
+	int		RetornaDadosDeslocamento(int Construcao, int Demanda, double &HorarioInicio, double &HorarioFinal);									// retorna dados de deslocamento da deamnda de uma construção passados
+	int		VerificaIntegridadeDeDeslocamentosDasCarretas(int Imprime,int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo);		// verifica a integridade entre os Deslocamentos da Carreta
 
-	void	ArmazenaVetorIntComOrdem( vector < int > &VetorOrdem);
+	void	ArmazenaVetorIntComOrdem( vector < int > &VetorOrdem);		// armazena a ordem corrente dos veículos
 
 	~ConjuntoCarretas();
 };
@@ -333,6 +332,8 @@ void	ConjuntoCarretas::IniciaConjuntoCarretas(int NumeroCaminhoes, int NumeroDaP
 		Carretas[v].Deslocamentos.clear();
 		Carretas[v].NumeroPlanta = NumeroDaPlanta;
 	}
+
+	// observação: não reinicia os dados de >> TempoParaDescarregarNaConstrucao
 
 }
 
@@ -437,7 +438,7 @@ int		ConjuntoCarretas::RetornaDadosDeslocamento(int Construcao, int Demanda, dou
 		}
 	}
 	// retorna 0 caso não se encontre o deslocamento
-	cout << endl << endl << "   <<<<<<<<<<< Problema! não se encontrou o deslocamento da demanda [" << Construcao << "-" << Demanda << "] -> ConjuntoCarretas::RetornaDadosDeslocamento " << endl << endl;
+	cout << endl << endl << "   ###########################  Problema! Não se encontrou o deslocamento da demanda [" << Construcao << "-" << Demanda << "] -> ConjuntoCarretas::RetornaDadosDeslocamento ########################### " << endl << endl;
 	return 0;
 }
 
@@ -468,8 +469,9 @@ int		ConjuntoCarretas::VerificaIntegridadeDeDeslocamentosDasCarretas(int Imprime
 	return integro;
 }
 
+// armazena a ordem corrente dos veículos
 void	ConjuntoCarretas::ArmazenaVetorIntComOrdem( vector < int > &VetorOrdem){
-	// faz o vetor de int ter o memso tamanho que o número de carretas
+	// faz o vetor de int ter o mesmo tamanho que o número de carretas
 	VetorOrdem.resize( (int) Carretas.size() );
 	// percorre todas as carretas
 	for( int v = 0; v < (int) Carretas.size(); v++){

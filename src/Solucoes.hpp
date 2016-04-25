@@ -989,7 +989,7 @@ void	Solucao::RealizarBuscaLocalCaminhao(int EscolhaVeiculo, int EscolhaConstruc
 	busca.CarregaSolucao( NP, PlantasInstancia, NE,	ConstrucoesInstancia, NV, Velocidade, TempoDeVidaConcreto);
 
 	// equanto o procediemnto da busca local melhorar a solução que se tem, se continua no while
-	while ( busca.BuscaLocalTentaRealizarTarefasComOutosVeiculos(EscolhaVeiculo, EscolhaConstrucao, EscolhaPlanta,ImprimeProcedimento, ImprimeEstruturas, RealizaProcessoDeAtrazarTarefas) == 1){
+	while ( busca.BuscaLocalTentaRealizarTarefasComOutrosVeiculos(EscolhaVeiculo, EscolhaConstrucao, EscolhaPlanta,ImprimeProcedimento, ImprimeEstruturas, RealizaProcessoDeAtrazarTarefas) == 1){
 		// carrega a nova solução que se obteve
 		CarregaSolucao(busca.NP, busca.PlantasInstancia, busca.NE, busca.ConstrucoesInstancia, busca.NV , busca.Velocidade , busca.TempoDeVidaConcreto);
 
@@ -1035,8 +1035,8 @@ void	Solucao::RealizarBuscaLocalConstrucao(int EscolhaVeiculo, int EscolhaConstr
 	// carrega os dados da solução para a classe da busca local
 	busca.CarregaSolucao( NP, PlantasInstancia, NE,	ConstrucoesInstancia, NV, Velocidade, TempoDeVidaConcreto);
 
-	// equanto o procediemnto da busca local melhorar a solução que se tem, se continua no while
-	while ( busca.BuscaLocalMudaOrdemAtendiemntoConstrucoes(EscolhaVeiculo, EscolhaConstrucao, EscolhaPlanta,ImprimeProcedimento, ImprimeEstruturas, RealizaProcessoDeAtrazarTarefas) == 1){
+	// equanto o procedimento da busca local melhorar a solução que se tem, se continua no while
+	while ( busca.BuscaLocalMudaOrdemAtendimentoConstrucoes(EscolhaVeiculo, EscolhaConstrucao, EscolhaPlanta,ImprimeProcedimento, ImprimeEstruturas, RealizaProcessoDeAtrazarTarefas) == 1){
 		// carrega a nova solução que se obteve
 		CarregaSolucao(busca.NP, busca.PlantasInstancia, busca.NE, busca.ConstrucoesInstancia, busca.NV , busca.Velocidade , busca.TempoDeVidaConcreto);
 

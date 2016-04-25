@@ -38,7 +38,6 @@ int main(int argc, char **argv) {
 		string 	Nome;
 
 		string 	Saida;
-		char *cstr;
 
 		list<string>::iterator it;
 
@@ -59,6 +58,8 @@ int main(int argc, char **argv) {
 		Heuristica *Instancia;
 
 		string TipoDeEntrada;
+
+		unsigned int SementeAleatoria;
 
 		// Exscrever a dadta
 		 time_t timer;
@@ -392,6 +393,12 @@ int main(int argc, char **argv) {
 					printf("\n\n ----- Execução GRASP Circular as %s ----- \n\n", buffer);
 				}
 
+				SementeAleatoria = (unsigned int)  ( clock() + time(NULL) );
+
+				srand( SementeAleatoria);
+
+				printf(" Semente Aleatoria : %u \n\n",SementeAleatoria);
+
 				// escreve o tipo de execução
 
 				printf("\n ******************** Tipo Execução **************************** \n\n");
@@ -486,7 +493,6 @@ int main(int argc, char **argv) {
 				if( Instancia->LeDados(Nome, EscreveDadosLidosNaTela) == 1){
 					//cout << " Leu Dados" << endl;
 
-					srand( clock() + time(NULL));
 
 					if( TipoProcedimento == "grasp"){
 						Instancia->ExecutaGrasp(Nome, NumeroIteracoes, TempoExecucaoMaximo, EscolhaVeiculo,  EscolhaConstrucao,  EscolhaPlanta, RealizaProcessoDeAtrazarTarefas);
@@ -578,6 +584,13 @@ int main(int argc, char **argv) {
 					printf("\n\n ----- Execução GRASP Classico Circular as %s ----- \n\n", buffer);
 				}
 
+				SementeAleatoria = (unsigned int)  ( clock() + time(NULL) );
+
+				srand( SementeAleatoria);
+
+				printf(" Semente Aleatoria : %u \n\n",SementeAleatoria);
+
+
 
 				// escreve o tipo de execução
 
@@ -677,7 +690,7 @@ int main(int argc, char **argv) {
 				if( Instancia->LeDados(Nome, EscreveDadosLidosNaTela) == 1){
 					//cout << " Leu Dados" << endl;
 
-					srand(clock()+time(NULL));
+
 
 					if( TipoProcedimento == "graspClass"){
 						Instancia->ExecutaGraspClass(Nome, NumeroIteracoes, TempoExecucaoMaximo, EscolhaVeiculo,  EscolhaConstrucao,  EscolhaPlanta, RealizaProcessoDeAtrazarTarefas);

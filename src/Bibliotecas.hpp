@@ -48,7 +48,8 @@ using namespace std;
 //0.0083333 // meio minuto
 //0.016666; // um minuto
 
-#define PenalidadeNaoAtendimentoDemanda	500			//penalidade de não atendiemnto da demanda, ela esta presente no processo de calculo do makespan
+#define PenalidadeNaoAtendimentoDemanda	10000000			//penalidade de não atendiemnto da demanda, ela esta presente no processo de calculo do makespan
+// dez milhões
 
 #define  PonteiroArquivo FILE*
 
@@ -68,11 +69,6 @@ using namespace std;
 
 #include "Solucoes.hpp"				// possui as classes da solução e os procedimentos  viabilidade1 e viabilidade2
 
-
 #include "Heuristica.hpp"			// possui os procediemtos que cada instancia ira sofrer
-
-
-
-
 
 #endif /* BIBLIOTECAS_HPP_ */

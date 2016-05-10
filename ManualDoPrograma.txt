@@ -1,0 +1,41 @@
+Manual de utilização do progrma
+
+O programa tem como entrada inicial as opções: "inst" ou "arq"
+
+-> "inst" é para ler e executar apenas uma instância. O nome da instância deve ser passada em seguida e ela deve estar na pasta "InstS/"
+-> "arq" é para ler e executar um conjunto de instâncias. O nome dessas instâncias deve estar em um arquivo que o nome deve ser passado em seguida. Os nomes devem estar listados e separados por um paragrafo. Sendo que cada nome de instância estara um embaixo do outro. Esse arquivo com os nomes deve acabar com EOF sinalizando que não se tem mias intâncias. As instâncias desse arquivo devem estar na pasta "InstS/".
+
+
+Em seguida deve se passar o parametro "SemRec" ou "ComRec"
+
+-> "SemRec" siguinifica que o processo heuristico não irá realizar um procedimento recursivo para tentar viabilizar a solução.
+->  "ComRec"siguinifica que o processo heuristico irá realizar um procedimento recursivo para tentar viabilizar a solução.
+
+Em seguida deve se passar o parametro "cons", "consCir", "grasp", "graspCir", "graspClass" ou "graspClassCir"
+
+-> "cons" é para realizar a o processo heuristico uma vez e executar as três buscas locais uma após a outra apenas uma vez.
+-> "consCir" é para realizar a o processo heuristico uma vez e executar as três buscas locais enquanto se conseguir melhorar a solução.
+-> "grasp" é para realizar o grasp sendo que em cada iteração se realiza o processo construtivo e em seguida as buscas locais em sequancia
+-> "graspCir" é para realizar o grasp sendo que em cada iteração se realiza o processo construtivo e em seguida as buscas locais são realizadas enqaunto se consegue melhorar a solução
+-> "graspClass" é para realizar o grasp sendo que em cada iteração se realiza o processo construtivo. Após todas as iterações se realiza as buscas locais em sequancia
+-> "graspClassCir"  é para realizar o grasp sendo que em cada iteração se realiza o processo construtivo. Após todas as iterações se realiza as buscas locais enaqunto se conseguir melhorar a solução.
+
+Caso se escolher "cons" ou "consCir" se tem que passar os tres paramtros:
+
+-> Escolha do modeo de seleção do veiculo: 
+	=> 1	Veículo com menor número de tarefas 
+	=> 2	Veículo com maior número de tarefas
+	=> 3	Veículo em ordem de sua numeração
+-> Escolha do modo de seleção da construção
+	=> 1	Construção com menor Rank (Janela de tempo / Deamanda )
+	=> 2	Construção com menor Janela de tempo
+	=> 3	Construção com menor Tempo inicio 
+-> Escolha do modo da planta 
+	=> 1	Planta mais proxima da cosntrução
+	=> 2	Planta com menor número de tarefas
+	=> 3	Planta com maior número de tarefas
+
+Caso se escolha  "grasp", "graspCir", "graspClass" ou "graspClassCir" se tem que colocar antes dos parametros citados acima nos casos do "cons" ou "consCir" o número de iterações, caso não se coloque o número de iterações será o valor do maior valor de LONG INT, e em seguida o tempo limite que se irá rodar o grasp em segundos, caso não se coloque o tempo limite será o valor do maior valor de LONG INT.
+
+O progrma também recebe um arquivo "ArquivosSalomon.txt" com o nome dos arquivos Solomon que serão trasnformados em instâncias para o nosso problema. As instâncias Solomon devem estar junto com o executavel do programa. Ele segue as mesmas regras do arquivo para executar varias instâncias, o "arq". É recomendavel mandar o arquivo vazio com apenas a palavra "EOF".
+

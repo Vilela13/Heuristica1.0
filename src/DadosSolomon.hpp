@@ -154,7 +154,6 @@ void 	DadosSolomon::CarregarNumeroNosCoordenadas( string Nome){
 		cout << NumeroVeiculos << "\t\t\t";
 	}
 
-
 	Instancia >> Capacidade;
 	if( EscreveDadosLidos == 1){
 		cout << Capacidade << endl;
@@ -163,7 +162,7 @@ void 	DadosSolomon::CarregarNumeroNosCoordenadas( string Nome){
 	// Guarda os dados a serem lidos
 
 	for( int i = 0; i<12; i++){
-		Instancia >>Auxiliar;
+		Instancia >> Auxiliar;
 		if( EscreveDadosLidos == 1){
 			cout << Auxiliar << "\t";
 		}
@@ -174,7 +173,6 @@ void 	DadosSolomon::CarregarNumeroNosCoordenadas( string Nome){
 
 	string name;
 	istringstream linha2Aux;
-
 
 	NumeroNosDadosSolomon = 0;
 
@@ -202,20 +200,12 @@ void 	DadosSolomon::CarregarNumeroNosCoordenadas( string Nome){
 			TempoDeServico.resize( TempoDeServico.size() + 1);
 			linha2Aux >>TempoDeServico[ NumeroNosDadosSolomon ];
 			NumeroNosDadosSolomon++;
-
 		}
-
-
 	}
-
-
-
-
 
     //cout << endl << endl << " DadosSolomon " << endl << endl;
     Instancia.close();
 }
-
 
 void 	DadosSolomon::EscreverDadosLidosInstanciaSolomon(){
 	cout << endl << endl;
@@ -230,14 +220,9 @@ void 	DadosSolomon::EscreverDadosLidosInstanciaSolomon(){
         cout << "\t " << NosCoord[i].NumeroNo << "\t\t" << NosCoord[i].CoordenadaX  << "\t\t" << NosCoord[i].CoordenadaY << "\t\t" << Demanda[i] << "\t\t";
         cout << JanelaDeTempo[i][0]  << "\t\t" << JanelaDeTempo[i][1]  << "\t\t" << TempoDeServico[i] << endl;
     }
-
     cout << endl << endl;
 
-
-
 }
-
-
 
 void 	DadosSolomon::CriaPastaInstS(){
 	DIR* dp1;
@@ -302,10 +287,7 @@ void 	DadosSolomon::CriaPastaDat(){
 
 }
 
-
-
 void 	DadosSolomon::CriarInstanciaSolomon(string Nome ){ //, int NumeroVERSAO, int MultiplicadorTempoDescarga ){
-
 
 	string 	CaminhoArquivo1;
 	string 	CaminhoArquivo2;
@@ -314,10 +296,8 @@ void 	DadosSolomon::CriarInstanciaSolomon(string Nome ){ //, int NumeroVERSAO, i
 	string 	Dados;
 	string 	TXT;
 
-
 	double HorarioInicioPlanta;
 	double HorarioFinalPlanta;
-
 
 	double TempoCarreta;
 	int NumeroMaxCarretas;
@@ -353,11 +333,12 @@ void 	DadosSolomon::CriarInstanciaSolomon(string Nome ){ //, int NumeroVERSAO, i
 
 	EscreveVelocidadeMinima = 0;
 
-	//MultiplicadorTempoDescarga = 2;
-	//NumeroVERSAO = 1;
-	NumeroPlantas 	= 3;
-	NumeroClientes 	= 15;
+	// Isso vale só para iniciar e escrever os dados da instancia passada
+	MultiplicadorTempoDescarga = 2;
+	NumeroVERSAO = 13;
 
+	NumeroPlantas 	= 1;
+	NumeroClientes 	= 25;
 
 	TempoDeDescarga 	= 0.1666667; // equivaelente a 10 minutos
 	TemproEntreEntregas = 0.1666667; // equivaelente a 10 minutos
@@ -367,13 +348,11 @@ void 	DadosSolomon::CriarInstanciaSolomon(string Nome ){ //, int NumeroVERSAO, i
 	HorarioInicioPlanta = 7;
 	HorarioFinalPlanta = 18;
 
-
 	TempoCarreta = MultiplicadorTempoDescarga * TempoDeDescarga; 			// tempo que se tem na janela de atendiemnto para atender a uma demanda
 	NumeroMaxCarretas = 5;			// numero maximo de demandas em uma construção
 	InicioMinAtendimento = 0.5;		// valor minimo que duas janelas de atendiemto podem ter no minimo caso os horarios inicio de atendiemnto iniciais forem difrentes
 	HorarioMinimoConstrucao = 8;	// horario minimo que uma janela de tempo pode ter
 	HorarioMaximoConstrucao = 17;	// horario maximo que uma janela de tempo pode ter
-
 
 	NumeroCaminhoesPorPlanta = 10;
 
@@ -416,7 +395,6 @@ void 	DadosSolomon::CriarInstanciaSolomon(string Nome ){ //, int NumeroVERSAO, i
 
 // Cria o nome da instancia para o modelo
 
-
 	cout << endl << endl << " NomeInstancia = " << NomeInstancia << endl << endl;
 
 	if( Nome.size() > 3){
@@ -425,8 +403,6 @@ void 	DadosSolomon::CriarInstanciaSolomon(string Nome ){ //, int NumeroVERSAO, i
 		}else{
 			cout << endl << endl <<  " Arquivo inconforme com as possiveis entradas" << endl << endl;
 		}
-
-
 
 		//srand(NumeroVERSAO);		// O gerador é o numero da versão
 		srand(clock()+time(NULL));			// gera numeros aleatorios
@@ -442,7 +418,6 @@ void 	DadosSolomon::CriarInstanciaSolomon(string Nome ){ //, int NumeroVERSAO, i
 		//}
 
 		NomeAux = Nome;
-
 
 		NomeAux.resize(NomeAux.size()-4);
 		NomeAux += "-P";
@@ -466,7 +441,6 @@ void 	DadosSolomon::CriarInstanciaSolomon(string Nome ){ //, int NumeroVERSAO, i
 
 		cout << "      Nome da Instancia Solomon = " << NomeAux << endl << endl;
 
-
 	}else{
 		cout << "Arquivo passado com tamanho invaldo " <<  Nome << endl ;
 	}
@@ -476,8 +450,6 @@ void 	DadosSolomon::CriarInstanciaSolomon(string Nome ){ //, int NumeroVERSAO, i
 	//CaminhoArquivo1 	= "./";
 	CaminhoArquivo1 	= "./InstS/";
 	CaminhoArquivo1 	+= NomeAux;
-
-
 
 	cout << endl << "  Arquivo = " << NomeAux << "  Caminho = " << CaminhoArquivo1 << endl;
 
@@ -592,7 +564,6 @@ void 	DadosSolomon::CriarInstanciaSolomon(string Nome ){ //, int NumeroVERSAO, i
 		}
 		// InstanciaSolomon << " Veiculo planta " << endl;
 
-
 		// Preenche o numero de demandas por entrada
 
 		for(int c =1; c <= NumeroClientes; c++){
@@ -614,8 +585,6 @@ void 	DadosSolomon::CriarInstanciaSolomon(string Nome ){ //, int NumeroVERSAO, i
 		}
 
 		//InstanciaSolomon << " localidade plantas "<< endl;
-
-
 
 		// Preenche as localizações entre entradas e plantas
 		for(int i =1; i <= NumeroClientes; i++){
@@ -696,17 +665,13 @@ void 	DadosSolomon::CriarInstanciaSolomon(string Nome ){ //, int NumeroVERSAO, i
 				DadosInstanciaSalomonCriada << (sqrt( pow( NoPlanta[p].CoordenadaX - NoCliente[c].CoordenadaX ,2) + pow( NoPlanta[p].CoordenadaY - NoCliente[c].CoordenadaY,2) ) / Velocidade)*60 + TempoPlanta * 60 + (sqrt( pow( NoPlanta[p].CoordenadaX - NoCliente[c].CoordenadaX,2) + pow( NoPlanta[p].CoordenadaY - NoCliente[c].CoordenadaY,2) ) / Velocidade)*60 << endl;
 			}
 		}
-
 	}else{
-
 		InstanciaSolomon << " Nao se enquadra! " << endl;
 	}
 
 	DadosInstanciaSalomonCriada.close();
 	InstanciaSolomon.close();
 }
-
-
 
 void 	DadosSolomon::EscreverComandosR(string Nome, char TipoArquivoSaida){
 
@@ -728,7 +693,6 @@ void 	DadosSolomon::EscreverComandosR(string Nome, char TipoArquivoSaida){
 	string NomeArquivoComandoR;
 	TipoComando = "./ComR/CmdR-";
 	TipoComando += NomeAux;
-
 
 	DIR* dp1;
 	DIR* dp2;
@@ -760,14 +724,11 @@ void 	DadosSolomon::EscreverComandosR(string Nome, char TipoArquivoSaida){
 
 	closedir( dp1 );
 
-
-
 	cout << endl <<  " Arquivo do comando R = " <<   TipoComando << endl << endl;
 
 	ComandosR.open(TipoComando.c_str());
 
 	ComandosR << "require(ggplot2) "<< endl;
-
 
 	ComandosR << "Dados <- data.frame(nomes = c(" ;
 
@@ -777,7 +738,6 @@ void 	DadosSolomon::EscreverComandosR(string Nome, char TipoArquivoSaida){
 		}
 		ComandosR << "\"C" <<  c << "(" <<  NumeroCarretas[c] << ")"<<  "\"";
 	}
-
 
 	for( int p = 1; p <= NumeroPlantas; p++){
 		ComandosR << ","<< "\"P" <<  p <<  "\"";
@@ -861,14 +821,10 @@ void 	DadosSolomon::EscreverComandosR(string Nome, char TipoArquivoSaida){
 
 	closedir( dp2 );
 
-
-
 	//NomeArquivoComandoR = "./Imagens/";
 	NomeArquivoComandoR += NomeAux;
 
 	NomeArquivoComandoR.resize( NomeArquivoComandoR.size() - 4 );
-
-
 
 // Cria Post Script
 	if (TipoArquivoSaida == '1'){
@@ -936,7 +892,6 @@ void 	DadosSolomon::EscreverComandosExcel(string Nome){
 	//}
 	//fclose (fp);
 
-
 	string 	TipoComando;
 	TipoComando = "./ComE/CmdE-";
 	TipoComando += Nome;
@@ -970,15 +925,11 @@ void 	DadosSolomon::EscreverComandosExcel(string Nome){
 
 	closedir( dp1 );
 
-
-
 	//cout << " galo => " << b << endl << endl;
 
 	ComandosExcel.open(TipoComando.c_str());
 
 	//cout << " Doido " << endl << endl;
-
-
 
 	for(int p = 1; p <= NumeroPlantas; p++){
         ComandosExcel << "P" <<  NoPlanta[p].NumeroNo  << "\t" << NoPlanta[p].CoordenadaX << "\t" << NoPlanta[p].CoordenadaY << endl ;
@@ -988,14 +939,8 @@ void 	DadosSolomon::EscreverComandosExcel(string Nome){
 		ComandosExcel << "C" <<	NoCliente[i].NumeroNo   << "\t" <<  NoCliente[i].CoordenadaX   << "\t" << NoCliente[i].CoordenadaY << endl;
 	}
 
-
     ComandosExcel.close();
-
-
 }
-
-
-
 
 DadosSolomon::~DadosSolomon(){
 

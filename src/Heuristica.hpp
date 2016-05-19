@@ -20,8 +20,8 @@ public:
 	int		NE;
 	ConjuntoConstrucoes ConstrucoesInstancia;
 	int		NV;
-	double	Velocidade;
-	double	TempoDeVidaConcreto;
+	float	Velocidade;
+	float	TempoDeVidaConcreto;
 
 	Heuristica();
 	int		LeDados(string, int );						// le os dados da instancia
@@ -131,7 +131,7 @@ void	Heuristica::ExecutaCONS(string NomeInstancia, int EscolhaVeiculo, int Escol
 	ImprimeSolucao = 0;
 
 	time_t InicioExecucao, FinalExecucao;
-	double TempoExecucao;
+	float TempoExecucao;
 
 	bool ImprimePlanta;
 	bool ImprimeConstrucao;
@@ -328,8 +328,8 @@ void	Heuristica::ExecutaCONS(string NomeInstancia, int EscolhaVeiculo, int Escol
 
 		Solucoes.Solucoes[0].ConstrucoesInstancia.Construcoes[1].Descarregamentos[1].Imprime();
 
-		double HoraInicio;
-		double HoraFinal;
+		float HoraInicio;
+		float HoraFinal;
 		int NumDemanda;
 		int NumPlanta;
 		int Carreta;
@@ -538,7 +538,7 @@ void	Heuristica::ExecutaCONScir(string NomeInstancia, int EscolhaVeiculo, int Es
 	ImprimeSolucao = 0;
 
 	time_t InicioExecucao, FinalExecucao;
-	double TempoExecucao;
+	float TempoExecucao;
 
 	bool ImprimePlanta;
 	bool ImprimeConstrucao;
@@ -579,9 +579,9 @@ void	Heuristica::ExecutaCONScir(string NomeInstancia, int EscolhaVeiculo, int Es
 	//int VerificaViabilidade;
 	//VerificaViabilidade = 1;
 
-	double MakespanAux1;
+	float MakespanAux1;
 	int Buaca1;
-	double MakespanAux2;
+	float MakespanAux2;
 	int Buaca2;
 
 
@@ -740,8 +740,8 @@ void	Heuristica::ExecutaCONScir(string NomeInstancia, int EscolhaVeiculo, int Es
 
 		Solucoes.Solucoes[0].ConstrucoesInstancia.Construcoes[1].Descarregamentos[1].Imprime();
 
-		double HoraInicio;
-		double HoraFinal;
+		float HoraInicio;
+		float HoraFinal;
 		int NumDemanda;
 		int NumPlanta;
 		int Carreta;
@@ -961,7 +961,7 @@ void	Heuristica::ExecutaGrasp(string NomeInstancia, long int NumeroIteracoes, lo
 	ImprimeSolucao = 0;
 
 	time_t InicioExecucao, FinalExecucao;
-	double TempoExecucao;
+	float TempoExecucao;
 
 	//bool ImprimePlanta;
 	//bool ImprimeConstrucao;
@@ -1216,7 +1216,7 @@ void	Heuristica::ExecutaGraspCir(string NomeInstancia, long int NumeroIteracoes,
 	ImprimeSolucao = 0;
 
 	time_t InicioExecucao, FinalExecucao;
-	double TempoExecucao;
+	float TempoExecucao;
 
 	//bool ImprimePlanta;
 	//bool ImprimeConstrucao;
@@ -1261,9 +1261,9 @@ void	Heuristica::ExecutaGraspCir(string NomeInstancia, long int NumeroIteracoes,
 	//int VerificaViabilidade;
 	//VerificaViabilidade = 1;
 
-	double MakespanAux1;
+	float MakespanAux1;
 	int Buaca1;
-	double MakespanAux2;
+	float MakespanAux2;
 	int Buaca2;
 
 	int iteracoes;
@@ -1494,7 +1494,7 @@ void	Heuristica::ExecutaGraspClass(string NomeInstancia, long int NumeroIteracoe
 	ImprimeSolucao = 0;
 
 	time_t InicioExecucao, FinalExecucao;
-	double TempoExecucao;
+	float TempoExecucao;
 
 	//bool ImprimePlanta;
 	//bool ImprimeConstrucao;
@@ -1753,7 +1753,7 @@ void	Heuristica::ExecutaGraspClassCir(string NomeInstancia, long int NumeroItera
 	ImprimeSolucao = 0;
 
 	time_t InicioExecucao, FinalExecucao;
-	double TempoExecucao;
+	float TempoExecucao;
 
 	//bool ImprimePlanta;
 	//bool ImprimeConstrucao;
@@ -1798,9 +1798,9 @@ void	Heuristica::ExecutaGraspClassCir(string NomeInstancia, long int NumeroItera
 	//int VerificaViabilidade;
 	//VerificaViabilidade = 1;
 
-	double MakespanAux1;
+	float MakespanAux1;
 	int Buaca1;
-	double MakespanAux2;
+	float MakespanAux2;
 	int Buaca2;
 
 	int iteracoes;

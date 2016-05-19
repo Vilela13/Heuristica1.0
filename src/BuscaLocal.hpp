@@ -20,18 +20,18 @@ public:
 	int		NE;									// número de construções (empresas)
 	ConjuntoConstrucoes ConstrucoesInstancia;	// estrutura das construções (empresas)
 	int		NV;									// numero de veículos
-	double	Velocidade;							// velocidade dos veículos
-	double	TempoDeVidaConcreto;				// tempo de vida do concreto
+	float	Velocidade;							// velocidade dos veículos
+	float	TempoDeVidaConcreto;				// tempo de vida do concreto
 
-	double	Makespan;							// makespan geral das plantas e construções (empresas)
+	float	Makespan;							// makespan geral das plantas e construções (empresas)
 
 	BuscaLocal();	// construtora da classe
 
-	void	CarregaSolucao(int np, ConjuntoPlantas Plantas, int ne, ConjuntoConstrucoes Construcoes, int nv, double v,double TDVC);		// Carrega os dados da instancia e a solução até o momento
+	void	CarregaSolucao(int np, ConjuntoPlantas Plantas, int ne, ConjuntoConstrucoes Construcoes, int nv, float v,float TDVC);		// Carrega os dados da instancia e a solução até o momento
 	int		SelecionaConstrucao( int &ConstrucaoEscolhida, int &IndiceConstrucaoEscolhida);					// seleciona a construção ainda não avaliada que tera suas demandas atendidas avaliadas pela busca local
 	int		RetornaConstrucaoQuePodeSerAtendida( int &Construcao, int &IndiceConstrucao);		// retorna a construção que possui o menor inidice e que ainda pode ser atendida
 
-	double	CalculaMakespanSolucao();				// calcula o makespan
+	float	CalculaMakespanSolucao();				// calcula o makespan
 
 	int		BuscaLocalTentaRealizarTarefasComOutrosVeiculos(int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta,int Imprime, int ImprimeEstruturas, int RealizaProcessoDeAtrazarTarefas);			// busca local que se verifica se a demanda pode ser melhor atendida caso se realize o seu atendimento com outro caminhão/veículo
 	int		BuscaLocalMudaOrdemAtendimentoConstrucoes(int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta,int Imprime, int ImprimeEstruturas, int RealizaProcessoDeAtrazarTarefas);
@@ -52,7 +52,7 @@ BuscaLocal::BuscaLocal(){
 
 
 // Carrega os dados da instancia e a solução até o momento
-void 	BuscaLocal::CarregaSolucao(int np, ConjuntoPlantas Plantas, int ne, ConjuntoConstrucoes Construcoes, int nv, double v,double TDVC){
+void 	BuscaLocal::CarregaSolucao(int np, ConjuntoPlantas Plantas, int ne, ConjuntoConstrucoes Construcoes, int nv, float v,float TDVC){
 	NP 						= np;
 	PlantasInstancia		= Plantas;
 	NE 						= ne;
@@ -101,7 +101,7 @@ int 	BuscaLocal::RetornaConstrucaoQuePodeSerAtendida( int &Construcao, int &Indi
 }
 
 // calcula o makespan
-double 	BuscaLocal::CalculaMakespanSolucao(){
+float 	BuscaLocal::CalculaMakespanSolucao(){
 	// calcula o makespan da solução corrente de suas construções
 	ConstrucoesInstancia.CalculaMakespansConstrucoes();
 	// calcula o makespan da solução corrente de suas plantas
@@ -144,7 +144,7 @@ int 	BuscaLocal::BuscaLocalTentaRealizarTarefasComOutrosVeiculos(int EscolhaVeic
 	int 	IndicePlanta;
 
 	// makespan da solução anterior que se tinha
-	double 	MakespanAnterior;
+	float 	MakespanAnterior;
 
 	// verifica se atendeu a demanda que será reatendida ou não
 	int 	Recolocar;
@@ -354,7 +354,7 @@ int 	BuscaLocal::BuscaLocalMudaOrdemAtendimentoConstrucoes(int EscolhaVeiculo, i
 	vector < DadosTarefa > DadosTarefasMovidasEtapa2;
 
 	// makespan da solução anterior que se tinha
-	double 	MakespanAnterior;
+	float 	MakespanAnterior;
 
 	// variavel que controla se ira imprimir o procedimento de locação de tarefas
 	int 	ImprimeDadosAdicionaTarefa;
@@ -509,7 +509,7 @@ int 	BuscaLocal::BuscaLocalTrocaPlantaAtendimento(int EscolhaVeiculo, int Escolh
 	ImprimeSolucao = 1;
 
 	// makespan da solução anterior que se tinha
-	double 	MakespanAnterior;
+	float 	MakespanAnterior;
 
 	// variaveis que guardam a demanda deletada na etapa um e o status do procedimento de se deletar tal demanda
 	int 	DemandaAnalise;
@@ -520,12 +520,12 @@ int 	BuscaLocal::BuscaLocalTrocaPlantaAtendimento(int EscolhaVeiculo, int Escolh
 	int 	NumCarreta;
 
 	// variaveis que armazenam os horarios da tarefa analisada para ser deletada caso for atendida pela planta em questão
-	double 	HorarioInicioDescarregamento;
-	double 	HorarioFinalDescarregamento;
-	double 	HorarioInicioCarregamento;
-	double 	HorarioFinalCarregamento;
-	double 	HorarioInicioDeslocamento;
-	double 	HorarioFinalDeslocamento;
+	float 	HorarioInicioDescarregamento;
+	float 	HorarioFinalDescarregamento;
+	float 	HorarioInicioCarregamento;
+	float 	HorarioFinalCarregamento;
+	float 	HorarioInicioDeslocamento;
+	float 	HorarioFinalDeslocamento;
 
 	// dados das tarefas movidas duarante o procedimento que serão utilizadas ara retornar ao estado anterior da solução caso se piore a solução que se tinha
 	vector < DadosTarefa > DadosTarefasMovidasEtapa1;

@@ -20,16 +20,21 @@ public:
 	int		NE;
 	ConjuntoConstrucoes ConstrucoesInstancia;
 	int		NV;
-	double	Velocidade;
-	double	TempoDeVidaConcreto;
+	float	Velocidade;
+	float	TempoDeVidaConcreto;
 
-	double	Makespan;
+	float	Makespan;
 
 	vector< vector < vector < int > > > Alfa;
+	vector< vector < vector < vector < vector < int > > > > > Beta;
+	vector< vector < vector < vector < vector < int > > > > > Betaprod;
+	vector< vector < vector < float > > > Tvi;
+	vector< vector < vector < float > > > TPvi;
+
 
 	Solucao();
 
-	void	CarregaSolucao(int np, ConjuntoPlantas Plantas, int ne, ConjuntoConstrucoes Construcoes, int nv, double v,double TDVC);		// Carrega os dados da instancia e a solução até o momento
+	void	CarregaSolucao(int np, ConjuntoPlantas Plantas, int ne, ConjuntoConstrucoes Construcoes, int nv, float v,float TDVC);		// Carrega os dados da instancia e a solução até o momento
 	void	Imprime(bool ImprimePlanta, bool ImprimeConstrucao, bool VerificaViabilidade, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo);									// imprime os dados da solução
 	int		DeletaAlocacaoTarefasPosterioresMesmaConstrucao(int VerificaExistencia, int Construcao, int Demanda, vector < DadosTarefa >& DadosTarefasMovidas);					// deleta demandas atendidas na construção após certa demanda que é passada com parametro
 
@@ -45,9 +50,9 @@ public:
 
 	int		SelecionaConstrucao(int &ConstrucaoParaAtender, int &ConstrucaoParaAtenderIndice);	// seleciona a construção a ser analisada no momento
 	int		ProcuraConstrucaoNaoAtendida(int &ConstrucaoNaoAtendida, int &DemandaNaoAtendida);																	// Encontra a construção que possui a menor distancia a uma planta dentre todas as construções com demandas não atendidas
-	void	AlocaTempoPlantaPodeAtenderDemanda(int IndiceConstrucaoNaoAtendida, vector < double > &TempoPlantaConsegueAtender, int Imprime);					// Aloca o tempo inicial que se pode sair uma carreta da planta para suprir a construção passada
+	void	AlocaTempoPlantaPodeAtenderDemanda(int IndiceConstrucaoNaoAtendida, vector < float > &TempoPlantaConsegueAtender, int Imprime);					// Aloca o tempo inicial que se pode sair uma carreta da planta para suprir a construção passada
 
-	int		DeletaTarefasAposTempoPlantaPodeAtender(vector < double > &TempoPlantaPodeAtender, vector < DadosTarefa > &DadosTarefasMovidas,  int Imprime );		// deleta todas as tarefas que são atendidas após os horarios armazenados da TempoPlantaPodeAtender
+	int		DeletaTarefasAposTempoPlantaPodeAtender(vector < float > &TempoPlantaPodeAtender, vector < DadosTarefa > &DadosTarefasMovidas,  int Imprime );		// deleta todas as tarefas que são atendidas após os horarios armazenados da TempoPlantaPodeAtender
 
 	int		Viabilidade2(int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta, int Imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo, int RealizaProcessoDeAtrazarTarefas);
 	void	ProcessoViabilizacao2(int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta, int Imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo, int RealizaProcessoDeAtrazarTarefas);
@@ -61,8 +66,10 @@ public:
 
 	// para testar solução
 
-	void IniciaAlfa();
-	void ImprimeAlfa( int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo);
+	void IniciaVariaveisModelo();
+	void AtribuiValoresvariaveisModelo();
+	void ImprimeVariaveisModeloSeparado();
+	void ImprimeVariaveisDoModelo( int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo);
 
 	~Solucao();
 };
@@ -79,7 +86,7 @@ Solucao::Solucao(){
 
 
 // Carrega os dados da instancia e a solução até o momento
-void	Solucao::CarregaSolucao(int np, ConjuntoPlantas Plantas, int ne, ConjuntoConstrucoes Construcoes, int nv, double v,double TDVC){
+void	Solucao::CarregaSolucao(int np, ConjuntoPlantas Plantas, int ne, ConjuntoConstrucoes Construcoes, int nv, float v,float TDVC){
 	NP = np;
 	PlantasInstancia = Plantas;
 	NE = ne;
@@ -91,6 +98,7 @@ void	Solucao::CarregaSolucao(int np, ConjuntoPlantas Plantas, int ne, ConjuntoCo
 
 // imprime os dados da solução
 void 	Solucao::Imprime(bool ImprimePlanta, bool ImprimeConstrucao, bool VerificaViabilidade ,  int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo){
+
 
 
 	// Imprime os dados das plantas
@@ -109,9 +117,12 @@ void 	Solucao::Imprime(bool ImprimePlanta, bool ImprimeConstrucao, bool Verifica
 		fprintf(Arquivo, "     MAKESPAN GERAL = %.4f \n", PlantasInstancia.MakespanPLantas + ConstrucoesInstancia.MakespanConstrucoes);
 	}
 
-	IniciaAlfa();
 
-	ImprimeAlfa(ImprimeSolucao, ImprimeArquivo, Arquivo);
+
+	IniciaVariaveisModelo();
+	AtribuiValoresvariaveisModelo();
+	//ImprimeVariaveisModeloSeparado();
+	//ImprimeVariaveisDoModelo(ImprimeSolucao, ImprimeArquivo, Arquivo);
 
 }
 
@@ -435,14 +446,14 @@ int		Solucao::DeletaUltimaDemandaConstrucaoEmAnalise( int ConstrucaoNaoAtendida,
 	int ConstrucaoEmAnalise;
 
 	// variaveis que armazena os horarios da tarefa deletada e que será armazenada
-	double HorarioInicioConstrucao;
-	double HorarioFinalConstrucao;
+	float HorarioInicioConstrucao;
+	float HorarioFinalConstrucao;
 
-	double HorarioInicioPlanta;
-	double HorarioFimPlanta;
+	float HorarioInicioPlanta;
+	float HorarioFimPlanta;
 
-	double HorarioInicioCarreta;
-	double HorarioFimCarreta;
+	float HorarioInicioCarreta;
+	float HorarioFimCarreta;
 
 	// inidices da planta e do veiculo
 	int p;
@@ -545,7 +556,7 @@ int		Solucao::ProcuraConstrucaoNaoAtendida(int &ConstrucaoNaoAtendida, int &Dema
 	ConstrucaoTemporario = -13;
 	DemandaTemporaria = -13;
 
-	double DistanciaPlantaTemporaria;
+	float DistanciaPlantaTemporaria;
 	// inicia o valor da variavel com o maior valor para que qualquer valor de uma distancia de uma construção a uma planat sejáa ceito inicialmente
 	DistanciaPlantaTemporaria = DBL_MAX;
 
@@ -588,7 +599,7 @@ int		Solucao::ProcuraConstrucaoNaoAtendida(int &ConstrucaoNaoAtendida, int &Dema
 }
 
 // Aloca o tempo que se pode começar a carregar uma carreta da planta para suprir a construção passada
-void	Solucao::AlocaTempoPlantaPodeAtenderDemanda(int IndiceConstrucaoNaoAtendida, vector < double > &TempoPlantaConsegueAtender, int Imprime){
+void	Solucao::AlocaTempoPlantaPodeAtenderDemanda(int IndiceConstrucaoNaoAtendida, vector < float > &TempoPlantaConsegueAtender, int Imprime){
 
 	// percorre todas as plantas
 	for( int p = 0; p < NP; p++){
@@ -632,12 +643,12 @@ void	Solucao::AlocaTempoPlantaPodeAtenderDemanda(int IndiceConstrucaoNaoAtendida
 
 
 // deleta todas as tarefas que são atendidas após os horarios armazenados da TempoPlantaPodeAtender
-int		Solucao::DeletaTarefasAposTempoPlantaPodeAtender(vector < double > &TempoPlantaPodeAtender, vector < DadosTarefa > &DadosTarefasMovidas,  int Imprime){
+int		Solucao::DeletaTarefasAposTempoPlantaPodeAtender(vector < float > &TempoPlantaPodeAtender, vector < DadosTarefa > &DadosTarefasMovidas,  int Imprime){
 
 	int TarefaDeletada;
 	int PlantaAux;
 	int IndicePlantaAux;
-	double DistanciaAux;
+	float DistanciaAux;
 	int Ativa;
 
 	int construcao;
@@ -721,7 +732,7 @@ int		Solucao::Viabilidade2(int EscolhaVeiculo, int EscolhaConstrucao, int Escolh
 
 	// dados das plantas que podem atender a demanda em questão
 	vector< int > PlantasPodemAtenderTarefa;
-	vector < double > TempoPlantaPodeAtender;
+	vector < float > TempoPlantaPodeAtender;
 
 	// variaveis de controle
 	int TarefaAdicionada;
@@ -1123,7 +1134,10 @@ void	Solucao::RealizarBuscaLocalPlanta(int EscolhaVeiculo, int EscolhaConstrucao
 	}
 }
 
-void Solucao::IniciaAlfa(){
+void Solucao:: IniciaVariaveisModelo(){
+
+
+
 	Alfa.resize(NV);
 	for(int v = 0; v < NV; v++){
 		Alfa[v].resize(NE);
@@ -1131,10 +1145,100 @@ void Solucao::IniciaAlfa(){
 			for( int e2 = 0; e2 < NE; e2++){
 				if( ConstrucoesInstancia.Construcoes[e2].NumeroDaConstrucao == e1){
 					Alfa[v][e1].resize( ConstrucoesInstancia.Construcoes[e2].NumeroDemandas );
+						for( int d = 0; d < ConstrucoesInstancia.Construcoes[e2].NumeroDemandas; d++){
+							Alfa[v][e1][d]=0;
+						}
 				}
 			}
 		}
 	}
+
+
+
+	Beta.resize(NV);
+	for(int v = 0; v < NV; v++){
+		Beta[v].resize(NE);
+		for( int e1 = 0; e1 < NE; e1++){
+			for( int e2 = 0; e2 < NE; e2++){
+				if( ConstrucoesInstancia.Construcoes[e2].NumeroDaConstrucao == e1){
+					Beta[v][e1].resize( ConstrucoesInstancia.Construcoes[e2].NumeroDemandas );
+					for( int d = 0; d < ConstrucoesInstancia.Construcoes[e2].NumeroDemandas; d++){
+						Beta[v][e1][d].resize(NE);
+						for( int e3 = 0; e3 < NE; e3++){
+							for( int e4 = 0; e4 < NE; e4++){
+								if( ConstrucoesInstancia.Construcoes[e4].NumeroDaConstrucao == e3){
+									Beta[v][e1][d][e3].resize( ConstrucoesInstancia.Construcoes[e4].NumeroDemandas );
+									for( int d2 = 0; d2 < ConstrucoesInstancia.Construcoes[e4].NumeroDemandas; d2++){
+										Beta[v][e1][d][e3][d2] = 0;
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+
+
+	Betaprod.resize(NP);
+	for(int p = 0; p < NP; p++){
+		Betaprod[p].resize(NE);
+		for( int e1 = 0; e1 < NE; e1++){
+			for( int e2 = 0; e2 < NE; e2++){
+				if( ConstrucoesInstancia.Construcoes[e2].NumeroDaConstrucao == e1){
+					Betaprod[p][e1].resize( ConstrucoesInstancia.Construcoes[e2].NumeroDemandas );
+					for( int d = 0; d < ConstrucoesInstancia.Construcoes[e2].NumeroDemandas; d++){
+						Betaprod[p][e1][d].resize(NE);
+						for( int e3 = 0; e3 < NE; e3++){
+							for( int e4 = 0; e4 < NE; e4++){
+								if( ConstrucoesInstancia.Construcoes[e4].NumeroDaConstrucao == e3){
+									Betaprod[p][e1][d][e3].resize( ConstrucoesInstancia.Construcoes[e4].NumeroDemandas );
+									for( int d2 = 0; d2 < ConstrucoesInstancia.Construcoes[e4].NumeroDemandas; d2++){
+										Betaprod[p][e1][d][e3][d2] = 0;
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+
+
+	Tvi.resize(NV);
+	for(int v = 0; v < NV; v++){
+		Tvi[v].resize(NE);
+		for( int e1 = 0; e1 < NE; e1++){
+			for( int e2 = 0; e2 < NE; e2++){
+				if( ConstrucoesInstancia.Construcoes[e2].NumeroDaConstrucao == e1){
+					Tvi[v][e1].resize( ConstrucoesInstancia.Construcoes[e2].NumeroDemandas );
+				}
+			}
+		}
+	}
+
+
+
+	TPvi.resize(NP);
+	for(int p = 0; p < NP; p++){
+		TPvi[p].resize(NE);
+		for( int e1 = 0; e1 < NE; e1++){
+			for( int e2 = 0; e2 < NE; e2++){
+				if( ConstrucoesInstancia.Construcoes[e2].NumeroDaConstrucao == e1){
+					TPvi[p][e1].resize( ConstrucoesInstancia.Construcoes[e2].NumeroDemandas );
+				}
+			}
+		}
+	}
+
+
+}
+
+void Solucao::AtribuiValoresvariaveisModelo(){
 
 	for(int v = 0; v < (int) Alfa.size(); v++){
 		for(int e = 0; e < (int) Alfa[v].size(); e++){
@@ -1143,25 +1247,65 @@ void Solucao::IniciaAlfa(){
 			}
 		}
 	}
-
-	cout << endl << endl;
 	for( int p = 0; p < (int) PlantasInstancia.Plantas.size(); p++){
 		for( int car = 0; car < (int) PlantasInstancia.Plantas[p].Carregamentos.size(); car++){
-			cout << " carreta : " <<  PlantasInstancia.Plantas[p].Carregamentos[car].NumCarretaUtilizada;
-			cout << " Construcao : " <<  PlantasInstancia.Plantas[p].Carregamentos[car].NumeroConstrucao ;
-			cout <<  " demanda : " << PlantasInstancia.Plantas[p].Carregamentos[car].NumeroDemandaSuprida ;
-			cout <<  "        tempo : " << PlantasInstancia.Plantas[p].Carregamentos[car].HorarioInicioCarregamento ;
-			cout <<  " - " << PlantasInstancia.Plantas[p].Carregamentos[car].HorarioFinalCarregamento << endl ;
 			Alfa[ PlantasInstancia.Plantas[p].Carregamentos[car].NumCarretaUtilizada ] [ PlantasInstancia.Plantas[p].Carregamentos[car].NumeroConstrucao ][ PlantasInstancia.Plantas[p].Carregamentos[car].NumeroDemandaSuprida ] = 1;
+			TPvi[ p ][ PlantasInstancia.Plantas[p].Carregamentos[car].NumeroConstrucao ][ PlantasInstancia.Plantas[p].Carregamentos[car].NumeroDemandaSuprida ] = PlantasInstancia.Plantas[p].Carregamentos[car].HorarioInicioCarregamento;
+		}
+	}
+
+	for( int p = 0; p < (int) PlantasInstancia.Plantas.size(); p++){
+		for( int car1 = 0; car1 < (int) PlantasInstancia.Plantas[p].Carregamentos.size(); car1++){
+			for( int car2 = 0; car2 < (int) PlantasInstancia.Plantas[p].Carregamentos.size(); car2++){
+				if( car1 != car2){
+					if( PlantasInstancia.Plantas[p].Carregamentos[car1].HorarioInicioCarregamento < PlantasInstancia.Plantas[p].Carregamentos[car2].HorarioInicioCarregamento){
+						Betaprod[p][PlantasInstancia.Plantas[p].Carregamentos[car1].NumeroConstrucao ][PlantasInstancia.Plantas[p].Carregamentos[car1].NumeroDemandaSuprida][PlantasInstancia.Plantas[p].Carregamentos[car2].NumeroConstrucao][PlantasInstancia.Plantas[p].Carregamentos[car2].NumeroDemandaSuprida] = 1;
+					}
+				}
+			}
 		}
 	}
 
 
-	cout << endl << endl;
+	//cout << endl << endl << "   galo x" << endl << endl;
+
+	for( int c1 = 0; c1 < NE; c1++){
+		for( int des1 = 0; des1 < (int) ConstrucoesInstancia.Construcoes[c1].Descarregamentos.size(); des1++){
+			Tvi[ ConstrucoesInstancia.Construcoes[c1].Descarregamentos[des1].NumCarretaUtilizada ][ ConstrucoesInstancia.Construcoes[c1].NumeroDaConstrucao ][des1] = ConstrucoesInstancia.Construcoes[c1].Descarregamentos[des1].HorarioInicioDescarregamento;
+			for( int c2 = 0; c2 < NE; c2++){
+				for( int des2 = 0; des2 < (int) ConstrucoesInstancia.Construcoes[c2].Descarregamentos.size(); des2++){
+					if( c1 != c2 && des1 != des2){
+						if( ConstrucoesInstancia.Construcoes[c1].Descarregamentos[des1].NumPlantaFornecedor == ConstrucoesInstancia.Construcoes[c2].Descarregamentos[des2].NumPlantaFornecedor ){
+							if( ConstrucoesInstancia.Construcoes[c1].Descarregamentos[des1].HorarioInicioDescarregamento < ConstrucoesInstancia.Construcoes[c2].Descarregamentos[des2].HorarioInicioDescarregamento){
+								Betaprod[ ConstrucoesInstancia.Construcoes[c1].Descarregamentos[des1].NumPlantaFornecedor ][ ConstrucoesInstancia.Construcoes[c1].NumeroDaConstrucao ][ des1 ][ ConstrucoesInstancia.Construcoes[c2].NumeroDaConstrucao ][ des2 ] = 1;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+
+
 
 }
 
-void Solucao::ImprimeAlfa( int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo){
+void Solucao::ImprimeVariaveisModeloSeparado(){
+	ofstream ArquivoVariaveis;
+	ArquivoVariaveis.open( "VariaveisColocalrModelo.txt" );
+
+
+	//ArquivoVariaveis << " model.add(Alfa[" << PlantasInstancia.Plantas[p].Carregamentos[car].NumCarretaUtilizada <<"]";
+
+	//ArquivoVariaveis << " model.add(BetaProducao[" << p << "]";
+	//ArquivoVariaveis << "[" << PlantasInstancia.Plantas[p].Carregamentos[car1].NumeroConstrucao << "][" << PlantasInstancia.Plantas[p].Carregamentos[car1].NumeroDemandaSuprida << "]";
+	//ArquivoVariaveis << "[" << PlantasInstancia.Plantas[p].Carregamentos[car2].NumeroConstrucao << "][" << PlantasInstancia.Plantas[p].Carregamentos[car2].NumeroDemandaSuprida << "] == 1 );" << endl;
+
+	ArquivoVariaveis.close();
+}
+
+void Solucao::ImprimeVariaveisDoModelo( int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo){
 
 	if( ImprimeSolucao == 1){
 		for(int v = 0; v < (int) Alfa.size(); v++){
@@ -1206,7 +1350,7 @@ class ConjuntoSolucoes{
 public:
 	vector < Solucao > Solucoes;
 	ConjuntoSolucoes();			// classe construtoora
-	void	InsereSolucao(int np, ConjuntoPlantas Plantas, int ne, ConjuntoConstrucoes Construcoes, int nv, double v,double TDVC);			// carrega uma solução ao vetor das soluções
+	void	InsereSolucao(int np, ConjuntoPlantas Plantas, int ne, ConjuntoConstrucoes Construcoes, int nv, float v,float TDVC);			// carrega uma solução ao vetor das soluções
 	void	CalculaMakespanSolucoes();		// calcula o makespan das soluções
 	void	CalculaNiveisViabilidadeSolucoes();		// calcula o niveis de viabilidade das solução
 	void	Imprime(bool ImprimePlanta, bool ImprimeConstrucao, bool VerificaViabilidade, int ImprimeSolucao , int ImprimeArquivo, PonteiroArquivo  &Arquivo);		// imprime as soluções
@@ -1219,7 +1363,7 @@ ConjuntoSolucoes::ConjuntoSolucoes(){
 }
 
 // carrega uma solução ao vetor das soluções
-void	ConjuntoSolucoes::InsereSolucao(int np, ConjuntoPlantas Plantas, int ne, ConjuntoConstrucoes Construcoes, int nv, double v,double TDVC){
+void	ConjuntoSolucoes::InsereSolucao(int np, ConjuntoPlantas Plantas, int ne, ConjuntoConstrucoes Construcoes, int nv, float v,float TDVC){
 	Solucao S1;
 	// carrega dasos da solução
 	S1.CarregaSolucao( np, Plantas, ne, Construcoes, nv, v, TDVC);

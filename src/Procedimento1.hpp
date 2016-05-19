@@ -19,12 +19,12 @@ public:
 	int 	NE;
 	ConjuntoConstrucoes ConstrucoesInstancia;
 	int 	NV;
-	double 	Velocidade;
-	double 	TempoDeVidaConcreto;
+	float 	Velocidade;
+	float 	TempoDeVidaConcreto;
 
 	Procedimento1();
 
-	void 	CarregaDados(int InstNP, ConjuntoPlantas InstPlantasInstancia, int InstNE, ConjuntoConstrucoes InstConstrucoesInstancia, int InstNV, double InstVelocidade, double InstTempoDeVidaConcreto);		// carrega os dados da solução
+	void 	CarregaDados(int InstNP, ConjuntoPlantas InstPlantasInstancia, int InstNE, ConjuntoConstrucoes InstConstrucoesInstancia, int InstNV, float InstVelocidade, float InstTempoDeVidaConcreto);		// carrega os dados da solução
 	int 	SelecionaConstrucao(  int &ConstrucaoVaiSerSuprida, int &IndiceConstrucaoVaiSerSuprida);											// Seleciona uma construção baseada em um rank que elas possuem
 	void 	ConfereSeNaoEncontrouUmaPlanta( int  PlantaSelecionada);											// Verifica se não encontrou uma planta
 
@@ -43,7 +43,7 @@ Procedimento1::Procedimento1(){
 }
 
 // carrega os dados da solução
-void 	Procedimento1::CarregaDados(int InstNP, ConjuntoPlantas InstPlantasInstancia, int InstNE, ConjuntoConstrucoes InstConstrucoesInstancia, int InstNV, double InstVelocidade, double InstTempoDeVidaConcreto){
+void 	Procedimento1::CarregaDados(int InstNP, ConjuntoPlantas InstPlantasInstancia, int InstNE, ConjuntoConstrucoes InstConstrucoesInstancia, int InstNV, float InstVelocidade, float InstTempoDeVidaConcreto){
 	NP 	= InstNP;
 	PlantasInstancia 		= InstPlantasInstancia;
 	NE 	= InstNE;

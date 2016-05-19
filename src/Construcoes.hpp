@@ -15,14 +15,14 @@
 
 class Descarregamento{
 public:
-	double	HorarioInicioDescarregamento;
-	double	HorarioFinalDescarregamento;
+	float	HorarioInicioDescarregamento;
+	float	HorarioFinalDescarregamento;
 	int		NumCarretaUtilizada;			// número da carreta utilizada para realizar o descarregamento
 	int		NumPlantaFornecedor;			// númerod a planta que fornece o concreto
 
 	Descarregamento();	// construtora
 
-	int		verifica( int carreta, int planta, double HorarioInicio, double HorarioFinal);			// verifica se os dados passados se referem ao descarregamento
+	int		verifica( int carreta, int planta, float HorarioInicio, float HorarioFinal);			// verifica se os dados passados se referem ao descarregamento
 	void	AnulaConteudo();			// anula o consteudo do descarregamento retornando ao estado original
 	void	Imprime();				// imprime o conteudo dos descarregamento
 
@@ -39,7 +39,7 @@ Descarregamento::Descarregamento(){
 }
 
 // verifica se os dados passados se referem ao descarregamento
-int		Descarregamento::verifica( int carreta, int planta, double HorarioInicio, double HorarioFinal){
+int		Descarregamento::verifica( int carreta, int planta, float HorarioInicio, float HorarioFinal){
 	// verifica se os dados passados são os memos que os do descarregamento
 	if( NumCarretaUtilizada == carreta &&  NumPlantaFornecedor ==  planta && HorarioInicioDescarregamento == HorarioInicio && HorarioFinalDescarregamento == HorarioFinal){
 		// dados conferem, retorna 1
@@ -76,7 +76,7 @@ bool 	DecideQualDescarregamentoVemPrimeiro ( Descarregamento d1, Descarregamento
 // classe que foi criada para guardar a distancia da construção para a planta e manter um ponteiro para a estrutura dessa planta
 class DistanciaPlanta{
 public:
-	double	Distancia;
+	float	Distancia;
 	Planta* PlantaComparada;
 };
 
@@ -94,13 +94,13 @@ public:
 	vector < int > SituacaoDemanda;					// vetor que se armazena a situação das demandas que se temq ue suprir na construção
 	vector < int > SituacaoRemocao;					// vetor que armazena a situação de remoção da demanda. Se o valor for 1 ela ja foi removida, se é 0 ela ainda não foi
 	vector < DistanciaPlanta > DistanciaPlantas;	// distância da construção até as plantas
-	double	TempoMaximoEntreDescargas;				// tempo máximo permitido entre dois descarregamentos
-	double	TempoMinimoDeFuncionamento;				// tempo mínimo de funcionamento da construção, primeiro horario que se pode receber um carregamento em uma construção
-	double	TempoMaximoDeFuncionamento;				// tempo máximo de funcionamento da construção, ultimo horario que se pode receber um carregamento em uma construção
-	double	RankTempoDemandas;						// rank entre a janela de tempo de se receber descarregamentos e o número de demandas
+	float	TempoMaximoEntreDescargas;				// tempo máximo permitido entre dois descarregamentos
+	float	TempoMinimoDeFuncionamento;				// tempo mínimo de funcionamento da construção, primeiro horario que se pode receber um carregamento em uma construção
+	float	TempoMaximoDeFuncionamento;				// tempo máximo de funcionamento da construção, ultimo horario que se pode receber um carregamento em uma construção
+	float	RankTempoDemandas;						// rank entre a janela de tempo de se receber descarregamentos e o número de demandas
 	int		StatusAtendimento;						// o número de demandas atendidas na construção
 	vector < Descarregamento > Descarregamentos;	// descarregamentos já realziados na construção
-	double	Makespan;								// makespan da construção
+	float	Makespan;								// makespan da construção
 
 	// variaveis auxiliares nos procedimentos
 
@@ -110,32 +110,32 @@ public:
 
 	Construcao();
 	void	CalculaRankTempoDemandas(int comentarios);					// Calcula o rank que decide qual construção será atendida inicialmente
-	int		VerificaDisponibilidade( double InicioPossivelAlocacao, double FinalPossivelAlocacao);				// Verifica se da para colocar a demanda na construção, ela sinaliza se caso atrazar as demandas sejá possivel alocar a demanda.
-	int		AlocaAtividade(double HoraInicio, double HoraFinal, int Carreta, int NumPlanta,  int Situacao, int StatusRemocao, ConjuntoPlantas& Plantas);		// Aloca uma demanda na cosntrução apartir de dados
+	int		VerificaDisponibilidade( float InicioPossivelAlocacao, float FinalPossivelAlocacao);				// Verifica se da para colocar a demanda na construção, ela sinaliza se caso atrazar as demandas sejá possivel alocar a demanda.
+	int		AlocaAtividade(float HoraInicio, float HoraFinal, int Carreta, int NumPlanta,  int Situacao, int StatusRemocao, ConjuntoPlantas& Plantas);		// Aloca uma demanda na cosntrução apartir de dados
 
-	int		AlocaAtividadeSalvandoDados(int VerificaExistencia, double HoraInicio, double HoraFinal, int Carreta, int NumPlanta, int Situacao, int StatusRemocao, ConjuntoPlantas& Plantas, vector < DadosTarefa > &DadosTarefasMovidas);			// Aloca uma demanda na cosntrução apartir de dados, dalvando os dados da demanda alocada em estrutura DadosAdicionado
-	int		DeletaAtividadeLocomovendoAsOutrasTarefas(double HoraInicio, double HoraFinal, int NumDemanda,  int NumPlanta, int Carreta, ConjuntoPlantas& Plantas);				// Deleta alocação de tarefa e reordenadno as alocações para que os dados se mantenham corretos
-	int		DeletaAtividadeLocomovendoAsOutrasTarefasSalvandoDados(int VerificaExistencia, double HoraInicio, double HoraFinal, int NumDemanda,  int NumPlanta, int Carreta, ConjuntoPlantas& Plantas, vector < DadosTarefa > &DadosTarefasMovidasAuxiliar);			// Deleta alocação de tarefa e reordenadno as alocações para que os dados se mantenham corretos, salvando os dados da tarefa removida em uma estrutura
+	int		AlocaAtividadeSalvandoDados(int VerificaExistencia, float HoraInicio, float HoraFinal, int Carreta, int NumPlanta, int Situacao, int StatusRemocao, ConjuntoPlantas& Plantas, vector < DadosTarefa > &DadosTarefasMovidas);			// Aloca uma demanda na cosntrução apartir de dados, dalvando os dados da demanda alocada em estrutura DadosAdicionado
+	int		DeletaAtividadeLocomovendoAsOutrasTarefas(float HoraInicio, float HoraFinal, int NumDemanda,  int NumPlanta, int Carreta, ConjuntoPlantas& Plantas);				// Deleta alocação de tarefa e reordenadno as alocações para que os dados se mantenham corretos
+	int		DeletaAtividadeLocomovendoAsOutrasTarefasSalvandoDados(int VerificaExistencia, float HoraInicio, float HoraFinal, int NumDemanda,  int NumPlanta, int Carreta, ConjuntoPlantas& Plantas, vector < DadosTarefa > &DadosTarefasMovidasAuxiliar);			// Deleta alocação de tarefa e reordenadno as alocações para que os dados se mantenham corretos, salvando os dados da tarefa removida em uma estrutura
 
 	int		DeletaTarefas( int VerificaExistencia, int demanda, vector < DadosTarefa > &DadosRetirando, ConjuntoPlantas& Plantas);			// Deleta tarefas da demanda passada e as posteriores a esta demanda passada
 	int		DeletaTarefasAnteriormenteAdicionadasDados(   DadosTarefa DadosAdicionados, ConjuntoPlantas& Plantas);		// deleta tarefa apartir de dados
 	int		VerificaDescarregamentosRespeitaIntervalo();			// Verifica se os descrarregamentor na construção estão respeitando os intervalos entre elas
 
-	void	RetornaHorarioInicioCarregamento( int NumDemanda, double& HoraInicio);				// retorna o horario de inicio de um certo descarregamento na construção
-	void	RetornaDadosDescarregamento( int d, int& PlantaEmAnalise, int& CaminhaoEmAnalise, int& ConstrucaoEmAnalise, double& HorarioInicioAuxiliar,double& HorarioFinalAuxiliar);		// Retorna os dados de um certo descarregamento
+	void	RetornaHorarioInicioCarregamento( int NumDemanda, float& HoraInicio);				// retorna o horario de inicio de um certo descarregamento na construção
+	void	RetornaDadosDescarregamento( int d, int& PlantaEmAnalise, int& CaminhaoEmAnalise, int& ConstrucaoEmAnalise, float& HorarioInicioAuxiliar,float& HorarioFinalAuxiliar);		// Retorna os dados de um certo descarregamento
 	void	CalculaMakespan();			// Calcula o Makespan da construção
 
-	int		AtrasaDemandasParaAtenderMaster( int NumDemanda, double HoraInicioAtendiemnto, vector < DadosTarefa > &DadosTarefasMovidasAuxiliar,int SituacaoDemanda, int StatusRemocao, ConjuntoPlantas& Plantas, int &SituacaoAlocacao, int EscolhaVeiculo, int EscolhaPlanta, int imprime, string frase);		// função de atrazar as demandas para atender a ultima demanda, está é a função que recebe a demanda não alocada ainda
+	int		AtrasaDemandasParaAtenderMaster( int NumDemanda, float HoraInicioAtendiemnto, vector < DadosTarefa > &DadosTarefasMovidasAuxiliar,int SituacaoDemanda, int StatusRemocao, ConjuntoPlantas& Plantas, int &SituacaoAlocacao, int EscolhaVeiculo, int EscolhaPlanta, int imprime, string frase);		// função de atrazar as demandas para atender a ultima demanda, está é a função que recebe a demanda não alocada ainda
 
 	void	RecolocaTarefaDeletada( vector < DadosTarefa > &DadosTarefasMovidasAuxiliar, ConjuntoPlantas& Plantas, int imprime);
-	void	AtrasaDemandasParaAtenderRecursao( int NumDemanda, double HoraInicioAtendiemnto, vector < DadosTarefa > &DadosTarefasMovidasAuxiliar,ConjuntoPlantas& Plantas, int &SituacaoAlocacao, int EscolhaVeiculo, int EscolhaPlanta,int imprime, string frase);			// função de atrazar as demandas para atender a ultima demanda, está é a função que recebe as demandas que serão atrasadas para que a demanda não atendida possa ser atendida
+	void	AtrasaDemandasParaAtenderRecursao( int NumDemanda, float HoraInicioAtendiemnto, vector < DadosTarefa > &DadosTarefasMovidasAuxiliar,ConjuntoPlantas& Plantas, int &SituacaoAlocacao, int EscolhaVeiculo, int EscolhaPlanta,int imprime, string frase);			// função de atrazar as demandas para atender a ultima demanda, está é a função que recebe as demandas que serão atrasadas para que a demanda não atendida possa ser atendida
 	void	EncontraPlanta(  int& NumPlantaAnalisando, int EscolhaPlanta, ConjuntoPlantas& Plantas, string frase);					// encontra a planta mais perto da construção e que não tenha sido analisada antes
-	int		AlocaAtividadeComHorarioFinalAtendimento( int NumDemanda, double HoraFimAtendimento, double &NovaHoraFimAtendimento, vector < DadosTarefa > &DadosTarefasMovidasAuxiliar,int SituacaoDemanda, int StatusRemocao,ConjuntoPlantas& Plantas, int EscolhaVeiculo,  int EscolhaPlanta, int imprime, string frase);			// aloca atividade sabedno que ela tem que começar em um certo hoario, este horaio é determinado pelo horaio que ela tem que terminar.
+	int		AlocaAtividadeComHorarioFinalAtendimento( int NumDemanda, float HoraFimAtendimento, float &NovaHoraFimAtendimento, vector < DadosTarefa > &DadosTarefasMovidasAuxiliar,int SituacaoDemanda, int StatusRemocao,ConjuntoPlantas& Plantas, int EscolhaVeiculo,  int EscolhaPlanta, int imprime, string frase);			// aloca atividade sabedno que ela tem que começar em um certo hoario, este horaio é determinado pelo horaio que ela tem que terminar.
 
 	int		VerificaIntegridadeDeDescrregamentos(int imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo);			// verifica a integridade entre os descarregamentos da construção
 
-	int		AlocaAtividadeComHorarioFinalAtendimentoComVeiculoFixo( int NumDemanda, int NumPlanta, int NumCarreta, double HoraFimAtendimento, double &NovaHoraFimAtendimento, vector < DadosTarefa > &DadosTarefasMovidasAuxiliar, int SituacaoDemanda, int StatusRemocao, ConjuntoPlantas& Plantas, int EscolhaVeiculo, int EscolhaPlanta, string frase);		// aloca atividade sabedno que ela tem que começar em um certo hoario, este horaio é determinado pelo horaio que ela tem que terminar. Nesse caso se tem que realizar o atendimeto com o veículo passado na função
-	int		AtrasaDemandasParaAtenderMasterComVeiculoFixo( int NumDemanda, int NumPlanta, int NumCarreta, double HoraFimAtendimento, vector < DadosTarefa > &DadosTarefasMovidasAuxiliar,int SituacaoDemanda, int StatusRemocao,ConjuntoPlantas& Plantas, int &SituacaoAlocacao, int EscolhaVeiculo, int EscolhaPlanta,int imprime, string frase);
+	int		AlocaAtividadeComHorarioFinalAtendimentoComVeiculoFixo( int NumDemanda, int NumPlanta, int NumCarreta, float HoraFimAtendimento, float &NovaHoraFimAtendimento, vector < DadosTarefa > &DadosTarefasMovidasAuxiliar, int SituacaoDemanda, int StatusRemocao, ConjuntoPlantas& Plantas, int EscolhaVeiculo, int EscolhaPlanta, string frase);		// aloca atividade sabedno que ela tem que começar em um certo hoario, este horaio é determinado pelo horaio que ela tem que terminar. Nesse caso se tem que realizar o atendimeto com o veículo passado na função
+	int		AtrasaDemandasParaAtenderMasterComVeiculoFixo( int NumDemanda, int NumPlanta, int NumCarreta, float HoraFimAtendimento, vector < DadosTarefa > &DadosTarefasMovidasAuxiliar,int SituacaoDemanda, int StatusRemocao,ConjuntoPlantas& Plantas, int &SituacaoAlocacao, int EscolhaVeiculo, int EscolhaPlanta,int imprime, string frase);
 
 	int		DemandaNaoAtendida( int &DemandaNaoAtendida);			// retorna a demanda não atendida na construção por parametro, retorna 1 se tive demanda não atendida e zero se a construção já tiver sido completamente atendida
 	void	ImprimeContrucao(int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo);		// Imprime os dados da construções
@@ -176,7 +176,7 @@ void	Construcao::CalculaRankTempoDemandas(int comentarios){
 }
 
 // Verifica se da para colocar a demanda na construção, ela sinaliza se caso atrazar as demandas sejá possivel alocar a demanda.
-int		Construcao::VerificaDisponibilidade( double InicioPossivelAlocacao, double FinalPossivelAlocacao){
+int		Construcao::VerificaDisponibilidade( float InicioPossivelAlocacao, float FinalPossivelAlocacao){
 	// variaveis que sinalizam se tem tarefa anterior ou posterior
 	int 	PossuiTarefaAnterior;
 	int 	PossuiTarefaPosterior;
@@ -298,7 +298,7 @@ int		Construcao::VerificaDisponibilidade( double InicioPossivelAlocacao, double 
 }
 
 // Aloca uma demanda na cosntrução apartir de dados
-int 	Construcao::AlocaAtividade(double HoraInicio, double HoraFinal, int Carreta, int NumPlanta,  int Situacao, int StatusRemocao, ConjuntoPlantas& Plantas){
+int 	Construcao::AlocaAtividade(float HoraInicio, float HoraFinal, int Carreta, int NumPlanta,  int Situacao, int StatusRemocao, ConjuntoPlantas& Plantas){
 
 // Verifica se é possivel colocar uma tarefa nesta construção
 	if( StatusAtendimento == NumeroDemandas){
@@ -367,14 +367,14 @@ int 	Construcao::AlocaAtividade(double HoraInicio, double HoraFinal, int Carreta
 	}
 
 // aloca horarios
-	double 	HorarioInicioPlanta;
-	double 	HorarioFimPlanta;
+	float 	HorarioInicioPlanta;
+	float 	HorarioFimPlanta;
 
 	HorarioInicioPlanta = HoraInicio - Plantas.Plantas[p].DistanciaConstrucoes[NumeroDaConstrucao] -  Plantas.Plantas[p].TempoPlanta;
 	HorarioFimPlanta = HorarioInicioPlanta +  Plantas.Plantas[p].TempoPlanta;
 
-	double 	HorarioInicioCarreta;
-	double 	HorarioFimCarreta;
+	float 	HorarioInicioCarreta;
+	float 	HorarioFimCarreta;
 
 	HorarioInicioCarreta = HorarioInicioPlanta;
 	HorarioFimCarreta = HoraFinal + Plantas.Plantas[p].DistanciaConstrucoes[NumeroDaConstrucao];
@@ -388,7 +388,7 @@ int 	Construcao::AlocaAtividade(double HoraInicio, double HoraFinal, int Carreta
 }
 
 // Aloca uma demanda na cosntrução apartir de dados, dalvando os dados da demanda alocada em estrutura DadosAdicionado
-int		Construcao::AlocaAtividadeSalvandoDados(int VerificaExistencia, double HoraInicio, double HoraFinal, int Carreta, int NumPlanta, int Situacao, int StatusRemocao, ConjuntoPlantas& Plantas, vector < DadosTarefa > &DadosTarefasMovidas){
+int		Construcao::AlocaAtividadeSalvandoDados(int VerificaExistencia, float HoraInicio, float HoraFinal, int Carreta, int NumPlanta, int Situacao, int StatusRemocao, ConjuntoPlantas& Plantas, vector < DadosTarefa > &DadosTarefasMovidas){
 
 // Verifica se é possivel colocar uma tarefa nesta construção
 	if( StatusAtendimento == NumeroDemandas){
@@ -457,14 +457,14 @@ int		Construcao::AlocaAtividadeSalvandoDados(int VerificaExistencia, double Hora
 	}
 
 // aloca horarios
-	double 	HorarioInicioPlanta;
-	double 	HorarioFimPlanta;
+	float 	HorarioInicioPlanta;
+	float 	HorarioFimPlanta;
 
 	HorarioInicioPlanta = HoraInicio - Plantas.Plantas[p].DistanciaConstrucoes[NumeroDaConstrucao] -  Plantas.Plantas[p].TempoPlanta;
 	HorarioFimPlanta = HorarioInicioPlanta +  Plantas.Plantas[p].TempoPlanta;
 
-	double	HorarioInicioCarreta;
-	double 	HorarioFimCarreta;
+	float	HorarioInicioCarreta;
+	float 	HorarioFimCarreta;
 
 	HorarioInicioCarreta = HorarioInicioPlanta;
 	HorarioFimCarreta = HoraFinal + Plantas.Plantas[p].DistanciaConstrucoes[NumeroDaConstrucao];
@@ -485,7 +485,7 @@ int		Construcao::AlocaAtividadeSalvandoDados(int VerificaExistencia, double Hora
 }
 
 // Deleta alocação de tarefa e reordenadno as alocações para que os dados se mantenham corretos
-int		Construcao::DeletaAtividadeLocomovendoAsOutrasTarefas(double HoraInicio, double HoraFinal, int NumDemanda,  int NumPlanta, int Carreta, ConjuntoPlantas& Plantas){
+int		Construcao::DeletaAtividadeLocomovendoAsOutrasTarefas(float HoraInicio, float HoraFinal, int NumDemanda,  int NumPlanta, int Carreta, ConjuntoPlantas& Plantas){
 
 // Verifica se existe a demanda que se quer deletar
 	if( StatusAtendimento - 1 < NumDemanda){
@@ -507,14 +507,14 @@ int		Construcao::DeletaAtividadeLocomovendoAsOutrasTarefas(double HoraInicio, do
 		}
 
 // aloca horarios
-		double	HorarioInicioPlanta;
-		double 	HorarioFimPlanta;
+		float	HorarioInicioPlanta;
+		float 	HorarioFimPlanta;
 
 		HorarioInicioPlanta = HoraInicio - Plantas.Plantas[p].DistanciaConstrucoes[NumeroDaConstrucao] -  Plantas.Plantas[p].TempoPlanta;
 		HorarioFimPlanta 	= HorarioInicioPlanta +  Plantas.Plantas[p].TempoPlanta;
 
-		double 	HorarioInicioCarreta;
-		double 	HorarioFimCarreta;
+		float 	HorarioInicioCarreta;
+		float 	HorarioFimCarreta;
 
 		HorarioInicioCarreta 	= HorarioInicioPlanta;
 		HorarioFimCarreta 		= HoraFinal + Plantas.Plantas[p].DistanciaConstrucoes[NumeroDaConstrucao];
@@ -569,7 +569,7 @@ int		Construcao::DeletaAtividadeLocomovendoAsOutrasTarefas(double HoraInicio, do
 }
 
 // Deleta alocação de tarefa e reordenadno as alocações para que os dados se mantenham corretos, salvando os dados da tarefa removida em uma estrutura
-int		Construcao::DeletaAtividadeLocomovendoAsOutrasTarefasSalvandoDados(int VerificaExistencia, double HoraInicio, double HoraFinal, int NumDemanda,  int NumPlanta, int Carreta, ConjuntoPlantas& Plantas, vector < DadosTarefa > &DadosTarefasMovidasAuxiliar){
+int		Construcao::DeletaAtividadeLocomovendoAsOutrasTarefasSalvandoDados(int VerificaExistencia, float HoraInicio, float HoraFinal, int NumDemanda,  int NumPlanta, int Carreta, ConjuntoPlantas& Plantas, vector < DadosTarefa > &DadosTarefasMovidasAuxiliar){
 
 	// variavel para parar o programa
 	int 	ParaPrograma;
@@ -600,14 +600,14 @@ int		Construcao::DeletaAtividadeLocomovendoAsOutrasTarefasSalvandoDados(int Veri
 		}
 
 // aloca horarios
-		double 	HorarioInicioPlanta;
-		double 	HorarioFimPlanta;
+		float 	HorarioInicioPlanta;
+		float 	HorarioFimPlanta;
 
 		HorarioInicioPlanta = HoraInicio - Plantas.Plantas[p].DistanciaConstrucoes[NumeroDaConstrucao] -  Plantas.Plantas[p].TempoPlanta;
 		HorarioFimPlanta 	= HorarioInicioPlanta +  Plantas.Plantas[p].TempoPlanta;
 
-		double 	HorarioInicioCarreta;
-		double 	HorarioFimCarreta;
+		float 	HorarioInicioCarreta;
+		float 	HorarioFimCarreta;
 
 		HorarioInicioCarreta 	= HorarioInicioPlanta;
 		HorarioFimCarreta 		= HoraFinal + Plantas.Plantas[p].DistanciaConstrucoes[NumeroDaConstrucao];
@@ -680,16 +680,16 @@ int		Construcao::DeletaTarefas(int VerificaExistencia, int demanda, vector < Dad
 	int 	DemandasRetiradas;
 
 	// variaveis que armazenam os horarios da cosntrução
-	double 	HorarioInicioConstrucao;
-	double 	HorarioFinalConstrucao;
+	float 	HorarioInicioConstrucao;
+	float 	HorarioFinalConstrucao;
 
 	// variaveis que armazenam os horarios da planta
-	double 	HorarioInicioPlanta;
-	double 	HorarioFimPlanta;
+	float 	HorarioInicioPlanta;
+	float 	HorarioFimPlanta;
 
 	// variaveis que armazenam os horarios da carreta
-	double 	HorarioInicioCarreta;
-	double 	HorarioFimCarreta;
+	float 	HorarioInicioCarreta;
+	float 	HorarioFimCarreta;
 
 	// inicializa o contador de tarefas retiradas com zero
 	DemandasRetiradas = 0;
@@ -809,10 +809,10 @@ int		Construcao::DeletaTarefasAnteriormenteAdicionadasDados(   DadosTarefa Dados
 	}
 
 	// aloca horarios
-	double HorarioInicioPlanta;
-	double HorarioFimPlanta;
-	double HorarioInicioCarreta;
-	double HorarioFimCarreta;
+	float HorarioInicioPlanta;
+	float HorarioFimPlanta;
+	float HorarioInicioCarreta;
+	float HorarioFimCarreta;
 
 	HorarioInicioPlanta  = DadosAdicionados.HorariosDasTarefas[0];
 	HorarioFimPlanta 	 = DadosAdicionados.HorariosDasTarefas[1];
@@ -882,7 +882,7 @@ int		Construcao::VerificaDescarregamentosRespeitaIntervalo(){
 }
 
 // retorna o horario de inicio de um certo descarregamento na construção
-void	Construcao::RetornaHorarioInicioCarregamento( int NumDemanda, double& HoraInicio){
+void	Construcao::RetornaHorarioInicioCarregamento( int NumDemanda, float& HoraInicio){
 	// sinaliza se encontrou o descarregamento
 	int 	ativa;
 	// inicia como se não tivesse encontrado o descarregamento
@@ -906,7 +906,7 @@ void	Construcao::RetornaHorarioInicioCarregamento( int NumDemanda, double& HoraI
 }
 
 // Retorna os dados de um certo descarregamento
-void	Construcao::RetornaDadosDescarregamento( int d, int& PlantaEmAnalise, int& 	CaminhaoEmAnalise, int& ConstrucaoEmAnalise, double& HorarioInicioAuxiliar,double& HorarioFinalAuxiliar){
+void	Construcao::RetornaDadosDescarregamento( int d, int& PlantaEmAnalise, int& 	CaminhaoEmAnalise, int& ConstrucaoEmAnalise, float& HorarioInicioAuxiliar,float& HorarioFinalAuxiliar){
 
 	PlantaEmAnalise 		=	Descarregamentos[d].NumPlantaFornecedor;
 	CaminhaoEmAnalise 		=	Descarregamentos[d].NumCarretaUtilizada;
@@ -945,7 +945,7 @@ void	Construcao::CalculaMakespan(){
 
 
 // função de atrazar as demandas para atender a ultima demanda, está é a função que recebe a demanda não alocada ainda
-int		Construcao::AtrasaDemandasParaAtenderMaster( int NumDemanda, double HoraFimAtendimento, vector < DadosTarefa > &DadosTarefasMovidasAuxiliar,int SituacaoDemanda, int StatusRemocao,ConjuntoPlantas& Plantas, int &SituacaoAlocacao, int EscolhaVeiculo, int EscolhaPlanta, int imprime, string frase){
+int		Construcao::AtrasaDemandasParaAtenderMaster( int NumDemanda, float HoraFimAtendimento, vector < DadosTarefa > &DadosTarefasMovidasAuxiliar,int SituacaoDemanda, int StatusRemocao,ConjuntoPlantas& Plantas, int &SituacaoAlocacao, int EscolhaVeiculo, int EscolhaPlanta, int imprime, string frase){
 
 	// ****************** Variaveis que precisão ser removidas, pois não tem utilidade na função ***************************//
 
@@ -962,7 +962,7 @@ int		Construcao::AtrasaDemandasParaAtenderMaster( int NumDemanda, double HoraFim
 
 
 	// aramazena o valor auxiliar do horario final de atendiemnto na construção caso for adotado se possibilita o atendimento da demanda
-	double 	NovaHoraFimAtendimento;
+	float 	NovaHoraFimAtendimento;
 
 	if( imprime == 1){
 		cout  << endl << "     ====================== Entra Master [" << NumeroDaConstrucao << "-" << NumDemanda << "] ====================== "  << endl << endl;
@@ -1021,8 +1021,8 @@ void	Construcao::RecolocaTarefaDeletada( vector < DadosTarefa > &DadosTarefasMov
 	int 	Posicao;
 	//PonteiroArquivo  Arquivo;
 
-	double 	HoraInicio;
-	double 	HoraFinal;
+	float 	HoraInicio;
+	float 	HoraFinal;
 	int 	Carreta;
 	int 	NumPlanta;
 	int 	Situacao;
@@ -1057,7 +1057,7 @@ void	Construcao::RecolocaTarefaDeletada( vector < DadosTarefa > &DadosTarefasMov
 }
 
 // função de atrazar as demandas para atender a ultima demanda, está é a função que recebe as demandas que serão atrasadas para que a demanda não atendida possa ser atendida
-void	Construcao::AtrasaDemandasParaAtenderRecursao( int NumDemanda, double HoraFimAtendimento, vector < DadosTarefa > &DadosTarefasMovidasAuxiliar,ConjuntoPlantas& Plantas, int &SituacaoAlocacao, int EscolhaVeiculo, int EscolhaPlanta, int imprime, string frase){
+void	Construcao::AtrasaDemandasParaAtenderRecursao( int NumDemanda, float HoraFimAtendimento, vector < DadosTarefa > &DadosTarefasMovidasAuxiliar,ConjuntoPlantas& Plantas, int &SituacaoAlocacao, int EscolhaVeiculo, int EscolhaPlanta, int imprime, string frase){
 
 	// ****************** Variaveis que precisão ser removidas, pois não tem utilidade na função *************************** //
 
@@ -1074,7 +1074,7 @@ void	Construcao::AtrasaDemandasParaAtenderRecursao( int NumDemanda, double HoraF
 
 
 	// aramazena o valor auxiliar do horario final de atendiemnto na construção caso for adotado se possibilita o atendimento da demanda
-	double 	NovaHoraFimAtendimento;
+	float 	NovaHoraFimAtendimento;
 	// aramzena os valores da situação da demanda e a situação remoção da demanda retirada, para que quando a demanda for readicionada ela tenha os mesmo valores para esses campos que era anteriorment
 	int 	SituacaoDemandaAux;
 	int 	SituacaoRemocaoAux;
@@ -1190,7 +1190,7 @@ void	Construcao::EncontraPlanta(  int& NumPlantaAnalisando, int EscolhaPlanta, C
 
 	if( EscolhaPlanta == 1){
 		// variavel que armazena a distancia da construção a planta usada para se encontra a planta mais proxima
-		double 	DistanciaConstrucaoPlanta;
+		float 	DistanciaConstrucaoPlanta;
 
 		// inicializa as variaveis
 		NumPlantaAnalisando 		= -13;
@@ -1258,13 +1258,13 @@ void	Construcao::EncontraPlanta(  int& NumPlantaAnalisando, int EscolhaPlanta, C
 
 
 // aloca atividade sabedno que ela tem que começar em um certo horario, este horaio é determinado pelo horaio que ela tem que terminar.
-int		Construcao::AlocaAtividadeComHorarioFinalAtendimento( int NumDemanda, double HoraFimAtendimento, double &NovaHoraFimAtendimento, vector < DadosTarefa > &DadosTarefasMovidasAuxiliar, int SituacaoDemanda, int StatusRemocao, ConjuntoPlantas& Plantas,  int EscolhaVeiculo,  int EscolhaPlanta, int imprime, string frase){
+int		Construcao::AlocaAtividadeComHorarioFinalAtendimento( int NumDemanda, float HoraFimAtendimento, float &NovaHoraFimAtendimento, vector < DadosTarefa > &DadosTarefasMovidasAuxiliar, int SituacaoDemanda, int StatusRemocao, ConjuntoPlantas& Plantas,  int EscolhaVeiculo,  int EscolhaPlanta, int imprime, string frase){
 	// armazena os horarios de uma tarefa
-	double 	HorarioInicioPlanta;
-	double 	HorarioSaiDaPlanta;
-	double 	HorarioRetornaPlanta;
-	double 	HorarioChegaContrucao;
-	double 	HorarioSaiConstrucao;
+	float 	HorarioInicioPlanta;
+	float 	HorarioSaiDaPlanta;
+	float 	HorarioRetornaPlanta;
+	float 	HorarioChegaContrucao;
+	float 	HorarioSaiConstrucao;
 	// arqmazena os estados de disponibilidade da tarefa na planta, na coonstrução e no caminhão
 	int 	DisponibilidadePlanta;
 	int 	DisponibilidadeConstrucao;
@@ -1459,13 +1459,13 @@ int 	Construcao::VerificaIntegridadeDeDescrregamentos(int imprime, int ImprimeSo
 
 
 // aloca atividade sabedno que ela tem que começar em um certo hoario, este horaio é determinado pelo horaio que ela tem que terminar. Nesse caso se tem que realizar o atendimeto com o veículo passado na função
-int 	Construcao::AlocaAtividadeComHorarioFinalAtendimentoComVeiculoFixo( int NumDemanda, int NumPlanta, int NumCarreta, double HoraFimAtendimento, double &NovaHoraFimAtendimento, vector < DadosTarefa > &DadosTarefasMovidasAuxiliar, int SituacaoDemanda, int StatusRemocao, ConjuntoPlantas& Plantas, int EscolhaVeiculo, int EscolhaPlanta, string frase){
+int 	Construcao::AlocaAtividadeComHorarioFinalAtendimentoComVeiculoFixo( int NumDemanda, int NumPlanta, int NumCarreta, float HoraFimAtendimento, float &NovaHoraFimAtendimento, vector < DadosTarefa > &DadosTarefasMovidasAuxiliar, int SituacaoDemanda, int StatusRemocao, ConjuntoPlantas& Plantas, int EscolhaVeiculo, int EscolhaPlanta, string frase){
 	// armazena os horarios de uma tarefa
-	double 	HorarioInicioPlanta;
-	double 	HorarioSaiDaPlanta;
-	double 	HorarioRetornaPlanta;
-	double 	HorarioChegaContrucao;
-	double 	HorarioSaiConstrucao;
+	float 	HorarioInicioPlanta;
+	float 	HorarioSaiDaPlanta;
+	float 	HorarioRetornaPlanta;
+	float 	HorarioChegaContrucao;
+	float 	HorarioSaiConstrucao;
 	// arqmazena os estados de disponibilidade da tarefa na planta, na coonstrução e no caminhão
 	int 	DisponibilidadePlanta;
 	int 	DisponibilidadeConstrucao;
@@ -1474,8 +1474,8 @@ int 	Construcao::AlocaAtividadeComHorarioFinalAtendimentoComVeiculoFixo( int Num
 	// situação se a planta pode atender a demanda caso atrasar (-2) ou ela não pode atender a demanda (0)
 	int 	SituacaoPlanta;
 	// hoaraior que a planta pode atender a demanda caso as demandas ateriores forem atrasadas, e o horario que a construção iria ser atendida
-	//double 	HorarioQuePlantaPodeAtender;
-	double 	HorarioQueConstrucaoPodeReceberDemanda;
+	//float 	HorarioQuePlantaPodeAtender;
+	float 	HorarioQueConstrucaoPodeReceberDemanda;
 
 	// inidices da planta e do veículo (caminhão)
 	int 	p;
@@ -1558,7 +1558,7 @@ int 	Construcao::AlocaAtividadeComHorarioFinalAtendimentoComVeiculoFixo( int Num
 
 
 // função de atrazar as demandas para atender a ultima demanda, está é a função que recebe a demanda não alocada ainda
-int 	Construcao::AtrasaDemandasParaAtenderMasterComVeiculoFixo( int NumDemanda, int NumPlanta, int NumCarreta, double HoraFimAtendimento, vector < DadosTarefa > &DadosTarefasMovidasAuxiliar,int SituacaoDemanda, int StatusRemocao,ConjuntoPlantas& Plantas, int &SituacaoAlocacao, int EscolhaVeiculo, int EscolhaPlanta,int imprime, string frase){
+int 	Construcao::AtrasaDemandasParaAtenderMasterComVeiculoFixo( int NumDemanda, int NumPlanta, int NumCarreta, float HoraFimAtendimento, vector < DadosTarefa > &DadosTarefasMovidasAuxiliar,int SituacaoDemanda, int StatusRemocao,ConjuntoPlantas& Plantas, int &SituacaoAlocacao, int EscolhaVeiculo, int EscolhaPlanta,int imprime, string frase){
 
 
 	// ****************** Variaveis que precisão ser removidas, pois não tem utilidade na função ***************************//
@@ -1576,7 +1576,7 @@ int 	Construcao::AtrasaDemandasParaAtenderMasterComVeiculoFixo( int NumDemanda, 
 
 
 	// aramazena o valor auxiliar do horario final de atendiemnto na construção caso for adotado se possibilita o atendimento da demanda
-	double 	NovaHoraFimAtendimento;
+	float 	NovaHoraFimAtendimento;
 
 	if( imprime == 1){
 		cout << endl << endl << "     ====================== Entra Master [" << NumeroDaConstrucao << "-" << NumDemanda << "] -> Construcao::AtrasaDemandasParaAtenderMasterComVeiculoFixo ====================== "  << endl << endl;
@@ -1783,7 +1783,7 @@ public:
 	vector< Construcao > Construcoes;
 	int 	NumeroConstrucoes;
 
-	double	MakespanConstrucoes;
+	float	MakespanConstrucoes;
 	int 	NivelDeInviabilidade;
 
 	ConjuntoConstrucoes();
@@ -1817,8 +1817,8 @@ public:
 	void 	AlocaValoresConstrucoesAnalizadas( int IndiceConstrucaoNaoAtendida );		// 		Coloca o status 2 para as construções que já foram atendidas, e coloca 3 no status da construção passada como parametro
 	int 	VerificaTemConstrucaoParaAnalisar();									// verifica se tem construção para analisar
 
-	int 	RetornaDadosDemandaAtendida( int Construcao, int Demanda,  int &NumPlanta, int &NumCarreta, double &HorarioInicioDescarregamento, double &HorarioFinalDescarregamento, double &HorarioInicioCarregamento, double &HorarioFinalCarregamento, double &HorarioInicioDeslocamento, double &HorarioFinalDeslocamento, ConjuntoPlantas& Plantas);		// retorna dados de uma tarefa que atende uma demanda passada na função
-	int 	VerificaIntegridaDeDemandaAtendida( int Construcao, int Demanda, int NumPlanta, int NumCarreta, double HorarioInicioDescarregamento, double HorarioFinalDescarregamento, double HorarioInicioCarregamento, double HorarioFinalCarregamento, double HorarioInicioDeslocamento, double HorarioFinalDeslocamento, int imprime,  int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo);		// verifica a integridade da tarefa
+	int 	RetornaDadosDemandaAtendida( int Construcao, int Demanda,  int &NumPlanta, int &NumCarreta, float &HorarioInicioDescarregamento, float &HorarioFinalDescarregamento, float &HorarioInicioCarregamento, float &HorarioFinalCarregamento, float &HorarioInicioDeslocamento, float &HorarioFinalDeslocamento, ConjuntoPlantas& Plantas);		// retorna dados de uma tarefa que atende uma demanda passada na função
+	int 	VerificaIntegridaDeDemandaAtendida( int Construcao, int Demanda, int NumPlanta, int NumCarreta, float HorarioInicioDescarregamento, float HorarioFinalDescarregamento, float HorarioInicioCarregamento, float HorarioFinalCarregamento, float HorarioInicioDeslocamento, float HorarioFinalDeslocamento, int imprime,  int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo);		// verifica a integridade da tarefa
 
 // 	Função auxiliar a retornar a solução inicial
 	int 	ReadicionaDeletaTarefasApartirDeDados( vector < DadosTarefa > DadosTarefasMovidas, ConjuntoPlantas &PlantasInstancia);
@@ -1966,12 +1966,12 @@ int 	ConjuntoConstrucoes::VerificaIndividualmenteDemandas(ConjuntoPlantas& Plant
 	// variaveis que armazenam os dados da tarefa
 	int 	NumPlanta;
 	int 	NumCarreta;
-	double 	HorarioInicioDescarregamento;
-	double 	HorarioFinalDescarregamento;
-	double 	HorarioInicioCarregamento;
-	double 	HorarioFinalCarregamento;
-	double 	HorarioInicioDeslocamento;
-	double 	HorarioFinalDeslocamento;
+	float 	HorarioInicioDescarregamento;
+	float 	HorarioFinalDescarregamento;
+	float 	HorarioInicioCarregamento;
+	float 	HorarioFinalCarregamento;
+	float 	HorarioInicioDeslocamento;
+	float 	HorarioFinalDeslocamento;
 
 	// variavel que sinaliza se a tarefa é integra ou não
 	int 	integridade;
@@ -2295,7 +2295,7 @@ int 	ConjuntoConstrucoes::VerificaTemConstrucaoParaAnalisar(){
 
 // retorna dados de uma tarefa que atende uma demanda passada na função
 
-int 	ConjuntoConstrucoes::RetornaDadosDemandaAtendida( int Construcao, int Demanda, int &NumPlanta, int &NumCarreta, double &HorarioInicioDescarregamento, double &HorarioFinalDescarregamento, double &HorarioInicioCarregamento, double &HorarioFinalCarregamento, double &HorarioInicioDeslocamento, double &HorarioFinalDeslocamento, ConjuntoPlantas& Plantas){
+int 	ConjuntoConstrucoes::RetornaDadosDemandaAtendida( int Construcao, int Demanda, int &NumPlanta, int &NumCarreta, float &HorarioInicioDescarregamento, float &HorarioFinalDescarregamento, float &HorarioInicioCarregamento, float &HorarioFinalCarregamento, float &HorarioInicioDeslocamento, float &HorarioFinalDeslocamento, ConjuntoPlantas& Plantas){
 	// percorre todas as construções
 	for( int c = 0; c < NumeroConstrucoes; c++){
 		//verifica se a cosntrução corrente é a que se quer
@@ -2335,7 +2335,7 @@ int 	ConjuntoConstrucoes::RetornaDadosDemandaAtendida( int Construcao, int Deman
 
 // verifica a integridade da tarefa
 
-int 	ConjuntoConstrucoes::VerificaIntegridaDeDemandaAtendida( int Construcao, int Demanda, int NumPlanta, int NumCarreta, double HorarioInicioDescarregamento, double HorarioFinalDescarregamento, double HorarioInicioCarregamento, double HorarioFinalCarregamento, double HorarioInicioDeslocamento, double HorarioFinalDeslocamento, int imprime,  int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo){
+int 	ConjuntoConstrucoes::VerificaIntegridaDeDemandaAtendida( int Construcao, int Demanda, int NumPlanta, int NumCarreta, float HorarioInicioDescarregamento, float HorarioFinalDescarregamento, float HorarioInicioCarregamento, float HorarioFinalCarregamento, float HorarioInicioDeslocamento, float HorarioFinalDeslocamento, int imprime,  int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo){
 	// variavel qiue guarda o indice da cosntrução passada
 	int 	c;
 
@@ -2478,7 +2478,7 @@ int 	ConjuntoConstrucoes::ReadicionaDeletaTarefasApartirDeDados( vector < DadosT
 void 	ConjuntoConstrucoes::EncontraPlanta( int c, int& NumPlantaAnalisando,int EscolhaPlanta, ConjuntoPlantas &PlantasInstancia, string frase){
 	if( EscolhaPlanta == 1){
 		// variavel que armazena a distancia da construção a planta usada para se encontra a planta mais proxima
-		double 	DistanciaConstrucaoPlanta;
+		float 	DistanciaConstrucaoPlanta;
 
 		// inicializa as variaveis
 		NumPlantaAnalisando 		= -13;
@@ -2562,11 +2562,11 @@ int 	ConjuntoConstrucoes::AdicionaTarefa( int VerificaExistencia, int Construcao
 	// ********************************************************************************************************************//
 
 	// armazena os horarios de uma tarefa
-	double 	HorarioInicioPlanta;
-	double 	HorarioSaiDaPlanta;
-	double 	HorarioRetornaPlanta;
-	double 	HorarioChegaContrucao;
-	double 	HorarioSaiConstrucao;
+	float 	HorarioInicioPlanta;
+	float 	HorarioSaiDaPlanta;
+	float 	HorarioRetornaPlanta;
+	float 	HorarioChegaContrucao;
+	float 	HorarioSaiConstrucao;
 	// arqmazena os estados de disponibilidade da tarefa na planta, na coonstrução e no caminhão
 	int 	DisponibilidadePlanta;
 	int 	DisponibilidadeConstrucao;
@@ -2792,11 +2792,11 @@ int 	ConjuntoConstrucoes::AdicionaTarefaComVeiculoFixo( int VerificaExistencia, 
 
 
 	// armazena os horarios de uma tarefa
-	double 	HorarioInicioPlanta;
-	double 	HorarioSaiDaPlanta;
-	double 	HorarioRetornaPlanta;
-	double 	HorarioChegaContrucao;
-	double 	HorarioSaiConstrucao;
+	float 	HorarioInicioPlanta;
+	float 	HorarioSaiDaPlanta;
+	float 	HorarioRetornaPlanta;
+	float 	HorarioChegaContrucao;
+	float 	HorarioSaiConstrucao;
 	// arqmazena os estados de disponibilidade da tarefa na planta, na coonstrução e no caminhão
 	int 	DisponibilidadePlanta;
 	int 	DisponibilidadeConstrucao;
@@ -2816,8 +2816,8 @@ int 	ConjuntoConstrucoes::AdicionaTarefaComVeiculoFixo( int VerificaExistencia, 
 	// situação se a planta pode atender a demanda caso atrasar (-2) ou ela não pode atender a demanda (0)
 	int 	SituacaoPlanta;
 	// hoaraior que a planta pode atender a demanda caso as demandas ateriores forem atrasadas, e o horario que a construção iria ser atendida
-	double 	HorarioQuePlantaPodeAtender;
-	double 	HorarioQueConstrucaoPodeReceberDemanda;
+	float 	HorarioQuePlantaPodeAtender;
+	float 	HorarioQueConstrucaoPodeReceberDemanda;
 
 	// variaveis de controle
 	int 	SituacaoAlocacao;

@@ -25,6 +25,8 @@ public:
 
 	double	Makespan;
 
+	vector< vector < vector < int > > > Alfa;
+
 	Solucao();
 
 	void	CarregaSolucao(int np, ConjuntoPlantas Plantas, int ne, ConjuntoConstrucoes Construcoes, int nv, double v,double TDVC);		// Carrega os dados da instancia e a solução até o momento
@@ -56,6 +58,11 @@ public:
 	void 	RealizarBuscaLocalCaminhao(int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta, int imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo, int RealizaProcessoDeAtrazarTarefas);
 	void 	RealizarBuscaLocalConstrucao(int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta, int imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo, int RealizaProcessoDeAtrazarTarefas);
 	void 	RealizarBuscaLocalPlanta(int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta, int imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo, int RealizaProcessoDeAtrazarTarefas);
+
+	// para testar solução
+
+	void IniciaAlfa();
+	void ImprimeAlfa( int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo);
 
 	~Solucao();
 };
@@ -101,6 +108,10 @@ void 	Solucao::Imprime(bool ImprimePlanta, bool ImprimeConstrucao, bool Verifica
 	if(ImprimeArquivo == 1){
 		fprintf(Arquivo, "     MAKESPAN GERAL = %.4f \n", PlantasInstancia.MakespanPLantas + ConstrucoesInstancia.MakespanConstrucoes);
 	}
+
+	IniciaAlfa();
+
+	ImprimeAlfa(ImprimeSolucao, ImprimeArquivo, Arquivo);
 
 }
 
@@ -1111,6 +1122,75 @@ void	Solucao::RealizarBuscaLocalPlanta(int EscolhaVeiculo, int EscolhaConstrucao
 
 	}
 }
+
+void Solucao::IniciaAlfa(){
+	Alfa.resize(NV);
+	for(int v = 0; v < NV; v++){
+		Alfa[v].resize(NE);
+		for( int e1 = 0; e1 < NE; e1++){
+			for( int e2 = 0; e2 < NE; e2++){
+				if( ConstrucoesInstancia.Construcoes[e2].NumeroDaConstrucao == e1){
+					Alfa[v][e1].resize( ConstrucoesInstancia.Construcoes[e2].NumeroDemandas );
+				}
+			}
+		}
+	}
+
+	for(int v = 0; v < (int) Alfa.size(); v++){
+		for(int e = 0; e < (int) Alfa[v].size(); e++){
+			for(int d = 0; d < (int) Alfa[v][e].size(); d++){
+				Alfa[v][e][d] = 0;
+			}
+		}
+	}
+
+	cout << endl << endl;
+	for( int p = 0; p < (int) PlantasInstancia.Plantas.size(); p++){
+		for( int car = 0; car < (int) PlantasInstancia.Plantas[p].Carregamentos.size(); car++){
+			cout << " carreta : " <<  PlantasInstancia.Plantas[p].Carregamentos[car].NumCarretaUtilizada;
+			cout << " Construcao : " <<  PlantasInstancia.Plantas[p].Carregamentos[car].NumeroConstrucao ;
+			cout <<  " demanda : " << PlantasInstancia.Plantas[p].Carregamentos[car].NumeroDemandaSuprida ;
+			cout <<  "        tempo : " << PlantasInstancia.Plantas[p].Carregamentos[car].HorarioInicioCarregamento ;
+			cout <<  " - " << PlantasInstancia.Plantas[p].Carregamentos[car].HorarioFinalCarregamento << endl ;
+			Alfa[ PlantasInstancia.Plantas[p].Carregamentos[car].NumCarretaUtilizada ] [ PlantasInstancia.Plantas[p].Carregamentos[car].NumeroConstrucao ][ PlantasInstancia.Plantas[p].Carregamentos[car].NumeroDemandaSuprida ] = 1;
+		}
+	}
+
+
+	cout << endl << endl;
+
+}
+
+void Solucao::ImprimeAlfa( int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo){
+
+	if( ImprimeSolucao == 1){
+		for(int v = 0; v < (int) Alfa.size(); v++){
+			printf(" Veiculo %d \n", v);
+			for(int e = 0; e < (int) Alfa[v].size(); e++){
+				for(int d = 0; d < (int) Alfa[v][e].size(); d++){
+					printf( " Alfa_%d_%d_%d [%d]    ",v,e,d,Alfa[v][e][d]);
+				}
+				printf( "\n");
+			}
+			printf( "\n");
+		}
+	}
+
+	if( ImprimeArquivo == 1){
+		for(int v = 0; v < (int) Alfa.size(); v++){
+			fprintf(Arquivo," Veiculo %d \n", v);
+			for(int e = 0; e < (int) Alfa[v].size(); e++){
+				for(int d = 0; d < (int) Alfa[v][e].size(); d++){
+					fprintf(Arquivo, " Alfa_%d_%d_%d [%d]    ",v,e,d,Alfa[v][e][d]);
+				}
+				fprintf(Arquivo, "\n");
+			}
+			fprintf(Arquivo, "\n");
+		}
+	}
+
+}
+
 
 Solucao::~Solucao(){
 

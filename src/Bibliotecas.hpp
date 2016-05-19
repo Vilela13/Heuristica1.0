@@ -44,8 +44,7 @@
 
 using namespace std;
 
-#define IntervaloDeTempo 0.0023333
-//0.0083333 // meio minuto
+#define IntervaloDeTempo 0.0083333 // meio minuto
 //0.016666; // um minuto
 
 #define PenalidadeNaoAtendimentoDemanda	10000000			//penalidade de não atendiemnto da demanda, ela esta presente no processo de calculo do makespan

@@ -68,6 +68,7 @@ public:
 
 	void IniciaVariaveisModelo();
 	void AtribuiValoresvariaveisModelo();
+	int VerificaRestricoes();
 	void ImprimeVariaveisModeloSeparado();
 	void ImprimeVariaveisDoModelo( int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo);
 
@@ -121,7 +122,10 @@ void 	Solucao::Imprime(bool ImprimePlanta, bool ImprimeConstrucao, bool Verifica
 
 	IniciaVariaveisModelo();
 	AtribuiValoresvariaveisModelo();
-	//ImprimeVariaveisModeloSeparado();
+
+	VerificaRestricoes();
+
+	ImprimeVariaveisModeloSeparado();
 	//ImprimeVariaveisDoModelo(ImprimeSolucao, ImprimeArquivo, Arquivo);
 
 }
@@ -1146,7 +1150,7 @@ void Solucao:: IniciaVariaveisModelo(){
 				if( ConstrucoesInstancia.Construcoes[e2].NumeroDaConstrucao == e1){
 					Alfa[v][e1].resize( ConstrucoesInstancia.Construcoes[e2].NumeroDemandas );
 						for( int d = 0; d < ConstrucoesInstancia.Construcoes[e2].NumeroDemandas; d++){
-							Alfa[v][e1][d]=0;
+							Alfa[v][e1][d] = 0;
 						}
 				}
 			}
@@ -1216,6 +1220,9 @@ void Solucao:: IniciaVariaveisModelo(){
 			for( int e2 = 0; e2 < NE; e2++){
 				if( ConstrucoesInstancia.Construcoes[e2].NumeroDaConstrucao == e1){
 					Tvi[v][e1].resize( ConstrucoesInstancia.Construcoes[e2].NumeroDemandas );
+					for( int d = 0; d < (int) ConstrucoesInstancia.Construcoes[e2].NumeroDemandas; d++){
+						Tvi[v][e1][d] = ConstrucoesInstancia.Construcoes[e2].TempoMinimoDeFuncionamento;
+					}
 				}
 			}
 		}
@@ -1230,6 +1237,9 @@ void Solucao:: IniciaVariaveisModelo(){
 			for( int e2 = 0; e2 < NE; e2++){
 				if( ConstrucoesInstancia.Construcoes[e2].NumeroDaConstrucao == e1){
 					TPvi[p][e1].resize( ConstrucoesInstancia.Construcoes[e2].NumeroDemandas );
+					for( int d = 0; d < (int) ConstrucoesInstancia.Construcoes[e2].NumeroDemandas; d++){
+						TPvi[p][e1][d] = PlantasInstancia.Plantas[p].TempoMinimoDeFuncionamento;
+					}
 				}
 			}
 		}
@@ -1274,7 +1284,9 @@ void Solucao::AtribuiValoresvariaveisModelo(){
 			Tvi[ ConstrucoesInstancia.Construcoes[c1].Descarregamentos[des1].NumCarretaUtilizada ][ ConstrucoesInstancia.Construcoes[c1].NumeroDaConstrucao ][des1] = ConstrucoesInstancia.Construcoes[c1].Descarregamentos[des1].HorarioInicioDescarregamento;
 			for( int c2 = 0; c2 < NE; c2++){
 				for( int des2 = 0; des2 < (int) ConstrucoesInstancia.Construcoes[c2].Descarregamentos.size(); des2++){
-					if( c1 != c2 && des1 != des2){
+					if( c1 == c2 && des1 == des2){
+
+					}else{
 						if( ConstrucoesInstancia.Construcoes[c1].Descarregamentos[des1].NumPlantaFornecedor == ConstrucoesInstancia.Construcoes[c2].Descarregamentos[des2].NumPlantaFornecedor ){
 							if( ConstrucoesInstancia.Construcoes[c1].Descarregamentos[des1].HorarioInicioDescarregamento < ConstrucoesInstancia.Construcoes[c2].Descarregamentos[des2].HorarioInicioDescarregamento){
 								Betaprod[ ConstrucoesInstancia.Construcoes[c1].Descarregamentos[des1].NumPlantaFornecedor ][ ConstrucoesInstancia.Construcoes[c1].NumeroDaConstrucao ][ des1 ][ ConstrucoesInstancia.Construcoes[c2].NumeroDaConstrucao ][ des2 ] = 1;
@@ -1291,16 +1303,93 @@ void Solucao::AtribuiValoresvariaveisModelo(){
 
 }
 
+int Solucao::VerificaRestricoes(){
+
+	int AuxRest1;
+
+	// restrição 1
+
+	for( int e1 = 0; e1 < NE; e1++){
+		for( int e2 = 0; e2 < NE; e2++){
+			if( ConstrucoesInstancia.Construcoes[e2].NumeroDaConstrucao == e1){
+				for( int d = 0; d < (int) ConstrucoesInstancia.Construcoes[e2].NumeroDemandas; d++){
+					AuxRest1 = 0;
+					for(int v = 0; v < NV; v++){
+						AuxRest1 = AuxRest1 + Alfa[v][e1][d];
+					}
+					if( AuxRest1 != 1 ){
+						cout << " Soma Alfas[v][" << e1 << "][" << d << "] = 1 			>>>>>> Problema <<<<<<<<<<<< " << endl << endl;
+					}
+				}
+			}
+		}
+	}
+}
+
 void Solucao::ImprimeVariaveisModeloSeparado(){
 	ofstream ArquivoVariaveis;
-	ArquivoVariaveis.open( "VariaveisColocalrModelo.txt" );
+	ArquivoVariaveis.open( "VariaveisColocarModelo.txt" );
+
+	for( int v = 0; v < (int) Alfa.size(); v++){
+		for( int e = 0; e < (int) Alfa[v].size(); e++){
+			for( int d = 0; d < (int) Alfa[v][e].size();d++){
+				if( Alfa[v][e][d] != 0){
+					ArquivoVariaveis << " model.add(Alfa[" << v << "][" << e << "][" << d << "] = " <<  Alfa[v][e][d] << ");"<< endl;
+				}
+			}
+		}
+	}
 
 
-	//ArquivoVariaveis << " model.add(Alfa[" << PlantasInstancia.Plantas[p].Carregamentos[car].NumCarretaUtilizada <<"]";
 
-	//ArquivoVariaveis << " model.add(BetaProducao[" << p << "]";
-	//ArquivoVariaveis << "[" << PlantasInstancia.Plantas[p].Carregamentos[car1].NumeroConstrucao << "][" << PlantasInstancia.Plantas[p].Carregamentos[car1].NumeroDemandaSuprida << "]";
-	//ArquivoVariaveis << "[" << PlantasInstancia.Plantas[p].Carregamentos[car2].NumeroConstrucao << "][" << PlantasInstancia.Plantas[p].Carregamentos[car2].NumeroDemandaSuprida << "] == 1 );" << endl;
+	for( int v = 0; v < (int) Tvi.size(); v++){
+		for( int e = 0; e < (int) Tvi[v].size(); e++){
+			for( int d = 0; d < (int) Tvi[v][e].size();d++){
+				ArquivoVariaveis << " 	model.add(Tvi[" << v << "][" << e << "][" << d << "] = " << Tvi[v][e][d] << ");"<< endl;
+			}
+		}
+	}
+
+	for( int v = 0; v < (int) Beta.size(); v++){
+		for( int e1 = 0; e1 < (int) Beta[v].size(); e1++){
+			for( int d1 = 0; d1 < (int) Beta[v][e1].size();d1++){
+				for( int e2 = 0; e2 < (int) Beta[v][e1][d1].size(); e2++){
+					for( int d2 = 0; d2 < (int) Beta[v][e1][d1][e2].size();d2++){
+						if( Beta[v][e1][d1][e2][d2] != 0){
+							ArquivoVariaveis << " model.add(Beta[" << v << "][" << e1 << "][" << d1 << "][" << e2 << "][" << d2<< "] = " << Beta[v][e1][d1][e2][d2] << "); " << endl;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	for( int p = 0; p < (int) TPvi.size(); p++){
+		for( int e1 = 0; e1 < (int) TPvi[p].size(); e1++){
+			for( int d1 = 0; d1 < (int) TPvi[p][e1].size(); d1++){
+				ArquivoVariaveis << " 		model.add(TPvi[" << p << "][" << e1 << "][" << d1 << "] = " << TPvi[p][e1][d1] << ");" << endl;
+			}
+		}
+	}
+
+
+	for( int p = 0; p < (int) Betaprod.size(); p++){
+		for( int e1 = 0; e1 < (int) Betaprod[p].size(); e1++){
+			for( int d1 = 0; d1 < (int) Betaprod[p][e1].size(); d1++){
+				for( int e2 = 0; e2 < (int) Betaprod[p][e1][d1].size(); e2++){
+					for( int d2 = 0; d2 < (int) Betaprod[p][e1][d1][e2].size(); d2++){
+						if( Betaprod[p][e1][d1][e2][d2] != 0){
+							ArquivoVariaveis << " model.add(Betaprod[" << p << "][" << e1 << "][" << d1 << "][" << e2 << "][" << d2<< "] = " << Betaprod[p][e1][d1][e2][d2] << "); " << endl;
+						}
+					}
+				}
+			}
+
+		}
+	}
+
+
+
 
 	ArquivoVariaveis.close();
 }

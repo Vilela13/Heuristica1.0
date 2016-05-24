@@ -1263,26 +1263,14 @@ void Solucao:: IniciaVariaveisModelo(){
 
 void Solucao::AtribuiValoresvariaveisModelo(){
 
-	for(int v = 0; v < (int) Alfa.size(); v++){
-		for(int e = 0; e < (int) Alfa[v].size(); e++){
-			for(int d = 0; d < (int) Alfa[v][e].size(); d++){
-				Alfa[v][e][d] = 0;
-			}
-		}
-	}
-	for( int p = 0; p < (int) PlantasInstancia.Plantas.size(); p++){
-		for( int car = 0; car < (int) PlantasInstancia.Plantas[p].Carregamentos.size(); car++){
-			Alfa[ PlantasInstancia.Plantas[p].Carregamentos[car].NumCarretaUtilizada ] [ PlantasInstancia.Plantas[p].Carregamentos[car].NumeroConstrucao ][ PlantasInstancia.Plantas[p].Carregamentos[car].NumeroDemandaSuprida ] = 1;
-			TPvi[ p ][ PlantasInstancia.Plantas[p].Carregamentos[car].NumeroConstrucao ][ PlantasInstancia.Plantas[p].Carregamentos[car].NumeroDemandaSuprida ] = PlantasInstancia.Plantas[p].Carregamentos[car].HorarioInicioCarregamento;
-		}
-	}
-
 	for( int p = 0; p < (int) PlantasInstancia.Plantas.size(); p++){
 		for( int car1 = 0; car1 < (int) PlantasInstancia.Plantas[p].Carregamentos.size(); car1++){
+			Alfa[ PlantasInstancia.Plantas[p].Carregamentos[car1].NumCarretaUtilizada ][ PlantasInstancia.Plantas[p].Carregamentos[car1].NumeroConstrucao ][ PlantasInstancia.Plantas[p].Carregamentos[car1].NumeroDemandaSuprida ] = 1;
+			TPvi[ PlantasInstancia.Plantas[p].Carregamentos[car1].NumCarretaUtilizada ][ PlantasInstancia.Plantas[p].Carregamentos[car1].NumeroConstrucao ][ PlantasInstancia.Plantas[p].Carregamentos[car1].NumeroDemandaSuprida ] = PlantasInstancia.Plantas[p].Carregamentos[car1].HorarioInicioCarregamento;
 			for( int car2 = 0; car2 < (int) PlantasInstancia.Plantas[p].Carregamentos.size(); car2++){
 				if( car1 != car2){
 					if( PlantasInstancia.Plantas[p].Carregamentos[car1].HorarioInicioCarregamento < PlantasInstancia.Plantas[p].Carregamentos[car2].HorarioInicioCarregamento){
-						Betaprod[p][PlantasInstancia.Plantas[p].Carregamentos[car1].NumeroConstrucao ][PlantasInstancia.Plantas[p].Carregamentos[car1].NumeroDemandaSuprida][PlantasInstancia.Plantas[p].Carregamentos[car2].NumeroConstrucao][PlantasInstancia.Plantas[p].Carregamentos[car2].NumeroDemandaSuprida] = 1;
+						Betaprod[ PlantasInstancia.Plantas[p].NumeroDaPlanta ][ PlantasInstancia.Plantas[p].Carregamentos[car1].NumeroConstrucao ][ PlantasInstancia.Plantas[p].Carregamentos[car1].NumeroDemandaSuprida ][ PlantasInstancia.Plantas[p].Carregamentos[car2].NumeroConstrucao ][ PlantasInstancia.Plantas[p].Carregamentos[car2].NumeroDemandaSuprida ] = 1;
 					}
 				}
 			}
@@ -1300,9 +1288,9 @@ void Solucao::AtribuiValoresvariaveisModelo(){
 					if( c1 == c2 && des1 == des2){
 
 					}else{
-						if( ConstrucoesInstancia.Construcoes[c1].Descarregamentos[des1].NumPlantaFornecedor == ConstrucoesInstancia.Construcoes[c2].Descarregamentos[des2].NumPlantaFornecedor ){
+						if( ConstrucoesInstancia.Construcoes[c1].Descarregamentos[des1].NumCarretaUtilizada == ConstrucoesInstancia.Construcoes[c2].Descarregamentos[des2].NumCarretaUtilizada ){
 							if( ConstrucoesInstancia.Construcoes[c1].Descarregamentos[des1].HorarioInicioDescarregamento < ConstrucoesInstancia.Construcoes[c2].Descarregamentos[des2].HorarioInicioDescarregamento){
-								Betaprod[ ConstrucoesInstancia.Construcoes[c1].Descarregamentos[des1].NumPlantaFornecedor ][ ConstrucoesInstancia.Construcoes[c1].NumeroDaConstrucao ][ des1 ][ ConstrucoesInstancia.Construcoes[c2].NumeroDaConstrucao ][ des2 ] = 1;
+								Beta[ ConstrucoesInstancia.Construcoes[c1].Descarregamentos[des1].NumCarretaUtilizada ][ ConstrucoesInstancia.Construcoes[c1].NumeroDaConstrucao ][ des1 ][ ConstrucoesInstancia.Construcoes[c2].NumeroDaConstrucao ][ des2 ] = 1;
 							}
 						}
 					}

@@ -52,6 +52,8 @@ using namespace std;
 
 #define  PonteiroArquivo FILE*
 
+#include "DadosModelo.hpp"
+
 #include "DadosSolomon.hpp"				// classe que apartir das instancias de solomon cria uma instancia do nosso problema
 #include "Carretas.hpp"					// classe que possui as estruturas caracteristicas dos caminhões/ veículos/ britadeiras
 #include "Plantas.hpp"					// classe que possui as estruturas caracteristicas das plantas

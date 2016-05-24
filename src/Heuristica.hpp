@@ -14,6 +14,8 @@ class Heuristica{
 
 public:
 
+	 DadosModelo DM;
+
 	ifstream arq;
 	int		NP;
 	ConjuntoPlantas PlantasInstancia;
@@ -2034,6 +2036,7 @@ void	Heuristica::LeNomeInstancia(int comentarios, string& Instancia){
 void	Heuristica::LeNumeroPlantasEntregasVeiculos(int comentarios){
 	// le numero de plantas
 	arq >> NP;
+
 	// inicia os dados que guada os dados das plantas
 	PlantasInstancia.IniciaConjuntoPlantas(NP);
 	for( int p = 0; p < NP; p++){
@@ -2041,6 +2044,9 @@ void	Heuristica::LeNumeroPlantasEntregasVeiculos(int comentarios){
 	}
 	// le numero de construções
 	arq >> NE;
+
+
+
 	// inicia as estrutura que guardao os dados das construções
 	ConstrucoesInstancia.IniciaConjuntoConstrucoes(NE);
 	for( int c = 0; c < NE; c++){
@@ -2054,12 +2060,70 @@ void	Heuristica::LeNumeroPlantasEntregasVeiculos(int comentarios){
 		cout << " Numero de Entregas "<< NE << endl;
 		cout << " Numero de Veiculos "<< NV << endl;
 	}
+
+	DM.NP = NP;
+	DM.NE = NE;
+	DM.NV = NV;
+
+
+
+	DM.Veiculos.resize(NP);
+	DM.Demandas.resize(NE);
+
+	DM.TEMpc.resize(NP);
+	for( int p = 0; p < NP; p++){
+		DM.TEMpc[p].resize(NE);
+	}
+	DM.TEMcp.resize(NE);
+	for( int e = 0; e < NE; e++){
+		DM.TEMcp[e].resize(NP);
+	}
+	DM.DESCvi.resize(NV);
+	for( int v = 0; v < NV; v++){
+		DM.DESCvi[v].resize(NE);
+	}
+	DM.CARRp.resize(NP);
+	DM.TETAc.resize(NE);
+	DM.S1vii.resize(NV);
+	DM.S2vii.resize(NV);
+
+	DM.TMINp.resize(NP);
+	DM.TMAXp.resize(NP);
+	DM.TMINc.resize(NE);
+	DM.TMAXc.resize(NE);
+
+	DM.M1vi.resize(NV);
+	for( int v = 0; v < NV; v++){
+		DM.M1vi[v].resize(NE);
+	}
+	DM.M2pc.resize(NP);
+	for( int p = 0; p < NP; p++){
+		DM.M2pc[p].resize(NE);
+	}
+
+
+
+	DM.M3c.resize(NE);
+	DM.M4vi.resize(NV);
+	for( int v = 0; v < NV; v++){
+		DM.M4vi[v].resize(NE);
+	}
+	DM.M5vii.resize(NV);
+	DM.M6vii.resize(NV);
+	DM.M7c.resize(NE);
+	DM.M8vi.resize(NV);
+	for( int v = 0; v < NV; v++){
+		DM.M8vi[v].resize(NE);
+	}
+	DM.M9p.resize(NP);
+
 }
 
 // le a velocidade
 void	Heuristica::LeVelocidade(int comentarios){
 	// le a velocidade dos caminhões
 	arq >> Velocidade;
+
 	if( comentarios == 1){
 		cout << " Velocidade "<<  Velocidade << endl;
 	}
@@ -2070,6 +2134,10 @@ void	Heuristica::LeVelocidade(int comentarios){
 void	Heuristica::LeTempoDeVidaConcreto(int comentarios){
 	// le o tempo de vida do concreto
 	arq >> TempoDeVidaConcreto;
+
+	DM.TVC = TempoDeVidaConcreto;
+
+
 	if( comentarios == 1){
 		cout << " Tempo De Vida Concreto "<<  TempoDeVidaConcreto << endl;
 	}
@@ -2078,10 +2146,16 @@ void	Heuristica::LeTempoDeVidaConcreto(int comentarios){
 // le o numero de veículos por planta
 void	Heuristica::LeVeiculosPorPlanta(int comentarios){
 	int aux;
+
+
+
 	// percorre todas as planats
 	for (int i = 0; i < NP ; i++){
 		// le o numero d eveiculos que existe na planta corrente
 		arq >> PlantasInstancia.Plantas[i].NumeroVeiculos;
+
+		DM.Veiculos[i] = PlantasInstancia.Plantas[i].NumeroVeiculos;
+
 		// inicia a estrutura que armazena os veiculos da planta corrente
 		PlantasInstancia.Plantas[i].VeiculosDaPlanta.IniciaConjuntoCarretas( PlantasInstancia.Plantas[i].NumeroVeiculos, PlantasInstancia.Plantas[i].NumeroDaPlanta );
 		if( comentarios == 1){
@@ -2100,7 +2174,6 @@ void	Heuristica::LeVeiculosPorPlanta(int comentarios){
 			cout << ") " << endl;
 		}
 	}
-
 }
 
 // le o numero de demandas por construção
@@ -2110,6 +2183,15 @@ void	Heuristica::LeNumeroDemandas(int comentarios){
 	for (int i = 0; i < NE ; i++){
 		// le o numero de demandas
 		arq >> ConstrucoesInstancia.Construcoes[i].NumeroDemandas;
+
+		DM.Demandas[i] = ConstrucoesInstancia.Construcoes[i].NumeroDemandas;
+		for( int v = 0; v < NV; v++){
+			DM.DESCvi[v][i].resize(ConstrucoesInstancia.Construcoes[i].NumeroDemandas);
+			DM.M1vi[v][i].resize(ConstrucoesInstancia.Construcoes[i].NumeroDemandas);
+			DM.M4vi[v][i].resize(ConstrucoesInstancia.Construcoes[i].NumeroDemandas);
+			DM.M8vi[v][i].resize(ConstrucoesInstancia.Construcoes[i].NumeroDemandas);
+		}
+
 		// inicializa o numero de descarregamentos que cosntrução temq ue receber para satisfazer todas as suas demandas
 		ConstrucoesInstancia.Construcoes[i].Descarregamentos.resize(ConstrucoesInstancia.Construcoes[i].NumeroDemandas);
 		// inicia o status de atendiemntos como zero, nenhuma demanda foi atendida ainda
@@ -2140,6 +2222,37 @@ void	Heuristica::LeNumeroDemandas(int comentarios){
 			cout << ") " << endl;
 		}
 	}
+
+
+
+
+	for (int v = 0; v < NV ; v++){
+		DM.S1vii[v].resize(NE);
+		DM.S2vii[v].resize(NE);
+		DM.M5vii[v].resize(NE);
+		DM.M6vii[v].resize(NE);
+		for (int e1 = 0; e1 < NE ; e1++){
+			DM.S1vii[v][e1].resize( ConstrucoesInstancia.Construcoes[e1].NumeroDemandas );
+			DM.S2vii[v][e1].resize( ConstrucoesInstancia.Construcoes[e1].NumeroDemandas );
+			DM.M5vii[v][e1].resize( ConstrucoesInstancia.Construcoes[e1].NumeroDemandas );
+			DM.M6vii[v][e1].resize( ConstrucoesInstancia.Construcoes[e1].NumeroDemandas );
+
+			for (int d1 = 0; d1 < (int) DM.S1vii[v][e1].size() ; d1++){
+				DM.S1vii[v][e1][d1].resize(NE);
+				DM.S2vii[v][e1][d1].resize(NE);
+				DM.M5vii[v][e1][d1].resize(NE);
+				DM.M6vii[v][e1][d1].resize(NE);
+				for (int e2 = 0; e2 < NE ; e2++){
+					DM.S1vii[v][e1][d1][e2].resize( ConstrucoesInstancia.Construcoes[e2].NumeroDemandas );
+					DM.S2vii[v][e1][d1][e2].resize( ConstrucoesInstancia.Construcoes[e2].NumeroDemandas );
+					DM.M5vii[v][e1][d1][e2].resize( ConstrucoesInstancia.Construcoes[e2].NumeroDemandas );
+					DM.M6vii[v][e1][d1][e2].resize( ConstrucoesInstancia.Construcoes[e2].NumeroDemandas );
+				}
+			}
+		}
+	}
+
+
 }
 
 

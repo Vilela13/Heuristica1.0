@@ -1158,6 +1158,7 @@ void Solucao:: IniciaVariaveisModelo(){
 	}
 
 
+//cout << endl << endl << "  galo " << endl << endl;
 
 	Beta.resize(NV);
 	for(int v = 0; v < NV; v++){
@@ -1166,14 +1167,14 @@ void Solucao:: IniciaVariaveisModelo(){
 			for( int e2 = 0; e2 < NE; e2++){
 				if( ConstrucoesInstancia.Construcoes[e2].NumeroDaConstrucao == e1){
 					Beta[v][e1].resize( ConstrucoesInstancia.Construcoes[e2].NumeroDemandas );
-					for( int d = 0; d < ConstrucoesInstancia.Construcoes[e2].NumeroDemandas; d++){
-						Beta[v][e1][d].resize(NE);
+					for( int d1 = 0; d1 < ConstrucoesInstancia.Construcoes[e2].NumeroDemandas; d1++){
+						Beta[v][e1][d1].resize(NE);
 						for( int e3 = 0; e3 < NE; e3++){
 							for( int e4 = 0; e4 < NE; e4++){
 								if( ConstrucoesInstancia.Construcoes[e4].NumeroDaConstrucao == e3){
-									Beta[v][e1][d][e3].resize( ConstrucoesInstancia.Construcoes[e4].NumeroDemandas );
+									Beta[v][e1][d1][e3].resize( ConstrucoesInstancia.Construcoes[e4].NumeroDemandas );
 									for( int d2 = 0; d2 < ConstrucoesInstancia.Construcoes[e4].NumeroDemandas; d2++){
-										Beta[v][e1][d][e3][d2] = 0;
+										Beta[v][e1][d1][e3][d2] = 0;
 									}
 								}
 							}
@@ -1193,14 +1194,14 @@ void Solucao:: IniciaVariaveisModelo(){
 			for( int e2 = 0; e2 < NE; e2++){
 				if( ConstrucoesInstancia.Construcoes[e2].NumeroDaConstrucao == e1){
 					Betaprod[p][e1].resize( ConstrucoesInstancia.Construcoes[e2].NumeroDemandas );
-					for( int d = 0; d < ConstrucoesInstancia.Construcoes[e2].NumeroDemandas; d++){
-						Betaprod[p][e1][d].resize(NE);
+					for( int d1 = 0; d1 < ConstrucoesInstancia.Construcoes[e2].NumeroDemandas; d1++){
+						Betaprod[p][e1][d1].resize(NE);
 						for( int e3 = 0; e3 < NE; e3++){
 							for( int e4 = 0; e4 < NE; e4++){
 								if( ConstrucoesInstancia.Construcoes[e4].NumeroDaConstrucao == e3){
-									Betaprod[p][e1][d][e3].resize( ConstrucoesInstancia.Construcoes[e4].NumeroDemandas );
+									Betaprod[p][e1][d1][e3].resize( ConstrucoesInstancia.Construcoes[e4].NumeroDemandas );
 									for( int d2 = 0; d2 < ConstrucoesInstancia.Construcoes[e4].NumeroDemandas; d2++){
-										Betaprod[p][e1][d][e3][d2] = 0;
+										Betaprod[p][e1][d1][e3][d2] = 0;
 									}
 								}
 							}
@@ -1230,16 +1231,28 @@ void Solucao:: IniciaVariaveisModelo(){
 
 
 
-	TPvi.resize(NP);
-	for(int p = 0; p < NP; p++){
-		TPvi[p].resize(NE);
-		for( int e1 = 0; e1 < NE; e1++){
-			for( int e2 = 0; e2 < NE; e2++){
-				if( ConstrucoesInstancia.Construcoes[e2].NumeroDaConstrucao == e1){
-					TPvi[p][e1].resize( ConstrucoesInstancia.Construcoes[e2].NumeroDemandas );
-					for( int d = 0; d < (int) ConstrucoesInstancia.Construcoes[e2].NumeroDemandas; d++){
-						TPvi[p][e1][d] = PlantasInstancia.Plantas[p].TempoMinimoDeFuncionamento;
+	int AuxV;
+	AuxV = 0;
+
+	TPvi.resize(NV);
+	for(int p1 = 0; p1 < NP; p1++){
+		for(int p2 = 0; p2 < NP; p2++){
+			if( PlantasInstancia.Plantas[p2].NumeroDaPlanta == p1){
+
+				for( int v = 0; v < PlantasInstancia.Plantas[p2].NumeroVeiculos; v++){
+					TPvi[AuxV].resize(NE);
+					for( int e1 = 0; e1 < NE; e1++){
+						for( int e2 = 0; e2 < NE; e2++){
+							if( ConstrucoesInstancia.Construcoes[e2].NumeroDaConstrucao == e1){
+								TPvi[AuxV][e1].resize( ConstrucoesInstancia.Construcoes[e2].NumeroDemandas );
+								for( int d = 0; d < (int) ConstrucoesInstancia.Construcoes[e2].NumeroDemandas; d++){
+									TPvi[AuxV][e1][d] = PlantasInstancia.Plantas[p2].TempoMinimoDeFuncionamento;
+								}
+							}
+						}
+
 					}
+					AuxV++;
 				}
 			}
 		}

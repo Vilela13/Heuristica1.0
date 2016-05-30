@@ -2270,6 +2270,10 @@ void	Heuristica::LeDistancias(int comentarios){
 		for ( int c = 0; c < NE; c++){
 			// le a distancia da planta corresnte para a construção corrente e armazena esse valor
 			arq >> PlantasInstancia.Plantas[p].DistanciaConstrucoes[c];
+
+			// Dados modelo
+			DM.TEMpc[p][c] = PlantasInstancia.Plantas[p].DistanciaConstrucoes[c];
+
 			if( comentarios == 1){
 				cout << PlantasInstancia.Plantas[p].DistanciaConstrucoes[c] << " ";
 			}
@@ -2292,6 +2296,10 @@ void	Heuristica::LeDistancias(int comentarios){
 		for ( int p = 0; p < NP; p++){
 			// le a distancia da construção corrente para a planta corresnte e armazena esse valor
 			arq >> ConstrucoesInstancia.Construcoes[c].DistanciaPlantas[p].Distancia;
+
+			// Dados modelo
+			DM.TEMcp[c][p] = ConstrucoesInstancia.Construcoes[c].DistanciaPlantas[p].Distancia;
+
 			// armazena um ponteiro que leva a planta que a distancia acima que na construção corrente ela se refere
 			ConstrucoesInstancia.Construcoes[c].DistanciaPlantas[p].PlantaComparada = &PlantasInstancia.Plantas[p];
 			if( comentarios == 1){
@@ -2308,6 +2316,9 @@ void	Heuristica::LeDistancias(int comentarios){
 // le os tempos que cada caminhão leva para atender cada demanda em cada cosntrução
 void	Heuristica::LeTempoConstrucao(int comentarios){
 	int aux;
+
+	int VeiculoAux1;
+	int VeiculoAux2;
 
 	if( comentarios == 1){
 		cout << "     Tempo de cada veiculo em cada cosntrucao "<< endl;
@@ -2337,6 +2348,20 @@ void	Heuristica::LeTempoConstrucao(int comentarios){
 				for ( int d = 0; d < ConstrucoesInstancia.Construcoes[c].NumeroDemandas; d++){
 					// le o tempo que o veicuo corrente leva para atender a demanda corrente
 					arq >> PlantasInstancia.Plantas[p].VeiculosDaPlanta.Carretas[v].TempoParaDescarregarNaConstrucao[c][d];
+
+					// encontra a númeração do veiculo referente a que se tem no modelo
+					VeiculoAux1 = 0;
+					VeiculoAux2 = 0;
+					for( int p1 = 0; p1 < NP ; p1++){
+						if( p1 == p){
+							VeiculoAux2 = VeiculoAux1 + v;
+						}
+						VeiculoAux1 = VeiculoAux1 + PlantasInstancia.Plantas[p].NumeroVeiculos;
+					}
+
+					// Dados modelo
+					DM.DESCvi[ VeiculoAux2 ][c][d] = PlantasInstancia.Plantas[p].VeiculosDaPlanta.Carretas[v].TempoParaDescarregarNaConstrucao[c][d];
+
 					if( comentarios == 1){
 						cout << PlantasInstancia.Plantas[p].VeiculosDaPlanta.Carretas[v].TempoParaDescarregarNaConstrucao[c][d] << "  ";
 					}
@@ -2356,6 +2381,10 @@ void	Heuristica::LeTempoPlanta(int comentarios){
 	for (int p = 0; p < NP ; p++){
 		// le e armazena o tempo que a planta leva para carregar um caminhão de concreto
 		arq >> PlantasInstancia.Plantas[p].TempoPlanta;
+
+		// Dados modelo
+		DM.CARRp[p] = PlantasInstancia.Plantas[p].TempoPlanta;
+
 		if( comentarios == 1){
 			cout << " Tempo na Planta " << p +1 << " = " <<  PlantasInstancia.Plantas[p].TempoPlanta << endl;
 		}
@@ -2372,6 +2401,10 @@ void	Heuristica::LeTempoMaximoEntreDescargas(int comentarios){
 	for ( int c = 0; c < NE; c++){
 		// le e armazena o tempo maximo entre dois carregamentos seguidos na mesma construção
 		arq >> ConstrucoesInstancia.Construcoes[c].TempoMaximoEntreDescargas;
+
+		// Dados modelo
+		DM.TETAc[c] = ConstrucoesInstancia.Construcoes[c].TempoMaximoEntreDescargas;
+
 		if( comentarios == 1){
 			cout << " Construcao " << c + 1 << " = " <<  ConstrucoesInstancia.Construcoes[c].TempoMaximoEntreDescargas << endl;
 		}
@@ -2384,11 +2417,19 @@ void	Heuristica::LeTempoMaximoMinimoConstrucoes(int comentarios){
 	for ( int c = 0; c < NE; c++){
 		// le e armazena o tempo minimo que se pode receber um caminhão na construção
 		arq >> ConstrucoesInstancia.Construcoes[c].TempoMinimoDeFuncionamento;
+
+		// Dados modelo
+		DM.TMINc[c] = ConstrucoesInstancia.Construcoes[c].TempoMinimoDeFuncionamento;
+
 	}
 	// percorre todas as construções
 	for ( int c = 0; c < NE; c++){
 		// le e armazena o tempo máximo que se pode receber um caminhão na construção
 		arq >> ConstrucoesInstancia.Construcoes[c].TempoMaximoDeFuncionamento;
+
+		// Dados modelo
+		DM.TMAXc[c] = ConstrucoesInstancia.Construcoes[c].TempoMaximoDeFuncionamento;
+
 	}
 	if( comentarios == 1){
 		cout << "     Intervalo de Funcionamento Construcoes " << endl;

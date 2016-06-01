@@ -34,6 +34,9 @@ public:
 	vector< vector < vector < float > > > Tvei;
 	vector< vector < vector < float > > > TPvei;
 
+	vector < float > Ze;
+	vector < float > Zp;
+
 
 	Solucao();
 
@@ -1261,6 +1264,8 @@ void Solucao:: IniciaVariaveisModelo(){
 	}
 
 
+	Ze.resize(NE);
+	Zp.resize(NP);
 }
 
 void Solucao::AtribuiValoresVariaveisModelo(){
@@ -1280,7 +1285,7 @@ void Solucao::AtribuiValoresVariaveisModelo(){
 	if( imprime == 1 ){
 		cout << endl << endl << "   Alfa, TPvei e BetaProducao " << endl << endl;
 	}
-
+	// atribui valores a Alfa, TPvei e BetaProducao
 	for( int p1 = 0; p1 < (int) PlantasInstancia.Plantas.size(); p1++){
 		for( int p2 = 0; p2 < (int) PlantasInstancia.Plantas.size(); p2++){
 			if( PlantasInstancia.Plantas[p2].NumeroDaPlanta == p1){
@@ -1324,7 +1329,7 @@ void Solucao::AtribuiValoresVariaveisModelo(){
 	VeiculoAux2 = 0;
 	VeiculoPlantaAux = 0;
 
-
+	// atribui valores a Tvei e Beta
 	for( int c1 = 0; c1 < NE; c1++){
 		for( int des1 = 0; des1 < (int) ConstrucoesInstancia.Construcoes[c1].Descarregamentos.size(); des1++){
 
@@ -1372,12 +1377,32 @@ void Solucao::AtribuiValoresVariaveisModelo(){
 		}
 	}
 
+	// atribui valor a Ze
+	for( int c1 = 0; c1 < NE; c1++){
+		for( int c2 = 0; c2 < NE; c2++){
+			if( ConstrucoesInstancia.Construcoes[c2].NumeroDaConstrucao == c1){
+				Ze[c1] = ConstrucoesInstancia.Construcoes[c2].Makespan;
+			}
+		}
+	}
+
+	// atribui valor a Zp
+	for( int p1 = 0; p1 < NP; p1++){
+		for( int p2 = 0; p2 < NP; p2++){
+			if( PlantasInstancia.Plantas[p2].NumeroDaPlanta == p1){
+				Zp[p1] = PlantasInstancia.Plantas[p2].Makespan;
+			}
+		}
+	}
+
 }
 
 // caso retornar 0 tem problema, 1 não
 int Solucao::VerificaRestricoes(){
 
+	// variaveis auxiliares
 	int AuxRest1;
+	int VeiculoAux;
 
 	// restrição 1
 
@@ -1390,11 +1415,104 @@ int Solucao::VerificaRestricoes(){
 						AuxRest1 = AuxRest1 + Alfa[v][e1][d];
 					}
 					if( AuxRest1 != 1 ){
-						cout << " Soma Alfas[v][" << e1 << "][" << d << "] = 1 			>>>>>> Problema <<<<<<<<<<<< " << endl << endl;
+						cout << endl << " Restrição 1 violada " << endl;
+						cout << " Soma Alfas[v][" << e1 << "][" << d << "] = 1 " << endl << endl;
 						return 0;
 					}
 				}
 			}
+		}
+	}
+
+	// restrição 2
+
+	for( int e1 = 0; e1 < NE; e1++){
+		for( int d1 = 0; d1 < DM.Demandas[e1]; d1++){
+			for( int v = 0; v < NV; v++){
+				if( Ze[e1] < Tvei[v][e1][d1] + DM.DESCvi[v][e1][d1]  - DM.M1vi[v][e1][d1] * ( 1 - Alfa[v][e1][d1]) ){
+					cout << endl << " Restrição 2 violada " << endl;
+					cout << "Ze[" << e1 << "] >= Tvei[" << v << "][" << e1 << "][" << d1 << "] + DM.DESCvi[" << v << "][" << e1 << "][" << d1 << "]  - DM.M1vi[" << v << "][" << e1 << "][" << d1 << "] * ( 1 - Alfa[" << v << "][" << e1 << "][" << d1 << "]) ) " << endl;
+					cout << Ze[e1] <<" >= " << Tvei[v][e1][d1] << " + " << DM.DESCvi[v][e1][d1] << " - " << DM.M1vi[v][e1][d1] << " * ( 1 - " << Alfa[v][e1][d1] << ") )" << endl;
+					return 0;
+
+				}
+			}
+		}
+	}
+
+	// restrição 3
+	VeiculoAux = 0;
+	for( int p1 = 0; p1 < NP; p1++){
+
+		//cout << endl << " planta " << p1 << " tem " << DM.Veiculos[p1] << " veiculos " << endl;
+
+		for( int v = 0; v < DM.Veiculos[p1]; v++){
+			for( int e1 = 0; e1 < NE; e1++){
+				for( int d1 = 0; d1 < DM.Demandas[e1]; d1++){
+
+					//cout << endl << "  veiculo [" << VeiculoAux << "] na planta é [" << p1 << "-" << v << "]";
+
+					if( Tvei[VeiculoAux][e1][d1] < - DM.M2pc[p1][e1] * ( 1 - Alfa[VeiculoAux][e1][d1] ) +  TPvei[VeiculoAux][e1][d1] + DM.CARRp[p1] + DM.TEMpc[p1][e1] ){
+						cout << endl << " Restrição 3 violada " << endl;
+						cout << " Tvei[" << VeiculoAux<< "][" << e1<< "][" << d1<< "] >= - DM.M2pc[" << p1<< "][" << e1<< "] * ( 1 - Alfa[" << VeiculoAux<< "][" << e1 << "][" << d1 << "] ) +  TPvei[" << VeiculoAux<< "][" << e1<< "][" << d1<< "] + DM.CARRp[" << p1<< "] + DM.TEMpc[" << p1<< "][" << e1 << "]" << endl;
+						cout << Tvei[VeiculoAux][e1][d1] << " >= - " << DM.M2pc[p1][e1] << "* ( 1 - " << Alfa[VeiculoAux][e1][d1] << " ) +  " << TPvei[VeiculoAux][e1][d1] << " + " << DM.CARRp[p1] << " + " << DM.TEMpc[p1][e1];
+						return 0;
+					}
+				}
+			}
+			VeiculoAux = VeiculoAux + 1;
+		}
+	}
+
+	// restrição 4
+	VeiculoAux = 0;
+	for( int p1 = 0; p1 < NP; p1++){
+		for( int v = 0; v < DM.Veiculos[p1]; v++){
+			for( int e1 = 0; e1 < NE; e1++){
+				for( int d1 = 0; d1 < DM.Demandas[e1]; d1++){
+					if( Tvei[VeiculoAux][e1][d1] >  DM.M3c[e1] * ( 1 - Alfa[VeiculoAux][e1][d1] ) +  TPvei[VeiculoAux][e1][d1] + DM.CARRp[p1] + DM.TEMpc[p1][e1] ){
+						cout << endl << " Restrição 4 violada " << endl;
+						cout << " Tvei[" << VeiculoAux<< "][" << e1<< "][" << d1<< "] <= DM.M3c[" << e1<< "] * ( 1 - Alfa[" << VeiculoAux<< "][" << e1 << "][" << d1 << "] ) +  TPvei[" << VeiculoAux<< "][" << e1<< "][" << d1<< "] + DM.CARRp[" << p1<< "] + DM.TEMpc[" << p1<< "][" << e1 << "]" << endl;
+						cout << Tvei[VeiculoAux][e1][d1] << "<= " << DM.M3c[e1] << "* ( 1 - " << Alfa[VeiculoAux][e1][d1] << " ) +  " << TPvei[VeiculoAux][e1][d1] << " + " << DM.CARRp[p1] << " + " << DM.TEMpc[p1][e1];
+						return 0;
+					}
+				}
+			}
+			VeiculoAux++;
+		}
+	}
+
+	// restrição 5
+	VeiculoAux = 0;
+	for( int p1 = 0; p1 < NP; p1++){
+
+		//cout << endl << " planta " << p1 << " tem " << DM.Veiculos[p1] << " veiculos " << endl;
+
+		for( int v = 0; v < DM.Veiculos[p1]; v++){
+			//cout << endl << "  veiculo [" << VeiculoAux << "] na planta é [" << p1 << "-" << v << "]";
+
+			for( int e1 = 0; e1 < NE; e1++){
+				for( int d1 = 0; d1 < DM.Demandas[e1]; d1++){
+					if( Zp[p1] < Tvei[VeiculoAux][e1][d1] + DM.DESCvi[VeiculoAux][e1][d1] + DM.TEMcp[e1][p1] - DM.M4vi[VeiculoAux][e1][d1] * ( 1 - Alfa[VeiculoAux][e1][d1] ) ){
+						cout << endl << " Restrição 5 violada " << endl;
+						cout << "Zp[" << p1 << "] >= Tvei[" << VeiculoAux << "][" << e1 << "][" << d1 << "] + DM.DESCvi[" << VeiculoAux << "][" << e1 << "][" << d1 << "] + DM.TEMcp[" << e1 << "][" << p1 << "] - DM.M4vi[" << VeiculoAux << "][" << e1 << "][" << d1 << "] * ( 1 - Alfa[" << VeiculoAux << "][" << e1 << "][" << d1 << "] ) " << endl;
+						cout << Zp[p1] << " >= " << Tvei[VeiculoAux][e1][d1]  << " + " << DM.DESCvi[VeiculoAux][e1][d1]  << " + " << DM.TEMcp[e1][p1]  << " - " << DM.M4vi[VeiculoAux][e1][d1]  << " * ( 1 -  " << Alfa[VeiculoAux][e1][d1] << ")" << endl;
+						return 0;
+					}
+				}
+			}
+			VeiculoAux++;
+		}
+	}
+
+	// restrição 6
+	VeiculoAux = 0;
+	for( int p1 = 0; p1 < NP; p1++){
+		if( Zp[p1] < DM.TMINp[p1]){
+			cout << endl << " Restrição 6 violada " << endl;
+			cout << "Zp[" << p1 << "] >= DM.TMINp[" << p1 << "]" << endl;
+			cout << Zp[p1] << " >= " << DM.TMINp[p1] << endl;
+			return 0;
 		}
 	}
 

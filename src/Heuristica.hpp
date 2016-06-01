@@ -2497,7 +2497,10 @@ void	Heuristica::CalculoRankTempoDemanda(int comentarios){
 void Heuristica::IniciaParametrosDoModelo(){
 
 	int VeiculoAux;
+	int imprime;
+
 	VeiculoAux = 0;
+	imprime = 0;
 
 	// aloca valores nas variaveis S de tempo entre construções consecultivas
 	for(int p = 0; p < NP; p++){
@@ -2545,10 +2548,15 @@ void Heuristica::IniciaParametrosDoModelo(){
 			for( int c1 = 0; c1 < NE; c1++){
 				for( int d1 = 0; d1 < DM.Demandas[c1]; d1++){
 					DM.M4vi[VeiculoAux][c1][d1] = DM.TMAXc[c1] + DM.DESCvi[VeiculoAux][c1][d1] + DM.TEMcp[c1][p];
+
+					if( imprime == 1) {
+						cout << " DM.M4vi[" << VeiculoAux << "][" << c1 << "][" << d1 << "] = DM.TMAXc[" << c1 << "] + DM.DESCvi[" << VeiculoAux << "][" << c1 << "][" << d1 << "] + DM.TEMcp[" << c1 << "][" << p << "]" << endl;
+						cout << DM.M4vi[VeiculoAux][c1][d1] << " =  " << DM.TMAXc[c1] << " + " << DM.DESCvi[VeiculoAux][c1][d1] << " + " << DM.TEMcp[c1][p] << endl << endl;
+					}
 				}
 			}
+			VeiculoAux++;
 		}
-		VeiculoAux++;
 	}
 
 	// Aloca valor M5 e M6

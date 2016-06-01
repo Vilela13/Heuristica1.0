@@ -74,9 +74,9 @@ bool 	DecideQualDescarregamentoVemPrimeiro ( Descarregamento d1, Descarregamento
 }
 
 // classe que foi criada para guardar a distancia da construção para a planta e manter um ponteiro para a estrutura dessa planta
-class DistanciaPlanta{
+class TempoParaPlanta{
 public:
-	float	Distancia;
+	float	Tempo;
 	Planta* PlantaComparada;
 };
 
@@ -93,7 +93,7 @@ public:
 	int		NumeroDemandas;							// número de demadas que se tem que suprir na construções
 	vector < int > SituacaoDemanda;					// vetor que se armazena a situação das demandas que se temq ue suprir na construção
 	vector < int > SituacaoRemocao;					// vetor que armazena a situação de remoção da demanda. Se o valor for 1 ela ja foi removida, se é 0 ela ainda não foi
-	vector < DistanciaPlanta > DistanciaPlantas;	// distância da construção até as plantas
+	vector < TempoParaPlanta > TempoParaPlantas;	// distância da construção até as plantas
 	float	TempoMaximoEntreDescargas;				// tempo máximo permitido entre dois descarregamentos
 	float	TempoMinimoDeFuncionamento;				// tempo mínimo de funcionamento da construção, primeiro horario que se pode receber um carregamento em uma construção
 	float	TempoMaximoDeFuncionamento;				// tempo máximo de funcionamento da construção, ultimo horario que se pode receber um carregamento em uma construção
@@ -370,14 +370,14 @@ int 	Construcao::AlocaAtividade(float HoraInicio, float HoraFinal, int Carreta, 
 	float 	HorarioInicioPlanta;
 	float 	HorarioFimPlanta;
 
-	HorarioInicioPlanta = HoraInicio - Plantas.Plantas[p].DistanciaConstrucoes[NumeroDaConstrucao] -  Plantas.Plantas[p].TempoPlanta;
+	HorarioInicioPlanta = HoraInicio - Plantas.Plantas[p].TempoParaConstrucoes[NumeroDaConstrucao] -  Plantas.Plantas[p].TempoPlanta;
 	HorarioFimPlanta = HorarioInicioPlanta +  Plantas.Plantas[p].TempoPlanta;
 
 	float 	HorarioInicioCarreta;
 	float 	HorarioFimCarreta;
 
 	HorarioInicioCarreta = HorarioInicioPlanta;
-	HorarioFimCarreta = HoraFinal + Plantas.Plantas[p].DistanciaConstrucoes[NumeroDaConstrucao];
+	HorarioFimCarreta = HoraFinal + Plantas.Plantas[p].TempoParaConstrucoes[NumeroDaConstrucao];
 
 // Aloca atividades no veiculo e depois na planta
 	Plantas.Plantas[p].VeiculosDaPlanta.Carretas[v].AlocaAtividade( HorarioInicioCarreta, HorarioFimCarreta, NumeroDaConstrucao , NumDemanda);
@@ -460,14 +460,14 @@ int		Construcao::AlocaAtividadeSalvandoDados(int VerificaExistencia, float HoraI
 	float 	HorarioInicioPlanta;
 	float 	HorarioFimPlanta;
 
-	HorarioInicioPlanta = HoraInicio - Plantas.Plantas[p].DistanciaConstrucoes[NumeroDaConstrucao] -  Plantas.Plantas[p].TempoPlanta;
+	HorarioInicioPlanta = HoraInicio - Plantas.Plantas[p].TempoParaConstrucoes[NumeroDaConstrucao] -  Plantas.Plantas[p].TempoPlanta;
 	HorarioFimPlanta = HorarioInicioPlanta +  Plantas.Plantas[p].TempoPlanta;
 
 	float	HorarioInicioCarreta;
 	float 	HorarioFimCarreta;
 
 	HorarioInicioCarreta = HorarioInicioPlanta;
-	HorarioFimCarreta = HoraFinal + Plantas.Plantas[p].DistanciaConstrucoes[NumeroDaConstrucao];
+	HorarioFimCarreta = HoraFinal + Plantas.Plantas[p].TempoParaConstrucoes[NumeroDaConstrucao];
 
 // Aloca atividades no veiculo e depois na planta
 	Plantas.Plantas[p].VeiculosDaPlanta.Carretas[v].AlocaAtividade( HorarioInicioCarreta, HorarioFimCarreta, NumeroDaConstrucao , NumDemanda);
@@ -510,14 +510,14 @@ int		Construcao::DeletaAtividadeLocomovendoAsOutrasTarefas(float HoraInicio, flo
 		float	HorarioInicioPlanta;
 		float 	HorarioFimPlanta;
 
-		HorarioInicioPlanta = HoraInicio - Plantas.Plantas[p].DistanciaConstrucoes[NumeroDaConstrucao] -  Plantas.Plantas[p].TempoPlanta;
+		HorarioInicioPlanta = HoraInicio - Plantas.Plantas[p].TempoParaConstrucoes[NumeroDaConstrucao] -  Plantas.Plantas[p].TempoPlanta;
 		HorarioFimPlanta 	= HorarioInicioPlanta +  Plantas.Plantas[p].TempoPlanta;
 
 		float 	HorarioInicioCarreta;
 		float 	HorarioFimCarreta;
 
 		HorarioInicioCarreta 	= HorarioInicioPlanta;
-		HorarioFimCarreta 		= HoraFinal + Plantas.Plantas[p].DistanciaConstrucoes[NumeroDaConstrucao];
+		HorarioFimCarreta 		= HoraFinal + Plantas.Plantas[p].TempoParaConstrucoes[NumeroDaConstrucao];
 
 		/*
 		cout << endl << endl << "  Dados tarefa " << endl << endl;
@@ -603,14 +603,14 @@ int		Construcao::DeletaAtividadeLocomovendoAsOutrasTarefasSalvandoDados(int Veri
 		float 	HorarioInicioPlanta;
 		float 	HorarioFimPlanta;
 
-		HorarioInicioPlanta = HoraInicio - Plantas.Plantas[p].DistanciaConstrucoes[NumeroDaConstrucao] -  Plantas.Plantas[p].TempoPlanta;
+		HorarioInicioPlanta = HoraInicio - Plantas.Plantas[p].TempoParaConstrucoes[NumeroDaConstrucao] -  Plantas.Plantas[p].TempoPlanta;
 		HorarioFimPlanta 	= HorarioInicioPlanta +  Plantas.Plantas[p].TempoPlanta;
 
 		float 	HorarioInicioCarreta;
 		float 	HorarioFimCarreta;
 
 		HorarioInicioCarreta 	= HorarioInicioPlanta;
-		HorarioFimCarreta 		= HoraFinal + Plantas.Plantas[p].DistanciaConstrucoes[NumeroDaConstrucao];
+		HorarioFimCarreta 		= HoraFinal + Plantas.Plantas[p].TempoParaConstrucoes[NumeroDaConstrucao];
 
 		/*
 		cout << endl << endl << "  Dados tarefa " << endl << endl;
@@ -719,11 +719,11 @@ int		Construcao::DeletaTarefas(int VerificaExistencia, int demanda, vector < Dad
 		HorarioInicioConstrucao = Descarregamentos[d].HorarioInicioDescarregamento;
 		HorarioFinalConstrucao  = Descarregamentos[d].HorarioFinalDescarregamento;
 		// armazena os horarios da plana referente a tarefa
-		HorarioInicioPlanta 	= HorarioInicioConstrucao - Plantas.Plantas[p].DistanciaConstrucoes[NumeroDaConstrucao] -  Plantas.Plantas[p].TempoPlanta;
+		HorarioInicioPlanta 	= HorarioInicioConstrucao - Plantas.Plantas[p].TempoParaConstrucoes[NumeroDaConstrucao] -  Plantas.Plantas[p].TempoPlanta;
 		HorarioFimPlanta 		= HorarioInicioPlanta +  Plantas.Plantas[p].TempoPlanta;
 		// armazena os horarios da carreta referente a tarefa
 		HorarioInicioCarreta 	= HorarioInicioPlanta;
-		HorarioFimCarreta 		= HorarioFinalConstrucao + Plantas.Plantas[p].DistanciaConstrucoes[NumeroDaConstrucao];
+		HorarioFimCarreta 		= HorarioFinalConstrucao + Plantas.Plantas[p].TempoParaConstrucoes[NumeroDaConstrucao];
 
 		/*
 		cout << endl << endl << "  Dados tarefa " << endl << endl;
@@ -1190,21 +1190,21 @@ void	Construcao::EncontraPlanta(  int& NumPlantaAnalisando, int EscolhaPlanta, C
 
 	if( EscolhaPlanta == 1){
 		// variavel que armazena a distancia da construção a planta usada para se encontra a planta mais proxima
-		float 	DistanciaConstrucaoPlanta;
+		float 	TempoConstrucaoPlanta;
 
 		// inicializa as variaveis
 		NumPlantaAnalisando 		= -13;
-		DistanciaConstrucaoPlanta 	= DBL_MAX;
+		TempoConstrucaoPlanta 	= DBL_MAX;
 
 		// percorre todas as plantas
 		for( int p = 0; p < (int) Plantas.Plantas.size(); p++){
-			if( DistanciaConstrucaoPlanta > DistanciaPlantas[p].Distancia){
+			if( TempoConstrucaoPlanta > TempoParaPlantas[p].Tempo){
 				// planta que ainda não foi analisada
 				if( Plantas.Plantas[p].PlantasAnalizadas == 0){
 					// passa o numero da planta escolhida
 					NumPlantaAnalisando = p;
 					// atualiza a distancia da planta mais proxima a construção
-					DistanciaConstrucaoPlanta = DistanciaPlantas[p].Distancia;
+					TempoConstrucaoPlanta = TempoParaPlantas[p].Tempo;
 				}
 			}
 		}
@@ -1300,16 +1300,16 @@ int		Construcao::AlocaAtividadeComHorarioFinalAtendimento( int NumDemanda, float
 			for( int v = 0; v < Plantas.Plantas[IndPlantaAnalisando].NumeroVeiculos; v++){
 
 				// atualiza o horario inicial que a planta pode atender a demanda
-				HorarioInicioPlanta 	= HoraFimAtendimento - Plantas.Plantas[IndPlantaAnalisando].VeiculosDaPlanta.Carretas[v].TempoParaDescarregarNaConstrucao[NumeroDaConstrucao][NumDemanda] -  Plantas.Plantas[IndPlantaAnalisando].DistanciaConstrucoes[NumeroDaConstrucao] -  Plantas.Plantas[IndPlantaAnalisando].TempoPlanta;
+				HorarioInicioPlanta 	= HoraFimAtendimento - Plantas.Plantas[IndPlantaAnalisando].VeiculosDaPlanta.Carretas[v].TempoParaDescarregarNaConstrucao[NumeroDaConstrucao][NumDemanda] -  Plantas.Plantas[IndPlantaAnalisando].TempoParaConstrucoes[NumeroDaConstrucao] -  Plantas.Plantas[IndPlantaAnalisando].TempoPlanta;
 				HorarioChegaContrucao 	= HoraFimAtendimento - Plantas.Plantas[IndPlantaAnalisando].VeiculosDaPlanta.Carretas[v].TempoParaDescarregarNaConstrucao[NumeroDaConstrucao][NumDemanda];
 
 				// realizar até o horario inicio da planta ou da construção não ultrapassar o limite de atendidmento da planta ou da construção respectivamente
 				while( HorarioInicioPlanta <= Plantas.Plantas[IndPlantaAnalisando].TempoMaximoDeFuncionamento &&  HorarioChegaContrucao <= TempoMaximoDeFuncionamento){
 					// atualiza os horarios na construção e planta
 					HorarioSaiDaPlanta 			= HorarioInicioPlanta 	+ Plantas.Plantas[IndPlantaAnalisando].TempoPlanta;
-					HorarioChegaContrucao 		= HorarioSaiDaPlanta 	+ Plantas.Plantas[IndPlantaAnalisando].DistanciaConstrucoes[NumeroDaConstrucao];
+					HorarioChegaContrucao 		= HorarioSaiDaPlanta 	+ Plantas.Plantas[IndPlantaAnalisando].TempoParaConstrucoes[NumeroDaConstrucao];
 					HorarioSaiConstrucao 		= HorarioChegaContrucao +  Plantas.Plantas[IndPlantaAnalisando].VeiculosDaPlanta.Carretas[v].TempoParaDescarregarNaConstrucao[NumeroDaConstrucao][NumDemanda];
-					HorarioRetornaPlanta 		= HorarioSaiConstrucao 	+ Plantas.Plantas[IndPlantaAnalisando].DistanciaConstrucoes[NumeroDaConstrucao];
+					HorarioRetornaPlanta 		= HorarioSaiConstrucao 	+ Plantas.Plantas[IndPlantaAnalisando].TempoParaConstrucoes[NumeroDaConstrucao];
 					// verifica se é possivel realizar o atendiemnto da demanda tanto na planta, construção e carreta
 					DisponibilidadePlanta 		= Plantas.Plantas[IndPlantaAnalisando].VerificaDisponibilidade(HorarioInicioPlanta, HorarioSaiDaPlanta );
 					DisponibilidadeConstrucao 	= VerificaDisponibilidade( HorarioChegaContrucao, HorarioSaiConstrucao);
@@ -1495,15 +1495,15 @@ int 	Construcao::AlocaAtividadeComHorarioFinalAtendimentoComVeiculoFixo( int Num
 	// verifica se a cosntrução já não teve todas as suas demandas atendidas
 	if ( NumeroDemandas > StatusAtendimento){
 		// atualiza o horario inicial que a planta pode atender a demanda
-		HorarioInicioPlanta 	= HoraFimAtendimento 	- Plantas.Plantas[p].VeiculosDaPlanta.Carretas[v].TempoParaDescarregarNaConstrucao[NumeroDaConstrucao][NumDemanda] -  Plantas.Plantas[p].DistanciaConstrucoes[NumeroDaConstrucao] -  Plantas.Plantas[p].TempoPlanta;
-		HorarioChegaContrucao 	= HorarioInicioPlanta 	+ Plantas.Plantas[p].TempoPlanta + Plantas.Plantas[p].DistanciaConstrucoes[NumeroDaConstrucao];
+		HorarioInicioPlanta 	= HoraFimAtendimento 	- Plantas.Plantas[p].VeiculosDaPlanta.Carretas[v].TempoParaDescarregarNaConstrucao[NumeroDaConstrucao][NumDemanda] -  Plantas.Plantas[p].TempoParaConstrucoes[NumeroDaConstrucao] -  Plantas.Plantas[p].TempoPlanta;
+		HorarioChegaContrucao 	= HorarioInicioPlanta 	+ Plantas.Plantas[p].TempoPlanta + Plantas.Plantas[p].TempoParaConstrucoes[NumeroDaConstrucao];
 		// realizar até o horario inicio da planta ou da construção não ultrapassar o limite de atendidmento da planta ou da construção respectivamente
 		while( HorarioInicioPlanta <= Plantas.Plantas[p].TempoMaximoDeFuncionamento &&  HorarioChegaContrucao <= TempoMaximoDeFuncionamento){
 			// atualiza os horarios na construção e planta
 			HorarioSaiDaPlanta 		= HorarioInicioPlanta + Plantas.Plantas[p].TempoPlanta;
-			HorarioChegaContrucao 	= HorarioSaiDaPlanta + Plantas.Plantas[p].DistanciaConstrucoes[NumeroDaConstrucao];
+			HorarioChegaContrucao 	= HorarioSaiDaPlanta + Plantas.Plantas[p].TempoParaConstrucoes[NumeroDaConstrucao];
 			HorarioSaiConstrucao 	= HorarioChegaContrucao +  Plantas.Plantas[p].VeiculosDaPlanta.Carretas[v].TempoParaDescarregarNaConstrucao[NumeroDaConstrucao][NumDemanda];
-			HorarioRetornaPlanta 	= HorarioSaiConstrucao + Plantas.Plantas[p].DistanciaConstrucoes[NumeroDaConstrucao];
+			HorarioRetornaPlanta 	= HorarioSaiConstrucao + Plantas.Plantas[p].TempoParaConstrucoes[NumeroDaConstrucao];
 			// verifica se é possivel realizar o atendiemnto da demanda tanto na planta, construção e carreta
 			DisponibilidadePlanta 		= Plantas.Plantas[p].VerificaDisponibilidade(HorarioInicioPlanta, HorarioSaiDaPlanta );
 			DisponibilidadeConstrucao 	= VerificaDisponibilidade( HorarioChegaContrucao, HorarioSaiConstrucao);
@@ -1712,7 +1712,7 @@ Construcao::~Construcao(){
 	NumeroDemandas = -13;
 	SituacaoDemanda.clear();
 	SituacaoRemocao.clear();
-	DistanciaPlantas.clear();
+	TempoParaPlantas.clear();
 	TempoMaximoEntreDescargas = -13;
 	TempoMinimoDeFuncionamento = -13;
 	TempoMaximoDeFuncionamento = -13;
@@ -2478,21 +2478,21 @@ int 	ConjuntoConstrucoes::ReadicionaDeletaTarefasApartirDeDados( vector < DadosT
 void 	ConjuntoConstrucoes::EncontraPlanta( int c, int& NumPlantaAnalisando,int EscolhaPlanta, ConjuntoPlantas &PlantasInstancia, string frase){
 	if( EscolhaPlanta == 1){
 		// variavel que armazena a distancia da construção a planta usada para se encontra a planta mais proxima
-		float 	DistanciaConstrucaoPlanta;
+		float 	TempoConstrucaoPlanta;
 
 		// inicializa as variaveis
 		NumPlantaAnalisando 		= -13;
-		DistanciaConstrucaoPlanta 	= DBL_MAX;
+		TempoConstrucaoPlanta 	= DBL_MAX;
 
 		// percorre todas as plantas
 		for( int p = 0; p < (int) PlantasInstancia.Plantas.size(); p++){
-			if( DistanciaConstrucaoPlanta > Construcoes[c].DistanciaPlantas[p].Distancia){
+			if( TempoConstrucaoPlanta > Construcoes[c].TempoParaPlantas[p].Tempo){
 				// planta que ainda não foi analisada
 				if( PlantasInstancia.Plantas[p].PlantasAnalizadas == 0){
 					// passa o numero da planta escolhida
 					NumPlantaAnalisando = p;
 					// atualiza a distancia da planta mais proxima a construção
-					DistanciaConstrucaoPlanta = Construcoes[c].DistanciaPlantas[p].Distancia;
+					TempoConstrucaoPlanta = Construcoes[c].TempoParaPlantas[p].Tempo;
 				}
 			}
 		}
@@ -2606,23 +2606,23 @@ int 	ConjuntoConstrucoes::AdicionaTarefa( int VerificaExistencia, int Construcao
 				// percorre todos os veículos da planta
 				for( int v = 0; v < PlantasInstancia.Plantas[ p ].NumeroVeiculos; v++){
 					// inicializa o tempo inicio que a planta corrente ira começar a analise se pode atender a demanda corrente, caso
-					if( ( Construcoes[c].TempoMinimoDeFuncionamento - PlantasInstancia.Plantas[ p ].DistanciaConstrucoes[ Construcoes[c].NumeroDaConstrucao ] - PlantasInstancia.Plantas[ p ].TempoPlanta ) > PlantasInstancia.Plantas[ p ].TempoMinimoDeFuncionamento ){
+					if( ( Construcoes[c].TempoMinimoDeFuncionamento - PlantasInstancia.Plantas[ p ].TempoParaConstrucoes[ Construcoes[c].NumeroDaConstrucao ] - PlantasInstancia.Plantas[ p ].TempoPlanta ) > PlantasInstancia.Plantas[ p ].TempoMinimoDeFuncionamento ){
 						//caso o tempo de inicio do carregamento da britadeira na plantar for restrito pela construção.
-						HorarioInicioPlanta 	= Construcoes[c].TempoMinimoDeFuncionamento - PlantasInstancia.Plantas[ p ].DistanciaConstrucoes[ Construcoes[c].NumeroDaConstrucao ] - PlantasInstancia.Plantas[ p ].TempoPlanta;
+						HorarioInicioPlanta 	= Construcoes[c].TempoMinimoDeFuncionamento - PlantasInstancia.Plantas[ p ].TempoParaConstrucoes[ Construcoes[c].NumeroDaConstrucao ] - PlantasInstancia.Plantas[ p ].TempoPlanta;
 						// atualiza os horarios na construção e planta
 						HorarioSaiDaPlanta 		= HorarioInicioPlanta 	+ PlantasInstancia.Plantas[ p ].TempoPlanta;
-						HorarioChegaContrucao 	= HorarioSaiDaPlanta 	+ PlantasInstancia.Plantas[ p ].DistanciaConstrucoes[ Construcoes[c].NumeroDaConstrucao];
+						HorarioChegaContrucao 	= HorarioSaiDaPlanta 	+ PlantasInstancia.Plantas[ p ].TempoParaConstrucoes[ Construcoes[c].NumeroDaConstrucao];
 						HorarioSaiConstrucao 	= HorarioChegaContrucao + PlantasInstancia.Plantas[ p ].VeiculosDaPlanta.Carretas[v].TempoParaDescarregarNaConstrucao[ Construcoes[c].NumeroDaConstrucao ][ Demanda ];
-						HorarioRetornaPlanta 	= HorarioSaiConstrucao 	+ PlantasInstancia.Plantas[ p ].DistanciaConstrucoes[ Construcoes[c].NumeroDaConstrucao ];
+						HorarioRetornaPlanta 	= HorarioSaiConstrucao 	+ PlantasInstancia.Plantas[ p ].TempoParaConstrucoes[ Construcoes[c].NumeroDaConstrucao ];
 
 					}else{
 						//caso o tempo de inicio do carregamento da britadeira na plantar for restrito pela planta.
 						HorarioInicioPlanta 	= PlantasInstancia.Plantas[ p ].TempoMinimoDeFuncionamento;
 						// atualiza os horarios na construção e planta
 						HorarioSaiDaPlanta 		= HorarioInicioPlanta + PlantasInstancia.Plantas[ p ].TempoPlanta;
-						HorarioChegaContrucao 	= HorarioSaiDaPlanta + PlantasInstancia.Plantas[ p ].DistanciaConstrucoes[ Construcoes[c].NumeroDaConstrucao];
+						HorarioChegaContrucao 	= HorarioSaiDaPlanta + PlantasInstancia.Plantas[ p ].TempoParaConstrucoes[ Construcoes[c].NumeroDaConstrucao];
 						HorarioSaiConstrucao 	= HorarioChegaContrucao +  PlantasInstancia.Plantas[ p ].VeiculosDaPlanta.Carretas[v].TempoParaDescarregarNaConstrucao[ Construcoes[c].NumeroDaConstrucao ][ Demanda ];
-						HorarioRetornaPlanta 	= HorarioSaiConstrucao + PlantasInstancia.Plantas[ p ].DistanciaConstrucoes[ Construcoes[c].NumeroDaConstrucao ];
+						HorarioRetornaPlanta 	= HorarioSaiConstrucao + PlantasInstancia.Plantas[ p ].TempoParaConstrucoes[ Construcoes[c].NumeroDaConstrucao ];
 					}
 					// enquanto estiver na janela de tempo possivel para atendimeto se realiza o loop abaixo.
 					while( HorarioInicioPlanta <= PlantasInstancia.Plantas[ p ].TempoMaximoDeFuncionamento &&  HorarioChegaContrucao <= Construcoes[c].TempoMaximoDeFuncionamento){
@@ -2676,9 +2676,9 @@ int 	ConjuntoConstrucoes::AdicionaTarefa( int VerificaExistencia, int Construcao
 						HorarioInicioPlanta 	= HorarioInicioPlanta 	+ IntervaloDeTempo;
 						// atualiza os horarios na construção e planta
 						HorarioSaiDaPlanta 		= HorarioInicioPlanta 	+ PlantasInstancia.Plantas[ p ].TempoPlanta;
-						HorarioChegaContrucao 	= HorarioSaiDaPlanta 	+ PlantasInstancia.Plantas[ p ].DistanciaConstrucoes[ Construcoes[c].NumeroDaConstrucao];
+						HorarioChegaContrucao 	= HorarioSaiDaPlanta 	+ PlantasInstancia.Plantas[ p ].TempoParaConstrucoes[ Construcoes[c].NumeroDaConstrucao];
 						HorarioSaiConstrucao 	= HorarioChegaContrucao +  PlantasInstancia.Plantas[ p ].VeiculosDaPlanta.Carretas[v].TempoParaDescarregarNaConstrucao[ Construcoes[c].NumeroDaConstrucao ][ Demanda ];
-						HorarioRetornaPlanta 	= HorarioSaiConstrucao 	+ PlantasInstancia.Plantas[ p ].DistanciaConstrucoes[ Construcoes[c].NumeroDaConstrucao ];
+						HorarioRetornaPlanta 	= HorarioSaiConstrucao 	+ PlantasInstancia.Plantas[ p ].TempoParaConstrucoes[ Construcoes[c].NumeroDaConstrucao ];
 					// realiza o loop até que os intervalos de de funcionamento da planta e da construção ainda sejam respeitados
 					}
 				}
@@ -2839,22 +2839,22 @@ int 	ConjuntoConstrucoes::AdicionaTarefaComVeiculoFixo( int VerificaExistencia, 
 		// verifica se a construção já foi atendida em sua totatlidade, cao não entra no if
 		if ( Construcoes[c].NumeroDemandas > Construcoes[c].StatusAtendimento){
 			// inicializa o tempo inicio que a planta corrente ira começar a analise se pode atender a demanda corrente, caso
-			if( ( Construcoes[c].TempoMinimoDeFuncionamento - PlantasInstancia.Plantas[ p ].DistanciaConstrucoes[ Construcoes[c].NumeroDaConstrucao ] - PlantasInstancia.Plantas[ p ].TempoPlanta ) > PlantasInstancia.Plantas[ p ].TempoMinimoDeFuncionamento ){
+			if( ( Construcoes[c].TempoMinimoDeFuncionamento - PlantasInstancia.Plantas[ p ].TempoParaConstrucoes[ Construcoes[c].NumeroDaConstrucao ] - PlantasInstancia.Plantas[ p ].TempoPlanta ) > PlantasInstancia.Plantas[ p ].TempoMinimoDeFuncionamento ){
 				//caso o tempo de inicio do carregamento da britadeira na plantar for restrito pela construção.
-				HorarioInicioPlanta = Construcoes[c].TempoMinimoDeFuncionamento - PlantasInstancia.Plantas[ p ].DistanciaConstrucoes[ Construcoes[c].NumeroDaConstrucao ] - PlantasInstancia.Plantas[ p ].TempoPlanta;
+				HorarioInicioPlanta = Construcoes[c].TempoMinimoDeFuncionamento - PlantasInstancia.Plantas[ p ].TempoParaConstrucoes[ Construcoes[c].NumeroDaConstrucao ] - PlantasInstancia.Plantas[ p ].TempoPlanta;
 				// atualiza os horarios na construção e planta
 				HorarioSaiDaPlanta 		= HorarioInicioPlanta 	+ PlantasInstancia.Plantas[ p ].TempoPlanta;
-				HorarioChegaContrucao 	= HorarioSaiDaPlanta 	+ PlantasInstancia.Plantas[ p ].DistanciaConstrucoes[ Construcoes[c].NumeroDaConstrucao];
+				HorarioChegaContrucao 	= HorarioSaiDaPlanta 	+ PlantasInstancia.Plantas[ p ].TempoParaConstrucoes[ Construcoes[c].NumeroDaConstrucao];
 				HorarioSaiConstrucao 	= HorarioChegaContrucao +  PlantasInstancia.Plantas[ p ].VeiculosDaPlanta.Carretas[v].TempoParaDescarregarNaConstrucao[ Construcoes[c].NumeroDaConstrucao ][ Demanda ];
-				HorarioRetornaPlanta 	= HorarioSaiConstrucao 	+ PlantasInstancia.Plantas[ p ].DistanciaConstrucoes[ Construcoes[c].NumeroDaConstrucao ];
+				HorarioRetornaPlanta 	= HorarioSaiConstrucao 	+ PlantasInstancia.Plantas[ p ].TempoParaConstrucoes[ Construcoes[c].NumeroDaConstrucao ];
 			}else{
 				//caso o tempo de inicio do carregamento da britadeira na plantar for restrito pela planta.
 				HorarioInicioPlanta = PlantasInstancia.Plantas[ p ].TempoMinimoDeFuncionamento;
 				// atualiza os horarios na construção e planta
 				HorarioSaiDaPlanta 		= HorarioInicioPlanta 	+ PlantasInstancia.Plantas[ p ].TempoPlanta;
-				HorarioChegaContrucao 	= HorarioSaiDaPlanta 	+ PlantasInstancia.Plantas[ p ].DistanciaConstrucoes[ Construcoes[c].NumeroDaConstrucao];
+				HorarioChegaContrucao 	= HorarioSaiDaPlanta 	+ PlantasInstancia.Plantas[ p ].TempoParaConstrucoes[ Construcoes[c].NumeroDaConstrucao];
 				HorarioSaiConstrucao 	= HorarioChegaContrucao +  PlantasInstancia.Plantas[ p ].VeiculosDaPlanta.Carretas[v].TempoParaDescarregarNaConstrucao[ Construcoes[c].NumeroDaConstrucao ][ Demanda ];
-				HorarioRetornaPlanta 	= HorarioSaiConstrucao 	+ PlantasInstancia.Plantas[ p ].DistanciaConstrucoes[ Construcoes[c].NumeroDaConstrucao ];
+				HorarioRetornaPlanta 	= HorarioSaiConstrucao 	+ PlantasInstancia.Plantas[ p ].TempoParaConstrucoes[ Construcoes[c].NumeroDaConstrucao ];
 			}
 			// enquanto estiver na janela de tempo possivel para atendimeto se realiza o loop abaixo.
 			while( HorarioInicioPlanta <= PlantasInstancia.Plantas[ p ].TempoMaximoDeFuncionamento &&  HorarioChegaContrucao <= Construcoes[c].TempoMaximoDeFuncionamento){
@@ -2904,9 +2904,9 @@ int 	ConjuntoConstrucoes::AdicionaTarefaComVeiculoFixo( int VerificaExistencia, 
 				HorarioInicioPlanta 	= HorarioInicioPlanta + IntervaloDeTempo;
 				// atualiza os horarios na construção e planta
 				HorarioSaiDaPlanta 		= HorarioInicioPlanta 	+ PlantasInstancia.Plantas[ p ].TempoPlanta;
-				HorarioChegaContrucao 	= HorarioSaiDaPlanta 	+ PlantasInstancia.Plantas[ p ].DistanciaConstrucoes[ Construcoes[c].NumeroDaConstrucao];
+				HorarioChegaContrucao 	= HorarioSaiDaPlanta 	+ PlantasInstancia.Plantas[ p ].TempoParaConstrucoes[ Construcoes[c].NumeroDaConstrucao];
 				HorarioSaiConstrucao 	= HorarioChegaContrucao +  PlantasInstancia.Plantas[ p ].VeiculosDaPlanta.Carretas[v].TempoParaDescarregarNaConstrucao[ Construcoes[c].NumeroDaConstrucao ][ Demanda ];
-				HorarioRetornaPlanta 	= HorarioSaiConstrucao 	+ PlantasInstancia.Plantas[ p ].DistanciaConstrucoes[ Construcoes[c].NumeroDaConstrucao ];
+				HorarioRetornaPlanta 	= HorarioSaiConstrucao 	+ PlantasInstancia.Plantas[ p ].TempoParaConstrucoes[ Construcoes[c].NumeroDaConstrucao ];
 			// realiza o loop até que os intervalos de de funcionamento da planta e da construção ainda sejam respeitados
 			}
 		}

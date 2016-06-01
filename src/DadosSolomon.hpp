@@ -656,7 +656,7 @@ void 	DadosSolomon::CriarInstanciaSolomon(string Nome ){ //, int NumeroVERSAO, i
 			DadosInstanciaSalomonCriada << "Horario [ "	<< HoraInicioCliente[c] << " - " << HoraFinalCliente[c] << " ]" << endl;
 		}
 
-		DadosInstanciaSalomonCriada << endl << endl<< "Distancia das plantas para construcoes  em minutos" << endl << endl;
+		DadosInstanciaSalomonCriada << endl << endl<< "Tempo das plantas para construcoes  em minutos" << endl << endl;
 		for (int p = 1; p <= NumeroPlantas; p++){
 			DadosInstanciaSalomonCriada <<  "   Planta = " <<  p << endl;
 			DadosInstanciaSalomonCriada << "Construcao   Tempo de Ida    Tempo de Ida e Volta" << endl;

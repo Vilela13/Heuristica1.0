@@ -48,7 +48,7 @@ public:
 	int 	NumeroDaPlanta;
 	int 	NumeroVeiculos;
 	ConjuntoCarretas VeiculosDaPlanta;
-	vector < float > DistanciaConstrucoes;
+	vector < float > TempoParaConstrucoes;
 	float 	TempoPlanta;
 	float 	TempoMinimoDeFuncionamento;
 	float 	TempoMaximoDeFuncionamento;
@@ -72,7 +72,7 @@ public:
 
 	void 	CalculaMakespan();										// calcula o Makes pan da Planta
 	void 	Imprime(int OrdenaPlantas, int OrdenaCarretas, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo);		// Imprime dados da planta
-	void 	ImprimeDistancias();									// Imprime as distancias da planta as construções
+	void 	ImprimeTempos();									// Imprime as distancias da planta as construções
 
 	int 	VerificaIntegridadeDeCarregamentos(int imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo); 					// verifica a integridade entre os Carregamentos da planta
 
@@ -251,13 +251,13 @@ void 	Planta::Imprime(int OrdenaPlantas, int OrdenaCarretas, int ImprimeSolucao,
 }
 
 // Imprime as distancias da planta as construções
-void 	Planta::ImprimeDistancias(){
-	cout << " +++ Distancias ++++ " << endl;
-	cout << "Numero de conatricoes " << DistanciaConstrucoes.size() << endl;
+void 	Planta::ImprimeTempos(){
+	cout << " +++ Tempos ++++ " << endl;
+	cout << "Numero de conatricoes " << TempoParaConstrucoes.size() << endl;
 	// percorre por todas as construções
-	for ( int c = 0; c < (int) DistanciaConstrucoes.size(); c++){
+	for ( int c = 0; c < (int) TempoParaConstrucoes.size(); c++){
 		// imprime a distancia da planta a construção corrente
-		printf("   Contrucao %d = %.4f", c, DistanciaConstrucoes[c]);
+		printf("   Contrucao %d = %.4f", c, TempoParaConstrucoes[c]);
 	}
 }
 
@@ -337,7 +337,7 @@ int 	Planta::VerificaIntegridadeDeCarregamentos(int imprime,int ImprimeSolucao, 
 
 // destruidora
 Planta::~Planta(){
-	DistanciaConstrucoes.clear();
+	TempoParaConstrucoes.clear();
 	Carregamentos.clear();
 }
 
@@ -559,7 +559,7 @@ int 	ConjuntoPlantas::CorrigeReferenciaCarregamentoDeslocamentoMaisUm( int NumPl
 	float 	HorarioInicioPlanta;
 	float 	HorarioFimPlanta;
 
-	HorarioInicioPlanta = HorarioInicioDescarregamento - Plantas[p].DistanciaConstrucoes[construcao] -  Plantas[p].TempoPlanta;
+	HorarioInicioPlanta = HorarioInicioDescarregamento - Plantas[p].TempoParaConstrucoes[construcao] -  Plantas[p].TempoPlanta;
 	HorarioFimPlanta = HorarioInicioPlanta + Plantas[p].TempoPlanta;
 
 // Modifica o número da demanda suprida pela planta em questão em mais um
@@ -585,7 +585,7 @@ int 	ConjuntoPlantas::CorrigeReferenciaCarregamentoDeslocamentoMaisUm( int NumPl
 	float 	HorarioFimVeiculo;
 
 	HorarioInicioVeiculo = HorarioInicioPlanta;
-	HorarioFimVeiculo = HorarioFinalDescarregamento + Plantas[p].DistanciaConstrucoes[construcao];
+	HorarioFimVeiculo = HorarioFinalDescarregamento + Plantas[p].TempoParaConstrucoes[construcao];
 
 // Modifica o número da demanda suprida pelo caminhão (veículo) em questão em mais um
 	int 	ModificouDeslocamento;
@@ -626,7 +626,7 @@ int 	ConjuntoPlantas::CorrigeReferenciaCarregamentoDeslocamentoMenosUm(int NumPl
 	float 	HorarioInicioPlanta;
 	float 	HorarioFimPlanta;
 
-	HorarioInicioPlanta = HorarioInicioDescarregamento - Plantas[p].DistanciaConstrucoes[Construcao] -  Plantas[p].TempoPlanta;
+	HorarioInicioPlanta = HorarioInicioDescarregamento - Plantas[p].TempoParaConstrucoes[Construcao] -  Plantas[p].TempoPlanta;
 	HorarioFimPlanta = HorarioInicioPlanta +  Plantas[p].TempoPlanta;
 
 // Modifica o número da demanda suprida pela planta em questão em mais um
@@ -651,7 +651,7 @@ int 	ConjuntoPlantas::CorrigeReferenciaCarregamentoDeslocamentoMenosUm(int NumPl
 	float HorarioFimVeiculo;
 
 	HorarioInicioVeiculo = HorarioInicioPlanta;
-	HorarioFimVeiculo = HorarioFinalDescarregamento + Plantas[p].DistanciaConstrucoes[Construcao];
+	HorarioFimVeiculo = HorarioFinalDescarregamento + Plantas[p].TempoParaConstrucoes[Construcao];
 
 // Modifica o número da demanda suprida pelo caminhão (veículo) em questão em mais um
 	int ModificouDeslocamento;

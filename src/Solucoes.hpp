@@ -478,12 +478,12 @@ int		Solucao::DeletaUltimaDemandaConstrucaoEmAnalise( int ConstrucaoNaoAtendida,
 	}
 
 	// aloca horarios da planta
-	HorarioInicioPlanta = HorarioInicioConstrucao - PlantasInstancia.Plantas[p].DistanciaConstrucoes[ConstrucaoNaoAtendida] -  PlantasInstancia.Plantas[p].TempoPlanta;
+	HorarioInicioPlanta = HorarioInicioConstrucao - PlantasInstancia.Plantas[p].TempoParaConstrucoes[ConstrucaoNaoAtendida] -  PlantasInstancia.Plantas[p].TempoPlanta;
 	HorarioFimPlanta = HorarioInicioPlanta +  PlantasInstancia.Plantas[p].TempoPlanta;
 
 	// aloca horarios da carreta
 	HorarioInicioCarreta = HorarioInicioPlanta;
-	HorarioFimCarreta = HorarioFinalConstrucao + PlantasInstancia.Plantas[p].DistanciaConstrucoes[ConstrucaoNaoAtendida];
+	HorarioFimCarreta = HorarioFinalConstrucao + PlantasInstancia.Plantas[p].TempoParaConstrucoes[ConstrucaoNaoAtendida];
 
 	if( AdicionaElementoVetorDadosTarefa(0, DadosTarefasDemandasAnteriores, ConstrucaoNaoAtendida, PlantaEmAnalise, CaminhaoEmAnalise, 1,0, HorarioInicioPlanta, HorarioFimPlanta, HorarioInicioConstrucao,HorarioFinalConstrucao, HorarioFimCarreta,'r') == 0){
 		cout << endl << endl << "  <<<<<<<<<<<<<  Erro! Problema em alocar a tarefa da cosntrução [" << ConstrucaoNaoAtendida << "] (" << HorarioInicioConstrucao << "-" << HorarioFinalConstrucao << ") da planta [" << PlantaEmAnalise << "] (" << HorarioInicioPlanta << "-" << HorarioFimPlanta << ") caminhão [" << CaminhaoEmAnalise << "] (" << HorarioInicioCarreta << "-" << HorarioFimCarreta << ") ->Solucao::DeletaUltimaDemandaConstrucaoEmAnalise >>>>>>>>>> " << endl << endl;
@@ -561,9 +561,9 @@ int		Solucao::ProcuraConstrucaoNaoAtendida(int &ConstrucaoNaoAtendida, int &Dema
 	ConstrucaoTemporario = -13;
 	DemandaTemporaria = -13;
 
-	float DistanciaPlantaTemporaria;
+	float TempoParaPlantaTemporaria;
 	// inicia o valor da variavel com o maior valor para que qualquer valor de uma distancia de uma construção a uma planat sejáa ceito inicialmente
-	DistanciaPlantaTemporaria = DBL_MAX;
+	TempoParaPlantaTemporaria = DBL_MAX;
 
 	// percorre por todas as construções
 	for ( int c = 0; c < NE; c++){
@@ -576,9 +576,9 @@ int		Solucao::ProcuraConstrucaoNaoAtendida(int &ConstrucaoNaoAtendida, int &Dema
 					// percorre todas as plantas para pegar a demanda não atendida que esteja mais perto de uma planta
 					for ( int p = 0; p < NP; p++){
 						// caso a distancia da planta a demanda corrente for menor que a distancia corrente, se entra no if
-						if( DistanciaPlantaTemporaria >= ConstrucoesInstancia.Construcoes[c].DistanciaPlantas[p].Distancia){
+						if( TempoParaPlantaTemporaria >= ConstrucoesInstancia.Construcoes[c].TempoParaPlantas[p].Tempo){
 							// atualiza as variaveis com a demanda corrente
-							DistanciaPlantaTemporaria = ConstrucoesInstancia.Construcoes[c].DistanciaPlantas[p].Distancia;
+							TempoParaPlantaTemporaria = ConstrucoesInstancia.Construcoes[c].TempoParaPlantas[p].Tempo;
 							ConstrucaoTemporario = ConstrucoesInstancia.Construcoes[c].NumeroDaConstrucao;
 							DemandaTemporaria = d;
 						}
@@ -609,9 +609,9 @@ void	Solucao::AlocaTempoPlantaPodeAtenderDemanda(int IndiceConstrucaoNaoAtendida
 	// percorre todas as plantas
 	for( int p = 0; p < NP; p++){
 		// se o tempo minimo de funcionamento da planta for menor que o tempo que uma carreta partindo dela pode atender a cosntrução no inicio de seu funcioanmento, entra no if
-		if( PlantasInstancia.Plantas[p].TempoMinimoDeFuncionamento  < ConstrucoesInstancia.Construcoes[IndiceConstrucaoNaoAtendida].TempoMinimoDeFuncionamento - ConstrucoesInstancia.Construcoes[ IndiceConstrucaoNaoAtendida ].DistanciaPlantas[ p ].Distancia - PlantasInstancia.Plantas[p].TempoPlanta){
+		if( PlantasInstancia.Plantas[p].TempoMinimoDeFuncionamento  < ConstrucoesInstancia.Construcoes[IndiceConstrucaoNaoAtendida].TempoMinimoDeFuncionamento - ConstrucoesInstancia.Construcoes[ IndiceConstrucaoNaoAtendida ].TempoParaPlantas[ p ].Tempo - PlantasInstancia.Plantas[p].TempoPlanta){
 			// atualiza o tempo que a planta pode atender a cosntrução como sendo o tempo que a carreta pode atender a construção no inicio do funcionamento da construção
-			TempoPlantaConsegueAtender[p] = ConstrucoesInstancia.Construcoes[IndiceConstrucaoNaoAtendida].TempoMinimoDeFuncionamento - ConstrucoesInstancia.Construcoes[ IndiceConstrucaoNaoAtendida ].DistanciaPlantas[ p ].Distancia - PlantasInstancia.Plantas[p].TempoPlanta;
+			TempoPlantaConsegueAtender[p] = ConstrucoesInstancia.Construcoes[IndiceConstrucaoNaoAtendida].TempoMinimoDeFuncionamento - ConstrucoesInstancia.Construcoes[ IndiceConstrucaoNaoAtendida ].TempoParaPlantas[ p ].Tempo - PlantasInstancia.Plantas[p].TempoPlanta;
 		}else{
 			// atualiza o tempo que a planta pode atender a construção como sendo o tempo que a planta começa a funcionar
 			TempoPlantaConsegueAtender[p] = PlantasInstancia.Plantas[p].TempoMinimoDeFuncionamento;
@@ -627,9 +627,9 @@ void	Solucao::AlocaTempoPlantaPodeAtenderDemanda(int IndiceConstrucaoNaoAtendida
 			// percorre por todas as plantas
 			for( int p = 0; p < NP; p++){
 				// caso a planta corrente conseguir atender uma demanda anterior em relação a que se quer atender e em um horario maior que o já assinalado, se atualiza o tempo que a planta pode atender a construção
-				if( TempoPlantaConsegueAtender[p] < ConstrucoesInstancia.Construcoes[IndiceConstrucaoNaoAtendida].Descarregamentos[d].HorarioInicioDescarregamento - ConstrucoesInstancia.Construcoes[IndiceConstrucaoNaoAtendida].DistanciaPlantas[p].Distancia){
+				if( TempoPlantaConsegueAtender[p] < ConstrucoesInstancia.Construcoes[IndiceConstrucaoNaoAtendida].Descarregamentos[d].HorarioInicioDescarregamento - ConstrucoesInstancia.Construcoes[IndiceConstrucaoNaoAtendida].TempoParaPlantas[p].Tempo){
 					// atualiza o tempo que a planta pode atender a construção
-					TempoPlantaConsegueAtender[p] = ConstrucoesInstancia.Construcoes[IndiceConstrucaoNaoAtendida].Descarregamentos[d].HorarioInicioDescarregamento - ConstrucoesInstancia.Construcoes[IndiceConstrucaoNaoAtendida].DistanciaPlantas[p].Distancia;
+					TempoPlantaConsegueAtender[p] = ConstrucoesInstancia.Construcoes[IndiceConstrucaoNaoAtendida].Descarregamentos[d].HorarioInicioDescarregamento - ConstrucoesInstancia.Construcoes[IndiceConstrucaoNaoAtendida].TempoParaPlantas[p].Tempo;
 				}
 			}
 		}
@@ -653,7 +653,7 @@ int		Solucao::DeletaTarefasAposTempoPlantaPodeAtender(vector < float > &TempoPla
 	int TarefaDeletada;
 	int PlantaAux;
 	int IndicePlantaAux;
-	float DistanciaAux;
+	float TempoAux;
 	int Ativa;
 
 	int construcao;
@@ -677,13 +677,13 @@ int		Solucao::DeletaTarefasAposTempoPlantaPodeAtender(vector < float > &TempoPla
 
 			// armazena os dados e a diastancia da planta que atende a demanda corrente
 			PlantaAux = ConstrucoesInstancia.Construcoes[c].Descarregamentos[d].NumPlantaFornecedor;
-			DistanciaAux = ConstrucoesInstancia.Construcoes[c].DistanciaPlantas[ PlantaAux ].Distancia;
+			TempoAux = ConstrucoesInstancia.Construcoes[c].TempoParaPlantas[ PlantaAux ].Tempo;
 			// pega o indice da planta
 			if( PlantasInstancia.AlocaInidiceFabrica( PlantaAux, IndicePlantaAux) == 0){
 				cout << endl << endl << "     >>>>>>>> Problema! Não encontrou a planta [" << PlantaAux << "]"<< endl << endl;
 			}
 			// verifica se a demanda corrente é atendida após o tempo que a planta pode atender a deamnda não atendida, ou se a deamnda corrente é atendia em um horario que irá confrontar com o atendiemnto da demanda não atendida ( a demanda corrente é atendida antes da demanda que se quer atender, mas seu termino de atendimento inviabiliza o atendimento da demnada não atendida no horario que a planta pode atende-la)
-			if( ConstrucoesInstancia.Construcoes[c].Descarregamentos[d].HorarioInicioDescarregamento - DistanciaAux  > TempoPlantaPodeAtender[PlantaAux]){
+			if( ConstrucoesInstancia.Construcoes[c].Descarregamentos[d].HorarioInicioDescarregamento - TempoAux  > TempoPlantaPodeAtender[PlantaAux]){
 				if( Imprime == 1){
 					cout << "	-> Planta = " << PlantaAux << "   Demanda = [" << ConstrucoesInstancia.Construcoes[c].NumeroDaConstrucao << "-" << d << "] indice construção (" << c << ")" << endl;
 					ConstrucoesInstancia.Construcoes[c].Descarregamentos[d].Imprime();

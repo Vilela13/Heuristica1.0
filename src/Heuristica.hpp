@@ -45,7 +45,7 @@ public:
 	void	LeVeiculosPorPlanta(int);					// le o numero de veículos por planta
 	void	LeNumeroDemandas(int);						// le o numero de demandas por construção
 
-	void	LeDistancias(int);							// le as distancias das plantas para as construções
+	void	LeTempos(int);							// le as distancias das plantas para as construções
 	void	LeTempoConstrucao(int);					// le os tempos que cada caminhão leva para atender cada demanda em cada cosntrução
 	void	LeTempoPlanta(int);						// le o tempo que acda planta leva para carregar um caminhão de concreto
 
@@ -94,7 +94,7 @@ int		Heuristica::LeDados(string Nome, int comentarios){
 		LeTempoDeVidaConcreto(comentarios);
 		LeVeiculosPorPlanta( comentarios);
 		LeNumeroDemandas(comentarios);
-		LeDistancias(comentarios);
+		LeTempos(comentarios);
 		LeTempoConstrucao(comentarios);
 		LeTempoPlanta(comentarios);
 		LeTempoMaximoEntreDescargas(comentarios);
@@ -2257,25 +2257,25 @@ void	Heuristica::LeNumeroDemandas(int comentarios){
 
 
 // le as distancias das plantas para as construções
-void	Heuristica::LeDistancias(int comentarios){
+void	Heuristica::LeTempos(int comentarios){
 	// Le a distancia das plantas para as construções
 	if( comentarios == 1){
-		cout << "     Distancia Planta para Construcoes"<< endl;
+		cout << "    Tempo Planta para Construcoes"<< endl;
 	}
 	// percorre todas as plantas
 	for (int p = 0; p < NP ; p++){
 		// inicializa a estrutura de distancia da planta corrente para as cosntruções que existem
-		PlantasInstancia.Plantas[p].DistanciaConstrucoes.resize(NE);
+		PlantasInstancia.Plantas[p].TempoParaConstrucoes.resize(NE);
 		// percorre por todas as construções que existem
 		for ( int c = 0; c < NE; c++){
 			// le a distancia da planta corresnte para a construção corrente e armazena esse valor
-			arq >> PlantasInstancia.Plantas[p].DistanciaConstrucoes[c];
+			arq >> PlantasInstancia.Plantas[p].TempoParaConstrucoes[c];
 
 			// Dados modelo
-			DM.TEMpc[p][c] = PlantasInstancia.Plantas[p].DistanciaConstrucoes[c];
+			DM.TEMpc[p][c] = PlantasInstancia.Plantas[p].TempoParaConstrucoes[c];
 
 			if( comentarios == 1){
-				cout << PlantasInstancia.Plantas[p].DistanciaConstrucoes[c] << " ";
+				cout << PlantasInstancia.Plantas[p].TempoParaConstrucoes[c] << " ";
 			}
 		}
 		if( comentarios == 1){
@@ -2286,24 +2286,24 @@ void	Heuristica::LeDistancias(int comentarios){
 
 	// Le a distancia das construções para as plantas
 	if( comentarios == 1){
-		cout << "     Distancia Construcoes para Plantas"<< endl;
+		cout << "     Tempo Construcoes para Plantas"<< endl;
 	}
 	// percorre todas as cosntruções
 	for (int c = 0; c < NE ; c++){
 		// inicializa a estrutura de distancia da construção para as plantas
-		ConstrucoesInstancia.Construcoes[c].DistanciaPlantas.resize(NP);
+		ConstrucoesInstancia.Construcoes[c].TempoParaPlantas.resize(NP);
 		// percorre todas as plantas
 		for ( int p = 0; p < NP; p++){
 			// le a distancia da construção corrente para a planta corresnte e armazena esse valor
-			arq >> ConstrucoesInstancia.Construcoes[c].DistanciaPlantas[p].Distancia;
+			arq >> ConstrucoesInstancia.Construcoes[c].TempoParaPlantas[p].Tempo;
 
 			// Dados modelo
-			DM.TEMcp[c][p] = ConstrucoesInstancia.Construcoes[c].DistanciaPlantas[p].Distancia;
+			DM.TEMcp[c][p] = ConstrucoesInstancia.Construcoes[c].TempoParaPlantas[p].Tempo;
 
 			// armazena um ponteiro que leva a planta que a distancia acima que na construção corrente ela se refere
-			ConstrucoesInstancia.Construcoes[c].DistanciaPlantas[p].PlantaComparada = &PlantasInstancia.Plantas[p];
+			ConstrucoesInstancia.Construcoes[c].TempoParaPlantas[p].PlantaComparada = &PlantasInstancia.Plantas[p];
 			if( comentarios == 1){
-				cout <<  ConstrucoesInstancia.Construcoes[c].DistanciaPlantas[p].Distancia << " ";
+				cout <<  ConstrucoesInstancia.Construcoes[c].TempoParaPlantas[p].Tempo << " ";
 			}
 		}
 		if( comentarios == 1){

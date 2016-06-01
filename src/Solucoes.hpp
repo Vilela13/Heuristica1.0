@@ -25,6 +25,9 @@ public:
 
 	float	Makespan;
 
+	// armazena os dados do modelo
+	DadosModelo DM;
+
 	vector< vector < vector < int > > > Alfa;
 	vector< vector < vector < vector < vector < int > > > > > Beta;
 	vector< vector < vector < vector < vector < int > > > > > BetaProducao;
@@ -34,7 +37,7 @@ public:
 
 	Solucao();
 
-	void	CarregaSolucao(int np, ConjuntoPlantas Plantas, int ne, ConjuntoConstrucoes Construcoes, int nv, float v,float TDVC);		// Carrega os dados da instancia e a solução até o momento
+	void	CarregaSolucao(int np, ConjuntoPlantas Plantas, int ne, ConjuntoConstrucoes Construcoes, int nv, float v,float TDVC, DadosModelo dm);		// Carrega os dados da instancia e a solução até o momento
 	void	Imprime(bool ImprimePlanta, bool ImprimeConstrucao, bool VerificaViabilidade, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo);									// imprime os dados da solução
 	int		DeletaAlocacaoTarefasPosterioresMesmaConstrucao(int VerificaExistencia, int Construcao, int Demanda, vector < DadosTarefa >& DadosTarefasMovidas);					// deleta demandas atendidas na construção após certa demanda que é passada com parametro
 
@@ -87,7 +90,7 @@ Solucao::Solucao(){
 
 
 // Carrega os dados da instancia e a solução até o momento
-void	Solucao::CarregaSolucao(int np, ConjuntoPlantas Plantas, int ne, ConjuntoConstrucoes Construcoes, int nv, float v,float TDVC){
+void	Solucao::CarregaSolucao(int np, ConjuntoPlantas Plantas, int ne, ConjuntoConstrucoes Construcoes, int nv, float v,float TDVC, DadosModelo dm){
 	NP = np;
 	PlantasInstancia = Plantas;
 	NE = ne;
@@ -95,6 +98,8 @@ void	Solucao::CarregaSolucao(int np, ConjuntoPlantas Plantas, int ne, ConjuntoCo
 	NV = nv;
 	Velocidade = v;
 	TempoDeVidaConcreto = TDVC;
+
+	DM = dm;
 }
 
 // imprime os dados da solução
@@ -1013,12 +1018,12 @@ void	Solucao::RealizarBuscaLocalCaminhao(int EscolhaVeiculo, int EscolhaConstruc
 	ImprimeProcedimento = 0;
 
 	// carrega os dados da solução para a classe da busca local
-	busca.CarregaSolucao( NP, PlantasInstancia, NE,	ConstrucoesInstancia, NV, Velocidade, TempoDeVidaConcreto);
+	busca.CarregaSolucao( NP, PlantasInstancia, NE,	ConstrucoesInstancia, NV, Velocidade, TempoDeVidaConcreto, DM);
 
 	// equanto o procediemnto da busca local melhorar a solução que se tem, se continua no while
 	while ( busca.BuscaLocalTentaRealizarTarefasComOutrosVeiculos(EscolhaVeiculo, EscolhaConstrucao, EscolhaPlanta,ImprimeProcedimento, ImprimeEstruturas, RealizaProcessoDeAtrazarTarefas) == 1){
 		// carrega a nova solução que se obteve
-		CarregaSolucao(busca.NP, busca.PlantasInstancia, busca.NE, busca.ConstrucoesInstancia, busca.NV , busca.Velocidade , busca.TempoDeVidaConcreto);
+		CarregaSolucao(busca.NP, busca.PlantasInstancia, busca.NE, busca.ConstrucoesInstancia, busca.NV , busca.Velocidade , busca.TempoDeVidaConcreto, busca.DM);
 
 		// calcula o makespan geral
 		CalculaMakespan();
@@ -1060,12 +1065,12 @@ void	Solucao::RealizarBuscaLocalConstrucao(int EscolhaVeiculo, int EscolhaConstr
 	ImprimeProcedimento = 0;
 
 	// carrega os dados da solução para a classe da busca local
-	busca.CarregaSolucao( NP, PlantasInstancia, NE,	ConstrucoesInstancia, NV, Velocidade, TempoDeVidaConcreto);
+	busca.CarregaSolucao( NP, PlantasInstancia, NE,	ConstrucoesInstancia, NV, Velocidade, TempoDeVidaConcreto, DM);
 
 	// equanto o procedimento da busca local melhorar a solução que se tem, se continua no while
 	while ( busca.BuscaLocalMudaOrdemAtendimentoConstrucoes(EscolhaVeiculo, EscolhaConstrucao, EscolhaPlanta,ImprimeProcedimento, ImprimeEstruturas, RealizaProcessoDeAtrazarTarefas) == 1){
 		// carrega a nova solução que se obteve
-		CarregaSolucao(busca.NP, busca.PlantasInstancia, busca.NE, busca.ConstrucoesInstancia, busca.NV , busca.Velocidade , busca.TempoDeVidaConcreto);
+		CarregaSolucao(busca.NP, busca.PlantasInstancia, busca.NE, busca.ConstrucoesInstancia, busca.NV , busca.Velocidade , busca.TempoDeVidaConcreto, busca.DM);
 
 		// calcula o makespan geral
 		CalculaMakespan();
@@ -1108,12 +1113,12 @@ void	Solucao::RealizarBuscaLocalPlanta(int EscolhaVeiculo, int EscolhaConstrucao
 	ImprimeProcedimento = 0;
 
 	// carrega os dados da solução para a classe da busca local
-	busca.CarregaSolucao( NP, PlantasInstancia, NE,	ConstrucoesInstancia, NV, Velocidade, TempoDeVidaConcreto);
+	busca.CarregaSolucao( NP, PlantasInstancia, NE,	ConstrucoesInstancia, NV, Velocidade, TempoDeVidaConcreto, DM);
 
 	// equanto o procediemnto da busca local melhorar a solução que se tem, se continua no while
 	while ( busca.BuscaLocalTrocaPlantaAtendimento(EscolhaVeiculo, EscolhaConstrucao, EscolhaPlanta,ImprimeProcedimento, ImprimeEstruturas, RealizaProcessoDeAtrazarTarefas) == 1){
 		// carrega a nova solução que se obteve
-		CarregaSolucao(busca.NP, busca.PlantasInstancia, busca.NE, busca.ConstrucoesInstancia, busca.NV , busca.Velocidade , busca.TempoDeVidaConcreto);
+		CarregaSolucao(busca.NP, busca.PlantasInstancia, busca.NE, busca.ConstrucoesInstancia, busca.NV , busca.Velocidade , busca.TempoDeVidaConcreto, busca.DM);
 
 		// calcula o makespan geral
 		CalculaMakespan();
@@ -1512,7 +1517,7 @@ class ConjuntoSolucoes{
 public:
 	vector < Solucao > Solucoes;
 	ConjuntoSolucoes();			// classe construtoora
-	void	InsereSolucao(int np, ConjuntoPlantas Plantas, int ne, ConjuntoConstrucoes Construcoes, int nv, float v,float TDVC);			// carrega uma solução ao vetor das soluções
+	void	InsereSolucao(int np, ConjuntoPlantas Plantas, int ne, ConjuntoConstrucoes Construcoes, int nv, float v,float TDVC, DadosModelo dm);			// carrega uma solução ao vetor das soluções
 	void	CalculaMakespanSolucoes();		// calcula o makespan das soluções
 	void	CalculaNiveisViabilidadeSolucoes();		// calcula o niveis de viabilidade das solução
 	void	Imprime(bool ImprimePlanta, bool ImprimeConstrucao, bool VerificaViabilidade, int ImprimeSolucao , int ImprimeArquivo, PonteiroArquivo  &Arquivo);		// imprime as soluções
@@ -1525,10 +1530,10 @@ ConjuntoSolucoes::ConjuntoSolucoes(){
 }
 
 // carrega uma solução ao vetor das soluções
-void	ConjuntoSolucoes::InsereSolucao(int np, ConjuntoPlantas Plantas, int ne, ConjuntoConstrucoes Construcoes, int nv, float v,float TDVC){
+void	ConjuntoSolucoes::InsereSolucao(int np, ConjuntoPlantas Plantas, int ne, ConjuntoConstrucoes Construcoes, int nv, float v,float TDVC, DadosModelo dm){
 	Solucao S1;
 	// carrega dasos da solução
-	S1.CarregaSolucao( np, Plantas, ne, Construcoes, nv, v, TDVC);
+	S1.CarregaSolucao( np, Plantas, ne, Construcoes, nv, v, TDVC, dm);
 	// colocar a solução carregada nbo vetor de soluções
 	Solucoes.push_back(S1);
 }

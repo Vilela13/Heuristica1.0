@@ -14,9 +14,13 @@ class Heuristica{
 
 public:
 
-	 DadosModelo DM;
+	// armazena os dados do modelo
+	DadosModelo DM;
 
+	// variavel para ler arquivo
 	ifstream arq;
+
+	// variaveis do sistema
 	int		NP;
 	ConjuntoPlantas PlantasInstancia;
 	int		NE;
@@ -45,7 +49,7 @@ public:
 	void	LeVeiculosPorPlanta(int);					// le o numero de veículos por planta
 	void	LeNumeroDemandas(int);						// le o numero de demandas por construção
 
-	void	LeTempos(int);							// le as distancias das plantas para as construções
+	void	LeTemposContrucaoPlantaViceVersa(int);							// le as distancias das plantas para as construções
 	void	LeTempoConstrucao(int);					// le os tempos que cada caminhão leva para atender cada demanda em cada cosntrução
 	void	LeTempoPlanta(int);						// le o tempo que acda planta leva para carregar um caminhão de concreto
 
@@ -54,7 +58,11 @@ public:
 	void	LeTempoMaximoMinimoPlantas(int);			// le o tempo minimo e máximo que um caminhão pode começar a carregar em uma planta
 
 	void	CalculoRankTempoDemanda(int);				// calcula o rank baseado na janela de tempo e no numero de demandas para cada cosntrução
-    ~Heuristica();
+
+	void 	IniciaParametrosDoModelo();					// inicia parametros do modelo
+
+	~Heuristica();
+
 
 };
 
@@ -94,7 +102,7 @@ int		Heuristica::LeDados(string Nome, int comentarios){
 		LeTempoDeVidaConcreto(comentarios);
 		LeVeiculosPorPlanta( comentarios);
 		LeNumeroDemandas(comentarios);
-		LeTempos(comentarios);
+		LeTemposContrucaoPlantaViceVersa(comentarios);
 		LeTempoConstrucao(comentarios);
 		LeTempoPlanta(comentarios);
 		LeTempoMaximoEntreDescargas(comentarios);
@@ -102,6 +110,9 @@ int		Heuristica::LeDados(string Nome, int comentarios){
 		LeTempoMaximoMinimoPlantas(comentarios);
 		// calcula o rank
 		CalculoRankTempoDemanda(comentarios);
+
+		// utilizado para verificr a coretude em relação ao modelo
+		IniciaParametrosDoModelo();
 
 		// fecha o arquivo da instancia aberto
 		arq.close();
@@ -250,7 +261,7 @@ void	Heuristica::ExecutaCONS(string NomeInstancia, int EscolhaVeiculo, int Escol
 	InicioExecucao = time(NULL);
 
 
-	Prod1.CarregaDados(NP, PlantasInstancia, NE, ConstrucoesInstancia, NV, Velocidade, TempoDeVidaConcreto);
+	Prod1.CarregaDados(NP, PlantasInstancia, NE, ConstrucoesInstancia, NV, Velocidade, TempoDeVidaConcreto, DM);
 
 	//Prod1.ConstrucoesInstancia.ImprimeContrucoes();
 
@@ -298,7 +309,7 @@ void	Heuristica::ExecutaCONS(string NomeInstancia, int EscolhaVeiculo, int Escol
 	}
 
 
-	Solucoes.InsereSolucao(Prod1.NP, Prod1.PlantasInstancia, Prod1.NE, Prod1.ConstrucoesInstancia, Prod1.NV, Prod1.Velocidade, Prod1.TempoDeVidaConcreto);
+	Solucoes.InsereSolucao(Prod1.NP, Prod1.PlantasInstancia, Prod1.NE, Prod1.ConstrucoesInstancia, Prod1.NV, Prod1.Velocidade, Prod1.TempoDeVidaConcreto, Prod1.DM);
 
 	Solucoes.CalculaMakespanSolucoes();
 
@@ -662,7 +673,7 @@ void	Heuristica::ExecutaCONScir(string NomeInstancia, int EscolhaVeiculo, int Es
 	InicioExecucao = time(NULL);
 
 
-	Prod1.CarregaDados(NP, PlantasInstancia, NE, ConstrucoesInstancia, NV, Velocidade, TempoDeVidaConcreto);
+	Prod1.CarregaDados(NP, PlantasInstancia, NE, ConstrucoesInstancia, NV, Velocidade, TempoDeVidaConcreto, DM);
 
 	//Prod1.ConstrucoesInstancia.ImprimeContrucoes();
 
@@ -710,7 +721,7 @@ void	Heuristica::ExecutaCONScir(string NomeInstancia, int EscolhaVeiculo, int Es
 	}
 
 
-	Solucoes.InsereSolucao(Prod1.NP, Prod1.PlantasInstancia, Prod1.NE, Prod1.ConstrucoesInstancia, Prod1.NV, Prod1.Velocidade, Prod1.TempoDeVidaConcreto);
+	Solucoes.InsereSolucao(Prod1.NP, Prod1.PlantasInstancia, Prod1.NE, Prod1.ConstrucoesInstancia, Prod1.NV, Prod1.Velocidade, Prod1.TempoDeVidaConcreto, Prod1.DM);
 
 	Solucoes.CalculaMakespanSolucoes();
 
@@ -1100,13 +1111,13 @@ void	Heuristica::ExecutaGrasp(string NomeInstancia, long int NumeroIteracoes, lo
 
 		Prod1 = new Procedimento1;
 
-		Prod1->CarregaDados(NP, PlantasInstancia, NE, ConstrucoesInstancia, NV, Velocidade, TempoDeVidaConcreto);
+		Prod1->CarregaDados(NP, PlantasInstancia, NE, ConstrucoesInstancia, NV, Velocidade, TempoDeVidaConcreto, DM);
 
 		Prod1->Executa( EscolhaVeiculoProcediemnto, EscolhaConstrucaoProcediemnto, EscolhaPlantaProcediemnto, ImprimeProcedimentoConstrutivo, ImprimeSolucao, ImprimeArquivo, Arquivo, RealizaProcessoDeAtrazarTarefas);
 
 		SolucaoCorrente = new Solucao;
 
-		SolucaoCorrente->CarregaSolucao(Prod1->NP, Prod1->PlantasInstancia, Prod1->NE, Prod1->ConstrucoesInstancia, Prod1->NV, Prod1->Velocidade, Prod1->TempoDeVidaConcreto);
+		SolucaoCorrente->CarregaSolucao(Prod1->NP, Prod1->PlantasInstancia, Prod1->NE, Prod1->ConstrucoesInstancia, Prod1->NV, Prod1->Velocidade, Prod1->TempoDeVidaConcreto, Prod1->DM);
 
 		delete(Prod1);
 
@@ -1358,13 +1369,13 @@ void	Heuristica::ExecutaGraspCir(string NomeInstancia, long int NumeroIteracoes,
 
 		Prod1 = new Procedimento1;
 
-		Prod1->CarregaDados(NP, PlantasInstancia, NE, ConstrucoesInstancia, NV, Velocidade, TempoDeVidaConcreto);
+		Prod1->CarregaDados(NP, PlantasInstancia, NE, ConstrucoesInstancia, NV, Velocidade, TempoDeVidaConcreto, DM);
 
 		Prod1->Executa( EscolhaVeiculoProcediemnto, EscolhaConstrucaoProcediemnto, EscolhaPlantaProcediemnto, ImprimeProcedimentoConstrutivo, ImprimeSolucao, ImprimeArquivo, Arquivo, RealizaProcessoDeAtrazarTarefas);
 
 		SolucaoCorrente = new Solucao;
 
-		SolucaoCorrente->CarregaSolucao(Prod1->NP, Prod1->PlantasInstancia, Prod1->NE, Prod1->ConstrucoesInstancia, Prod1->NV, Prod1->Velocidade, Prod1->TempoDeVidaConcreto);
+		SolucaoCorrente->CarregaSolucao(Prod1->NP, Prod1->PlantasInstancia, Prod1->NE, Prod1->ConstrucoesInstancia, Prod1->NV, Prod1->Velocidade, Prod1->TempoDeVidaConcreto, Prod1->DM);
 
 		delete(Prod1);
 
@@ -1631,13 +1642,13 @@ void	Heuristica::ExecutaGraspClass(string NomeInstancia, long int NumeroIteracoe
 
 		Prod1 = new Procedimento1;
 
-		Prod1->CarregaDados(NP, PlantasInstancia, NE, ConstrucoesInstancia, NV, Velocidade, TempoDeVidaConcreto);
+		Prod1->CarregaDados(NP, PlantasInstancia, NE, ConstrucoesInstancia, NV, Velocidade, TempoDeVidaConcreto, DM);
 
 		Prod1->Executa( EscolhaVeiculoProcediemnto, EscolhaConstrucaoProcediemnto, EscolhaPlantaProcediemnto, ImprimeProcedimentoConstrutivo, ImprimeSolucao, ImprimeArquivo, Arquivo, RealizaProcessoDeAtrazarTarefas);
 
 		SolucaoCorrente = new Solucao;
 
-		SolucaoCorrente->CarregaSolucao(Prod1->NP, Prod1->PlantasInstancia, Prod1->NE, Prod1->ConstrucoesInstancia, Prod1->NV, Prod1->Velocidade, Prod1->TempoDeVidaConcreto);
+		SolucaoCorrente->CarregaSolucao(Prod1->NP, Prod1->PlantasInstancia, Prod1->NE, Prod1->ConstrucoesInstancia, Prod1->NV, Prod1->Velocidade, Prod1->TempoDeVidaConcreto, Prod1->DM);
 
 		delete(Prod1);
 
@@ -1897,13 +1908,13 @@ void	Heuristica::ExecutaGraspClassCir(string NomeInstancia, long int NumeroItera
 
 		Prod1 = new Procedimento1;
 
-		Prod1->CarregaDados(NP, PlantasInstancia, NE, ConstrucoesInstancia, NV, Velocidade, TempoDeVidaConcreto);
+		Prod1->CarregaDados(NP, PlantasInstancia, NE, ConstrucoesInstancia, NV, Velocidade, TempoDeVidaConcreto, DM);
 
 		Prod1->Executa( EscolhaVeiculoProcediemnto, EscolhaConstrucaoProcediemnto, EscolhaPlantaProcediemnto, ImprimeProcedimentoConstrutivo, ImprimeSolucao, ImprimeArquivo, Arquivo, RealizaProcessoDeAtrazarTarefas);
 
 		SolucaoCorrente = new Solucao;
 
-		SolucaoCorrente->CarregaSolucao(Prod1->NP, Prod1->PlantasInstancia, Prod1->NE, Prod1->ConstrucoesInstancia, Prod1->NV, Prod1->Velocidade, Prod1->TempoDeVidaConcreto);
+		SolucaoCorrente->CarregaSolucao(Prod1->NP, Prod1->PlantasInstancia, Prod1->NE, Prod1->ConstrucoesInstancia, Prod1->NV, Prod1->Velocidade, Prod1->TempoDeVidaConcreto, Prod1->DM);
 
 		delete(Prod1);
 
@@ -2116,6 +2127,11 @@ void	Heuristica::LeNumeroPlantasEntregasVeiculos(int comentarios){
 		DM.M8vi[v].resize(NE);
 	}
 	DM.M9p.resize(NP);
+	DM.M10cp.resize(NE);
+	for( int c = 0; c < NE; c++){
+		DM.M10cp[c].resize(NP);
+	}
+
 
 }
 
@@ -2257,7 +2273,7 @@ void	Heuristica::LeNumeroDemandas(int comentarios){
 
 
 // le as distancias das plantas para as construções
-void	Heuristica::LeTempos(int comentarios){
+void	Heuristica::LeTemposContrucaoPlantaViceVersa(int comentarios){
 	// Le a distancia das plantas para as construções
 	if( comentarios == 1){
 		cout << "    Tempo Planta para Construcoes"<< endl;
@@ -2445,11 +2461,17 @@ void	Heuristica::LeTempoMaximoMinimoPlantas(int comentarios){
 	for ( int p = 0; p < NP; p++){
 		// le e armazena o tempo minimo que se pode começar a carregar um caminhão na planta corrente
 		arq >> PlantasInstancia.Plantas[p].TempoMinimoDeFuncionamento;
+
+		// Dados modelo
+		DM.TMINp[p] = PlantasInstancia.Plantas[p].TempoMinimoDeFuncionamento;
 	}
 	// percorre todas as plantas
 	for ( int p = 0; p < NP; p++){
 		// le e armazena o tempo máximo que se pode começar a carregar um caminhão na planta corrente
 		arq >> PlantasInstancia.Plantas[p].TempoMaximoDeFuncionamento;
+
+		// Dados modelo
+		DM.TMAXp[p] = PlantasInstancia.Plantas[p].TempoMaximoDeFuncionamento;
 	}
 	if( comentarios == 1){
 		cout << "     Intervalo de Funcionamento Plantas " << endl;
@@ -2470,6 +2492,108 @@ void	Heuristica::CalculoRankTempoDemanda(int comentarios){
 		// calcula o rank para a cosntrução corrente
 		ConstrucoesInstancia.Construcoes[c].CalculaRankTempoDemandas( comentarios );
 	}
+}
+
+void Heuristica::IniciaParametrosDoModelo(){
+
+	int VeiculoAux;
+	VeiculoAux = 0;
+
+	// aloca valores nas variaveis S de tempo entre construções consecultivas
+	for(int p = 0; p < NP; p++){
+		for( int v = 0; v < DM.Veiculos[p]; v++){
+			for( int c1 = 0; c1 < NE; c1++){
+				for( int d1 = 0; d1 < DM.Demandas[c1]; d1++){
+					for( int c2 = 0; c2 < NE; c2++){
+						for( int d2 = 0; d2 < DM.Demandas[c2]; d2++){
+							DM.S1vii[VeiculoAux][c1][d1][c2][d2] = DM.TEMcp[c1][p] + DM.CARRp[p] + DM.TEMpc[p][c2];
+							DM.S2vii[VeiculoAux][c2][d2][c1][d1] = DM.TEMcp[c2][p] + DM.CARRp[p] + DM.TEMpc[p][c1];
+						}
+					}
+				}
+			}
+			VeiculoAux++;
+		}
+	}
+
+	// Aloca valor do M1
+	for( int v = 0; v < NV; v++){
+		for( int c1 = 0; c1 < NE; c1++){
+			for( int d1 = 0; d1 < DM.Demandas[c1]; d1++){
+				DM.M1vi[v][c1][d1] = DM.TMAXc[c1] + DM.DESCvi[v][c1][d1];
+			}
+		}
+	}
+
+	// Aloca valor do M2
+	for( int p = 0; p < NP; p++){
+		for( int c1 = 0; c1 < NE; c1++){
+			DM.M2pc[p][c1] = DM.TMAXp[p] + DM.CARRp[p] + DM.TEMpc[p][c1];
+		}
+	}
+
+	// Aloca valor do M3
+	for( int c1 = 0; c1 < NE; c1++){
+		DM.M3c[c1] = DM.TMAXc[c1];
+	}
+
+	// Aloca valor do M4
+	VeiculoAux = 0;
+
+	for(int p = 0; p < NP; p++){
+		for( int v = 0; v < DM.Veiculos[p]; v++){
+			for( int c1 = 0; c1 < NE; c1++){
+				for( int d1 = 0; d1 < DM.Demandas[c1]; d1++){
+					DM.M4vi[VeiculoAux][c1][d1] = DM.TMAXc[c1] + DM.DESCvi[VeiculoAux][c1][d1] + DM.TEMcp[c1][p];
+				}
+			}
+		}
+		VeiculoAux++;
+	}
+
+	// Aloca valor M5 e M6
+	for( int v = 0; v < NV; v++){
+		for( int c1 = 0; c1 < NE; c1++){
+			for( int d1 = 0; d1 < DM.Demandas[c1]; d1++){
+				for( int c2 = 0; c2 < NE; c2++){
+					for( int d2 = 0; d2 < DM.Demandas[c2]; d2++){
+						DM.M5vii[v][c1][d1][c2][d2] = DM.TMAXc[c1] + DM.DESCvi[v][c1][d1] + DM.S1vii[v][c1][d1][c2][d2];
+						DM.M6vii[v][c1][d1][c2][d2] = DM.TMAXc[c2] + DM.DESCvi[v][c2][d2] + DM.S2vii[v][c2][d2][c1][d1];
+					}
+				}
+			}
+		}
+	}
+
+	// Aloca valor do M7
+	for( int c1 = 0; c1 < NE; c1++){
+		DM.M7c[c1] = DM.TMAXc[c1];
+	}
+
+	// Aloca valor M8
+	for( int v = 0; v < NV; v++){
+		for( int c1 = 0; c1 < NE; c1++){
+			for( int d1 = 0; d1 < DM.Demandas[c1]; d1++){
+				DM.M8vi[v][c1][d1] = DM.TMAXc[c1] + DM.DESCvi[v][c1][d1];
+			}
+		}
+	}
+
+	// Aloca valor do M9
+	for( int p = 0; p < NP; p++){
+		DM.M9p[p] = DM.TMAXp[p] + DM.CARRp[p];
+	}
+
+	// Aloca valor do M10
+	for( int p = 0; p < NP; p++){
+		for( int c1 = 0; c1 < NE; c1++){
+			DM.M10cp[c1][p] = DM.TMAXc[c1] - DM.TMINp[p];
+		}
+	}
+
+
+
+
 }
 
 Heuristica::~Heuristica(){

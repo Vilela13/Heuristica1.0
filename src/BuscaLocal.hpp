@@ -25,9 +25,11 @@ public:
 
 	float	Makespan;							// makespan geral das plantas e construções (empresas)
 
+	DadosModelo DM;
+
 	BuscaLocal();	// construtora da classe
 
-	void	CarregaSolucao(int np, ConjuntoPlantas Plantas, int ne, ConjuntoConstrucoes Construcoes, int nv, float v,float TDVC);		// Carrega os dados da instancia e a solução até o momento
+	void	CarregaSolucao(int np, ConjuntoPlantas Plantas, int ne, ConjuntoConstrucoes Construcoes, int nv, float v,float TDVC, DadosModelo dm);		// Carrega os dados da instancia e a solução até o momento
 	int		SelecionaConstrucao( int &ConstrucaoEscolhida, int &IndiceConstrucaoEscolhida);					// seleciona a construção ainda não avaliada que tera suas demandas atendidas avaliadas pela busca local
 	int		RetornaConstrucaoQuePodeSerAtendida( int &Construcao, int &IndiceConstrucao);		// retorna a construção que possui o menor inidice e que ainda pode ser atendida
 
@@ -52,7 +54,7 @@ BuscaLocal::BuscaLocal(){
 
 
 // Carrega os dados da instancia e a solução até o momento
-void 	BuscaLocal::CarregaSolucao(int np, ConjuntoPlantas Plantas, int ne, ConjuntoConstrucoes Construcoes, int nv, float v,float TDVC){
+void 	BuscaLocal::CarregaSolucao(int np, ConjuntoPlantas Plantas, int ne, ConjuntoConstrucoes Construcoes, int nv, float v,float TDVC, DadosModelo dm){
 	NP 						= np;
 	PlantasInstancia		= Plantas;
 	NE 						= ne;
@@ -60,6 +62,7 @@ void 	BuscaLocal::CarregaSolucao(int np, ConjuntoPlantas Plantas, int ne, Conjun
 	NV 						= nv;
 	Velocidade				= v;
 	TempoDeVidaConcreto 	= TDVC;
+	DM = dm;
 }
 
 // seleciona a construção ainda não avaliada que tera suas demandas atendidas avaliadas pela busca local

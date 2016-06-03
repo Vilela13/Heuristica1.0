@@ -1516,6 +1516,27 @@ int Solucao::VerificaRestricoes(){
 		}
 	}
 
+	// verifica intervalo entre a produção e o consumo
+		VeiculoAux = 0;
+		for( int p = 0; p < NP; p++){
+			for( int v = 0; v < DM.Veiculos[p]; v++){
+				for( int e1 = 0; e1 < NE; e1++){
+					for( int d1 = 0; d1 < DM.Demandas[e1]; d1++){
+						if( Alfa[VeiculoAux][e1][d1] == 1){
+							if( Tvei[VeiculoAux][e1][d1] - TPvei[VeiculoAux][e1][d1] != DM.CARRp[p] + DM.TEMpc[p][e1] ){
+								cout << endl << endl << "   Problema integridade" << endl;
+								cout << " Tvei[" << VeiculoAux << "][" << e1 << "][" << d1 << "] - TPvei[" << VeiculoAux << "][" << e1 << "][" << d1 << "] != DM.CARRp[" << p << "] + DM.TEMpc[" << p << "][" << e1 << "]" << endl;
+								cout << Tvei[VeiculoAux][e1][d1] << " - " << TPvei[VeiculoAux][e1][d1] << "(" << Tvei[VeiculoAux][e1][d1] - TPvei[VeiculoAux][e1][d1] <<") != (" << DM.CARRp[p] + DM.TEMpc[p][e1] << ") " << DM.CARRp[p] << " + " << DM.TEMpc[p][e1] << endl;
+								cout << " diferença de : " << Tvei[VeiculoAux][e1][d1] - TPvei[VeiculoAux][e1][d1]  -( DM.CARRp[p] + DM.TEMpc[p][e1] ) << endl;
+								//return 0;
+							}
+						}
+					}
+				}
+				VeiculoAux++;
+			}
+		}
+
 	return 1;
 }
 

@@ -19,29 +19,29 @@ public:
 	vector < int > Demandas;
 	vector < int > Veiculos;
 
-	vector < vector < float > > TEMpc;
-	vector < vector < float > > TEMcp;
-	vector < vector < vector < float > > > DESCvi;
-	vector < float > CARRp;
-	float TVC;
-	vector < float > TETAc;
-	vector < vector < vector < vector < vector < float > > > > > S1vii;
-	vector < vector < vector < vector < vector < float > > > > > S2vii;
-	vector < float > TMINc;
-	vector < float > TMAXc;
-	vector < float > TMINp;
-	vector < float > TMAXp;
+	vector < vector < double > > TEMpc;
+	vector < vector < double > > TEMcp;
+	vector < vector < vector < double > > > DESCvi;
+	vector < double > CARRp;
+	double TVC;
+	vector < double > TETAc;
+	vector < vector < vector < vector < vector < double > > > > > S1vii;
+	vector < vector < vector < vector < vector < double > > > > > S2vii;
+	vector < double > TMINc;
+	vector < double > TMAXc;
+	vector < double > TMINp;
+	vector < double > TMAXp;
 
-	vector < vector < vector < float > > > M1vi;
-	vector < vector < float > > M2pc;
-	vector < float > M3c;
-	vector < vector < vector < float > > > M4vi;
-	vector < vector < vector < vector < vector < float > > > > > M5vii;
-	vector < vector < vector < vector < vector < float > > > > > M6vii;
-	vector < float > M7c;
-	vector < vector < vector < float > > > M8vi;
-	vector < float > M9p;
-	vector < vector < float > > M10cp;
+	vector < vector < vector < double > > > M1vi;
+	vector < vector < double > > M2pc;
+	vector < double > M3c;
+	vector < vector < vector < double > > > M4vi;
+	vector < vector < vector < vector < vector < double > > > > > M5vii;
+	vector < vector < vector < vector < vector < double > > > > > M6vii;
+	vector < double > M7c;
+	vector < vector < vector < double > > > M8vi;
+	vector < double > M9p;
+	vector < vector < double > > M10cp;
 
 
 };

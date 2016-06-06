@@ -13,8 +13,8 @@
 class CoordenadaNo{
 public:
 	int NumeroNo;
-	float CoordenadaX;
-	float CoordenadaY;
+	double CoordenadaX;
+	double CoordenadaY;
 };
 
 class DadosSolomon{
@@ -47,7 +47,7 @@ public:
 	int 	NumeroClientes;
 	vector < CoordenadaNo > NoCliente;
 	int 	NumeroCaminhoes;
-	float 	Velocidade;
+	double 	Velocidade;
 
 // Declara variaveis
 
@@ -61,17 +61,17 @@ public:
 	vector < int > CaminhoesPlanta;
 	vector < int > NumeroCarretas;		// guarda o numero de clientes
 
-	float 	TempoDeDescarga;
-	float 	TemproEntreEntregas;
-	float 	TempoPlanta;
-	float 	TempoDeVidaConcreto;
-	float 	TempoEntreEntregas;
+	double 	TempoDeDescarga;
+	double 	TemproEntreEntregas;
+	double 	TempoPlanta;
+	double 	TempoDeVidaConcreto;
+	double 	TempoEntreEntregas;
 
-	vector < float > HoraInicioPlanta;
-	vector < float > HoraFinalPlanta;
+	vector < double > HoraInicioPlanta;
+	vector < double > HoraFinalPlanta;
 
-	vector < float > HoraInicioCliente;
-	vector < float > HoraFinalCliente;
+	vector < double > HoraInicioCliente;
+	vector < double > HoraFinalCliente;
 
 	ifstream Instancia;
 	ofstream ComandosR;
@@ -296,38 +296,38 @@ void 	DadosSolomon::CriarInstanciaSolomon(string Nome ){ //, int NumeroVERSAO, i
 	string 	Dados;
 	string 	TXT;
 
-	float HorarioInicioPlanta;
-	float HorarioFinalPlanta;
+	double HorarioInicioPlanta;
+	double HorarioFinalPlanta;
 
-	float TempoCarreta;
+	double TempoCarreta;
 	int NumeroMaxCarretas;
-	float InicioMinAtendimento;
-	float HorarioMinimoConstrucao;
-	float HorarioMaximoConstrucao;
+	double InicioMinAtendimento;
+	double HorarioMinimoConstrucao;
+	double HorarioMaximoConstrucao;
 
 	int NoPlantaAux;
 	int NoConstrucaoAux;
 
 	int NumeroCaminhoesPorPlanta;
 
-	float DistanciaMaxima;
-	float DistanciaAuxiliar;
+	double DistanciaMaxima;
+	double DistanciaAuxiliar;
 
 	CoordenadaNo No1;
 	CoordenadaNo No2;
 
-	float VelocidadeAux;
+	double VelocidadeAux;
 
-	float InicioAlmoco;
-	float FinalAlmoco;
+	double InicioAlmoco;
+	double FinalAlmoco;
 
 	stringstream ConverterIntEmString;
 
-	float MultiplicadorTempoDescarga;
+	double MultiplicadorTempoDescarga;
 	int 	NumeroVERSAO;
 
-	//float AuxiliarNumero;
-	//float Lixo;
+	//double AuxiliarNumero;
+	//double Lixo;
 
 	int EscreveVelocidadeMinima;
 
@@ -681,8 +681,8 @@ void 	DadosSolomon::EscreverComandosR(string Nome, char TipoArquivoSaida){
 	//LimiteplotarX = 45;
 	//LimiteplotarY = 90;
 
-	float 	PosicaoTextoX;
-	float 	PosicaoTextoY;
+	double 	PosicaoTextoX;
+	double 	PosicaoTextoY;
 	int 	TamanhoLetraLegenda;
 
 	PosicaoTextoX = 0.5;

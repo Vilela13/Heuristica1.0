@@ -20,10 +20,10 @@ public:
 	int		NE;
 	ConjuntoConstrucoes ConstrucoesInstancia;
 	int		NV;
-	float	Velocidade;
-	float	TempoDeVidaConcreto;
+	double	Velocidade;
+	double	TempoDeVidaConcreto;
 
-	float	Makespan;
+	double	Makespan;
 
 	// armazena os dados do modelo
 	DadosModelo DM;
@@ -31,16 +31,16 @@ public:
 	vector< vector < vector < int > > > Alfa;
 	vector< vector < vector < vector < vector < int > > > > > Beta;
 	vector< vector < vector < vector < vector < int > > > > > BetaProducao;
-	vector< vector < vector < float > > > Tvei;
-	vector< vector < vector < float > > > TPvei;
+	vector< vector < vector < double > > > Tvei;
+	vector< vector < vector < double > > > TPvei;
 
-	vector < float > Ze;
-	vector < float > Zp;
+	vector < double > Ze;
+	vector < double > Zp;
 
 
 	Solucao();
 
-	void	CarregaSolucao(int np, ConjuntoPlantas Plantas, int ne, ConjuntoConstrucoes Construcoes, int nv, float v,float TDVC, DadosModelo dm);		// Carrega os dados da instancia e a solução até o momento
+	void	CarregaSolucao(int np, ConjuntoPlantas Plantas, int ne, ConjuntoConstrucoes Construcoes, int nv, double v,double TDVC, DadosModelo dm);		// Carrega os dados da instancia e a solução até o momento
 	void	Imprime(bool ImprimePlanta, bool ImprimeConstrucao, bool VerificaViabilidade, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo);									// imprime os dados da solução
 	int		DeletaAlocacaoTarefasPosterioresMesmaConstrucao(int VerificaExistencia, int Construcao, int Demanda, vector < DadosTarefa >& DadosTarefasMovidas);					// deleta demandas atendidas na construção após certa demanda que é passada com parametro
 
@@ -56,9 +56,9 @@ public:
 
 	int		SelecionaConstrucao(int &ConstrucaoParaAtender, int &ConstrucaoParaAtenderIndice);	// seleciona a construção a ser analisada no momento
 	int		ProcuraConstrucaoNaoAtendida(int &ConstrucaoNaoAtendida, int &DemandaNaoAtendida);																	// Encontra a construção que possui a menor distancia a uma planta dentre todas as construções com demandas não atendidas
-	void	AlocaTempoPlantaPodeAtenderDemanda(int IndiceConstrucaoNaoAtendida, vector < float > &TempoPlantaConsegueAtender, int Imprime);					// Aloca o tempo inicial que se pode sair uma carreta da planta para suprir a construção passada
+	void	AlocaTempoPlantaPodeAtenderDemanda(int IndiceConstrucaoNaoAtendida, vector < double > &TempoPlantaConsegueAtender, int Imprime);					// Aloca o tempo inicial que se pode sair uma carreta da planta para suprir a construção passada
 
-	int		DeletaTarefasAposTempoPlantaPodeAtender(vector < float > &TempoPlantaPodeAtender, vector < DadosTarefa > &DadosTarefasMovidas,  int Imprime );		// deleta todas as tarefas que são atendidas após os horarios armazenados da TempoPlantaPodeAtender
+	int		DeletaTarefasAposTempoPlantaPodeAtender(vector < double > &TempoPlantaPodeAtender, vector < DadosTarefa > &DadosTarefasMovidas,  int Imprime );		// deleta todas as tarefas que são atendidas após os horarios armazenados da TempoPlantaPodeAtender
 
 	int		Viabilidade2(int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta, int Imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo, int RealizaProcessoDeAtrazarTarefas);
 	void	ProcessoViabilizacao2(int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta, int Imprime, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo, int RealizaProcessoDeAtrazarTarefas);
@@ -93,7 +93,7 @@ Solucao::Solucao(){
 
 
 // Carrega os dados da instancia e a solução até o momento
-void	Solucao::CarregaSolucao(int np, ConjuntoPlantas Plantas, int ne, ConjuntoConstrucoes Construcoes, int nv, float v,float TDVC, DadosModelo dm){
+void	Solucao::CarregaSolucao(int np, ConjuntoPlantas Plantas, int ne, ConjuntoConstrucoes Construcoes, int nv, double v,double TDVC, DadosModelo dm){
 	NP = np;
 	PlantasInstancia = Plantas;
 	NE = ne;
@@ -459,14 +459,14 @@ int		Solucao::DeletaUltimaDemandaConstrucaoEmAnalise( int ConstrucaoNaoAtendida,
 	int ConstrucaoEmAnalise;
 
 	// variaveis que armazena os horarios da tarefa deletada e que será armazenada
-	float HorarioInicioConstrucao;
-	float HorarioFinalConstrucao;
+	double HorarioInicioConstrucao;
+	double HorarioFinalConstrucao;
 
-	float HorarioInicioPlanta;
-	float HorarioFimPlanta;
+	double HorarioInicioPlanta;
+	double HorarioFimPlanta;
 
-	float HorarioInicioCarreta;
-	float HorarioFimCarreta;
+	double HorarioInicioCarreta;
+	double HorarioFimCarreta;
 
 	// inidices da planta e do veiculo
 	int p;
@@ -569,7 +569,7 @@ int		Solucao::ProcuraConstrucaoNaoAtendida(int &ConstrucaoNaoAtendida, int &Dema
 	ConstrucaoTemporario = -13;
 	DemandaTemporaria = -13;
 
-	float TempoParaPlantaTemporaria;
+	double TempoParaPlantaTemporaria;
 	// inicia o valor da variavel com o maior valor para que qualquer valor de uma distancia de uma construção a uma planat sejáa ceito inicialmente
 	TempoParaPlantaTemporaria = DBL_MAX;
 
@@ -612,7 +612,7 @@ int		Solucao::ProcuraConstrucaoNaoAtendida(int &ConstrucaoNaoAtendida, int &Dema
 }
 
 // Aloca o tempo que se pode começar a carregar uma carreta da planta para suprir a construção passada
-void	Solucao::AlocaTempoPlantaPodeAtenderDemanda(int IndiceConstrucaoNaoAtendida, vector < float > &TempoPlantaConsegueAtender, int Imprime){
+void	Solucao::AlocaTempoPlantaPodeAtenderDemanda(int IndiceConstrucaoNaoAtendida, vector < double > &TempoPlantaConsegueAtender, int Imprime){
 
 	// percorre todas as plantas
 	for( int p = 0; p < NP; p++){
@@ -656,12 +656,12 @@ void	Solucao::AlocaTempoPlantaPodeAtenderDemanda(int IndiceConstrucaoNaoAtendida
 
 
 // deleta todas as tarefas que são atendidas após os horarios armazenados da TempoPlantaPodeAtender
-int		Solucao::DeletaTarefasAposTempoPlantaPodeAtender(vector < float > &TempoPlantaPodeAtender, vector < DadosTarefa > &DadosTarefasMovidas,  int Imprime){
+int		Solucao::DeletaTarefasAposTempoPlantaPodeAtender(vector < double > &TempoPlantaPodeAtender, vector < DadosTarefa > &DadosTarefasMovidas,  int Imprime){
 
 	int TarefaDeletada;
 	int PlantaAux;
 	int IndicePlantaAux;
-	float TempoAux;
+	double TempoAux;
 	int Ativa;
 
 	int construcao;
@@ -745,7 +745,7 @@ int		Solucao::Viabilidade2(int EscolhaVeiculo, int EscolhaConstrucao, int Escolh
 
 	// dados das plantas que podem atender a demanda em questão
 	vector< int > PlantasPodemAtenderTarefa;
-	vector < float > TempoPlantaPodeAtender;
+	vector < double > TempoPlantaPodeAtender;
 
 	// variaveis de controle
 	int TarefaAdicionada;
@@ -1400,6 +1400,12 @@ void Solucao::AtribuiValoresVariaveisModelo(){
 // caso retornar 0 tem problema, 1 não
 int Solucao::VerificaRestricoes(){
 
+	bool ColocaFolga;
+	float Folga;
+
+	ColocaFolga = 1;
+	Folga = 0.0000002;
+
 	// variaveis auxiliares
 	int AuxRest1;
 	int VeiculoAux;
@@ -1450,36 +1456,38 @@ int Solucao::VerificaRestricoes(){
 			for( int e1 = 0; e1 < NE; e1++){
 				for( int d1 = 0; d1 < DM.Demandas[e1]; d1++){
 
-					if( Tvei[VeiculoAux][e1][d1] -  TPvei[VeiculoAux][e1][d1] < - DM.M2pc[p1][e1] * ( 1 - Alfa[VeiculoAux][e1][d1] ) + DM.CARRp[p1] + DM.TEMpc[p1][e1] ){
+					if( Tvei[VeiculoAux][e1][d1] -  TPvei[VeiculoAux][e1][d1] < - DM.M2pc[p1][e1] * ( 1 - Alfa[VeiculoAux][e1][d1] ) + DM.CARRp[p1] + DM.TEMpc[p1][e1] - ColocaFolga * Folga){
 						cout << endl << " Restrição 3 violada " << endl;
 						cout << " Tvei[" << VeiculoAux<< "][" << e1<< "][" << d1<< "] >= - DM.M2pc[" << p1<< "][" << e1<< "] * ( 1 - Alfa[" << VeiculoAux<< "][" << e1 << "][" << d1 << "] ) +  TPvei[" << VeiculoAux<< "][" << e1<< "][" << d1<< "] + DM.CARRp[" << p1<< "] + DM.TEMpc[" << p1<< "][" << e1 << "]" << endl;
 						cout << Tvei[VeiculoAux][e1][d1] << " >= - " << DM.M2pc[p1][e1] << "* ( 1 - " << Alfa[VeiculoAux][e1][d1] << " ) +  " << TPvei[VeiculoAux][e1][d1] << " + " << DM.CARRp[p1] << " + " << DM.TEMpc[p1][e1];
-						return 0;
-					}
+						cout << endl << endl;
 
-					if( Alfa[VeiculoAux][e1][d1] == 1){
-						if( - DM.M2pc[p1][e1] * ( 1 - Alfa[VeiculoAux][e1][d1] ) != 0 ) {
-							cout << endl << " Não anula o DM2 " << endl;
-							cout << " DM.M2pc[" << e1 << "] * ( 1 - Alfa[" << VeiculoAux << "][" << e1 << "][" << d1 << "] ) = " << DM.M2pc[p1][e1] * ( 1 - Alfa[VeiculoAux][e1][d1] ) << endl;
-							return 0;
-						}
 
-						if( ( Tvei[VeiculoAux][e1][d1] - TPvei[VeiculoAux][e1][d1] ) > ( DM.CARRp[p1] + DM.TEMpc[p1][e1] ) ){
-							cout << endl << endl << "  Maior parte da frente " << endl << endl;
-						}else{
-							if( ( Tvei[VeiculoAux][e1][d1] - TPvei[VeiculoAux][e1][d1] ) < ( DM.CARRp[p1] + DM.TEMpc[p1][e1] ) ){
-								cout << endl << endl << "   Menor parte da frente " << endl << endl;
-							}else{
-								cout << endl << endl << "  É igual!  1 +++++++++++++++++++++ " << endl << endl;
+						if( Alfa[VeiculoAux][e1][d1] == 1){
+							if( - DM.M2pc[p1][e1] * ( 1 - Alfa[VeiculoAux][e1][d1] ) != 0 ) {
+								cout << endl << " Não anula o DM2 " << endl;
+								cout << " DM.M2pc[" << e1 << "] * ( 1 - Alfa[" << VeiculoAux << "][" << e1 << "][" << d1 << "] ) = " << DM.M2pc[p1][e1] * ( 1 - Alfa[VeiculoAux][e1][d1] ) << endl;
+								return 0;
 							}
-						}
 
-						if( ( Tvei[VeiculoAux][e1][d1] - TPvei[VeiculoAux][e1][d1] ) != ( DM.CARRp[p1] + DM.TEMpc[p1][e1] ) ){
-							cout << endl << endl << "   Problema integridade 1" << endl;
-							cout << " Tvei[" << VeiculoAux << "][" << e1 << "][" << d1 << "] - TPvei[" << VeiculoAux << "][" << e1 << "][" << d1 << "] != DM.CARRp[" << p1 << "] + DM.TEMpc[" << p1 << "][" << e1 << "]" << endl;
-							cout << Tvei[VeiculoAux][e1][d1] << " - " << TPvei[VeiculoAux][e1][d1] << "(" << Tvei[VeiculoAux][e1][d1] - TPvei[VeiculoAux][e1][d1] <<") != (" << DM.CARRp[p1] + DM.TEMpc[p1][e1] << ") " << DM.CARRp[p1] << " + " << DM.TEMpc[p1][e1] << endl;
-							cout << " diferença de : " << Tvei[VeiculoAux][e1][d1] - TPvei[VeiculoAux][e1][d1]  -( DM.CARRp[p1] + DM.TEMpc[p1][e1] ) << endl;
-							//return 0;
+							if( ( Tvei[VeiculoAux][e1][d1] - TPvei[VeiculoAux][e1][d1] ) > ( DM.CARRp[p1] + DM.TEMpc[p1][e1] ) ){
+								cout << endl << endl << "  Maior parte da frente " << endl << endl;
+							}else{
+								if( ( Tvei[VeiculoAux][e1][d1] - TPvei[VeiculoAux][e1][d1] ) < ( DM.CARRp[p1] + DM.TEMpc[p1][e1] ) ){
+									cout << endl << endl << "   Menor parte da frente " << endl << endl;
+								}else{
+									//cout << endl << endl << "  É igual!  1 +++++++++++++++++++++ " << endl << endl;
+								}
+							}
+
+							if( ( Tvei[VeiculoAux][e1][d1] - TPvei[VeiculoAux][e1][d1] ) != ( DM.CARRp[p1] + DM.TEMpc[p1][e1] ) ){
+								cout << endl << endl << "   Problema integridade 1" << endl;
+								cout << " Tvei[" << VeiculoAux << "][" << e1 << "][" << d1 << "] - TPvei[" << VeiculoAux << "][" << e1 << "][" << d1 << "] != DM.CARRp[" << p1 << "] + DM.TEMpc[" << p1 << "][" << e1 << "]" << endl;
+								cout << Tvei[VeiculoAux][e1][d1] << " - " << TPvei[VeiculoAux][e1][d1] << "(" << Tvei[VeiculoAux][e1][d1] - TPvei[VeiculoAux][e1][d1] <<") != (" << DM.CARRp[p1] + DM.TEMpc[p1][e1] << ") " << DM.CARRp[p1] << " + " << DM.TEMpc[p1][e1] << endl;
+								cout << " diferença de : " << Tvei[VeiculoAux][e1][d1] - TPvei[VeiculoAux][e1][d1]  -( DM.CARRp[p1] + DM.TEMpc[p1][e1] ) << endl;
+								//return 0;
+							}
+							return 0;
 						}
 					}
 
@@ -1497,38 +1505,39 @@ int Solucao::VerificaRestricoes(){
 			for( int e1 = 0; e1 < NE; e1++){
 				for( int d1 = 0; d1 < DM.Demandas[e1]; d1++){
 
-					if( Tvei[VeiculoAux][e1][d1] -  TPvei[VeiculoAux][e1][d1] >  DM.M3c[e1] * ( 1 - Alfa[VeiculoAux][e1][d1] )  + DM.CARRp[p1] + DM.TEMpc[p1][e1] ){
+					if( Tvei[VeiculoAux][e1][d1] -  TPvei[VeiculoAux][e1][d1] >  DM.M3c[e1] * ( 1 - Alfa[VeiculoAux][e1][d1] )  + DM.CARRp[p1] + DM.TEMpc[p1][e1]  + ColocaFolga * Folga){
 						cout << endl << " Restrição 4 violada " << endl;
 						cout << " Tvei[" << VeiculoAux<< "][" << e1<< "][" << d1<< "] <= DM.M3c[" << e1<< "] * ( 1 - Alfa[" << VeiculoAux<< "][" << e1 << "][" << d1 << "] ) +  TPvei[" << VeiculoAux<< "][" << e1<< "][" << d1<< "] + DM.CARRp[" << p1<< "] + DM.TEMpc[" << p1<< "][" << e1 << "]" << endl;
 						cout << Tvei[VeiculoAux][e1][d1] << "<= " << DM.M3c[e1] << "* ( 1 - " << Alfa[VeiculoAux][e1][d1] << " ) +  " << TPvei[VeiculoAux][e1][d1] << " + " << DM.CARRp[p1] << " + " << DM.TEMpc[p1][e1];
-						return 0;
-					}
+						cout << endl << endl;
 
-					if( Alfa[VeiculoAux][e1][d1] == 1){
-						if( ( DM.M3c[e1] * ( 1 - Alfa[VeiculoAux][e1][d1] )  ) != 0 ) {
-							cout << endl << " Não anula o DM3 " << endl;
-							cout << " DM.M3c[" << e1 << "] * ( 1 - Alfa[" << VeiculoAux << "][" << e1 << "][" << d1 << "] ) = " << DM.M3c[e1] * ( 1 - Alfa[VeiculoAux][e1][d1] ) << endl;
-							return 0;
-						}
+						if( Alfa[VeiculoAux][e1][d1] == 1){
+							if( ( DM.M3c[e1] * ( 1 - Alfa[VeiculoAux][e1][d1] )  ) != 0 ) {
+								cout << endl << " Não anula o DM3 " << endl;
+								cout << " DM.M3c[" << e1 << "] * ( 1 - Alfa[" << VeiculoAux << "][" << e1 << "][" << d1 << "] ) = " << DM.M3c[e1] * ( 1 - Alfa[VeiculoAux][e1][d1] ) << endl;
+								return 0;
+							}
 
-						if( (Tvei[VeiculoAux][e1][d1] - TPvei[VeiculoAux][e1][d1] ) > ( DM.CARRp[p1] + DM.TEMpc[p1][e1] ) ){
-							cout << endl << endl << "  Maior parte da frente " << endl << endl;
-						}else{
-							if( ( Tvei[VeiculoAux][e1][d1] - TPvei[VeiculoAux][e1][d1] ) < ( DM.CARRp[p1] + DM.TEMpc[p1][e1] ) ){
-								cout << endl << endl << "   Menor parte da frente " << endl << endl;
+							if( (Tvei[VeiculoAux][e1][d1] - TPvei[VeiculoAux][e1][d1] ) > ( DM.CARRp[p1] + DM.TEMpc[p1][e1] ) ){
+								cout << endl << endl << "  Maior parte da frente " << endl << endl;
 							}else{
-								cout << endl << endl << "  É igual!  2 +++++++++++++++++++++ " << endl << endl;
+								if( ( Tvei[VeiculoAux][e1][d1] - TPvei[VeiculoAux][e1][d1] ) < ( DM.CARRp[p1] + DM.TEMpc[p1][e1] ) ){
+									cout << endl << endl << "   Menor parte da frente " << endl << endl;
+								}else{
+									//cout << endl << endl << "  É igual!  2 +++++++++++++++++++++ " << endl << endl;
+								}
+							}
+
+
+							if( ( Tvei[VeiculoAux][e1][d1] - TPvei[VeiculoAux][e1][d1] ) != ( DM.CARRp[p1] + DM.TEMpc[p1][e1] ) ){
+								cout << endl << endl << "   Problema integridade 2" << endl;
+								cout << " Tvei[" << VeiculoAux << "][" << e1 << "][" << d1 << "] - TPvei[" << VeiculoAux << "][" << e1 << "][" << d1 << "] != DM.CARRp[" << p1 << "] + DM.TEMpc[" << p1 << "][" << e1 << "]" << endl;
+								cout << Tvei[VeiculoAux][e1][d1] << " - " << TPvei[VeiculoAux][e1][d1] << "(" << Tvei[VeiculoAux][e1][d1] - TPvei[VeiculoAux][e1][d1] <<") != (" << DM.CARRp[p1] + DM.TEMpc[p1][e1] << ") " << DM.CARRp[p1] << " + " << DM.TEMpc[p1][e1] << endl;
+								cout << " diferença de : " << Tvei[VeiculoAux][e1][d1] - TPvei[VeiculoAux][e1][d1]  -( DM.CARRp[p1] + DM.TEMpc[p1][e1] ) << endl;
+								//return 0;
 							}
 						}
-
-
-						if( ( Tvei[VeiculoAux][e1][d1] - TPvei[VeiculoAux][e1][d1] ) != ( DM.CARRp[p1] + DM.TEMpc[p1][e1] ) ){
-							cout << endl << endl << "   Problema integridade 2" << endl;
-							cout << " Tvei[" << VeiculoAux << "][" << e1 << "][" << d1 << "] - TPvei[" << VeiculoAux << "][" << e1 << "][" << d1 << "] != DM.CARRp[" << p1 << "] + DM.TEMpc[" << p1 << "][" << e1 << "]" << endl;
-							cout << Tvei[VeiculoAux][e1][d1] << " - " << TPvei[VeiculoAux][e1][d1] << "(" << Tvei[VeiculoAux][e1][d1] - TPvei[VeiculoAux][e1][d1] <<") != (" << DM.CARRp[p1] + DM.TEMpc[p1][e1] << ") " << DM.CARRp[p1] << " + " << DM.TEMpc[p1][e1] << endl;
-							cout << " diferença de : " << Tvei[VeiculoAux][e1][d1] - TPvei[VeiculoAux][e1][d1]  -( DM.CARRp[p1] + DM.TEMpc[p1][e1] ) << endl;
-							//return 0;
-						}
+						return 0;
 					}
 
 
@@ -1574,6 +1583,76 @@ int Solucao::VerificaRestricoes(){
 		}
 	}
 
+	// restrição 7 e 9
+	for( int v = 0; v < NV; v++){
+		for( int e1 = 0; e1 < NE; e1++){
+			for( int d1 = 0; d1 < DM.Demandas[e1]; d1++){
+				for( int e2 = 0; e2 < NE; e2++){
+					for( int d2 = 0; d2 < DM.Demandas[e2]; d2++){
+						if( e1 == e2 && d1 == d2 ){
+
+						}else{
+							if( DM.M5vii[v][e1][d1][e2][d2] * ( 1 - Alfa[v][e1][d1] ) + DM.M5vii[v][e1][d1][e2][d2] * ( 1 - Alfa[v][e2][d2] ) + DM.M5vii[v][e1][d1][e2][d2] * ( 1 - Beta[v][e1][d1][e2][d2] ) + Tvei[v][e2][d2] < Tvei[v][e1][d1] + DM.DESCvi[v][e1][d1] + DM.S1vii[v][e1][d1][e2][d2] ){
+								cout << endl << " Restrição 7 ou 9 violada " << endl;
+								cout << " DM.M5vii[" << v << "][" << e1 << "][" << d1 << "][" << e2 << "][" << d2 << "] * ( 1 - Alfa[" << v << "][" << e1 << "][" << d1 << "] ) + DM.M5vii[" << v << "][" << e1 << "][" << d1 << "][" << e2 << "][" << d2 << "] * ( 1 - Alfa[" << v << "][" << e2 << "][" << d2 << "] ) + DM.M5vii[" << v << "][" << e1 << "][" << d1 << "][" << e2 << "][" << d2 << "] * ( 1 - Beta[" << v << "][" << e1 << "][" << d1 << "][" << e2 << "][" << d2 <<"] ) + Tvei[" << v << "][" << e2 << "][" << d2 << "] >= Tvei[" << v << "][" << e1 << "][" << d1 << "] + DM.DESCvi[" << v << "][" << e1 << "][" << d1 << "] + DM.S1vii[" << v << "][" << e1 << "][" << d1 << "][" << e2 << "][" << d2 << "]" << endl;
+								cout << DM.M5vii[v][e1][d1][e2][d2] << " * ( 1 - " << Alfa[v][e1][d1] << " ) + " << DM.M5vii[v][e1][d1][e2][d2] << " * ( 1 - " << Alfa[v][e2][d2] << " ) + " << DM.M5vii[v][e1][d1][e2][d2] << "  * ( 1 - " << Beta[v][e1][d1][e2][d2]  << ") + " << Tvei[v][e2][d2] << ">= " << Tvei[v][e1][d1] << " + " << DM.DESCvi[v][e1][d1] << "  + " << DM.S1vii[v][e1][d1][e2][d2] << endl;
+								cout << DM.M5vii[v][e1][d1][e2][d2] * ( 1 - Alfa[v][e1][d1] ) + DM.M5vii[v][e1][d1][e2][d2] * ( 1 - Alfa[v][e2][d2] ) + DM.M5vii[v][e1][d1][e2][d2] * ( 1 - Beta[v][e1][d1][e2][d2] ) + Tvei[v][e2][d2] << " >= " <<  Tvei[v][e1][d1] + DM.DESCvi[v][e1][d1] + DM.S1vii[v][e1][d1][e2][d2] << endl;
+								return 0;
+							}
+
+
+						}
+
+					}
+				}
+			}
+		}
+	}
+
+	// restrição 8 e 10
+	for( int v = 0; v < NV; v++){
+		for( int e1 = 0; e1 < NE; e1++){
+			for( int d1 = 0; d1 < DM.Demandas[e1]; d1++){
+				for( int e2 = 0; e2 < NE; e2++){
+					for( int d2 = 0; d2 < DM.Demandas[e2]; d2++){
+						if( e1 == e2 && d1 == d2 ){
+
+						}else{
+							if( DM.M6vii[v][e1][d1][e2][d2] * ( 1 - Alfa[v][e1][d1] ) + DM.M6vii[v][e1][d1][e2][d2] * ( 1 - Alfa[v][e2][d2] ) + DM.M6vii[v][e1][d1][e2][d2] * Beta[v][e1][d1][e2][d2] + Tvei[v][e1][d1] < Tvei[v][e2][d2] + DM.DESCvi[v][e2][d2] + DM.S2vii[v][e2][d2][e1][d1] ){
+								cout << endl << " Restrição 8 ou 10 violada " << endl;
+								cout << " DM.M6vii[" << v << "][" << e1 << "][" << d1 << "][" << e2 << "][" << d2 << "] * ( 1 - Alfa[" << v << "][" << e1 << "][" << d1 << "] ) + DM.M6vii[" << v << "][" << e1 << "][" << d1 << "][" << e2 << "][" << d2 << "] * ( 1 - Alfa[" << v << "][" << e2 << "][" << d2 << "] ) + DM.M6vii[" << v << "][" << e1 << "][" << d1 << "][" << e2 << "][" << d2 << "] * Beta[" << v << "][" << e1 << "][" << d1 << "][" << e2 << "][" << d2 <<"] + Tvei[" << v << "][" << e1 << "][" << d1 << "] >= Tvei[" << v << "][" << e2 << "][" << d2 << "] + DM.DESCvi[" << v << "][" << e2 << "][" << d2 << "] + DM.S2vii[" << v << "][" << e2 << "][" << d2 << "][" << e1 << "][" << d1 << "]" << endl;
+								cout << DM.M6vii[v][e1][d1][e2][d2] << " * ( 1 - " << Alfa[v][e1][d1] << " ) + " << DM.M6vii[v][e1][d1][e2][d2] << " * ( 1 - " << Alfa[v][e2][d2] << " ) + " << DM.M6vii[v][e1][d1][e2][d2] << "  * " << Beta[v][e1][d1][e2][d2]  << ") + " << Tvei[v][e1][d1] << ">= " << Tvei[v][e2][d2] << " + " << DM.DESCvi[v][e2][d2] << "  + " << DM.S2vii[v][e2][d2][e1][d1] << endl;
+								cout << DM.M6vii[v][e1][d1][e2][d2] * ( 1 - Alfa[v][e1][d1] ) + DM.M6vii[v][e1][d1][e2][d2] * ( 1 - Alfa[v][e2][d2] ) + DM.M6vii[v][e1][d1][e2][d2] *  Beta[v][e1][d1][e2][d2] + Tvei[v][e1][d1] << " >= " <<  Tvei[v][e2][d2] + DM.DESCvi[v][e2][d2] + DM.S2vii[v][e2][d2][e1][d1] << endl;
+								return 0;
+							}
+
+
+						}
+
+					}
+				}
+			}
+		}
+	}
+
+	// restrição 11
+	for( int v1 = 0; v1 < NV; v1++){
+		for( int v2 = 0; v2 < NV; v2++){
+			for( int e1 = 0; e1 < NE; e1++){
+				if( DM.Demandas[e1] > 1){
+					for( int d1 = 1; d1 < DM.Demandas[e1]; d1++){
+						if( DM.M7c[e1] * ( 1 -  Alfa[v1][e1][d1-1] ) + Tvei[v1][e1][d1-1]  + DM.DESCvi[v1][e1][d1-1] + DM.TETAc[e1] < - DM.M7c[e1] *  ( 1 -  Alfa[v2][e1][d1] ) + Tvei[v2][e1][d1] ){
+							cout << endl << " Restrição11 violada " << endl;
+							cout << " DM.M7c[" << e1 << "] * ( 1 -  Alfa[" << v1 << "][" << e1 << "][" << d1-1 << "] ) + Tvei[" << v1 << "][" << e1 << "][" << d1-1 << "]  + DM.DESCvi[" << v1 << "][" << e1 << "][" << d1-1 << "] + DM.TETAc[" << e1 << "] => - DM.M7c[" << e1 << "] *  ( 1 -  Alfa[" << v2 << "][" << e1 << "][" << d1 << "] ) + Tvei[" << v2 << "][" << e1 << "][" << d1 << "]" << endl;
+							cout << DM.M7c[e1] << " * ( 1 - " << Alfa[v1][e1][d1-1] << " ) +  " << Tvei[v1][e1][d1-1] << "  + " << + DM.DESCvi[v1][e1][d1-1] << " + " << DM.TETAc[e1] << " >= -  " << DM.M7c[e1] << " *  ( 1 -   " << Alfa[v2][e1][d1] << " )  + " << Tvei[v2][e1][d1] << endl;
+							cout << DM.M7c[e1] * ( 1 -  Alfa[v1][e1][d1-1] ) + Tvei[v1][e1][d1-1]  + DM.DESCvi[v1][e1][d1-1] + DM.TETAc[e1] << " >= " <<  - DM.M7c[e1] *  ( 1 -  Alfa[v2][e1][d1] ) + Tvei[v2][e1][d1] << endl;
+							return 0;
+						}
+					}
+				}
+			}
+		}
+	}
 
 
 	return 1;
@@ -1695,7 +1774,7 @@ class ConjuntoSolucoes{
 public:
 	vector < Solucao > Solucoes;
 	ConjuntoSolucoes();			// classe construtoora
-	void	InsereSolucao(int np, ConjuntoPlantas Plantas, int ne, ConjuntoConstrucoes Construcoes, int nv, float v,float TDVC, DadosModelo dm);			// carrega uma solução ao vetor das soluções
+	void	InsereSolucao(int np, ConjuntoPlantas Plantas, int ne, ConjuntoConstrucoes Construcoes, int nv, double v,double TDVC, DadosModelo dm);			// carrega uma solução ao vetor das soluções
 	void	CalculaMakespanSolucoes();		// calcula o makespan das soluções
 	void	CalculaNiveisViabilidadeSolucoes();		// calcula o niveis de viabilidade das solução
 	void	Imprime(bool ImprimePlanta, bool ImprimeConstrucao, bool VerificaViabilidade, int ImprimeSolucao , int ImprimeArquivo, PonteiroArquivo  &Arquivo);		// imprime as soluções
@@ -1708,7 +1787,7 @@ ConjuntoSolucoes::ConjuntoSolucoes(){
 }
 
 // carrega uma solução ao vetor das soluções
-void	ConjuntoSolucoes::InsereSolucao(int np, ConjuntoPlantas Plantas, int ne, ConjuntoConstrucoes Construcoes, int nv, float v,float TDVC, DadosModelo dm){
+void	ConjuntoSolucoes::InsereSolucao(int np, ConjuntoPlantas Plantas, int ne, ConjuntoConstrucoes Construcoes, int nv, double v,double TDVC, DadosModelo dm){
 	Solucao S1;
 	// carrega dasos da solução
 	S1.CarregaSolucao( np, Plantas, ne, Construcoes, nv, v, TDVC, dm);

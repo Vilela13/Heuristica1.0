@@ -21,7 +21,7 @@ void 	IniciaVetorIntComZero(vector< int > &VetorInt);	// inicia o vector de int 
 
 int 	VerificaSeTemUmValorVetorInt( int Valor, vector< int > VetorInt);			// verifica se existe um valor no vector igual ao valor passado
 int 	VerificaTodosValoresVetorInt( int Valor, vector< int > VetorInt);			// verifica se todos os valores do vector são iguais ao valor passado
-void 	ImprimeVetorDouble( vector< float > VetorDouble); 						// imprime os valores do vector de elementos float
+void 	ImprimeVetorDouble( vector< double > VetorDouble); 						// imprime os valores do vector de elementos double
 
 
 // inicia os valores de c e d com -13
@@ -120,8 +120,8 @@ int 	VerificaTodosValoresVetorInt( int Valor, vector< int > VetorInt){
 	return 1;
 }
 
-// imprime os valores do vector de elementos float
-void 	ImprimeVetorDouble( vector< float > VetorDouble){
+// imprime os valores do vector de elementos double
+void 	ImprimeVetorDouble( vector< double > VetorDouble){
 	cout << " Conteudo Vetor "<< endl;
 	// percorre todo os elementos do  vector
 	for( int i = 0; i < (int) VetorDouble.size(); i++){

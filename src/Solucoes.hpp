@@ -1450,14 +1450,40 @@ int Solucao::VerificaRestricoes(){
 			for( int e1 = 0; e1 < NE; e1++){
 				for( int d1 = 0; d1 < DM.Demandas[e1]; d1++){
 
-					//cout << endl << "  veiculo [" << VeiculoAux << "] na planta é [" << p1 << "-" << v << "]";
-
-					if( Tvei[VeiculoAux][e1][d1] < - DM.M2pc[p1][e1] * ( 1 - Alfa[VeiculoAux][e1][d1] ) +  TPvei[VeiculoAux][e1][d1] + DM.CARRp[p1] + DM.TEMpc[p1][e1] ){
+					if( Tvei[VeiculoAux][e1][d1] -  TPvei[VeiculoAux][e1][d1] < - DM.M2pc[p1][e1] * ( 1 - Alfa[VeiculoAux][e1][d1] ) + DM.CARRp[p1] + DM.TEMpc[p1][e1] ){
 						cout << endl << " Restrição 3 violada " << endl;
 						cout << " Tvei[" << VeiculoAux<< "][" << e1<< "][" << d1<< "] >= - DM.M2pc[" << p1<< "][" << e1<< "] * ( 1 - Alfa[" << VeiculoAux<< "][" << e1 << "][" << d1 << "] ) +  TPvei[" << VeiculoAux<< "][" << e1<< "][" << d1<< "] + DM.CARRp[" << p1<< "] + DM.TEMpc[" << p1<< "][" << e1 << "]" << endl;
 						cout << Tvei[VeiculoAux][e1][d1] << " >= - " << DM.M2pc[p1][e1] << "* ( 1 - " << Alfa[VeiculoAux][e1][d1] << " ) +  " << TPvei[VeiculoAux][e1][d1] << " + " << DM.CARRp[p1] << " + " << DM.TEMpc[p1][e1];
 						return 0;
 					}
+
+					if( Alfa[VeiculoAux][e1][d1] == 1){
+						if( - DM.M2pc[p1][e1] * ( 1 - Alfa[VeiculoAux][e1][d1] ) != 0 ) {
+							cout << endl << " Não anula o DM2 " << endl;
+							cout << " DM.M2pc[" << e1 << "] * ( 1 - Alfa[" << VeiculoAux << "][" << e1 << "][" << d1 << "] ) = " << DM.M2pc[p1][e1] * ( 1 - Alfa[VeiculoAux][e1][d1] ) << endl;
+							return 0;
+						}
+
+						if( ( Tvei[VeiculoAux][e1][d1] - TPvei[VeiculoAux][e1][d1] ) > ( DM.CARRp[p1] + DM.TEMpc[p1][e1] ) ){
+							cout << endl << endl << "  Maior parte da frente " << endl << endl;
+						}else{
+							if( ( Tvei[VeiculoAux][e1][d1] - TPvei[VeiculoAux][e1][d1] ) < ( DM.CARRp[p1] + DM.TEMpc[p1][e1] ) ){
+								cout << endl << endl << "   Menor parte da frente " << endl << endl;
+							}else{
+								cout << endl << endl << "  É igual!  1 +++++++++++++++++++++ " << endl << endl;
+							}
+						}
+
+						if( ( Tvei[VeiculoAux][e1][d1] - TPvei[VeiculoAux][e1][d1] ) != ( DM.CARRp[p1] + DM.TEMpc[p1][e1] ) ){
+							cout << endl << endl << "   Problema integridade 1" << endl;
+							cout << " Tvei[" << VeiculoAux << "][" << e1 << "][" << d1 << "] - TPvei[" << VeiculoAux << "][" << e1 << "][" << d1 << "] != DM.CARRp[" << p1 << "] + DM.TEMpc[" << p1 << "][" << e1 << "]" << endl;
+							cout << Tvei[VeiculoAux][e1][d1] << " - " << TPvei[VeiculoAux][e1][d1] << "(" << Tvei[VeiculoAux][e1][d1] - TPvei[VeiculoAux][e1][d1] <<") != (" << DM.CARRp[p1] + DM.TEMpc[p1][e1] << ") " << DM.CARRp[p1] << " + " << DM.TEMpc[p1][e1] << endl;
+							cout << " diferença de : " << Tvei[VeiculoAux][e1][d1] - TPvei[VeiculoAux][e1][d1]  -( DM.CARRp[p1] + DM.TEMpc[p1][e1] ) << endl;
+							//return 0;
+						}
+					}
+
+
 				}
 			}
 			VeiculoAux = VeiculoAux + 1;
@@ -1470,17 +1496,49 @@ int Solucao::VerificaRestricoes(){
 		for( int v = 0; v < DM.Veiculos[p1]; v++){
 			for( int e1 = 0; e1 < NE; e1++){
 				for( int d1 = 0; d1 < DM.Demandas[e1]; d1++){
-					if( Tvei[VeiculoAux][e1][d1] >  DM.M3c[e1] * ( 1 - Alfa[VeiculoAux][e1][d1] ) +  TPvei[VeiculoAux][e1][d1] + DM.CARRp[p1] + DM.TEMpc[p1][e1] ){
+
+					if( Tvei[VeiculoAux][e1][d1] -  TPvei[VeiculoAux][e1][d1] >  DM.M3c[e1] * ( 1 - Alfa[VeiculoAux][e1][d1] )  + DM.CARRp[p1] + DM.TEMpc[p1][e1] ){
 						cout << endl << " Restrição 4 violada " << endl;
 						cout << " Tvei[" << VeiculoAux<< "][" << e1<< "][" << d1<< "] <= DM.M3c[" << e1<< "] * ( 1 - Alfa[" << VeiculoAux<< "][" << e1 << "][" << d1 << "] ) +  TPvei[" << VeiculoAux<< "][" << e1<< "][" << d1<< "] + DM.CARRp[" << p1<< "] + DM.TEMpc[" << p1<< "][" << e1 << "]" << endl;
 						cout << Tvei[VeiculoAux][e1][d1] << "<= " << DM.M3c[e1] << "* ( 1 - " << Alfa[VeiculoAux][e1][d1] << " ) +  " << TPvei[VeiculoAux][e1][d1] << " + " << DM.CARRp[p1] << " + " << DM.TEMpc[p1][e1];
 						return 0;
 					}
+
+					if( Alfa[VeiculoAux][e1][d1] == 1){
+						if( ( DM.M3c[e1] * ( 1 - Alfa[VeiculoAux][e1][d1] )  ) != 0 ) {
+							cout << endl << " Não anula o DM3 " << endl;
+							cout << " DM.M3c[" << e1 << "] * ( 1 - Alfa[" << VeiculoAux << "][" << e1 << "][" << d1 << "] ) = " << DM.M3c[e1] * ( 1 - Alfa[VeiculoAux][e1][d1] ) << endl;
+							return 0;
+						}
+
+						if( (Tvei[VeiculoAux][e1][d1] - TPvei[VeiculoAux][e1][d1] ) > ( DM.CARRp[p1] + DM.TEMpc[p1][e1] ) ){
+							cout << endl << endl << "  Maior parte da frente " << endl << endl;
+						}else{
+							if( ( Tvei[VeiculoAux][e1][d1] - TPvei[VeiculoAux][e1][d1] ) < ( DM.CARRp[p1] + DM.TEMpc[p1][e1] ) ){
+								cout << endl << endl << "   Menor parte da frente " << endl << endl;
+							}else{
+								cout << endl << endl << "  É igual!  2 +++++++++++++++++++++ " << endl << endl;
+							}
+						}
+
+
+						if( ( Tvei[VeiculoAux][e1][d1] - TPvei[VeiculoAux][e1][d1] ) != ( DM.CARRp[p1] + DM.TEMpc[p1][e1] ) ){
+							cout << endl << endl << "   Problema integridade 2" << endl;
+							cout << " Tvei[" << VeiculoAux << "][" << e1 << "][" << d1 << "] - TPvei[" << VeiculoAux << "][" << e1 << "][" << d1 << "] != DM.CARRp[" << p1 << "] + DM.TEMpc[" << p1 << "][" << e1 << "]" << endl;
+							cout << Tvei[VeiculoAux][e1][d1] << " - " << TPvei[VeiculoAux][e1][d1] << "(" << Tvei[VeiculoAux][e1][d1] - TPvei[VeiculoAux][e1][d1] <<") != (" << DM.CARRp[p1] + DM.TEMpc[p1][e1] << ") " << DM.CARRp[p1] << " + " << DM.TEMpc[p1][e1] << endl;
+							cout << " diferença de : " << Tvei[VeiculoAux][e1][d1] - TPvei[VeiculoAux][e1][d1]  -( DM.CARRp[p1] + DM.TEMpc[p1][e1] ) << endl;
+							//return 0;
+						}
+					}
+
+
+
 				}
 			}
 			VeiculoAux++;
 		}
 	}
+
 
 	// restrição 5
 	VeiculoAux = 0;
@@ -1516,26 +1574,7 @@ int Solucao::VerificaRestricoes(){
 		}
 	}
 
-	// verifica intervalo entre a produção e o consumo
-		VeiculoAux = 0;
-		for( int p = 0; p < NP; p++){
-			for( int v = 0; v < DM.Veiculos[p]; v++){
-				for( int e1 = 0; e1 < NE; e1++){
-					for( int d1 = 0; d1 < DM.Demandas[e1]; d1++){
-						if( Alfa[VeiculoAux][e1][d1] == 1){
-							if( Tvei[VeiculoAux][e1][d1] - TPvei[VeiculoAux][e1][d1] != DM.CARRp[p] + DM.TEMpc[p][e1] ){
-								cout << endl << endl << "   Problema integridade" << endl;
-								cout << " Tvei[" << VeiculoAux << "][" << e1 << "][" << d1 << "] - TPvei[" << VeiculoAux << "][" << e1 << "][" << d1 << "] != DM.CARRp[" << p << "] + DM.TEMpc[" << p << "][" << e1 << "]" << endl;
-								cout << Tvei[VeiculoAux][e1][d1] << " - " << TPvei[VeiculoAux][e1][d1] << "(" << Tvei[VeiculoAux][e1][d1] - TPvei[VeiculoAux][e1][d1] <<") != (" << DM.CARRp[p] + DM.TEMpc[p][e1] << ") " << DM.CARRp[p] << " + " << DM.TEMpc[p][e1] << endl;
-								cout << " diferença de : " << Tvei[VeiculoAux][e1][d1] - TPvei[VeiculoAux][e1][d1]  -( DM.CARRp[p] + DM.TEMpc[p][e1] ) << endl;
-								//return 0;
-							}
-						}
-					}
-				}
-				VeiculoAux++;
-			}
-		}
+
 
 	return 1;
 }

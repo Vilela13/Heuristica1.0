@@ -47,31 +47,29 @@ public:
 	int 	NumeroClientes;
 	vector < CoordenadaNo > NoCliente;
 	int 	NumeroCaminhoes;
-	double 	Velocidade;
+	double Velocidade;
 
 // Declara variaveis
 
 	char 	*b;
 	char 	*aux1;
 
-
-
 	int 	CaminhaoAux;
 
 	vector < int > CaminhoesPlanta;
 	vector < int > NumeroCarretas;		// guarda o numero de clientes
 
-	double 	TempoDeDescarga;
-	double 	TemproEntreEntregas;
-	double 	TempoPlanta;
-	double 	TempoDeVidaConcreto;
-	double 	TempoEntreEntregas;
+	long int  	TempoDeDescarga;
+	long int  	TemproEntreEntregas;
+	long int  	TempoPlanta;
+	long int  	TempoDeVidaConcreto;
+	long int  	TempoEntreEntregas;
 
-	vector < double > HoraInicioPlanta;
-	vector < double > HoraFinalPlanta;
+	vector < long int  > HoraInicioPlanta;
+	vector < long int  > HoraFinalPlanta;
 
-	vector < double > HoraInicioCliente;
-	vector < double > HoraFinalCliente;
+	vector < long int  > HoraInicioCliente;
+	vector < long int  > HoraFinalCliente;
 
 	ifstream Instancia;
 	ofstream ComandosR;
@@ -296,14 +294,14 @@ void 	DadosSolomon::CriarInstanciaSolomon(string Nome ){ //, int NumeroVERSAO, i
 	string 	Dados;
 	string 	TXT;
 
-	double HorarioInicioPlanta;
-	double HorarioFinalPlanta;
+	long int HorarioInicioPlanta;
+	long int HorarioFinalPlanta;
 
-	double TempoCarreta;
+	long int TempoCarreta;
 	int NumeroMaxCarretas;
-	double InicioMinAtendimento;
-	double HorarioMinimoConstrucao;
-	double HorarioMaximoConstrucao;
+	long int InicioMinAtendimento;
+	long int HorarioMinimoConstrucao;
+	long int HorarioMaximoConstrucao;
 
 	int NoPlantaAux;
 	int NoConstrucaoAux;
@@ -318,8 +316,8 @@ void 	DadosSolomon::CriarInstanciaSolomon(string Nome ){ //, int NumeroVERSAO, i
 
 	double VelocidadeAux;
 
-	double InicioAlmoco;
-	double FinalAlmoco;
+	long int InicioAlmoco;
+	long int FinalAlmoco;
 
 	stringstream ConverterIntEmString;
 
@@ -331,7 +329,10 @@ void 	DadosSolomon::CriarInstanciaSolomon(string Nome ){ //, int NumeroVERSAO, i
 
 	int EscreveVelocidadeMinima;
 
-	EscreveVelocidadeMinima = 0;
+	double MinutosEmUmaHora;
+	MinutosEmUmaHora = 60;
+
+	EscreveVelocidadeMinima = 1;
 
 	// Isso vale só para iniciar e escrever os dados da instancia passada
 	MultiplicadorTempoDescarga = 2;
@@ -340,24 +341,27 @@ void 	DadosSolomon::CriarInstanciaSolomon(string Nome ){ //, int NumeroVERSAO, i
 	NumeroPlantas 	= 1;
 	NumeroClientes 	= 25;
 
-	TempoDeDescarga 	= 0.1666667; // equivaelente a 10 minutos
-	TemproEntreEntregas = 0.1666667; // equivaelente a 10 minutos
-	TempoPlanta 		= 0.083333333; // equivalente a 5 minutos(4 min = 0.066667 ; 3min = 0.05 e 2min = 0.0333333)
-	TempoDeVidaConcreto = 1.5;
+	TempoDeDescarga 	= 10; // equivaelente a 10 minutos
+	TemproEntreEntregas = 10; // equivaelente a 10 minutos
+	TempoPlanta 		= 5; // equivalente a 5 minutos(4 min = 0.066667 ; 3min = 0.05 e 2min = 0.0333333)
+	TempoDeVidaConcreto = 90;			// 1 hora e meia
 
-	HorarioInicioPlanta = 7;
-	HorarioFinalPlanta = 18;
+	HorarioInicioPlanta = 420;		// (7:00)
+	HorarioFinalPlanta = 1080;		// (18:00)
 
-	TempoCarreta = MultiplicadorTempoDescarga * TempoDeDescarga; 			// tempo que se tem na janela de atendiemnto para atender a uma demanda
+	TempoCarreta = (long int) (MultiplicadorTempoDescarga * TempoDeDescarga); 			// tempo que se tem na janela de atendiemnto para atender a uma demanda
+
+	cout << " TempoCarreta = " << TempoCarreta << endl;
+
 	NumeroMaxCarretas = 5;			// numero maximo de demandas em uma construção
-	InicioMinAtendimento = 0.5;		// valor minimo que duas janelas de atendiemto podem ter no minimo caso os horarios inicio de atendiemnto iniciais forem difrentes
-	HorarioMinimoConstrucao = 8;	// horario minimo que uma janela de tempo pode ter
-	HorarioMaximoConstrucao = 17;	// horario maximo que uma janela de tempo pode ter
+	InicioMinAtendimento = 30;		// valor minimo que duas janelas de atendiemto podem ter no minimo caso os horarios inicio de atendiemnto iniciais forem difrentes
+	HorarioMinimoConstrucao = 480;	// horario minimo que uma janela de tempo pode ter (8:00)
+	HorarioMaximoConstrucao = 1020;	// horario maximo que uma janela de tempo pode ter (17:00)
 
 	NumeroCaminhoesPorPlanta = 10;
 
-	InicioAlmoco = 12;
-	FinalAlmoco = 13.5;
+	InicioAlmoco = 720;		// 12:00
+	FinalAlmoco = 810;		// 13:30
 
 	DistanciaMaxima = 0;
 
@@ -371,13 +375,15 @@ void 	DadosSolomon::CriarInstanciaSolomon(string Nome ){ //, int NumeroVERSAO, i
 		}
 	}
 
+	//cout << " numero normal = " << 120.934 << " numero com (int) = " << (int) 120.934 << endl; // sempre arredonda para baixo
+
 	if( EscreveVelocidadeMinima == 1){
 		cout << endl << endl << "      Maior distancia entre nos = " << DistanciaMaxima << endl;
 		cout << " No " << No1.NumeroNo << " [ " << No1.CoordenadaX << "," << No1.CoordenadaY << "] ao No "  << No2.NumeroNo << " [ " << No2.CoordenadaX << "," << No2.CoordenadaY << "]" << endl;
-		cout << "  tempo entre nos a 20 km/h = " <<  DistanciaMaxima/20 << endl;
-		cout << "  tempo entre nos a 30 km/h = " <<  DistanciaMaxima/30 << endl;
-		cout << "  tempo entre nos a 40 km/h = " <<  DistanciaMaxima/40 << endl;
-		cout << "  tempo entre nos a 50 km/h = " <<  DistanciaMaxima/50 << endl;
+		cout << "  tempo entre nos a 20 km/h = " <<  (int) ( DistanciaMaxima/20 * 60 ) << endl;
+		cout << "  tempo entre nos a 30 km/h = " <<  (int) ( DistanciaMaxima/30 * 60 ) << endl;
+		cout << "  tempo entre nos a 40 km/h = " <<  (int) ( DistanciaMaxima/40 * 60 ) << endl;
+		cout << "  tempo entre nos a 50 km/h = " <<  (int) ( DistanciaMaxima/50 * 60 ) << endl;
 
 		VelocidadeAux = DistanciaMaxima/TempoDeVidaConcreto;
 
@@ -386,7 +392,9 @@ void 	DadosSolomon::CriarInstanciaSolomon(string Nome ){ //, int NumeroVERSAO, i
 		cout << endl<< endl<< endl;
 	}
 
-	Velocidade 		= 30;
+	Velocidade 	= 30/MinutosEmUmaHora ;		// velocidade em hora dividido por minutos (60), da a velocidade por minuto
+
+	cout << endl << endl << " Velocidade = " << Velocidade << endl << endl;
 
 	//binomial_distribution<int> distribution(5,0.5); 		// gera numeros segundo a distribuição binomial
 
@@ -508,28 +516,30 @@ void 	DadosSolomon::CriarInstanciaSolomon(string Nome ){ //, int NumeroVERSAO, i
 		// define o no que ira representar a construção, o númeor de carretas e o intervalo de atendiemnto
 		for( int i = 1; i <= NumeroClientes; i++){
 			//cout << "    construção " << i << " tamanho = " << NosCoord.size() << endl;
+
 			NoConstrucaoAux = rand() % NosCoord.size();
 			NoCliente[i].NumeroNo = NosCoord[NoConstrucaoAux].NumeroNo;
 			NoCliente[i].CoordenadaX = NosCoord[NoConstrucaoAux].CoordenadaX;
 			NoCliente[i].CoordenadaY = NosCoord[NoConstrucaoAux].CoordenadaY;
 			NosCoord.erase(NosCoord.begin() + NoConstrucaoAux);
 
+
 			NumeroCarretas[i] = rand()%(NumeroMaxCarretas) + 1;	// fornece o numero de demandas da conrução
-			//
+
 			if(rand()%2 == 1){
-				HoraInicioCliente[i] = HorarioMinimoConstrucao + (rand()%(int)((HorarioMinimoConstrucao-InicioAlmoco)*(1/InicioMinAtendimento)))*InicioMinAtendimento;
+				HoraInicioCliente[i] = HorarioMinimoConstrucao + (rand() % (int)( (HorarioMinimoConstrucao-InicioAlmoco)/ InicioMinAtendimento )  ) *InicioMinAtendimento;
 				HoraFinalCliente[i] = HoraInicioCliente[i] + NumeroCarretas[i]*TempoCarreta -  TempoDeDescarga;
 
 				while( HoraFinalCliente[i] + TempoDeDescarga > InicioAlmoco ){
-					HoraInicioCliente[i] = HorarioMinimoConstrucao + (rand()%(int)((HorarioMinimoConstrucao-InicioAlmoco)*(1/InicioMinAtendimento)))*InicioMinAtendimento;
+					HoraInicioCliente[i] = HorarioMinimoConstrucao + ( rand()%(int)( (HorarioMinimoConstrucao-InicioAlmoco)/ InicioMinAtendimento) )*InicioMinAtendimento;
 					HoraFinalCliente[i] = HoraInicioCliente[i] + NumeroCarretas[i]*TempoCarreta -  TempoDeDescarga;
 				}
 			}else{
-				HoraInicioCliente[i] = FinalAlmoco + (rand()%(int)((FinalAlmoco-HorarioMaximoConstrucao)*(1/InicioMinAtendimento)))*InicioMinAtendimento;
+				HoraInicioCliente[i] = FinalAlmoco + (rand()%(int)( (FinalAlmoco-HorarioMaximoConstrucao)/InicioMinAtendimento) )*InicioMinAtendimento;
 				HoraFinalCliente[i] = HoraInicioCliente[i] + NumeroCarretas[i]*TempoCarreta  -  TempoDeDescarga;
 
 				while( HoraFinalCliente[i] + TempoDeDescarga > HorarioMaximoConstrucao ){
-					HoraInicioCliente[i] = HorarioMinimoConstrucao + (rand()%(int)((FinalAlmoco-HorarioMaximoConstrucao)*(1/InicioMinAtendimento)))*InicioMinAtendimento;
+					HoraInicioCliente[i] = HorarioMinimoConstrucao + (rand()%(int)( (FinalAlmoco-HorarioMaximoConstrucao)/InicioMinAtendimento) )*InicioMinAtendimento;
 					HoraFinalCliente[i] = HoraInicioCliente[i] + NumeroCarretas[i]*TempoCarreta -  TempoDeDescarga;
 				}
 			}
@@ -575,21 +585,21 @@ void 	DadosSolomon::CriarInstanciaSolomon(string Nome ){ //, int NumeroVERSAO, i
 			InstanciaSolomon << endl;
 		}
 
-		// Preenche as localizações entre  plantas e entradas
+		// Preenche as os tempos entre  plantas e entradas
 
 		for(int p =1; p <= NumeroPlantas; p++){
 			for(int i =1; i <= NumeroClientes; i++){
-				InstanciaSolomon << sqrt( pow( NoPlanta[p].CoordenadaX - NoCliente[i].CoordenadaX,2) + pow( NoPlanta[p].CoordenadaY - NoCliente[i].CoordenadaY,2) ) / Velocidade << " ";
+				InstanciaSolomon << (long int) ( sqrt( pow( NoPlanta[p].CoordenadaX - NoCliente[i].CoordenadaX,2) + pow( NoPlanta[p].CoordenadaY - NoCliente[i].CoordenadaY,2) ) / Velocidade ) << " ";
 			}
 			InstanciaSolomon << endl;
 		}
 
 		//InstanciaSolomon << " localidade plantas "<< endl;
 
-		// Preenche as localizações entre entradas e plantas
+		// Preenche as os tempos entre entradas e plantas
 		for(int i =1; i <= NumeroClientes; i++){
 			for(int p =1; p <= NumeroPlantas; p++){
-				InstanciaSolomon << sqrt( pow( NoPlanta[p].CoordenadaX - NoCliente[i].CoordenadaX ,2) + pow( NoPlanta[p].CoordenadaY - NoCliente[i].CoordenadaY ,2) ) / Velocidade << " ";
+				InstanciaSolomon << (long int) ( sqrt( pow( NoPlanta[p].CoordenadaX - NoCliente[i].CoordenadaX ,2) + pow( NoPlanta[p].CoordenadaY - NoCliente[i].CoordenadaY ,2) ) / Velocidade ) << " ";
 			}
 			InstanciaSolomon << endl;
 		}
@@ -661,8 +671,8 @@ void 	DadosSolomon::CriarInstanciaSolomon(string Nome ){ //, int NumeroVERSAO, i
 			DadosInstanciaSalomonCriada <<  "   Planta = " <<  p << endl;
 			DadosInstanciaSalomonCriada << "Construcao   Tempo de Ida    Tempo de Ida e Volta" << endl;
 			for( int c = 1; c <= NumeroClientes; c++){
-				DadosInstanciaSalomonCriada << c << "\t\t" << (sqrt( pow( NoPlanta[p].CoordenadaX - NoCliente[c].CoordenadaX ,2) + pow( NoPlanta[p].CoordenadaY - NoCliente[c].CoordenadaY,2) ) / Velocidade)*60  << "\t\t";
-				DadosInstanciaSalomonCriada << (sqrt( pow( NoPlanta[p].CoordenadaX - NoCliente[c].CoordenadaX ,2) + pow( NoPlanta[p].CoordenadaY - NoCliente[c].CoordenadaY,2) ) / Velocidade)*60 + TempoPlanta * 60 + (sqrt( pow( NoPlanta[p].CoordenadaX - NoCliente[c].CoordenadaX,2) + pow( NoPlanta[p].CoordenadaY - NoCliente[c].CoordenadaY,2) ) / Velocidade)*60 << endl;
+				DadosInstanciaSalomonCriada << c << "\t\t" <<  (long int)  (sqrt( pow( NoPlanta[p].CoordenadaX - NoCliente[c].CoordenadaX ,2) + pow( NoPlanta[p].CoordenadaY - NoCliente[c].CoordenadaY,2) ) / Velocidade )  << "\t\t";
+				DadosInstanciaSalomonCriada <<  (long int) ( sqrt( pow( NoPlanta[p].CoordenadaX - NoCliente[c].CoordenadaX ,2) + pow( NoPlanta[p].CoordenadaY - NoCliente[c].CoordenadaY,2) )  / Velocidade ) + TempoPlanta  + (sqrt( pow( NoPlanta[p].CoordenadaX - NoCliente[c].CoordenadaX,2) + pow( NoPlanta[p].CoordenadaY - NoCliente[c].CoordenadaY,2) ) / Velocidade) << endl;
 			}
 		}
 	}else{

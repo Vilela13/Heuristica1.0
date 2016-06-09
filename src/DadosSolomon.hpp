@@ -88,7 +88,7 @@ public:
 	void CriaPastaInstS();
 	void CriaPastaDat();
 
-	void CriarInstanciaSolomon(string Nome); // , int NumeroVERSAO, int MultiplicadorTempoDescarga );
+	void CriarInstanciaSolomon(string Nome); //, int NumeroVERSAO, int MultiplicadorTempoDescarga );
 
 	void EscreverComandosR(string,char );
 
@@ -285,7 +285,7 @@ void 	DadosSolomon::CriaPastaDat(){
 
 }
 
-void 	DadosSolomon::CriarInstanciaSolomon(string Nome ){ //, int NumeroVERSAO, int MultiplicadorTempoDescarga ){
+void 	DadosSolomon::CriarInstanciaSolomon(string Nome) { //,  int NumeroVERSAO, int MultiplicadorTempoDescarga ){
 
 	string 	CaminhoArquivo1;
 	string 	CaminhoArquivo2;
@@ -324,8 +324,8 @@ void 	DadosSolomon::CriarInstanciaSolomon(string Nome ){ //, int NumeroVERSAO, i
 	double MultiplicadorTempoDescarga;
 	int 	NumeroVERSAO;
 
-	//double AuxiliarNumero;
-	//double Lixo;
+	double AuxiliarNumero;
+	double Lixo;
 
 	int EscreveVelocidadeMinima;
 
@@ -335,16 +335,16 @@ void 	DadosSolomon::CriarInstanciaSolomon(string Nome ){ //, int NumeroVERSAO, i
 	EscreveVelocidadeMinima = 1;
 
 	// Isso vale só para iniciar e escrever os dados da instancia passada
-	MultiplicadorTempoDescarga = 2;
-	NumeroVERSAO = 13;
+	//MultiplicadorTempoDescarga = 2;
+	//NumeroVERSAO = 13;
 
 	NumeroPlantas 	= 1;
-	NumeroClientes 	= 25;
+	NumeroClientes 	= 5;
 
 	TempoDeDescarga 	= 10; // equivaelente a 10 minutos
 	TemproEntreEntregas = 10; // equivaelente a 10 minutos
 	TempoPlanta 		= 5; // equivalente a 5 minutos(4 min = 0.066667 ; 3min = 0.05 e 2min = 0.0333333)
-	TempoDeVidaConcreto = 90;			// 1 hora e meia
+	TempoDeVidaConcreto = 90;			// 1,5 horas
 
 	HorarioInicioPlanta = 420;		// (7:00)
 	HorarioFinalPlanta = 1080;		// (18:00)
@@ -394,7 +394,7 @@ void 	DadosSolomon::CriarInstanciaSolomon(string Nome ){ //, int NumeroVERSAO, i
 
 	Velocidade 	= 30/MinutosEmUmaHora ;		// velocidade em hora dividido por minutos (60), da a velocidade por minuto
 
-	cout << endl << endl << " Velocidade = " << Velocidade << endl << endl;
+	//cout << endl << endl << " Velocidade = " << Velocidade << endl << endl;
 
 	//binomial_distribution<int> distribution(5,0.5); 		// gera numeros segundo a distribuição binomial
 
@@ -672,7 +672,7 @@ void 	DadosSolomon::CriarInstanciaSolomon(string Nome ){ //, int NumeroVERSAO, i
 			DadosInstanciaSalomonCriada << "Construcao   Tempo de Ida    Tempo de Ida e Volta" << endl;
 			for( int c = 1; c <= NumeroClientes; c++){
 				DadosInstanciaSalomonCriada << c << "\t\t" <<  (long int)  (sqrt( pow( NoPlanta[p].CoordenadaX - NoCliente[c].CoordenadaX ,2) + pow( NoPlanta[p].CoordenadaY - NoCliente[c].CoordenadaY,2) ) / Velocidade )  << "\t\t";
-				DadosInstanciaSalomonCriada <<  (long int) ( sqrt( pow( NoPlanta[p].CoordenadaX - NoCliente[c].CoordenadaX ,2) + pow( NoPlanta[p].CoordenadaY - NoCliente[c].CoordenadaY,2) )  / Velocidade ) + TempoPlanta  + (sqrt( pow( NoPlanta[p].CoordenadaX - NoCliente[c].CoordenadaX,2) + pow( NoPlanta[p].CoordenadaY - NoCliente[c].CoordenadaY,2) ) / Velocidade) << endl;
+				DadosInstanciaSalomonCriada <<  (long int) ( sqrt( pow( NoPlanta[p].CoordenadaX - NoCliente[c].CoordenadaX ,2) + pow( NoPlanta[p].CoordenadaY - NoCliente[c].CoordenadaY,2) )  / Velocidade ) + TempoPlanta  +  (long int) (sqrt( pow( NoPlanta[p].CoordenadaX - NoCliente[c].CoordenadaX,2) + pow( NoPlanta[p].CoordenadaY - NoCliente[c].CoordenadaY,2) ) / Velocidade) << endl;
 			}
 		}
 	}else{

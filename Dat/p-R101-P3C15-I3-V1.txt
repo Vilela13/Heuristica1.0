@@ -1,77 +1,77 @@
 ./Dat/p-R101-P3C15-I3-V1.txt
  Gerador dos numeros aleatorios das demandas ( 1 ) 
 Dados das plantas 
-   NoPlanta = 1 Horario [ 7 - 18 ]
-   NoPlanta = 2 Horario [ 7 - 18 ]
-   NoPlanta = 3 Horario [ 7 - 18 ]
+   NoPlanta = 1 Horario [ 420 - 1080 ]
+   NoPlanta = 2 Horario [ 420 - 1080 ]
+   NoPlanta = 3 Horario [ 420 - 1080 ]
 Dados dos Clientes 
-  NoCliente = 1 	Demanda em carretas ( 2 ) Horario [ 14 - 14.8333 ]
-  NoCliente = 2 	Demanda em carretas ( 3 ) Horario [ 8.5 - 9.83333 ]
-  NoCliente = 3 	Demanda em carretas ( 2 ) Horario [ 8.5 - 9.33333 ]
-  NoCliente = 4 	Demanda em carretas ( 1 ) Horario [ 15.5 - 15.8333 ]
-  NoCliente = 5 	Demanda em carretas ( 5 ) Horario [ 9.5 - 11.8333 ]
-  NoCliente = 6 	Demanda em carretas ( 5 ) Horario [ 8.5 - 10.8333 ]
-  NoCliente = 7 	Demanda em carretas ( 1 ) Horario [ 10 - 10.3333 ]
-  NoCliente = 8 	Demanda em carretas ( 4 ) Horario [ 9.5 - 11.3333 ]
-  NoCliente = 9 	Demanda em carretas ( 5 ) Horario [ 9 - 11.3333 ]
-  NoCliente = 10 	Demanda em carretas ( 1 ) Horario [ 15 - 15.3333 ]
-  NoCliente = 11 	Demanda em carretas ( 5 ) Horario [ 8 - 10.3333 ]
-  NoCliente = 12 	Demanda em carretas ( 2 ) Horario [ 10.5 - 11.3333 ]
-  NoCliente = 13 	Demanda em carretas ( 5 ) Horario [ 9 - 11.3333 ]
-  NoCliente = 14 	Demanda em carretas ( 3 ) Horario [ 8 - 9.33333 ]
-  NoCliente = 15 	Demanda em carretas ( 2 ) Horario [ 13.5 - 14.3333 ]
+  NoCliente = 1 	Demanda em carretas ( 4 ) Horario [ 840 - 950 ]
+  NoCliente = 2 	Demanda em carretas ( 1 ) Horario [ 870 - 890 ]
+  NoCliente = 3 	Demanda em carretas ( 5 ) Horario [ 660 - 800 ]
+  NoCliente = 4 	Demanda em carretas ( 1 ) Horario [ 570 - 590 ]
+  NoCliente = 5 	Demanda em carretas ( 5 ) Horario [ 840 - 980 ]
+  NoCliente = 6 	Demanda em carretas ( 5 ) Horario [ 480 - 620 ]
+  NoCliente = 7 	Demanda em carretas ( 3 ) Horario [ 930 - 1010 ]
+  NoCliente = 8 	Demanda em carretas ( 5 ) Horario [ 870 - 1010 ]
+  NoCliente = 9 	Demanda em carretas ( 4 ) Horario [ 600 - 710 ]
+  NoCliente = 10 	Demanda em carretas ( 5 ) Horario [ 570 - 710 ]
+  NoCliente = 11 	Demanda em carretas ( 5 ) Horario [ 480 - 620 ]
+  NoCliente = 12 	Demanda em carretas ( 1 ) Horario [ 960 - 980 ]
+  NoCliente = 13 	Demanda em carretas ( 5 ) Horario [ 570 - 710 ]
+  NoCliente = 14 	Demanda em carretas ( 5 ) Horario [ 540 - 680 ]
+  NoCliente = 15 	Demanda em carretas ( 1 ) Horario [ 810 - 830 ]
 
 
-Distancia das plantas para construcoes  em minutos
+Tempo das plantas para construcoes  em minutos
 
    Planta = 1
 Construcao   Tempo de Ida    Tempo de Ida e Volta
-1		60.8276		126.655
-2		50.9902		106.98
-3		36		77
-4		42.4264		89.8528
-5		64.0312		133.062
-6		58.3095		121.619
-7		22.3607		49.7214
-8		41.2311		87.4621
-9		22.3607		49.7214
-10		30		65
-11		67.082		139.164
-12		64.0312		133.062
-13		36.0555		77.111
-14		50		105
-15		72.111		149.222
+1		67		139
+2		60		125
+3		58		121
+4		67		139
+5		42		89
+6		64		133
+7		22		49
+8		72		149
+9		60		125
+10		64		133
+11		44		93
+12		36		77
+13		22		49
+14		63		131
+15		41		87
    Planta = 2
 Construcao   Tempo de Ida    Tempo de Ida e Volta
-1		70.7107		146.421
-2		78.1025		161.205
-3		65.3911		135.782
-4		50		105
-5		63.2456		131.491
-6		22.3607		49.7214
-7		50.9902		106.98
-8		20		45
-9		40		85
-10		90.5539		186.108
-11		76.1577		157.315
-12		44.7214		94.4427
-13		82.4621		169.924
-14		101.98		208.961
-15		111.803		228.607
+1		50		105
+2		36		77
+3		44		93
+4		98		201
+5		20		45
+6		80		165
+7		22		49
+8		98		201
+9		72		149
+10		41		87
+11		70		145
+12		64		133
+13		36		77
+14		70		145
+15		22		49
    Planta = 3
 Construcao   Tempo de Ida    Tempo de Ida e Volta
-1		85.8836		176.767
-2		52.4976		109.995
-3		72.1388		149.278
-4		24.4131		53.8262
-5		35.4401		75.8802
-6		46		97
-7		53.8145		112.629
-8		27.8568		60.7136
-9		39.6989		84.3977
-10		81.5843		168.169
-11		48.3322		101.664
-12		66.7533		138.507
-13		83.7616		172.523
-14		101.074		207.148
-15		117.796		240.593
+1		114		233
+2		101		207
+3		90		185
+4		20		45
+5		92		189
+6		80		165
+7		63		131
+8		30		65
+9		58		121
+10		113		231
+11		50		105
+12		20		45
+13		50		105
+14		92		189
+15		82		169

@@ -1,0 +1,61 @@
+./Dat/p-C101-P1C25-I2-V13.txt
+ Gerador dos numeros aleatorios das demandas ( 13 ) 
+Dados das plantas 
+   NoPlanta = 1 Horario [ 420 - 1080 ]
+Dados dos Clientes 
+  NoCliente = 1 	Demanda em carretas ( 2 ) Horario [ 870 - 900 ]
+  NoCliente = 2 	Demanda em carretas ( 2 ) Horario [ 870 - 900 ]
+  NoCliente = 3 	Demanda em carretas ( 2 ) Horario [ 600 - 630 ]
+  NoCliente = 4 	Demanda em carretas ( 1 ) Horario [ 600 - 610 ]
+  NoCliente = 5 	Demanda em carretas ( 1 ) Horario [ 600 - 610 ]
+  NoCliente = 6 	Demanda em carretas ( 5 ) Horario [ 510 - 600 ]
+  NoCliente = 7 	Demanda em carretas ( 4 ) Horario [ 930 - 1000 ]
+  NoCliente = 8 	Demanda em carretas ( 2 ) Horario [ 810 - 840 ]
+  NoCliente = 9 	Demanda em carretas ( 5 ) Horario [ 510 - 600 ]
+  NoCliente = 10 	Demanda em carretas ( 1 ) Horario [ 630 - 640 ]
+  NoCliente = 11 	Demanda em carretas ( 3 ) Horario [ 630 - 680 ]
+  NoCliente = 12 	Demanda em carretas ( 1 ) Horario [ 540 - 550 ]
+  NoCliente = 13 	Demanda em carretas ( 1 ) Horario [ 990 - 1000 ]
+  NoCliente = 14 	Demanda em carretas ( 3 ) Horario [ 540 - 590 ]
+  NoCliente = 15 	Demanda em carretas ( 1 ) Horario [ 540 - 550 ]
+  NoCliente = 16 	Demanda em carretas ( 1 ) Horario [ 570 - 580 ]
+  NoCliente = 17 	Demanda em carretas ( 4 ) Horario [ 810 - 880 ]
+  NoCliente = 18 	Demanda em carretas ( 3 ) Horario [ 930 - 980 ]
+  NoCliente = 19 	Demanda em carretas ( 1 ) Horario [ 900 - 910 ]
+  NoCliente = 20 	Demanda em carretas ( 2 ) Horario [ 870 - 900 ]
+  NoCliente = 21 	Demanda em carretas ( 2 ) Horario [ 510 - 540 ]
+  NoCliente = 22 	Demanda em carretas ( 3 ) Horario [ 600 - 650 ]
+  NoCliente = 23 	Demanda em carretas ( 3 ) Horario [ 600 - 650 ]
+  NoCliente = 24 	Demanda em carretas ( 2 ) Horario [ 630 - 660 ]
+  NoCliente = 25 	Demanda em carretas ( 2 ) Horario [ 660 - 690 ]
+
+
+Tempo das plantas para construcoes  em minutos
+
+   Planta = 1
+Construcao   Tempo de Ida    Tempo de Ida e Volta
+1		70		145
+2		72		149
+3		30		65
+4		38		81
+5		32		69
+6		20		45
+7		78		161
+8		36		77
+9		20		45
+10		66		137
+11		30		65
+12		40		85
+13		76		157
+14		39		83
+15		24		53
+16		32		69
+17		26		57
+18		61		127
+19		30		65
+20		41		87
+21		36		77
+22		78		161
+23		33		71
+24		37		79
+25		80		165

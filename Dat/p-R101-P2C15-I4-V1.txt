@@ -1,59 +1,59 @@
 ./Dat/p-R101-P2C15-I4-V1.txt
  Gerador dos numeros aleatorios das demandas ( 1 ) 
 Dados das plantas 
-   NoPlanta = 1 Horario [ 7 - 18 ]
-   NoPlanta = 2 Horario [ 7 - 18 ]
+   NoPlanta = 1 Horario [ 420 - 1080 ]
+   NoPlanta = 2 Horario [ 420 - 1080 ]
 Dados dos Clientes 
-  NoCliente = 1 	Demanda em carretas ( 2 ) Horario [ 10 - 11.1667 ]
-  NoCliente = 2 	Demanda em carretas ( 3 ) Horario [ 8.5 - 10.3333 ]
-  NoCliente = 3 	Demanda em carretas ( 2 ) Horario [ 9.5 - 10.6667 ]
-  NoCliente = 4 	Demanda em carretas ( 1 ) Horario [ 8 - 8.5 ]
-  NoCliente = 5 	Demanda em carretas ( 2 ) Horario [ 8 - 9.16667 ]
-  NoCliente = 6 	Demanda em carretas ( 1 ) Horario [ 15.5 - 16 ]
-  NoCliente = 7 	Demanda em carretas ( 1 ) Horario [ 9.5 - 10 ]
-  NoCliente = 8 	Demanda em carretas ( 1 ) Horario [ 15 - 15.5 ]
-  NoCliente = 9 	Demanda em carretas ( 1 ) Horario [ 15 - 15.5 ]
-  NoCliente = 10 	Demanda em carretas ( 2 ) Horario [ 13.5 - 14.6667 ]
-  NoCliente = 11 	Demanda em carretas ( 2 ) Horario [ 13.5 - 14.6667 ]
-  NoCliente = 12 	Demanda em carretas ( 1 ) Horario [ 10.5 - 11 ]
-  NoCliente = 13 	Demanda em carretas ( 2 ) Horario [ 8.5 - 9.66667 ]
-  NoCliente = 14 	Demanda em carretas ( 2 ) Horario [ 8.5 - 9.66667 ]
-  NoCliente = 15 	Demanda em carretas ( 5 ) Horario [ 8.5 - 11.6667 ]
+  NoCliente = 1 	Demanda em carretas ( 3 ) Horario [ 540 - 650 ]
+  NoCliente = 2 	Demanda em carretas ( 4 ) Horario [ 540 - 690 ]
+  NoCliente = 3 	Demanda em carretas ( 5 ) Horario [ 510 - 700 ]
+  NoCliente = 4 	Demanda em carretas ( 4 ) Horario [ 630 - 780 ]
+  NoCliente = 5 	Demanda em carretas ( 1 ) Horario [ 510 - 540 ]
+  NoCliente = 6 	Demanda em carretas ( 4 ) Horario [ 480 - 630 ]
+  NoCliente = 7 	Demanda em carretas ( 2 ) Horario [ 570 - 640 ]
+  NoCliente = 8 	Demanda em carretas ( 2 ) Horario [ 570 - 640 ]
+  NoCliente = 9 	Demanda em carretas ( 3 ) Horario [ 540 - 650 ]
+  NoCliente = 10 	Demanda em carretas ( 3 ) Horario [ 900 - 1010 ]
+  NoCliente = 11 	Demanda em carretas ( 1 ) Horario [ 660 - 690 ]
+  NoCliente = 12 	Demanda em carretas ( 3 ) Horario [ 570 - 680 ]
+  NoCliente = 13 	Demanda em carretas ( 1 ) Horario [ 600 - 630 ]
+  NoCliente = 14 	Demanda em carretas ( 4 ) Horario [ 660 - 810 ]
+  NoCliente = 15 	Demanda em carretas ( 1 ) Horario [ 570 - 600 ]
 
 
-Distancia das plantas para construcoes  em minutos
+Tempo das plantas para construcoes  em minutos
 
    Planta = 1
 Construcao   Tempo de Ida    Tempo de Ida e Volta
-1		53.8516		112.703
-2		50.9902		106.98
-3		41.2311		87.4621
-4		22.3607		49.7214
-5		31.6228		68.2456
-6		67.082		139.164
-7		52.4976		109.995
-8		60.8276		126.655
-9		44.7214		94.4427
-10		50		105
-11		36.0555		77.111
-12		72.111		149.222
-13		60.8276		126.655
-14		64.0312		133.062
-15		36		77
+1		42		89
+2		30		65
+3		30		65
+4		41		87
+5		64		133
+6		67		139
+7		60		125
+8		36		77
+9		52		109
+10		67		139
+11		64		133
+12		44		93
+13		22		49
+14		50		105
+15		31		67
    Planta = 2
 Construcao   Tempo de Ida    Tempo de Ida e Volta
-1		42.4264		89.8528
-2		70		145
-3		31.6228		68.2456
-4		14.1421		33.2843
-5		36.0555		77.111
-6		82.4621		169.924
-7		53.8145		112.629
-8		40		85
-9		64.0312		133.062
-10		50.9902		106.98
-11		31.6228		68.2456
-12		64.0312		133.062
-13		50.9902		106.98
-14		86.0233		177.047
-15		18.868		42.7359
+1		63		131
+2		85		175
+3		84		173
+4		22		49
+5		22		49
+6		92		189
+7		22		49
+8		70		145
+9		46		97
+10		110		225
+11		80		165
+12		102		209
+13		41		87
+14		90		185
+15		44		93

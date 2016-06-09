@@ -1,44 +1,44 @@
 ./Dat/p-C101-P2C10-I4-V1.txt
  Gerador dos numeros aleatorios das demandas ( 1 ) 
 Dados das plantas 
-   NoPlanta = 1 Horario [ 7 - 18 ]
-   NoPlanta = 2 Horario [ 7 - 18 ]
+   NoPlanta = 1 Horario [ 420 - 1080 ]
+   NoPlanta = 2 Horario [ 420 - 1080 ]
 Dados dos Clientes 
-  NoCliente = 1 	Demanda em carretas ( 4 ) Horario [ 8 - 10.5 ]
-  NoCliente = 2 	Demanda em carretas ( 1 ) Horario [ 8.5 - 9 ]
-  NoCliente = 3 	Demanda em carretas ( 1 ) Horario [ 15 - 15.5 ]
-  NoCliente = 4 	Demanda em carretas ( 4 ) Horario [ 8.5 - 11 ]
-  NoCliente = 5 	Demanda em carretas ( 5 ) Horario [ 9.5 - 12.6667 ]
-  NoCliente = 6 	Demanda em carretas ( 4 ) Horario [ 10 - 12.5 ]
-  NoCliente = 7 	Demanda em carretas ( 1 ) Horario [ 16 - 16.5 ]
-  NoCliente = 8 	Demanda em carretas ( 3 ) Horario [ 10 - 11.8333 ]
-  NoCliente = 9 	Demanda em carretas ( 2 ) Horario [ 10 - 11.1667 ]
-  NoCliente = 10 	Demanda em carretas ( 1 ) Horario [ 14.5 - 15 ]
+  NoCliente = 1 	Demanda em carretas ( 3 ) Horario [ 480 - 590 ]
+  NoCliente = 2 	Demanda em carretas ( 5 ) Horario [ 570 - 760 ]
+  NoCliente = 3 	Demanda em carretas ( 3 ) Horario [ 540 - 650 ]
+  NoCliente = 4 	Demanda em carretas ( 2 ) Horario [ 900 - 970 ]
+  NoCliente = 5 	Demanda em carretas ( 4 ) Horario [ 510 - 660 ]
+  NoCliente = 6 	Demanda em carretas ( 1 ) Horario [ 540 - 570 ]
+  NoCliente = 7 	Demanda em carretas ( 1 ) Horario [ 570 - 600 ]
+  NoCliente = 8 	Demanda em carretas ( 1 ) Horario [ 570 - 600 ]
+  NoCliente = 9 	Demanda em carretas ( 4 ) Horario [ 510 - 660 ]
+  NoCliente = 10 	Demanda em carretas ( 4 ) Horario [ 480 - 630 ]
 
 
-Distancia das plantas para construcoes  em minutos
+Tempo das plantas para construcoes  em minutos
 
    Planta = 1
 Construcao   Tempo de Ida    Tempo de Ida e Volta
-1		39.2938		83.5875
-2		76.1577		157.315
-3		30.2655		65.531
-4		32		69
-5		66.6033		138.207
-6		24.3311		53.6621
-7		32.249		69.4981
-8		36.2215		77.4431
-9		78.7147		162.429
-10		61.6117		128.223
+1		78		161
+2		36		77
+3		70		145
+4		39		83
+5		78		161
+6		32		69
+7		33		71
+8		20		45
+9		30		65
+10		38		81
    Planta = 2
 Construcao   Tempo de Ida    Tempo de Ida e Volta
-1		6.32456		17.6491
-2		39.6989		84.3977
-3		44.4072		93.8144
-4		8.94427		22.8885
-5		41.2311		87.4621
-6		41.1825		87.365
-7		11.3137		27.6274
-8		4		13
-9		43.8634		92.7268
-10		33.5261		72.0522
+1		56		117
+2		38		81
+3		47		99
+4		31		67
+5		61		127
+6		32		69
+7		26		57
+8		7		19
+9		34		73
+10		36		77

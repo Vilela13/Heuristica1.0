@@ -139,7 +139,7 @@ int main(int argc, char **argv) {
 
 
 			//cout << " entrei 1 - escreve Instancia Salomon" << endl;
-			InstanciaSolomon->CriarInstanciaSolomon( Nome);// , v, m );
+			InstanciaSolomon->CriarInstanciaSolomon( Nome); //, v, m );
 			//cout << " sai 1 - escreve Instancia Salomon" << endl;
 
 			//cout << " entrei 2 - escreve comandos R" << endl;

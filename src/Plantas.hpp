@@ -177,8 +177,11 @@ int 	Planta::DeletaAtividade(double HoraInicio, double HoraFinal, int NumConstru
 void 	Planta::CalculaMakespan(){
 	Makespan = 0;
 
+	//cout << "  entra " << endl;
+	//cout << " TempoMinimoDeFuncionamento " << TempoMinimoDeFuncionamento << endl;
+
 	// inicia o makespan da planta com o menor tempo que a planta pode iniciar um carregamento
-	if( Makespan > TempoMinimoDeFuncionamento){
+	if( Makespan < TempoMinimoDeFuncionamento){
 		Makespan = TempoMinimoDeFuncionamento;
 	}
 	// percorre por todos os caminhões das plantas

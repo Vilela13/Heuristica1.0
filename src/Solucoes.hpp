@@ -126,21 +126,21 @@ void 	Solucao::Imprime(bool ImprimePlanta, bool ImprimeConstrucao, bool Verifica
 		fprintf(Arquivo, "     MAKESPAN GERAL = %.4f \n", PlantasInstancia.MakespanPLantas + ConstrucoesInstancia.MakespanConstrucoes);
 	}
 
-/*
+
 	// Confere variaveis modelo
 	if( ConstrucoesInstancia.NivelDeInviabilidade == 0){
-		cout << endl << " inicia -> " << endl;
+		//cout << endl << " inicia -> " << endl;
 		IniciaVariaveisModelo();
-		cout << "  atribui -> " << endl;
+		//cout << "  atribui -> " << endl;
 		AtribuiValoresVariaveisModelo();
-		cout << "  chaca -> " << endl;
+		//cout << "  chaca -> " << endl;
 		VerificaRestricoes();
-		cout << "  galo" << endl;
+		//cout << "  galo" << endl;
 
 		//ImprimeVariaveisModeloSeparado();
 	}
 	//ImprimeVariaveisDoModelo(ImprimeSolucao, ImprimeArquivo, Arquivo);
-*/
+
 }
 
 // deleta demandas atendidas na construção após certa demanda que é passada com parametro
@@ -1286,18 +1286,24 @@ void Solucao::AtribuiValoresVariaveisModelo(){
 	VeiculoAux1 = 0;
 
 
+
 	if( imprime == 1 ){
 		cout << endl << endl << "   Alfa, TPvei e BetaProducao " << endl << endl;
 	}
 	// atribui valores a Alfa, TPvei e BetaProducao
 	for( int p1 = 0; p1 < (int) PlantasInstancia.Plantas.size(); p1++){
 		for( int p2 = 0; p2 < (int) PlantasInstancia.Plantas.size(); p2++){
+
 			if( PlantasInstancia.Plantas[p2].NumeroDaPlanta == p1){
+
 
 				for( int car1 = 0; car1 < (int) PlantasInstancia.Plantas[p2].Carregamentos.size(); car1++){
 
+
 					// aloca o veiculo corrente de acordo com os veiculos das outras plantas. Os veiculos são numerados separadamente das plantas ao contrario do que ocorre no modelo
 					VeiculoAux2 = VeiculoAux1 + PlantasInstancia.Plantas[p2].Carregamentos[car1].NumCarretaUtilizada;
+
+
 					if( imprime == 1 ){
 						cout << " veiculo geral : [" << VeiculoAux2 << "]  planta - veiculo : [" << p1 << "-" << PlantasInstancia.Plantas[p2].Carregamentos[car1].NumCarretaUtilizada << "]" << endl ;
 					}
@@ -1314,11 +1320,11 @@ void Solucao::AtribuiValoresVariaveisModelo(){
 							}
 						}
 					}
-					// armazena o numero do ultimo veiculo a ultima planta analisada
-					VeiculoPlantaAux = car1;
 				}
+				// armazena o numero do ultimo veiculo a ultima planta analisada
+				VeiculoPlantaAux = PlantasInstancia.Plantas[p2].NumeroVeiculos;
 				// atualiza o numero do veiculo da proxima planta a ser analisada como sendo os veiculos ja analisados, mais os veiculos da ultima planta analisada e mais um para ser o primeiro veículo da proxima planta
-				VeiculoAux1 = VeiculoAux1 + VeiculoPlantaAux + 1;
+				VeiculoAux1 = VeiculoAux1 + VeiculoPlantaAux;
 			}
 		}
 	}

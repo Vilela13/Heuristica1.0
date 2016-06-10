@@ -2153,6 +2153,9 @@ void	Heuristica::LeTempoDeVidaConcreto(int comentarios){
 
 	DM.TVC = TempoDeVidaConcreto;
 
+	for( int c = 0; c < NE; c++){
+			ConstrucoesInstancia.Construcoes[c].TempoDeVidaConcreto = TempoDeVidaConcreto;
+	}
 
 	if( comentarios == 1){
 		cout << " Tempo De Vida Concreto "<<  TempoDeVidaConcreto << endl;

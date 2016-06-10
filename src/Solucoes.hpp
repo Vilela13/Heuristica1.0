@@ -126,17 +126,21 @@ void 	Solucao::Imprime(bool ImprimePlanta, bool ImprimeConstrucao, bool Verifica
 		fprintf(Arquivo, "     MAKESPAN GERAL = %.4f \n", PlantasInstancia.MakespanPLantas + ConstrucoesInstancia.MakespanConstrucoes);
 	}
 
-
+/*
 	// Confere variaveis modelo
+	if( ConstrucoesInstancia.NivelDeInviabilidade == 0){
+		cout << endl << " inicia -> " << endl;
+		IniciaVariaveisModelo();
+		cout << "  atribui -> " << endl;
+		AtribuiValoresVariaveisModelo();
+		cout << "  chaca -> " << endl;
+		VerificaRestricoes();
+		cout << "  galo" << endl;
 
-	IniciaVariaveisModelo();
-	AtribuiValoresVariaveisModelo();
-
-	VerificaRestricoes();
-
-	ImprimeVariaveisModeloSeparado();
+		//ImprimeVariaveisModeloSeparado();
+	}
 	//ImprimeVariaveisDoModelo(ImprimeSolucao, ImprimeArquivo, Arquivo);
-
+*/
 }
 
 // deleta demandas atendidas na construção após certa demanda que é passada com parametro
@@ -1928,6 +1932,14 @@ void Solucao::ImprimeVariaveisDoModelo( int ImprimeSolucao, int ImprimeArquivo, 
 
 Solucao::~Solucao(){
 
+		Alfa.clear();
+		Beta.clear();
+		BetaProducao.clear();
+		Tvei.clear();
+		TPvei.clear();
+
+		Ze.clear();
+		Zp.clear();
 }
 
 // #################################################################

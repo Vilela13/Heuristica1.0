@@ -267,9 +267,9 @@ int 	Planta::VerificaIntegridadeDeCarregamentos(int imprime,int ImprimeSolucao, 
 	for( int c1 = 0; c1 < (int) Carregamentos.size(); c1++){
 		// verifica se o carregamento não possui tempo negativo
 		if( Carregamentos[c1].HorarioInicioCarregamento > Carregamentos[c1].HorarioFinalCarregamento ){
-			if( ImprimeSolucao == 1){
+			//if( ImprimeSolucao == 1){
 				printf( " >>>>>>>>>>>>>> Problema! Carregamento possui tempo negativo %.4f (%.4f-%.4f)\n",  Carregamentos[c1].HorarioFinalCarregamento - Carregamentos[c1].HorarioInicioCarregamento  , Carregamentos[c1].HorarioInicioCarregamento, Carregamentos[c1].HorarioFinalCarregamento );
-			}
+			//}
 			if(ImprimeArquivo ==1 ){
 				fprintf(Arquivo, " >>>>>>>>>>>>>> Problema! Carregamento possui tempo negativo %.4f (%.4f-%.4f)\n",  Carregamentos[c1].HorarioFinalCarregamento - Carregamentos[c1].HorarioInicioCarregamento  , Carregamentos[c1].HorarioInicioCarregamento, Carregamentos[c1].HorarioFinalCarregamento );
 			}
@@ -281,9 +281,9 @@ int 	Planta::VerificaIntegridadeDeCarregamentos(int imprime,int ImprimeSolucao, 
 			if( Carregamentos[c1].HorarioInicioCarregamento != Carregamentos[c2].HorarioInicioCarregamento && Carregamentos[c1].HorarioFinalCarregamento != Carregamentos[c2].HorarioFinalCarregamento){
 				// verifica se o Carregamento está contido dentro de outro Carregamento
 				if( Carregamentos[c1].HorarioInicioCarregamento <= Carregamentos[c2].HorarioInicioCarregamento && Carregamentos[c1].HorarioFinalCarregamento >= Carregamentos[c2].HorarioFinalCarregamento ){
-					if( ImprimeSolucao == 1){
+					//if( ImprimeSolucao == 1){
 						printf( " >>>>>>>>>>>>>> Problema! Carregamento (%.4f-%.4f) está contido em (%.4f-%.4f) \n", Carregamentos[c2].HorarioInicioCarregamento  , Carregamentos[c2].HorarioFinalCarregamento, Carregamentos[c1].HorarioInicioCarregamento, Carregamentos[c1].HorarioFinalCarregamento );
-					}
+					//}
 					if(ImprimeArquivo ==1 ){
 						fprintf(Arquivo," >>>>>>>>>>>>>> Problema! Carregamento (%.4f-%.4f) está contido em (%.4f-%.4f) \n", Carregamentos[c2].HorarioInicioCarregamento  , Carregamentos[c2].HorarioFinalCarregamento, Carregamentos[c1].HorarioInicioCarregamento, Carregamentos[c1].HorarioFinalCarregamento );
 					}
@@ -291,29 +291,29 @@ int 	Planta::VerificaIntegridadeDeCarregamentos(int imprime,int ImprimeSolucao, 
 				}
 				// verifica se o Carregamento  contem  outro Carregamento
 				if( Carregamentos[c1].HorarioInicioCarregamento >= Carregamentos[c2].HorarioInicioCarregamento && Carregamentos[c1].HorarioFinalCarregamento <= Carregamentos[c2].HorarioFinalCarregamento ){
-					if( ImprimeSolucao == 1){
+					//if( ImprimeSolucao == 1){
 						printf( " >>>>>>>>>>>>>> Problema! Carregamento (%.4f-%.4f) contem (%.4f-%.4f) \n", Carregamentos[c2].HorarioInicioCarregamento  , Carregamentos[c2].HorarioFinalCarregamento, Carregamentos[c1].HorarioInicioCarregamento, Carregamentos[c1].HorarioFinalCarregamento );
-					}
+					//}
 					if(ImprimeArquivo ==1 ){
 						fprintf(Arquivo," >>>>>>>>>>>>>> Problema! Carregamento (%.4f-%.4f) contem (%.4f-%.4f) \n", Carregamentos[c2].HorarioInicioCarregamento  , Carregamentos[c2].HorarioFinalCarregamento, Carregamentos[c1].HorarioInicioCarregamento, Carregamentos[c1].HorarioFinalCarregamento );
 					}
 					return 0;
 				}
 				// verifica se o Carregamento  está parcialmente contido na parte inicial de  outro Carregamento
-				if( Carregamentos[c1].HorarioFinalCarregamento >= Carregamentos[c2].HorarioInicioCarregamento && Carregamentos[c1].HorarioFinalCarregamento <= Carregamentos[c2].HorarioFinalCarregamento ){
-					if( ImprimeSolucao == 1){
+				if( Carregamentos[c1].HorarioFinalCarregamento > Carregamentos[c2].HorarioInicioCarregamento && Carregamentos[c1].HorarioFinalCarregamento <= Carregamentos[c2].HorarioFinalCarregamento ){
+					//if( ImprimeSolucao == 1){
 						printf( " >>>>>>>>>>>>>> Problema! Carregamento (%.4f-%.4f) está parcialmente contido na parte inicial de (%.4f-%.4f) \n", Carregamentos[c1].HorarioInicioCarregamento, Carregamentos[c1].HorarioFinalCarregamento, Carregamentos[c2].HorarioInicioCarregamento  , Carregamentos[c2].HorarioFinalCarregamento );
-					}
+					//}
 					if(ImprimeArquivo ==1 ){
 						fprintf(Arquivo, " >>>>>>>>>>>>>> Problema! Carregamento (%.4f-%.4f) está parcialmente contido na parte inicial de (%.4f-%.4f) \n", Carregamentos[c1].HorarioInicioCarregamento, Carregamentos[c1].HorarioFinalCarregamento, Carregamentos[c2].HorarioInicioCarregamento  , Carregamentos[c2].HorarioFinalCarregamento );
 					}
 					return 0;
 				}
 				// verifica se o Carregamento  está parcialmente contido na parte final de  outro Carregamento
-				if( Carregamentos[c1].HorarioInicioCarregamento >= Carregamentos[c2].HorarioInicioCarregamento && Carregamentos[c1].HorarioInicioCarregamento <= Carregamentos[c2].HorarioFinalCarregamento ){
-					if( ImprimeSolucao == 1){
+				if( Carregamentos[c1].HorarioInicioCarregamento >= Carregamentos[c2].HorarioInicioCarregamento && Carregamentos[c1].HorarioInicioCarregamento < Carregamentos[c2].HorarioFinalCarregamento ){
+					//if( ImprimeSolucao == 1){
 						printf( " >>>>>>>>>>>>>> Problema! Carregamento (%.4f-%.4f) está parcialmente contido na parte final de (%.4f-%.4f) \n", Carregamentos[c1].HorarioInicioCarregamento, Carregamentos[c1].HorarioFinalCarregamento, Carregamentos[c2].HorarioInicioCarregamento  , Carregamentos[c2].HorarioFinalCarregamento );
-					}
+					//}
 					if(ImprimeArquivo ==1 ){
 						fprintf(Arquivo, " >>>>>>>>>>>>>> Problema! Carregamento (%.4f-%.4f) está parcialmente contido na parte final de (%.4f-%.4f) \n", Carregamentos[c1].HorarioInicioCarregamento, Carregamentos[c1].HorarioFinalCarregamento, Carregamentos[c2].HorarioInicioCarregamento  , Carregamentos[c2].HorarioFinalCarregamento );
 					}

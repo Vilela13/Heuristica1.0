@@ -43,8 +43,37 @@ public:
 	vector < double > M9p;
 	vector < vector < double > > M10cp;
 
-
+	~DadosModelo();
 };
+
+DadosModelo::~DadosModelo(){
+
+	Demandas.clear();
+	Veiculos.clear();
+
+	TEMpc.clear();
+	TEMcp.clear();
+	DESCvi.clear();
+	CARRp.clear();
+	TETAc.clear();
+	S1vii.clear();
+	S2vii.clear();
+	TMINc.clear();
+	TMAXc.clear();
+	TMINp.clear();
+	TMAXp.clear();
+
+	M1vi.clear();
+	M2pc.clear();
+	M3c.clear();
+	M4vi.clear();
+	M5vii.clear();
+	M6vii.clear();
+	M7c.clear();
+	M8vi.clear();
+	M9p.clear();
+	M10cp.clear();
+}
 
 
 #endif /* DADOSMODELO_HPP_ */

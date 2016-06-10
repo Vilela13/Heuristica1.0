@@ -1389,9 +1389,9 @@ int 	Construcao::VerificaIntegridadeDeDescrregamentos(int imprime, int ImprimeSo
 	for( int d1 = 0; d1 < (int)  Descarregamentos.size(); d1++){
 		// verifica se o descarregaento não possui tempo negativo
 		if( Descarregamentos[d1].HorarioInicioDescarregamento > Descarregamentos[d1].HorarioFinalDescarregamento ){
-			if ( ImprimeSolucao == 1){
+			//if ( ImprimeSolucao == 1){
 				printf( " >>>>>>>>>>>>>> Problema! Descarregamento possui tempo negativo %.4f (%.4f-%.4f)\n",  Descarregamentos[d1].HorarioFinalDescarregamento - Descarregamentos[d1].HorarioInicioDescarregamento  , Descarregamentos[d1].HorarioInicioDescarregamento, Descarregamentos[d1].HorarioFinalDescarregamento );
-			}
+			//}
 			if ( ImprimeArquivo == 1){
 				fprintf( Arquivo, " >>>>>>>>>>>>>> Problema! Descarregamento possui tempo negativo %.4f (%.4f-%.4f)\n",  Descarregamentos[d1].HorarioFinalDescarregamento - Descarregamentos[d1].HorarioInicioDescarregamento  , Descarregamentos[d1].HorarioInicioDescarregamento, Descarregamentos[d1].HorarioFinalDescarregamento );
 			}
@@ -1404,9 +1404,9 @@ int 	Construcao::VerificaIntegridadeDeDescrregamentos(int imprime, int ImprimeSo
 			if( Descarregamentos[d1].HorarioInicioDescarregamento != Descarregamentos[d2].HorarioInicioDescarregamento && Descarregamentos[d1].HorarioFinalDescarregamento != Descarregamentos[d2].HorarioFinalDescarregamento){
 				// verifica se o descarregamento está contido dentro de outro descarregamento
 				if( Descarregamentos[d1].HorarioInicioDescarregamento <= Descarregamentos[d2].HorarioInicioDescarregamento && Descarregamentos[d1].HorarioFinalDescarregamento >= Descarregamentos[d2].HorarioFinalDescarregamento ){
-					if ( ImprimeSolucao == 1){
+					//if ( ImprimeSolucao == 1){
 						printf( " >>>>>>>>>>>>>> Problema! Descarregamento (%.4f-%.4f) está contido em (%.4f-%.4f) \n", Descarregamentos[d2].HorarioInicioDescarregamento  , Descarregamentos[d2].HorarioFinalDescarregamento, Descarregamentos[d1].HorarioInicioDescarregamento, Descarregamentos[d1].HorarioFinalDescarregamento );
-					}
+					//}
 					if ( ImprimeArquivo == 1){
 						fprintf( Arquivo," >>>>>>>>>>>>>> Problema! Descarregamento (%.4f-%.4f) está contido em (%.4f-%.4f) \n", Descarregamentos[d2].HorarioInicioDescarregamento  , Descarregamentos[d2].HorarioFinalDescarregamento, Descarregamentos[d1].HorarioInicioDescarregamento, Descarregamentos[d1].HorarioFinalDescarregamento );
 					}
@@ -1415,9 +1415,9 @@ int 	Construcao::VerificaIntegridadeDeDescrregamentos(int imprime, int ImprimeSo
 				}
 				// verifica se o descarregamento  contem  outro descarregamento
 				if( Descarregamentos[d1].HorarioInicioDescarregamento >= Descarregamentos[d2].HorarioInicioDescarregamento && Descarregamentos[d1].HorarioFinalDescarregamento <= Descarregamentos[d2].HorarioFinalDescarregamento ){
-					if ( ImprimeSolucao == 1){
+					//if ( ImprimeSolucao == 1){
 						printf( " >>>>>>>>>>>>>> Problema! Descarregamento (%.4f-%.4f) contem (%.4f-%.4f) \n", Descarregamentos[d2].HorarioInicioDescarregamento  , Descarregamentos[d2].HorarioFinalDescarregamento, Descarregamentos[d1].HorarioInicioDescarregamento, Descarregamentos[d1].HorarioFinalDescarregamento );
-					}
+					//}
 					if ( ImprimeArquivo == 1){
 						fprintf( Arquivo, " >>>>>>>>>>>>>> Problema! Descarregamento (%.4f-%.4f) contem (%.4f-%.4f) \n", Descarregamentos[d2].HorarioInicioDescarregamento  , Descarregamentos[d2].HorarioFinalDescarregamento, Descarregamentos[d1].HorarioInicioDescarregamento, Descarregamentos[d1].HorarioFinalDescarregamento );
 					}
@@ -1426,9 +1426,9 @@ int 	Construcao::VerificaIntegridadeDeDescrregamentos(int imprime, int ImprimeSo
 				}
 				// verifica se o descarregamento  está parcialmente contido na parte inicial de  outro descarregamento
 				if( Descarregamentos[d1].HorarioFinalDescarregamento > Descarregamentos[d2].HorarioInicioDescarregamento && Descarregamentos[d1].HorarioFinalDescarregamento <= Descarregamentos[d2].HorarioFinalDescarregamento ){
-					if ( ImprimeSolucao == 1){
+					//if ( ImprimeSolucao == 1){
 						printf( " >>>>>>>>>>>>>> Problema! Descarregamento (%.4f-%.4f) está parcialmente contido na parte inicial de (%.4f-%.4f) \n", Descarregamentos[d1].HorarioInicioDescarregamento, Descarregamentos[d1].HorarioFinalDescarregamento, Descarregamentos[d2].HorarioInicioDescarregamento  , Descarregamentos[d2].HorarioFinalDescarregamento );
-					}
+					//}
 					if ( ImprimeArquivo == 1){
 						fprintf( Arquivo," >>>>>>>>>>>>>> Problema! Descarregamento (%.4f-%.4f) está parcialmente contido na parte inicial de (%.4f-%.4f) \n", Descarregamentos[d1].HorarioInicioDescarregamento, Descarregamentos[d1].HorarioFinalDescarregamento, Descarregamentos[d2].HorarioInicioDescarregamento  , Descarregamentos[d2].HorarioFinalDescarregamento );
 					}
@@ -1437,9 +1437,9 @@ int 	Construcao::VerificaIntegridadeDeDescrregamentos(int imprime, int ImprimeSo
 				}
 				// verifica se o descarregamento  está parcialmente contido na parte final de  outro descarregamento
 				if( Descarregamentos[d1].HorarioInicioDescarregamento >= Descarregamentos[d2].HorarioInicioDescarregamento && Descarregamentos[d1].HorarioInicioDescarregamento < Descarregamentos[d2].HorarioFinalDescarregamento ){
-					if ( ImprimeSolucao == 1){
+					//if ( ImprimeSolucao == 1){
 						printf( " >>>>>>>>>>>>>> Problema! Descarregamento (%.4f-%.4f) está parcialmente contido na parte final de (%.4f-%.4f) \n", Descarregamentos[d1].HorarioInicioDescarregamento, Descarregamentos[d1].HorarioFinalDescarregamento, Descarregamentos[d2].HorarioInicioDescarregamento  , Descarregamentos[d2].HorarioFinalDescarregamento );
-					}
+					//}
 					if( ImprimeArquivo == 1){
 						fprintf( Arquivo, " >>>>>>>>>>>>>> Problema! Descarregamento (%.4f-%.4f) está parcialmente contido na parte final de (%.4f-%.4f) \n", Descarregamentos[d1].HorarioInicioDescarregamento, Descarregamentos[d1].HorarioFinalDescarregamento, Descarregamentos[d2].HorarioInicioDescarregamento  , Descarregamentos[d2].HorarioFinalDescarregamento );
 					}
@@ -2061,9 +2061,9 @@ int 	ConjuntoConstrucoes::VerificaIntervaloContrucoes(int ImprimeSolucao, int Im
 			}
 		}else{
 			// caso não respeitar
-			if( ImprimeSolucao == 1){
+			//if( ImprimeSolucao == 1){
 				cout << endl << Construcoes[c].NumeroDaConstrucao << " Não Respeita Intervalo! INVIÁVEL!!!";
-			}
+			//}
 			if(  ImprimeArquivo == 1){
 				fprintf( Arquivo, "\n %d Não Respeita Intervalo! INVIÁVEL!!!",Construcoes[c].NumeroDaConstrucao);
 			}
@@ -2099,9 +2099,9 @@ int 	ConjuntoConstrucoes::VerificacaoConsistenciaTarefas(ConjuntoPlantas& Planta
 
 	//verifica as tarefas individualmente
 	if( VerificaIndividualmenteDemandas( Plantas,imprime, ImprimeSolucao,ImprimeArquivo, Arquivo) == 0){
-		if( ImprimeSolucao == 1){
+		//if( ImprimeSolucao == 1){
 			cout << endl << endl << "   >>>>>>>>>>>>> Probelma com integridade de demandas individuais" << endl << endl;
-		}
+		//}
 		if( ImprimeArquivo == 1){
 			fprintf (Arquivo, " \n\n    >>>>>>>>>>>>> Probelma com integridade de demandas individuais \n\n");
 		}
@@ -2110,9 +2110,9 @@ int 	ConjuntoConstrucoes::VerificacaoConsistenciaTarefas(ConjuntoPlantas& Planta
 	}
 	//verifica os descarregamentos
 	if( VerificacaoIntegridadeDeDescarregamentosConstrucoes(imprime, ImprimeSolucao,ImprimeArquivo, Arquivo) == 0){
-		if( ImprimeSolucao == 1){
+		//if( ImprimeSolucao == 1){
 			cout << endl << endl << "   >>>>>>>>>>>>> Probelma com integridade de Descarregaemntos" << endl << endl;
-		}
+		//}
 		if( ImprimeArquivo == 1){
 			fprintf (Arquivo, " \n\n    >>>>>>>>>>>>> Probelma com integridade de Descarregaemntos \n\n");
 		}
@@ -2121,9 +2121,9 @@ int 	ConjuntoConstrucoes::VerificacaoConsistenciaTarefas(ConjuntoPlantas& Planta
 	}
 	//verifica intervalo entre descarregamentos descarregamentos
 	if( VerificaIntervaloContrucoes(ImprimeSolucao,ImprimeArquivo, Arquivo) == 0){
-		if( ImprimeSolucao == 1){
+		//if( ImprimeSolucao == 1){
 			cout << endl << endl << "   >>>>>>>>>>>>> Probelma com integridade com o tempo entre os Descarregaemntos" << endl << endl;
-		}
+		//}
 		if( ImprimeArquivo == 1){
 			fprintf (Arquivo, " \n\n   >>>>>>>>>>>>> Probelma com integridade com o tempo entre os Descarregaemntos \n\n");
 		}
@@ -2132,9 +2132,9 @@ int 	ConjuntoConstrucoes::VerificacaoConsistenciaTarefas(ConjuntoPlantas& Planta
 	}
 	//verifica os carregamentos
 	if(Plantas.VerificaIntegridadeDeCarregamentosDasPlantas(imprime, ImprimeSolucao,ImprimeArquivo, Arquivo) == 0){
-		if( ImprimeSolucao == 1){
+		//if( ImprimeSolucao == 1){
 			cout << endl << endl << "   >>>>>>>>>>>>> Probelma com integridade de Carregaemntos" << endl << endl;
-		}
+		//}
 		if( ImprimeArquivo == 1){
 			fprintf (Arquivo, " \n\n   >>>>>>>>>>>>> Probelma com integridade de Carregaemntos \n\n");
 		}
@@ -2143,9 +2143,9 @@ int 	ConjuntoConstrucoes::VerificacaoConsistenciaTarefas(ConjuntoPlantas& Planta
 	}
 	//verifica os deslocamentos
 	if(Plantas.VerificaIntegridadeDeDeslocaemntosDosVeiculosDasPlantas(imprime, ImprimeSolucao,ImprimeArquivo, Arquivo) == 0){
-		if( ImprimeSolucao == 1){
+		//if( ImprimeSolucao == 1){
 			cout << endl << endl << "   >>>>>>>>>>>>> Probelma com integridade de Deslocamentos" << endl << endl;
-		}
+		//}
 		if( ImprimeArquivo == 1){
 			fprintf (Arquivo, " \n\n   >>>>>>>>>>>>> Probelma com integridade de Deslocamentos \n\n");
 		}

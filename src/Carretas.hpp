@@ -185,9 +185,9 @@ int		Carreta::VerificaIntegridadeDeDeslocamentos(int Imprime, int ImprimeSolucao
 	for( int d1 = 0; d1 < (int) Deslocamentos.size(); d1++){
 		// verifica se o Deslocamento não possui tempo negativo
 		if( Deslocamentos[d1].HorarioInicioDeslocamento > Deslocamentos[d1].HorarioFinalDeslocamento ){
-			if( ImprimeSolucao == 1){
+			//if( ImprimeSolucao == 1){
 				printf( " >>>>>>>>>>>>>> Problema! Deslocamento possui tempo negativo %.4f (%.4f-%.4f)\n",  Deslocamentos[d1].HorarioFinalDeslocamento - Deslocamentos[d1].HorarioInicioDeslocamento  , Deslocamentos[d1].HorarioInicioDeslocamento, Deslocamentos[d1].HorarioFinalDeslocamento );
-			}
+			//}
 			if( ImprimeArquivo == 1){
 				fprintf( Arquivo, " >>>>>>>>>>>>>> Problema! Deslocamento possui tempo negativo %.4f (%.4f-%.4f)\n",  Deslocamentos[d1].HorarioFinalDeslocamento - Deslocamentos[d1].HorarioInicioDeslocamento  , Deslocamentos[d1].HorarioInicioDeslocamento, Deslocamentos[d1].HorarioFinalDeslocamento );
 			}
@@ -199,9 +199,9 @@ int		Carreta::VerificaIntegridadeDeDeslocamentos(int Imprime, int ImprimeSolucao
 			if( Deslocamentos[d1].HorarioInicioDeslocamento != Deslocamentos[d2].HorarioInicioDeslocamento && Deslocamentos[d1].HorarioFinalDeslocamento != Deslocamentos[d2].HorarioFinalDeslocamento){
 				// verifica se o Deslocamento está contido dentro de outro Deslocamento
 				if( Deslocamentos[d1].HorarioInicioDeslocamento <= Deslocamentos[d2].HorarioInicioDeslocamento && Deslocamentos[d1].HorarioFinalDeslocamento >= Deslocamentos[d2].HorarioFinalDeslocamento ){
-					if( ImprimeSolucao == 1){
+					//if( ImprimeSolucao == 1){
 						printf( " >>>>>>>>>>>>>> Problema! Deslocamento (%.4f-%.4f) está contido em (%.4f-%.4f) \n", Deslocamentos[d2].HorarioInicioDeslocamento  , Deslocamentos[d2].HorarioFinalDeslocamento, Deslocamentos[d1].HorarioInicioDeslocamento, Deslocamentos[d1].HorarioFinalDeslocamento );
-					}
+					//}
 					if( ImprimeArquivo == 1){
 						fprintf( Arquivo, " >>>>>>>>>>>>>> Problema! Deslocamento (%.4f-%.4f) está contido em (%.4f-%.4f) \n", Deslocamentos[d2].HorarioInicioDeslocamento  , Deslocamentos[d2].HorarioFinalDeslocamento, Deslocamentos[d1].HorarioInicioDeslocamento, Deslocamentos[d1].HorarioFinalDeslocamento );
 					}
@@ -209,29 +209,29 @@ int		Carreta::VerificaIntegridadeDeDeslocamentos(int Imprime, int ImprimeSolucao
 				}
 				// verifica se o Deslocamento  contem  outro Deslocamento
 				if( Deslocamentos[d1].HorarioInicioDeslocamento >= Deslocamentos[d2].HorarioInicioDeslocamento && Deslocamentos[d1].HorarioFinalDeslocamento <= Deslocamentos[d2].HorarioFinalDeslocamento ){
-					if( ImprimeSolucao == 1){
+					//if( ImprimeSolucao == 1){
 						printf( " >>>>>>>>>>>>>> Problema! Deslocamento (%.4f-%.4f) contem (%.4f-%.4f) \n", Deslocamentos[d2].HorarioInicioDeslocamento  , Deslocamentos[d2].HorarioFinalDeslocamento, Deslocamentos[d1].HorarioInicioDeslocamento, Deslocamentos[d1].HorarioFinalDeslocamento );
-					}
+					//}
 					if( ImprimeArquivo == 1){
 						fprintf( Arquivo," >>>>>>>>>>>>>> Problema! Deslocamento (%.4f-%.4f) contem (%.4f-%.4f) \n", Deslocamentos[d2].HorarioInicioDeslocamento  , Deslocamentos[d2].HorarioFinalDeslocamento, Deslocamentos[d1].HorarioInicioDeslocamento, Deslocamentos[d1].HorarioFinalDeslocamento );
 					}
 					return 0;
 				}
 				// verifica se o Deslocamento  está parcialmente contido na parte inicial de  outro Deslocamento
-				if( Deslocamentos[d1].HorarioFinalDeslocamento >= Deslocamentos[d2].HorarioInicioDeslocamento && Deslocamentos[d1].HorarioFinalDeslocamento <= Deslocamentos[d2].HorarioFinalDeslocamento ){
-					if( ImprimeSolucao == 1){
+				if( Deslocamentos[d1].HorarioFinalDeslocamento > Deslocamentos[d2].HorarioInicioDeslocamento && Deslocamentos[d1].HorarioFinalDeslocamento <= Deslocamentos[d2].HorarioFinalDeslocamento ){
+					//if( ImprimeSolucao == 1){
 						printf( " >>>>>>>>>>>>>> Problema! Deslocamento (%.4f-%.4f) está parcialmente contido na parte inicial de (%.4f-%.4f) \n", Deslocamentos[d1].HorarioInicioDeslocamento, Deslocamentos[d1].HorarioFinalDeslocamento, Deslocamentos[d2].HorarioInicioDeslocamento  , Deslocamentos[d2].HorarioFinalDeslocamento );
-					}
+					//}
 					if( ImprimeArquivo == 1){
 						fprintf( Arquivo," >>>>>>>>>>>>>> Problema! Deslocamento (%.4f-%.4f) está parcialmente contido na parte inicial de (%.4f-%.4f) \n", Deslocamentos[d1].HorarioInicioDeslocamento, Deslocamentos[d1].HorarioFinalDeslocamento, Deslocamentos[d2].HorarioInicioDeslocamento  , Deslocamentos[d2].HorarioFinalDeslocamento );
 					}
 					return 0;
 				}
 				// verifica se o Deslocamento  está parcialmente contido na parte final de  outro Deslocamento
-				if( Deslocamentos[d1].HorarioInicioDeslocamento >= Deslocamentos[d2].HorarioInicioDeslocamento && Deslocamentos[d1].HorarioInicioDeslocamento <= Deslocamentos[d2].HorarioFinalDeslocamento ){
-					if( ImprimeSolucao == 1){
+				if( Deslocamentos[d1].HorarioInicioDeslocamento >= Deslocamentos[d2].HorarioInicioDeslocamento && Deslocamentos[d1].HorarioInicioDeslocamento < Deslocamentos[d2].HorarioFinalDeslocamento ){
+					//if( ImprimeSolucao == 1){
 						printf( " >>>>>>>>>>>>>> Problema! Deslocamento (%.4f-%.4f) está parcialmente contido na parte final de (%.4f-%.4f) \n", Deslocamentos[d1].HorarioInicioDeslocamento, Deslocamentos[d1].HorarioFinalDeslocamento, Deslocamentos[d2].HorarioInicioDeslocamento  , Deslocamentos[d2].HorarioFinalDeslocamento );
-					}
+					//}
 					if( ImprimeArquivo == 1){
 						fprintf( Arquivo," >>>>>>>>>>>>>> Problema! Deslocamento (%.4f-%.4f) está parcialmente contido na parte final de (%.4f-%.4f) \n", Deslocamentos[d1].HorarioInicioDeslocamento, Deslocamentos[d1].HorarioFinalDeslocamento, Deslocamentos[d2].HorarioInicioDeslocamento  , Deslocamentos[d2].HorarioFinalDeslocamento );
 					}

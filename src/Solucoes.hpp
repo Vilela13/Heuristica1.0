@@ -130,11 +130,11 @@ void 	Solucao::Imprime(bool ImprimePlanta, bool ImprimeConstrucao, bool Verifica
 	// Confere variaveis modelo
 	if( ConstrucoesInstancia.NivelDeInviabilidade == 0){
 		//cout << endl << " inicia -> " << endl;
-		IniciaVariaveisModelo();
+		//IniciaVariaveisModelo();
 		//cout << "  atribui -> " << endl;
-		AtribuiValoresVariaveisModelo();
+		//AtribuiValoresVariaveisModelo();
 		//cout << "  chaca -> " << endl;
-		VerificaRestricoes();
+		//VerificaRestricoes();
 		//cout << "  galo" << endl;
 
 		//ImprimeVariaveisModeloSeparado();
@@ -1413,7 +1413,7 @@ int Solucao::VerificaRestricoes(){
 	bool ColocaFolga;
 	float Folga;
 
-	ColocaFolga = 1;
+	ColocaFolga = 0;
 	Folga = 0.0000002;
 
 	// variaveis auxiliares

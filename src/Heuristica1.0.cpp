@@ -13,7 +13,6 @@ using namespace std;
 
 int main(int argc, char **argv) {
 
-
 	if( argc > 6){
 
 		// tipo de escolha de veiculo, construção e planta

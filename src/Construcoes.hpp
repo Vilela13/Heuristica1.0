@@ -301,9 +301,12 @@ int		Construcao::VerificaDisponibilidade( double InicioPossivelAlocacao, double 
 }
 
 int 	Construcao::VerificaTempoDeVidaConcreto ( double HorarioChegaContrucao, double HorarioInicioPlanta){
+	// verifica se o tempo entre a produção e o consumo do concreto respeita o tempo de vida do concreto
 	if( ( HorarioChegaContrucao - HorarioInicioPlanta ) <= TempoDeVidaConcreto){
+		// retorna 1 se sim
 		return 1;
 	}
+	// retorna 0 se não
 	return 0;
 
 }
@@ -679,7 +682,7 @@ int		Construcao::DeletaAtividadeLocomovendoAsOutrasTarefasSalvandoDados(int Veri
 }
 
 
-// Deleta tarefas da demanda passada e as posteriores a esta demanda passada
+// Deleta tarefas da demanda passada e as posteriores a esta demanda passada, ela salva as tarefas deletadas em estrutura
 int		Construcao::DeletaTarefas(int VerificaExistencia, int demanda, vector < DadosTarefa > &DadosTarefasMovidas, ConjuntoPlantas& Plantas){
 	// variaveis que armazenam a planta e a carreta da demanda deletada
 	int 	Planta;
@@ -1330,7 +1333,7 @@ int		Construcao::AlocaAtividadeComHorarioFinalAtendimento( int NumDemanda, doubl
 					HorarioChegaContrucao 		= HorarioSaiDaPlanta 	+ Plantas.Plantas[IndPlantaAnalisando].TempoParaConstrucoes[NumeroDaConstrucao];
 					HorarioSaiConstrucao 		= HorarioChegaContrucao +  Plantas.Plantas[IndPlantaAnalisando].VeiculosDaPlanta.Carretas[v].TempoParaDescarregarNaConstrucao[NumeroDaConstrucao][NumDemanda];
 					HorarioRetornaPlanta 		= HorarioSaiConstrucao 	+ Plantas.Plantas[IndPlantaAnalisando].TempoParaConstrucoes[NumeroDaConstrucao];
-					// verifica se é possivel realizar o atendiemnto da demanda tanto na planta, construção e carreta
+					// verifica se é possivel realizar o atendiemnto da demanda tanto na planta, construção e carreta, verifica tempo de vida concreto
 					DisponibilidadePlanta 		= Plantas.Plantas[IndPlantaAnalisando].VerificaDisponibilidade(HorarioInicioPlanta, HorarioSaiDaPlanta );
 					DisponibilidadeConstrucao 	= VerificaDisponibilidade( HorarioChegaContrucao, HorarioSaiConstrucao);
 					DisponibilidadeCarreta 		= Plantas.Plantas[IndPlantaAnalisando].VeiculosDaPlanta.Carretas[v].VerificaDisponibilidade(HorarioInicioPlanta, HorarioRetornaPlanta);
@@ -1535,7 +1538,7 @@ int 	Construcao::AlocaAtividadeComHorarioFinalAtendimentoComVeiculoFixo( int Num
 			HorarioChegaContrucao 	= HorarioSaiDaPlanta + Plantas.Plantas[p].TempoParaConstrucoes[NumeroDaConstrucao];
 			HorarioSaiConstrucao 	= HorarioChegaContrucao +  Plantas.Plantas[p].VeiculosDaPlanta.Carretas[v].TempoParaDescarregarNaConstrucao[NumeroDaConstrucao][NumDemanda];
 			HorarioRetornaPlanta 	= HorarioSaiConstrucao + Plantas.Plantas[p].TempoParaConstrucoes[NumeroDaConstrucao];
-			// verifica se é possivel realizar o atendiemnto da demanda tanto na planta, construção e carreta
+			// verifica se é possivel realizar o atendiemnto da demanda tanto na planta, construção e carreta, verifica tempo de vida concreto
 			DisponibilidadePlanta 		= Plantas.Plantas[p].VerificaDisponibilidade(HorarioInicioPlanta, HorarioSaiDaPlanta );
 			DisponibilidadeConstrucao 	= VerificaDisponibilidade( HorarioChegaContrucao, HorarioSaiConstrucao);
 			DisponibilidadeCarreta 		= Plantas.Plantas[p].VeiculosDaPlanta.Carretas[v].VerificaDisponibilidade(HorarioInicioPlanta, HorarioRetornaPlanta);
@@ -2045,6 +2048,26 @@ int 	ConjuntoConstrucoes::VerificaIndividualmenteDemandas(ConjuntoPlantas& Plant
 				if ( VerificaIntegridaDeDemandaAtendida(Construcoes[c].NumeroDaConstrucao, d, NumPlanta, NumCarreta, HorarioInicioDescarregamento, HorarioFinalDescarregamento, HorarioInicioCarregamento, HorarioFinalCarregamento, HorarioInicioDeslocamento, HorarioFinalDeslocamento, imprime, ImprimeSolucao,ImprimeArquivo, Arquivo) == 0){
 					// caso não for ele assinala na variavel de controle que se tem uma tarefa não integra
 					integridade = 0;
+				}
+				// verifica o tempo de vida do concreto na tarefa
+				if( HorarioInicioDescarregamento - HorarioInicioCarregamento > Construcoes[c].TempoDeVidaConcreto){
+					if( imprime == 1){
+						if( ImprimeSolucao == 1){
+							printf( " NÃO RESPEITA TEMPO DE VIDA DO CONCRETO\n\n\n");
+						}
+						if( ImprimeArquivo == 1){
+							fprintf( Arquivo, " NÃO RESPEITA TEMPO DE VIDA DO CONCRETO\n\n\n");
+						}
+					}
+				}else{
+					if( imprime == 1){
+						if( ImprimeSolucao == 1){
+							printf( " Respeita Tempo De Vida Concreto\n");
+						}
+						if( ImprimeArquivo == 1){
+							fprintf( Arquivo, " Respeita Tempo De Vida Concreto\n");
+						}
+					}
 				}
 
 			}
@@ -2661,7 +2684,7 @@ int 	ConjuntoConstrucoes::AdicionaTarefa( int VerificaExistencia, int Construcao
 					}
 					// enquanto estiver na janela de tempo possivel para atendimeto se realiza o loop abaixo.
 					while( HorarioInicioPlanta <= PlantasInstancia.Plantas[ p ].TempoMaximoDeFuncionamento &&  HorarioChegaContrucao <= Construcoes[c].TempoMaximoDeFuncionamento){
-						// verifica se é possivel realizar o atendiemnto da demanda tanto na planta, construção e carreta
+						// verifica se é possivel realizar o atendiemnto da demanda tanto na planta, construção e carreta, verifica tempo de vida concreto
 						DisponibilidadePlanta 		= PlantasInstancia.Plantas[ p ].VerificaDisponibilidade(HorarioInicioPlanta, HorarioSaiDaPlanta );
 						DisponibilidadeConstrucao 	= Construcoes[c].VerificaDisponibilidade( HorarioChegaContrucao, HorarioSaiConstrucao );
 						DisponibilidadeCarreta 		= PlantasInstancia.Plantas[ p ].VeiculosDaPlanta.Carretas[v].VerificaDisponibilidade( HorarioInicioPlanta, HorarioRetornaPlanta );
@@ -2898,7 +2921,7 @@ int 	ConjuntoConstrucoes::AdicionaTarefaComVeiculoFixo( int VerificaExistencia, 
 			// enquanto estiver na janela de tempo possivel para atendimeto se realiza o loop abaixo.
 			while( HorarioInicioPlanta <= PlantasInstancia.Plantas[ p ].TempoMaximoDeFuncionamento &&  HorarioChegaContrucao <= Construcoes[c].TempoMaximoDeFuncionamento){
 
-				// verifica se é possivel realizar o atendiemnto da demanda tanto na planta, construção e carreta
+				// verifica se é possivel realizar o atendiemnto da demanda tanto na planta, construção e carreta, verifica tempo de vida concreto
 				DisponibilidadePlanta 		= PlantasInstancia.Plantas[ p ].VerificaDisponibilidade(HorarioInicioPlanta, HorarioSaiDaPlanta );
 				DisponibilidadeConstrucao 	= Construcoes[c].VerificaDisponibilidade( HorarioChegaContrucao, HorarioSaiConstrucao );
 				DisponibilidadeCarreta 		= PlantasInstancia.Plantas[ p ].VeiculosDaPlanta.Carretas[v].VerificaDisponibilidade( HorarioInicioPlanta, HorarioRetornaPlanta );

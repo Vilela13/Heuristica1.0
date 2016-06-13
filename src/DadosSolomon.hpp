@@ -380,10 +380,10 @@ void 	DadosSolomon::CriarInstanciaSolomon(string Nome) { //,  int NumeroVERSAO, 
 	if( EscreveVelocidadeMinima == 1){
 		cout << endl << endl << "      Maior distancia entre nos = " << DistanciaMaxima << endl;
 		cout << " No " << No1.NumeroNo << " [ " << No1.CoordenadaX << "," << No1.CoordenadaY << "] ao No "  << No2.NumeroNo << " [ " << No2.CoordenadaX << "," << No2.CoordenadaY << "]" << endl;
-		cout << "  tempo entre nos a 20 km/h = " <<  (int) ( DistanciaMaxima/20 * 60 ) << endl;
-		cout << "  tempo entre nos a 30 km/h = " <<  (int) ( DistanciaMaxima/30 * 60 ) << endl;
-		cout << "  tempo entre nos a 40 km/h = " <<  (int) ( DistanciaMaxima/40 * 60 ) << endl;
-		cout << "  tempo entre nos a 50 km/h = " <<  (int) ( DistanciaMaxima/50 * 60 ) << endl;
+		cout << "  tempo entre nos a 20 km/h = " <<  (int) ( (DistanciaMaxima/20) * 60 ) << endl;
+		cout << "  tempo entre nos a 30 km/h = " <<  (int) ( (DistanciaMaxima/30) * 60 ) << endl;
+		cout << "  tempo entre nos a 40 km/h = " <<  (int) ( (DistanciaMaxima/40) * 60 ) << endl;
+		cout << "  tempo entre nos a 50 km/h = " <<  (int) ( (DistanciaMaxima/50) * 60 ) << endl;
 
 		VelocidadeAux = DistanciaMaxima/TempoDeVidaConcreto;
 
@@ -527,19 +527,19 @@ void 	DadosSolomon::CriarInstanciaSolomon(string Nome) { //,  int NumeroVERSAO, 
 			NumeroCarretas[i] = rand()%(NumeroMaxCarretas) + 1;	// fornece o numero de demandas da conrução
 
 			if(rand()%2 == 1){
-				HoraInicioCliente[i] = HorarioMinimoConstrucao + (rand() % (int)( (HorarioMinimoConstrucao-InicioAlmoco)/ InicioMinAtendimento )  ) *InicioMinAtendimento;
+				HoraInicioCliente[i] = HorarioMinimoConstrucao + ( rand() % (int)( (HorarioMinimoConstrucao-InicioAlmoco)/ InicioMinAtendimento )  ) *InicioMinAtendimento;
 				HoraFinalCliente[i] = HoraInicioCliente[i] + NumeroCarretas[i]*TempoCarreta -  TempoDeDescarga;
 
 				while( HoraFinalCliente[i] + TempoDeDescarga > InicioAlmoco ){
-					HoraInicioCliente[i] = HorarioMinimoConstrucao + ( rand()%(int)( (HorarioMinimoConstrucao-InicioAlmoco)/ InicioMinAtendimento) )*InicioMinAtendimento;
+					HoraInicioCliente[i] = HorarioMinimoConstrucao + ( rand() % (int)( (HorarioMinimoConstrucao-InicioAlmoco)/ InicioMinAtendimento) ) *InicioMinAtendimento;
 					HoraFinalCliente[i] = HoraInicioCliente[i] + NumeroCarretas[i]*TempoCarreta -  TempoDeDescarga;
 				}
 			}else{
-				HoraInicioCliente[i] = FinalAlmoco + (rand()%(int)( (FinalAlmoco-HorarioMaximoConstrucao)/InicioMinAtendimento) )*InicioMinAtendimento;
+				HoraInicioCliente[i] = FinalAlmoco + ( rand() % (int)( (FinalAlmoco-HorarioMaximoConstrucao)/ InicioMinAtendimento) ) *InicioMinAtendimento;
 				HoraFinalCliente[i] = HoraInicioCliente[i] + NumeroCarretas[i]*TempoCarreta  -  TempoDeDescarga;
 
 				while( HoraFinalCliente[i] + TempoDeDescarga > HorarioMaximoConstrucao ){
-					HoraInicioCliente[i] = HorarioMinimoConstrucao + (rand()%(int)( (FinalAlmoco-HorarioMaximoConstrucao)/InicioMinAtendimento) )*InicioMinAtendimento;
+					HoraInicioCliente[i] = HorarioMinimoConstrucao + ( rand() % (int)( (FinalAlmoco-HorarioMaximoConstrucao)/ InicioMinAtendimento) ) *InicioMinAtendimento;
 					HoraFinalCliente[i] = HoraInicioCliente[i] + NumeroCarretas[i]*TempoCarreta -  TempoDeDescarga;
 				}
 			}

@@ -83,7 +83,7 @@ void 	ImprimeDadosRetiradoAdicionadoVetorConstrucaoAnalisada( int ImprimeDadosTa
 
 // inicia o vector de int com todos os seus valores como 0
 void 	IniciaVetorIntComZero(vector< int > &VetorInt){
-	// percorre todo os elementos do  vector
+	// percorre todos os elementos do  vector
 	for( int i = 0; i < (int) VetorInt.size(); i++){
 		 // aloca o valor 0 ao elemento do vector corrente
 		VetorInt[i] = 0;
@@ -94,7 +94,7 @@ void 	IniciaVetorIntComZero(vector< int > &VetorInt){
 
 // verifica se existe um valor no vector igual ao valor passado
 int 	VerificaSeTemUmValorVetorInt( int Valor, vector< int > VetorInt){
-	// percorre todo os elementos do  vector
+	// percorre todos os elementos do  vector
 	for( int i = 0; i < (int) VetorInt.size(); i++){
 		// verifica se o elemento do vector é igual ao valor passado
 		if( VetorInt[i] == Valor){
@@ -108,7 +108,7 @@ int 	VerificaSeTemUmValorVetorInt( int Valor, vector< int > VetorInt){
 
 // verifica se todos os valores do vector são iguais ao valor passado
 int 	VerificaTodosValoresVetorInt( int Valor, vector< int > VetorInt){
-	// percorre todo os elementos do  vector
+	// percorre todos os elementos do  vector
 	for( int i = 0; i < (int) VetorInt.size(); i++){
 		// verifica se o elemento do vector não é igual ao valor passado
 		if( VetorInt[i] != Valor){
@@ -123,7 +123,7 @@ int 	VerificaTodosValoresVetorInt( int Valor, vector< int > VetorInt){
 // imprime os valores do vector de elementos double
 void 	ImprimeVetorDouble( vector< double > VetorDouble){
 	cout << " Conteudo Vetor "<< endl;
-	// percorre todo os elementos do  vector
+	// percorre todos os elementos do  vector
 	for( int i = 0; i < (int) VetorDouble.size(); i++){
 		cout << " [" << i << "] " << VetorDouble[i] << " ";
 	}

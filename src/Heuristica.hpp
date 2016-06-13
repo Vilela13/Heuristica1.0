@@ -1705,7 +1705,7 @@ void	Heuristica::ExecutaGraspClass(string NomeInstancia, long int NumeroIteracoe
 
 	TempoExecucao = difftime(FinalExecucao, InicioExecucao);
 
-	fprintf(Arquivo,"\n    Busca Local  \t Tenpo até aqui ( %.0f ) \n",  TempoExecucao);
+	fprintf(Arquivo,"\n    Busca Local  \t Tempo até aqui ( %.0f ) \n",  TempoExecucao);
 	fprintf(Arquivo,"     Solução \t BuscaLocal1 \t BuscaLocal2 \t BuscaLocal3  \n");
 	fprintf(Arquivo,"         %f \t ", SolucaoFinal.Makespan);
 
@@ -1971,7 +1971,7 @@ void	Heuristica::ExecutaGraspClassCir(string NomeInstancia, long int NumeroItera
 	// calcula o tempo
 	TempoExecucao = difftime(FinalExecucao, InicioExecucao);
 
-	fprintf(Arquivo,"\n    Busca Local  \t Tenpo até aqui ( %.0f ) \n",  TempoExecucao);
+	fprintf(Arquivo,"\n    Busca Local  \t Tempo até aqui ( %.0f ) \n",  TempoExecucao);
 	fprintf(Arquivo,"     Solução \t BuscaLocal  \n");
 	fprintf(Arquivo,"         %f \t ", SolucaoFinal.Makespan);
 

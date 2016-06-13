@@ -111,6 +111,7 @@ void	Carreta::AlocaAtividade(double HoraInicio, double HoraFinal, int NumContruc
 	// incrementa em 1 o numero de demandas atendidas pela carreta
 	NumeroDeDemandasAntendidas = NumeroDeDemandasAntendidas + 1;
 
+	// estrutura auxiliar do deslocamento
 	Deslocamento DeslocamentoAux;
 
 	// carrega os dados do deslocamento

@@ -998,11 +998,13 @@ void	Solucao::ProcessoViabilizacao2(int EscolhaVeiculo, int EscolhaConstrucao, i
 
 // calcula o makespan geral da solução
 void	Solucao::CalculaMakespan(){
-	// calcula makespan das cosntruções e das plantas
-	PlantasInstancia.CalculaMakespanPlantas();
+	// calcula makespan  das plantas
+	//PlantasInstancia.CalculaMakespanPlantas();
+
+	// calcula makespan das cosntruções
 	ConstrucoesInstancia.CalculaMakespansConstrucoes();
 	 // caculo o makespan geral da solução
-	Makespan = PlantasInstancia.MakespanPLantas + ConstrucoesInstancia.MakespanConstrucoes;
+	Makespan =  ConstrucoesInstancia.MakespanConstrucoes; //+ PlantasInstancia.MakespanPLantas;
 }
 
 void	Solucao::CalculaNiveisViabilidade(){

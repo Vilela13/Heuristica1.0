@@ -70,7 +70,7 @@ public:
 	void 	AlocaAtividade(double HoraInicio, double HoraFinal, int NumConstrucao, int NumDemanda, int Carreta);	// Aloca tarefa na planta
 	int 	DeletaAtividade(double HoraInicio, double HoraFinal, int NumConstrucao, int NumDemanda, int Carreta);	// Deleta tarefa na planta
 
-	void 	CalculaMakespan();										// calcula o Makes pan da Planta
+	//void 	CalculaMakespan();										// calcula o Makes pan da Planta
 	void 	Imprime(int OrdenaPlantas, int OrdenaCarretas, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo);		// Imprime dados da planta
 	void 	ImprimeTempos();									// Imprime as distancias da planta as construções
 
@@ -173,6 +173,8 @@ int 	Planta::DeletaAtividade(double HoraInicio, double HoraFinal, int NumConstru
 	return 0;
 }
 
+/* não aplico mais
+
 // calcula o MakesPan da Planta
 void 	Planta::CalculaMakespan(){
 	Makespan = 0;
@@ -196,6 +198,9 @@ void 	Planta::CalculaMakespan(){
 		}
 	}
 }
+*/
+
+
 
 // Imprime dados da planta
 void 	Planta::Imprime(int OrdenaPlantas, int OrdenaCarretas, int ImprimeSolucao, int ImprimeArquivo, PonteiroArquivo  &Arquivo){
@@ -386,7 +391,9 @@ bool 	DecideQualPlantaMaisTarefa(Planta p1,Planta p2) {
 
 // Gerador Aleatorico Planta
 int 	GeradorAleatoricoPlanta (int i) {
-	return rand()%i;
+
+
+	 return rand()%i;
 }
 
 // #################################################################
@@ -410,7 +417,7 @@ public:
 	void 	IniciaConjuntoPlantas(int Numero);		// Inicia o vetor de plantas da classe com o número de palnats que se quer
 
 	int 	DeletaTarefa( int NumPlanta, double HoraInicio, double HoraFinal, int NumConstrucao, int NumDemanda, int Carreta, double HoraInicioCarreta, double HoraFinalCarreta);			// deleta tarefa tanto na planta e no veiculo que executa a tarefa
-	void 	CalculaMakespanPlantas();			// Calcula o Makespan de todas as Plantas
+	//void 	CalculaMakespanPlantas();			// Calcula o Makespan de todas as Plantas
 	int 	AlocaInidiceFabrica( int Planta, int &IndicePlanta);			// Aloca o inice da planta que corresponde a planat que se passa como parametro
 
 	int 	CorrigeReferenciaCarregamentoDeslocamentoMaisUm(int NumPlantaFornecedor,int NumCarretaUtilizada,int construcao, int NumeroDemandaSuprida, double HorarioInicioDescarregamento,  double HorarioFinalDescarregamento);		// corrige as referencias da tarefa aumentando o numerod a demanda que é suprida em mais um
@@ -519,6 +526,8 @@ int 	ConjuntoPlantas::DeletaTarefa( int NumPlanta, double HoraInicio, double Hor
 
 }
 
+/* não aplico mais
+
 // Calcula o Makespan de todas as Plantas
 void 	ConjuntoPlantas::CalculaMakespanPlantas(){
 	MakespanPLantas = 0;
@@ -530,6 +539,8 @@ void 	ConjuntoPlantas::CalculaMakespanPlantas(){
 		MakespanPLantas = MakespanPLantas + Plantas[p].Makespan;
 	}
 }
+*/
+
 
 // Aloca o inice da planta que corresponde a planat que se passa como parametro
 int 	ConjuntoPlantas::AlocaInidiceFabrica(int Planta, int &IndicePlanta){

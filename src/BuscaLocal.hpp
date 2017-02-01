@@ -107,10 +107,12 @@ int 	BuscaLocal::RetornaConstrucaoQuePodeSerAtendida( int &Construcao, int &Indi
 double 	BuscaLocal::CalculaMakespanSolucao(){
 	// calcula o makespan da solução corrente de suas construções
 	ConstrucoesInstancia.CalculaMakespansConstrucoes();
+
 	// calcula o makespan da solução corrente de suas plantas
-	PlantasInstancia.CalculaMakespanPlantas();
+	//PlantasInstancia.CalculaMakespanPlantas();
+
 	// calcula o makespan da solução
-	Makespan = ConstrucoesInstancia.MakespanConstrucoes + PlantasInstancia.MakespanPLantas;
+	Makespan = ConstrucoesInstancia.MakespanConstrucoes; // + PlantasInstancia.MakespanPLantas;
 	// retorna o valor do makespan
 	return Makespan;
 

@@ -1804,6 +1804,8 @@ bool 	DecideQualContrucaoTemMenorInicio (Construcao c1,Construcao c2) {
 
 // Gerador Aleatorico Construcao
 int 	GeradorAleatoricoConstrucao (int i) {
+
+
 	return rand()%i;
 }
 

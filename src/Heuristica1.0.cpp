@@ -11,6 +11,84 @@
 
 using namespace std;
 
+
+bool EscreveTipoDeExecucao( int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta, int RealizaProcessoDeAtrazarTarefas){
+	printf("\n ******************** Tipo Execução **************************** \n\n");
+
+	// escreve o tipo de escolha do veículo
+	switch (EscolhaVeiculo) {
+		case 1:
+			printf("  -> Veículo com menor número de tarefas  \n");
+			break;
+		case 2:
+			printf("  -> Veículo com maior número de tarefas  \n");
+			break;
+		case 3:
+			printf("  -> Veículo em ordem de sua numeração  \n");
+			break;
+		case 4:
+			printf("  -> Veículo em ordem aleatoria  \n");
+			break;
+		default:
+			printf("\n\n Probelam ao selecionar a ordenação do veículo \n\n");
+			return 0;
+			break;
+	}
+
+	// escreve o tipo de escolha do cosntrução
+	switch (EscolhaConstrucao) {
+		case 1:
+			printf("  -> Construção com menor Rank (Janela de tempo / Deamanda )   \n");
+			break;
+		case 2:
+			printf("  -> Construção com menor Janela de tempo   \n");
+			break;
+		case 3:
+			printf("  -> Construção com menor Tempo inicio   \n");
+			break;
+		case 4:
+			printf("  -> Construção em ordem aleatoria  \n");
+			break;
+		default:
+			printf("\n\n Probelam ao selecionar a ordenação da cosntrução \n\n");
+			return 0;
+			break;
+	}
+
+	// escreve o tipo de escolha do planta
+	switch (EscolhaPlanta) {
+		case 1:
+			printf("  -> Planta mais proxima da construção \n");
+			break;
+		case 2:
+			printf("  -> Planta com menor número de tarefas \n");
+			break;
+		case 3:
+			printf("  -> Planta com maior número de tarefas \n");
+			break;
+		case 4:
+			printf("  -> Planta com ordem aleatoria \n");
+			break;
+		default:
+			printf("\n\n Probelam ao selecionar a ordenação da planta \n\n");
+			return 0;
+			break;
+	}
+
+	if( RealizaProcessoDeAtrazarTarefas == 1){
+		printf("\n    -> Realzia processo recursivo para se atender uma demanda atrasando as demandas anteriores \n\n");
+	}else{
+		printf("\n    -> NÃO realzia processo recursivo para se atender uma demanda atrasando as demandas anteriores \n\n");
+	}
+
+	printf("\n ******************************************************************** \n\n\n");
+	return 1;
+
+
+}
+
+
+
 int main(int argc, char **argv) {
 
 	if( argc > 6){
@@ -42,7 +120,7 @@ int main(int argc, char **argv) {
 
 		TipoProcedimento = argv[4];
 
-		if( TipoProcedimento != "Cons" && TipoProcedimento != "ConsBusc" && TipoProcedimento != "ConsBuscCir" && TipoProcedimento != "grasp" && TipoProcedimento != "graspCir" && TipoProcedimento != "graspClass" && TipoProcedimento != "graspClassCir"){
+		if( TipoProcedimento != "Cons" && TipoProcedimento != "Cons400" && TipoProcedimento != "ConsBusc" && TipoProcedimento != "ConsBuscCir" && TipoProcedimento != "grasp" && TipoProcedimento != "graspCir" && TipoProcedimento != "graspClass" && TipoProcedimento != "graspClassCir"){
 			cout << endl << endl << endl <<  argv[4] << "   Problema em se identificar o tipo de procediemnto a se realizar " << endl << endl << endl;
 			return 0;
 		}
@@ -107,75 +185,9 @@ int main(int argc, char **argv) {
 
 				// escreve o tipo de execução
 
-				printf("\n ******************** Tipo Execução **************************** \n\n");
-
-				// escreve o tipo de escolha do veículo
-				switch (EscolhaVeiculo) {
-					case 1:
-						printf("  -> Veículo com menor número de tarefas  \n");
-						break;
-					case 2:
-						printf("  -> Veículo com maior número de tarefas  \n");
-						break;
-					case 3:
-						printf("  -> Veículo em ordem de sua numeração  \n");
-						break;
-					case 4:
-						printf("  -> Veículo em ordem aleatoria  \n");
-						break;
-					default:
-						printf("\n\n Probelam ao selecionar a ordenação do veículo \n\n");
-						return 0;
-						break;
+				if( EscreveTipoDeExecucao( EscolhaVeiculo, EscolhaConstrucao, EscolhaPlanta, RealizaProcessoDeAtrazarTarefas) == 0){
+					return 0;
 				}
-
-				// escreve o tipo de escolha do cosntrução
-				switch (EscolhaConstrucao) {
-					case 1:
-						printf("  -> Construção com menor Rank (Janela de tempo / Deamanda )   \n");
-						break;
-					case 2:
-						printf("  -> Construção com menor Janela de tempo   \n");
-						break;
-					case 3:
-						printf("  -> Construção com menor Tempo inicio   \n");
-						break;
-					case 4:
-						printf("  -> Construção em ordem aleatoria  \n");
-						break;
-					default:
-						printf("\n\n Probelam ao selecionar a ordenação da cosntrução \n\n");
-						return 0;
-						break;
-				}
-
-				// escreve o tipo de escolha do planta
-				switch (EscolhaPlanta) {
-					case 1:
-						printf("  -> Planta mais proxima da construção \n");
-						break;
-					case 2:
-						printf("  -> Planta com menor número de tarefas \n");
-						break;
-					case 3:
-						printf("  -> Planta com maior número de tarefas \n");
-						break;
-					case 4:
-						printf("  -> Planta com ordem aleatoria \n");
-						break;
-					default:
-						printf("\n\n Probelam ao selecionar a ordenação da planta \n\n");
-						return 0;
-						break;
-				}
-
-				if( RealizaProcessoDeAtrazarTarefas == 1){
-					printf("\n    -> Realzia processo recursivo para se atender uma demanda atrasando as demandas anteriores \n\n");
-				}else{
-					printf("\n    -> NÃO realzia processo recursivo para se atender uma demanda atrasando as demandas anteriores \n\n");
-				}
-
-				printf("\n ******************************************************************** \n\n\n");
 
 				if( TipoProcedimento == "Cons" ){
 					// escreve cabeçario
@@ -197,6 +209,86 @@ int main(int argc, char **argv) {
 
 					if( TipoProcedimento == "Cons" ){
 						Instancia->ExecutaCons(Nome, EscolhaVeiculo, EscolhaConstrucao, EscolhaPlanta, RealizaProcessoDeAtrazarTarefas);
+					}
+				}
+
+				delete(Instancia);
+			}
+
+			NumeroIteracoesString.clear();
+			TempoExecucaoMaximoString.clear();
+			Recursao.clear();
+			TipoProcedimento.clear();
+			ListaInstancias.clear();
+			Nome.clear();
+			Saida.clear();
+			Instancias.clear();
+
+			ArquivoExcelResposta.close();
+			ListaInstancias.clear();
+
+			if( TipoDeEntrada.compare(0,3,"arq") == 0){
+				cout << "\n \n Galo Doido! \n \n";
+			}
+			return 1;
+		 }
+
+
+		if( TipoProcedimento == "Cons400"){
+
+			if( argc != 8){
+				if( TipoProcedimento == "Cons400"){
+					cout << endl << endl << endl << "    Probelma na entrada de parametros para se executar o cons" << endl << endl << endl;
+				}
+				return 0;
+			}
+
+			srand ( time(NULL) + clock()  );
+
+			 // ordena na ordem do menor número de tarefas para o maior se colocar o valor 1, ordena na ordem do maior número de tarefas para o menor se colocar o valor 2
+			EscolhaVeiculo = atoi( argv[5]);			// função atoi tranforma char em inteiro ( biblioteca stdlib.h)
+			 // modo de escolha da construção, 1 escolhe a construção por meio do RankTempoDemandas, 2 escolhe a construção com mais demandas,
+			EscolhaConstrucao = atoi( argv[6]);		// função atoi tranforma char em inteiro ( biblioteca stdlib.h)
+			 // modo de escolha da planta, 1 é a planta mais proxima, 1 é a planta com menos tarefas, 3 é a planta com mais tarefas
+			EscolhaPlanta = atoi( argv[7]);			// função atoi tranforma char em inteiro ( biblioteca stdlib.h)
+
+			 // coleta a data e a hora
+			time(&timer);
+			tm_info = localtime(&timer);
+			strftime(buffer, 26, " * %H:%M:%S de %d:%m:%Y", tm_info);
+
+			if( TipoDeEntrada.compare(0,3,"arq") == 0){
+				if( TipoProcedimento == "Cons400" ){
+					// escreve a hora da execucao e a parte inicial da tabela
+					printf("\n\n ----- Execução Cons400 as %s ----- \n\n", buffer);
+				}
+
+				// escreve o tipo de execução
+
+				if( EscreveTipoDeExecucao( EscolhaVeiculo, EscolhaConstrucao, EscolhaPlanta, RealizaProcessoDeAtrazarTarefas) == 0){
+					return 0;
+				}
+
+				if( TipoProcedimento == "Cons400" ){
+					// escreve cabeçario
+					printf(" Nome_Instancia  \t Construtiva \t NivelDeInviabilidade  \t  Tempo(segundos) \n");
+				}
+			}
+
+			while( !ListaInstancias.empty()){
+				it = ListaInstancias.begin();
+				Nome = *it;
+				ListaInstancias.pop_front();
+
+				//cout << " Modelo => " << Nome << endl << endl;
+
+				Instancia = new Heuristica;
+
+				if( Instancia->LeDados(Nome, EscreveDadosLidosNaTela) == 1){
+					//cout << " Leu Dados" << endl;
+
+					if( TipoProcedimento == "Cons400" ){
+						Instancia->ExecutaCons400(Nome, EscolhaVeiculo, EscolhaConstrucao, EscolhaPlanta, RealizaProcessoDeAtrazarTarefas);
 					}
 				}
 
@@ -257,66 +349,9 @@ int main(int argc, char **argv) {
 
 				// escreve o tipo de execução
 
-				printf("\n ******************** Tipo Execução **************************** \n\n");
-
-				// escreve o tipo de escolha do veículo
-				switch (EscolhaVeiculo) {
-					case 1:
-						printf("  -> Veículo com menor número de tarefas  \n");
-						break;
-					case 2:
-						printf("  -> Veículo com maior número de tarefas  \n");
-						break;
-					case 3:
-						printf("  -> Veículo em ordem de sua numeração  \n");
-						break;
-					default:
-						printf("\n\n Probelam ao selecionar a ordenação do veículo \n\n");
-						return 0;
-						break;
-				}
-
-				// escreve o tipo de escolha do cosntrução
-				switch (EscolhaConstrucao) {
-					case 1:
-						printf("  -> Construção com menor Rank (Janela de tempo / Deamanda )   \n");
-						break;
-					case 2:
-						printf("  -> Construção com menor Janela de tempo   \n");
-						break;
-					case 3:
-						printf("  -> Construção com menor Tempo inicio   \n");
-						break;
-					default:
-						printf("\n\n Probelam ao selecionar a ordenação da cosntrução \n\n");
-						return 0;
-						break;
-				}
-
-				// escreve o tipo de escolha do planta
-				switch (EscolhaPlanta) {
-					case 1:
-						printf("  -> Planta mais proxima da construção \n");
-						break;
-					case 2:
-						printf("  -> Planta com menor número de tarefas \n");
-						break;
-					case 3:
-						printf("  -> Planta com maior número de tarefas \n");
-						break;
-					default:
-						printf("\n\n Probelam ao selecionar a ordenação da planta \n\n");
-						return 0;
-						break;
-				}
-
-				if( RealizaProcessoDeAtrazarTarefas == 1){
-					printf("\n    -> Realzia processo recursivo para se atender uma demanda atrasando as demandas anteriores \n\n");
-				}else{
-					printf("\n    -> NÃO realzia processo recursivo para se atender uma demanda atrasando as demandas anteriores \n\n");
-				}
-
-				printf("\n ******************************************************************** \n\n\n");
+				if( EscreveTipoDeExecucao( EscolhaVeiculo, EscolhaConstrucao, EscolhaPlanta, RealizaProcessoDeAtrazarTarefas) == 0){
+									return 0;
+								}
 
 				if( TipoProcedimento == "cons" ){
 					// escreve cabeçario
@@ -428,81 +463,9 @@ int main(int argc, char **argv) {
 
 				// escreve o tipo de execução
 
-				printf("\n ******************** Tipo Execução **************************** \n\n");
-
-				if( NumeroIteracoesString == "-" ){
-					printf("  -> Número irrestrito de iterações  \n");
-				}else{
-					printf("  -> %ld número de iterações  \n", NumeroIteracoes);
+				if( EscreveTipoDeExecucao( EscolhaVeiculo, EscolhaConstrucao, EscolhaPlanta, RealizaProcessoDeAtrazarTarefas) == 0){
+					return 0;
 				}
-
-				if( TempoExecucaoMaximoString == "-"){
-					printf("  -> Tempo de execução irrestrito  \n");
-				}else{
-					printf("  -> Tempo maximo para a execução : %ld segundos  \n", TempoExecucaoMaximo );
-				}
-
-				// escreve o tipo de escolha do veículo
-				switch (EscolhaVeiculo) {
-					case 1:
-						printf("  -> Veículo com menor número de tarefas  \n");
-						break;
-					case 2:
-						printf("  -> Veículo com maior número de tarefas  \n");
-						break;
-					case 3:
-						printf("  -> Veículo em ordem de sua numeração  \n");
-						break;
-					default:
-						printf("\n\n Probelam ao selecionar a ordenação do veículo \n\n");
-						return 0;
-						break;
-				}
-
-				// escreve o tipo de escolha do cosntrução
-				switch (EscolhaConstrucao) {
-					case 0:
-						printf("  -> Mantem ordenação aleatória  realizada no processo construtivo  \n");
-						break;
-					case 1:
-						printf("  -> Construção com menor Rank (Janela de tempo / Deamanda )   \n");
-						break;
-					case 2:
-						printf("  -> Construção com menor Janela de tempo   \n");
-						break;
-					case 3:
-						printf("  -> Construção com menor Tempo inicio   \n");
-						break;
-					default:
-						printf("\n\n Probelam ao selecionar a ordenação da cosntrução \n\n");
-						return 0;
-						break;
-				}
-
-				// escreve o tipo de escolha do planta
-				switch (EscolhaPlanta) {
-					case 1:
-						printf("  -> Planta mais proxima da cosntrução \n");
-						break;
-					case 2:
-						printf("  -> Planta com menor número de tarefas \n");
-						break;
-					case 3:
-						printf("  -> Planta com maior número de tarefas \n");
-						break;
-					default:
-						printf("\n\n Probelam ao selecionar a ordenação da planta \n\n");
-						return 0;
-						break;
-				}
-
-				if( RealizaProcessoDeAtrazarTarefas == 1){
-					printf("\n    -> Realzia processo recursivo para se atender uma demanda atrasando as demandas anteriores \n\n");
-				}else{
-					printf("\n    -> NÃO realzia processo recursivo para se atender uma demanda atrasando as demandas anteriores \n\n");
-				}
-
-				printf("\n ******************************************************************** \n\n\n");
 
 				// escreve cabeçario
 				printf(" Nome_Instancia  \t Solução \t Nivel_Viabilidade \t Tempo (segundos) \n");
@@ -621,83 +584,9 @@ int main(int argc, char **argv) {
 
 				// escreve o tipo de execução
 
-				printf("\n ******************** Tipo Execução **************************** \n\n");
-
-
-				if( NumeroIteracoesString == "-" ){
-					printf("  -> Número irrestrito de iterações  \n");
-				}else{
-					printf("  -> %ld número de iterações  \n", NumeroIteracoes);
+				if( EscreveTipoDeExecucao( EscolhaVeiculo, EscolhaConstrucao, EscolhaPlanta, RealizaProcessoDeAtrazarTarefas) == 0){
+					return 0;
 				}
-
-				if( TempoExecucaoMaximoString == "-"){
-					printf("  -> Tempo de execução irrestrito  \n");
-				}else{
-					printf("  -> Tempo maximo para a execução : %ld segundos  \n", TempoExecucaoMaximo );
-				}
-
-
-				// escreve o tipo de escolha do veículo
-				switch (EscolhaVeiculo) {
-					case 1:
-						printf("  -> Veículo com menor número de tarefas  \n");
-						break;
-					case 2:
-						printf("  -> Veículo com maior número de tarefas  \n");
-						break;
-					case 3:
-						printf("  -> Veículo em ordem de sua numeração  \n");
-						break;
-					default:
-						printf("\n\n Probelam ao selecionar a ordenação do veículo \n\n");
-						return 0;
-						break;
-				}
-
-				// escreve o tipo de escolha do cosntrução
-				switch (EscolhaConstrucao) {
-					case 0:
-						printf("  -> Mantem ordenação aleatória  realizada no processo construtivo  \n");
-						break;
-					case 1:
-						printf("  -> Construção com menor Rank (Janela de tempo / Deamanda )   \n");
-						break;
-					case 2:
-						printf("  -> Construção com menor Janela de tempo   \n");
-						break;
-					case 3:
-						printf("  -> Construção com menor Tempo inicio   \n");
-						break;
-					default:
-						printf("\n\n Probelam ao selecionar a ordenação da cosntrução \n\n");
-						return 0;
-						break;
-				}
-
-				// escreve o tipo de escolha do planta
-				switch (EscolhaPlanta) {
-					case 1:
-						printf("  -> Planta mais proxima da cosntrução \n");
-						break;
-					case 2:
-						printf("  -> Planta com menor número de tarefas \n");
-						break;
-					case 3:
-						printf("  -> Planta com maior número de tarefas \n");
-						break;
-					default:
-						printf("\n\n Probelam ao selecionar a ordenação da planta \n\n");
-						return 0;
-						break;
-				}
-
-				if( RealizaProcessoDeAtrazarTarefas == 1){
-					printf("\n    -> Realzia processo recursivo para se atender uma demanda atrasando as demandas anteriores \n\n");
-				}else{
-					printf("\n    -> NÃO realzia processo recursivo para se atender uma demanda atrasando as demandas anteriores \n\n");
-				}
-
-				printf("\n ******************************************************************** \n\n\n");
 
 
 

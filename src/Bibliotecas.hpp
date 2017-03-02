@@ -8,6 +8,9 @@
 #ifndef BIBLIOTECAS_HPP_
 #define BIBLIOTECAS_HPP_
 
+
+#include <ilcplex/ilocplex.h>
+
 #include <sstream>
 
 #include <iostream>     // Biblioteca padrão de c++
@@ -34,6 +37,42 @@
 
 #include <algorithm>	// Coptem a função Sort() e random_shuffle
 
+
+
+
+
+#include <climits>
+
+
+#include <dirent.h> 	// Manipulação de arquivos em C (meu caso, ver se arquivo existe)
+
+//#include <random>		// Biblioteca para gerar numeros segundo probabilidades
+
+/* Outra maneira de criar arquivos
+#include <sys/types.h>
+#include <sys/stat.h>		// Manipulação de arquivos em C (meu caso, criar arquivo )
+*/
+
+
+// modelo
+
+#define BigM 2147483647    // maior Int
+
+ILOSTLBEGIN
+
+#include "VariaveisFixas.hpp"
+
+using namespace std;
+
+
+#include "Modelo.hpp"
+#include "ModeloJanelaViolada.hpp"
+
+#include "FuncoesDoCPP.hpp"
+
+
+
+// heuristica
 
 //#include <random>		// Biblioteca para gerar numeros segundo probabilidades
 

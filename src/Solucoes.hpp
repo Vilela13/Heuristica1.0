@@ -35,7 +35,6 @@ public:
 	vector< vector < vector < double > > > TPvei;
 
 	vector < double > Ze;
-	vector < double > Zp;
 
 
 	Solucao();
@@ -120,10 +119,10 @@ void 	Solucao::Imprime(bool ImprimePlanta, bool ImprimeConstrucao, bool Verifica
 	}
 
 	if( ImprimeSolucao == 1){
-		printf("     MAKESPAN GERAL = %.4f \n", PlantasInstancia.MakespanPLantas + ConstrucoesInstancia.MakespanConstrucoes);
+		printf("     MAKESPAN GERAL = %.4f \n",  ConstrucoesInstancia.MakespanConstrucoes);
 	}
 	if(ImprimeArquivo == 1){
-		fprintf(Arquivo, "     MAKESPAN GERAL = %.4f \n", PlantasInstancia.MakespanPLantas + ConstrucoesInstancia.MakespanConstrucoes);
+		fprintf(Arquivo, "     MAKESPAN GERAL = %.4f \n",  ConstrucoesInstancia.MakespanConstrucoes);
 	}
 
 
@@ -1235,7 +1234,7 @@ void Solucao:: IniciaVariaveisModelo(){
 				if( ConstrucoesInstancia.Construcoes[e2].NumeroDaConstrucao == e1){
 					Tvei[v][e1].resize( ConstrucoesInstancia.Construcoes[e2].NumeroDemandas );
 					for( int d = 0; d < (int) ConstrucoesInstancia.Construcoes[e2].NumeroDemandas; d++){
-						Tvei[v][e1][d] = ConstrucoesInstancia.Construcoes[e2].TempoMinimoDeFuncionamento;
+						Tvei[v][e1][d] = 0;
 					}
 				}
 			}
@@ -1257,7 +1256,7 @@ void Solucao:: IniciaVariaveisModelo(){
 							if( ConstrucoesInstancia.Construcoes[e2].NumeroDaConstrucao == e1){
 								TPvei[AuxV][e1].resize( ConstrucoesInstancia.Construcoes[e2].NumeroDemandas );
 								for( int d = 0; d < (int) ConstrucoesInstancia.Construcoes[e2].NumeroDemandas; d++){
-									TPvei[AuxV][e1][d] = PlantasInstancia.Plantas[p2].TempoMinimoDeFuncionamento;
+									TPvei[AuxV][e1][d] = 0;
 								}
 							}
 						}
@@ -1271,7 +1270,6 @@ void Solucao:: IniciaVariaveisModelo(){
 
 
 	Ze.resize(NE);
-	Zp.resize(NP);
 }
 
 void Solucao::AtribuiValoresVariaveisModelo(){
@@ -1398,14 +1396,7 @@ void Solucao::AtribuiValoresVariaveisModelo(){
 		}
 	}
 
-	// atribui valor a Zp
-	for( int p1 = 0; p1 < NP; p1++){
-		for( int p2 = 0; p2 < NP; p2++){
-			if( PlantasInstancia.Plantas[p2].NumeroDaPlanta == p1){
-				Zp[p1] = PlantasInstancia.Plantas[p2].Makespan;
-			}
-		}
-	}
+
 
 }
 
@@ -1561,39 +1552,9 @@ int Solucao::VerificaRestricoes(){
 	}
 
 
-	// restrição 5
-	VeiculoAux = 0;
-	for( int p1 = 0; p1 < NP; p1++){
 
-		//cout << endl << " planta " << p1 << " tem " << DM.Veiculos[p1] << " veiculos " << endl;
 
-		for( int v = 0; v < DM.Veiculos[p1]; v++){
-			//cout << endl << "  veiculo [" << VeiculoAux << "] na planta é [" << p1 << "-" << v << "]";
 
-			for( int e1 = 0; e1 < NE; e1++){
-				for( int d1 = 0; d1 < DM.Demandas[e1]; d1++){
-					if( Zp[p1] < Tvei[VeiculoAux][e1][d1] + DM.DESCvi[VeiculoAux][e1][d1] + DM.TEMcp[e1][p1] - DM.M4vi[VeiculoAux][e1][d1] * ( 1 - Alfa[VeiculoAux][e1][d1] ) ){
-						cout << endl << " Restrição 5 violada " << endl;
-						cout << "Zp[" << p1 << "] >= Tvei[" << VeiculoAux << "][" << e1 << "][" << d1 << "] + DM.DESCvi[" << VeiculoAux << "][" << e1 << "][" << d1 << "] + DM.TEMcp[" << e1 << "][" << p1 << "] - DM.M4vi[" << VeiculoAux << "][" << e1 << "][" << d1 << "] * ( 1 - Alfa[" << VeiculoAux << "][" << e1 << "][" << d1 << "] ) " << endl;
-						cout << Zp[p1] << " >= " << Tvei[VeiculoAux][e1][d1]  << " + " << DM.DESCvi[VeiculoAux][e1][d1]  << " + " << DM.TEMcp[e1][p1]  << " - " << DM.M4vi[VeiculoAux][e1][d1]  << " * ( 1 -  " << Alfa[VeiculoAux][e1][d1] << ")" << endl;
-						return 0;
-					}
-				}
-			}
-			VeiculoAux++;
-		}
-	}
-
-	// restrição 6
-	VeiculoAux = 0;
-	for( int p1 = 0; p1 < NP; p1++){
-		if( Zp[p1] < DM.TMINp[p1]){
-			cout << endl << " Restrição 6 violada " << endl;
-			cout << "Zp[" << p1 << "] >= DM.TMINp[" << p1 << "]" << endl;
-			cout << Zp[p1] << " >= " << DM.TMINp[p1] << endl;
-			return 0;
-		}
-	}
 
 	// restrição 7 e 9
 	for( int v = 0; v < NV; v++){
@@ -1947,7 +1908,6 @@ Solucao::~Solucao(){
 		TPvei.clear();
 
 		Ze.clear();
-		Zp.clear();
 }
 
 // #################################################################

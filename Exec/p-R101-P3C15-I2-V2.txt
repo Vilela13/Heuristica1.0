@@ -17,3 +17,995 @@
 
  Tempo  0.000000 
 
+
+
+ ----- Execução as  * 11:21:19 de 02:03:2017 ----- 
+
+ p-R101-P3C15-I2-V2.txt 
+ 
+
+############################### Procedimento Construcao Solucao por meio de Heuristica Construtiva #####################################
+
+########################################################################################################################################
+
+
+
+  Solucao inicial viavel!    
+
+ 
+
+ Tempo  0.000000 
+
+
+
+ ----- Execução as  * 11:52:41 de 02:03:2017 ----- 
+
+ p-R101-P3C15-I2-V2.txt 
+ 
+
+############################### Procedimento Construcao Solucao por meio de Heuristica Construtiva #####################################
+
+########################################################################################################################################
+
+
+
+  Solucao inicial viavel!    
+
+ 
+
+ Tempo  0.000000 
+
+  Construtiva 	 Viabilidade1 	 Viabilidade2   
+         12067.000000 	 ------ 	 ------ 
+
+    Busca Local  	 Tempo até aqui ( 0 ) 
+     Solução 	 BuscaLocalVeiculo   
+         12067.000000 	   12057.000000 	
+
+  [[[[[[  Imprime plantas  ]]]]]]
+
+# Planta 0 com 10 veiculos, funciona de (420.0000 - 1080.0000)
+   Carregamentos 
+    * Caminhao [0 - 6] para suprir construcao [2 - 0] das ( 420.0000 as 425.0000)
+    * Caminhao [0 - 7] para suprir construcao [2 - 1] das ( 430.0000 as 435.0000)
+    * Caminhao [0 - 3] para suprir construcao [2 - 2] das ( 440.0000 as 445.0000)
+    * Caminhao [0 - 5] para suprir construcao [0 - 0] das ( 463.0000 as 468.0000)
+    * Caminhao [0 - 1] para suprir construcao [0 - 2] das ( 483.0000 as 488.0000)
+    * Caminhao [0 - 8] para suprir construcao [0 - 3] das ( 493.0000 as 498.0000)
+    * Caminhao [0 - 9] para suprir construcao [0 - 4] das ( 503.0000 as 508.0000)
+    * Caminhao [0 - 4] para suprir construcao [12 - 0] das ( 508.0000 as 513.0000)
+    * Caminhao [0 - 2] para suprir construcao [12 - 1] das ( 518.0000 as 523.0000)
+    * Caminhao [0 - 0] para suprir construcao [12 - 2] das ( 535.5000 as 540.5000)
+    * Caminhao [0 - 6] para suprir construcao [12 - 3] das ( 555.0000 as 560.0000)
+    * Caminhao [0 - 3] para suprir construcao [11 - 2] das ( 639.0000 as 644.0000)
+    * Caminhao [0 - 9] para suprir construcao [1 - 0] das ( 741.0000 as 746.0000)
+    * Caminhao [0 - 0] para suprir construcao [1 - 1] das ( 751.0000 as 756.0000)
+    * Caminhao [0 - 5] para suprir construcao [7 - 0] das ( 768.0000 as 773.0000)
+    * Caminhao [0 - 8] para suprir construcao [13 - 0] das ( 791.0000 as 796.0000)
+    * Caminhao [0 - 2] para suprir construcao [8 - 1] das ( 803.0000 as 808.0000)
+    * Caminhao [0 - 4] para suprir construcao [5 - 1] das ( 808.0000 as 813.0000)
+    * Caminhao [0 - 1] para suprir construcao [3 - 0] das ( 813.0000 as 818.0000)
+    * Caminhao [0 - 6] para suprir construcao [5 - 2] das ( 818.0000 as 823.0000)
+    * Caminhao [0 - 3] para suprir construcao [5 - 3] das ( 828.0000 as 833.0000)
+    * Caminhao [0 - 7] para suprir construcao [5 - 4] das ( 838.0000 as 843.0000)
+    * Caminhao [0 - 9] para suprir construcao [9 - 0] das ( 884.0000 as 889.0000)
+    * Caminhao [0 - 8] para suprir construcao [9 - 1] das ( 894.0000 as 899.0000)
+    * Caminhao [0 - 0] para suprir construcao [10 - 0] das ( 925.0000 as 930.0000)
+    =>  Veiculos da Planta 0 <= 
+ [[[[[[  Imprime carretas  ]]]]]]
+# Carreta [0-0] que atendeu 3 demandas 
+     *  Atender a [12-2] de (535.5000 - 678.5000)
+    *  Atender a [1-1] de (751.0000 - 894.0000)
+    *  Atender a [10-0] de (925.0000 - 1000.0000)
+# Carreta [0-1] que atendeu 2 demandas 
+     *  Atender a [0-2] de (483.0000 - 642.0000)
+    *  Atender a [3-0] de (813.0000 - 944.0000)
+# Carreta [0-2] que atendeu 2 demandas 
+     *  Atender a [12-1] de (518.0000 - 661.0000)
+    *  Atender a [8-1] de (803.0000 - 902.0000)
+# Carreta [0-3] que atendeu 3 demandas 
+     *  Atender a [2-2] de (440.0000 - 575.0000)
+    *  Atender a [11-2] de (639.0000 - 726.0000)
+    *  Atender a [5-3] de (828.0000 - 977.0000)
+# Carreta [0-4] que atendeu 2 demandas 
+     *  Atender a [12-0] de (508.0000 - 651.0000)
+    *  Atender a [5-1] de (808.0000 - 957.0000)
+# Carreta [0-5] que atendeu 2 demandas 
+     *  Atender a [0-0] de (463.0000 - 622.0000)
+    *  Atender a [7-0] de (768.0000 - 917.0000)
+# Carreta [0-6] que atendeu 3 demandas 
+     *  Atender a [2-0] de (420.0000 - 555.0000)
+    *  Atender a [12-3] de (555.0000 - 698.0000)
+    *  Atender a [5-2] de (818.0000 - 967.0000)
+# Carreta [0-7] que atendeu 2 demandas 
+     *  Atender a [2-1] de (430.0000 - 565.0000)
+    *  Atender a [5-4] de (838.0000 - 987.0000)
+# Carreta [0-8] que atendeu 3 demandas 
+     *  Atender a [0-3] de (493.0000 - 652.0000)
+    *  Atender a [13-0] de (791.0000 - 894.0000)
+    *  Atender a [9-1] de (894.0000 - 991.0000)
+# Carreta [0-9] que atendeu 3 demandas 
+     *  Atender a [0-4] de (503.0000 - 662.0000)
+    *  Atender a [1-0] de (741.0000 - 884.0000)
+    *  Atender a [9-0] de (884.0000 - 981.0000)
+   Makespan = -13.000000 
+
+# Planta 1 com 10 veiculos, funciona de (420.0000 - 1080.0000)
+   Carregamentos 
+    * Caminhao [1 - 7] para suprir construcao [6 - 0] das ( 433.0000 as 438.0000)
+    * Caminhao [1 - 9] para suprir construcao [0 - 1] das ( 482.0000 as 487.0000)
+    * Caminhao [1 - 3] para suprir construcao [11 - 0] das ( 586.0000 as 591.0000)
+    * Caminhao [1 - 2] para suprir construcao [11 - 1] das ( 596.0000 as 601.0000)
+    * Caminhao [1 - 6] para suprir construcao [1 - 2] das ( 772.0000 as 777.0000)
+    * Caminhao [1 - 4] para suprir construcao [1 - 3] das ( 782.0000 as 787.0000)
+    * Caminhao [1 - 9] para suprir construcao [13 - 1] das ( 817.0000 as 822.0000)
+    * Caminhao [1 - 1] para suprir construcao [7 - 1] das ( 822.0000 as 827.0000)
+    * Caminhao [1 - 7] para suprir construcao [13 - 2] das ( 827.0000 as 832.0000)
+    * Caminhao [1 - 8] para suprir construcao [7 - 2] das ( 832.0000 as 837.0000)
+    * Caminhao [1 - 5] para suprir construcao [7 - 3] das ( 842.0000 as 847.0000)
+    =>  Veiculos da Planta 1 <= 
+ [[[[[[  Imprime carretas  ]]]]]]
+# Carreta [1-0] que atendeu 0 demandas 
+ # Carreta [1-1] que atendeu 1 demandas 
+     *  Atender a [7-1] de (822.0000 - 897.0000)
+# Carreta [1-2] que atendeu 1 demandas 
+     *  Atender a [11-1] de (596.0000 - 749.0000)
+# Carreta [1-3] que atendeu 1 demandas 
+     *  Atender a [11-0] de (586.0000 - 739.0000)
+# Carreta [1-4] que atendeu 1 demandas 
+     *  Atender a [1-3] de (782.0000 - 903.0000)
+# Carreta [1-5] que atendeu 1 demandas 
+     *  Atender a [7-3] de (842.0000 - 917.0000)
+# Carreta [1-6] que atendeu 1 demandas 
+     *  Atender a [1-2] de (772.0000 - 893.0000)
+# Carreta [1-7] que atendeu 2 demandas 
+     *  Atender a [6-0] de (433.0000 - 592.0000)
+    *  Atender a [13-2] de (827.0000 - 898.0000)
+# Carreta [1-8] que atendeu 1 demandas 
+     *  Atender a [7-2] de (832.0000 - 907.0000)
+# Carreta [1-9] que atendeu 2 demandas 
+     *  Atender a [0-1] de (482.0000 - 623.0000)
+    *  Atender a [13-1] de (817.0000 - 888.0000)
+   Makespan = -13.000000 
+
+# Planta 2 com 10 veiculos, funciona de (420.0000 - 1080.0000)
+   Carregamentos 
+    * Caminhao [2 - 5] para suprir construcao [6 - 1] das ( 430.0000 as 435.0000)
+    * Caminhao [2 - 9] para suprir construcao [6 - 2] das ( 440.0000 as 445.0000)
+    * Caminhao [2 - 3] para suprir construcao [8 - 0] das ( 777.0000 as 782.0000)
+    * Caminhao [2 - 5] para suprir construcao [5 - 0] das ( 815.0000 as 820.0000)
+    * Caminhao [2 - 4] para suprir construcao [4 - 0] das ( 820.0000 as 825.0000)
+    * Caminhao [2 - 1] para suprir construcao [14 - 0] das ( 924.0000 as 929.0000)
+    * Caminhao [2 - 8] para suprir construcao [10 - 1] das ( 933.0000 as 938.0000)
+    =>  Veiculos da Planta 2 <= 
+ [[[[[[  Imprime carretas  ]]]]]]
+# Carreta [2-0] que atendeu 0 demandas 
+ # Carreta [2-1] que atendeu 1 demandas 
+     *  Atender a [14-0] de (924.0000 - 1001.0000)
+# Carreta [2-2] que atendeu 0 demandas 
+ # Carreta [2-3] que atendeu 1 demandas 
+     *  Atender a [8-0] de (777.0000 - 908.0000)
+# Carreta [2-4] que atendeu 1 demandas 
+     *  Atender a [4-0] de (820.0000 - 995.0000)
+# Carreta [2-5] que atendeu 2 demandas 
+     *  Atender a [6-1] de (430.0000 - 615.0000)
+    *  Atender a [5-0] de (815.0000 - 930.0000)
+# Carreta [2-6] que atendeu 0 demandas 
+ # Carreta [2-7] que atendeu 0 demandas 
+ # Carreta [2-8] que atendeu 1 demandas 
+     *  Atender a [10-1] de (933.0000 - 1012.0000)
+# Carreta [2-9] que atendeu 1 demandas 
+     *  Atender a [6-2] de (440.0000 - 625.0000)
+   Makespan = -13.000000 
+
+  Makespan Geral das Plantas = -13.0000
+
+
+ [[[[[[  Imprime construcoes  ]]]]]] 
+ # Contrucao 6 com 3 demandas, janela de tempo (510.0000 - 560.0000), com rank = 16.6667 
+     * Carreta [1-7] atende demanda 6-0 de ( 510.0000 as 520.0000 )
+     * Carreta [2-5] atende demanda 6-1 de ( 520.0000 as 530.0000 )
+     * Carreta [2-9] atende demanda 6-2 de ( 530.0000 as 540.0000 )
+   Vetor de atendimento demandas [  1  1  1 ]
+    Vetor de Situacao Remocao das demandas [  0  0  0 ]
+   MAKESPAN = 540.0000   Status = 3
+# Contrucao 11 com 3 demandas, janela de tempo (660.0000 - 710.0000), com rank = 16.6667 
+     * Carreta [1-3] atende demanda 11-0 de ( 660.0000 as 670.0000 )
+     * Carreta [1-2] atende demanda 11-1 de ( 670.0000 as 680.0000 )
+     * Carreta [0-3] atende demanda 11-2 de ( 680.0000 as 690.0000 )
+   Vetor de atendimento demandas [  1  1  1 ]
+    Vetor de Situacao Remocao das demandas [  0  0  0 ]
+   MAKESPAN = 690.0000   Status = 3
+# Contrucao 8 com 2 demandas, janela de tempo (840.0000 - 870.0000), com rank = 15.0000 
+     * Carreta [2-3] atende demanda 8-0 de ( 840.0000 as 850.0000 )
+     * Carreta [0-2] atende demanda 8-1 de ( 850.0000 as 860.0000 )
+   Vetor de atendimento demandas [  1  1 ]
+    Vetor de Situacao Remocao das demandas [  0  0 ]
+   MAKESPAN = 860.0000   Status = 2
+# Contrucao 5 com 5 demandas, janela de tempo (870.0000 - 960.0000), com rank = 18.0000 
+     * Carreta [2-5] atende demanda 5-0 de ( 870.0000 as 880.0000 )
+     * Carreta [0-4] atende demanda 5-1 de ( 880.0000 as 890.0000 )
+     * Carreta [0-6] atende demanda 5-2 de ( 890.0000 as 900.0000 )
+     * Carreta [0-3] atende demanda 5-3 de ( 900.0000 as 910.0000 )
+     * Carreta [0-7] atende demanda 5-4 de ( 910.0000 as 920.0000 )
+   Vetor de atendimento demandas [  1  1  1  1  1 ]
+    Vetor de Situacao Remocao das demandas [  0  0  0  0  0 ]
+   MAKESPAN = 920.0000   Status = 5
+# Contrucao 2 com 3 demandas, janela de tempo (480.0000 - 530.0000), com rank = 16.6667 
+     * Carreta [0-6] atende demanda 2-0 de ( 485.0000 as 495.0000 )
+     * Carreta [0-7] atende demanda 2-1 de ( 495.0000 as 505.0000 )
+     * Carreta [0-3] atende demanda 2-2 de ( 505.0000 as 515.0000 )
+   Vetor de atendimento demandas [  1  1  1 ]
+    Vetor de Situacao Remocao das demandas [  0  0  0 ]
+   MAKESPAN = 515.0000   Status = 3
+# Contrucao 12 com 4 demandas, janela de tempo (570.0000 - 640.0000), com rank = 17.5000 
+     * Carreta [0-4] atende demanda 12-0 de ( 577.0000 as 587.0000 )
+     * Carreta [0-2] atende demanda 12-1 de ( 587.0000 as 597.0000 )
+     * Carreta [0-0] atende demanda 12-2 de ( 604.5000 as 614.5000 )
+     * Carreta [0-6] atende demanda 12-3 de ( 624.0000 as 634.0000 )
+   Vetor de atendimento demandas [  1  1  1  1 ]
+    Vetor de Situacao Remocao das demandas [  0  0  0  0 ]
+   MAKESPAN = 634.0000   Status = 4
+# Contrucao 4 com 1 demandas, janela de tempo (900.0000 - 910.0000), com rank = 10.0000 
+     * Carreta [2-4] atende demanda 4-0 de ( 905.0000 as 915.0000 )
+   Vetor de atendimento demandas [  1 ]
+    Vetor de Situacao Remocao das demandas [  0 ]
+   MAKESPAN = 915.0000   Status = 1
+# Contrucao 13 com 3 demandas, janela de tempo (840.0000 - 890.0000), com rank = 16.6667 
+     * Carreta [0-8] atende demanda 13-0 de ( 840.0000 as 850.0000 )
+     * Carreta [1-9] atende demanda 13-1 de ( 850.0000 as 860.0000 )
+     * Carreta [1-7] atende demanda 13-2 de ( 860.0000 as 870.0000 )
+   Vetor de atendimento demandas [  1  1  1 ]
+    Vetor de Situacao Remocao das demandas [  0  0  0 ]
+   MAKESPAN = 870.0000   Status = 3
+# Contrucao 1 com 4 demandas, janela de tempo (810.0000 - 880.0000), com rank = 17.5000 
+     * Carreta [0-9] atende demanda 1-0 de ( 810.0000 as 820.0000 )
+     * Carreta [0-0] atende demanda 1-1 de ( 820.0000 as 830.0000 )
+     * Carreta [1-6] atende demanda 1-2 de ( 830.0000 as 840.0000 )
+     * Carreta [1-4] atende demanda 1-3 de ( 840.0000 as 850.0000 )
+   Vetor de atendimento demandas [  1  1  1  1 ]
+    Vetor de Situacao Remocao das demandas [  0  0  0  0 ]
+   MAKESPAN = 850.0000   Status = 4
+# Contrucao 0 com 5 demandas, janela de tempo (540.0000 - 630.0000), com rank = 18.0000 
+     * Carreta [0-5] atende demanda 0-0 de ( 540.0000 as 550.0000 )
+     * Carreta [1-9] atende demanda 0-1 de ( 550.0000 as 560.0000 )
+     * Carreta [0-1] atende demanda 0-2 de ( 560.0000 as 570.0000 )
+     * Carreta [0-8] atende demanda 0-3 de ( 570.0000 as 580.0000 )
+     * Carreta [0-9] atende demanda 0-4 de ( 580.0000 as 590.0000 )
+   Vetor de atendimento demandas [  1  1  1  1  1 ]
+    Vetor de Situacao Remocao das demandas [  0  0  0  0  0 ]
+   MAKESPAN = 590.0000   Status = 5
+# Contrucao 10 com 2 demandas, janela de tempo (960.0000 - 990.0000), com rank = 15.0000 
+     * Carreta [0-0] atende demanda 10-0 de ( 960.0000 as 970.0000 )
+     * Carreta [2-8] atende demanda 10-1 de ( 970.0000 as 980.0000 )
+   Vetor de atendimento demandas [  1  1 ]
+    Vetor de Situacao Remocao das demandas [  0  0 ]
+   MAKESPAN = 980.0000   Status = 2
+# Contrucao 7 com 4 demandas, janela de tempo (840.0000 - 910.0000), com rank = 17.5000 
+     * Carreta [0-5] atende demanda 7-0 de ( 840.0000 as 850.0000 )
+     * Carreta [1-1] atende demanda 7-1 de ( 857.0000 as 867.0000 )
+     * Carreta [1-8] atende demanda 7-2 de ( 867.0000 as 877.0000 )
+     * Carreta [1-5] atende demanda 7-3 de ( 877.0000 as 887.0000 )
+   Vetor de atendimento demandas [  1  1  1  1 ]
+    Vetor de Situacao Remocao das demandas [  0  0  0  0 ]
+   MAKESPAN = 887.0000   Status = 4
+# Contrucao 9 com 2 demandas, janela de tempo (930.0000 - 960.0000), com rank = 15.0000 
+     * Carreta [0-9] atende demanda 9-0 de ( 930.0000 as 940.0000 )
+     * Carreta [0-8] atende demanda 9-1 de ( 940.0000 as 950.0000 )
+   Vetor de atendimento demandas [  1  1 ]
+    Vetor de Situacao Remocao das demandas [  0  0 ]
+   MAKESPAN = 950.0000   Status = 2
+# Contrucao 3 com 1 demandas, janela de tempo (870.0000 - 880.0000), com rank = 10.0000 
+     * Carreta [0-1] atende demanda 3-0 de ( 876.0000 as 886.0000 )
+   Vetor de atendimento demandas [  1 ]
+    Vetor de Situacao Remocao das demandas [  0 ]
+   MAKESPAN = 886.0000   Status = 1
+# Contrucao 14 com 1 demandas, janela de tempo (960.0000 - 970.0000), com rank = 10.0000 
+     * Carreta [2-1] atende demanda 14-0 de ( 960.0000 as 970.0000 )
+   Vetor de atendimento demandas [  1 ]
+    Vetor de Situacao Remocao das demandas [  0 ]
+   MAKESPAN = 970.0000   Status = 1
+ Nivel de Inviabilidade = 0  
+ 
+ Makespan Geral das Construcoes = 12057.000000
+ 
+
+ ***********  Consistencia da solução ********************* 
+
+
+           Verifica tarefas individualmente 
+
+  - Demanda [6-0] => construcao [6] no horario (510.0000-520.0000)  planta [1] no horario (433.0000-438.0000)   carreta [7] no horario (433.0000-592.0000) 
+     Integro 
+ Respeita Tempo De Vida Concreto
+  - Demanda [6-1] => construcao [6] no horario (520.0000-530.0000)  planta [2] no horario (430.0000-435.0000)   carreta [5] no horario (430.0000-615.0000) 
+     Integro 
+ Respeita Tempo De Vida Concreto
+  - Demanda [6-2] => construcao [6] no horario (530.0000-540.0000)  planta [2] no horario (440.0000-445.0000)   carreta [9] no horario (440.0000-625.0000) 
+     Integro 
+ Respeita Tempo De Vida Concreto
+  - Demanda [11-0] => construcao [11] no horario (660.0000-670.0000)  planta [1] no horario (586.0000-591.0000)   carreta [3] no horario (586.0000-739.0000) 
+     Integro 
+ Respeita Tempo De Vida Concreto
+  - Demanda [11-1] => construcao [11] no horario (670.0000-680.0000)  planta [1] no horario (596.0000-601.0000)   carreta [2] no horario (596.0000-749.0000) 
+     Integro 
+ Respeita Tempo De Vida Concreto
+  - Demanda [11-2] => construcao [11] no horario (680.0000-690.0000)  planta [0] no horario (639.0000-644.0000)   carreta [3] no horario (639.0000-726.0000) 
+     Integro 
+ Respeita Tempo De Vida Concreto
+  - Demanda [8-0] => construcao [8] no horario (840.0000-850.0000)  planta [2] no horario (777.0000-782.0000)   carreta [3] no horario (777.0000-908.0000) 
+     Integro 
+ Respeita Tempo De Vida Concreto
+  - Demanda [8-1] => construcao [8] no horario (850.0000-860.0000)  planta [0] no horario (803.0000-808.0000)   carreta [2] no horario (803.0000-902.0000) 
+     Integro 
+ Respeita Tempo De Vida Concreto
+  - Demanda [5-0] => construcao [5] no horario (870.0000-880.0000)  planta [2] no horario (815.0000-820.0000)   carreta [5] no horario (815.0000-930.0000) 
+     Integro 
+ Respeita Tempo De Vida Concreto
+  - Demanda [5-1] => construcao [5] no horario (880.0000-890.0000)  planta [0] no horario (808.0000-813.0000)   carreta [4] no horario (808.0000-957.0000) 
+     Integro 
+ Respeita Tempo De Vida Concreto
+  - Demanda [5-2] => construcao [5] no horario (890.0000-900.0000)  planta [0] no horario (818.0000-823.0000)   carreta [6] no horario (818.0000-967.0000) 
+     Integro 
+ Respeita Tempo De Vida Concreto
+  - Demanda [5-3] => construcao [5] no horario (900.0000-910.0000)  planta [0] no horario (828.0000-833.0000)   carreta [3] no horario (828.0000-977.0000) 
+     Integro 
+ Respeita Tempo De Vida Concreto
+  - Demanda [5-4] => construcao [5] no horario (910.0000-920.0000)  planta [0] no horario (838.0000-843.0000)   carreta [7] no horario (838.0000-987.0000) 
+     Integro 
+ Respeita Tempo De Vida Concreto
+  - Demanda [2-0] => construcao [2] no horario (485.0000-495.0000)  planta [0] no horario (420.0000-425.0000)   carreta [6] no horario (420.0000-555.0000) 
+     Integro 
+ Respeita Tempo De Vida Concreto
+  - Demanda [2-1] => construcao [2] no horario (495.0000-505.0000)  planta [0] no horario (430.0000-435.0000)   carreta [7] no horario (430.0000-565.0000) 
+     Integro 
+ Respeita Tempo De Vida Concreto
+  - Demanda [2-2] => construcao [2] no horario (505.0000-515.0000)  planta [0] no horario (440.0000-445.0000)   carreta [3] no horario (440.0000-575.0000) 
+     Integro 
+ Respeita Tempo De Vida Concreto
+  - Demanda [12-0] => construcao [12] no horario (577.0000-587.0000)  planta [0] no horario (508.0000-513.0000)   carreta [4] no horario (508.0000-651.0000) 
+     Integro 
+ Respeita Tempo De Vida Concreto
+  - Demanda [12-1] => construcao [12] no horario (587.0000-597.0000)  planta [0] no horario (518.0000-523.0000)   carreta [2] no horario (518.0000-661.0000) 
+     Integro 
+ Respeita Tempo De Vida Concreto
+  - Demanda [12-2] => construcao [12] no horario (604.5000-614.5000)  planta [0] no horario (535.5000-540.5000)   carreta [0] no horario (535.5000-678.5000) 
+     Integro 
+ Respeita Tempo De Vida Concreto
+  - Demanda [12-3] => construcao [12] no horario (624.0000-634.0000)  planta [0] no horario (555.0000-560.0000)   carreta [6] no horario (555.0000-698.0000) 
+     Integro 
+ Respeita Tempo De Vida Concreto
+  - Demanda [4-0] => construcao [4] no horario (905.0000-915.0000)  planta [2] no horario (820.0000-825.0000)   carreta [4] no horario (820.0000-995.0000) 
+     Integro 
+ Respeita Tempo De Vida Concreto
+  - Demanda [13-0] => construcao [13] no horario (840.0000-850.0000)  planta [0] no horario (791.0000-796.0000)   carreta [8] no horario (791.0000-894.0000) 
+     Integro 
+ Respeita Tempo De Vida Concreto
+  - Demanda [13-1] => construcao [13] no horario (850.0000-860.0000)  planta [1] no horario (817.0000-822.0000)   carreta [9] no horario (817.0000-888.0000) 
+     Integro 
+ Respeita Tempo De Vida Concreto
+  - Demanda [13-2] => construcao [13] no horario (860.0000-870.0000)  planta [1] no horario (827.0000-832.0000)   carreta [7] no horario (827.0000-898.0000) 
+     Integro 
+ Respeita Tempo De Vida Concreto
+  - Demanda [1-0] => construcao [1] no horario (810.0000-820.0000)  planta [0] no horario (741.0000-746.0000)   carreta [9] no horario (741.0000-884.0000) 
+     Integro 
+ Respeita Tempo De Vida Concreto
+  - Demanda [1-1] => construcao [1] no horario (820.0000-830.0000)  planta [0] no horario (751.0000-756.0000)   carreta [0] no horario (751.0000-894.0000) 
+     Integro 
+ Respeita Tempo De Vida Concreto
+  - Demanda [1-2] => construcao [1] no horario (830.0000-840.0000)  planta [1] no horario (772.0000-777.0000)   carreta [6] no horario (772.0000-893.0000) 
+     Integro 
+ Respeita Tempo De Vida Concreto
+  - Demanda [1-3] => construcao [1] no horario (840.0000-850.0000)  planta [1] no horario (782.0000-787.0000)   carreta [4] no horario (782.0000-903.0000) 
+     Integro 
+ Respeita Tempo De Vida Concreto
+  - Demanda [0-0] => construcao [0] no horario (540.0000-550.0000)  planta [0] no horario (463.0000-468.0000)   carreta [5] no horario (463.0000-622.0000) 
+     Integro 
+ Respeita Tempo De Vida Concreto
+  - Demanda [0-1] => construcao [0] no horario (550.0000-560.0000)  planta [1] no horario (482.0000-487.0000)   carreta [9] no horario (482.0000-623.0000) 
+     Integro 
+ Respeita Tempo De Vida Concreto
+  - Demanda [0-2] => construcao [0] no horario (560.0000-570.0000)  planta [0] no horario (483.0000-488.0000)   carreta [1] no horario (483.0000-642.0000) 
+     Integro 
+ Respeita Tempo De Vida Concreto
+  - Demanda [0-3] => construcao [0] no horario (570.0000-580.0000)  planta [0] no horario (493.0000-498.0000)   carreta [8] no horario (493.0000-652.0000) 
+     Integro 
+ Respeita Tempo De Vida Concreto
+  - Demanda [0-4] => construcao [0] no horario (580.0000-590.0000)  planta [0] no horario (503.0000-508.0000)   carreta [9] no horario (503.0000-662.0000) 
+     Integro 
+ Respeita Tempo De Vida Concreto
+  - Demanda [10-0] => construcao [10] no horario (960.0000-970.0000)  planta [0] no horario (925.0000-930.0000)   carreta [0] no horario (925.0000-1000.0000) 
+     Integro 
+ Respeita Tempo De Vida Concreto
+  - Demanda [10-1] => construcao [10] no horario (970.0000-980.0000)  planta [2] no horario (933.0000-938.0000)   carreta [8] no horario (933.0000-1012.0000) 
+     Integro 
+ Respeita Tempo De Vida Concreto
+  - Demanda [7-0] => construcao [7] no horario (840.0000-850.0000)  planta [0] no horario (768.0000-773.0000)   carreta [5] no horario (768.0000-917.0000) 
+     Integro 
+ Respeita Tempo De Vida Concreto
+  - Demanda [7-1] => construcao [7] no horario (857.0000-867.0000)  planta [1] no horario (822.0000-827.0000)   carreta [1] no horario (822.0000-897.0000) 
+     Integro 
+ Respeita Tempo De Vida Concreto
+  - Demanda [7-2] => construcao [7] no horario (867.0000-877.0000)  planta [1] no horario (832.0000-837.0000)   carreta [8] no horario (832.0000-907.0000) 
+     Integro 
+ Respeita Tempo De Vida Concreto
+  - Demanda [7-3] => construcao [7] no horario (877.0000-887.0000)  planta [1] no horario (842.0000-847.0000)   carreta [5] no horario (842.0000-917.0000) 
+     Integro 
+ Respeita Tempo De Vida Concreto
+  - Demanda [9-0] => construcao [9] no horario (930.0000-940.0000)  planta [0] no horario (884.0000-889.0000)   carreta [9] no horario (884.0000-981.0000) 
+     Integro 
+ Respeita Tempo De Vida Concreto
+  - Demanda [9-1] => construcao [9] no horario (940.0000-950.0000)  planta [0] no horario (894.0000-899.0000)   carreta [8] no horario (894.0000-991.0000) 
+     Integro 
+ Respeita Tempo De Vida Concreto
+  - Demanda [3-0] => construcao [3] no horario (876.0000-886.0000)  planta [0] no horario (813.0000-818.0000)   carreta [1] no horario (813.0000-944.0000) 
+     Integro 
+ Respeita Tempo De Vida Concreto
+  - Demanda [14-0] => construcao [14] no horario (960.0000-970.0000)  planta [2] no horario (924.0000-929.0000)   carreta [1] no horario (924.0000-1001.0000) 
+     Integro 
+ Respeita Tempo De Vida Concreto
+
+          Verifica integridade Descarregaemntos  
+
+ construcao [ 6 ]  Descarregamentos integros 
+ construcao [ 11 ]  Descarregamentos integros 
+ construcao [ 8 ]  Descarregamentos integros 
+ construcao [ 5 ]  Descarregamentos integros 
+ construcao [ 2 ]  Descarregamentos integros 
+ construcao [ 12 ]  Descarregamentos integros 
+ construcao [ 4 ]  Descarregamentos integros 
+ construcao [ 13 ]  Descarregamentos integros 
+ construcao [ 1 ]  Descarregamentos integros 
+ construcao [ 0 ]  Descarregamentos integros 
+ construcao [ 10 ]  Descarregamentos integros 
+ construcao [ 7 ]  Descarregamentos integros 
+ construcao [ 9 ]  Descarregamentos integros 
+ construcao [ 3 ]  Descarregamentos integros 
+ construcao [ 14 ]  Descarregamentos integros 
+ 
+  Status de respeito a intervelos de construção 
+ 
+ 6  Respeita Intervalo! 
+ 11  Respeita Intervalo! 
+ 8  Respeita Intervalo! 
+ 5  Respeita Intervalo! 
+ 2  Respeita Intervalo! 
+ 12  Respeita Intervalo! 
+ 4  Respeita Intervalo! 
+ 13  Respeita Intervalo! 
+ 1  Respeita Intervalo! 
+ 0  Respeita Intervalo! 
+ 10  Respeita Intervalo! 
+ 7  Respeita Intervalo! 
+ 9  Respeita Intervalo! 
+ 3  Respeita Intervalo! 
+ 14  Respeita Intervalo!
+
+
+  Verifica integridade carregamentos 
+
+ planta [0]  Carregamentos integros 
+ planta [1]  Carregamentos integros 
+ planta [2]  Carregamentos integros 
+
+          Verifica integridade Deslocamentos  
+
+   Planta [0]
+     Carreta [0]  Deslocamentos integros 
+     Carreta [1]  Deslocamentos integros 
+     Carreta [2]  Deslocamentos integros 
+     Carreta [3]  Deslocamentos integros 
+     Carreta [4]  Deslocamentos integros 
+     Carreta [5]  Deslocamentos integros 
+     Carreta [6]  Deslocamentos integros 
+     Carreta [7]  Deslocamentos integros 
+     Carreta [8]  Deslocamentos integros 
+     Carreta [9]  Deslocamentos integros 
+   Planta [1]
+     Carreta [0]  Deslocamentos integros 
+     Carreta [1]  Deslocamentos integros 
+     Carreta [2]  Deslocamentos integros 
+     Carreta [3]  Deslocamentos integros 
+     Carreta [4]  Deslocamentos integros 
+     Carreta [5]  Deslocamentos integros 
+     Carreta [6]  Deslocamentos integros 
+     Carreta [7]  Deslocamentos integros 
+     Carreta [8]  Deslocamentos integros 
+     Carreta [9]  Deslocamentos integros 
+   Planta [2]
+     Carreta [0]  Deslocamentos integros 
+     Carreta [1]  Deslocamentos integros 
+     Carreta [2]  Deslocamentos integros 
+     Carreta [3]  Deslocamentos integros 
+     Carreta [4]  Deslocamentos integros 
+     Carreta [5]  Deslocamentos integros 
+     Carreta [6]  Deslocamentos integros 
+     Carreta [7]  Deslocamentos integros 
+     Carreta [8]  Deslocamentos integros 
+     Carreta [9]  Deslocamentos integros 
+
+
+ *********************************************************** 
+
+     MAKESPAN GERAL = 12044.0000 
+ 
+
+ Tempo  1 
+
+  Construtiva 	 Viabilidade1 	 Viabilidade2   
+        ------ 	  12049.000000 	 ------ 
+
+    Busca Local  	 Tempo até aqui ( 0 ) 
+     Solução 	 BuscaLocalVeiculo   
+         12049.000000 	   12019.000000 	
+
+  [[[[[[  Imprime plantas  ]]]]]]
+
+# Planta 0 com 10 veiculos, funciona de (420.0000 - 1080.0000)
+   Carregamentos 
+    * Caminhao [0 - 3] para suprir construcao [2 - 0] das ( 420.0000 as 425.0000)
+    * Caminhao [0 - 4] para suprir construcao [2 - 1] das ( 430.0000 as 435.0000)
+    * Caminhao [0 - 5] para suprir construcao [2 - 2] das ( 440.0000 as 445.0000)
+    * Caminhao [0 - 7] para suprir construcao [0 - 1] das ( 473.0000 as 478.0000)
+    * Caminhao [0 - 1] para suprir construcao [0 - 2] das ( 483.0000 as 488.0000)
+    * Caminhao [0 - 2] para suprir construcao [0 - 3] das ( 493.0000 as 498.0000)
+    * Caminhao [0 - 0] para suprir construcao [12 - 0] das ( 501.0000 as 506.0000)
+    * Caminhao [0 - 8] para suprir construcao [12 - 1] das ( 511.0000 as 516.0000)
+    * Caminhao [0 - 6] para suprir construcao [12 - 2] das ( 521.0000 as 526.0000)
+    * Caminhao [0 - 9] para suprir construcao [12 - 3] das ( 531.0000 as 536.0000)
+    * Caminhao [0 - 4] para suprir construcao [11 - 0] das ( 619.0000 as 624.0000)
+    * Caminhao [0 - 3] para suprir construcao [11 - 2] das ( 639.0000 as 644.0000)
+    * Caminhao [0 - 8] para suprir construcao [1 - 2] das ( 761.0000 as 766.0000)
+    * Caminhao [0 - 0] para suprir construcao [8 - 0] das ( 793.0000 as 798.0000)
+    * Caminhao [0 - 4] para suprir construcao [5 - 0] das ( 798.0000 as 803.0000)
+    * Caminhao [0 - 2] para suprir construcao [8 - 1] das ( 803.0000 as 808.0000)
+    * Caminhao [0 - 7] para suprir construcao [3 - 0] das ( 808.0000 as 813.0000)
+    * Caminhao [0 - 5] para suprir construcao [5 - 2] das ( 818.0000 as 823.0000)
+    * Caminhao [0 - 1] para suprir construcao [5 - 3] das ( 828.0000 as 833.0000)
+    * Caminhao [0 - 3] para suprir construcao [4 - 0] das ( 873.0000 as 878.0000)
+    * Caminhao [0 - 9] para suprir construcao [9 - 0] das ( 884.0000 as 889.0000)
+    * Caminhao [0 - 0] para suprir construcao [9 - 1] das ( 894.0000 as 899.0000)
+    * Caminhao [0 - 6] para suprir construcao [10 - 1] das ( 935.0000 as 940.0000)
+    =>  Veiculos da Planta 0 <= 
+ [[[[[[  Imprime carretas  ]]]]]]
+# Carreta [0-0] que atendeu 3 demandas 
+     *  Atender a [12-0] de (501.0000 - 644.0000)
+    *  Atender a [8-0] de (793.0000 - 892.0000)
+    *  Atender a [9-1] de (894.0000 - 991.0000)
+# Carreta [0-1] que atendeu 2 demandas 
+     *  Atender a [0-2] de (483.0000 - 642.0000)
+    *  Atender a [5-3] de (828.0000 - 977.0000)
+# Carreta [0-2] que atendeu 2 demandas 
+     *  Atender a [0-3] de (493.0000 - 652.0000)
+    *  Atender a [8-1] de (803.0000 - 902.0000)
+# Carreta [0-3] que atendeu 3 demandas 
+     *  Atender a [2-0] de (420.0000 - 555.0000)
+    *  Atender a [11-2] de (639.0000 - 726.0000)
+    *  Atender a [4-0] de (873.0000 - 932.0000)
+# Carreta [0-4] que atendeu 3 demandas 
+     *  Atender a [2-1] de (430.0000 - 565.0000)
+    *  Atender a [11-0] de (619.0000 - 706.0000)
+    *  Atender a [5-0] de (798.0000 - 947.0000)
+# Carreta [0-5] que atendeu 2 demandas 
+     *  Atender a [2-2] de (440.0000 - 575.0000)
+    *  Atender a [5-2] de (818.0000 - 967.0000)
+# Carreta [0-6] que atendeu 2 demandas 
+     *  Atender a [12-2] de (521.0000 - 664.0000)
+    *  Atender a [10-1] de (935.0000 - 1010.0000)
+# Carreta [0-7] que atendeu 2 demandas 
+     *  Atender a [0-1] de (473.0000 - 632.0000)
+    *  Atender a [3-0] de (808.0000 - 939.0000)
+# Carreta [0-8] que atendeu 2 demandas 
+     *  Atender a [12-1] de (511.0000 - 654.0000)
+    *  Atender a [1-2] de (761.0000 - 904.0000)
+# Carreta [0-9] que atendeu 2 demandas 
+     *  Atender a [12-3] de (531.0000 - 674.0000)
+    *  Atender a [9-0] de (884.0000 - 981.0000)
+   Makespan = -13.000000 
+
+# Planta 1 com 10 veiculos, funciona de (420.0000 - 1080.0000)
+   Carregamentos 
+    * Caminhao [1 - 8] para suprir construcao [6 - 0] das ( 433.0000 as 438.0000)
+    * Caminhao [1 - 4] para suprir construcao [6 - 1] das ( 443.0000 as 448.0000)
+    * Caminhao [1 - 9] para suprir construcao [0 - 0] das ( 472.0000 as 477.0000)
+    * Caminhao [1 - 0] para suprir construcao [0 - 4] das ( 512.0000 as 517.0000)
+    * Caminhao [1 - 5] para suprir construcao [11 - 1] das ( 596.0000 as 601.0000)
+    * Caminhao [1 - 8] para suprir construcao [1 - 0] das ( 752.0000 as 757.0000)
+    * Caminhao [1 - 9] para suprir construcao [7 - 0] das ( 805.0000 as 810.0000)
+    * Caminhao [1 - 3] para suprir construcao [13 - 0] das ( 810.0000 as 815.0000)
+    * Caminhao [1 - 6] para suprir construcao [7 - 1] das ( 815.0000 as 820.0000)
+    * Caminhao [1 - 7] para suprir construcao [13 - 1] das ( 820.0000 as 825.0000)
+    * Caminhao [1 - 4] para suprir construcao [7 - 2] das ( 825.0000 as 830.0000)
+    * Caminhao [1 - 1] para suprir construcao [13 - 2] das ( 830.0000 as 835.0000)
+    * Caminhao [1 - 0] para suprir construcao [7 - 3] das ( 835.0000 as 840.0000)
+    * Caminhao [1 - 3] para suprir construcao [10 - 0] das ( 900.0000 as 905.0000)
+    =>  Veiculos da Planta 1 <= 
+ [[[[[[  Imprime carretas  ]]]]]]
+# Carreta [1-0] que atendeu 2 demandas 
+     *  Atender a [0-4] de (512.0000 - 653.0000)
+    *  Atender a [7-3] de (835.0000 - 910.0000)
+# Carreta [1-1] que atendeu 1 demandas 
+     *  Atender a [13-2] de (830.0000 - 901.0000)
+# Carreta [1-2] que atendeu 0 demandas 
+ # Carreta [1-3] que atendeu 2 demandas 
+     *  Atender a [13-0] de (810.0000 - 881.0000)
+    *  Atender a [10-0] de (900.0000 - 1025.0000)
+# Carreta [1-4] que atendeu 2 demandas 
+     *  Atender a [6-1] de (443.0000 - 602.0000)
+    *  Atender a [7-2] de (825.0000 - 900.0000)
+# Carreta [1-5] que atendeu 1 demandas 
+     *  Atender a [11-1] de (596.0000 - 749.0000)
+# Carreta [1-6] que atendeu 1 demandas 
+     *  Atender a [7-1] de (815.0000 - 890.0000)
+# Carreta [1-7] que atendeu 1 demandas 
+     *  Atender a [13-1] de (820.0000 - 891.0000)
+# Carreta [1-8] que atendeu 2 demandas 
+     *  Atender a [6-0] de (433.0000 - 592.0000)
+    *  Atender a [1-0] de (752.0000 - 873.0000)
+# Carreta [1-9] que atendeu 2 demandas 
+     *  Atender a [0-0] de (472.0000 - 613.0000)
+    *  Atender a [7-0] de (805.0000 - 880.0000)
+   Makespan = -13.000000 
+
+# Planta 2 com 10 veiculos, funciona de (420.0000 - 1080.0000)
+   Carregamentos 
+    * Caminhao [2 - 7] para suprir construcao [6 - 2] das ( 440.0000 as 445.0000)
+    * Caminhao [2 - 5] para suprir construcao [1 - 1] das ( 793.0000 as 798.0000)
+    * Caminhao [2 - 3] para suprir construcao [1 - 3] das ( 813.0000 as 818.0000)
+    * Caminhao [2 - 0] para suprir construcao [5 - 1] das ( 825.0000 as 830.0000)
+    * Caminhao [2 - 6] para suprir construcao [5 - 4] das ( 855.0000 as 860.0000)
+    * Caminhao [2 - 8] para suprir construcao [14 - 0] das ( 924.0000 as 929.0000)
+    =>  Veiculos da Planta 2 <= 
+ [[[[[[  Imprime carretas  ]]]]]]
+# Carreta [2-0] que atendeu 1 demandas 
+     *  Atender a [5-1] de (825.0000 - 940.0000)
+# Carreta [2-1] que atendeu 0 demandas 
+ # Carreta [2-2] que atendeu 0 demandas 
+ # Carreta [2-3] que atendeu 1 demandas 
+     *  Atender a [1-3] de (813.0000 - 872.0000)
+# Carreta [2-4] que atendeu 0 demandas 
+ # Carreta [2-5] que atendeu 1 demandas 
+     *  Atender a [1-1] de (793.0000 - 852.0000)
+# Carreta [2-6] que atendeu 1 demandas 
+     *  Atender a [5-4] de (855.0000 - 970.0000)
+# Carreta [2-7] que atendeu 1 demandas 
+     *  Atender a [6-2] de (440.0000 - 625.0000)
+# Carreta [2-8] que atendeu 1 demandas 
+     *  Atender a [14-0] de (924.0000 - 1001.0000)
+# Carreta [2-9] que atendeu 0 demandas 
+    Makespan = -13.000000 
+
+  Makespan Geral das Plantas = -13.0000
+
+
+ [[[[[[  Imprime construcoes  ]]]]]] 
+ # Contrucao 3 com 1 demandas, janela de tempo (870.0000 - 880.0000), com rank = 10.0000 
+     * Carreta [0-7] atende demanda 3-0 de ( 871.0000 as 881.0000 )
+   Vetor de atendimento demandas [  1 ]
+    Vetor de Situacao Remocao das demandas [  1 ]
+   MAKESPAN = 881.0000   Status = 1
+# Contrucao 14 com 1 demandas, janela de tempo (960.0000 - 970.0000), com rank = 10.0000 
+     * Carreta [2-8] atende demanda 14-0 de ( 960.0000 as 970.0000 )
+   Vetor de atendimento demandas [  1 ]
+    Vetor de Situacao Remocao das demandas [  0 ]
+   MAKESPAN = 970.0000   Status = 1
+# Contrucao 10 com 2 demandas, janela de tempo (960.0000 - 990.0000), com rank = 15.0000 
+     * Carreta [1-3] atende demanda 10-0 de ( 960.0000 as 970.0000 )
+     * Carreta [0-6] atende demanda 10-1 de ( 970.0000 as 980.0000 )
+   Vetor de atendimento demandas [  1  1 ]
+    Vetor de Situacao Remocao das demandas [  0  0 ]
+   MAKESPAN = 980.0000   Status = 2
+# Contrucao 12 com 4 demandas, janela de tempo (570.0000 - 640.0000), com rank = 17.5000 
+     * Carreta [0-0] atende demanda 12-0 de ( 570.0000 as 580.0000 )
+     * Carreta [0-8] atende demanda 12-1 de ( 580.0000 as 590.0000 )
+     * Carreta [0-6] atende demanda 12-2 de ( 590.0000 as 600.0000 )
+     * Carreta [0-9] atende demanda 12-3 de ( 600.0000 as 610.0000 )
+   Vetor de atendimento demandas [  1  1  1  1 ]
+    Vetor de Situacao Remocao das demandas [  0  0  0  0 ]
+   MAKESPAN = 610.0000   Status = 4
+# Contrucao 9 com 2 demandas, janela de tempo (930.0000 - 960.0000), com rank = 15.0000 
+     * Carreta [0-9] atende demanda 9-0 de ( 930.0000 as 940.0000 )
+     * Carreta [0-0] atende demanda 9-1 de ( 940.0000 as 950.0000 )
+   Vetor de atendimento demandas [  1  1 ]
+    Vetor de Situacao Remocao das demandas [  0  0 ]
+   MAKESPAN = 950.0000   Status = 2
+# Contrucao 7 com 4 demandas, janela de tempo (840.0000 - 910.0000), com rank = 17.5000 
+     * Carreta [1-9] atende demanda 7-0 de ( 840.0000 as 850.0000 )
+     * Carreta [1-6] atende demanda 7-1 de ( 850.0000 as 860.0000 )
+     * Carreta [1-4] atende demanda 7-2 de ( 860.0000 as 870.0000 )
+     * Carreta [1-0] atende demanda 7-3 de ( 870.0000 as 880.0000 )
+   Vetor de atendimento demandas [  1  1  1  1 ]
+    Vetor de Situacao Remocao das demandas [  0  0  0  0 ]
+   MAKESPAN = 880.0000   Status = 4
+# Contrucao 5 com 5 demandas, janela de tempo (870.0000 - 960.0000), com rank = 18.0000 
+     * Carreta [0-4] atende demanda 5-0 de ( 870.0000 as 880.0000 )
+     * Carreta [2-0] atende demanda 5-1 de ( 880.0000 as 890.0000 )
+     * Carreta [0-5] atende demanda 5-2 de ( 890.0000 as 900.0000 )
+     * Carreta [0-1] atende demanda 5-3 de ( 900.0000 as 910.0000 )
+     * Carreta [2-6] atende demanda 5-4 de ( 910.0000 as 920.0000 )
+   Vetor de atendimento demandas [  1  1  1  1  1 ]
+    Vetor de Situacao Remocao das demandas [  0  0  0  0  0 ]
+   MAKESPAN = 920.0000   Status = 5
+# Contrucao 1 com 4 demandas, janela de tempo (810.0000 - 880.0000), com rank = 17.5000 
+     * Carreta [1-8] atende demanda 1-0 de ( 810.0000 as 820.0000 )
+     * Carreta [2-5] atende demanda 1-1 de ( 820.0000 as 830.0000 )
+     * Carreta [0-8] atende demanda 1-2 de ( 830.0000 as 840.0000 )
+     * Carreta [2-3] atende demanda 1-3 de ( 840.0000 as 850.0000 )
+   Vetor de atendimento demandas [  1  1  1  1 ]
+    Vetor de Situacao Remocao das demandas [  0  0  0  0 ]
+   MAKESPAN = 850.0000   Status = 4
+# Contrucao 8 com 2 demandas, janela de tempo (840.0000 - 870.0000), com rank = 15.0000 
+     * Carreta [0-0] atende demanda 8-0 de ( 840.0000 as 850.0000 )
+     * Carreta [0-2] atende demanda 8-1 de ( 850.0000 as 860.0000 )
+   Vetor de atendimento demandas [  1  1 ]
+    Vetor de Situacao Remocao das demandas [  0  0 ]
+   MAKESPAN = 860.0000   Status = 2
+# Contrucao 0 com 5 demandas, janela de tempo (540.0000 - 630.0000), com rank = 18.0000 
+     * Carreta [1-9] atende demanda 0-0 de ( 540.0000 as 550.0000 )
+     * Carreta [0-7] atende demanda 0-1 de ( 550.0000 as 560.0000 )
+     * Carreta [0-1] atende demanda 0-2 de ( 560.0000 as 570.0000 )
+     * Carreta [0-2] atende demanda 0-3 de ( 570.0000 as 580.0000 )
+     * Carreta [1-0] atende demanda 0-4 de ( 580.0000 as 590.0000 )
+   Vetor de atendimento demandas [  1  1  1  1  1 ]
+    Vetor de Situacao Remocao das demandas [  0  0  0  0  0 ]
+   MAKESPAN = 590.0000   Status = 5
+# Contrucao 4 com 1 demandas, janela de tempo (900.0000 - 910.0000), com rank = 10.0000 
+     * Carreta [0-3] atende demanda 4-0 de ( 900.0000 as 910.0000 )
+   Vetor de atendimento demandas [  1 ]
+    Vetor de Situacao Remocao das demandas [  0 ]
+   MAKESPAN = 910.0000   Status = 1
+# Contrucao 2 com 3 demandas, janela de tempo (480.0000 - 530.0000), com rank = 16.6667 
+     * Carreta [0-3] atende demanda 2-0 de ( 485.0000 as 495.0000 )
+     * Carreta [0-4] atende demanda 2-1 de ( 495.0000 as 505.0000 )
+     * Carreta [0-5] atende demanda 2-2 de ( 505.0000 as 515.0000 )
+   Vetor de atendimento demandas [  1  1  1 ]
+    Vetor de Situacao Remocao das demandas [  0  0  0 ]
+   MAKESPAN = 515.0000   Status = 3
+# Contrucao 11 com 3 demandas, janela de tempo (660.0000 - 710.0000), com rank = 16.6667 
+     * Carreta [0-4] atende demanda 11-0 de ( 660.0000 as 670.0000 )
+     * Carreta [1-5] atende demanda 11-1 de ( 670.0000 as 680.0000 )
+     * Carreta [0-3] atende demanda 11-2 de ( 680.0000 as 690.0000 )
+   Vetor de atendimento demandas [  1  1  1 ]
+    Vetor de Situacao Remocao das demandas [  0  0  0 ]
+   MAKESPAN = 690.0000   Status = 3
+# Contrucao 6 com 3 demandas, janela de tempo (510.0000 - 560.0000), com rank = 16.6667 
+     * Carreta [1-8] atende demanda 6-0 de ( 510.0000 as 520.0000 )
+     * Carreta [1-4] atende demanda 6-1 de ( 520.0000 as 530.0000 )
+     * Carreta [2-7] atende demanda 6-2 de ( 530.0000 as 540.0000 )
+   Vetor de atendimento demandas [  1  1  1 ]
+    Vetor de Situacao Remocao das demandas [  0  0  0 ]
+   MAKESPAN = 540.0000   Status = 3
+# Contrucao 13 com 3 demandas, janela de tempo (840.0000 - 890.0000), com rank = 16.6667 
+     * Carreta [1-3] atende demanda 13-0 de ( 843.0000 as 853.0000 )
+     * Carreta [1-7] atende demanda 13-1 de ( 853.0000 as 863.0000 )
+     * Carreta [1-1] atende demanda 13-2 de ( 863.0000 as 873.0000 )
+   Vetor de atendimento demandas [  1  1  1 ]
+    Vetor de Situacao Remocao das demandas [  0  0  0 ]
+   MAKESPAN = 873.0000   Status = 3
+ Nivel de Inviabilidade = 0  
+ 
+ Makespan Geral das Construcoes = 12019.000000
+ 
+
+ ***********  Consistencia da solução ********************* 
+
+
+           Verifica tarefas individualmente 
+
+  - Demanda [3-0] => construcao [3] no horario (871.0000-881.0000)  planta [0] no horario (808.0000-813.0000)   carreta [7] no horario (808.0000-939.0000) 
+     Integro 
+ Respeita Tempo De Vida Concreto
+  - Demanda [14-0] => construcao [14] no horario (960.0000-970.0000)  planta [2] no horario (924.0000-929.0000)   carreta [8] no horario (924.0000-1001.0000) 
+     Integro 
+ Respeita Tempo De Vida Concreto
+  - Demanda [10-0] => construcao [10] no horario (960.0000-970.0000)  planta [1] no horario (900.0000-905.0000)   carreta [3] no horario (900.0000-1025.0000) 
+     Integro 
+ Respeita Tempo De Vida Concreto
+  - Demanda [10-1] => construcao [10] no horario (970.0000-980.0000)  planta [0] no horario (935.0000-940.0000)   carreta [6] no horario (935.0000-1010.0000) 
+     Integro 
+ Respeita Tempo De Vida Concreto
+  - Demanda [12-0] => construcao [12] no horario (570.0000-580.0000)  planta [0] no horario (501.0000-506.0000)   carreta [0] no horario (501.0000-644.0000) 
+     Integro 
+ Respeita Tempo De Vida Concreto
+  - Demanda [12-1] => construcao [12] no horario (580.0000-590.0000)  planta [0] no horario (511.0000-516.0000)   carreta [8] no horario (511.0000-654.0000) 
+     Integro 
+ Respeita Tempo De Vida Concreto
+  - Demanda [12-2] => construcao [12] no horario (590.0000-600.0000)  planta [0] no horario (521.0000-526.0000)   carreta [6] no horario (521.0000-664.0000) 
+     Integro 
+ Respeita Tempo De Vida Concreto
+  - Demanda [12-3] => construcao [12] no horario (600.0000-610.0000)  planta [0] no horario (531.0000-536.0000)   carreta [9] no horario (531.0000-674.0000) 
+     Integro 
+ Respeita Tempo De Vida Concreto
+  - Demanda [9-0] => construcao [9] no horario (930.0000-940.0000)  planta [0] no horario (884.0000-889.0000)   carreta [9] no horario (884.0000-981.0000) 
+     Integro 
+ Respeita Tempo De Vida Concreto
+  - Demanda [9-1] => construcao [9] no horario (940.0000-950.0000)  planta [0] no horario (894.0000-899.0000)   carreta [0] no horario (894.0000-991.0000) 
+     Integro 
+ Respeita Tempo De Vida Concreto
+  - Demanda [7-0] => construcao [7] no horario (840.0000-850.0000)  planta [1] no horario (805.0000-810.0000)   carreta [9] no horario (805.0000-880.0000) 
+     Integro 
+ Respeita Tempo De Vida Concreto
+  - Demanda [7-1] => construcao [7] no horario (850.0000-860.0000)  planta [1] no horario (815.0000-820.0000)   carreta [6] no horario (815.0000-890.0000) 
+     Integro 
+ Respeita Tempo De Vida Concreto
+  - Demanda [7-2] => construcao [7] no horario (860.0000-870.0000)  planta [1] no horario (825.0000-830.0000)   carreta [4] no horario (825.0000-900.0000) 
+     Integro 
+ Respeita Tempo De Vida Concreto
+  - Demanda [7-3] => construcao [7] no horario (870.0000-880.0000)  planta [1] no horario (835.0000-840.0000)   carreta [0] no horario (835.0000-910.0000) 
+     Integro 
+ Respeita Tempo De Vida Concreto
+  - Demanda [5-0] => construcao [5] no horario (870.0000-880.0000)  planta [0] no horario (798.0000-803.0000)   carreta [4] no horario (798.0000-947.0000) 
+     Integro 
+ Respeita Tempo De Vida Concreto
+  - Demanda [5-1] => construcao [5] no horario (880.0000-890.0000)  planta [2] no horario (825.0000-830.0000)   carreta [0] no horario (825.0000-940.0000) 
+     Integro 
+ Respeita Tempo De Vida Concreto
+  - Demanda [5-2] => construcao [5] no horario (890.0000-900.0000)  planta [0] no horario (818.0000-823.0000)   carreta [5] no horario (818.0000-967.0000) 
+     Integro 
+ Respeita Tempo De Vida Concreto
+  - Demanda [5-3] => construcao [5] no horario (900.0000-910.0000)  planta [0] no horario (828.0000-833.0000)   carreta [1] no horario (828.0000-977.0000) 
+     Integro 
+ Respeita Tempo De Vida Concreto
+  - Demanda [5-4] => construcao [5] no horario (910.0000-920.0000)  planta [2] no horario (855.0000-860.0000)   carreta [6] no horario (855.0000-970.0000) 
+     Integro 
+ Respeita Tempo De Vida Concreto
+  - Demanda [1-0] => construcao [1] no horario (810.0000-820.0000)  planta [1] no horario (752.0000-757.0000)   carreta [8] no horario (752.0000-873.0000) 
+     Integro 
+ Respeita Tempo De Vida Concreto
+  - Demanda [1-1] => construcao [1] no horario (820.0000-830.0000)  planta [2] no horario (793.0000-798.0000)   carreta [5] no horario (793.0000-852.0000) 
+     Integro 
+ Respeita Tempo De Vida Concreto
+  - Demanda [1-2] => construcao [1] no horario (830.0000-840.0000)  planta [0] no horario (761.0000-766.0000)   carreta [8] no horario (761.0000-904.0000) 
+     Integro 
+ Respeita Tempo De Vida Concreto
+  - Demanda [1-3] => construcao [1] no horario (840.0000-850.0000)  planta [2] no horario (813.0000-818.0000)   carreta [3] no horario (813.0000-872.0000) 
+     Integro 
+ Respeita Tempo De Vida Concreto
+  - Demanda [8-0] => construcao [8] no horario (840.0000-850.0000)  planta [0] no horario (793.0000-798.0000)   carreta [0] no horario (793.0000-892.0000) 
+     Integro 
+ Respeita Tempo De Vida Concreto
+  - Demanda [8-1] => construcao [8] no horario (850.0000-860.0000)  planta [0] no horario (803.0000-808.0000)   carreta [2] no horario (803.0000-902.0000) 
+     Integro 
+ Respeita Tempo De Vida Concreto
+  - Demanda [0-0] => construcao [0] no horario (540.0000-550.0000)  planta [1] no horario (472.0000-477.0000)   carreta [9] no horario (472.0000-613.0000) 
+     Integro 
+ Respeita Tempo De Vida Concreto
+  - Demanda [0-1] => construcao [0] no horario (550.0000-560.0000)  planta [0] no horario (473.0000-478.0000)   carreta [7] no horario (473.0000-632.0000) 
+     Integro 
+ Respeita Tempo De Vida Concreto
+  - Demanda [0-2] => construcao [0] no horario (560.0000-570.0000)  planta [0] no horario (483.0000-488.0000)   carreta [1] no horario (483.0000-642.0000) 
+     Integro 
+ Respeita Tempo De Vida Concreto
+  - Demanda [0-3] => construcao [0] no horario (570.0000-580.0000)  planta [0] no horario (493.0000-498.0000)   carreta [2] no horario (493.0000-652.0000) 
+     Integro 
+ Respeita Tempo De Vida Concreto
+  - Demanda [0-4] => construcao [0] no horario (580.0000-590.0000)  planta [1] no horario (512.0000-517.0000)   carreta [0] no horario (512.0000-653.0000) 
+     Integro 
+ Respeita Tempo De Vida Concreto
+  - Demanda [4-0] => construcao [4] no horario (900.0000-910.0000)  planta [0] no horario (873.0000-878.0000)   carreta [3] no horario (873.0000-932.0000) 
+     Integro 
+ Respeita Tempo De Vida Concreto
+  - Demanda [2-0] => construcao [2] no horario (485.0000-495.0000)  planta [0] no horario (420.0000-425.0000)   carreta [3] no horario (420.0000-555.0000) 
+     Integro 
+ Respeita Tempo De Vida Concreto
+  - Demanda [2-1] => construcao [2] no horario (495.0000-505.0000)  planta [0] no horario (430.0000-435.0000)   carreta [4] no horario (430.0000-565.0000) 
+     Integro 
+ Respeita Tempo De Vida Concreto
+  - Demanda [2-2] => construcao [2] no horario (505.0000-515.0000)  planta [0] no horario (440.0000-445.0000)   carreta [5] no horario (440.0000-575.0000) 
+     Integro 
+ Respeita Tempo De Vida Concreto
+  - Demanda [11-0] => construcao [11] no horario (660.0000-670.0000)  planta [0] no horario (619.0000-624.0000)   carreta [4] no horario (619.0000-706.0000) 
+     Integro 
+ Respeita Tempo De Vida Concreto
+  - Demanda [11-1] => construcao [11] no horario (670.0000-680.0000)  planta [1] no horario (596.0000-601.0000)   carreta [5] no horario (596.0000-749.0000) 
+     Integro 
+ Respeita Tempo De Vida Concreto
+  - Demanda [11-2] => construcao [11] no horario (680.0000-690.0000)  planta [0] no horario (639.0000-644.0000)   carreta [3] no horario (639.0000-726.0000) 
+     Integro 
+ Respeita Tempo De Vida Concreto
+  - Demanda [6-0] => construcao [6] no horario (510.0000-520.0000)  planta [1] no horario (433.0000-438.0000)   carreta [8] no horario (433.0000-592.0000) 
+     Integro 
+ Respeita Tempo De Vida Concreto
+  - Demanda [6-1] => construcao [6] no horario (520.0000-530.0000)  planta [1] no horario (443.0000-448.0000)   carreta [4] no horario (443.0000-602.0000) 
+     Integro 
+ Respeita Tempo De Vida Concreto
+  - Demanda [6-2] => construcao [6] no horario (530.0000-540.0000)  planta [2] no horario (440.0000-445.0000)   carreta [7] no horario (440.0000-625.0000) 
+     Integro 
+ Respeita Tempo De Vida Concreto
+  - Demanda [13-0] => construcao [13] no horario (843.0000-853.0000)  planta [1] no horario (810.0000-815.0000)   carreta [3] no horario (810.0000-881.0000) 
+     Integro 
+ Respeita Tempo De Vida Concreto
+  - Demanda [13-1] => construcao [13] no horario (853.0000-863.0000)  planta [1] no horario (820.0000-825.0000)   carreta [7] no horario (820.0000-891.0000) 
+     Integro 
+ Respeita Tempo De Vida Concreto
+  - Demanda [13-2] => construcao [13] no horario (863.0000-873.0000)  planta [1] no horario (830.0000-835.0000)   carreta [1] no horario (830.0000-901.0000) 
+     Integro 
+ Respeita Tempo De Vida Concreto
+
+          Verifica integridade Descarregaemntos  
+
+ construcao [ 3 ]  Descarregamentos integros 
+ construcao [ 14 ]  Descarregamentos integros 
+ construcao [ 10 ]  Descarregamentos integros 
+ construcao [ 12 ]  Descarregamentos integros 
+ construcao [ 9 ]  Descarregamentos integros 
+ construcao [ 7 ]  Descarregamentos integros 
+ construcao [ 5 ]  Descarregamentos integros 
+ construcao [ 1 ]  Descarregamentos integros 
+ construcao [ 8 ]  Descarregamentos integros 
+ construcao [ 0 ]  Descarregamentos integros 
+ construcao [ 4 ]  Descarregamentos integros 
+ construcao [ 2 ]  Descarregamentos integros 
+ construcao [ 11 ]  Descarregamentos integros 
+ construcao [ 6 ]  Descarregamentos integros 
+ construcao [ 13 ]  Descarregamentos integros 
+ 
+  Status de respeito a intervelos de construção 
+ 
+ 3  Respeita Intervalo! 
+ 14  Respeita Intervalo! 
+ 10  Respeita Intervalo! 
+ 12  Respeita Intervalo! 
+ 9  Respeita Intervalo! 
+ 7  Respeita Intervalo! 
+ 5  Respeita Intervalo! 
+ 1  Respeita Intervalo! 
+ 8  Respeita Intervalo! 
+ 0  Respeita Intervalo! 
+ 4  Respeita Intervalo! 
+ 2  Respeita Intervalo! 
+ 11  Respeita Intervalo! 
+ 6  Respeita Intervalo! 
+ 13  Respeita Intervalo!
+
+
+  Verifica integridade carregamentos 
+
+ planta [0]  Carregamentos integros 
+ planta [1]  Carregamentos integros 
+ planta [2]  Carregamentos integros 
+
+          Verifica integridade Deslocamentos  
+
+   Planta [0]
+     Carreta [0]  Deslocamentos integros 
+     Carreta [1]  Deslocamentos integros 
+     Carreta [2]  Deslocamentos integros 
+     Carreta [3]  Deslocamentos integros 
+     Carreta [4]  Deslocamentos integros 
+     Carreta [5]  Deslocamentos integros 
+     Carreta [6]  Deslocamentos integros 
+     Carreta [7]  Deslocamentos integros 
+     Carreta [8]  Deslocamentos integros 
+     Carreta [9]  Deslocamentos integros 
+   Planta [1]
+     Carreta [0]  Deslocamentos integros 
+     Carreta [1]  Deslocamentos integros 
+     Carreta [2]  Deslocamentos integros 
+     Carreta [3]  Deslocamentos integros 
+     Carreta [4]  Deslocamentos integros 
+     Carreta [5]  Deslocamentos integros 
+     Carreta [6]  Deslocamentos integros 
+     Carreta [7]  Deslocamentos integros 
+     Carreta [8]  Deslocamentos integros 
+     Carreta [9]  Deslocamentos integros 
+   Planta [2]
+     Carreta [0]  Deslocamentos integros 
+     Carreta [1]  Deslocamentos integros 
+     Carreta [2]  Deslocamentos integros 
+     Carreta [3]  Deslocamentos integros 
+     Carreta [4]  Deslocamentos integros 
+     Carreta [5]  Deslocamentos integros 
+     Carreta [6]  Deslocamentos integros 
+     Carreta [7]  Deslocamentos integros 
+     Carreta [8]  Deslocamentos integros 
+     Carreta [9]  Deslocamentos integros 
+
+
+ *********************************************************** 
+
+     MAKESPAN GERAL = 12006.0000 
+ 
+
+ Tempo  1 
+

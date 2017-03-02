@@ -1,0 +1,20 @@
+Tried aggregator 1 time.
+MIP Presolve eliminated 1840 rows and 1 columns.
+MIP Presolve modified 3075400 coefficients.
+Reduced MIP has 941166 rows, 48315 columns, and 4667000 nonzeros.
+Reduced MIP has 46460 binaries, 0 generals, 0 SOSs, and 0 indicators.
+Presolve time = 7.51 sec. (3595.26 ticks)
+Probing time = 4.51 sec. (92.11 ticks)
+Tried aggregator 1 time.
+Reduced MIP has 941166 rows, 48315 columns, and 4667000 nonzeros.
+Reduced MIP has 46460 binaries, 0 generals, 0 SOSs, and 0 indicators.
+Presolve time = 3.22 sec. (1337.05 ticks)
+
+Root node processing (before b&c):
+  Real time             =   20.93 sec. (6648.04 ticks)
+Parallel b&c, 12 threads:
+  Real time             =    0.00 sec. (0.00 ticks)
+  Sync time (average)   =    0.00 sec.
+  Wait time (average)   =    0.00 sec.
+                          ------------
+Total (root+branch&cut) =   20.93 sec. (6648.04 ticks)

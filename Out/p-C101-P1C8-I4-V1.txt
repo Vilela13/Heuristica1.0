@@ -1,0 +1,31 @@
+Tried aggregator 1 time.
+MIP Presolve eliminated 480 rows and 1 columns.
+MIP Presolve modified 411100 coefficients.
+Reduced MIP has 126104 rows, 6800 columns, and 623600 nonzeros.
+Reduced MIP has 6312 binaries, 0 generals, 0 SOSs, and 0 indicators.
+Presolve time = 0.97 sec. (480.55 ticks)
+Probing time = 1.13 sec. (14.89 ticks)
+Tried aggregator 1 time.
+Reduced MIP has 126104 rows, 6800 columns, and 623600 nonzeros.
+Reduced MIP has 6312 binaries, 0 generals, 0 SOSs, and 0 indicators.
+Presolve time = 0.44 sec. (178.99 ticks)
+Probing time = 1.24 sec. (16.30 ticks)
+Clique table members: 24.
+MIP emphasis: balance optimality and feasibility.
+MIP search method: dynamic search.
+Parallel mode: deterministic, using up to 12 threads.
+Root relaxation solution time = 3.80 sec. (558.77 ticks)
+
+        Nodes                                         Cuts/
+   Node  Left     Objective  IInf  Best Integer    Best Bound    ItCnt     Gap
+
+      0     0    -4452.9000   240                  -4452.9000     3707         
+
+Root node processing (before b&c):
+  Real time             =   20.05 sec. (3690.38 ticks)
+Parallel b&c, 12 threads:
+  Real time             =    0.00 sec. (0.00 ticks)
+  Sync time (average)   =    0.00 sec.
+  Wait time (average)   =    0.00 sec.
+                          ------------
+Total (root+branch&cut) =   20.05 sec. (3690.38 ticks)

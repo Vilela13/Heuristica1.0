@@ -1,0 +1,23 @@
+
+
+
+
+->			inst p-C101-P1C5-I2-V1.txt ComRec Cons 4 4 4 heuristica
+
+arquivo contendo o nome dass instnatias em Instancias.txt rodar heuristica com recurção apena a parte construtiva, com recursão no processo e com os paraetros 4 4 4 de seleção dos veiculos, construções e plantas. 
+
+
+->			arq Instancias.txt 600 modelo Violando
+
+arquivo contendo o nome dass instnatias em Instancias.txt rodar por 600 segundos o modelo com violação 
+
+
+->			arq Instancias.txt 600 modelo NaoViolando
+
+arquivo contendo o nome dass instnatias em Instancias.txt rodar por 600 segundos o modelo sem violação
+
+->          inst p-C101-P1C5-I2-V1.txt 20 modelo NaoViolando
+
+Roda apenas uma instancia, a p-C101-P1C5-I2-V1.txt
+
+->          ModeloComInicio	inst Teste1.txt ComRec Cons 1 1 1

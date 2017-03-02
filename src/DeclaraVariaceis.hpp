@@ -39,8 +39,6 @@
 
 	int 	EscreveDadosLidosNaTela;
 
-	EscreveDadosLidosNaTela = 0;
-
 	DadosSolomon *InstanciaSolomon;
 
 	ifstream ArquivoInstanciaSolomon;

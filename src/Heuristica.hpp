@@ -35,14 +35,19 @@ public:
 	void	ExecutaCons(string NomeInstancia, int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta, int RealizaProcessoDeAtrazarTarefas);
 	void	ExecutaCons400(string NomeInstancia, int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta, int RealizaProcessoDeAtrazarTarefas);
 
-	void	ExecutaConsBusc(string NomeInstancia, int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta,  int RealizaProcessoDeAtrazarTarefas);			// executa o procedimento heuristico
-	void	ExecutaConsBuscCir(string NomeInstancia, int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta, int RealizaProcessoDeAtrazarTarefas);
+	void	ExecutaConsBuscVei(string NomeInstancia, long int NumeroIteracoes, long int TempoExecucaoMaximo, int EscolhaVeiculo, int EscolhaConstrucao,  int EscolhaPlanta,  int RealizaProcessoDeAtrazarTarefas);
+	void	ExecutaConsBuscCons(string NomeInstancia, long int NumeroIteracoes, long int TempoExecucaoMaximo, int EscolhaVeiculo, int EscolhaConstrucao,  int EscolhaPlanta,  int RealizaProcessoDeAtrazarTarefas);
+	void	ExecutaConsBuscPlan(string NomeInstancia, long int NumeroIteracoes, long int TempoExecucaoMaximo, int EscolhaVeiculo, int EscolhaConstrucao,  int EscolhaPlanta,  int RealizaProcessoDeAtrazarTarefas);
 
-	void	ExecutaGrasp(string NomeInstancia, long int NumeroIteracoes, long int TempoExecucaoMaximo, int EscolhaVeiculo, int EscolhaConstrucao,  int EscolhaPlanta,  int RealizaProcessoDeAtrazarTarefas);
-	void	ExecutaGraspCir(string NomeInstancia, long int NumeroIteracoes, long int TempoExecucaoMaximo, int EscolhaVeiculo, int EscolhaConstrucao,  int EscolhaPlanta,  int RealizaProcessoDeAtrazarTarefas);
 
-	void	ExecutaGraspClass(string NomeInstancia, long int NumeroIteracoes, long int TempoExecucaoMaximo, int EscolhaVeiculo, int EscolhaConstrucao,  int EscolhaPlanta,  int RealizaProcessoDeAtrazarTarefas);
-	void	ExecutaGraspClassCir(string NomeInstancia, long int NumeroIteracoes, long int TempoExecucaoMaximo, int EscolhaVeiculo, int EscolhaConstrucao,  int EscolhaPlanta,  int RealizaProcessoDeAtrazarTarefas);
+	void	ExecutaConsBuscas(string NomeInstancia, int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta,  int RealizaProcessoDeAtrazarTarefas);			// executa o procedimento heuristico
+	void	ExecutaConsBuscasCir(string NomeInstancia, int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta, int RealizaProcessoDeAtrazarTarefas);
+
+	void	ExecutaGrsp(string NomeInstancia, long int NumeroIteracoes, long int TempoExecucaoMaximo, int EscolhaVeiculo, int EscolhaConstrucao,  int EscolhaPlanta,  int RealizaProcessoDeAtrazarTarefas);
+	void	ExecutaGrspCir(string NomeInstancia, long int NumeroIteracoes, long int TempoExecucaoMaximo, int EscolhaVeiculo, int EscolhaConstrucao,  int EscolhaPlanta,  int RealizaProcessoDeAtrazarTarefas);
+
+	void	ExecutaGrspClass(string NomeInstancia, long int NumeroIteracoes, long int TempoExecucaoMaximo, int EscolhaVeiculo, int EscolhaConstrucao,  int EscolhaPlanta,  int RealizaProcessoDeAtrazarTarefas);
+	void	ExecutaGrspClassCir(string NomeInstancia, long int NumeroIteracoes, long int TempoExecucaoMaximo, int EscolhaVeiculo, int EscolhaConstrucao,  int EscolhaPlanta,  int RealizaProcessoDeAtrazarTarefas);
 
 	void	LeNomeInstancia(int , string& );			// le o nome da instancia
 	void	LeNumeroPlantasEntregasVeiculos(int);		// le o numero de plantas, veiculos e cosntruções
@@ -443,6 +448,11 @@ void	Heuristica::ExecutaCons(string NomeInstancia, int EscolhaVeiculo, int Escol
 
 
 
+	Solucoes.Solucoes[0].IniciaVariaveisModelo();
+	Solucoes.Solucoes[0].AtribuiValoresVariaveisModelo();
+	Solucoes.Solucoes[0].ImprimeVariaveisModeloSeparado();
+
+
 	// coleta o horario final
 	FinalExecucao = time(NULL);
 
@@ -699,10 +709,762 @@ void	Heuristica::ExecutaCons400(string NomeInstancia, int EscolhaVeiculo, int Es
 
 
 
+void	Heuristica::ExecutaConsBuscVei(string NomeInstancia, long int NumeroIteracoes, long int TempoExecucaoMaximo, int EscolhaVeiculo, int EscolhaConstrucao,  int EscolhaPlanta,  int RealizaProcessoDeAtrazarTarefas){
+
+	// ponteiro para o arquivo que se irá salvar os dados
+	PonteiroArquivo  Arquivo;
+
+	// caminho para o arquivo que se irá salvar os dados
+	string Caminho;
+
+	// variavel que controla se irá escrever os dados em um aruivo, é inicializada com 0
+	int ImprimeArquivo;
+	ImprimeArquivo = 0;
+
+	// variavel que controla se imprime na tela a solução e os procediemntos
+	int ImprimeSolucao;
+	ImprimeSolucao = 0;
+
+	time_t InicioExecucao, FinalExecucao;
+	double TempoExecucao;
+
+	//bool ImprimePlanta;
+	//bool ImprimeConstrucao;
+	//bool IntervalosRespeitadosConstrucaoes;
+
+	//ImprimePlanta = 1;
+	//ImprimeConstrucao = 1;
+	//IntervalosRespeitadosConstrucaoes = 1;
+
+	int ImprimeProcedimentoConstrutivo;
+	ImprimeProcedimentoConstrutivo = 0;
+
+	int ImprimeViabilizacao;
+	ImprimeViabilizacao = 0;
+
+	int ImprimeBusca;
+	ImprimeBusca = 0;
+
+	// Exscrever a dadta
+	 time_t timer;
+	 char buffer[26];
+	 struct tm* tm_info;
+
+	// variavel que faz o progrma parar
+	int ParaPrograma;
+
+	// classe do procediemnto construtivo
+	Procedimento1 *Prod1;
+
+
+
+	// classe que armazena solução corrente
+	Solucao *SolucaoCorrente;
+
+	// classe que armazena solução final
+	Solucao SolucaoFinal;
+
+	// variavel que informa se irá realizar a verificação da viabilidade ou não, inicializa com 1 que é que vai ter a verificação da viabilidade
+	//int VerificaViabilidade;
+	//VerificaViabilidade = 1;
+
+	int iteracoes;
+
+	// marca se já possui uma solução
+	int Ativa;
+	Ativa = 0;
+
+
+	// fornece o caminnho onde será criado o arquivo
+	Caminho =  "./Exec/";
+	// acrescenta o nome do arquivo ao caminho
+	Caminho +=  NomeInstancia;
+
+	DIR* dp;
+
+	dp = opendir ("Exec");
+
+	//cria a pasta Exec para salvar os dados da execução
+	if(!dp){
+		if( ImprimeSolucao == 1){
+			cout <<  "\n Nao tem diretorio \"Exec\"!!            FUDEU MUITO!! \n" << endl;
+		}
+
+		if(system("mkdir Exec;") == 0){
+			if( ImprimeSolucao == 1){
+				cout << " Criou pasta Exec" << endl;
+			}
+		}else{
+			cout << " Problema ao criar pasta Exec" << endl;
+		}
+
+		/* Outra maneira de criar arquivos
+		SituacaoDiretorio = mkdir("./myfolder", S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+		*/
+		dp = opendir ("Exec");
+
+		if(!dp){
+			cout << "\n Nao tem diretorio \"Exec\"!!             FUDEU MUITO!! \n" << endl;
+		}else{
+			if( ImprimeSolucao == 1){
+				cout << " Tem diretorio \"Exec\" !!  " << endl;
+			}
+		}
+	}else{
+		if( ImprimeSolucao == 1){
+			cout << " Tem diretorio \"Exec\" !!  " << endl;
+		}
+	}
+	closedir( dp );
+
+	// escreve o endereço do arquivo
+	//cout << endl << endl << endl << Caminho << "   -  " <<  Caminho.c_str() <<  endl << endl << endl;
+
+	cout << NomeInstancia << '\t';
+
+	// abre o arquivo
+	Arquivo = fopen (Caminho.c_str(), "a");
+
+	// verifica se abriu o arquivo
+	if(!Arquivo ){
+		// caso não escreve está mensagem
+		cout <<  endl << endl <<  endl << endl <<  "  Fudeu muito " <<  endl << endl <<  endl << endl;
+		cin >> ParaPrograma;
+	}
+
+	// coleta a data e a hora
+	time(&timer);
+	tm_info = localtime(&timer);
+	strftime(buffer, 26, " * %H:%M:%S de %d:%m:%Y", tm_info);
+
+	if( ImprimeArquivo == 1){
+		fprintf(Arquivo,"\n\n ----- Execução as %s ----- \n\n", buffer);
+		// escreve o nome da instancia no arquivo de saida
+		fprintf( Arquivo," %s \n ",  NomeInstancia.c_str());
+	}
+	if( ImprimeSolucao == 1){
+		printf("\n\n ----- Execução as %s ----- \n\n", buffer);
+	}
+
+	fprintf(Arquivo,"  Construtiva \t Viabilidade1 \t Viabilidade2   \n");
+
+	// coleta o horario inicial
+	InicioExecucao = time(NULL);
+	FinalExecucao = time(NULL);
+
+	iteracoes = 0;
+
+	while( iteracoes < NumeroIteracoes && (int) difftime(FinalExecucao, InicioExecucao) < TempoExecucaoMaximo ){
+
+		Prod1 = new Procedimento1;
+
+		Prod1->CarregaDados(NP, PlantasInstancia, NE, ConstrucoesInstancia, NV, Velocidade, TempoDeVidaConcreto, DM);
+
+		Prod1->Executa( EscolhaVeiculo, EscolhaConstrucao, EscolhaPlanta, ImprimeProcedimentoConstrutivo, ImprimeSolucao, ImprimeArquivo, Arquivo, RealizaProcessoDeAtrazarTarefas);
+
+		SolucaoCorrente = new Solucao;
+
+		SolucaoCorrente->CarregaSolucao(Prod1->NP, Prod1->PlantasInstancia, Prod1->NE, Prod1->ConstrucoesInstancia, Prod1->NV, Prod1->Velocidade, Prod1->TempoDeVidaConcreto, Prod1->DM);
+
+		delete(Prod1);
+
+		SolucaoCorrente->CalculaMakespan();
+
+		if(SolucaoCorrente->ConstrucoesInstancia.NivelDeInviabilidade == 0){
+			fprintf(Arquivo,"         %f \t", SolucaoCorrente->Makespan);
+		}else{
+			fprintf(Arquivo,"        ------ \t");
+		}
+
+		// ordena as construções
+		SolucaoCorrente->ConstrucoesInstancia.OrdenaCosntrucoes(EscolhaConstrucao);
+
+		if( SolucaoCorrente->ConstrucoesInstancia.NivelDeInviabilidade != 0){
+			SolucaoCorrente->ProcessoViabilizacao1( EscolhaVeiculo, EscolhaConstrucao, EscolhaPlanta, ImprimeViabilizacao, ImprimeSolucao, ImprimeArquivo, Arquivo, RealizaProcessoDeAtrazarTarefas);
+			SolucaoCorrente->CalculaMakespan();
+			SolucaoCorrente->CalculaNiveisViabilidade();
+			if( SolucaoCorrente->ConstrucoesInstancia.NivelDeInviabilidade != 0){
+				SolucaoCorrente->ProcessoViabilizacao2( EscolhaVeiculo, EscolhaConstrucao, EscolhaPlanta, ImprimeViabilizacao, ImprimeSolucao, ImprimeArquivo, Arquivo, RealizaProcessoDeAtrazarTarefas);
+				SolucaoCorrente->CalculaMakespan();
+				SolucaoCorrente->CalculaNiveisViabilidade();
+				if( SolucaoCorrente->ConstrucoesInstancia.NivelDeInviabilidade == 0){
+					fprintf(Arquivo," ------ \t %f \n", SolucaoCorrente->Makespan);
+				}else{
+					fprintf(Arquivo," ------ \t ------ \n");
+				}
+			}else{
+				fprintf(Arquivo,"  %f \t ------ \n", SolucaoCorrente->Makespan);
+			}
+		}else{
+			fprintf(Arquivo," ------ \t ------ \n");
+		}
+
+		if( Ativa == 0){
+			SolucaoFinal = *SolucaoCorrente;
+			 Ativa = 1;
+		}else{
+			if( SolucaoFinal.ConstrucoesInstancia.NivelDeInviabilidade == 0){
+				if( SolucaoCorrente->ConstrucoesInstancia.NivelDeInviabilidade == 0 && SolucaoFinal.Makespan > SolucaoCorrente->Makespan){
+					SolucaoFinal = *SolucaoCorrente;
+				}
+			}else{
+				if( SolucaoFinal.ConstrucoesInstancia.NivelDeInviabilidade > SolucaoCorrente->ConstrucoesInstancia.NivelDeInviabilidade){
+					SolucaoFinal = *SolucaoCorrente;
+				}
+			}
+
+		}
+		FinalExecucao = time(NULL);
+		delete( SolucaoCorrente);
+		iteracoes++;
+	}
+
+	TempoExecucao = difftime(FinalExecucao, InicioExecucao);
+
+	fprintf(Arquivo,"\n    Busca Local  \t Tempo até aqui ( %.0f ) \n",  TempoExecucao);
+	fprintf(Arquivo,"     Solução \t BuscaLocalVeiculo   \n");
+	fprintf(Arquivo,"         %f \t ", SolucaoFinal.Makespan);
+
+	if( SolucaoFinal.ConstrucoesInstancia.NivelDeInviabilidade == 0){
+		SolucaoFinal.RealizarBuscaLocalCaminhao(EscolhaVeiculo, EscolhaConstrucao, EscolhaPlanta, ImprimeBusca, ImprimeSolucao, ImprimeArquivo, Arquivo, RealizaProcessoDeAtrazarTarefas);
+		SolucaoFinal.CalculaMakespan();
+		fprintf(Arquivo,"  %f \t", SolucaoFinal.Makespan);
+	}else{
+		fprintf(Arquivo,"  ------ \n");
+	}
+
+	if( SolucaoFinal.ConstrucoesInstancia.NivelDeInviabilidade == 0){
+		printf( " \t %f \t %d ",  SolucaoFinal.Makespan, SolucaoFinal.ConstrucoesInstancia.NivelDeInviabilidade);
+	}else{
+		printf( " \t ------  \t %d ",  SolucaoFinal.ConstrucoesInstancia.NivelDeInviabilidade);
+	}
+	SolucaoFinal.Imprime(1,1,1,0,1,Arquivo);
+
+
+	// coleta o horario final
+	FinalExecucao = time(NULL);
+
+	// calcula o tempo
+	TempoExecucao = difftime(FinalExecucao, InicioExecucao);
+
+	printf( " \t %.0f \n",  TempoExecucao);
+
+	fprintf( Arquivo," \n\n Tempo  %.0f \n\n",  TempoExecucao);
+
+
+	fclose (Arquivo);
+	Caminho.clear();
+
+}
+
+
+void	Heuristica::ExecutaConsBuscCons(string NomeInstancia, long int NumeroIteracoes, long int TempoExecucaoMaximo, int EscolhaVeiculo, int EscolhaConstrucao,  int EscolhaPlanta,  int RealizaProcessoDeAtrazarTarefas){
+
+	// ponteiro para o arquivo que se irá salvar os dados
+	PonteiroArquivo  Arquivo;
+
+	// caminho para o arquivo que se irá salvar os dados
+	string Caminho;
+
+	// variavel que controla se irá escrever os dados em um aruivo, é inicializada com 0
+	int ImprimeArquivo;
+	ImprimeArquivo = 0;
+
+	// variavel que controla se imprime na tela a solução e os procediemntos
+	int ImprimeSolucao;
+	ImprimeSolucao = 0;
+
+	time_t InicioExecucao, FinalExecucao;
+	double TempoExecucao;
+
+	//bool ImprimePlanta;
+	//bool ImprimeConstrucao;
+	//bool IntervalosRespeitadosConstrucaoes;
+
+	//ImprimePlanta = 1;
+	//ImprimeConstrucao = 1;
+	//IntervalosRespeitadosConstrucaoes = 1;
+
+	int ImprimeProcedimentoConstrutivo;
+	ImprimeProcedimentoConstrutivo = 0;
+
+	int ImprimeViabilizacao;
+	ImprimeViabilizacao = 0;
+
+	int ImprimeBusca;
+	ImprimeBusca = 0;
+
+	// Exscrever a dadta
+	 time_t timer;
+	 char buffer[26];
+	 struct tm* tm_info;
+
+	// variavel que faz o progrma parar
+	int ParaPrograma;
+
+	// classe do procediemnto construtivo
+	Procedimento1 *Prod1;
+
+
+
+	// classe que armazena solução corrente
+	Solucao *SolucaoCorrente;
+
+	// classe que armazena solução final
+	Solucao SolucaoFinal;
+
+	// variavel que informa se irá realizar a verificação da viabilidade ou não, inicializa com 1 que é que vai ter a verificação da viabilidade
+	//int VerificaViabilidade;
+	//VerificaViabilidade = 1;
+
+	int iteracoes;
+
+	// marca se já possui uma solução
+	int Ativa;
+	Ativa = 0;
+
+
+	// fornece o caminnho onde será criado o arquivo
+	Caminho =  "./Exec/";
+	// acrescenta o nome do arquivo ao caminho
+	Caminho +=  NomeInstancia;
+
+	DIR* dp;
+
+	dp = opendir ("Exec");
+
+	//cria a pasta Exec para salvar os dados da execução
+	if(!dp){
+		if( ImprimeSolucao == 1){
+			cout <<  "\n Nao tem diretorio \"Exec\"!!            FUDEU MUITO!! \n" << endl;
+		}
+
+		if(system("mkdir Exec;") == 0){
+			if( ImprimeSolucao == 1){
+				cout << " Criou pasta Exec" << endl;
+			}
+		}else{
+			cout << " Problema ao criar pasta Exec" << endl;
+		}
+
+		/* Outra maneira de criar arquivos
+		SituacaoDiretorio = mkdir("./myfolder", S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+		*/
+		dp = opendir ("Exec");
+
+		if(!dp){
+			cout << "\n Nao tem diretorio \"Exec\"!!             FUDEU MUITO!! \n" << endl;
+		}else{
+			if( ImprimeSolucao == 1){
+				cout << " Tem diretorio \"Exec\" !!  " << endl;
+			}
+		}
+	}else{
+		if( ImprimeSolucao == 1){
+			cout << " Tem diretorio \"Exec\" !!  " << endl;
+		}
+	}
+	closedir( dp );
+
+	// escreve o endereço do arquivo
+	//cout << endl << endl << endl << Caminho << "   -  " <<  Caminho.c_str() <<  endl << endl << endl;
+
+	cout << NomeInstancia << '\t';
+
+	// abre o arquivo
+	Arquivo = fopen (Caminho.c_str(), "a");
+
+	// verifica se abriu o arquivo
+	if(!Arquivo ){
+		// caso não escreve está mensagem
+		cout <<  endl << endl <<  endl << endl <<  "  Fudeu muito " <<  endl << endl <<  endl << endl;
+		cin >> ParaPrograma;
+	}
+
+	// coleta a data e a hora
+	time(&timer);
+	tm_info = localtime(&timer);
+	strftime(buffer, 26, " * %H:%M:%S de %d:%m:%Y", tm_info);
+
+	if( ImprimeArquivo == 1){
+		fprintf(Arquivo,"\n\n ----- Execução as %s ----- \n\n", buffer);
+		// escreve o nome da instancia no arquivo de saida
+		fprintf( Arquivo," %s \n ",  NomeInstancia.c_str());
+	}
+	if( ImprimeSolucao == 1){
+		printf("\n\n ----- Execução as %s ----- \n\n", buffer);
+	}
+
+	fprintf(Arquivo,"  Construtiva \t Viabilidade1 \t Viabilidade2   \n");
+
+	// coleta o horario inicial
+	InicioExecucao = time(NULL);
+	FinalExecucao = time(NULL);
+
+	iteracoes = 0;
+
+	while( iteracoes < NumeroIteracoes && (int) difftime(FinalExecucao, InicioExecucao) < TempoExecucaoMaximo ){
+
+		Prod1 = new Procedimento1;
+
+		Prod1->CarregaDados(NP, PlantasInstancia, NE, ConstrucoesInstancia, NV, Velocidade, TempoDeVidaConcreto, DM);
+
+		Prod1->Executa( EscolhaVeiculo, EscolhaConstrucao, EscolhaPlanta, ImprimeProcedimentoConstrutivo, ImprimeSolucao, ImprimeArquivo, Arquivo, RealizaProcessoDeAtrazarTarefas);
+
+		SolucaoCorrente = new Solucao;
+
+		SolucaoCorrente->CarregaSolucao(Prod1->NP, Prod1->PlantasInstancia, Prod1->NE, Prod1->ConstrucoesInstancia, Prod1->NV, Prod1->Velocidade, Prod1->TempoDeVidaConcreto, Prod1->DM);
+
+		delete(Prod1);
+
+		SolucaoCorrente->CalculaMakespan();
+
+		if(SolucaoCorrente->ConstrucoesInstancia.NivelDeInviabilidade == 0){
+			fprintf(Arquivo,"         %f \t", SolucaoCorrente->Makespan);
+		}else{
+			fprintf(Arquivo,"        ------ \t");
+		}
+
+		// ordena as construções
+		SolucaoCorrente->ConstrucoesInstancia.OrdenaCosntrucoes(EscolhaConstrucao);
+
+		if( SolucaoCorrente->ConstrucoesInstancia.NivelDeInviabilidade != 0){
+			SolucaoCorrente->ProcessoViabilizacao1( EscolhaVeiculo, EscolhaConstrucao, EscolhaPlanta, ImprimeViabilizacao, ImprimeSolucao, ImprimeArquivo, Arquivo, RealizaProcessoDeAtrazarTarefas);
+			SolucaoCorrente->CalculaMakespan();
+			SolucaoCorrente->CalculaNiveisViabilidade();
+			if( SolucaoCorrente->ConstrucoesInstancia.NivelDeInviabilidade != 0){
+				SolucaoCorrente->ProcessoViabilizacao2( EscolhaVeiculo, EscolhaConstrucao, EscolhaPlanta, ImprimeViabilizacao, ImprimeSolucao, ImprimeArquivo, Arquivo, RealizaProcessoDeAtrazarTarefas);
+				SolucaoCorrente->CalculaMakespan();
+				SolucaoCorrente->CalculaNiveisViabilidade();
+				if( SolucaoCorrente->ConstrucoesInstancia.NivelDeInviabilidade == 0){
+					fprintf(Arquivo," ------ \t %f \n", SolucaoCorrente->Makespan);
+				}else{
+					fprintf(Arquivo," ------ \t ------ \n");
+				}
+			}else{
+				fprintf(Arquivo,"  %f \t ------ \n", SolucaoCorrente->Makespan);
+			}
+		}else{
+			fprintf(Arquivo," ------ \t ------ \n");
+		}
+
+		if( Ativa == 0){
+			SolucaoFinal = *SolucaoCorrente;
+			 Ativa = 1;
+		}else{
+			if( SolucaoFinal.ConstrucoesInstancia.NivelDeInviabilidade == 0){
+				if( SolucaoCorrente->ConstrucoesInstancia.NivelDeInviabilidade == 0 && SolucaoFinal.Makespan > SolucaoCorrente->Makespan){
+					SolucaoFinal = *SolucaoCorrente;
+				}
+			}else{
+				if( SolucaoFinal.ConstrucoesInstancia.NivelDeInviabilidade > SolucaoCorrente->ConstrucoesInstancia.NivelDeInviabilidade){
+					SolucaoFinal = *SolucaoCorrente;
+				}
+			}
+
+		}
+		FinalExecucao = time(NULL);
+		delete( SolucaoCorrente);
+		iteracoes++;
+	}
+
+	TempoExecucao = difftime(FinalExecucao, InicioExecucao);
+
+	fprintf(Arquivo,"\n    Busca Local  \t Tempo até aqui ( %.0f ) \n",  TempoExecucao);
+	fprintf(Arquivo,"     Solução  \t BuscaLocalConstrucao  \n");
+	fprintf(Arquivo,"         %f \t ", SolucaoFinal.Makespan);
+
+	if( SolucaoFinal.ConstrucoesInstancia.NivelDeInviabilidade == 0){
+
+		SolucaoFinal.RealizarBuscaLocalConstrucao(EscolhaVeiculo, EscolhaConstrucao, EscolhaPlanta,ImprimeBusca, ImprimeSolucao, ImprimeArquivo, Arquivo, RealizaProcessoDeAtrazarTarefas);
+		SolucaoFinal.CalculaMakespan();
+		fprintf(Arquivo,"  %f \t", SolucaoFinal.Makespan);
+
+	}else{
+		fprintf(Arquivo,"  ------ \n");
+	}
+
+	if( SolucaoFinal.ConstrucoesInstancia.NivelDeInviabilidade == 0){
+		printf( " \t %f \t %d ",  SolucaoFinal.Makespan, SolucaoFinal.ConstrucoesInstancia.NivelDeInviabilidade);
+	}else{
+		printf( " \t ------  \t %d ",  SolucaoFinal.ConstrucoesInstancia.NivelDeInviabilidade);
+	}
+	SolucaoFinal.Imprime(1,1,1,0,1,Arquivo);
+
+
+	// coleta o horario final
+	FinalExecucao = time(NULL);
+
+	// calcula o tempo
+	TempoExecucao = difftime(FinalExecucao, InicioExecucao);
+
+	printf( " \t %.0f \n",  TempoExecucao);
+
+	fprintf( Arquivo," \n\n Tempo  %.0f \n\n",  TempoExecucao);
+
+
+	fclose (Arquivo);
+	Caminho.clear();
+
+}
+
+void	Heuristica::ExecutaConsBuscPlan(string NomeInstancia, long int NumeroIteracoes, long int TempoExecucaoMaximo, int EscolhaVeiculo, int EscolhaConstrucao,  int EscolhaPlanta,  int RealizaProcessoDeAtrazarTarefas){
+
+	// ponteiro para o arquivo que se irá salvar os dados
+	PonteiroArquivo  Arquivo;
+
+	// caminho para o arquivo que se irá salvar os dados
+	string Caminho;
+
+	// variavel que controla se irá escrever os dados em um aruivo, é inicializada com 0
+	int ImprimeArquivo;
+	ImprimeArquivo = 0;
+
+	// variavel que controla se imprime na tela a solução e os procediemntos
+	int ImprimeSolucao;
+	ImprimeSolucao = 0;
+
+	time_t InicioExecucao, FinalExecucao;
+	double TempoExecucao;
+
+	//bool ImprimePlanta;
+	//bool ImprimeConstrucao;
+	//bool IntervalosRespeitadosConstrucaoes;
+
+	//ImprimePlanta = 1;
+	//ImprimeConstrucao = 1;
+	//IntervalosRespeitadosConstrucaoes = 1;
+
+	int ImprimeProcedimentoConstrutivo;
+	ImprimeProcedimentoConstrutivo = 0;
+
+	int ImprimeViabilizacao;
+	ImprimeViabilizacao = 0;
+
+	int ImprimeBusca;
+	ImprimeBusca = 0;
+
+	// Exscrever a dadta
+	 time_t timer;
+	 char buffer[26];
+	 struct tm* tm_info;
+
+	// variavel que faz o progrma parar
+	int ParaPrograma;
+
+	// classe do procediemnto construtivo
+	Procedimento1 *Prod1;
+
+
+
+	// classe que armazena solução corrente
+	Solucao *SolucaoCorrente;
+
+	// classe que armazena solução final
+	Solucao SolucaoFinal;
+
+	// variavel que informa se irá realizar a verificação da viabilidade ou não, inicializa com 1 que é que vai ter a verificação da viabilidade
+	//int VerificaViabilidade;
+	//VerificaViabilidade = 1;
+
+	int iteracoes;
+
+	// marca se já possui uma solução
+	int Ativa;
+	Ativa = 0;
+
+
+	// fornece o caminnho onde será criado o arquivo
+	Caminho =  "./Exec/";
+	// acrescenta o nome do arquivo ao caminho
+	Caminho +=  NomeInstancia;
+
+	DIR* dp;
+
+	dp = opendir ("Exec");
+
+	//cria a pasta Exec para salvar os dados da execução
+	if(!dp){
+		if( ImprimeSolucao == 1){
+			cout <<  "\n Nao tem diretorio \"Exec\"!!            FUDEU MUITO!! \n" << endl;
+		}
+
+		if(system("mkdir Exec;") == 0){
+			if( ImprimeSolucao == 1){
+				cout << " Criou pasta Exec" << endl;
+			}
+		}else{
+			cout << " Problema ao criar pasta Exec" << endl;
+		}
+
+		/* Outra maneira de criar arquivos
+		SituacaoDiretorio = mkdir("./myfolder", S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+		*/
+		dp = opendir ("Exec");
+
+		if(!dp){
+			cout << "\n Nao tem diretorio \"Exec\"!!             FUDEU MUITO!! \n" << endl;
+		}else{
+			if( ImprimeSolucao == 1){
+				cout << " Tem diretorio \"Exec\" !!  " << endl;
+			}
+		}
+	}else{
+		if( ImprimeSolucao == 1){
+			cout << " Tem diretorio \"Exec\" !!  " << endl;
+		}
+	}
+	closedir( dp );
+
+	// escreve o endereço do arquivo
+	//cout << endl << endl << endl << Caminho << "   -  " <<  Caminho.c_str() <<  endl << endl << endl;
+
+	cout << NomeInstancia << '\t';
+
+	// abre o arquivo
+	Arquivo = fopen (Caminho.c_str(), "a");
+
+	// verifica se abriu o arquivo
+	if(!Arquivo ){
+		// caso não escreve está mensagem
+		cout <<  endl << endl <<  endl << endl <<  "  Fudeu muito " <<  endl << endl <<  endl << endl;
+		cin >> ParaPrograma;
+	}
+
+	// coleta a data e a hora
+	time(&timer);
+	tm_info = localtime(&timer);
+	strftime(buffer, 26, " * %H:%M:%S de %d:%m:%Y", tm_info);
+
+	if( ImprimeArquivo == 1){
+		fprintf(Arquivo,"\n\n ----- Execução as %s ----- \n\n", buffer);
+		// escreve o nome da instancia no arquivo de saida
+		fprintf( Arquivo," %s \n ",  NomeInstancia.c_str());
+	}
+	if( ImprimeSolucao == 1){
+		printf("\n\n ----- Execução as %s ----- \n\n", buffer);
+	}
+
+	fprintf(Arquivo,"  Construtiva \t Viabilidade1 \t Viabilidade2   \n");
+
+	// coleta o horario inicial
+	InicioExecucao = time(NULL);
+	FinalExecucao = time(NULL);
+
+	iteracoes = 0;
+
+	while( iteracoes < NumeroIteracoes && (int) difftime(FinalExecucao, InicioExecucao) < TempoExecucaoMaximo ){
+
+		Prod1 = new Procedimento1;
+
+		Prod1->CarregaDados(NP, PlantasInstancia, NE, ConstrucoesInstancia, NV, Velocidade, TempoDeVidaConcreto, DM);
+
+		Prod1->Executa( EscolhaVeiculo, EscolhaConstrucao, EscolhaPlanta, ImprimeProcedimentoConstrutivo, ImprimeSolucao, ImprimeArquivo, Arquivo, RealizaProcessoDeAtrazarTarefas);
+
+		SolucaoCorrente = new Solucao;
+
+		SolucaoCorrente->CarregaSolucao(Prod1->NP, Prod1->PlantasInstancia, Prod1->NE, Prod1->ConstrucoesInstancia, Prod1->NV, Prod1->Velocidade, Prod1->TempoDeVidaConcreto, Prod1->DM);
+
+		delete(Prod1);
+
+		SolucaoCorrente->CalculaMakespan();
+
+		if(SolucaoCorrente->ConstrucoesInstancia.NivelDeInviabilidade == 0){
+			fprintf(Arquivo,"         %f \t", SolucaoCorrente->Makespan);
+		}else{
+			fprintf(Arquivo,"        ------ \t");
+		}
+
+		// ordena as construções
+		SolucaoCorrente->ConstrucoesInstancia.OrdenaCosntrucoes(EscolhaConstrucao);
+
+		if( SolucaoCorrente->ConstrucoesInstancia.NivelDeInviabilidade != 0){
+			SolucaoCorrente->ProcessoViabilizacao1( EscolhaVeiculo, EscolhaConstrucao, EscolhaPlanta, ImprimeViabilizacao, ImprimeSolucao, ImprimeArquivo, Arquivo, RealizaProcessoDeAtrazarTarefas);
+			SolucaoCorrente->CalculaMakespan();
+			SolucaoCorrente->CalculaNiveisViabilidade();
+			if( SolucaoCorrente->ConstrucoesInstancia.NivelDeInviabilidade != 0){
+				SolucaoCorrente->ProcessoViabilizacao2( EscolhaVeiculo, EscolhaConstrucao, EscolhaPlanta, ImprimeViabilizacao, ImprimeSolucao, ImprimeArquivo, Arquivo, RealizaProcessoDeAtrazarTarefas);
+				SolucaoCorrente->CalculaMakespan();
+				SolucaoCorrente->CalculaNiveisViabilidade();
+				if( SolucaoCorrente->ConstrucoesInstancia.NivelDeInviabilidade == 0){
+					fprintf(Arquivo," ------ \t %f \n", SolucaoCorrente->Makespan);
+				}else{
+					fprintf(Arquivo," ------ \t ------ \n");
+				}
+			}else{
+				fprintf(Arquivo,"  %f \t ------ \n", SolucaoCorrente->Makespan);
+			}
+		}else{
+			fprintf(Arquivo," ------ \t ------ \n");
+		}
+
+		if( Ativa == 0){
+			SolucaoFinal = *SolucaoCorrente;
+			 Ativa = 1;
+		}else{
+			if( SolucaoFinal.ConstrucoesInstancia.NivelDeInviabilidade == 0){
+				if( SolucaoCorrente->ConstrucoesInstancia.NivelDeInviabilidade == 0 && SolucaoFinal.Makespan > SolucaoCorrente->Makespan){
+					SolucaoFinal = *SolucaoCorrente;
+				}
+			}else{
+				if( SolucaoFinal.ConstrucoesInstancia.NivelDeInviabilidade > SolucaoCorrente->ConstrucoesInstancia.NivelDeInviabilidade){
+					SolucaoFinal = *SolucaoCorrente;
+				}
+			}
+
+		}
+		FinalExecucao = time(NULL);
+		delete( SolucaoCorrente);
+		iteracoes++;
+	}
+
+	TempoExecucao = difftime(FinalExecucao, InicioExecucao);
+
+	fprintf(Arquivo,"\n    Busca Local  \t Tempo até aqui ( %.0f ) \n",  TempoExecucao);
+	fprintf(Arquivo,"     Solução \t  BuscaLocalPlanta  \n");
+	fprintf(Arquivo,"         %f \t ", SolucaoFinal.Makespan);
+
+	if( SolucaoFinal.ConstrucoesInstancia.NivelDeInviabilidade == 0){
+		SolucaoFinal.RealizarBuscaLocalPlanta(EscolhaVeiculo, EscolhaConstrucao, EscolhaPlanta,ImprimeBusca, ImprimeSolucao, ImprimeArquivo, Arquivo, RealizaProcessoDeAtrazarTarefas);
+		SolucaoFinal.CalculaMakespan();
+		fprintf(Arquivo,"  %f \n", SolucaoFinal.Makespan);
+	}else{
+		fprintf(Arquivo,"  ------ \n");
+	}
+
+	if( SolucaoFinal.ConstrucoesInstancia.NivelDeInviabilidade == 0){
+		printf( " \t %f \t %d ",  SolucaoFinal.Makespan, SolucaoFinal.ConstrucoesInstancia.NivelDeInviabilidade);
+	}else{
+		printf( " \t ------  \t %d ",  SolucaoFinal.ConstrucoesInstancia.NivelDeInviabilidade);
+	}
+	SolucaoFinal.Imprime(1,1,1,0,1,Arquivo);
+
+
+	// coleta o horario final
+	FinalExecucao = time(NULL);
+
+	// calcula o tempo
+	TempoExecucao = difftime(FinalExecucao, InicioExecucao);
+
+	printf( " \t %.0f \n",  TempoExecucao);
+
+	fprintf( Arquivo," \n\n Tempo  %.0f \n\n",  TempoExecucao);
+
+
+	fclose (Arquivo);
+	Caminho.clear();
+
+}
+
+
+
+
+
+
 
 
 // executa o procedimento heuristico
-void	Heuristica::ExecutaConsBusc(string NomeInstancia, int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta, int RealizaProcessoDeAtrazarTarefas){
+void	Heuristica::ExecutaConsBuscas(string NomeInstancia, int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta, int RealizaProcessoDeAtrazarTarefas){
 
 	// ponteiro para o arquivo que se irá salvar os dados
 	PonteiroArquivo  Arquivo;
@@ -1111,7 +1873,7 @@ void	Heuristica::ExecutaConsBusc(string NomeInstancia, int EscolhaVeiculo, int E
 
 
 // executa o procedimento heuristico
-void	Heuristica::ExecutaConsBuscCir(string NomeInstancia, int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta, int RealizaProcessoDeAtrazarTarefas){
+void	Heuristica::ExecutaConsBuscasCir(string NomeInstancia, int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta, int RealizaProcessoDeAtrazarTarefas){
 
 	// ponteiro para o arquivo que se irá salvar os dados
 	PonteiroArquivo  Arquivo;
@@ -1534,7 +2296,7 @@ void	Heuristica::ExecutaConsBuscCir(string NomeInstancia, int EscolhaVeiculo, in
 
 
 
-void	Heuristica::ExecutaGrasp(string NomeInstancia, long int NumeroIteracoes, long int TempoExecucaoMaximo, int EscolhaVeiculo, int EscolhaConstrucao,  int EscolhaPlanta,  int RealizaProcessoDeAtrazarTarefas){
+void	Heuristica::ExecutaGrsp(string NomeInstancia, long int NumeroIteracoes, long int TempoExecucaoMaximo, int EscolhaVeiculo, int EscolhaConstrucao,  int EscolhaPlanta,  int RealizaProcessoDeAtrazarTarefas){
 
 	// ponteiro para o arquivo que se irá salvar os dados
 	PonteiroArquivo  Arquivo;
@@ -1789,7 +2551,7 @@ void	Heuristica::ExecutaGrasp(string NomeInstancia, long int NumeroIteracoes, lo
 
 
 
-void	Heuristica::ExecutaGraspCir(string NomeInstancia, long int NumeroIteracoes,  long int TempoExecucaoMaximo, int EscolhaVeiculo, int EscolhaConstrucao,  int EscolhaPlanta,  int RealizaProcessoDeAtrazarTarefas){
+void	Heuristica::ExecutaGrspCir(string NomeInstancia, long int NumeroIteracoes,  long int TempoExecucaoMaximo, int EscolhaVeiculo, int EscolhaConstrucao,  int EscolhaPlanta,  int RealizaProcessoDeAtrazarTarefas){
 
 	// ponteiro para o arquivo que se irá salvar os dados
 	PonteiroArquivo  Arquivo;
@@ -2067,7 +2829,7 @@ void	Heuristica::ExecutaGraspCir(string NomeInstancia, long int NumeroIteracoes,
 
 
 
-void	Heuristica::ExecutaGraspClass(string NomeInstancia, long int NumeroIteracoes, long int TempoExecucaoMaximo, int EscolhaVeiculo, int EscolhaConstrucao,  int EscolhaPlanta,  int RealizaProcessoDeAtrazarTarefas){
+void	Heuristica::ExecutaGrspClass(string NomeInstancia, long int NumeroIteracoes, long int TempoExecucaoMaximo, int EscolhaVeiculo, int EscolhaConstrucao,  int EscolhaPlanta,  int RealizaProcessoDeAtrazarTarefas){
 
 	// ponteiro para o arquivo que se irá salvar os dados
 	PonteiroArquivo  Arquivo;
@@ -2326,7 +3088,7 @@ void	Heuristica::ExecutaGraspClass(string NomeInstancia, long int NumeroIteracoe
 
 
 
-void	Heuristica::ExecutaGraspClassCir(string NomeInstancia, long int NumeroIteracoes,  long int TempoExecucaoMaximo, int EscolhaVeiculo, int EscolhaConstrucao,  int EscolhaPlanta,  int RealizaProcessoDeAtrazarTarefas){
+void	Heuristica::ExecutaGrspClassCir(string NomeInstancia, long int NumeroIteracoes,  long int TempoExecucaoMaximo, int EscolhaVeiculo, int EscolhaConstrucao,  int EscolhaPlanta,  int RealizaProcessoDeAtrazarTarefas){
 
 	// ponteiro para o arquivo que se irá salvar os dados
 	PonteiroArquivo  Arquivo;

@@ -1,0 +1,44 @@
+Teste1
+2			-> duas plantas
+4			-> quatro veiculos
+4			-> donstruções
+1			->	tempo de vida do concreto
+20			-> tempo de descarregamento
+3 1 2 3 	-> caminhoes da primeira planta
+1 1			-> caminhoes da segunda planta
+1 1  		-> demanda da construção 1
+1 1  		-> demanda da construção 2 
+1 1   		-> demanda da construção 3
+1 1   		-> demanda da construção 4
+1 2 7 8		-> distancia da planta 1 as outras construções
+8 7 2 1		-> distancia da planta 2 as outras construções
+1 8 				-> distancia da construçao 1 as outras plantas
+2 7 				-> distancia da construçao 2 as outras plantas
+7 2 				-> distancia da construçao 3 as outras plantas
+8 1 				-> distancia da construçao 4 as outras plantas
+1			-> caminhão 1
+1	1			-> tempo para descarregar a demanda 1 na construção 1
+1	1			-> tempo para descarregar a demanda 1 na construção 2
+1	1			-> tempo para descarregar a demanda 1 na construção 3
+1	1			-> tempo para descarregar a demanda 1 na construção 4
+2			-> caminhão 2
+1	1			-> tempo para descarregar a demanda 1 na construção 1
+1	1			-> tempo para descarregar a demanda 1 na construção 2
+1	1			-> tempo para descarregar a demanda 1 na construção 3
+1 	1			-> tempo para descarregar a demanda 1 na construção 4
+3			-> caminhão 3
+1	1			-> tempo para descarregar a demanda 1 na construção 1
+1	1			-> tempo para descarregar a demanda 1 na construção 2
+1	1			-> tempo para descarregar a demanda 1 na construção 3
+1	1			-> tempo para descarregar a demanda 1 na construção 4
+4			-> caminhão 4
+1	1			-> tempo para descarregar a demanda 1 na construção 1
+1	1			-> tempo para descarregar a demanda 1 na construção 2
+1	1			-> tempo para descarregar a demanda 1 na construção 3
+1	1			-> tempo para descarregar a demanda 1 na construção 4
+1	1		->> tempo para carregar concreto nas plantas 
+1	1	1	1		->> tempo para descarrrregar concrto nas construções
+0 0 0 0 		-> tempo minimo da construçao
+5 5 9 3 		-> tempo maximo da construçao
+0 0 		-> tempo minimo da planta
+17 2 		-> tempo maximo da planta

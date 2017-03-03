@@ -96,7 +96,7 @@ int main(int argc, char **argv) {
 
 	EscreveDadosLidosNaTela  = 0;
 
-	// apenas o modelo
+	// apenas o modelo ************************************************************************
 	if( argc == 6 && strcmp ( argv[4], "modelo") == 0 ){		// strcmp for 0 é porque o conteudo é igual
 
 		#include "DeclaracaoVariaveisMain.hpp"
@@ -315,7 +315,7 @@ int main(int argc, char **argv) {
 
 
 
-
+	// apenas huristicas **************************************************************************
 	if( argc == 9 || argc == 11 ){
 
 		if( argc == 9) {
@@ -1021,9 +1021,11 @@ int main(int argc, char **argv) {
 	}
 
 
+
+	// modelo com inicio na heuristica
 	if( strcmp ( argv[1], "ModeloComInicio") == 0 ){
 
-
+// heuristica
 
 
 		TipoDeEntrada = argv[2];
@@ -1032,7 +1034,7 @@ int main(int argc, char **argv) {
 		Recursao = argv[4];
 
 		if( Recursao != "ComRec" && Recursao != "SemRec"){
-			cout << endl << endl << endl <<  argv[3] << "   Problema a se definir se o programa irá atrasar as tarefas anteriores para atender uma demanda ou não " << endl << endl << endl;
+			cout << endl << endl << endl <<  argv[4] << "   Problema a se definir se o programa irá atrasar as tarefas anteriores para atender uma demanda ou não " << endl << endl << endl;
 			return 0;
 		}else{
 			if( Recursao == "SemRec"){
@@ -1075,6 +1077,35 @@ int main(int argc, char **argv) {
 				return 0;
 			}
 		}
+
+
+
+		// modelo **************************************************************************************
+
+		int ComViolacao;
+
+
+		EscreveDadosLidosNaTela = 0;
+		if(strcmp ( argv[10], "Violando") == 0){
+			ComViolacao = 1;
+		}else{
+			if(strcmp ( argv[10], "NaoViolando") == 0){
+				ComViolacao = 0;
+			}else{
+				cout << "    Problema na passagem de parametros do modelo." << endl << endl;
+			}
+		}
+
+		double TempoExecucao;
+		if( strcmp(argv[11],"-") == 0 ){
+			TempoExecucao = INT_MAX;
+		}else{
+			TempoExecucao = atoi( argv[11] ) ;
+		}
+
+
+
+		// ****************************************************************************
 
 		TipoProcedimento = argv[5];
 
@@ -1126,6 +1157,27 @@ int main(int argc, char **argv) {
 
 					if( TipoProcedimento == "Cons" ){
 						Instancia->ExecutaCons(Nome, EscolhaVeiculo, EscolhaConstrucao, EscolhaPlanta, RealizaProcessoDeAtrazarTarefas);
+
+
+
+						#include "DeclaracaoVariaveisMain.hpp"
+
+
+						cout << " Instancia->ConstrucoesInstancia.NivelDeInviabilidade " << Instancia->ConstrucoesInstancia.NivelDeInviabilidade << endl << endl;
+
+						if( Instancia->ConstrucoesInstancia.NivelDeInviabilidade == 0){
+							cout << endl << endl << " inicia solucao" << endl << endl;
+
+
+						}
+
+
+						//**********************************************************
+
+
+
+
+
 					}
 				}
 

@@ -359,7 +359,7 @@ int main(int argc, char **argv) {
 
 		TipoProcedimento = argv[4];
 
-		if( TipoProcedimento != "Cons" && TipoProcedimento != "Cons400" && TipoProcedimento != "ConsBuscVei" && TipoProcedimento != "ConsBuscCons" && TipoProcedimento != "ConsBuscPlan" && TipoProcedimento != "ConsBuscas" && TipoProcedimento != "ConsBuscasCir" && TipoProcedimento != "Grsp" && TipoProcedimento != "GrspCir" && TipoProcedimento != "GrspClass" && TipoProcedimento != "GrspClassCir"){
+		if( TipoProcedimento != "Cons" && TipoProcedimento != "Cons100" && TipoProcedimento != "ConsBuscVei" && TipoProcedimento != "ConsBuscCons" && TipoProcedimento != "ConsBuscPlan" && TipoProcedimento != "ConsBuscas" && TipoProcedimento != "ConsBuscasCir" && TipoProcedimento != "Grsp" && TipoProcedimento != "GrspCir" && TipoProcedimento != "GrspClass" && TipoProcedimento != "GrspClassCir"){
 			cout << endl << endl << endl <<  argv[4] << "   Problema em se identificar o tipo de procediemnto a se realizar " << endl << endl << endl;
 			return 0;
 		}
@@ -476,10 +476,10 @@ int main(int argc, char **argv) {
 		 }
 
 
-		if( TipoProcedimento == "Cons400"){
+		if( TipoProcedimento == "Cons100"){
 
 			if( argc != 9){
-				if( TipoProcedimento == "Cons400"){
+				if( TipoProcedimento == "Cons100"){
 					cout << endl << endl << endl << "    Probelma na entrada de parametros para se executar o cons" << endl << endl << endl;
 				}
 				return 0;
@@ -511,7 +511,7 @@ int main(int argc, char **argv) {
 					return 0;
 				}
 
-				if( TipoProcedimento == "Cons400" ){
+				if( TipoProcedimento == "Cons100" ){
 					// escreve cabeçario
 					printf(" Nome_Instancia  \t Construtiva \t NivelDeInviabilidade  \t  Tempo(segundos) \n");
 				}
@@ -529,8 +529,8 @@ int main(int argc, char **argv) {
 				if( Instancia->LeDados(Nome, EscreveDadosLidosNaTela) == 1){
 					//cout << " Leu Dados" << endl;
 
-					if( TipoProcedimento == "Cons400" ){
-						Instancia->ExecutaCons400(Nome, EscolhaVeiculo, EscolhaConstrucao, EscolhaPlanta, RealizaProcessoDeAtrazarTarefas);
+					if( TipoProcedimento == "Cons100" ){
+						Instancia->ExecutaCons100(Nome, EscolhaVeiculo, EscolhaConstrucao, EscolhaPlanta, RealizaProcessoDeAtrazarTarefas);
 					}
 				}
 

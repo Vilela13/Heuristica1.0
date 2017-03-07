@@ -73,7 +73,7 @@ public:
 	int		LeDados(string, int );						// le os dados da instancia
 
 	void	ExecutaCons(string NomeInstancia, int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta, int RealizaProcessoDeAtrazarTarefas);
-	void	ExecutaCons400(string NomeInstancia, int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta, int RealizaProcessoDeAtrazarTarefas);
+	void	ExecutaCons100(string NomeInstancia, int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta, int RealizaProcessoDeAtrazarTarefas);
 
 	void	ExecutaConsBuscVei(string NomeInstancia, long int NumeroIteracoes, long int TempoExecucaoMaximo, int EscolhaVeiculo, int EscolhaConstrucao,  int EscolhaPlanta,  int RealizaProcessoDeAtrazarTarefas);
 	void	ExecutaConsBuscCons(string NomeInstancia, long int NumeroIteracoes, long int TempoExecucaoMaximo, int EscolhaVeiculo, int EscolhaConstrucao,  int EscolhaPlanta,  int RealizaProcessoDeAtrazarTarefas);
@@ -484,7 +484,7 @@ void	Heuristica::ExecutaCons(string NomeInstancia, int EscolhaVeiculo, int Escol
 
 
 
-void	Heuristica::ExecutaCons400(string NomeInstancia, int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta, int RealizaProcessoDeAtrazarTarefas){
+void	Heuristica::ExecutaCons100(string NomeInstancia, int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta, int RealizaProcessoDeAtrazarTarefas){
 
 
 
@@ -586,7 +586,7 @@ void	Heuristica::ExecutaCons400(string NomeInstancia, int EscolhaVeiculo, int Es
 
 	iteracoes = 0;
 
-	while( iteracoes <= 400  ){
+	while( iteracoes <= 100  ){
 
 		Prod1 = new Procedimento1;
 

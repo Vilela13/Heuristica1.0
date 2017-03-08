@@ -20,4 +20,16 @@ arquivo contendo o nome dass instnatias em Instancias.txt rodar por 600 segundos
 
 Roda apenas uma instancia, a p-C101-P1C5-I2-V1.txt
 
+
+->			inst p-C101-P1C5-I2-V1.txt ComRec ConsBuscVei 2 - 4 4 4 heuristica
+
+roda a construtiva seguida da busca local veiculo com 2 iteraçãoes sem limite de tempo (-), com todos os parametros atelatorios (4)
+
+->			inst p-C101-P1C5-I2-V1.txt ComRec ConsBuscCons 2 - 4 4 4 heuristica
+->			inst p-C101-P1C5-I2-V1.txt ComRec ConsBuscPlan 2 - 4 4 4 heuristica
+->			inst p-C101-P1C5-I2-V1.txt ComRec ConsBuscasVeiConsPlan 2 - 4 4 4 heuristica
+
+
 ->          ModeloComInicio	inst Teste1.txt ComRec Cons 1 1 1
+
+trabalhando para rodar modelo com inicio em solução da heuristica

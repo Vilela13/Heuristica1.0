@@ -359,7 +359,7 @@ int main(int argc, char **argv) {
 
 		TipoProcedimento = argv[4];
 
-		if( TipoProcedimento != "Cons" && TipoProcedimento != "Cons100" && TipoProcedimento != "ConsBuscVei" && TipoProcedimento != "ConsBuscCons" && TipoProcedimento != "ConsBuscPlan" && TipoProcedimento != "ConsBuscas" && TipoProcedimento != "ConsBuscasCir" && TipoProcedimento != "Grsp" && TipoProcedimento != "GrspCir" && TipoProcedimento != "GrspClass" && TipoProcedimento != "GrspClassCir"){
+		if( TipoProcedimento != "Cons" && TipoProcedimento != "Cons100" && TipoProcedimento != "ConsBuscVei" && TipoProcedimento != "ConsBuscCons" && TipoProcedimento != "ConsBuscPlan" && TipoProcedimento != "ConsBuscasVeiConsPlan" && TipoProcedimento != "ConsBuscas" && TipoProcedimento != "ConsBuscasCir" && TipoProcedimento != "Grsp" && TipoProcedimento != "GrspCir" && TipoProcedimento != "GrspClass" && TipoProcedimento != "GrspClassCir"){
 			cout << endl << endl << endl <<  argv[4] << "   Problema em se identificar o tipo de procediemnto a se realizar " << endl << endl << endl;
 			return 0;
 		}
@@ -557,7 +557,7 @@ int main(int argc, char **argv) {
 
 
 
-		if( TipoProcedimento == "ConsBuscVei" || TipoProcedimento == "ConsBuscCons" || TipoProcedimento == "ConsBuscPlan"){
+		if( TipoProcedimento == "ConsBuscVei" || TipoProcedimento == "ConsBuscCons" || TipoProcedimento == "ConsBuscPlan" || TipoProcedimento == "ConsBuscasVeiConsPlan"){
 
 			 if( argc != 11){
 				 cout << endl << endl << endl << "    Probelma na entrada de parametros para se executar o " << TipoProcedimento << endl << endl << endl;
@@ -616,7 +616,11 @@ int main(int argc, char **argv) {
 						// escreve a hora da execucao e a parte inicial da tabela
 						printf("\n\n ----- Execução ConsBuscCons as %s ----- \n\n", buffer);
 					}else{
-						printf("\n\n ----- Execução ConsBuscPlan as %s ----- \n\n", buffer);
+						if( TipoProcedimento == "ConsBuscPlan" ){
+							printf("\n\n ----- Execução ConsBuscPlan as %s ----- \n\n", buffer);
+						}else{
+							printf("\n\n ----- Execução ConsBuscVeiconsPlan as %s ----- \n\n", buffer);
+						}
 					}
 
 				}
@@ -661,7 +665,11 @@ int main(int argc, char **argv) {
 						if( TipoProcedimento == "ConsBuscCons"){
 							Instancia->ExecutaConsBuscCons(Nome, NumeroIteracoes, TempoExecucaoMaximo, EscolhaVeiculo,  EscolhaConstrucao,  EscolhaPlanta, RealizaProcessoDeAtrazarTarefas);
 						}else{
-							Instancia->ExecutaConsBuscPlan(Nome, NumeroIteracoes, TempoExecucaoMaximo, EscolhaVeiculo,  EscolhaConstrucao,  EscolhaPlanta, RealizaProcessoDeAtrazarTarefas);
+							if( TipoProcedimento == "ConsBuscPlan" ){
+								Instancia->ExecutaConsBuscPlan(Nome, NumeroIteracoes, TempoExecucaoMaximo, EscolhaVeiculo,  EscolhaConstrucao,  EscolhaPlanta, RealizaProcessoDeAtrazarTarefas);
+							}else{
+								Instancia->ExecutaConsBuscasveiConsPlan(Nome, NumeroIteracoes, TempoExecucaoMaximo, EscolhaVeiculo,  EscolhaConstrucao,  EscolhaPlanta, RealizaProcessoDeAtrazarTarefas);
+							}
 						}
 
 					}

@@ -47,3 +47,5 @@ Instância 	 Status 	 Solução_Primal 	 Solução_Dual 	 Solução_Real 	 Gap 	
  p-C101-P1C5-I2-V1.txt 	Optimal 	4100.000 	 4100.000 	 4100.000 	 0.000 	 12.018 	 
  p-C101-P1C5-I2-V1.txt 	Optimal 	4100.000 	 4100.000 	 4100.000 	 0.000 	 13.628 	 
  p-C101-P1C5-I2-V1.txt 	Optimal 	4100.000 	 4100.000 	 4100.000 	 0.000 	 10.986 	 
+ p-C101-P1C5-I2-V1.txt 	Optimal 	4100.000 	 4100.000 	 4100.000 	 0.000 	 12.524 	 
+ p-C101-P1C5-I2-V1.txt 	Optimal 	4100.000 	 4100.000 	 4100.000 	 0.000 	 13.434 	 

@@ -964,3 +964,138 @@
 
  Tempo  0.000000 
 
+  Construtiva 	 Viabilidade1 	 Viabilidade2   
+
+    Busca Local  	 Tempo até aqui ( 0 ) 
+     Solução 	 BuscaLocalVeiculo   
+         -13.000000 	   ------ 
+
+
+  [[[[[[  Imprime plantas  ]]]]]]
+
+  Makespan Geral das Plantas = -13.0000
+
+
+ [[[[[[  Imprime construcoes  ]]]]]] 
+  Nivel de Inviabilidade = 0  
+ 
+ Makespan Geral das Construcoes = 0.000000
+ 
+
+ ***********  Consistencia da solução ********************* 
+
+
+           Verifica tarefas individualmente 
+
+
+          Verifica integridade Descarregaemntos  
+
+ 
+  Status de respeito a intervelos de construção 
+
+
+
+  Verifica integridade carregamentos 
+
+
+          Verifica integridade Deslocamentos  
+
+
+
+ *********************************************************** 
+
+     MAKESPAN GERAL = 0.0000 
+ 
+
+ Tempo  0 
+
+  Construtiva 	 Viabilidade1 	 Viabilidade2   
+
+    Busca Local  	 Tempo até aqui ( 0 ) 
+     Solução 	 BuscaLocalVeiculo   
+         -13.000000 	   ------ 
+
+
+  [[[[[[  Imprime plantas  ]]]]]]
+
+  Makespan Geral das Plantas = -13.0000
+
+
+ [[[[[[  Imprime construcoes  ]]]]]] 
+  Nivel de Inviabilidade = 0  
+ 
+ Makespan Geral das Construcoes = 0.000000
+ 
+
+ ***********  Consistencia da solução ********************* 
+
+
+           Verifica tarefas individualmente 
+
+
+          Verifica integridade Descarregaemntos  
+
+ 
+  Status de respeito a intervelos de construção 
+
+
+
+  Verifica integridade carregamentos 
+
+
+          Verifica integridade Deslocamentos  
+
+
+
+ *********************************************************** 
+
+     MAKESPAN GERAL = 0.0000 
+ 
+
+ Tempo  0 
+
+  Construtiva 	 Viabilidade1 	 Viabilidade2   
+
+    Busca Local  	 Tempo até aqui ( 0 ) 
+     Solução 	 BuscaLocalVeiculo   
+         -13.000000 	   ------ 
+
+
+  [[[[[[  Imprime plantas  ]]]]]]
+
+  Makespan Geral das Plantas = -13.0000
+
+
+ [[[[[[  Imprime construcoes  ]]]]]] 
+  Nivel de Inviabilidade = 0  
+ 
+ Makespan Geral das Construcoes = 0.000000
+ 
+
+ ***********  Consistencia da solução ********************* 
+
+
+           Verifica tarefas individualmente 
+
+
+          Verifica integridade Descarregaemntos  
+
+ 
+  Status de respeito a intervelos de construção 
+
+
+
+  Verifica integridade carregamentos 
+
+
+          Verifica integridade Deslocamentos  
+
+
+
+ *********************************************************** 
+
+     MAKESPAN GERAL = 0.0000 
+ 
+
+ Tempo  0 
+

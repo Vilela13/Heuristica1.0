@@ -316,7 +316,7 @@ int main(int argc, char **argv) {
 
 
 	// apenas huristicas **************************************************************************
-	if( argc == 9 || argc == 11 ){
+	if( (argc == 9 || argc == 11) && strcmp( argv[1], "ModeloComInicio") != 0){
 
 		if( argc == 9) {
 			if( strcmp( argv[8], "heuristica") != 0 ){
@@ -935,8 +935,6 @@ int main(int argc, char **argv) {
 					 cout << endl << endl << " Tempo de execução negativo " << Nome << endl << endl;
 					 return 0;
 				 }
-				 // tempo maximo de execução do problema
-				 TempoExecucaoMaximo = atoi( argv[6]);		// função atoi tranforma char em inteiro ( biblioteca stdlib.h)
 			 }
 
 			 // ordena na ordem do menor número de tarefas para o maior se colocar o valor 1, ordena na ordem do maior número de tarefas para o menor se colocar o valor 2
@@ -1031,15 +1029,22 @@ int main(int argc, char **argv) {
 
 
 	// modelo com inicio na heuristica
-	if( strcmp ( argv[1], "ModeloComInicio") == 0 ){
+	if( argc = 10 && strcmp ( argv[1], "ModeloComInicio") == 0 ){
 
-// heuristica
+		int StatusInicio;
+		double PrimalInicio;
+		double DualInicio;
+		double SolucaoRealInicio;
+		double GapInicio;
+		double TempoInicio;
 
+		ClasseModeloInicioHeuristica *InstanciaInicioHeuristica;
 
-		TipoDeEntrada = argv[2];
-		Instancias = argv[3];
+		//cout << endl << " entrou " << endl;
 
-		Recursao = argv[4];
+		Instancias = argv[2];
+
+		Recursao = argv[3];
 
 		if( Recursao != "ComRec" && Recursao != "SemRec"){
 			cout << endl << endl << endl <<  argv[4] << "   Problema a se definir se o programa irá atrasar as tarefas anteriores para atender uma demanda ou não " << endl << endl << endl;
@@ -1055,160 +1060,60 @@ int main(int argc, char **argv) {
 			}
 		}
 
-		// caso for passado o parametro arq, que quer dizer que um conjunto de instancias será testado se entra nesse loop. compare retorna 0 se o string for igual ao texto (arq) que se quer comparar.
-		if( TipoDeEntrada.compare(0,3,"arq") == 0 ){
-			ArquivoInstancia.open(Instancias.c_str());
-			if ( ArquivoInstancia.is_open() ){
-				ArquivoInstancia >> Nome;
-				//cout << " instancia lida = " << Nome << endl;
-				while( Nome != "EOF"){
-					ListaInstancias.push_back(Nome);
-					ArquivoInstancia >> Nome;
-				}
-				ArquivoInstancia.close();
-			}else{
-				cout << "\n \n Arquivo inexistente! \n \n";
-				return 0;
-			}
-		}else{
+		// numero maximo de iterações
+		 NumeroIteracoesString = argv[4];
+		 if( NumeroIteracoesString == "-"){
+			 NumeroIteracoes = LONG_MAX;
+		 }else{
+			 if( atoi( argv[4]) > 0){
+				 NumeroIteracoes = atoi( argv[4]);		// função atoi tranforma char em inteiro ( biblioteca stdlib.h)
+			 }else{
+				 cout << endl << endl << " Numero de iterações negativo " << Nome << endl << endl;
+				 return 0;
+			 }
+		 }
 
-		// caso for apenas uma intância, se coloca na lista de instancia apena a instancia que se quer comprar
-			if( TipoDeEntrada.compare(0,4,"inst") == 0 ){
-				ListaInstancias.push_back(Instancias);
-			}else{
-				cout << "(" << TipoDeEntrada << ")";
-				printf( " TipoDeEntrada  Problema na definição da entrada das instancias. \n\n\n");
-				ListaInstancias.clear();
-				Nome.clear();
-				Instancias.clear();
-				Saida.clear();
-				return 0;
-			}
-		}
+		 TempoExecucaoMaximoString = argv[5];
+		 if( TempoExecucaoMaximoString == "-"){
+			 TempoExecucaoMaximo = LONG_MAX;
+		 }else{
+			 if( atoi( argv[5]) > 0){
+				 TempoExecucaoMaximo = atoi( argv[5]);		// função atoi tranforma char em inteiro ( biblioteca stdlib.h)
+			 }else{
+				 cout << endl << endl << " Tempo de execução negativo " << Nome << endl << endl;
+				 return 0;
+			 }
+		 }
 
+		srand ( time(NULL) + clock()  );
 
+		 // ordena na ordem do menor número de tarefas para o maior se colocar o valor 1, ordena na ordem do maior número de tarefas para o menor se colocar o valor 2
+		EscolhaVeiculo = atoi( argv[6]);			// função atoi tranforma char em inteiro ( biblioteca stdlib.h)
+		 // modo de escolha da construção, 1 escolhe a construção por meio do RankTempoDemandas, 2 escolhe a construção com mais demandas,
+		EscolhaConstrucao = atoi( argv[7]);		// função atoi tranforma char em inteiro ( biblioteca stdlib.h)
+		 // modo de escolha da planta, 1 é a planta mais proxima, 1 é a planta com menos tarefas, 3 é a planta com mais tarefas
+		EscolhaPlanta = atoi( argv[8]);			// função atoi tranforma char em inteiro ( biblioteca stdlib.h)
 
 		// modelo **************************************************************************************
 
-		int ComViolacao;
-
-
-		EscreveDadosLidosNaTela = 0;
-		if(strcmp ( argv[10], "Violando") == 0){
-			ComViolacao = 1;
-		}else{
-			if(strcmp ( argv[10], "NaoViolando") == 0){
-				ComViolacao = 0;
-			}else{
-				cout << "    Problema na passagem de parametros do modelo." << endl << endl;
-			}
-		}
 
 		double TempoExecucao;
-		if( strcmp(argv[11],"-") == 0 ){
+		if( strcmp(argv[9],"-") == 0 ){
 			TempoExecucao = INT_MAX;
 		}else{
-			TempoExecucao = atoi( argv[11] ) ;
+			TempoExecucao = atoi( argv[9] ) ;
 		}
 
+		InstanciaInicioHeuristica = new ClasseModeloInicioHeuristica;
+		if( InstanciaInicioHeuristica->LeDados(Instancias, EscreveDadosLidosNaTela) == 1){
+			//cout << "   Leu dados " << endl << endl;
 
+			//cout << endl <<  "TempoExecucaoMaximo  " << TempoExecucaoMaximo << endl << endl;
 
-		// ****************************************************************************
+			InstanciaInicioHeuristica->CplexInicia(Instancias, RealizaProcessoDeAtrazarTarefas, NumeroIteracoes, TempoExecucaoMaximo, EscolhaVeiculo, EscolhaConstrucao, EscolhaPlanta,  TempoExecucao, StatusInicio, PrimalInicio, DualInicio, SolucaoRealInicio, GapInicio, TempoInicio);
+		}
 
-		TipoProcedimento = argv[5];
-
-		if( TipoProcedimento == "Cons"){
-
-			srand ( time(NULL) + clock()  );
-
-			 // ordena na ordem do menor número de tarefas para o maior se colocar o valor 1, ordena na ordem do maior número de tarefas para o menor se colocar o valor 2
-			EscolhaVeiculo = atoi( argv[6]);			// função atoi tranforma char em inteiro ( biblioteca stdlib.h)
-			 // modo de escolha da construção, 1 escolhe a construção por meio do RankTempoDemandas, 2 escolhe a construção com mais demandas,
-			EscolhaConstrucao = atoi( argv[7]);		// função atoi tranforma char em inteiro ( biblioteca stdlib.h)
-			 // modo de escolha da planta, 1 é a planta mais proxima, 1 é a planta com menos tarefas, 3 é a planta com mais tarefas
-			EscolhaPlanta = atoi( argv[8]);			// função atoi tranforma char em inteiro ( biblioteca stdlib.h)
-
-			 // coleta a data e a hora
-			time(&timer);
-			tm_info = localtime(&timer);
-			strftime(buffer, 26, " * %H:%M:%S de %d:%m:%Y", tm_info);
-
-			if( TipoDeEntrada.compare(0,3,"arq") == 0){
-				if( TipoProcedimento == "Cons" ){
-					// escreve a hora da execucao e a parte inicial da tabela
-					printf("\n\n ----- Execução Cons as %s ----- \n\n", buffer);
-				}
-
-				// escreve o tipo de execução
-
-				if( EscreveTipoDeExecucao( EscolhaVeiculo, EscolhaConstrucao, EscolhaPlanta, RealizaProcessoDeAtrazarTarefas) == 0){
-					return 0;
-				}
-
-				if( TipoProcedimento == "Cons" ){
-					// escreve cabeçario
-					printf(" Nome_Instancia  \t Construtiva \t Viabilidade1 \t Viabilidade2  \t  Tempo (segundos) \n");
-				}
-			}
-
-			while( !ListaInstancias.empty()){
-				it = ListaInstancias.begin();
-				Nome = *it;
-				ListaInstancias.pop_front();
-
-				//cout << " Modelo => " << Nome << endl << endl;
-
-				Instancia = new Heuristica;
-
-				if( Instancia->LeDados(Nome, EscreveDadosLidosNaTela) == 1){
-					//cout << " Leu Dados" << endl;
-
-					if( TipoProcedimento == "Cons" ){
-						Instancia->ExecutaCons(Nome, EscolhaVeiculo, EscolhaConstrucao, EscolhaPlanta, RealizaProcessoDeAtrazarTarefas);
-
-
-
-						#include "DeclaracaoVariaveisMain.hpp"
-
-
-						cout << " Instancia->ConstrucoesInstancia.NivelDeInviabilidade " << Instancia->ConstrucoesInstancia.NivelDeInviabilidade << endl << endl;
-
-						if( Instancia->ConstrucoesInstancia.NivelDeInviabilidade == 0){
-							cout << endl << endl << " inicia solucao" << endl << endl;
-
-
-						}
-
-
-						//**********************************************************
-
-
-
-
-
-					}
-				}
-
-				delete(Instancia);
-			}
-
-			NumeroIteracoesString.clear();
-			TempoExecucaoMaximoString.clear();
-			Recursao.clear();
-			TipoProcedimento.clear();
-			ListaInstancias.clear();
-			Nome.clear();
-			Saida.clear();
-			Instancias.clear();
-
-			ArquivoExcelResposta.close();
-			ListaInstancias.clear();
-
-			if( TipoDeEntrada.compare(0,3,"arq") == 0){
-				cout << "\n \n Galo Doido! \n \n";
-			}
-			return 1;
-		 }
+		return 1;
 
 
 	}

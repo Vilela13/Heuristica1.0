@@ -30,6 +30,7 @@ roda a construtiva seguida da busca local veiculo com 2 iteraçãoes sem limite 
 ->			inst p-C101-P1C5-I2-V1.txt ComRec ConsBuscasVeiConsPlan 2 - 4 4 4 heuristica
 
 
-->          ModeloComInicio	inst Teste1.txt ComRec Cons 1 1 1
+->          ModeloComInicio	Teste1.txt ComRec  2 - 1 1 1 20
+			ModeloComInicio	p-C101-P1C5-I2-V1.txt ComRec  2 - 4 4 4 20
 
-trabalhando para rodar modelo com inicio em solução da heuristica
+trabalhando para rodar modelo com inicio em solução da heuristica ConsBuscasVeiConsPlan 

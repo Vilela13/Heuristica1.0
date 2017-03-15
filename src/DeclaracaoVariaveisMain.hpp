@@ -47,6 +47,7 @@
 
 	ClasseModeloJanelaViolada *InstanciaComViolacao;
 
+
 	string Instancias;
 	string Saida;
 

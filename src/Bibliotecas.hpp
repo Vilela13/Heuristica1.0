@@ -112,4 +112,8 @@ using namespace std;
 
 #include "Heuristica.hpp"			// possui os procediemtos que cada instancia ira sofrer
 
+
+// modelo com inicio heuristica
+#include "ModeloInicioHeuristica.hpp"		// possui o modelo que inicia a solução na heuristica
+
 #endif /* BIBLIOTECAS_HPP_ */

@@ -54,8 +54,8 @@ src/Heuristica1.0.o: ../src/Heuristica1.0.cpp ../src/Bibliotecas.hpp \
  ../src/Plantas.hpp ../src/DadosTarefa.hpp ../src/Construcoes.hpp \
  ../src/FuncoesSolucoes.hpp ../src/Procedimento1.hpp \
  ../src/BuscaLocal.hpp ../src/Solucoes.hpp ../src/Heuristica.hpp \
- ../src/DeclaraVariaceis.hpp ../src/DeclaracaoVariaveisMain.hpp \
- ../src/CriaInstancias.hpp
+ ../src/ModeloInicioHeuristica.hpp ../src/DeclaraVariaceis.hpp \
+ ../src/DeclaracaoVariaveisMain.hpp ../src/CriaInstancias.hpp
 
 ../src/Bibliotecas.hpp:
 
@@ -186,6 +186,8 @@ src/Heuristica1.0.o: ../src/Heuristica1.0.cpp ../src/Bibliotecas.hpp \
 ../src/Solucoes.hpp:
 
 ../src/Heuristica.hpp:
+
+../src/ModeloInicioHeuristica.hpp:
 
 ../src/DeclaraVariaceis.hpp:
 

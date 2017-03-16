@@ -668,7 +668,7 @@ int main(int argc, char **argv) {
 							if( TipoProcedimento == "ConsBuscPlan" ){
 								Instancia->ExecutaConsBuscPlan(Nome, NumeroIteracoes, TempoExecucaoMaximo, EscolhaVeiculo,  EscolhaConstrucao,  EscolhaPlanta, RealizaProcessoDeAtrazarTarefas);
 							}else{
-								Instancia->ExecutaConsBuscasveiConsPlan(Nome, NumeroIteracoes, TempoExecucaoMaximo, EscolhaVeiculo,  EscolhaConstrucao,  EscolhaPlanta, RealizaProcessoDeAtrazarTarefas);
+								Instancia->ExecutaConsBuscasVeiConsPlan(Nome, NumeroIteracoes, TempoExecucaoMaximo, EscolhaVeiculo,  EscolhaConstrucao,  EscolhaPlanta, RealizaProcessoDeAtrazarTarefas);
 							}
 						}
 

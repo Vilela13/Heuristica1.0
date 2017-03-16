@@ -145,15 +145,15 @@ int ClasseModeloInicioHeuristica::CplexInicia(string Nome, int RealizaProcessoDe
 
 	Instancia2 = new Heuristica;
 
-	if( Instancia2->LeDados(Nome, 0) == 1){
+	if( Instancia2->LeDados(Nome, 1) == 1){
 
 //		cout << "NumeroIteracoes  " << NumeroIteracoes << "  TempoExecucaoMaximo  " << TempoExecucaoMaximo ;
 //		cout << "  EscolhaVeiculo  " << EscolhaVeiculo << " EscolhaConstrucao  " << EscolhaConstrucao << " EscolhaPlanta " << EscolhaPlanta;
 //		cout << "  RealizaProcessoDeAtrazarTarefas" << RealizaProcessoDeAtrazarTarefas << endl;
-		Instancia2->ExecutaConsBuscasveiConsPlan(Nome, NumeroIteracoes, TempoExecucaoMaximo, EscolhaVeiculo, EscolhaConstrucao, EscolhaPlanta, RealizaProcessoDeAtrazarTarefas);
+		Instancia2->ExecutaConsBuscasVeiConsPlan(Nome, NumeroIteracoes, TempoExecucaoMaximo, EscolhaVeiculo, EscolhaConstrucao, EscolhaPlanta, RealizaProcessoDeAtrazarTarefas);
 
-
-
+		Instancia2->IniciaVariaveisDoModelo();
+		Instancia2->AlocaVariaveisDoModelo();
 
 
 /*

@@ -1,9 +1,9 @@
 Solution status =  [Feasible] 
 Solution primal cost = 4100
-Solution dual cost = 4040
+Solution dual cost = 4050
 Soution with delay = 4100
-Gap = 1.46341%
-Tempo = 20.0165 segundos. 
+Gap = 1.21951%
+Tempo = 20.0216 segundos. 
 
  Veiculo 0
 Alfa_0_0_0 [0]  

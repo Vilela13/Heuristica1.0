@@ -79,7 +79,7 @@ public:
 	void	ExecutaConsBuscCons(string NomeInstancia, long int NumeroIteracoes, long int TempoExecucaoMaximo, int EscolhaVeiculo, int EscolhaConstrucao,  int EscolhaPlanta,  int RealizaProcessoDeAtrazarTarefas);
 	void	ExecutaConsBuscPlan(string NomeInstancia, long int NumeroIteracoes, long int TempoExecucaoMaximo, int EscolhaVeiculo, int EscolhaConstrucao,  int EscolhaPlanta,  int RealizaProcessoDeAtrazarTarefas);
 
-	void	ExecutaConsBuscasveiConsPlan(string NomeInstancia, long int NumeroIteracoes, long int TempoExecucaoMaximo, int EscolhaVeiculo, int EscolhaConstrucao,  int EscolhaPlanta,  int RealizaProcessoDeAtrazarTarefas);
+	void	ExecutaConsBuscasVeiConsPlan(string NomeInstancia, long int NumeroIteracoes, long int TempoExecucaoMaximo, int EscolhaVeiculo, int EscolhaConstrucao,  int EscolhaPlanta,  int RealizaProcessoDeAtrazarTarefas);
 
 
 	void	ExecutaConsBuscas(string NomeInstancia, int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta,  int RealizaProcessoDeAtrazarTarefas);			// executa o procedimento heuristico
@@ -142,6 +142,18 @@ public:
 
 	// variavel que faz o progrma parar
 	int ParaPrograma;
+
+	vector < vector < vector < double > > >TVvei;
+	vector < vector < vector < double > > >TVPvei;
+
+
+	vector < vector < vector < bool > > >ALFAvei;
+	vector < vector < vector < vector < vector < bool > > > > > BETAveiei;
+	vector < vector < vector < vector < vector < bool > > > > > BETAPpeiei;
+
+	void IniciaVariaveisDoModelo();
+
+	void AlocaVariaveisDoModelo();
 
 
 	~Heuristica();
@@ -212,7 +224,7 @@ int		Heuristica::LeDados(string Nome, int comentarios){
 
 
 
-// executa o procedimento heuristico
+// executa o procedimento heuristico sem buscas locais
 void	Heuristica::ExecutaCons(string NomeInstancia, int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta, int RealizaProcessoDeAtrazarTarefas){
 
 	// variavel que controla se irá escrever os dados em um aruivo, é inicializada com 0
@@ -461,12 +473,20 @@ void	Heuristica::ExecutaCons(string NomeInstancia, int EscolhaVeiculo, int Escol
 	}
 
 
-
+// montei para escrever os dados do modelo em um arquivo separado, mudei a estrategia
 	Solucoes.Solucoes[0].IniciaVariaveisModelo();
 	Solucoes.Solucoes[0].AtribuiValoresVariaveisModelo();
 	Solucoes.Solucoes[0].ImprimeVariaveisModeloSeparado();
+
+
+
+
+
 	ConstrucoesInstancia.NivelDeInviabilidade = Solucoes.Solucoes[0].ConstrucoesInstancia.NivelDeInviabilidade;
 
+	// para passara os parametros
+	ConstrucoesInstancia = Solucoes.Solucoes[0].ConstrucoesInstancia;
+	PlantasInstancia = Solucoes.Solucoes[0].PlantasInstancia;
 
 
 	// coleta o horario final
@@ -485,7 +505,7 @@ void	Heuristica::ExecutaCons(string NomeInstancia, int EscolhaVeiculo, int Escol
 }
 
 
-
+// executa o procedimento heuristico 100 vezes sem realizar nenhuma busca
 void	Heuristica::ExecutaCons100(string NomeInstancia, int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta, int RealizaProcessoDeAtrazarTarefas){
 
 
@@ -656,6 +676,11 @@ void	Heuristica::ExecutaCons100(string NomeInstancia, int EscolhaVeiculo, int Es
 	}
 
 	if( SolucaoFinal.ConstrucoesInstancia.NivelDeInviabilidade == 0){
+
+	// para passara os parametros
+		ConstrucoesInstancia = SolucaoFinal.ConstrucoesInstancia;
+		PlantasInstancia = SolucaoFinal.PlantasInstancia;
+
 		printf( " \t %f \t %d ",  SolucaoFinal.Makespan, SolucaoFinal.ConstrucoesInstancia.NivelDeInviabilidade);
 	}else{
 		printf( " \t ------  \t %d ",  SolucaoFinal.ConstrucoesInstancia.NivelDeInviabilidade);
@@ -682,7 +707,7 @@ void	Heuristica::ExecutaCons100(string NomeInstancia, int EscolhaVeiculo, int Es
 }
 
 
-
+// executa o procedimento heuristico um certo número de tempo e depois realiza uma busca veículo
 void	Heuristica::ExecutaConsBuscVei(string NomeInstancia, long int NumeroIteracoes, long int TempoExecucaoMaximo, int EscolhaVeiculo, int EscolhaConstrucao,  int EscolhaPlanta,  int RealizaProcessoDeAtrazarTarefas){
 
 
@@ -863,6 +888,11 @@ void	Heuristica::ExecutaConsBuscVei(string NomeInstancia, long int NumeroIteraco
 	if( SolucaoFinal.ConstrucoesInstancia.NivelDeInviabilidade == 0){
 		SolucaoFinal.RealizarBuscaLocalCaminhao(EscolhaVeiculo, EscolhaConstrucao, EscolhaPlanta, ImprimeBusca, ImprimeSolucao, ImprimeArquivo, Arquivo, RealizaProcessoDeAtrazarTarefas);
 		SolucaoFinal.CalculaMakespan();
+
+		// para passara os parametros
+		ConstrucoesInstancia = SolucaoFinal.ConstrucoesInstancia;
+		PlantasInstancia = SolucaoFinal.PlantasInstancia;
+
 		fprintf(Arquivo,"  %f \t", SolucaoFinal.Makespan);
 	}else{
 		fprintf(Arquivo,"  ------ \n");
@@ -894,7 +924,7 @@ void	Heuristica::ExecutaConsBuscVei(string NomeInstancia, long int NumeroIteraco
 
 }
 
-
+// executa o procedimento heuristico um certo número de tempo e depois realiza uma busca construção
 void	Heuristica::ExecutaConsBuscCons(string NomeInstancia, long int NumeroIteracoes, long int TempoExecucaoMaximo, int EscolhaVeiculo, int EscolhaConstrucao,  int EscolhaPlanta,  int RealizaProcessoDeAtrazarTarefas){
 
 
@@ -1076,6 +1106,11 @@ void	Heuristica::ExecutaConsBuscCons(string NomeInstancia, long int NumeroIterac
 
 		SolucaoFinal.RealizarBuscaLocalConstrucao(EscolhaVeiculo, EscolhaConstrucao, EscolhaPlanta,ImprimeBusca, ImprimeSolucao, ImprimeArquivo, Arquivo, RealizaProcessoDeAtrazarTarefas);
 		SolucaoFinal.CalculaMakespan();
+
+		// para passara os parametros
+		ConstrucoesInstancia = SolucaoFinal.ConstrucoesInstancia;
+		PlantasInstancia = SolucaoFinal.PlantasInstancia;
+
 		fprintf(Arquivo,"  %f \t", SolucaoFinal.Makespan);
 
 	}else{
@@ -1108,6 +1143,7 @@ void	Heuristica::ExecutaConsBuscCons(string NomeInstancia, long int NumeroIterac
 
 }
 
+// executa o procedimento heuristico um certo número de tempo e depois realiza uma busca planta
 void	Heuristica::ExecutaConsBuscPlan(string NomeInstancia, long int NumeroIteracoes, long int TempoExecucaoMaximo, int EscolhaVeiculo, int EscolhaConstrucao,  int EscolhaPlanta,  int RealizaProcessoDeAtrazarTarefas){
 
 
@@ -1279,6 +1315,10 @@ void	Heuristica::ExecutaConsBuscPlan(string NomeInstancia, long int NumeroIterac
 		iteracoes++;
 	}
 
+
+
+
+
 	TempoExecucao = difftime(FinalExecucao, InicioExecucao);
 
 	fprintf(Arquivo,"\n    Busca Local  \t Tempo até aqui ( %.0f ) \n",  TempoExecucao);
@@ -1288,6 +1328,11 @@ void	Heuristica::ExecutaConsBuscPlan(string NomeInstancia, long int NumeroIterac
 	if( SolucaoFinal.ConstrucoesInstancia.NivelDeInviabilidade == 0){
 		SolucaoFinal.RealizarBuscaLocalPlanta(EscolhaVeiculo, EscolhaConstrucao, EscolhaPlanta,ImprimeBusca, ImprimeSolucao, ImprimeArquivo, Arquivo, RealizaProcessoDeAtrazarTarefas);
 		SolucaoFinal.CalculaMakespan();
+
+		// para passara os parametros
+		ConstrucoesInstancia = SolucaoFinal.ConstrucoesInstancia;
+		PlantasInstancia = SolucaoFinal.PlantasInstancia;
+
 		fprintf(Arquivo,"  %f \n", SolucaoFinal.Makespan);
 	}else{
 		fprintf(Arquivo,"  ------ \n");
@@ -1321,8 +1366,8 @@ void	Heuristica::ExecutaConsBuscPlan(string NomeInstancia, long int NumeroIterac
 
 
 
-
-void	Heuristica::ExecutaConsBuscasveiConsPlan(string NomeInstancia, long int NumeroIteracoes, long int TempoExecucaoMaximo, int EscolhaVeiculo, int EscolhaConstrucao,  int EscolhaPlanta,  int RealizaProcessoDeAtrazarTarefas){
+// executa o procedimento heuristico um certo número de tempo e depois realiza as buscas veículo, construção e planta em sequencia
+void	Heuristica::ExecutaConsBuscasVeiConsPlan(string NomeInstancia, long int NumeroIteracoes, long int TempoExecucaoMaximo, int EscolhaVeiculo, int EscolhaConstrucao,  int EscolhaPlanta,  int RealizaProcessoDeAtrazarTarefas){
 
 
 
@@ -1496,7 +1541,7 @@ void	Heuristica::ExecutaConsBuscasveiConsPlan(string NomeInstancia, long int Num
 	TempoExecucao = difftime(FinalExecucao, InicioExecucao);
 
 	fprintf(Arquivo,"\n    Busca Local  \t Tempo até aqui ( %.0f ) \n",  TempoExecucao);
-	fprintf(Arquivo,"     Solução \t BuscaLocalVeiculo   \n");
+	fprintf(Arquivo,"     Solução \t BuscaLocalVeiculoConstrucaoPlanta   \n");
 	fprintf(Arquivo,"         %f \t ", SolucaoFinal.Makespan);
 
 	if( SolucaoFinal.ConstrucoesInstancia.NivelDeInviabilidade == 0){
@@ -1506,6 +1551,11 @@ void	Heuristica::ExecutaConsBuscasveiConsPlan(string NomeInstancia, long int Num
 		SolucaoFinal.CalculaMakespan();
 		SolucaoFinal.RealizarBuscaLocalPlanta(EscolhaVeiculo, EscolhaConstrucao, EscolhaPlanta,ImprimeBusca, ImprimeSolucao, ImprimeArquivo, Arquivo, RealizaProcessoDeAtrazarTarefas);
 		SolucaoFinal.CalculaMakespan();
+
+		// para passara os parametros
+		ConstrucoesInstancia = SolucaoFinal.ConstrucoesInstancia;
+		PlantasInstancia = SolucaoFinal.PlantasInstancia;
+
 		fprintf(Arquivo,"  %f \t", SolucaoFinal.Makespan);
 	}else{
 		fprintf(Arquivo,"  ------ \n");
@@ -1539,7 +1589,7 @@ void	Heuristica::ExecutaConsBuscasveiConsPlan(string NomeInstancia, long int Num
 
 
 
-// executa o procedimento heuristico
+// executa o procedimento heuristico e buscas locais
 void	Heuristica::ExecutaConsBuscas(string NomeInstancia, int EscolhaVeiculo, int EscolhaConstrucao, int EscolhaPlanta, int RealizaProcessoDeAtrazarTarefas){
 
 
@@ -1889,6 +1939,10 @@ void	Heuristica::ExecutaConsBuscas(string NomeInstancia, int EscolhaVeiculo, int
 
 	ConstrucoesInstancia.NivelDeInviabilidade = Solucoes.Solucoes[0].ConstrucoesInstancia.NivelDeInviabilidade;
 
+	// para passara os parametros
+	ConstrucoesInstancia = Solucoes.Solucoes[0].ConstrucoesInstancia;
+	PlantasInstancia = Solucoes.Solucoes[0].PlantasInstancia;
+
 	// coleta o horario final
 	FinalExecucao = time(NULL);
 
@@ -2127,6 +2181,8 @@ void	Heuristica::ExecutaConsBuscasCir(string NomeInstancia, int EscolhaVeiculo, 
 
 		Solucoes.Solucoes[0].ProcessoViabilizacao1( EscolhaVeiculo, EscolhaConstrucao, EscolhaPlanta, ImprimeViabilizacao, ImprimeSolucao, ImprimeArquivo, Arquivo, RealizaProcessoDeAtrazarTarefas);
 
+
+
 		if( ImprimeSolucao == 1){
 			cout << endl << endl << "##############################################################################################" << endl << endl;
 		}
@@ -2160,6 +2216,8 @@ void	Heuristica::ExecutaConsBuscasCir(string NomeInstancia, int EscolhaVeiculo, 
 			}
 
 			Solucoes.Solucoes[0].ProcessoViabilizacao2( EscolhaVeiculo, EscolhaConstrucao, EscolhaPlanta, ImprimeViabilizacao, ImprimeSolucao, ImprimeArquivo, Arquivo, RealizaProcessoDeAtrazarTarefas);
+
+
 
 			if( ImprimeSolucao == 1){
 				cout << endl << endl << "##############################################################################################" << endl << endl;
@@ -2275,6 +2333,10 @@ void	Heuristica::ExecutaConsBuscasCir(string NomeInstancia, int EscolhaVeiculo, 
 	}
 
 	ConstrucoesInstancia.NivelDeInviabilidade = Solucoes.Solucoes[0].ConstrucoesInstancia.NivelDeInviabilidade;
+
+	// para passara os parametros
+	ConstrucoesInstancia = Solucoes.Solucoes[0].ConstrucoesInstancia;
+	PlantasInstancia = Solucoes.Solucoes[0].PlantasInstancia;
 
 	// coleta o horario final
 	FinalExecucao = time(NULL);
@@ -2494,6 +2556,9 @@ void	Heuristica::ExecutaGrsp(string NomeInstancia, long int NumeroIteracoes, lon
 
 	ConstrucoesInstancia.NivelDeInviabilidade = SolucaoFinal.ConstrucoesInstancia.NivelDeInviabilidade;
 
+	// para passara os parametros
+	ConstrucoesInstancia = SolucaoFinal.ConstrucoesInstancia;
+	PlantasInstancia = SolucaoFinal.PlantasInstancia;
 
 	// coleta o horario final
 	FinalExecucao = time(NULL);
@@ -2728,6 +2793,9 @@ void	Heuristica::ExecutaGrspCir(string NomeInstancia, long int NumeroIteracoes, 
 
 	ConstrucoesInstancia.NivelDeInviabilidade = SolucaoFinal.ConstrucoesInstancia.NivelDeInviabilidade;
 
+	// para passara os parametros
+	ConstrucoesInstancia = SolucaoFinal.ConstrucoesInstancia;
+	PlantasInstancia = SolucaoFinal.PlantasInstancia;
 
 	// coleta o horario final
 	FinalExecucao = time(NULL);
@@ -2951,6 +3019,9 @@ void	Heuristica::ExecutaGrspClass(string NomeInstancia, long int NumeroIteracoes
 
 	ConstrucoesInstancia.NivelDeInviabilidade = SolucaoFinal.ConstrucoesInstancia.NivelDeInviabilidade;
 
+	// para passara os parametros
+	ConstrucoesInstancia = SolucaoFinal.ConstrucoesInstancia;
+	PlantasInstancia = SolucaoFinal.PlantasInstancia;
 
 	// coleta o horario final
 	FinalExecucao = time(NULL);
@@ -3191,6 +3262,9 @@ void	Heuristica::ExecutaGrspClassCir(string NomeInstancia, long int NumeroIterac
 
 	ConstrucoesInstancia.NivelDeInviabilidade = SolucaoFinal.ConstrucoesInstancia.NivelDeInviabilidade;
 
+	// para passara os parametros
+	ConstrucoesInstancia = SolucaoFinal.ConstrucoesInstancia;
+	PlantasInstancia = SolucaoFinal.PlantasInstancia;
 
 	// coleta o horario final
 	FinalExecucao = time(NULL);
@@ -3788,6 +3862,147 @@ void Heuristica::IniciaParametrosDoModelo(){
 
 }
 
+void Heuristica::IniciaVariaveisDoModelo(){
+	TVvei.resize(NV);
+	for( int v = 0; v < NV; v++){
+		TVvei[v].resize(NE);
+		for( int e = 0; e < NE; e++){
+			TVvei[v][e].resize(DM.Demandas[e]);
+		}
+	}
+
+	//cout << endl << " TVvei " << endl;
+	for( int v = 0; v < NV; v++){
+		//cout << " v = " << v << endl;
+		for( int e = 0; e < NE; e++){
+			//cout << " e = " << e << endl;
+			for( int i = 0; i < DM.Demandas[e]; i++){
+				TVvei[v][e][i] = 0;
+				//cout << "  0  ";
+			}
+			//cout << endl;
+		}
+		//cout << endl;
+	}
+//vector < vector < vector < double > > >TVPvei;
+
+	TVPvei.resize(NP);
+	for( int p = 0; p < NP; p++){
+		TVPvei[p].resize(NE);
+		for( int e = 0; e < NE; e++){
+			TVPvei[p][e].resize(DM.Demandas[e]);
+		}
+	}
+
+	for( int p = 0; p < NP; p++){
+		//cout << " v = " << v << endl;
+		for( int e = 0; e < NE; e++){
+			//cout << " e = " << e << endl;
+			for( int i = 0; i < DM.Demandas[e]; i++){
+				TVPvei[p][e][i] = 0;
+				//cout << "  0  ";
+			}
+			//cout << endl;
+		}
+		//cout << endl;
+	}
+
+
+//vector < vector < vector < bool > > >ALFAvei;
+
+	ALFAvei.resize(NV);
+	for( int v = 0; v < NV; v++){
+		ALFAvei[v].resize(NE);
+		for( int e = 0; e < NE; e++){
+			ALFAvei[v][e].resize(DM.Demandas[e]);
+		}
+	}
+
+	//cout << endl << " TVvei " << endl;
+	for( int v = 0; v < NV; v++){
+		//cout << " v = " << v << endl;
+		for( int e = 0; e < NE; e++){
+			//cout << " e = " << e << endl;
+			for( int i = 0; i < DM.Demandas[e]; i++){
+				ALFAvei[v][e][i] = 0;
+				//cout << "  0  ";
+			}
+			//cout << endl;
+		}
+		//cout << endl;
+	}
+
+
+//vector < vector < vector < vector < vector < bool > > > > > BETAveiei;
+	BETAveiei.resize(NV);
+	for( int v = 0; v < NV; v++){
+		BETAveiei[v].resize(NE);
+		for( int e1 = 0; e1 < NE; e1++){
+			BETAveiei[v][e1].resize(DM.Demandas[e1]);
+			for( int i = 0; i < DM.Demandas[e1]; i++){
+				BETAveiei[v][e1][i].resize(NE);
+				for( int e2 = 0; e2 < NE; e2++){
+					BETAveiei[v][e1][i][e2].resize(DM.Demandas[e2]);
+				}
+			}
+		}
+	}
+
+	for( int v = 0; v < NV; v++){
+		for( int e1 = 0; e1 < NE; e1++){
+			for( int i1 = 0; i1 < DM.Demandas[e1]; i1++){
+				for( int e2 = 0; e2 < NE; e2++){
+					for( int i2 = 0; i2 < DM.Demandas[e2]; i2++){
+						BETAveiei[v][e1][i1][e2][i2] = 0;
+					}
+				}
+			}
+		}
+	}
+
+
+//vector < vector < vector < vector < vector < bool > > > > > BETAPpeiei;
+
+	BETAPpeiei.resize(NP);
+	for( int p = 0; p < NP; p++){
+		BETAPpeiei[p].resize(NE);
+		for( int e1 = 0; e1 < NE; e1++){
+			BETAPpeiei[p][e1].resize(DM.Demandas[e1]);
+			for( int i = 0; i < DM.Demandas[e1]; i++){
+				BETAPpeiei[p][e1][i].resize(NE);
+				for( int e2 = 0; e2 < NE; e2++){
+					BETAPpeiei[p][e1][i][e2].resize(DM.Demandas[e2]);
+				}
+			}
+		}
+	}
+
+	for( int p = 0; p < NP; p++){
+		for( int e1 = 0; e1 < NE; e1++){
+			for( int i1 = 0; i1 < DM.Demandas[e1]; i1++){
+				for( int e2 = 0; e2 < NE; e2++){
+					for( int i2 = 0; i2 < DM.Demandas[e2]; i2++){
+						BETAPpeiei[p][e1][i1][e2][i2] = 0;
+					}
+				}
+			}
+		}
+	}
+
+}
+
+void Heuristica::AlocaVariaveisDoModelo(){
+	for( int c = 0; c < ConstrucoesInstancia.Construcoes.size(); c++){
+		cout << " const = " << ConstrucoesInstancia.Construcoes[c].NumeroDaConstrucao << endl;
+		for( int d = 0; d < ConstrucoesInstancia.Construcoes[c].Descarregamentos.size(); d++){
+			cout << "       dem = " << d << " vei = " <<   ConstrucoesInstancia.Construcoes[c].Descarregamentos[d].NumCarretaUtilizada;
+			cout << " Inicio = " << ConstrucoesInstancia.Construcoes[c].Descarregamentos[d].HorarioInicioDescarregamento << endl;
+			//TVvei[ConstrucoesInstancia.Construcoes[c].Descarregamentos[d].NumCarretaUtilizada][ConstrucoesInstancia.Construcoes[c].NumeroDaConstrucao][d] = ConstrucoesInstancia.Construcoes[c].Descarregamentos[d].HorarioInicioDescarregamento;
+		}
+	}
+
+
+}
 Heuristica::~Heuristica(){
 
 }

@@ -271,7 +271,7 @@ int main(int argc, char **argv) {
 				it = ListaInstancias.begin();
 				Nome = *it;
 				ListaInstancias.pop_front();
-				cout << " Modelo <= " << Nome << endl ;
+				cout << " Modelo <= "  ;
 
 				if( InstanciaComViolacao->LeDados(Nome, EscreveDadosLidosNaTela) == 1){
 

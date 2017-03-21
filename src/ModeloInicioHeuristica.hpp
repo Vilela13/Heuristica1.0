@@ -282,7 +282,7 @@ int ClasseModeloInicioHeuristica::CplexInicia(string Nome, int RealizaProcessoDe
 			startVarBETAPpeiei.end();
 			startValBETAPpeiei.end();
 
-			cout << endl << " passando " << endl;
+			//cout << endl << " passando " << endl;
 		}
 	}
 

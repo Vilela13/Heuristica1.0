@@ -586,7 +586,7 @@ int		Construcao::DeletaAtividadeLocomovendoAsOutrasTarefas(double HoraInicio, do
 int		Construcao::DeletaAtividadeLocomovendoAsOutrasTarefasSalvandoDados(int VerificaExistencia, double HoraInicio, double HoraFinal, int NumDemanda,  int NumPlanta, int Carreta, ConjuntoPlantas& Plantas, vector < DadosTarefa > &DadosTarefasMovidasAuxiliar){
 
 	// variavel para parar o programa
-	int 	ParaPrograma;
+	//int 	ParaPrograma;
 
 // Verifica se a demanda que se quer deletar existe
 	if( StatusAtendimento - 1 < NumDemanda){

@@ -466,7 +466,7 @@ int main(int argc, char **argv) {
 			Saida.clear();
 			Instancias.clear();
 
-			ArquivoExcelResposta.close();
+			//ArquivoExcelResposta.close();
 			ListaInstancias.clear();
 
 			if( TipoDeEntrada.compare(0,3,"arq") == 0){
@@ -546,7 +546,7 @@ int main(int argc, char **argv) {
 			Saida.clear();
 			Instancias.clear();
 
-			ArquivoExcelResposta.close();
+			//ArquivoExcelResposta.close();
 			ListaInstancias.clear();
 
 			if( TipoDeEntrada.compare(0,3,"arq") == 0){
@@ -688,7 +688,7 @@ int main(int argc, char **argv) {
 			Instancias.clear();
 
 			ListaInstancias.clear();
-			ArquivoExcelResposta.close();
+			//ArquivoExcelResposta.close();
 
 			if( TipoDeEntrada.compare(0,3,"arq") == 0){
 				cout << "\n \n Galo Doido! \n \n";
@@ -780,7 +780,7 @@ int main(int argc, char **argv) {
 			Saida.clear();
 			Instancias.clear();
 
-			ArquivoExcelResposta.close();
+			//ArquivoExcelResposta.close();
 			ListaInstancias.clear();
 
 			if( TipoDeEntrada.compare(0,3,"arq") == 0){
@@ -891,7 +891,7 @@ int main(int argc, char **argv) {
 			Saida.clear();
 			Instancias.clear();
 
-			ArquivoExcelResposta.close();
+			//ArquivoExcelResposta.close();
 			ListaInstancias.clear();
 
 			if( TipoDeEntrada.compare(0,3,"arq") == 0){
@@ -1014,7 +1014,7 @@ int main(int argc, char **argv) {
 			Instancias.clear();
 
 			ListaInstancias.clear();
-			ArquivoExcelResposta.close();
+			//ArquivoExcelResposta.close();
 
 			if( TipoDeEntrada.compare(0,3,"arq") == 0){
 				cout << "\n \n Galo Doido! \n \n";
@@ -1029,7 +1029,7 @@ int main(int argc, char **argv) {
 
 
 	// modelo com inicio na heuristica
-	if( argc = 10 && strcmp ( argv[1], "ModeloComInicio") == 0 ){
+	if( argc == 10 && strcmp ( argv[1], "ModeloComInicio") == 0 ){
 
 		int StatusInicio;
 		double PrimalInicio;
@@ -1037,6 +1037,10 @@ int main(int argc, char **argv) {
 		double SolucaoRealInicio;
 		double GapInicio;
 		double TempoInicio;
+
+		bool Resolveu;
+		FILE *ArquivoExcelResposta2;
+		string Saida2;
 
 		ClasseModeloInicioHeuristica *InstanciaInicioHeuristica;
 
@@ -1104,15 +1108,42 @@ int main(int argc, char **argv) {
 			TempoExecucao = atoi( argv[9] ) ;
 		}
 
+		// abri arquivo com a saida do programa
+		Saida2 = "R-";				// coloca Res- no char*
+		Saida2 += "Instancias.txt";
+
+		//ArquivoExcelResposta.open(Saida.c_str());
+		ArquivoExcelResposta2 = fopen(Saida2.c_str(), "a");
+
+
 		InstanciaInicioHeuristica = new ClasseModeloInicioHeuristica;
+
+		cout << " Modelo <= " << Instancias << endl ;
 		if( InstanciaInicioHeuristica->LeDados(Instancias, EscreveDadosLidosNaTela) == 1){
 			//cout << "   Leu dados " << endl << endl;
 
 			//cout << endl <<  "TempoExecucaoMaximo  " << TempoExecucaoMaximo << endl << endl;
 
-			InstanciaInicioHeuristica->CplexInicia(Instancias, RealizaProcessoDeAtrazarTarefas, NumeroIteracoes, TempoExecucaoMaximo, EscolhaVeiculo, EscolhaConstrucao, EscolhaPlanta,  TempoExecucao, StatusInicio, PrimalInicio, DualInicio, SolucaoRealInicio, GapInicio, TempoInicio);
+			Resolveu = InstanciaInicioHeuristica->CplexInicia(Instancias, RealizaProcessoDeAtrazarTarefas, NumeroIteracoes, TempoExecucaoMaximo, EscolhaVeiculo, EscolhaConstrucao, EscolhaPlanta,  TempoExecucao, StatusInicio, PrimalInicio, DualInicio, SolucaoRealInicio, GapInicio, TempoInicio);
+			cout  << " Resolveu = " << Resolveu << endl << endl ;
+
+			ArquivoExcelResposta2 = fopen(Saida2.c_str(), "a");
+			fprintf(ArquivoExcelResposta2, " %s \t", Instancias.c_str());
+
+			if( InstanciaInicioHeuristica->HeuristicaResposta == 1 ){
+				fprintf(ArquivoExcelResposta2,"%.3f \t %.0f \t", InstanciaInicioHeuristica->SolucaoHeuristica, InstanciaInicioHeuristica->TempoHeuristica);
+			}else{
+				fprintf(ArquivoExcelResposta2," ----- \t %.0f \t",  InstanciaInicioHeuristica->TempoHeuristica);
+			}
+
+			DescobreStatus( StatusInicio, ArquivoExcelResposta2);
+
+			//ArquivoExcelResposta << " " <<   SolucaoPrimal << '\t' <<  " " << SolucaoDual << '\t' << " " <<   Gap << '\t' <<  " " << Tempo << '\n';
+			fprintf(ArquivoExcelResposta2, "%.3f \t %.3f \t %.3f \t  %.3f \t %.0f \n", PrimalInicio, DualInicio, SolucaoRealInicio, GapInicio, TempoInicio);
+			fclose(ArquivoExcelResposta2);
 		}
 
+		delete(InstanciaInicioHeuristica );
 		return 1;
 
 

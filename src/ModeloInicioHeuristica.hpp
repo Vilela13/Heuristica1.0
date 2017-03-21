@@ -13,6 +13,11 @@
 class ClasseModeloInicioHeuristica : public ClasseModelo{
 	public:
 
+	// variaveis para exportar os resultados
+	bool HeuristicaResposta;
+	double SolucaoHeuristica;
+	double TempoHeuristica;
+
 	int CplexInicia(string, int, long int, long int, int, int, int, int, int&, double&, double&, double&, double&, double&);
 
 };
@@ -137,7 +142,7 @@ int ClasseModeloInicioHeuristica::CplexInicia(string Nome, int RealizaProcessoDe
 		cplex->setOut(logfile1);
 	}
 	cplex->setParam(IloCplex::TiLim,  TempoExecucao);
-	cplex->setParam(IloCplex::Threads, 2);
+	cplex->setParam(IloCplex::Threads, 12);
 
 // heuristica inicio
 
@@ -145,39 +150,141 @@ int ClasseModeloInicioHeuristica::CplexInicia(string Nome, int RealizaProcessoDe
 
 	Instancia2 = new Heuristica;
 
-	if( Instancia2->LeDados(Nome, 1) == 1){
+	if( Instancia2->LeDados(Nome, 0) == 1){
 
 //		cout << "NumeroIteracoes  " << NumeroIteracoes << "  TempoExecucaoMaximo  " << TempoExecucaoMaximo ;
 //		cout << "  EscolhaVeiculo  " << EscolhaVeiculo << " EscolhaConstrucao  " << EscolhaConstrucao << " EscolhaPlanta " << EscolhaPlanta;
 //		cout << "  RealizaProcessoDeAtrazarTarefas" << RealizaProcessoDeAtrazarTarefas << endl;
 		Instancia2->ExecutaConsBuscasVeiConsPlan(Nome, NumeroIteracoes, TempoExecucaoMaximo, EscolhaVeiculo, EscolhaConstrucao, EscolhaPlanta, RealizaProcessoDeAtrazarTarefas);
 
-		Instancia2->IniciaVariaveisDoModelo();
-		Instancia2->AlocaVariaveisDoModelo();
+		HeuristicaResposta = 0;
+		TempoHeuristica = Instancia2->TempoExecucao;
+
+		if( Instancia2->ConstrucoesInstancia.NivelDeInviabilidade == 0){
+
+			HeuristicaResposta = 1;
+			SolucaoHeuristica = Instancia2->ConstrucoesInstancia.MakespanConstrucoes;
+			TempoHeuristica = Instancia2->TempoExecucao;
+
+			Instancia2->IniciaVariaveisDoModelo();
+			Instancia2->AlocaVariaveisDoModelo();
 
 
-/*
-		IloNumVarArray startVar(env);
-		IloNumArray startVal(env);
+			/*
+					IloNumVarArray startVar(env);
+					IloNumArray startVal(env);
 
-		for(int i=0; i<n; i++){
-			int a = solucao_heuristica[ i ];
-			int b = solucao_heuristica[ (i+1) % n ];
-			startVar.add(x[a][b]);
-			startVal.add(1);
+					for(int i=0; i<n; i++){
+						int a = solucao_heuristica[ i ];
+						int b = solucao_heuristica[ (i+1) % n ];
+						startVar.add(x[a][b]);
+						startVal.add(1);
+					}
+
+					cplex->addMIPStart(startVar, startVal);
+
+					startVal.end();
+					startVar.end();
+			*/
+			// TVvei
+			IloNumVarArray startVarTVvei(env);
+			IloNumArray startValTVvei(env);
+
+			for( int v = 0; v < NV; v++){
+				for( int e = 0; e < NE; e++){
+					for( int d = 0; d < Instancia2->DM.Demandas[e]; d++){
+						startVarTVvei.add(Tvei[v][e][d]);
+						startValTVvei.add(Instancia2->TVvei[v][e][d]);
+					}
+				}
+			}
+			cplex->addMIPStart(startVarTVvei,startValTVvei);
+			startVarTVvei.end();
+			startValTVvei.end();
+
+			// TPvei
+			IloNumVarArray startVarTVPvei(env);
+			IloNumArray startValTVPvei(env);
+
+			for( int v = 0; v < NV; v++){
+				for( int e = 0; e < NE; e++){
+					for( int d = 0; d < Instancia2->DM.Demandas[e]; d++){
+						startVarTVPvei.add(TPvei[v][e][d]);
+						startValTVPvei.add(Instancia2->TVPvei[v][e][d]);
+					}
+				}
+			}
+			cplex->addMIPStart(startVarTVPvei,startValTVPvei);
+			startVarTVPvei.end();
+			startValTVPvei.end();
+
+			// ALFAvei
+			IloNumVarArray startVarALFAvei(env);
+			IloNumArray startValALFAvei(env);
+
+			for( int v = 0; v < NV; v++){
+				for( int e = 0; e < NE; e++){
+					for( int d = 0; d < Instancia2->DM.Demandas[e]; d++){
+						startVarALFAvei.add(Alfa[v][e][d]);
+						startValALFAvei.add(Instancia2->ALFAvei[v][e][d]);
+					}
+				}
+			}
+			cplex->addMIPStart(startVarALFAvei,startValALFAvei);
+			startVarALFAvei.end();
+			startValALFAvei.end();
+
+			// BETAveiei
+			IloNumVarArray startVarBETAveiei(env);
+			IloNumArray startValBETAveiei(env);
+
+			for( int v = 0; v < NV; v++){
+				for( int e1 = 0; e1 < NE; e1++){
+					for( int d1 = 0; d1 < Instancia2->DM.Demandas[e1]; d1++){
+						for( int e2 = 0; e2 < NE; e2++){
+							for( int d2 = 0; d2 < Instancia2->DM.Demandas[e2]; d2++){
+								if( e1 == e2 && d1 == d2){
+
+								}else{
+									startVarBETAveiei.add(Beta[v][e1][d1][e2][d2]);
+									startValBETAveiei.add(Instancia2->BETAveiei[v][e1][d1][e2][d2]);
+								}
+							}
+						}
+					}
+				}
+			}
+			cplex->addMIPStart(startVarBETAveiei,startValBETAveiei);
+			startVarBETAveiei.end();
+			startValBETAveiei.end();
+
+			// BETAPpeiei
+			IloNumVarArray startVarBETAPpeiei(env);
+			IloNumArray startValBETAPpeiei(env);
+
+			for( int p = 0; p < NP; p++){
+				for( int e1 = 0; e1 < NE; e1++){
+					for( int d1 = 0; d1 < Instancia2->DM.Demandas[e1]; d1++){
+						for( int e2 = 0; e2 < NE; e2++){
+							for( int d2 = 0; d2 < Instancia2->DM.Demandas[e2]; d2++){
+								if( e1 == e2 && d1 == d2){
+
+								}else{
+									startVarBETAPpeiei.add(BetaProducao[p][e1][d1][e2][d2]);
+									startValBETAPpeiei.add(Instancia2->BETAPpeiei[p][e1][d1][e2][d2]);
+								}
+							}
+						}
+					}
+				}
+			}
+			cplex->addMIPStart(startVarBETAPpeiei,startValBETAPpeiei);
+			startVarBETAPpeiei.end();
+			startValBETAPpeiei.end();
+
+			cout << endl << " passando " << endl;
 		}
-
-		cplex->addMIPStart(startVar, startVal);
-
-		startVal.end();
-		startVar.end();
-*/
-
-
-
-
 	}
-
 
 
 // heuristica fim

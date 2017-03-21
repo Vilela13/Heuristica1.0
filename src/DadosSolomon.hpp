@@ -324,8 +324,8 @@ void 	DadosSolomon::CriarInstanciaSolomon(string Nome) { //,  int NumeroVERSAO, 
 	double MultiplicadorTempoDescarga;
 	int 	NumeroVERSAO;
 
-	double AuxiliarNumero;
-	double Lixo;
+	//double AuxiliarNumero;
+	//double Lixo;
 
 	int EscreveVelocidadeMinima;
 

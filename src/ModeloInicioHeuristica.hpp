@@ -158,6 +158,8 @@ int ClasseModeloInicioHeuristica::CplexInicia(string Nome, int RealizaProcessoDe
 		Instancia2->ExecutaConsBuscasVeiConsPlan(Nome, NumeroIteracoes, TempoExecucaoMaximo, EscolhaVeiculo, EscolhaConstrucao, EscolhaPlanta, RealizaProcessoDeAtrazarTarefas);
 
 		HeuristicaResposta = 0;
+
+
 		TempoHeuristica = Instancia2->TempoExecucao;
 
 		if( Instancia2->ConstrucoesInstancia.NivelDeInviabilidade == 0){
@@ -282,6 +284,20 @@ int ClasseModeloInicioHeuristica::CplexInicia(string Nome, int RealizaProcessoDe
 			startVarBETAPpeiei.end();
 			startValBETAPpeiei.end();
 
+
+			// Ze
+			IloNumVarArray startVarZe(env);
+			IloNumArray startValZe(env);
+
+
+			for( int e = 0; e < NE; e++){
+				startVarZe.add( Ze[e] );
+				startValZe.add( Instancia2->Ze[e] );
+			}
+
+			cplex->addMIPStart( startVarZe, startValZe);
+			startVarZe.end();
+			startValZe.end();
 			//cout << endl << " passando " << endl;
 		}
 	}

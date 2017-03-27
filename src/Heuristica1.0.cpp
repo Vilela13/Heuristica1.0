@@ -271,7 +271,7 @@ int main(int argc, char **argv) {
 				it = ListaInstancias.begin();
 				Nome = *it;
 				ListaInstancias.pop_front();
-				cout << " Modelo <= "  ;
+				cout << " Modelo <= " << Nome << endl ;
 
 				if( InstanciaComViolacao->LeDados(Nome, EscreveDadosLidosNaTela) == 1){
 
@@ -1118,7 +1118,7 @@ int main(int argc, char **argv) {
 
 		InstanciaInicioHeuristica = new ClasseModeloInicioHeuristica;
 
-		cout << " Modelo <= " << Instancias << endl ;
+		cout << " Modelo <= ";
 		if( InstanciaInicioHeuristica->LeDados(Instancias, EscreveDadosLidosNaTela) == 1){
 			//cout << "   Leu dados " << endl << endl;
 
@@ -1129,6 +1129,7 @@ int main(int argc, char **argv) {
 
 			ArquivoExcelResposta2 = fopen(Saida2.c_str(), "a");
 			fprintf(ArquivoExcelResposta2, " %s \t", Instancias.c_str());
+
 
 			if( InstanciaInicioHeuristica->HeuristicaResposta == 1 ){
 				fprintf(ArquivoExcelResposta2,"%.3f \t %.0f \t", InstanciaInicioHeuristica->SolucaoHeuristica, InstanciaInicioHeuristica->TempoHeuristica);

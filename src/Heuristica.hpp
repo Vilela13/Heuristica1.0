@@ -151,9 +151,13 @@ public:
 	vector < vector < vector < vector < vector < bool > > > > > BETAveiei;
 	vector < vector < vector < vector < vector < bool > > > > > BETAPpeiei;
 
+	vector < double > Ze;
+
 	void IniciaVariaveisDoModelo();
 
 	void AlocaVariaveisDoModelo();
+
+
 
 
 	~Heuristica();
@@ -541,8 +545,6 @@ void	Heuristica::ExecutaCons100(string NomeInstancia, int EscolhaVeiculo, int Es
 	// variavel que controla se imprime na tela a solução e os procediemntos
 	ImprimeSolucao = 0;
 
-	time_t InicioExecucao, FinalExecucao;
-	double TempoExecucao;
 
 	//bool ImprimePlanta;
 	//bool ImprimeConstrucao;
@@ -737,19 +739,17 @@ void	Heuristica::ExecutaConsBuscVei(string NomeInstancia, long int NumeroIteraco
 
 
 
-	// caminho para o arquivo que se irá salvar os dados
-	string Caminho;
+
 
 	// variavel que controla se irá escrever os dados em um aruivo, é inicializada com 0
-	int ImprimeArquivo;
+
 	ImprimeArquivo = 0;
 
 	// variavel que controla se imprime na tela a solução e os procediemntos
-	int ImprimeSolucao;
+
 	ImprimeSolucao = 0;
 
-	time_t InicioExecucao, FinalExecucao;
-	double TempoExecucao;
+
 
 	//bool ImprimePlanta;
 	//bool ImprimeConstrucao;
@@ -954,19 +954,15 @@ void	Heuristica::ExecutaConsBuscCons(string NomeInstancia, long int NumeroIterac
 
 
 
-	// caminho para o arquivo que se irá salvar os dados
-	string Caminho;
+
 
 	// variavel que controla se irá escrever os dados em um aruivo, é inicializada com 0
-	int ImprimeArquivo;
 	ImprimeArquivo = 0;
 
 	// variavel que controla se imprime na tela a solução e os procediemntos
-	int ImprimeSolucao;
 	ImprimeSolucao = 0;
 
-	time_t InicioExecucao, FinalExecucao;
-	double TempoExecucao;
+
 
 	//bool ImprimePlanta;
 	//bool ImprimeConstrucao;
@@ -1173,19 +1169,15 @@ void	Heuristica::ExecutaConsBuscPlan(string NomeInstancia, long int NumeroIterac
 
 
 
-	// caminho para o arquivo que se irá salvar os dados
-	string Caminho;
+
 
 	// variavel que controla se irá escrever os dados em um aruivo, é inicializada com 0
-	int ImprimeArquivo;
 	ImprimeArquivo = 0;
 
 	// variavel que controla se imprime na tela a solução e os procediemntos
-	int ImprimeSolucao;
 	ImprimeSolucao = 0;
 
-	time_t InicioExecucao, FinalExecucao;
-	double TempoExecucao;
+
 
 	//bool ImprimePlanta;
 	//bool ImprimeConstrucao;
@@ -1396,19 +1388,15 @@ void	Heuristica::ExecutaConsBuscasVeiConsPlan(string NomeInstancia, long int Num
 
 
 
-	// caminho para o arquivo que se irá salvar os dados
-	string Caminho;
+
 
 	// variavel que controla se irá escrever os dados em um aruivo, é inicializada com 0
-	int ImprimeArquivo;
 	ImprimeArquivo = 0;
 
 	// variavel que controla se imprime na tela a solução e os procediemntos
-	int ImprimeSolucao;
 	ImprimeSolucao = 0;
 
-	time_t InicioExecucao, FinalExecucao;
-	double TempoExecucao;
+
 
 	//bool ImprimePlanta;
 	//bool ImprimeConstrucao;
@@ -1610,6 +1598,7 @@ void	Heuristica::ExecutaConsBuscasVeiConsPlan(string NomeInstancia, long int Num
 	fclose (Arquivo);
 	Caminho.clear();
 
+
 }
 
 
@@ -1620,15 +1609,12 @@ void	Heuristica::ExecutaConsBuscas(string NomeInstancia, int EscolhaVeiculo, int
 
 
 	// variavel que controla se irá escrever os dados em um aruivo, é inicializada com 0
-	int ImprimeArquivo;
 	ImprimeArquivo = 1;
 
 	// variavel que controla se imprime na tela a solução e os procediemntos
-	int ImprimeSolucao;
 	ImprimeSolucao = 0;
 
-	time_t InicioExecucao, FinalExecucao;
-	double TempoExecucao;
+
 
 
 
@@ -1991,19 +1977,16 @@ void	Heuristica::ExecutaConsBuscasCir(string NomeInstancia, int EscolhaVeiculo, 
 	// ponteiro para o arquivo que se irá salvar os dados
 	PonteiroArquivo  Arquivo;
 
-	// caminho para o arquivo que se irá salvar os dados
-	string Caminho;
+
 
 	// variavel que controla se irá escrever os dados em um aruivo, é inicializada com 0
-	int ImprimeArquivo;
+
 	ImprimeArquivo = 1;
 
 	// variavel que controla se imprime na tela a solução e os procediemntos
-	int ImprimeSolucao;
+
 	ImprimeSolucao = 0;
 
-	time_t InicioExecucao, FinalExecucao;
-	double TempoExecucao;
 
 
 
@@ -2392,15 +2375,12 @@ void	Heuristica::ExecutaGrsp(string NomeInstancia, long int NumeroIteracoes, lon
 
 
 	// variavel que controla se irá escrever os dados em um aruivo, é inicializada com 0
-	int ImprimeArquivo;
 	ImprimeArquivo = 0;
 
 	// variavel que controla se imprime na tela a solução e os procediemntos
-	int ImprimeSolucao;
 	ImprimeSolucao = 0;
 
-	time_t InicioExecucao, FinalExecucao;
-	double TempoExecucao;
+
 
 	//bool ImprimePlanta;
 	//bool ImprimeConstrucao;
@@ -2616,15 +2596,11 @@ void	Heuristica::ExecutaGrspCir(string NomeInstancia, long int NumeroIteracoes, 
 
 
 	// variavel que controla se irá escrever os dados em um aruivo, é inicializada com 0
-	int ImprimeArquivo;
 	ImprimeArquivo = 0;
 
 	// variavel que controla se imprime na tela a solução e os procediemntos
-	int ImprimeSolucao;
 	ImprimeSolucao = 0;
 
-	time_t InicioExecucao, FinalExecucao;
-	double TempoExecucao;
 
 	//bool ImprimePlanta;
 	//bool ImprimeConstrucao;
@@ -2857,15 +2833,12 @@ void	Heuristica::ExecutaGrspClass(string NomeInstancia, long int NumeroIteracoes
 
 
 	// variavel que controla se irá escrever os dados em um aruivo, é inicializada com 0
-	int ImprimeArquivo;
 	ImprimeArquivo = 0;
 
 	// variavel que controla se imprime na tela a solução e os procediemntos
-	int ImprimeSolucao;
 	ImprimeSolucao = 0;
 
-	time_t InicioExecucao, FinalExecucao;
-	double TempoExecucao;
+
 
 	//bool ImprimePlanta;
 	//bool ImprimeConstrucao;
@@ -3079,15 +3052,11 @@ void	Heuristica::ExecutaGrspClassCir(string NomeInstancia, long int NumeroIterac
 
 
 	// variavel que controla se irá escrever os dados em um aruivo, é inicializada com 0
-	int ImprimeArquivo;
 	ImprimeArquivo = 0;
 
 	// variavel que controla se imprime na tela a solução e os procediemntos
-	int ImprimeSolucao;
 	ImprimeSolucao = 0;
 
-	time_t InicioExecucao, FinalExecucao;
-	double TempoExecucao;
 
 	//bool ImprimePlanta;
 	//bool ImprimeConstrucao;
@@ -3899,6 +3868,8 @@ void Heuristica::IniciaParametrosDoModelo(){
 }
 
 void Heuristica::IniciaVariaveisDoModelo(){
+
+
 	TVvei.resize(NV);
 	for( int v = 0; v < NV; v++){
 		TVvei[v].resize(NE);
@@ -4025,6 +3996,8 @@ void Heuristica::IniciaVariaveisDoModelo(){
 		}
 	}
 
+	Ze.resize(NE);
+
 }
 
 void Heuristica::AlocaVariaveisDoModelo(){
@@ -4110,6 +4083,22 @@ void Heuristica::AlocaVariaveisDoModelo(){
 			}
 		}
 	}
+
+
+	for( unsigned int c = 0; c < ConstrucoesInstancia.Construcoes.size(); c++){
+		Ze[c] = 0;
+		//cout << " const = " << ConstrucoesInstancia.Construcoes[c].NumeroDaConstrucao << endl;
+		for( unsigned int d = 0; d < ConstrucoesInstancia.Construcoes[c].Descarregamentos.size(); d++){
+			//cout << "       dem = " << d << " vei = " <<   ConstrucoesInstancia.Construcoes[c].Descarregamentos[d].NumCarretaUtilizada;
+			//cout << " Inicio = " << ConstrucoesInstancia.Construcoes[c].Descarregamentos[d].HorarioInicioDescarregamento ;
+			if( Ze[c] < TVvei[ConstrucoesInstancia.Construcoes[c].Descarregamentos[d].NumCarretaUtilizada][ConstrucoesInstancia.Construcoes[c].NumeroDaConstrucao][d]){
+				Ze[c] = TVvei[ConstrucoesInstancia.Construcoes[c].Descarregamentos[d].NumCarretaUtilizada][ConstrucoesInstancia.Construcoes[c].NumeroDaConstrucao][d];
+			}
+
+			//cout << "  ** " << endl;
+		}
+	}
+
 
 
 	//cout << "galo " ;

@@ -4086,17 +4086,24 @@ void Heuristica::AlocaVariaveisDoModelo(){
 
 
 	for( unsigned int c = 0; c < ConstrucoesInstancia.Construcoes.size(); c++){
-		Ze[c] = 0;
+		Ze[ConstrucoesInstancia.Construcoes[c].NumeroDaConstrucao] = 0;
+
 		//cout << " const = " << ConstrucoesInstancia.Construcoes[c].NumeroDaConstrucao << endl;
+
 		for( unsigned int d = 0; d < ConstrucoesInstancia.Construcoes[c].Descarregamentos.size(); d++){
-			//cout << "       dem = " << d << " vei = " <<   ConstrucoesInstancia.Construcoes[c].Descarregamentos[d].NumCarretaUtilizada;
-			//cout << " Inicio = " << ConstrucoesInstancia.Construcoes[c].Descarregamentos[d].HorarioInicioDescarregamento ;
-			if( Ze[c] < TVvei[ConstrucoesInstancia.Construcoes[c].Descarregamentos[d].NumCarretaUtilizada][ConstrucoesInstancia.Construcoes[c].NumeroDaConstrucao][d]){
-				Ze[c] = TVvei[ConstrucoesInstancia.Construcoes[c].Descarregamentos[d].NumCarretaUtilizada][ConstrucoesInstancia.Construcoes[c].NumeroDaConstrucao][d];
+
+			//cout << "       dem = " << d << " vei = " <<   ConstrucoesInstancia.Construcoes[c].Descarregamentos[d].NumCarretaUtilizada << endl;
+			//cout << " Inicio = " << ConstrucoesInstancia.Construcoes[c].Descarregamentos[d].HorarioInicioDescarregamento << endl;
+			//cout << " Final = " << ConstrucoesInstancia.Construcoes[c].Descarregamentos[d].HorarioFinalDescarregamento << endl;
+
+			if( Ze[ConstrucoesInstancia.Construcoes[c].NumeroDaConstrucao] <  ConstrucoesInstancia.Construcoes[c].Descarregamentos[d].HorarioFinalDescarregamento){
+				Ze[ConstrucoesInstancia.Construcoes[c].NumeroDaConstrucao] = ConstrucoesInstancia.Construcoes[c].Descarregamentos[d].HorarioFinalDescarregamento;
 			}
 
 			//cout << "  ** " << endl;
 		}
+
+		//cout << "    				   Coloca Ze[" << ConstrucoesInstancia.Construcoes[c].NumeroDaConstrucao << "] = " << Ze[ConstrucoesInstancia.Construcoes[c].NumeroDaConstrucao] << endl;
 	}
 
 

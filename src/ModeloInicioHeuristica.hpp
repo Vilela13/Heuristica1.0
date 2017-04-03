@@ -291,6 +291,9 @@ int ClasseModeloInicioHeuristica::CplexInicia(string Nome, int RealizaProcessoDe
 
 
 			for( int e = 0; e < NE; e++){
+
+				//cout << "   Ze[" << e << "] = " << Instancia2->Ze[e] << endl;
+
 				startVarZe.add( Ze[e] );
 				startValZe.add( Instancia2->Ze[e] );
 			}

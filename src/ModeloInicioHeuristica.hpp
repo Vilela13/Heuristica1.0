@@ -272,6 +272,9 @@ int ClasseModeloInicioHeuristica::CplexInicia(string Nome, int RealizaProcessoDe
 								if( e1 == e2 && d1 == d2){
 
 								}else{
+
+									//cout << " BETAPpeiei[" << p <<"][" << e1 << "][" << d1 << "][" << e2 << "][" << d2 << "] = " << Instancia2->BETAPpeiei[p][e1][d1][e2][d2] << endl;
+
 									startVarBETAPpeiei.add(BetaProducao[p][e1][d1][e2][d2]);
 									startValBETAPpeiei.add(Instancia2->BETAPpeiei[p][e1][d1][e2][d2]);
 								}

@@ -4002,29 +4002,73 @@ void Heuristica::IniciaVariaveisDoModelo(){
 
 void Heuristica::AlocaVariaveisDoModelo(){
 
+	int veiculo;
+
 	//cout << "Inicia TVvei e ALFAvei " << endl;
 	for( unsigned int c = 0; c < ConstrucoesInstancia.Construcoes.size(); c++){
+
 		//cout << " const = " << ConstrucoesInstancia.Construcoes[c].NumeroDaConstrucao << endl;
+
 		for( unsigned int d = 0; d < ConstrucoesInstancia.Construcoes[c].Descarregamentos.size(); d++){
-			//cout << "       dem = " << d << " vei = " <<   ConstrucoesInstancia.Construcoes[c].Descarregamentos[d].NumCarretaUtilizada;
+
+			//cout << "       dem = " << d;
+			//cout << " plan = " <<   ConstrucoesInstancia.Construcoes[c].Descarregamentos[d].NumPlantaFornecedor;
+
+			veiculo = 0;
+			for( int p1 = 0; p1 < ConstrucoesInstancia.Construcoes[c].Descarregamentos[d].NumPlantaFornecedor ; p1++){
+				for( unsigned int p2 = 0; p2 < PlantasInstancia.Plantas.size(); p2++){
+					if( p1 == PlantasInstancia.Plantas[p2].NumeroDaPlanta){
+							veiculo = veiculo + PlantasInstancia.Plantas[p2].NumeroVeiculos;
+					}
+				}
+			}
+
+			veiculo = veiculo + ConstrucoesInstancia.Construcoes[c].Descarregamentos[d].NumCarretaUtilizada;
+
+
+			//cout << " vei = " <<   veiculo;
 			//cout << " Inicio = " << ConstrucoesInstancia.Construcoes[c].Descarregamentos[d].HorarioInicioDescarregamento ;
-			TVvei[ConstrucoesInstancia.Construcoes[c].Descarregamentos[d].NumCarretaUtilizada][ConstrucoesInstancia.Construcoes[c].NumeroDaConstrucao][d] = ConstrucoesInstancia.Construcoes[c].Descarregamentos[d].HorarioInicioDescarregamento;
-			ALFAvei[ConstrucoesInstancia.Construcoes[c].Descarregamentos[d].NumCarretaUtilizada][ConstrucoesInstancia.Construcoes[c].NumeroDaConstrucao][d] = 1;
+			//cout << " Final = " << ConstrucoesInstancia.Construcoes[c].Descarregamentos[d].HorarioFinalDescarregamento ;
+
+			TVvei[ veiculo ][ ConstrucoesInstancia.Construcoes[c].NumeroDaConstrucao ][ d ] = ConstrucoesInstancia.Construcoes[c].Descarregamentos[d].HorarioInicioDescarregamento;
+			ALFAvei[ veiculo ][ ConstrucoesInstancia.Construcoes[c].NumeroDaConstrucao ][ d ] = 1;
+
 			//cout << "  ** " << endl;
 		}
 	}
+
+
 
 	//cout << "Inicia TVPvei " << endl;
 	for( unsigned int p = 0; p < PlantasInstancia.Plantas.size(); p++){
 		//cout << " Plan = " << PlantasInstancia.Plantas[p].NumeroDaPlanta << endl;
 		for( unsigned int d = 0; d < PlantasInstancia.Plantas[p].Carregamentos.size(); d++){
-			//cout << "  vei = " << PlantasInstancia.Plantas[p].Carregamentos[d].NumCarretaUtilizada;
+
+			veiculo = 0;
+			for( int p1 = 0; p1 < PlantasInstancia.Plantas[p].NumeroDaPlanta ; p1++){
+				for( unsigned int p2 = 0; p2 < PlantasInstancia.Plantas.size(); p2++){
+					if( p1 == PlantasInstancia.Plantas[p2].NumeroDaPlanta){
+							veiculo = veiculo + PlantasInstancia.Plantas[p2].NumeroVeiculos;
+					}
+				}
+			}
+
+			veiculo = veiculo + PlantasInstancia.Plantas[p].Carregamentos[d].NumCarretaUtilizada;
+
+			//cout << "  vei = " << veiculo;
 			//cout << "  cons = " << PlantasInstancia.Plantas[p].Carregamentos[d].NumeroConstrucao;
 			//cout << "  dem = " << PlantasInstancia.Plantas[p].Carregamentos[d].NumeroDemandaSuprida;
 			//cout << " inicio = " << PlantasInstancia.Plantas[p].Carregamentos[d].HorarioInicioCarregamento << endl;
-			TVPvei[PlantasInstancia.Plantas[p].Carregamentos[d].NumCarretaUtilizada ][PlantasInstancia.Plantas[p].Carregamentos[d].NumeroConstrucao][PlantasInstancia.Plantas[p].Carregamentos[d].NumeroDemandaSuprida] = PlantasInstancia.Plantas[p].Carregamentos[d].HorarioInicioCarregamento;
+
+			TVPvei[ veiculo ][ PlantasInstancia.Plantas[p].Carregamentos[d].NumeroConstrucao ][ PlantasInstancia.Plantas[p].Carregamentos[d].NumeroDemandaSuprida ] = PlantasInstancia.Plantas[p].Carregamentos[d].HorarioInicioCarregamento;
 		}
 	}
+
+
+	int veiculo1;
+	int veiculo2;
+
+
 
 	// problema
 	//cout << " Inicia BETAveiei" <<endl;
@@ -4033,17 +4077,42 @@ void Heuristica::AlocaVariaveisDoModelo(){
 			for( unsigned int c2 = 0; c2 < ConstrucoesInstancia.Construcoes.size(); c2++){
 				for( unsigned int d2 = 0; d2 < ConstrucoesInstancia.Construcoes[c2].Descarregamentos.size(); d2++){
 
-					if( ConstrucoesInstancia.Construcoes[c1].Descarregamentos[d1].NumCarretaUtilizada == ConstrucoesInstancia.Construcoes[c2].Descarregamentos[d2].NumCarretaUtilizada ){
-						if( ALFAvei[ConstrucoesInstancia.Construcoes[c1].Descarregamentos[d1].NumCarretaUtilizada][ConstrucoesInstancia.Construcoes[c1].NumeroDaConstrucao][d1] == 1 ){
-							if( ALFAvei[ConstrucoesInstancia.Construcoes[c2].Descarregamentos[d2].NumCarretaUtilizada][ConstrucoesInstancia.Construcoes[c2].NumeroDaConstrucao][d2] == 1){
-								if( ConstrucoesInstancia.Construcoes[c1].Descarregamentos[d1].NumCarretaUtilizada ==  ConstrucoesInstancia.Construcoes[c2].Descarregamentos[d2].NumCarretaUtilizada &&  ConstrucoesInstancia.Construcoes[c1].NumeroDaConstrucao == ConstrucoesInstancia.Construcoes[c2].NumeroDaConstrucao && d1 == d2){
+					veiculo1 = 0;
+					for( int p1 = 0; p1 < ConstrucoesInstancia.Construcoes[c1].Descarregamentos[d1].NumPlantaFornecedor ; p1++){
+						for( unsigned int p2 = 0; p2 < PlantasInstancia.Plantas.size(); p2++){
+							if( p1 == PlantasInstancia.Plantas[p2].NumeroDaPlanta){
+									veiculo1 = veiculo1 + PlantasInstancia.Plantas[p2].NumeroVeiculos;
+							}
+						}
+					}
+
+					veiculo1 = veiculo1 + ConstrucoesInstancia.Construcoes[c1].Descarregamentos[d1].NumCarretaUtilizada;
+
+					veiculo2 = 0;
+					for( int p1 = 0; p1 < ConstrucoesInstancia.Construcoes[c2].Descarregamentos[d2].NumPlantaFornecedor ; p1++){
+						for( unsigned int p2 = 0; p2 < PlantasInstancia.Plantas.size(); p2++){
+							if( p1 == PlantasInstancia.Plantas[p2].NumeroDaPlanta){
+									veiculo2 = veiculo2 + PlantasInstancia.Plantas[p2].NumeroVeiculos;
+							}
+						}
+					}
+
+					veiculo2 = veiculo2 + ConstrucoesInstancia.Construcoes[c2].Descarregamentos[d2].NumCarretaUtilizada;
+
+
+					if( ConstrucoesInstancia.Construcoes[c1].Descarregamentos[d1].NumPlantaFornecedor == ConstrucoesInstancia.Construcoes[c2].Descarregamentos[d2].NumPlantaFornecedor && veiculo1 == veiculo2 ){
+						if( ALFAvei[veiculo1][ConstrucoesInstancia.Construcoes[c1].NumeroDaConstrucao][d1] == 1 ){
+							if( ALFAvei[veiculo2][ConstrucoesInstancia.Construcoes[c2].NumeroDaConstrucao][d2] == 1){
+								if( veiculo1 ==  veiculo2 &&  ConstrucoesInstancia.Construcoes[c1].NumeroDaConstrucao == ConstrucoesInstancia.Construcoes[c2].NumeroDaConstrucao && d1 == d2){
 									// faz nada
 								}else{
-									if( TVvei[ConstrucoesInstancia.Construcoes[c1].Descarregamentos[d1].NumCarretaUtilizada][ConstrucoesInstancia.Construcoes[c1].NumeroDaConstrucao][d1] < TVvei[ConstrucoesInstancia.Construcoes[c2].Descarregamentos[d2].NumCarretaUtilizada][ConstrucoesInstancia.Construcoes[c2].NumeroDaConstrucao][d2]){
-										//cout << " vei = " << ConstrucoesInstancia.Construcoes[c1].Descarregamentos[d1].NumCarretaUtilizada;
+									if( TVvei[ veiculo1 ][ConstrucoesInstancia.Construcoes[c1].NumeroDaConstrucao][d1] < TVvei[ veiculo2 ][ConstrucoesInstancia.Construcoes[c2].NumeroDaConstrucao][d2]){
+
+
+										//cout << " vei = " << veiculo1;
 										//cout << "  cons1 = " << ConstrucoesInstancia.Construcoes[c1].NumeroDaConstrucao << " dem1 = " << d1;
 										//cout << "  cons2 = " << ConstrucoesInstancia.Construcoes[c2].NumeroDaConstrucao << " dem2 = " << d2 << endl;
-										BETAveiei[ConstrucoesInstancia.Construcoes[c1].Descarregamentos[d1].NumCarretaUtilizada][ConstrucoesInstancia.Construcoes[c1].NumeroDaConstrucao][d1][ConstrucoesInstancia.Construcoes[c2].NumeroDaConstrucao][d2] = 1;
+										BETAveiei[ veiculo1 ][ConstrucoesInstancia.Construcoes[c1].NumeroDaConstrucao][d1][ConstrucoesInstancia.Construcoes[c2].NumeroDaConstrucao][d2] = 1;
 									}
 								}
 							}
@@ -4062,13 +4131,35 @@ void Heuristica::AlocaVariaveisDoModelo(){
 			for( unsigned int c2 = 0; c2 < ConstrucoesInstancia.Construcoes.size(); c2++){
 				for( unsigned int d2 = 0; d2 < ConstrucoesInstancia.Construcoes[c2].Descarregamentos.size(); d2++){
 
+					veiculo1 = 0;
+					for( int p1 = 0; p1 < ConstrucoesInstancia.Construcoes[c1].Descarregamentos[d1].NumPlantaFornecedor ; p1++){
+						for( unsigned int p2 = 0; p2 < PlantasInstancia.Plantas.size(); p2++){
+							if( p1 == PlantasInstancia.Plantas[p2].NumeroDaPlanta){
+									veiculo1 = veiculo1 + PlantasInstancia.Plantas[p2].NumeroVeiculos;
+							}
+						}
+					}
+
+					veiculo1 = veiculo1 + ConstrucoesInstancia.Construcoes[c1].Descarregamentos[d1].NumCarretaUtilizada;
+
+					veiculo2 = 0;
+					for( int p1 = 0; p1 < ConstrucoesInstancia.Construcoes[c2].Descarregamentos[d2].NumPlantaFornecedor ; p1++){
+						for( unsigned int p2 = 0; p2 < PlantasInstancia.Plantas.size(); p2++){
+							if( p1 == PlantasInstancia.Plantas[p2].NumeroDaPlanta){
+									veiculo2 = veiculo2 + PlantasInstancia.Plantas[p2].NumeroVeiculos;
+							}
+						}
+					}
+
+					veiculo2 = veiculo2 + ConstrucoesInstancia.Construcoes[c2].Descarregamentos[d2].NumCarretaUtilizada;
+
 					if( ConstrucoesInstancia.Construcoes[c1].Descarregamentos[d1].NumPlantaFornecedor == ConstrucoesInstancia.Construcoes[c2].Descarregamentos[d2].NumPlantaFornecedor ){
-						if( ALFAvei[ConstrucoesInstancia.Construcoes[c1].Descarregamentos[d1].NumCarretaUtilizada][ConstrucoesInstancia.Construcoes[c1].NumeroDaConstrucao][d1] == 1 ){
-							if( ALFAvei[ConstrucoesInstancia.Construcoes[c2].Descarregamentos[d2].NumCarretaUtilizada][ConstrucoesInstancia.Construcoes[c2].NumeroDaConstrucao][d2] == 1){
-								if( ConstrucoesInstancia.Construcoes[c1].Descarregamentos[d1].NumCarretaUtilizada ==  ConstrucoesInstancia.Construcoes[c2].Descarregamentos[d2].NumCarretaUtilizada &&  ConstrucoesInstancia.Construcoes[c1].NumeroDaConstrucao == ConstrucoesInstancia.Construcoes[c2].NumeroDaConstrucao && d1 == d2){
+						if( ALFAvei[veiculo1][ConstrucoesInstancia.Construcoes[c1].NumeroDaConstrucao][d1] == 1 ){
+							if( ALFAvei[veiculo2][ConstrucoesInstancia.Construcoes[c2].NumeroDaConstrucao][d2] == 1){
+								if( veiculo1 ==  veiculo2 &&  ConstrucoesInstancia.Construcoes[c1].NumeroDaConstrucao == ConstrucoesInstancia.Construcoes[c2].NumeroDaConstrucao && d1 == d2){
 									// faz nada
 								}else{
-									if( TVPvei[ConstrucoesInstancia.Construcoes[c1].Descarregamentos[d1].NumCarretaUtilizada][ConstrucoesInstancia.Construcoes[c1].NumeroDaConstrucao][d1] <  TVPvei[ConstrucoesInstancia.Construcoes[c2].Descarregamentos[d2].NumCarretaUtilizada][ConstrucoesInstancia.Construcoes[c2].NumeroDaConstrucao][d2]){
+									if( TVPvei[veiculo1][ConstrucoesInstancia.Construcoes[c1].NumeroDaConstrucao][d1] <  TVPvei[veiculo2][ConstrucoesInstancia.Construcoes[c2].NumeroDaConstrucao][d2]){
 										//cout << " plan = " << ConstrucoesInstancia.Construcoes[c1].Descarregamentos[d1].NumPlantaFornecedor;
 										//cout << "  cons1 = " << ConstrucoesInstancia.Construcoes[c1].NumeroDaConstrucao << " dem1 = " << d1;
 										//cout << "  cons2 = " << ConstrucoesInstancia.Construcoes[c2].NumeroDaConstrucao << " dem2 = " << d2 << endl;
